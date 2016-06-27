@@ -1,0 +1,9 @@
+deployment:
+  prod:
+    branch: production
+    heroku:
+      appname: zoku-vault
+  staging:
+    branch: master
+    heroku:
+      appname: zoku-vault-staging

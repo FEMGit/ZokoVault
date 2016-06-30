@@ -1,10 +1,10 @@
 @import "neat-helpers"; // or 'neat-helpers' when in Rails
 
 // Change the grid settings
-$column: 90px;
-$gutter: 60px;
+$column: 100px;
+$gutter: 20px;
 $grid-columns: 12;
-//$max-width: 960px;
+$max-width: 100%;
 
 // Define your breakpoints
 $teneighty: new-breakpoint(max-width 1080px 12);

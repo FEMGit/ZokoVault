@@ -1,5 +1,61 @@
-header,
-footer{
-  margin: 0 auto;
-  padding: .2em;
+html,
+body,
+nav,
+main{
+  height:100%;
+}
+
+body{
+  @include outer-container;
+}
+
+header{
+  background: white;
+  padding: $bu $gu 5px;
+  box-shadow: $drop-shadow;
+}
+
+.logo{
+  margin:0;
+}
+
+.header-search{
+  float: right;
+  width: 200px;
+}
+
+nav{
+  width: 240px;
+  float:left;
+  background: $color-gray-dark;
+  padding: $bu 0 0 0;
+}
+
+a.main-nav{
+  width: 100%;
+  color: $color-primary-light;
+  padding: $bu $gu;
+  display:block;
+  width:100%;
+  cursor: pointer;
+
+  &:hover{
+    background: black;
+    color: $color-primary;
+  }
+}
+
+.nav-icon{
+  margin-right:5px;
+  fill: $color-primary-light;
+  vertical-align: middle;
+  margin-top: -3px;
+}
+a.main-nav:hover .nav-icon{
+  fill: $color-primary;
+}
+
+main{
+  margin-left: 240px;
+  background: $color-gray-light-tinted;
 }

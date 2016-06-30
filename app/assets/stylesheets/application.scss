@@ -1,11 +1,14 @@
-@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700';
 @import "normalize";
 @import "bourbon";
 @import "neat";
+@import"grid-settings";
 @import "variables";
 @import "mixins";
 @import "layout";
 @import "fonts";
+@import "svg";
+@import "forms";
 
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files

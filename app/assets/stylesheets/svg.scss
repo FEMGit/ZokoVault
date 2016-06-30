@@ -1,0 +1,80 @@
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+}
+
+/* =======================================================================================
+Example showing how to change the color/size of the icons:
+.icon-name {
+    font-size: 32px; // works because "width" & "height" were set using em units
+    color: red; // works for single-colored icons, because "fill" was set to "currentColor"
+}
+======================================================================================== */
+
+.icon-Safe {
+    width: 1.05859375em;
+}
+
+.icon-add-user-1 {
+    width: 1.1875em;
+}
+
+.icon-battery-charging-3 {
+    width: 0.5em;
+}
+
+.icon-book-6 {
+    width: 0.875em;
+}
+
+.icon-bookmark-2 {
+    width: 0.75em;
+}
+
+.icon-clipboard-2b {
+    width: 0.875em;
+}
+
+.icon-document-1 {
+    width: 0.875em;
+}
+
+.icon-document-3 {
+    width: 0.875em;
+}
+
+.icon-home-3 {
+    width: 1.1396484375em;
+}
+
+.icon-lock-2 {
+    width: 0.75em;
+}
+
+.icon-money-1 {
+    width: 0.625em;
+}
+
+.icon-paperclip-1 {
+    width: 1.080078125em;
+}
+
+.icon-pin-1 {
+    width: 0.9970703125em;
+}
+
+.icon-trash-2 {
+    width: 0.875em;
+}
+
+.icon-umbrella-1 {
+    width: 0.9931640625em;
+}
+
+.icon-user-1 {
+    width: 0.875em;
+}

@@ -1,5 +1,80 @@
-input{
+input,
+textarea{
   border: 1px solid $color-gray-med-tinted;
-  border-radius: 3px;
+  border-radius: 5px;
   padding: 5px;
+  width: 300px;
+  -webkit-appearance: none;
+}
+
+.styled-select{
+  border: 1px solid $color-gray-med-tinted;
+  border-radius: 5px;
+  background: white url(SVG/select-drop-down.svg) no-repeat 269px center;
+  height: 32px;
+  overflow: hidden;
+  width: 300px;
+  padding: 0;
+}
+
+select{
+  background: transparent;
+  border: none;
+  height: 30px;
+  padding: 5px;
+  width: 320px;
+  box-shadow: none;
+  -webkit-appearance: none;
+}
+
+label{
+  color: $color-gray-dark-tinted;
+}
+
+button{
+  cursor: pointer;
+  border:0;
+  border-radius: 5px;
+  color: white;
+  text-shadow: .5px 1px rgba(0,0,0,.25);
+  box-shadow: .5px 1px 3px rgba(0,0,0,.25);
+  margin-right: 10px;
+
+  &:hover{
+    opacity: .8;
+    box-shadow: .5px -2px 3px rgba(0,0,0,.25);
+  }
+}
+
+.big-button{
+  font-size: 16px;
+  padding: 15px;
+}
+
+.small-button{
+  font-size: 12px;
+  padding: 10px;
+}
+
+.primary-button{
+  background: $button-primary;
+}
+
+.secondary-button{
+  background: $button-secondary;
+}
+
+.tirtiary-button{
+  background: transparent;
+  border: 1px solid $color-gray-med-tinted;
+  color: $color-gray-med;
+  text-shadow: none;
+  box-shadow: none;
+
+  &:hover{
+    box-shadow: none;
+    opacity: 1;
+    color: $color-link-blue;
+    border: 1px solid $color-link-blue;
+  }
 }

@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get 'files' => 'welcome#files'
   get 'styleguide' => 'welcome#styleguide'
 
+  resources :users
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

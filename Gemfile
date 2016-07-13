@@ -32,6 +32,8 @@ gem 'neat'
 
 # File Up/download tools
 gem 'aws-sdk', '~> 2'
+gem 'carrierwave', '0.10.0'
+gem "fog"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

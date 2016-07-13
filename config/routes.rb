@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   resources :users
 
+  Rails.application.routes.draw do
+    resources :uploads
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

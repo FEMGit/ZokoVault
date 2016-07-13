@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   get 'files' => 'welcome#files'
   get 'styleguide' => 'welcome#styleguide'
 
+
+  Rails.application.routes.draw do
+    resources :uploads
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

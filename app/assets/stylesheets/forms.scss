@@ -2,9 +2,12 @@ input,
 textarea{
   border: 1px solid $color-gray-med-tinted;
   border-radius: 5px;
+  display:block;
+  margin-bottom: 10px;
   padding: 5px;
   width: 300px;
   -webkit-appearance: none;
+
 }
 
 .styled-select{
@@ -38,22 +41,22 @@ button{
   color: white;
   text-shadow: .5px 1px rgba(0,0,0,.25);
   box-shadow: .5px 1px 3px rgba(0,0,0,.25);
-  margin-right: 10px;
+  margin: 0 10px 20px 0;
 
   &:hover{
     opacity: .8;
-    box-shadow: .5px -2px 3px rgba(0,0,0,.25);
+    box-shadow: none;
   }
 }
 
 .big-button{
-  font-size: 16px;
-  padding: 15px;
+  font-size: 14px;
+  padding: 10px;
 }
 
 .small-button{
   font-size: 12px;
-  padding: 10px;
+  padding: 5px;
 }
 
 .primary-button{
@@ -72,7 +75,6 @@ button{
   box-shadow: none;
 
   &:hover{
-    box-shadow: none;
     opacity: 1;
     color: $color-link-blue;
     border: 1px solid $color-link-blue;

@@ -20,9 +20,15 @@ header{
   margin:0;
 }
 
-.header-search{
+.header-search{    //Currently commented out in _header.html.erb
   float: right;
   width: 200px;
+}
+
+.logout-link{
+  float: right;
+  color: $color-link-blue;
+  margin-top: 10px;
 }
 
 nav{

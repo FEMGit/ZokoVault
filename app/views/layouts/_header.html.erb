@@ -1,0 +1,7 @@
+<header>
+  <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
+  <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
+  <% if user_signed_in? %>
+    <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
+  <% end %>
+</header>

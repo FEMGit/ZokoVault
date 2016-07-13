@@ -13,23 +13,12 @@
   <%= render :partial => 'layouts/nav' %>
 
   <main>
-    <header>
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-      <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
-      <% if user_signed_in? %>
-        <li>
-        <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
-        </li>
-      <% else %>
-        <li>
-        <%= link_to('Login', new_user_session_path, :class=>"login-link")  %>
-        </li>
-      <% end %>
-      <%= search_field_tag 'search', 'Search', :class=>"header-search" %>
-    </header>
+
+    <%= render :partial => 'layouts/header' %>
 
     <div class="content">
+      <%= render :partial => 'layouts/alerts' %>
+
       <%= yield %>
     </div>
 

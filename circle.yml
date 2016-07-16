@@ -1,9 +1,11 @@
 deployment:
   prod:
     branch: production
-    heroku:
-      appname: zoku-vault
+    commands:
+      - git push git@heroku.com:zoku-vault.git $CIRCLE_SHA1:master
+      - heroku run rake db:migrate --app zoku-vault
   staging:
     branch: master
-    heroku:
-      appname: zoku-vault-staging
+    commands:
+      - git push git@heroku.com:zoku-vault-staging.git $CIRCLE_SHA1:master
+      - heroku run rake db:migrate --app zoku-vault-staging

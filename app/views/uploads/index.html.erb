@@ -1,6 +1,10 @@
 <% @uploads.each do |upload| %>
   <%= link_to upload do %>
-  <img src="<%= upload.name %>">
+  <div class="file-block">
+    <svg class="icon" x=2000>
+      <use xlink:href="#icon-document-3"></use>
+    </svg>
+  </div>
   <% end %>
 <% end %>
 

@@ -3,7 +3,8 @@ class UploadsController < ApplicationController
 
   # GET /uploads
   def index
-    @uploads = Upload.all
+    puts "index"
+    @uploads = Upload.where(user: current_user)
   end
 
   # GET /uploads/1
@@ -13,6 +14,14 @@ class UploadsController < ApplicationController
   # GET /uploads/new
   def new
     @upload = Upload.new
+    puts "current user Id: #{current_user.email}"
+    if current_user
+     @upload.user = current_user
+     @upload.save!
+    else
+     'TODO - redirect to login'
+    end
+
   end
 
   # GET /uploads/1/edit

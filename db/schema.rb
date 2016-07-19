@@ -11,17 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713031652) do
+ActiveRecord::Schema.define(version: 20160717185238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "uploads", force: :cascade do |t|
-    t.string "name"
-    t.text   "description"
-    t.string "folder"
-    t.string "url"
+    t.string  "name"
+    t.text    "description"
+    t.string  "folder"
+    t.string  "url"
+    t.integer "user_id"
   end
+
+  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -55,4 +58,5 @@ ActiveRecord::Schema.define(version: 20160713031652) do
     t.string "url"
   end
 
+  add_foreign_key "uploads", "users"
 end

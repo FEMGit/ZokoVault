@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root to: 'welcome#index'
   get 'files' => 'welcome#files'
+  get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
 
   resources :users

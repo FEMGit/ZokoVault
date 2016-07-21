@@ -25,4 +25,23 @@ p{
 }
 a, a:visited{
   color: $color-link-blue;
+  cursor: pointer;
+
+  &:hover{
+    text-decoration: underline;
+  }
+}
+ol {
+  counter-reset: item;
+  -webkit-padding-start: 20px;
+}
+ol li {
+  display: block;
+
+  &:before {
+    content: counter(item) ". ";
+    counter-increment: item;
+    font-weight: bold;
+    margin-right: 10px;
+  }
 }

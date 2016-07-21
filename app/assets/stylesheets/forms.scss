@@ -7,7 +7,6 @@ textarea{
   padding: 5px;
   width: 300px;
   -webkit-appearance: none;
-
 }
 
 .styled-select{
@@ -33,6 +32,8 @@ select{
 label{
   color: $color-gray-dark-tinted;
 }
+
+//BUTTONS
 
 button{
   cursor: pointer;
@@ -79,4 +80,16 @@ button{
     color: $color-link-blue;
     border: 1px solid $color-link-blue;
   }
+}
+
+
+//ERRORS
+.error-label{
+  color: $color-alert;
+  font-size: 12px;
+}
+
+.input-error{
+  border-color: $color-alert;
+  background: #fff3f5;
 }

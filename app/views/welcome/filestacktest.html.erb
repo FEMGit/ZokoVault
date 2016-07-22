@@ -1,3 +1,13 @@
+<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
+<script>
+  var fileToPage = function(evt){
+    var infoDiv = document.getElementById("file-info");
+    infoDiv.innerText=JSON.stringify(evt.fpfile,null,2);
+  }
+</script>
 
 <input type="filepicker" data-fp-apikey="AcFBIZ0KuTsCrhfSVLWraz"
-onchange="console.log(event.fpfile)">
+onchange="fileToPage(event)">
+
+
+<div id="file-info"/>

@@ -65,9 +65,12 @@ a.main-nav:hover .nav-icon{
 
 main{
   margin-left: 240px;
-
+  height: 100%;
+  overflow:hidden;
 }
 
 .content{
-  padding: 30px;
+  padding: 30px 30px 100px;
+  height:100%;
+  overflow-y:scroll;
 }

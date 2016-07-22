@@ -42,7 +42,7 @@ nav{
 a.main-nav{
   width: 100%;
   color: $color-primary-light;
-  padding: $bu $gu;
+  padding: $bu 0 $bu $gu;
   display:block;
   width:100%;
   cursor: pointer;
@@ -54,7 +54,7 @@ a.main-nav{
 }
 
 .nav-icon{
-  margin-right:5px;
+  margin-right:10px;
   fill: $color-primary-light;
   vertical-align: middle;
   margin-top: -3px;

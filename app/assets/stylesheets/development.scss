@@ -1,0 +1,23 @@
+.doc-tag{
+  font-size: 12px;
+  color: white;
+  background:$color-primary-shaded;
+  margin-right: 5px;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+.secondary-tag{
+  background:$color-primary;
+}
+.user-circle{
+  text-transform: uppercase;
+  color:white;
+  background:$color-primary-shaded;
+  border-radius: 20px;
+  padding:5px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.add-doc{
+  float:right;
+}

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
-
+  get 'documents' => 'documents#index'
   resources :users
 
   Rails.application.routes.draw do

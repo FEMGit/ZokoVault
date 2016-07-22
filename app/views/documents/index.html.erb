@@ -1,4 +1,5 @@
-<%= link_to 'Add Document', new_upload_path, :class=>'add-doc' %>
+
+<a class="add-doc">Add Document</a>
 <h1>Documents</h1>
 
 <table>
@@ -10,10 +11,9 @@
       <th>Actions</th>
     </tr>
 
-<% @uploads.each do |upload| %>
     <tr>
       <td>
-        <%= link_to upload do %>Document Name<% end %>
+        <a>Document Name</a>
       </td>
       <td>07/31/2016</td>
       <td>
@@ -31,5 +31,4 @@
         </button>
       </td>
     </tr>
-<% end %>
 </table>

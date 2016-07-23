@@ -1,13 +1,48 @@
+<table>
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      Modified
+    </th>
+    <th>
+      Shared With
+    </th>
+    <th>
+      Actions
+    </th>
+  </tr>
 <% @uploads.each do |upload| %>
-  <%= link_to upload do %>
-  <div class="file-block">
-    <svg class="icon" x=2000>
-      <use xlink:href="#icon-document-3"></use>
-    </svg>
-  </div>
-  <% end %>
-<% end %>
 
+    <tr>
+      <td>
+
+        Sample Name
+      </td>
+      <td>
+        Sample Modified
+      </td>
+      <td>
+        Sample Shared With
+      </td>
+      <td>
+        <%= link_to upload do %>
+          <button class="tirtiary-button small-button">
+            Open
+          </button>
+          
+        <% end %>
+      </td>
+    </tr>
+
+
+
+
+
+
+<% end %>
+    </table>
 <br>
 
 <%= link_to 'New upload', new_upload_path %>

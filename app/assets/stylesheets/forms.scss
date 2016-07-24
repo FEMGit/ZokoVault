@@ -42,7 +42,7 @@ button{
   color: white;
   text-shadow: .5px 1px rgba(0,0,0,.25);
   box-shadow: .5px 1px 3px rgba(0,0,0,.25);
-  margin: 0 10px 20px 0;
+  margin: 0 10px 0 0;
 
   &:hover{
     opacity: .8;
@@ -62,10 +62,12 @@ button{
 
 .primary-button{
   background: $button-primary;
+  margin-bottom: 20px;
 }
 
 .secondary-button{
   background: $button-secondary;
+  margin-bottom: 20px;
 }
 
 .outline-button{
@@ -82,6 +84,9 @@ button{
   }
 }
 
+.add-link{
+  text-decoration: none;
+}
 
 //ERRORS
 .error-label{

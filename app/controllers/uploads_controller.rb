@@ -17,6 +17,7 @@ class UploadsController < ApplicationController
     puts "current user Id: #{current_user.email}"
     if current_user
      @upload.user = current_user
+     @upload.folder = "Documents";
      @upload.save!
     else
      'TODO - redirect to login'

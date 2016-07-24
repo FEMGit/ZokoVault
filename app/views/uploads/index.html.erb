@@ -14,7 +14,7 @@
 <% @uploads.each do |upload| %>
     <tr>
       <td>
-        <%= link_to upload do %>Document Name<% end %>
+        <%= link_to upload do %><%= upload.name %><% end %>
       </td>
       <td>07/31/2016</td>
       <td>
@@ -27,9 +27,11 @@
         <span class="user-circle">MB</span>
       </td>
       <td>
-        <button class="outline-button small-button">
-          Edit
-        </button>
+        <%= link_to upload do %>
+          <button class="outline-button small-button">
+            Edit
+          </button>
+        <% end %>
       </td>
     </tr>
 <% end %>

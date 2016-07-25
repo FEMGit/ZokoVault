@@ -14,10 +14,10 @@
       <th>Shared With</th>
       <th>Actions</th>
     </tr>
-
+<% @uploads.each do |upload| %>
     <tr>
       <td>
-        <a>Document Name</a>
+        <%= link_to upload do %><%= upload.name %><% end %>
       </td>
       <td>07/31/2016</td>
       <td>
@@ -30,9 +30,12 @@
         <span class="user-circle">MB</span>
       </td>
       <td>
-        <button class="outline-button small-button">
-          Edit
-        </button>
+        <%= link_to upload do %>
+          <button class="outline-button small-button">
+            Edit
+          </button>
+        <% end %>
       </td>
     </tr>
+  <% end %>
 </table>

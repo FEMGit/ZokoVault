@@ -8,8 +8,9 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: padding-box;
   background: white;
-  padding: 15px 25px 0;
+//  padding: 15px 25px 0;
   min-height: 400px;
+  border: 1px solid $color-gray-med-tinted;
 }
 
 .large-modal{
@@ -23,15 +24,20 @@
 .small-modal{
   width: 300px;
 }
+.wizard-modal{
+  padding: 0;
+}
 
 .modal-header{
-
+  padding: 15px 25px;
 }
 .modal-content{
+  padding: 0 25px;
 }
 .modal-footer{
   position: absolute;
   bottom: 0;
+    padding: 15px 25px 0;
 }
 .modal-overlay {
   opacity: 0;

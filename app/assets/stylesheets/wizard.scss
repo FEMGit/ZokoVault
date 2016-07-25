@@ -1,0 +1,42 @@
+.step-wizard{
+  height: 59px;
+  border-bottom: 1px solid $color-gray-med-tinted;
+  background: $color-off-white-shaded;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  margin-bottom: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.inner-step{
+  width: 100%;
+  padding:20px 10px 10px 20px;
+  background: transparent asset-data-url('SVG/thin-chevron.svg') no-repeat center right;
+  //border-right: 1px solid $color-gray-med-tinted;
+
+  &:last-child{
+    background: transparent;
+    padding-left: 15px;
+  }
+}
+.inner-counter{
+  background:$color-gray-light;
+  color: white;
+  border-radius: 40px;
+  padding: 5px 12.5px 5px 12.5px;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  position: relative;
+  top: -1px;
+
+  &.current-step{
+  background:$color-primary;
+  }
+
+  &.completed-step{
+    padding: 5px 4px 5px 9px;
+  }
+}

@@ -65,12 +65,24 @@
   Outline Button
 </button>
 
-<br>
+<p><b>Circle Buttons</b></p>
 <a class="add-link" href="/uploads/new">
+  <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
-    </svg>Add link
+    </svg>
+  </span>Add link
 </a>
+
+<br><br>
+<a class="add-link" href="/uploads/new">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit link
+</a>
+<br><br>
 
 <p><b>Inputs</b></p>
 
@@ -109,6 +121,10 @@
   Small Modal
 </button>
 
+<button class="primary-button big-button" data-modal-id="wizard-modal">
+  Wizard Modal
+</button>
+
 <div id="large-modal" class="modal large-modal">
   <div class="modal-header">
     <a href="javascript:void(null)" class="js-modal-close modal-close">
@@ -134,10 +150,14 @@
       <use xlink:href="#icon-x-2"></use>
     </svg>
   </a>
-  <h2>Modal Title</h2>
-  <p>
-    If what you're doing doesn't make you happy - you're doing the wrong thing. Let's put some happy trees and bushes back in here. Only think about one thing at a time. Don't get greedy. Everything's not great in life, but we can still find beauty in it. <a>I am a link</a> It just happens - whether or not you worried about it or tried to plan it.
-  </p>
+  <div class="modal-header">
+    <h2>Modal Title</h2>
+  </div>
+  <div class="modal-content">
+    <p>
+      If what you're doing doesn't make you happy - you're doing the wrong thing. Let's put some happy trees and bushes back in here. Only think about one thing at a time. Don't get greedy. Everything's not great in life, but we can still find beauty in it. <a>I am a link</a> It just happens - whether or not you worried about it or tried to plan it.
+    </p>
+  </div>
 
   <footer class="modal-footer">
     <button class="js-modal-close secondary-button big-button">Close Button</a>
@@ -150,15 +170,49 @@
       <use xlink:href="#icon-x-2"></use>
     </svg>
   </a>
-  <h2>Modal Title</h2>
-  <p>
-    If what you're doing doesn't make you happy - you're doing the wrong thing. Let's put some happy trees and bushes back in here. Only think about one thing at a time. Don't get greedy. Everything's not great in life, but we can still find beauty in it. <a>I am a link</a> It just happens - whether or not you worried about it or tried to plan it.
-  </p>
+  <div class="modal-header">
+    <h2>Modal Title</h2>
+  </div>
+  <div class="modal-content">
+    <p>
+      If what you're doing doesn't make you happy - you're doing the wrong thing. Let's put some happy trees and bushes back in here. Only think about one thing at a time. Don't get greedy. Everything's not great in life, but we can still find beauty in it. <a>I am a link</a> It just happens - whether or not you worried about it or tried to plan it.
+    </p>
+  </div>
 
   <footer class="modal-footer">
     <button class="js-modal-close secondary-button big-button">Close Button</a>
   </footer>
 </div>
+
+<div id="wizard-modal" class="modal medium-modal wizard-modal">
+  <div class="step-wizard">
+    <div class="inner-step">
+      <span class="inner-counter completed-step">
+        <svg class="icon circle-icon">
+          <use xlink:href="#icon-checkmark-1">1</use>
+        </svg>
+      </span>Step 1
+    </div>
+    <div class="inner-step">
+      <span class="inner-counter current-step">2</span>Step 2
+    </div>
+    <div class="inner-step">
+      <span class="inner-counter">3</span>Step 3
+    </div>
+  </div>
+  <div class="modal-header">
+    <h2>Modal Title</h2>
+  </div>
+  <div class="modal-content">
+    <p>
+      If what you're doing doesn't make you happy - you're doing the wrong thing. Let's put some happy trees and bushes back in here. Only think about one thing at a time. Don't get greedy. Everything's not great in life, but we can still find beauty in it. <a>I am a link</a> It just happens - whether or not you worried about it or tried to plan it.
+    </p>
+  </div>
+  <footer class="modal-footer">
+    <button class="js-modal-close secondary-button big-button">Close Button</a>
+  </footer>
+</div>
+
 
 <p><b>Category Tags</b></p>
 <span class="doc-tag">Primary Tag</span>
@@ -189,6 +243,38 @@
     </tr>
 </table>
 
+<p><b>Step Wizard</b></p>
+
+<div class="step-wizard">
+  <div class="inner-step">
+    <span class="inner-counter current-steop">1</span>Step 1
+  </div>
+  <div class="inner-step">
+    <span class="inner-counter">2</span>Step 2
+  </div>
+  <div class="inner-step">
+    <span class="inner-counter">3</span>Step 3
+  </div>
+</div>
+
+<div class="step-wizard">
+  <div class="inner-step">
+    <span class="inner-counter completed-step">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-checkmark-1">1</use>
+      </svg>
+    </span>Step 1
+  </div>
+  <div class="inner-step">
+    <span class="inner-counter current-step">2</span>Step 2
+  </div>
+  <div class="inner-step">
+    <span class="inner-counter">3</span>Step 3
+  </div>
+  <div class="inner-step">
+    <span class="inner-counter">4</span>Step 4
+  </div>
+</div>
 
 <p><b>SVG Icons</b></p>
 

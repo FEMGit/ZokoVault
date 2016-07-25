@@ -10,17 +10,18 @@
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
+
 .inner-step{
   width: 100%;
   padding:20px 10px 10px 20px;
   background: transparent asset-data-url('SVG/thin-chevron.svg') no-repeat center right;
-  //border-right: 1px solid $color-gray-med-tinted;
 
   &:last-child{
     background: transparent;
     padding-left: 15px;
   }
 }
+
 .inner-counter{
   background:$color-gray-light;
   color: white;

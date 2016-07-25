@@ -100,7 +100,7 @@ button{
   top: 2px;
 }
 
-//ERRORS
+//ERRORS & STATE
 .error-label{
   color: $color-alert;
   font-size: 12px;
@@ -110,6 +110,11 @@ button{
   border-color: $color-alert;
   background: #fff3f5;
 }
+
 .form-hidden{
   display: none;
+}
+
+.form-disabled{
+  opacity: 0.5;
 }

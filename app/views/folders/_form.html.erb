@@ -1,0 +1,31 @@
+<%= form_for(@folder) do |f| %>
+  <% if @folder.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@folder.errors.count, "error") %> prohibited this folder from being saved:</h2>
+
+      <ul>
+      <% @folder.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :parent_id %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :system %><br>
+    <%= f.check_box :system %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -56,11 +56,22 @@
         <use xlink:href="#icon-Safe"></use>
       </svg>Shared With Me
     </a>
-    <a class="main-nav" href="/documents">
+    <a class="main-nav" href="<%=documents_path%>">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-folder-1"></use>
       </svg>Documents
     </a>
-
+    <a class="main-nav" href="<%=categories_path%>">
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-folder-1"></use>
+      </svg>Categories
+    </a>
+    <% Category.for_user(current_user).each do |category| %>
+      <a class="main-nav" href="<%=category_path(category)%>"
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-folder-1"></use>
+        </svg><%=category.name%>
+      </a>
+    <% end %>
   <% end %>
 </nav>

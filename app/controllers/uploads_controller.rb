@@ -1,10 +1,9 @@
-class UploadsController < ApplicationController
+class UploadsController < AuthenticatedController
   before_action :set_upload, only: [:show, :edit, :update, :destroy]
 
   # GET /uploads
   def index
-    puts "index"
-    @uploads = Upload.where(user: current_user)
+    @uploads = Upload.for_user(current_user)
   end
 
   # GET /uploads/1
@@ -14,7 +13,6 @@ class UploadsController < ApplicationController
   # GET /uploads/new
   def new
     @upload = Upload.new
-    puts "current user Id: #{current_user.email}"
     if current_user
      @upload.user = current_user
      @upload.folder = "Documents";
@@ -32,6 +30,7 @@ class UploadsController < ApplicationController
   # POST /uploads
   def create
     @upload = Upload.new(post_upload_params)
+    @upload.user = current_user
 
     if @upload.save
       redirect_to @upload, notice: 'Upload was successfully created.'
@@ -58,7 +57,7 @@ class UploadsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_upload
-      @upload = Upload.find(params[:id])
+      @upload = Upload.for_user(current_user).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

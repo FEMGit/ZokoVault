@@ -11,10 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160717185238) do
+ActiveRecord::Schema.define(version: 20160722223319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "documents", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "folder_id"
+    t.string   "name",        null: false
+    t.text     "description"
+    t.string   "url",         null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
+  add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
+
+  create_table "folders", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "parent_id"
+    t.string   "type"
+    t.string   "name",                        null: false
+    t.text     "description"
+    t.boolean  "system",      default: false, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "folders", ["parent_id"], name: "index_folders_on_parent_id", using: :btree
+  add_index "folders", ["user_id"], name: "index_folders_on_user_id", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string  "name"

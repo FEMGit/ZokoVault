@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= link_to @document.name, @document.url %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @document.description %>
+</p>
+
+<%= link_to 'Edit', edit_folder_document_path(@document.folder,@document) %> |
+<%= link_to 'Destroy', folder_document_path(@document.folder,@document), method: :delete, data: { confirm: 'Are you sure?' } %> |
+<%= link_to 'Back', folder_path(@document.folder) %>

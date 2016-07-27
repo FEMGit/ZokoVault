@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @category.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @category.description %>
+</p>
+
+<%= link_to 'Edit', edit_category_path(@category) %> |
+<%= link_to 'Back', categories_path %>
+
+<h1>Folders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @category.children.each do |folder| %>
+    <tr>
+      <td>
+        <a><%= link_to folder.name, folder %></a>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Folder', new_folder_path(@category) %>

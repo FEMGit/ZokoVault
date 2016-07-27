@@ -1,16 +1,5 @@
-
 <script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 <script>
-  /*filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
-  filepicker.pickAndStore(
-    {
-      location:"S3"
-    },
-    function(Blobs){
-      console.log(JSON.stringify(Blobs));
-    }
-  );*/
-
   var fileToPage = function(evt){
     var infoDiv = document.getElementById("file-info");
     infoDiv.innerText=JSON.stringify(evt.fpfile,null,2);
@@ -25,14 +14,14 @@
   }
 </script>
 
-<h1>New Upload</h1>
+<h1>New Document Upload</h1>
 
 <input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3"
   data-fp-store-container="zoku-stage" onchange="fileToPage(event)"/>
 
 <div id="file-info"></div>
 
-<%= form_for @upload, :html => {:id => "upload-form", :class => "form-hidden"} do |f| %>
+<%= form_for [@folder,@document], :html => {:id => "upload-form", :class => "form-hidden"} do |f| %>
   <div>
     <%= f.text_field :name, :id => "file-name" %><br>
     <%= f.text_field :url, :id =>"file-location" %>
@@ -42,4 +31,4 @@
 
 <% end %>
 
-<%= link_to 'Back', uploads_path %>
+<%= link_to 'Back', folder_path(@document.folder) %>

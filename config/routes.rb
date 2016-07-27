@@ -8,11 +8,18 @@ Rails.application.routes.draw do
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
-  get 'documents' => 'documents#index'
+
   resources :users
 
   Rails.application.routes.draw do
-    resources :uploads
+    resources :categories
+
+    resources :folders, except: [:index, :new] do
+      resources :documents, except: [:index]
+    end
+    get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
+
+    resources :documents, only: [:index]
   end
 
   # Example of regular route:

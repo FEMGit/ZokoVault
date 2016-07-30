@@ -35,8 +35,6 @@
   padding: 0 25px;
 }
 .modal-footer{
-  position: absolute;
-  bottom: 0;
     padding: 15px 25px 0;
 }
 .modal-overlay {
@@ -66,4 +64,9 @@ a.modal-close:hover {
   -webkit-transition: color 1s ease;
   -moz-transition: color 1s ease;
   transition: color 1s ease;
+}
+.modal-no-js{
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%);
 }

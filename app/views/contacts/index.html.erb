@@ -1,0 +1,63 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Contacts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Emailaddress</th>
+      <th>Phone</th>
+      <th>Category</th>
+      <th>Relationship</th>
+      <th>Beneficiarytype</th>
+      <th>Ssn</th>
+      <th>Birthdate</th>
+      <th>Address</th>
+      <th>Zipcode</th>
+      <th>State</th>
+      <th>Notes</th>
+      <th>Avatarcolor</th>
+      <th>Photourl</th>
+      <th>Businessname</th>
+      <th>Businesswebaddress</th>
+      <th>Businessphone</th>
+      <th>Businessfax</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contacts.each do |contact| %>
+      <tr>
+        <td><%= contact.firstname %></td>
+        <td><%= contact.lastname %></td>
+        <td><%= contact.emailaddress %></td>
+        <td><%= contact.phone %></td>
+        <td><%= contact.category %></td>
+        <td><%= contact.relationship %></td>
+        <td><%= contact.beneficiarytype %></td>
+        <td><%= contact.ssn %></td>
+        <td><%= contact.birthdate %></td>
+        <td><%= contact.address %></td>
+        <td><%= contact.zipcode %></td>
+        <td><%= contact.state %></td>
+        <td><%= contact.notes %></td>
+        <td><%= contact.avatarcolor %></td>
+        <td><%= contact.photourl %></td>
+        <td><%= contact.businessname %></td>
+        <td><%= contact.businesswebaddress %></td>
+        <td><%= contact.businessphone %></td>
+        <td><%= contact.businessfax %></td>
+        <td><%= link_to 'Show', contact %></td>
+        <td><%= link_to 'Edit', edit_contact_path(contact) %></td>
+        <td><%= link_to 'Destroy', contact, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Contact', new_contact_path %>

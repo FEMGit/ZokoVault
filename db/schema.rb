@@ -11,10 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160722223319) do
+ActiveRecord::Schema.define(version: 20160730024041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "contacts", force: :cascade do |t|
+    t.string   "firstname"
+    t.string   "lastname"
+    t.string   "emailaddress"
+    t.string   "phone"
+    t.string   "category"
+    t.string   "relationship"
+    t.string   "beneficiarytype"
+    t.string   "ssn"
+    t.date     "birthdate"
+    t.string   "address"
+    t.string   "zipcode"
+    t.string   "state"
+    t.text     "notes"
+    t.string   "avatarcolor"
+    t.string   "photourl"
+    t.string   "businessname"
+    t.string   "businesswebaddress"
+    t.string   "businessphone"
+    t.string   "businessfax"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
 
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"

@@ -40,7 +40,7 @@
 .modal-overlay {
   opacity: 0;
   filter: alpha(opacity=0);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 900;
@@ -69,4 +69,5 @@ a.modal-close:hover {
   top: 30px;
   left: 50%;
   transform: translate(-50%);
+  width: 525px;
 }

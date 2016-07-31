@@ -1,11 +1,3 @@
-<a class="add-link fr" href="/uploads/new">
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-</a>
-
 <h1>Documents</h1>
 
 <table>
@@ -16,15 +8,15 @@
       <th>Shared With</th>
       <th>Actions</th>
     </tr>
-<% @uploads.each do |upload| %>
+    <% @documents.each do |document| %>
     <tr>
       <td>
-        <%= link_to upload do %><%= upload.name %><% end %>
+        <a><%= link_to document.name, folder_document_path(document.folder,document) %></a>
       </td>
-      <td>07/31/2016</td>
+      <td><%=document.updated_at%></td>
       <td>
-        <span class="doc-tag">Insurance</span>
-        <span class="doc-tag secondary-tag">Car</span>
+        <span class="doc-tag"><%=document.folder.parent.name%></span>
+        <span class="doc-tag secondary-tag"><%=document.folder.name%></span>
       </td>
       <td>
         <span class="user-circle">AK</span>
@@ -32,12 +24,13 @@
         <span class="user-circle">MB</span>
       </td>
       <td>
-        <%= link_to upload do %>
-          <button class="outline-button small-button">
-            Edit
-          </button>
-        <% end %>
+        <button class="outline-button small-button">
+          <%= link_to 'Edit', edit_folder_document_path(document.folder,document) %>
+        </button>
+        <button class="outline-button small-button">
+          <%= link_to 'Destroy', folder_document_path(document.folder,document), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </button>
       </td>
     </tr>
-  <% end %>
+    <%end%>
 </table>

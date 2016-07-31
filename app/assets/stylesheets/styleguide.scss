@@ -1,0 +1,90 @@
+
+//COLOR BLOCKS
+.color-block::before{
+  width: 50px;
+  height: 50px;
+  content: "";
+  display:inline-block;
+  margin-right: 10px;
+  background: black;
+}
+
+//PRIMARY
+.color-primary::before{
+  background: $color-primary;
+}
+.color-primary-shaded::before{
+  background: $color-primary-shaded;
+}
+.color-primary-light::before{
+  background: $color-primary-light;
+}
+.color-primary-tinted::before{
+  background: $color-primary-tinted;
+}
+.color-link-blue::before{
+  background: $color-link-blue;
+}
+
+//SECONDARY
+.color-secondary::before{
+  background: $color-secondary;
+}
+.color-secondary-light::before{
+  background: $color-secondary-light;
+}
+
+//STRUTURAL
+.color-gray-dark-shaded::before{
+  background: $color-gray-dark-shaded;
+}
+.color-gray-dark::before{
+  background: $color-gray-dark;
+}
+.color-gray-dark-tinted::before{
+  background: $color-gray-dark-tinted;
+}
+.color-gray-med-shaded::before{
+  background: $color-gray-med-shaded;
+}
+.color-gray-med::before{
+  background: $color-gray-med;
+}
+.color-gray-med-tinted::before{
+  background: $color-gray-med-tinted;
+}
+.color-gray-light-shaded::before{
+  background: $color-gray-light-shaded;
+}
+.color-gray-light::before{
+  background: $color-gray-light;
+}
+.color-gray-light-tinted::before{
+  background: $color-gray-light-tinted;
+}
+.color-off-white::before{
+  background: $color-off-white;
+}
+.color-off-white-shaded::before{
+  background: $color-off-white-shaded;
+}
+.color-off-white-shaded-more::before{
+  background: $color-off-white-shaded-more;
+}
+.color-white::before{
+  background: $color-white;
+}
+
+//SYSTEM COLORS
+.color-alert::before{
+  background: $color-alert;
+}
+.color-confirm::before{
+  background: $color-confirm;
+}
+.color-notice::before{
+  background: $color-notice;
+}
+.color-warning::before{
+  background: $color-warning;
+}

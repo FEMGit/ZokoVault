@@ -1,4 +1,4 @@
-<button class="primary-button big-button hidden" data-modal-id="wizard-modal">
+<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
   Wizard Modal
 </button>
 <div id="wizard-modal" class="modal wizard-modal modal-no-js">
@@ -199,6 +199,7 @@ $(function(){
     $(".modal, .modal-overlay").fadeOut(500, function() {
       $(".modal-overlay").remove();
     });
+
   });
 
   //ESPECIALLY THIS GARBAGE

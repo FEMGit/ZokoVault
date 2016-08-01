@@ -1,6 +1,110 @@
-<h1>Editing Document</h1>
+<style>
+    .doc-card{
+      background: white;
+      border: 1px solid;
+      border-radius: 20px;
+      border-color: rgb(172, 172, 172);
+    }
+    .doc-card h1 {
+        padding: 21px 0px 13px 23px;
+        border-bottom: 1px rgb(211, 211, 211) solid;
+    }
+    .doc-details {
+        width: 50%;
+        border-right: 1px solid rgb(211, 211, 211);
+        padding: 2px 0px 0px 21px;
+        display: inline-block;
+    }
+    .share-details{
+        display: inline-block;
+    }
+    .doc-details div{
+      display:inline-block;
+    }
+    .button-block {
+        border-top: 1px solid rgb(211, 211, 211);
+        padding: 9px 0px 0px 23px;
+    }
+</style>
+<div class="doc-card">
 
-<%= render 'form' %>
+<h1>Edit Document</h1>
 
-<%= link_to 'Show', folder_document_path(@document.folder,@document) %> |
-<%= link_to 'Back', folder_path(@document.folder) %>
+<%= form_for [@document.folder,@document], :html => {:id => "doc-form"} do |f| %>
+  <% if @document.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@document.errors.count, "error") %> prohibited this document from being saved:</h2>
+
+      <ul>
+      <% @document.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :folder_id %>
+
+  <div class="doc-details">
+    <div class="field">
+      Document Name<br>
+      <%= f.text_field :name %><br>
+    </div>
+    <div class="field">
+      <%= f.label :description %><br>
+      <%= f.text_area :description %><br>
+    </div>
+    <div class="field">
+      <%= f.label :url %><br>
+      <%= f.text_field :url %><br>
+    </div>
+  </div>
+  <div class="share-details">
+    <table>
+      <th>
+        Shared With
+      </th>
+      <th>
+        Permissions
+      </th>
+      <tr>
+        <td>
+          John Frusciante
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Miles Davis
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Anthony Keidis
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+
+
+  <div class="button-block">
+    <button class="js-modal-close secondary-button big-button" onclick="submitForm(event)">Save</button>
+    <%= button_to 'Cancel', folder_path(@document.folder), form_class: "secondary-button big-button" %>
+    <button class="js-modal-close secondary-button big-button"><%= link_to 'Cancel', folder_path(@document.folder) %></a>
+    <%#= link_to 'Back', folder_path(@document.folder) #%>
+  </div>
+  <% end %>
+</div>
+<script>
+  var submitForm = function(e){
+    var docForm = document.getElementById("doc-form ");
+    docForm.submit();
+  }
+
+</script>

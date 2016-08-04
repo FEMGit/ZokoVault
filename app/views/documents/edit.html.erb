@@ -51,12 +51,17 @@
       <%= f.text_field :name %><br>
     </div>
     <div class="field">
-      <%= f.label :description %><br>
-      <%= f.text_area :description %><br>
+      Document Category <br>
+      <div class="styled-select">
+        <%= f.select :category, options_for_select([["Select...", ""], "Financial", "Estate", "Insurance", "Tax", "Other"]) %>
+      </div>
     </div>
     <div class="field">
-      <%= f.label :url %><br>
-      <%= f.text_field :url %><br>
+      Category Folder<br>
+      <% options= [['Select...',""], 'Financial', 'Estate', 'Insurance','Tax'] %>
+      <div class="styled-select form-disabled">
+        <%= select_tag :folder, options_for_select(options), :disabled =>true %><br />
+      </div>
     </div>
   </div>
   <div class="share-details">

@@ -10,6 +10,16 @@ Rails.application.routes.draw do
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
 
+  # Default category pages ?Could probably be done better programatically?
+  get 'estate_planning' => 'categories#estate_planning'
+  get 'final_wishes' => 'categories#final_wishes'
+  get 'financial_information' => 'categories#financial_information'
+  get 'healthcare_choices' => 'categories#healthcare_choices'
+  get 'insurance' => 'categories#insurance'
+  get 'shared' => 'categories#shared'
+  get 'taxes' => 'categories#taxes'
+  get 'web_accounts' => 'categories#web_accounts'
+
   resources :users
 
   Rails.application.routes.draw do

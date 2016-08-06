@@ -38,6 +38,19 @@
     color: $color-alert;
   }
 }
+.close-icon{
+  fill: $color-gray-light-shaded;
+  color: $color-gray-light-shaded;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: all 0.25s linear;
+
+  &:hover{
+    fill: $color-black;
+    color: $color-black;
+  }
+}
 
 /* =======================================================================================
 Example showing how to change the color/size of the icons:

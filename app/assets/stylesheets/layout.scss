@@ -39,17 +39,25 @@ nav{
   position: fixed;
 }
 
-a.main-nav{
+a.main-nav,
+a:visited.main-nav{
   width: 100%;
   color: $color-primary-light;
   padding: $bu 0 $bu $gu;
   display:block;
   width:100%;
   cursor: pointer;
+  text-decoration: none;
 
+  &.active{
+    background: black;
+    color: $color-white;
+  }
+  &.active:hover,
   &:hover{
     background: black;
     color: $color-primary;
+    text-decoration: none;
   }
 }
 

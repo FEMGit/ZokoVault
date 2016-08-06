@@ -2,65 +2,79 @@
 
   <% if !user_signed_in? %>
 
-    <%= link_to('Login', new_user_session_path, :class=>"main-nav")  %>
+
 
   <% else %>
 
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(root_url) %>" href="/">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-contacts-2"></use>
       </svg>My Profile
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(contacts_url) %>"
+       href="/contacts">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-share-3"></use>
       </svg>Contacts &amp; Permissions
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(financial_information_url) %>"
+       href="/financial_information">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-activity-monitor-1"></use>
       </svg>Financial Information
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(estate_planning_url) %>"
+       href="estate_planning">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>
       </svg>Estate Planning
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(insurance_url) %>"
+       href="insurance">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-umbrella-1"></use>
       </svg>Insurance
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(taxes_url) %>"
+       href="taxes">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-book-6"></use>
       </svg>Taxes
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(healthcare_choices_url) %>"
+       href="healthcare_choices">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-plus-1"></use>
       </svg>Healthcare Choices
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(final_wishes_url) %>"
+       href="final_wishes">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-bookmark-2"></use>
       </svg>Final Wishes
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(web_accounts_url) %>"
+       href="web_accounts">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-cloud-1"></use>
       </svg>Web Accounts
     </a>
-    <a class="main-nav">
+    <a class="main-nav <%= 'active' if current_page?(shared_url) %>"
+       href="/shared">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-Safe"></use>
       </svg>Shared With Me
     </a>
-    <a class="main-nav" href="<%=documents_path%>">
+    <a class="main-nav <%= 'active' if current_page?(documents_url) %>"
+       href="<%=documents_path%>">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-folder-1"></use>
       </svg>Documents
     </a>
+
+    <br><br>
+    <h5 style="color:white !important;padding-left: 10px;">To Be Removed</h5>
+
     <a class="main-nav" href="<%=categories_path%>">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-folder-1"></use>

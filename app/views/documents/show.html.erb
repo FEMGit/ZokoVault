@@ -9,7 +9,13 @@
   <strong>Description:</strong>
   <%= @document.description %>
 </p>
-
+<a class="add-link fr" href="/shares/new">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Contact
+</a>
 <%= link_to 'Edit', edit_folder_document_path(@document.folder,@document) %> |
 <%= link_to 'Destroy', folder_document_path(@document.folder,@document), method: :delete, data: { confirm: 'Are you sure?' } %> |
 <%= link_to 'Back', folder_path(@document.folder) %>

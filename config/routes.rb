@@ -20,11 +20,14 @@ Rails.application.routes.draw do
   get 'taxes' => 'categories#taxes'
   get 'web_accounts' => 'categories#web_accounts'
 
+  get 'shares/new/:document' => 'shares#new'
+
   resources :users
 
   Rails.application.routes.draw do
   resources :contacts
     resources :categories
+    resources :shares
 
     resources :folders, except: [:index, :new] do
       resources :documents, except: [:index]

@@ -1,46 +1,48 @@
 <style>
-    .doc-card{
-      background: white;
-      border: 1px solid;
-      border-radius: 20px;
-      border-color: rgb(172, 172, 172);
-    }
-    .doc-card h1 {
-        padding: 21px 0px 13px 23px;
-        border-bottom: 1px rgb(211, 211, 211) solid;
-    }
-    .doc-details {
-        width: 50%;
-        border-right: 1px solid rgb(211, 211, 211);
-        padding: 2px 0px 0px 21px;
-        display: inline-block;
-    }
-    .share-details{
-        display: inline-block;
-    }
-    .doc-details div{
-      display:inline-block;
-    }
-    .button-block {
-        border-top: 1px solid rgb(211, 211, 211);
-        padding: 9px 0px 0px 23px;
-    }
+  .doc-card {
+    background: white;
+    border: 1px solid;
+    border-radius: 20px;
+    border-color: rgb(172, 172, 172);
+  }
+  .doc-card h1 {
+    padding: 21px 0 13px 23px;
+    border-bottom: 1px rgb(211, 211, 211) solid;
+  }
+  .doc-details {
+    width: 50%;
+    border-right: 1px solid rgb(211, 211, 211);
+    padding: 2px 0 0 21px;
+    display: inline-block;
+  }
+  .share-details {
+    display: inline-block;
+  }
+  .doc-details div {
+    display: inline-block;
+  }
+  .button-block {
+    border-top: 1px solid rgb(211, 211, 211);
+    padding: 9px 0 0 23px;
+  }
+
 </style>
 <div class="doc-card">
 
-<h1>Edit Document</h1>
+  <h1>Edit Document</h1>
 
-<%= form_for [@document.folder,@document], :html => {:id => "doc-form"} do |f| %>
+  <%= form_for [@document.folder,@document], :html => {:id => "doc-form"} do |f| %>
   <% if @document.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@document.errors.count, "error") %> prohibited this document from being saved:</h2>
+  <div id="error_explanation">
+    <h2><%= pluralize(@document.errors.count, "error") %>
+      prohibited this document from being saved:</h2>
 
-      <ul>
+    <ul>
       <% @document.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+      <li><%= message %></li>
       <% end %>
-      </ul>
-    </div>
+    </ul>
+  </div>
   <% end %>
 
   <%= f.hidden_field :folder_id %>
@@ -51,7 +53,8 @@
       <%= f.text_field :name %><br>
     </div>
     <div class="field">
-      Document Category <br>
+      Document Category
+      <br>
       <div class="styled-select">
         <%= f.select :category, options_for_select([["Select...", ""], "Financial", "Estate", "Insurance", "Tax", "Other"]) %>
       </div>
@@ -60,43 +63,34 @@
       Category Folder<br>
       <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
       <div class="styled-select form-disabled">
-        <%= select_tag :folder, options_for_select(options), :disabled =>true %><br />
+        <%= select_tag :folder, options_for_select(options), :disabled =>true %><br/>
       </div>
     </div>
   </div>
+
   <div class="share-details">
     <table>
-      <th>
-        Shared With
-      </th>
-      <th>
-        Permissions
-      </th>
+      <tr>
+        <th>
+          Shared With
+        </th>
+        <th>
+          Permission
+        </th>
+      </tr>
+      <% @shares.each do |share| %>
       <tr>
         <td>
-          John Frusciante
+          <%= share.contact.firstname %> <%= share.contact.lastname %>
         </td>
         <td>
+          <%= share.permission %>
         </td>
       </tr>
-      <tr>
-        <td>
-          Miles Davis
-        </td>
-        <td>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Anthony Keidis
-        </td>
-        <td>
-        </td>
-      </tr>
+      <% end %>
+
     </table>
   </div>
-
-
 
   <div class="button-block">
     <button class="js-modal-close secondary-button big-button" onclick="submitForm(event)">Save</button>
@@ -107,9 +101,8 @@
   <% end %>
 </div>
 <script>
-  var submitForm = function(e){
+  var submitForm = function (e) {
     var docForm = document.getElementById("doc-form ");
     docForm.submit();
   }
-
 </script>

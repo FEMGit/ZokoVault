@@ -57,6 +57,6 @@ class SharesController < ApplicationController
     end
 
     def share_params
-      params.require(:share).permit(:contact_id, :document_id)
+      params.require(:share).permit(:contact_id, :document_id, :permission)
     end
   end

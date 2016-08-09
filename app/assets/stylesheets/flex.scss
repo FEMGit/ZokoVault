@@ -1,0 +1,16 @@
+.flex-boxes {
+  display: -ms-flex;
+	display: -webkit-flex;
+	display: flex;
+}
+.flex-box {
+  width: 50%;
+
+  &:first-child{
+    margin-right: $gu;
+  }
+}
+
+.flex-box-big {
+  flex: 1 1 40em;
+}

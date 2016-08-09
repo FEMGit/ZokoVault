@@ -5,7 +5,7 @@ textarea{
   display:block;
   margin-bottom: 10px;
   padding: 5px;
-  width: 300px;
+  width: $form-width;
   -webkit-appearance: none;
 }
 
@@ -15,7 +15,7 @@ textarea{
   background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 269px center;
   height: 32px;
   overflow: hidden;
-  width: 300px;
+  width: $form-width;
   padding: 0;
 }
 
@@ -24,7 +24,7 @@ select{
   border: none;
   height: 30px;
   padding: 5px;
-  width: 320px;
+  width: $form-width + $gu;
   box-shadow: none;
   -webkit-appearance: none;
 }
@@ -32,10 +32,6 @@ select{
 label{
   color: $color-gray-dark-tinted;
 }
-//
-// input[type="checkbox"]{
-//
-// }
 
 //BUTTONS
 
@@ -66,12 +62,10 @@ button{
 
 .primary-button{
   background: $button-primary;
-  margin-bottom: 20px;
 }
 
 .secondary-button{
   background: $button-secondary;
-  margin-bottom: 20px;
 }
 
 .outline-button{

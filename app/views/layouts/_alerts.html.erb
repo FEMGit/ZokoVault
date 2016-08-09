@@ -10,7 +10,7 @@
 <script>
 $(document).ready(function(){
   if ($(".flash-success").text().length > 0) {
-    $(".flash-success").show();
+    $(".flash-success").show().fadeOut( 5000 );
   }
   if ($(".flash-error").text().length > 0) {
     $(".flash-error").show();

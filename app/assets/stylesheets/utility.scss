@@ -1,0 +1,29 @@
+.fr{
+  float:right;
+}
+.fl{
+  float: left;
+}
+
+.bb-gray-light{
+  border-bottom: 1px solid $color-gray-light;
+}
+.bl-gray-light{
+  border-left: 1px solid $color-gray-light;
+}
+.br-gray-light{
+  border-right: 1px solid $color-gray-light;
+}
+.bt-gray-light{
+  border-top: 1px solid $color-gray-light;
+}
+
+
+.w-21{
+  width: $gu * 21 !important;
+}
+
+.bottom-fixed{
+  position: absolute;
+  bottom:0;
+}

@@ -1,6 +1,6 @@
 .doc-tag{
   font-size: 12px;
-  color: white;
+  color: $color-white;
   background:$color-primary-shaded;
   margin-right: 5px;
   border-radius: 5px;
@@ -11,7 +11,7 @@
 }
 .user-circle{
   text-transform: uppercase;
-  color:white;
+  color: $color-white;
   background:$color-primary-shaded;
   border-radius: 20px;
   padding:5px;
@@ -19,44 +19,20 @@
   font-weight: 600;
 }
 
-
-.flash{
-    position: absolute;
-    top: 33px;
-    margin: 0 auto;
-    width: 300px;
-    right: 50%;
-    left: 50%;
-    border: 1px solid $color-gray-med;
-    border-radius: 5px;
-}
-
-
-$base-spacing: 1.5em !default;
-$flashes: (
-  "alert": #fff6bf,
-  "error": #fbe3e4,
-  "notice": #e5edf8,
-  "success": #e6efc2,
-) !default;
-
-@each $flash-type, $color in $flashes {
-  .flash-#{$flash-type} {
-    background-color: $color;
-    color: shade($color, 60%);
-    display: block;
-    margin-bottom: $base-spacing / 2;
-    padding: $base-spacing / 2;
-    text-align: center;
-
-    a {
-      color: shade($color, 70%);
-      text-decoration: underline;
-
-      &:focus,
-      &:hover {
-        color: shade($color, 90%);
-      }
-    }
-  }
-}
+// 
+// .doc-details {
+//     width: 50%;
+// //    border-right: 1px solid rgb(211, 211, 211);
+// //    padding: 2px 0px 0px 21px;
+//     display: inline-block;
+// }
+// .share-details{
+//     display: inline-block;
+// }
+// .doc-details div{
+//   display:inline-block;
+// }
+// .button-block {
+//     border-top: 1px solid rgb(211, 211, 211);
+//     padding: 9px 0px 0px 23px;
+// }

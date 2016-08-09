@@ -30,7 +30,7 @@
 
 
         <label>Document Name</label><br>
-        <%= f.text_field :name, :class => '' %>
+        <%= f.text_field :name %>
 
         <label class="form-disabled">Category</label><br>
         <div class="styled-select ">
@@ -64,28 +64,26 @@
           <th>
             Permissions
           </th>
-          <tr>
-            <td>
-              John Frusciante
-            </td>
-            <td>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Miles Davis
-            </td>
-            <td>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Anthony Keidis
-            </td>
-            <td>
-            </td>
-          </tr>
+          <% @shares.each do |share| %>
+            <tr>
+              <td>
+                <%= share.contact.firstname %> <%= share.contact.lastname %>
+              </td>
+              <td>
+                <%= share.permission %>
+              </td>
+            </tr>
+          <% end %>
         </table>
+
+        <a class="add-link" href="">
+          <span class="circle-button small">
+            <svg class="icon circle-icon">
+              <use xlink:href="#icon-plus-1"></use>
+            </svg>
+          </span>Add Shared With
+        </a>
+
       </div>
 
     </div>
@@ -103,16 +101,12 @@
                  big-button">
           Cancel</button>
     </div>
-
   <% end %>
 </div>
 
-
-
 <script>
-  var submitForm = function(e){
+  var submitForm = function (e) {
     var docForm = document.getElementById("doc-form ");
     docForm.submit();
   }
-
 </script>

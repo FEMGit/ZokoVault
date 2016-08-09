@@ -14,6 +14,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def edit
+    @shares = @document.shares
   end
 
   def create

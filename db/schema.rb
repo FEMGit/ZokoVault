@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806135119) do
+ActiveRecord::Schema.define(version: 20160807183329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,17 @@ ActiveRecord::Schema.define(version: 20160806135119) do
   add_index "folders", ["parent_id"], name: "index_folders_on_parent_id", using: :btree
   add_index "folders", ["user_id"], name: "index_folders_on_user_id", using: :btree
 
+  create_table "shares", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "contact_id"
+    t.string   "permission"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "user_id"
+  end
+
+  add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
   create_table "uploads", force: :cascade do |t|
     t.string  "name"
     t.text    "description"
@@ -114,5 +125,6 @@ ActiveRecord::Schema.define(version: 20160806135119) do
   end
 
   add_foreign_key "contacts", "users"
+  add_foreign_key "shares", "users"
   add_foreign_key "uploads", "users"
 end

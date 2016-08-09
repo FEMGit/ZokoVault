@@ -96,6 +96,10 @@ button{
   margin-right: 5px;
   position: relative;
   top: 2px;
+
+  &.small{
+    padding: 2px 1px 1px 4px;
+  }
 }
 
 //ERRORS & STATE

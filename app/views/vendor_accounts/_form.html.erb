@@ -25,7 +25,9 @@
   </div>
   <div class="field">
     <%= f.label :vendor_id %><br>
-    <%= f.text_field :vendor_id %>
+    <div class="styled-select">
+      <%= f.select :vendor_id, options_for_select(Vendor.all.map{|v|[v.name, v.id]}) %>
+    </div>
   </div>
   <div class="actions">
     <%= f.submit %>

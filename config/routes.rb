@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :vendor_accounts
+  resources :vendors
   resources :contacts
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
@@ -25,6 +27,8 @@ Rails.application.routes.draw do
   resources :users
 
   Rails.application.routes.draw do
+  resources :vendor_accounts
+  resources :vendors
   resources :contacts
     resources :categories
     resources :shares

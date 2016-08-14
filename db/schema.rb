@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160807183329) do
+ActiveRecord::Schema.define(version: 20160814011953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,7 +124,36 @@ ActiveRecord::Schema.define(version: 20160807183329) do
     t.string "url"
   end
 
+  create_table "vendor_accounts", force: :cascade do |t|
+    t.string   "name"
+    t.string   "group"
+    t.string   "category"
+    t.integer  "vendor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "vendor_accounts", ["vendor_id"], name: "index_vendor_accounts_on_vendor_id", using: :btree
+
+  create_table "vendors", force: :cascade do |t|
+    t.string   "category"
+    t.string   "group"
+    t.string   "name"
+    t.string   "webaddress"
+    t.string   "phone"
+    t.integer  "contact_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "vendors", ["contact_id"], name: "index_vendors_on_contact_id", using: :btree
+  add_index "vendors", ["user_id"], name: "index_vendors_on_user_id", using: :btree
+
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "uploads", "users"
+  add_foreign_key "vendor_accounts", "vendors"
+  add_foreign_key "vendors", "contacts"
+  add_foreign_key "vendors", "users"
 end

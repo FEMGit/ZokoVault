@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @vendor_account.name %>
+</p>
+
+<p>
+  <strong>Group:</strong>
+  <%= @vendor_account.group %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @vendor_account.category %>
+</p>
+
+<p>
+  <strong>Vendor:</strong>
+  <%= @vendor_account.vendor %>
+</p>
+
+<%= link_to 'Edit', edit_vendor_account_path(@vendor_account) %> |
+<%= link_to 'Back', vendor_accounts_path %>

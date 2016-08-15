@@ -1,1 +1,18 @@
 <h1>Insurance</h1>
+
+<% @groups.each do |group| %>
+  <div>
+    <%= group["label"] %>
+    <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
+
+  </div>
+<% end %></br></br></br>
+
+<% @insurance_vendors.group_by(&:group).each do |group, vendors| %>
+  Group: <%= group %> </br>
+  <% vendors.each do |vendor| %>
+    <div>
+      <%= vendor.name %> </br>
+    </div>
+  <% end %></br>
+<% end %>

@@ -15,6 +15,8 @@ class VendorsController < ApplicationController
   # GET /vendors/new
   def new
     @vendor = Vendor.new
+    @vendor.category = params[:category]
+    @vendor.group = params[:group]
   end
 
   # GET /vendors/1/edit
@@ -25,6 +27,8 @@ class VendorsController < ApplicationController
   # POST /vendors.json
   def create
     @vendor = Vendor.new(vendor_params)
+    @vendor.user = current_user
+    @vendor_accounts = @vendor.vendor_accounts
 
     respond_to do |format|
       if @vendor.save

@@ -4,7 +4,11 @@ class CategoriesController < AuthenticatedController
   def index
     @categories = Category.for_user(current_user)
   end
-
+  def insurance
+    @category = "insurance"
+    @groups = Rails.configuration.x.categories[@category]["groups"]
+    @insurance_vendors = Vendor.for_user(current_user)
+  end
   def show
   end
 
@@ -57,6 +61,6 @@ class CategoriesController < AuthenticatedController
   end
 
   def category_params
-    params.require(:category).permit(:name, :description, :managed)
+    params.require(:category).permit(:name, :description, :managed, :category, :group)
   end
 end

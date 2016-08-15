@@ -12,12 +12,10 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :category %><br>
-    <%= f.text_field :category %>
+    <%= f.hidden_field :category %>
   </div>
   <div class="field">
-    <%= f.label :group %><br>
-    <%= f.text_field :group %>
+    <%= f.hidden_field :group %>
   </div>
   <div class="field">
     <%= f.label :name %><br>
@@ -35,10 +33,7 @@
     <%= f.label :contact_id %><br>
     <%= f.text_field :contact_id %>
   </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

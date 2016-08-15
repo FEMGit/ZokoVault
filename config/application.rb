@@ -11,7 +11,34 @@ module ZokuVault
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-
+    config.x.categories = {
+      "financial" => {
+        "label" => "Financial Information",
+        "groups" => [
+          0,1,2
+        ]
+      },
+      "estate" => {
+        "label" => "Estate Planning",
+        "groups" => [
+          0,1,2
+        ]
+      },
+      "insurance" => {
+        "label" => "Insurance",
+        "groups" => [
+          {"value" => "life",
+            "label" => "Life & Disability Insurance"
+          },
+          {"value" => "property",
+            "label" => "Property Insurance"
+          },
+          {"value" => "health",
+            "label" => "Health Insurance"
+          }
+        ]
+      }
+    }
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'

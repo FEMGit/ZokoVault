@@ -16,7 +16,11 @@
           <div class="card <%= group['value'] %>">
               <h3><%= vendor.name %></h3>
               <p><%= vendor.contact %></p>
-              <p><%= vendor.webaddress %></p>
+              <p>
+                <a href="<%= vendor.webaddress %>" target="_blank">
+                  <%= vendor.webaddress %>
+                </a>
+              </p>
               <p><%= vendor.phone %></p>
           </div>
         <% end %>

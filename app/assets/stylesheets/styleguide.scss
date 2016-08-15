@@ -75,6 +75,17 @@
   background: $color-white;
 }
 
+//COLORCARDS
+.color-card-1::before{
+  background: $color-card-1;
+}
+.color-card-2::before{
+  background: $color-card-2;
+}
+.color-card-3::before{
+  background: $color-card-3;
+}
+
 //SYSTEM COLORS
 .color-alert::before{
   background: $color-alert;

@@ -11,15 +11,15 @@
 }
 .user-circle{
   text-transform: uppercase;
-  color: $color-white;
-  background:$color-primary-shaded;
+  color: $color-gray-med;
   border-radius: 20px;
+  border: 1px solid $color-gray-med;
   padding:5px;
   font-size: 13px;
   font-weight: 600;
 }
 
-// 
+//
 // .doc-details {
 //     width: 50%;
 // //    border-right: 1px solid rgb(211, 211, 211);

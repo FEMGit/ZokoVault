@@ -32,10 +32,9 @@
         <label>Document Name</label><br>
         <%= f.text_field :name %>
 
-        <label class="form-disabled">Category</label><br>
+        <label>Category</label><br>
         <div class="styled-select ">
           <%= f.select :category,
-
               options_for_select([
                 ["Select...", ""],
                 "Contact",
@@ -48,7 +47,7 @@
                 "Web Accounts"]) %>
         </div><br>
 
-        <label>Card</label><br>
+        <label class="form-disabled">Card</label><br>
         <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
         <div class="styled-select form-disabled">
           <%= select_tag :folder, options_for_select(options), :disabled =>true %><br />

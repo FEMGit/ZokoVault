@@ -31,7 +31,9 @@
   </div>
   <div class="field">
     <%= f.label :contact_id %><br>
-    <%= f.text_field :contact_id %>
+    <div class="styled-select">
+      <%= f.select :contact_id, options_for_select(Contact.all.map{|c|[c.firstname + " " + c.lastname, c.id]}) %>
+    </div>
   </div>
 
   <div class="actions">

@@ -1,15 +1,18 @@
 <h1>Insurance</h1>
 
 <div class="flex-boxes">
+  <% @groups.each do |group| %>
+    <div class="flex-33">
+      <div class="card <%= group['value'] %>">
+        <h3><%= group["label"] %></h3>
+        <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
+      </div>
+    </div>
+  <% end %>
 
   <% @insurance_vendors.group_by(&:group).each do |group, vendors| %>
 
-    <% @groups.each do |group| %>
-      <div class="flex-33">
-        <div class="card <%= group['value'] %>">
-          <h3><%= group["label"] %></h3>
-          <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
-        </div>
+
 
         <% vendors.each do |vendor| %>
 
@@ -24,7 +27,5 @@
               <p><%= vendor.phone %></p>
           </div>
         <% end %>
-      </div>
-    <% end %>
   <% end %>
 </div>

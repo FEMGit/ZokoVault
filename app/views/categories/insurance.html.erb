@@ -1,19 +1,23 @@
 <h1>Insurance</h1>
 
 <div class="flex-boxes">
+  <% @groups.each do |group| %>
+    <div class="flex-33">
+      <div class="card <%= group['value'] %>">
+        <h3><%= group["label"] %></h3>
+        <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
-  <% @insurance_vendors.group_by(&:group).each do |group, vendors| %>
-      <div class="flex-33">
-        <div class="card <%= group %>">
-          <h3><%= @group_pivot[group] %></h3>
-          <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
-        </div>
 
-        <% vendors.each do |vendor| %>
-
-          <div class="card <%= group %>">
+<div class="flex-boxes">
+  <div class="flex-33">
+    <% @insurance_vendors.select{|v| v["group"]=="life"}.each do |vendor| %>
+          <div class="card life">
               <h3><%= vendor.name %></h3>
-              <p><%= vendor.contact %></p>
+              <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
               <p>
                 <a href="<%= vendor.webaddress %>" target="_blank">
                   <%= vendor.webaddress %>
@@ -21,7 +25,38 @@
               </p>
               <p><%= vendor.phone %></p>
           </div>
+      <% end %>
+    </div>
+
+    <div class="flex-33">
+      <% @insurance_vendors.select{|v| v["group"]=="property"}.each do |vendor| %>
+            <div class="card property">
+                <h3><%= vendor.name %></h3>
+                <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
+                <p>
+                  <a href="<%= vendor.webaddress %>" target="_blank">
+                    <%= vendor.webaddress %>
+                  </a>
+                </p>
+                <p><%= vendor.phone %></p>
+            </div>
         <% end %>
       </div>
-  <% end %>
+
+
+      <div class="flex-33">
+        <% @insurance_vendors.select{|v| v["group"]=="health"}.each do |vendor| %>
+              <div class="card health">
+                  <h3><%= vendor.name %></h3>
+                  <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
+                  <p>
+                    <a href="<%= vendor.webaddress %>" target="_blank">
+                      <%= vendor.webaddress %>
+                    </a>
+                  </p>
+                  <p><%= vendor.phone %></p>
+              </div>
+          <% end %>
+        </div>
+
 </div>

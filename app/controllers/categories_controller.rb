@@ -5,7 +5,7 @@ class CategoriesController < AuthenticatedController
     @categories = Category.for_user(current_user)
   end
   def insurance
-    @category = "insurance"
+    @category = "insurance" #TODO: fix bug in padding out groups if missing
     @groups = Rails.configuration.x.categories[@category]["groups"]
     @group_pivot = {      #TODO: Turn label/key attributes into hash programmatically
       "life" => "Life & Disability Insurance",

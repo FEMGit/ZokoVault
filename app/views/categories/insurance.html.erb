@@ -5,7 +5,7 @@
   <% @insurance_vendors.group_by(&:group).each do |group, vendors| %>
       <div class="flex-33">
         <div class="card <%= group %>">
-          <h3><%= group["label"] %></h3>
+          <h3><%= @group_pivot[group] %></h3>
           <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %>
         </div>
 

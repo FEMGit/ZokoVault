@@ -7,6 +7,11 @@ class CategoriesController < AuthenticatedController
   def insurance
     @category = "insurance"
     @groups = Rails.configuration.x.categories[@category]["groups"]
+    @group_pivot = {      #TODO: Turn label/key attributes into hash programmatically
+      "life" => "Life & Disability Insurance",
+      "property" => "Property Insurance",
+      "health" => "Health Insurance"
+    }
     @insurance_vendors = Vendor.for_user(current_user)
   end
   def show

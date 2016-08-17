@@ -25,12 +25,12 @@
         <use xlink:href="#icon-document-3"></use>
       </svg>Estate Planning
     </a>
-    <a class="main-nav <%= 'active' if current_page?(insurance_url) %>"
-       href="insurance">
+    <% insurance_current = 'active' if current_page?(insurance_url) %>
+    <%= link_to insurance_path, class: "main-nav #{insurance_current}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-umbrella-1"></use>
       </svg>Insurance
-    </a>
+    <% end %>
     <a class="main-nav <%= 'active' if current_page?(taxes_url) %>"
        href="taxes">
       <svg class="icon nav-icon">

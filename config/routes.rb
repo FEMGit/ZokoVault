@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'final_wishes' => 'categories#final_wishes'
   get 'financial_information' => 'categories#financial_information'
   get 'healthcare_choices' => 'categories#healthcare_choices'
-  get 'insurance' => 'categories#insurance'
+  get 'insurance' => 'categories#insurance', as: 'insurance'
   get 'shared' => 'categories#shared'
   get 'taxes' => 'categories#taxes'
   get 'web_accounts' => 'categories#web_accounts'

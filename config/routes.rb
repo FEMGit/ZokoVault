@@ -32,13 +32,9 @@ Rails.application.routes.draw do
   resources :contacts
     resources :categories
     resources :shares
-
-    resources :folders, except: [:index, :new] do
-      resources :documents, except: [:index]
-    end
     get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
-    resources :documents, only: [:index]
+    resources :documents
   end
 
   # Example of regular route:

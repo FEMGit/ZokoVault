@@ -9,8 +9,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @folder = Folder.find_by_id(params[:folder_id])
-    @document = Document.new(folder_id: params[:folder_id])
+    @document = Document.new()
   end
 
   def edit
@@ -18,14 +17,12 @@ class DocumentsController < AuthenticatedController
   end
 
   def create
-    folder = Folder.find_by_id(params[:folder_id])
     @document = Document.new(document_params)
-    @document.folder = folder
     @document.user = current_user
 
     respond_to do |format|
       if @document.save
-        format.html { redirect_to folder_document_path(@document.folder, @document), notice: 'Document was successfully created.' }
+        format.html { redirect_to document_path(@document), notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new }
@@ -37,7 +34,7 @@ class DocumentsController < AuthenticatedController
   def update
     respond_to do |format|
       if @document.update(document_params)
-        format.html { redirect_to folder_document_path(@document.folder, @document), notice: 'Document was successfully updated.' }
+        format.html { redirect_to document_path(@document), notice: 'Document was successfully updated.' }
         format.json { render :show, status: :ok, location: @document }
       else
         format.html { render :edit }
@@ -47,10 +44,9 @@ class DocumentsController < AuthenticatedController
   end
 
   def destroy
-    folder = @document.folder
     @document.destroy
     respond_to do |format|
-      format.html { redirect_to folder_path(folder), notice: 'Document was successfully destroyed.' }
+      format.html { redirect_to documents_path, notice: 'Document was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

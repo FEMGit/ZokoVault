@@ -16,6 +16,6 @@
     </svg>
   </span>Add Contact
 </a>
-<%= link_to 'Edit', edit_folder_document_path(@document.folder,@document) %> |
-<%= link_to 'Destroy', folder_document_path(@document.folder,@document), method: :delete, data: { confirm: 'Are you sure?' } %> |
-<%= link_to 'Back', folder_path(@document.folder) %>
+<%= link_to 'Edit', edit_document_path(@document) %> |
+<%= link_to 'Destroy', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' } %> |
+<%= link_to 'Back', documents_path %>

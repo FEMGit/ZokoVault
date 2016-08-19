@@ -1,3 +1,11 @@
+<a class="add-link fr" href="<%=new_document_path%>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+
 <h1>Documents</h1>
 
 <table>
@@ -11,13 +19,10 @@
     <% @documents.each do |document| %>
     <tr>
       <td>
-        <a><%= link_to document.name, folder_document_path(document.folder,document) %></a>
+        <a><%= link_to document.name, document_path(document) %></a>
       </td>
       <td><%=document.updated_at%></td>
-      <td>
-        <span class="doc-tag"><%=document.folder.parent.name%></span>
-        <span class="doc-tag secondary-tag"><%=document.folder.name%></span>
-      </td>
+      <td>tags</td>
       <td>
         <span class="user-circle">AK</span>
         <span class="user-circle">BM</span>
@@ -25,10 +30,10 @@
       </td>
       <td>
         <button class="outline-button small-button">
-          <%= link_to 'Edit', edit_folder_document_path(document.folder,document) %>
+          <%= link_to 'Edit', edit_document_path(document) %>
         </button>
         <button class="outline-button small-button">
-          <%= link_to 'Destroy', folder_document_path(document.folder,document), method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Destroy', document_path(document), method: :delete, data: { confirm: 'Are you sure?' } %>
         </button>
       </td>
     </tr>

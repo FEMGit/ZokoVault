@@ -19,6 +19,13 @@ class VendorsController < ApplicationController
     @vendor.group = params[:group]
   end
 
+  # GET /_new_vendor
+  def _newvendor
+    @vendor = Vendor.new
+    @vendor.category = params[:category]
+    @vendor.group = params[:group]
+  end
+
   # GET /vendors/1/edit
   def edit
   end

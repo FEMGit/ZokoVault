@@ -13,6 +13,7 @@ class CategoriesController < AuthenticatedController
       "health" => "Health Insurance"
     }
     @insurance_vendors = Vendor.for_user(current_user)
+    session[:ret_url] = "insurance"
   end
   def show
   end

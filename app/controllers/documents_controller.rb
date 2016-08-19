@@ -3,6 +3,7 @@ class DocumentsController < AuthenticatedController
 
   def index
     @documents = Document.for_user(current_user)
+    session[:ret_url] = "documents"
   end
 
   def show
@@ -21,8 +22,12 @@ class DocumentsController < AuthenticatedController
     @document.user = current_user
 
     respond_to do |format|
-      if @document.save #TODO: dynamic routing to documents vs insurance
-        format.html { redirect_to insurance_path, notice: 'Document was successfully created.' }
+      if @document.save #TODO: dynamic route builder for categories
+        if session[:ret_url] == "insurance"
+          format.html { redirect_to insurance_path, notice: 'Document was successfully created.' }
+        else
+          format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
+        end
         format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new }

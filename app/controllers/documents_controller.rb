@@ -21,8 +21,8 @@ class DocumentsController < AuthenticatedController
     @document.user = current_user
 
     respond_to do |format|
-      if @document.save
-        format.html { redirect_to document_path(@document), notice: 'Document was successfully created.' }
+      if @document.save #TODO: dynamic routing to documents vs insurance
+        format.html { redirect_to insurance_path, notice: 'Document was successfully created.' }
         format.json { render :show, status: :created, location: @document }
       else
         format.html { render :new }

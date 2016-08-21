@@ -27,7 +27,12 @@
     <%= f.text_field :url, :id =>"file-location" %>
     <%= f.text_field :description, :id =>"file-type" %>
     <%# f.type_field :type, :id =>"file-type" %>
-    <%= hidden_field_tag 'returl', params[:return] %>
+    <<div class="field">
+      <%= f.hidden_field :category %>
+    </div>
+    <div class="field">
+      <%= f.hidden_field :group %>
+    </div>
   </div>
 
 <% end %>

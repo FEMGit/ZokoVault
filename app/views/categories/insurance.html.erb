@@ -27,6 +27,19 @@
               <p><%= vendor.phone %></p>
           </div>
       <% end %>
+
+      <% @insurance_documents.select{|d| d["group"]=="life"}.each do |document| %>
+            <div class="card life">
+                <h3><%= document.name %></h3>
+                <p><%= document.description %></p>
+                <p>
+                  <a href="<%= document.url %>" target="_blank">
+                    <%= document.url %>
+                  </a>
+                </p>
+            </div>
+        <% end %>
+
     </div>
 
     <div class="flex-33">
@@ -42,6 +55,19 @@
                 <p><%= vendor.phone %></p>
             </div>
         <% end %>
+
+        <% @insurance_documents.select{|d| d["group"]=="property"}.each do |document| %>
+              <div class="card property">
+                  <h3><%= document.name %></h3>
+                  <p><%= document.description %></p>
+                  <p>
+                    <a href="<%= document.url %>" target="_blank">
+                      <%= document.url %>
+                    </a>
+                  </p>
+              </div>
+          <% end %>
+
       </div>
 
 
@@ -58,6 +84,19 @@
                   <p><%= vendor.phone %></p>
               </div>
           <% end %>
+
+          <% @insurance_documents.select{|d| d["group"]=="health"}.each do |document| %>
+                <div class="card health">
+                    <h3><%= document.name %></h3>
+                    <p><%= document.description %></p>
+                    <p>
+                      <a href="<%= document.url %>" target="_blank">
+                        <%= document.url %>
+                      </a>
+                    </p>
+                </div>
+            <% end %>
+
         </div>
 
 </div>

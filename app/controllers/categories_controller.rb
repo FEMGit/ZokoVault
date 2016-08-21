@@ -12,7 +12,8 @@ class CategoriesController < AuthenticatedController
       "property" => "Property Insurance",
       "health" => "Health Insurance"
     }
-    @insurance_vendors = Vendor.for_user(current_user)
+    @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
+    @insurance_documents = Document.for_user(current_user).where(category: @category)
     session[:ret_url] = "insurance"
   end
   def show

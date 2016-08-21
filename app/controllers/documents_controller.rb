@@ -11,6 +11,8 @@ class DocumentsController < AuthenticatedController
 
   def new
     @document = Document.new()
+    @document.category = params[:category]
+    @document.group = params[:group]
   end
 
   def edit
@@ -63,6 +65,6 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :url)
+    params.require(:document).permit(:name, :url, :group, :category)
   end
 end

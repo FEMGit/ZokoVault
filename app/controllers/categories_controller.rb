@@ -4,6 +4,7 @@ class CategoriesController < AuthenticatedController
   def index
     @categories = Category.for_user(current_user)
   end
+
   def insurance
     @category = "insurance" #TODO: fix bug in padding out groups if missing
     @groups = Rails.configuration.x.categories[@category]["groups"]
@@ -16,6 +17,7 @@ class CategoriesController < AuthenticatedController
     @insurance_documents = Document.for_user(current_user).where(category: @category)
     session[:ret_url] = "insurance"
   end
+
   def show
   end
 

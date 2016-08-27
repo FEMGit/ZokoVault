@@ -16,3 +16,10 @@
 !/log/.keep
 /tmp
 .env
+.idea/.generators
+.idea/.rakeTasks
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/zoku-vault-staging-rm.iml

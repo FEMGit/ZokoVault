@@ -28,18 +28,6 @@
           </div>
       <% end %>
 
-      <% @insurance_documents.select{|d| d["group"]=="life"}.each do |document| %>
-            <div class="card life">
-                <h3><%= document.name %></h3>
-                <p><%= document.description %></p>
-                <p>
-                  <a href="<%= document.url %>" target="_blank">
-                    <%= document.url %>
-                  </a>
-                </p>
-            </div>
-        <% end %>
-
     </div>
 
     <div class="flex-33">
@@ -55,18 +43,6 @@
                 <p><%= vendor.phone %></p>
             </div>
         <% end %>
-
-        <% @insurance_documents.select{|d| d["group"]=="property"}.each do |document| %>
-              <div class="card property">
-                  <h3><%= document.name %></h3>
-                  <p><%= document.description %></p>
-                  <p>
-                    <a href="<%= document.url %>" target="_blank">
-                      <%= document.url %>
-                    </a>
-                  </p>
-              </div>
-          <% end %>
 
       </div>
 
@@ -85,18 +61,40 @@
               </div>
           <% end %>
 
-          <% @insurance_documents.select{|d| d["group"]=="health"}.each do |document| %>
-                <div class="card health">
-                    <h3><%= document.name %></h3>
-                    <p><%= document.description %></p>
-                    <p>
-                      <a href="<%= document.url %>" target="_blank">
-                        <%= document.url %>
-                      </a>
-                    </p>
-                </div>
-            <% end %>
-
         </div>
-
 </div>
+
+        <h1>Documents</h1>
+
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Modified</th>
+            <th>Tags</th>
+            <th>Shared With</th>
+            <th>Actions</th>
+          </tr>
+          <% @insurance_documents.each do |document| %>
+              <tr>
+                <td>
+                  <a><%= link_to document.name, document_path(document) %></a>
+                </td>
+                <td><%=document.updated_at%></td>
+                <td>tags</td>
+                <td>
+                  <span class="user-circle">AK</span>
+                  <span class="user-circle">BM</span>
+                  <span class="user-circle">MB</span>
+                </td>
+                <td>
+                  <button class="outline-button small-button">
+                    <%= link_to 'Edit', edit_document_path(document) %>
+                  </button>
+                  <button class="outline-button small-button">
+                    <%= link_to 'Destroy', document_path(document), method: :delete, data: { confirm: 'Are you sure?' } %>
+                  </button>
+                </td>
+              </tr>
+          <%end%>
+        </table>
+

@@ -58,6 +58,13 @@ group :development, :test do
   gem 'byebug'
   # Rspec
   gem 'rspec-rails', '~> 3.4'
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'spring-commands-rspec'
+end
+
+group :test do
+  gem 'webmock'
 end
 
 group :development do

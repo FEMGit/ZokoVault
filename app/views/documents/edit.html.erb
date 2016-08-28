@@ -1,6 +1,6 @@
 <div id="large-modal" class="modal large-modal" style="display:block !important;">
   <div class="modal-header bb-gray-light">
-    <a href="javascript:void(null)" class="js-modal-close modal-close">
+    <a href="<%= document_path(@document) %>" class="js-modal-close modal-close">
       <svg class="icon">
         <use xlink:href="#icon-x-2"></use>
       </svg>
@@ -34,8 +34,7 @@
 
         <label>Category</label><br>
         <div class="styled-select ">
-          <%= f.select :category,
-              options_for_select([
+          <% options = [
                 ["Select...", ""],
                 "Contact",
                 "Financial Information",
@@ -44,13 +43,20 @@
                 "Taxes",
                 "Healthcare Choices",
                 "Final Wishes",
-                "Web Accounts"]) %>
+                "Web Accounts"] %>
+          <%= f.select :category, options_for_select(options, @document.category) %>
         </div><br>
 
         <label class="form-disabled">Card</label><br>
         <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
         <div class="styled-select form-disabled">
-          <%= select_tag :folder, options_for_select(options), :disabled =>true %><br />
+          <%= select_tag :folder, options_for_select(options, @document.folder), :disabled =>true %><br />
+        </div>
+
+        <div class="flex-box">
+        <label>Notes
+        <%= f.text_area :description %>
+        </label><br>
         </div>
 
       </div>
@@ -94,11 +100,8 @@
                  big-button"
           onclick="submitForm(event)" >
           Save</button>
-        <button
-          class="js-modal-close
-                 secondary-button
-                 big-button">
-          Cancel</button>
+        <%= link_to "Cancel", @document, 
+          class: "js-modal-close secondary-button big-button" %>
     </div>
   <% end %>
 </div>

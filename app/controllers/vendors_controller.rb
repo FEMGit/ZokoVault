@@ -17,6 +17,7 @@ class VendorsController < ApplicationController
     @vendor = Vendor.new
     @vendor.category = params[:category]
     @vendor.group = params[:group]
+    @vendor.vendor_accounts.build
   end
 
   # GET /_new_vendor
@@ -28,6 +29,9 @@ class VendorsController < ApplicationController
 
   # GET /vendors/1/edit
   def edit
+    if @vendor.vendor_accounts.size==0
+      @vendor.vendor_accounts.build
+    end
   end
 
   # POST /vendors
@@ -35,7 +39,8 @@ class VendorsController < ApplicationController
   def create
     @vendor = Vendor.new(vendor_params)
     @vendor.user = current_user
-    @vendor_accounts = @vendor.vendor_accounts
+
+
 
     respond_to do |format|
       if @vendor.save
@@ -80,6 +85,6 @@ class VendorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def vendor_params
-      params.require(:vendor).permit(:category, :group, :name, :webaddress, :phone, :contact_id, :user_id)
+      params.require(:vendor).permit(:category, :group, :name, :webaddress, :phone, :contact_id, :user_id, vendor_accounts_attributes: [:name])
     end
 end

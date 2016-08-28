@@ -29,6 +29,14 @@
     <%= f.label :phone %><br>
     <%= f.text_field :phone %>
   </div>
+
+    <%= f.fields_for :vendor_accounts do |vendor_account| %>
+        <div class="field">
+          Account Name<br>
+          <%= vendor_account.text_field :name %><br>
+        </div>
+    <% end %>
+
   <div class="field">
     <%= f.label :contact_id %><br>
     <div class="styled-select">

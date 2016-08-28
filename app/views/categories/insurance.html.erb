@@ -2,99 +2,95 @@
 
 <div class="flex-boxes">
   <% @groups.each do |group| %>
-    <div class="flex-33">
-      <div class="card <%= group['value'] %>">
-        <h3><%= group["label"] %></h3>
-        <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %></br>
-        <%= link_to 'Add Document', new_document_path(:category => @category, :group => group["value"], :return => "insurance") %>
+      <div class="flex-33">
+        <div class="card <%= group['value'] %>">
+          <h3><%= group["label"] %></h3>
+          <%= link_to 'Add Account', new_vendor_path(:category => @category, :group => group["value"]) %></br>
+          <%= link_to 'Add Document', new_document_path(:category => @category, :group => group["value"], :return => "insurance") %>
+        </div>
       </div>
-    </div>
   <% end %>
 </div>
 
 
+
 <div class="flex-boxes">
   <div class="flex-33">
-    <% @insurance_vendors.select{|v| v["group"]=="life"}.each do |vendor| %>
-          <div class="card life">
+    <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
+        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+            <div class="card life">
               <h3><%= vendor.name %></h3>
-              <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
-              <p>
-                <a href="<%= vendor.webaddress %>" target="_blank">
-                  <%= vendor.webaddress %>
-                </a>
-              </p>
+              <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
+              <p><%= vendor.webaddress %></p>
               <p><%= vendor.phone %></p>
-          </div>
-      <% end %>
-
-    </div>
-
-    <div class="flex-33">
-      <% @insurance_vendors.select{|v| v["group"]=="property"}.each do |vendor| %>
-            <div class="card property">
-                <h3><%= vendor.name %></h3>
-                <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
-                <p>
-                  <a href="<%= vendor.webaddress %>" target="_blank">
-                    <%= vendor.webaddress %>
-                  </a>
-                </p>
-                <p><%= vendor.phone %></p>
             </div>
         <% end %>
 
-      </div>
+    <% end %>
+
+  </div>
+
+  <div class="flex-33">
+    <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
+        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+            <div class="card property">
+              <h3><%= vendor.name %></h3>
+              <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
+              <p><%= vendor.webaddress %></p>
+              <p><%= vendor.phone %></p>
+            </div>
+        <% end %>
+    <% end %>
+
+  </div>
 
 
-      <div class="flex-33">
-        <% @insurance_vendors.select{|v| v["group"]=="health"}.each do |vendor| %>
-              <div class="card health">
-                  <h3><%= vendor.name %></h3>
-                  <p><%= vendor.contact.firstname + " " + vendor.contact.lastname%></p>
-                  <p>
-                    <a href="<%= vendor.webaddress %>" target="_blank">
-                      <%= vendor.webaddress %>
-                    </a>
-                  </p>
-                  <p><%= vendor.phone %></p>
-              </div>
-          <% end %>
+  <div class="flex-33">
+    <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
+        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+            <div class="card health">
+              <h3><%= vendor.name %></h3>
+              <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
+              <p><%= vendor.webaddress %></p>
+              <p><%= vendor.phone %></p>
+            </div>
+        <% end %>
+    <% end %>
 
-        </div>
+  </div>
 </div>
 
-        <h1>Documents</h1>
+<h1>Documents</h1>
 
-        <table>
-          <tr>
-            <th>Name</th>
-            <th>Modified</th>
-            <th>Tags</th>
-            <th>Shared With</th>
-            <th>Actions</th>
-          </tr>
-          <% @insurance_documents.each do |document| %>
-              <tr>
-                <td>
-                  <a><%= link_to document.name, document_path(document) %></a>
-                </td>
-                <td><%=document.updated_at%></td>
-                <td>tags</td>
-                <td>
-                  <span class="user-circle">AK</span>
-                  <span class="user-circle">BM</span>
-                  <span class="user-circle">MB</span>
-                </td>
-                <td>
-                  <button class="outline-button small-button">
-                    <%= link_to 'Edit', edit_document_path(document) %>
-                  </button>
-                  <button class="outline-button small-button">
-                    <%= link_to 'Destroy', document_path(document), method: :delete, data: { confirm: 'Are you sure?' } %>
-                  </button>
-                </td>
-              </tr>
-          <%end%>
-        </table>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+    <th>Shared With</th>
+    <th>Actions</th>
+  </tr>
+  <% @insurance_documents.each do |document| %>
+      <tr>
+        <td>
+          <a><%= link_to document.name, document_path(document) %></a>
+        </td>
+        <td><%= document.updated_at %></td>
+        <td>tags</td>
+        <td>
+          <span class="user-circle">AK</span>
+          <span class="user-circle">BM</span>
+          <span class="user-circle">MB</span>
+        </td>
+        <td>
+          <button class="outline-button small-button">
+            <%= link_to 'Edit', edit_document_path(document) %>
+          </button>
+          <button class="outline-button small-button">
+            <%= link_to 'Destroy', document_path(document), method: :delete, data: {confirm: 'Are you sure?'} %>
+          </button>
+        </td>
+      </tr>
+  <% end %>
+</table>
 

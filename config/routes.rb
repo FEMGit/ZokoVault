@@ -27,9 +27,9 @@ Rails.application.routes.draw do
   resources :users
 
   Rails.application.routes.draw do
-  resources :vendor_accounts
-  resources :vendors
-  resources :contacts
+    resources :vendor_accounts
+    resources :vendors
+    resources :contacts
     resources :categories
     resources :shares
     get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder

@@ -10,7 +10,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @document = Document.new()
+    @document = Document.new
     @document.category = params[:category]
     @document.group = params[:group]
   end

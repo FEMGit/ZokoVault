@@ -65,6 +65,6 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :url, :group, :category)
+    params.require(:document).permit(:name, :description, :url, :group, :category)
   end
 end

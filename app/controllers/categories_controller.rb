@@ -8,11 +8,6 @@ class CategoriesController < AuthenticatedController
   def insurance
     @category = "insurance" #TODO: fix bug in padding out groups if missing
     @groups = Rails.configuration.x.categories[@category]["groups"]
-    @group_pivot = {      #TODO: Turn label/key attributes into hash programmatically
-      "life" => "Life & Disability Insurance",
-      "property" => "Property Insurance",
-      "health" => "Health Insurance"
-    }
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category)
     session[:ret_url] = "insurance"
@@ -29,8 +24,7 @@ class CategoriesController < AuthenticatedController
   end
 
   def create
-    @category = Category.new(category_params)
-    @category.user = current_user
+    @category = Category.new(category_params.merge(user: current_user))
 
     respond_to do |format|
       if @category.save

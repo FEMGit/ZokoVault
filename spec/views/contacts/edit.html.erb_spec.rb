@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "contacts/edit", type: :view do
+  let(:user) { create :user }
+
   before(:each) do
     @contact = assign(:contact, Contact.create!(
       :firstname => "MyString",
@@ -20,7 +22,8 @@ RSpec.describe "contacts/edit", type: :view do
       :businessname => "MyString",
       :businesswebaddress => "MyString",
       :businessphone => "MyString",
-      :businessfax => "MyString"
+      :businessfax => "MyString",
+      user: user
     ))
   end
 

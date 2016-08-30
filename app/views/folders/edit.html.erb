@@ -3,4 +3,4 @@
 <%= render 'form' %>
 
 <%= link_to 'Show', @folder %> |
-<%= link_to 'Back', @folder.parent_path %>
+<%= link_to 'Back', path_helper(@folder.parent) %>

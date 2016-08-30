@@ -10,9 +10,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @document = Document.new
-    @document.category = params[:category]
-    @document.group = params[:group]
+    @document = Document.new(base_params.slice(:category, :group))
   end
 
   def edit
@@ -20,8 +18,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def create
-    @document = Document.new(document_params)
-    @document.user = current_user
+    @document = Document.new(document_params.merge(user_id: current_user.id))
 
     respond_to do |format|
       if @document.save #TODO: dynamic route builder for categories
@@ -64,7 +61,11 @@ class DocumentsController < AuthenticatedController
     @document = Document.for_user(current_user).find(params[:id])
   end
 
+  def base_params
+    params.permit(:group, :category)
+  end
+
   def document_params
-    params.require(:document).permit(:name, :description, :url, :group, :category)
+    params.require(:document).permit(:name, :description, :url)
   end
 end

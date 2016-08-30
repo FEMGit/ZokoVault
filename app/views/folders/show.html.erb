@@ -16,7 +16,7 @@
 </p>
 
 <%= link_to 'Edit', edit_folder_path(@folder) %> |
-<%= link_to 'Back', @folder.parent_path %>
+<%= link_to 'Back', path_helper(@folder.parent) %>
 
 <% if @folder.documents.empty? %>
   <h1>Sub-Folders</h1>

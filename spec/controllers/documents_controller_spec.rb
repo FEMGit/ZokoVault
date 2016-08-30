@@ -30,8 +30,13 @@ RSpec.describe DocumentsController, type: :controller do
 
   describe "GET #new" do
     it "assigns a new document as @document" do
-      get :new, {}, valid_session
-      expect(assigns(:document)).to be_a_new(Document)
+      get :new, { category: "foo", group: "bar" }, valid_session
+
+      document = assigns(:document)
+
+      expect(document).to be_a_new(Document)
+      expect(document.category).to eq "foo"
+      expect(document.group).to eq "bar"
     end
   end
 
@@ -55,6 +60,7 @@ RSpec.describe DocumentsController, type: :controller do
         post :create, {document: valid_attributes}, valid_session
         expect(assigns(:document)).to be_a(Document)
         expect(assigns(:document)).to be_persisted
+        expect(assigns(:document).user).to eq(user)
       end
 
       context "when return url is not 'insurance'" do

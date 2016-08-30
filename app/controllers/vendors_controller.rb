@@ -14,17 +14,13 @@ class VendorsController < ApplicationController
 
   # GET /vendors/new
   def new
-    @vendor = Vendor.new
-    @vendor.category = params[:category]
-    @vendor.group = params[:group]
+    @vendor = Vendor.new(base_params.slice(:category, :group))
     @vendor.vendor_accounts.build
   end
 
   # GET /_new_vendor
-  def _newvendor
-    @vendor = Vendor.new
-    @vendor.category = params[:category]
-    @vendor.group = params[:group]
+  def _newvendor # XXX: What is this? Not RESTFUL
+    new
   end
 
   # GET /vendors/1/edit
@@ -37,10 +33,8 @@ class VendorsController < ApplicationController
   # POST /vendors
   # POST /vendors.json
   def create
-    @vendor = Vendor.new(vendor_params)
-    @vendor.user = current_user
-
-
+    @vendor = Vendor.new(vendor_params.merge(user_id: current_user.id))
+    @vendor_accounts = @vendor.vendor_accounts
 
     respond_to do |format|
       if @vendor.save
@@ -81,6 +75,10 @@ class VendorsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_vendor
       @vendor = Vendor.find(params[:id])
+    end
+
+    def base_params
+      params.permit(:category, :group)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

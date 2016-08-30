@@ -18,6 +18,7 @@ class UploadsController < AuthenticatedController
      @upload.folder = "Documents";
      @upload.save!
     else
+      # XXX: User should be authenticated for every controller
      'TODO - redirect to login'
     end
 

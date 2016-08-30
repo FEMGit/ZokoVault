@@ -7,4 +7,7 @@ class Document < ActiveRecord::Base
   scope :in_folder, ->(folder) {where(folder: folder)}
   has_many :shares, foreign_key: "document_id" 
   has_many :contacts, through: :shares
+
+  validates :name, presence: true
+  validates :url, presence: true
 end

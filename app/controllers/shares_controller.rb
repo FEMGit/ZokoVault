@@ -16,8 +16,7 @@ class SharesController < ApplicationController
     end
 
     def create
-      @share = Share.new(share_params)
-      @share.user = current_user
+      @share = Share.new(share_params.merge(user_id: current_user.id))
 
       respond_to do |format|
         if @share.save

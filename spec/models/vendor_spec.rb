@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Vendor, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  describe "#destroy" do
+    let!(:subject) { create(:vendor, :with_vendor_account) }
+
+    it "destroys vendor account" do
+      expect { subject.destroy }.to change(VendorAccount, :count).by(-1)
+    end
+  end
 end

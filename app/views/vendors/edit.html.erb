@@ -3,4 +3,5 @@
 <%= render 'form' %>
 
 <%= link_to 'Show', @vendor %> |
-<%= link_to 'Back', vendors_path %>
+<%= link_to 'Back', vendors_path %> |
+<%= link_to 'Delete', vendor_path(@vendor), method: :delete, data: { confirm: 'Are you sure?' } %>

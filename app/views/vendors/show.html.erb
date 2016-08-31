@@ -27,12 +27,12 @@
 
 <p>
   <strong>Contact:</strong>
-  <%= @vendor.contact %>
+  <%= @vendor.contact.try(:name) %>
 </p>
 
 <p>
   <strong>User:</strong>
-  <%= @vendor.user %>
+  <%= @vendor.user.try(:email) %>
 </p>
 
 <%= link_to 'Edit', edit_vendor_path(@vendor) %> |

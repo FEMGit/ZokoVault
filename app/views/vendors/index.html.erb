@@ -24,8 +24,8 @@
         <td><%= vendor.name %></td>
         <td><%= vendor.webaddress %></td>
         <td><%= vendor.phone %></td>
-        <td><%= vendor.contact %></td>
-        <td><%= vendor.user %></td>
+        <td><%= vendor.contact.try(:name) %></td>
+        <td><%= vendor.user.try(:email) %></td>
         <td><%= link_to 'Show', vendor %></td>
         <td><%= link_to 'Edit', edit_vendor_path(vendor) %></td>
         <td><%= link_to 'Destroy', vendor, method: :delete, data: { confirm: 'Are you sure?' } %></td>

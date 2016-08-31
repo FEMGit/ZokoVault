@@ -101,7 +101,14 @@
           onclick="submitForm(event)" >
           Save</button>
         <%= link_to "Cancel", @document, 
-          class: "js-modal-close secondary-button big-button" %>
+          class: "js-modal-close button secondary-button big-button" %>
+        <% if @document.persisted? %>
+          <span class='footer_right'>
+            <span>Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
+            <span>Updated: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
+            <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' } %>
+          </span>
+        <% end %>
     </div>
   <% end %>
 </div>

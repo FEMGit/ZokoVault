@@ -50,6 +50,28 @@ button{
   }
 }
 
+.footer_right {
+  float: right;
+  margin-right: 20px;
+}
+
+
+a.button{
+  cursor: pointer;
+  text-decoration: none;
+  border:0;
+  border-radius: 5px;
+  color: white;
+  text-shadow: .5px 1px rgba(0,0,0,.25);
+  box-shadow: .5px 1px 3px rgba(0,0,0,.25);
+  margin: 0 10px 0 0;
+
+  &:hover{
+    opacity: .8;
+    box-shadow: none;
+  }
+}
+
 .big-button{
   font-size: 14px;
   padding: 10px;

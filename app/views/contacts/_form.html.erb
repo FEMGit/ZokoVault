@@ -40,15 +40,15 @@
 
       <div id="detail-form">
         <div class="field">
-          <%= f.label :firstname %><br>
+          <%= f.label :firstname, 'First Name' %><br>
           <%= f.text_field :firstname %>
         </div>
         <div class="field">
-          <%= f.label :lastname %><br>
+          <%= f.label :lastname, 'Last Name' %><br>
           <%= f.text_field :lastname %>
         </div>
         <div class="field">
-          <%= f.label :emailaddress %><br>
+          <%= f.label :emailaddress, 'Email Address' %><br>
           <%= f.text_field :emailaddress %>
         </div>
         <div class="field">
@@ -56,7 +56,7 @@
           <%= f.text_field :phone %>
         </div>
         <div class="field">
-          <%= f.label :category, 'Relationship' %><br>
+          <%= f.label :category %><br>
           <%= f.text_field :category %>
         </div>
       </div>
@@ -66,11 +66,11 @@
           <%= f.text_field :relationship %>
         </div>
         <div class="field">
-          <%= f.label :beneficiarytype %><br>
+          <%= f.label :beneficiarytype, 'Beneficiary Type' %><br>
           <%= f.text_field :beneficiarytype %>
         </div>
         <div class="field">
-          <%= f.label :ssn %><br>
+          <%= f.label :ssn, 'SSN' %><br>
           <%= f.text_field :ssn %>
         </div>
         <div class="field">
@@ -91,19 +91,19 @@
         </div>
 
         <div class="field">
-          <%= f.label :businessname %><br>
+          <%= f.label :businessname, 'Business Name' %><br>
           <%= f.text_field :businessname %>
         </div>
         <div class="field">
-          <%= f.label :businesswebaddress %><br>
+          <%= f.label :businesswebaddress, 'Business Web Address' %><br>
           <%= f.text_field :businesswebaddress %>
         </div>
         <div class="field">
-          <%= f.label :businessphone %><br>
+          <%= f.label :businessphone, 'Business Phone' %><br>
           <%= f.text_field :businessphone %>
         </div>
         <div class="field">
-          <%= f.label :businessfax %><br>
+          <%= f.label :businessfax, 'Business Fax' %><br>
           <%= f.text_field :businessfax %>
         </div>
 
@@ -115,11 +115,11 @@
       </div>
       <div id="avatar-form">
         <div class="field">
-          <%= f.label :avatarcolor %><br>
+          <%= f.label :avatarcolor, 'Avatar Color' %><br>
           <%= f.text_field :avatarcolor %>
         </div>
         <div class="field">
-          <%= f.label :photourl %><br>
+          <%= f.label :photourl, 'Photo Url' %><br>
           <%= f.text_field :photourl %>
         </div>
 
@@ -127,7 +127,9 @@
     <% end %>
   </div>
   <footer class="modal-footer">
-    <button class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
+    <a href="javascript:;" id='next-step' class=" button secondary-button big-button" 
+    onclick="wizNav(currentStep+1); return false;">Next</a>
+    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
     <%= link_to 'Cancel', contacts_path, class: "js-modal-close button secondary-button big-button" %>
     <span class='footer_right'>
       <% if @contact.persisted? %>
@@ -140,10 +142,15 @@
 
 <%#= link_to 'Back', contacts_path #%>
 <script>
+
+var currentStep = 1;
+
 var wizNav = function(step){
+  currentStep = step;
   console.log("in " + step);
   if(step===1){
-    console.log("in step 1");
+    $("#next-step").show();
+    $("#save-btn").hide();
     $("#detail-form").show();
     $("#avatar-form").hide();
     $("#category-form").hide();
@@ -155,6 +162,8 @@ var wizNav = function(step){
     $("#step-3").html('3');
   }
   else if(step===2){
+    $("#next-step").show();
+    $("#save-btn").hide();
     $("#detail-form").hide();
     $("#category-form").show();
     $("#avatar-form").hide();
@@ -166,7 +175,8 @@ var wizNav = function(step){
     $("#step-3").html('3');
   }
   else if(step===3){
-    console.log("in 3");
+    $("#next-step").hide();
+    $("#save-btn").show();
     $("#detail-form").hide();
     $("#category-form").hide();
     $("#avatar-form").show();

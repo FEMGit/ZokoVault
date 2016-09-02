@@ -6,7 +6,11 @@ class Contact < ActiveRecord::Base
   validates :firstname, presence: true
   validates :user_id, presence: true
 
-  def name
-    [lastname,firstname].compact.join(', ')
+  def name(biblio = false)
+    if biblio
+      [firstname,lastname].compact.join(' ')
+    else
+      [lastname,firstname].compact.join(', ')
+    end
   end
 end

@@ -10,4 +10,6 @@ class Document < ActiveRecord::Base
 
   validates :name, presence: true
   validates :url, presence: true
+
+  accepts_nested_attributes_for :shares, reject_if: proc { |attributes| attributes[:contact_id].blank? }
 end

@@ -62,6 +62,17 @@
       </div>
 
       <div class="flex-box">
+        <div id='shared-with-inputs'>
+          <label>Shared With</label>
+        </div>
+        <a class="add-link" href="" onclick="addContact(); return false;">
+          <span class="circle-button small">
+            <svg class="icon circle-icon">
+              <use xlink:href="#icon-plus-1"></use>
+            </svg>
+          </span>
+        </a>
+
         <table>
           <th>
             Shared With
@@ -69,10 +80,10 @@
           <th>
             Permissions
           </th>
-          <% @shares.each do |share| %>
+          <% @document.shares.each do |share| %>
             <tr>
               <td>
-                <%= share.contact.firstname %> <%= share.contact.lastname %>
+                <%= share.contact.name %>
               </td>
               <td>
                 <%= share.permission %>
@@ -80,14 +91,6 @@
             </tr>
           <% end %>
         </table>
-
-        <a class="add-link" href="">
-          <span class="circle-button small">
-            <svg class="icon circle-icon">
-              <use xlink:href="#icon-plus-1"></use>
-            </svg>
-          </span>Add Shared With
-        </a>
 
       </div>
 
@@ -118,4 +121,51 @@
     var docForm = document.getElementById("doc-form ");
     docForm.submit();
   }
+
+  // Keep a count of contact select boxes for indexing name
+  var newContactsCount = 0;
+
+  // Keep the contacts in json form
+  var contactsJson = <%=  Contact.for_user(current_user).map { |c| c.slice(:id, :name) }.to_json.html_safe %>;
+
+  // Dynamically add hidden field with user id and select box of contacts
+  // to contact area
+  var addContact = function() {
+
+    // Create new styled div
+    var divEl = $('<div>').attr({ class: 'styled-select'});
+
+    //Hidden field, create and appendTo new div element
+    $('<input>').attr({
+      type: 'hidden',
+      id: "document_shares_attributes_" + newContactsCount + "_user_id",
+      name: "document[shares_attributes]["+ newContactsCount +"][user_id]",
+      value: "<%= current_user.id %>"
+    }).appendTo(divEl)
+    //drop down;
+    var name = "document[shares_attributes]["+ newContactsCount +"][contact_id]";
+    var combo = $("<select></select>")
+      .attr({ 
+        id: "document_shares_attributes_" + newContactsCount + "_contact_id",
+        name: "document[shares_attributes]["+ newContactsCount +"][contact_id]"
+      });
+
+    // Add the options
+    combo.append("<option disabled selected value>Add contact...</option>");
+    $.each(contactsJson, function (i, el) {
+        combo.append("<option value='" + el.id + "'>" + el.name + "</option>");
+    });
+
+    // Append combo to new div el
+    $(combo).appendTo(divEl);
+    
+    // Append div select to shared div
+    $(divEl).appendTo('#shared-with-inputs');
+
+    // Increment
+    newContactsCount += 1;
+  }
+  addContact();
+      
+
 </script>

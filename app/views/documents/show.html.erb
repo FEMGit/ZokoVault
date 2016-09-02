@@ -10,6 +10,21 @@
   <%= @document.description %>
 </p>
 
+<p>
+  <strong>Category:</strong>
+  <%= @document.category %>
+</p>
+
+<p>
+  <strong>Contacts:</strong>
+  <% if @document.contacts.any? %>
+    <ul>
+      <li><%= @document.contacts.map(&:name).join('</li><li>').html_safe %></li>
+    </ul>
+  <% else %>
+    (none) 
+  <% end %>
+</p>
 <%= link_to 'Edit', edit_document_path(@document) %> |
 <%= link_to 'Destroy', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' } %> |
 <%= link_to 'Back', documents_path %>

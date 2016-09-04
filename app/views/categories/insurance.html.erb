@@ -17,7 +17,7 @@
 <div class="flex-boxes">
   <div class="flex-33">
     <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
-        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+        <%= link_to edit_vendor_path(vendor, return: 'insurance'), :class => "undo-link-style" do %>
             <div class="card life">
               <h3><%= vendor.name %></h3>
               <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
@@ -32,7 +32,7 @@
 
   <div class="flex-33">
     <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
-        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+        <%= link_to edit_vendor_path(vendor, return: 'insurance'), :class => "undo-link-style" do %>
             <div class="card property">
               <h3><%= vendor.name %></h3>
               <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
@@ -47,7 +47,7 @@
 
   <div class="flex-33">
     <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
-        <%= link_to edit_vendor_path(vendor), :class => "undo-link-style" do %>
+        <%= link_to edit_vendor_path(vendor, return: 'insurance'), :class => "undo-link-style" do %>
             <div class="card health">
               <h3><%= vendor.name %></h3>
               <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>

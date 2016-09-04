@@ -35,5 +35,5 @@
   <%= @vendor.user.try(:email) %>
 </p>
 
-<%= link_to 'Edit', edit_vendor_path(@vendor) %> |
-<%= link_to 'Back', vendors_path %>
+<%= link_to 'Edit', edit_vendor_path(@vendor, return: params[:return]) %> |
+<%= link_to 'Back', *return_to_path(vendors_path) %>

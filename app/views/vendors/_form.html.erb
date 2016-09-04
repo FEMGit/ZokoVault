@@ -1,4 +1,5 @@
 <%= form_for(@vendor) do |f| %>
+  <%= hidden_field_tag 'return', params[:return] %>
   <% if @vendor.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@vendor.errors.count, "error") %> prohibited this vendor from being saved:</h2>

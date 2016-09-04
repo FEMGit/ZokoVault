@@ -38,7 +38,7 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.save
-        format.html { redirect_to insurance_path, notice: 'Vendor was successfully created.' }
+        format.html { redirect_to @vendor, notice: 'Vendor was successfully created.' }
         format.json { render :show, status: :created, location: @vendor }
       else
         format.html { render :new }
@@ -73,12 +73,25 @@ class VendorsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def redirect_to(*payload)
+      super *return_to_path(*payload)
+    end
+
+    def return_to_path(*payload)
+      if base_params[:return] == "insurance"
+        payload[0] = insurance_path
+      end
+
+      payload
+    end
+    helper_method :return_to_path
+    
     def set_vendor
       @vendor = Vendor.find(params[:id])
     end
 
     def base_params
-      params.permit(:category, :group)
+      params.permit(:category, :group, :return)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

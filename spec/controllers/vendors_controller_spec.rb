@@ -80,7 +80,14 @@ RSpec.describe VendorsController, type: :controller do
 
       it "redirects to the created vendor" do
         post :create, {vendor: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(insurance_path)
+        expect(response).to redirect_to(assigns(:vendor))
+      end
+
+      context "it has a return param to insurance" do
+        it "redirects to the created vendor" do
+          post :create, {return: 'insurance', vendor: valid_attributes}, session: valid_session
+          expect(response).to redirect_to(insurance_path)
+        end
       end
     end
 

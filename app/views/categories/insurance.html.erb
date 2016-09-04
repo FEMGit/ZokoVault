@@ -5,7 +5,7 @@
       <div class="flex-33">
         <div class="card <%= group['value'] %>">
           <h3><%= group["label"] %></h3>
-          <%= link_to 'Add Vendor', new_vendor_path(:category => @category, :group => group["value"]) %></br>
+          <%= link_to 'Add Vendor', new_vendor_path(:category => @category, :group => group["value"], return: "insurance") %></br>
           <%= link_to 'Add Document', new_document_path(:category => @category, :group => group["value"], :return => "insurance") %>
         </div>
       </div>

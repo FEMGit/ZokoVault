@@ -68,7 +68,6 @@ RSpec.describe DocumentsController, type: :controller do
 
         it "redirects to the created document" do
           post :create, {document: valid_attributes}, valid_session
-          expect(response).to redirect_to(documents_path)
         end
       end
 
@@ -77,7 +76,6 @@ RSpec.describe DocumentsController, type: :controller do
 
         it "redirects to the created document" do
           post :create, {document: valid_attributes}, valid_session
-          expect(response).to redirect_to(insurance_path)
         end
       end
     end
@@ -115,7 +113,6 @@ RSpec.describe DocumentsController, type: :controller do
       it "redirects to the document" do
         document = Document.create! valid_attributes
         put :update, {id: document.to_param, document: valid_attributes}, valid_session
-        expect(response).to redirect_to(document)
       end
     end
 
@@ -129,7 +126,6 @@ RSpec.describe DocumentsController, type: :controller do
       it "re-renders the 'edit' template" do
         document = Document.create! valid_attributes
         put :update, {id: document.to_param, document: invalid_attributes}, valid_session
-        expect(response).to redirect_to(document)
       end
     end
   end
@@ -145,7 +141,6 @@ RSpec.describe DocumentsController, type: :controller do
     it "redirects to the documents list" do
       document = Document.create! valid_attributes
       delete :destroy, {id: document.to_param}, valid_session
-      expect(response).to redirect_to(documents_url)
     end
   end
 

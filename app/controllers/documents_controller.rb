@@ -23,9 +23,9 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       if @document.save #TODO: dynamic route builder for categories
         if session[:ret_url] == "insurance"
-          format.html { redirect_to insurance_path, notice: 'Document was successfully created.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
         else
-          format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
+          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
         end
         format.json { render :show, status: :created, location: @document }
       else
@@ -38,7 +38,11 @@ class DocumentsController < AuthenticatedController
   def update
     respond_to do |format|
       if @document.update(document_params)
-        format.html { redirect_to document_path(@document), notice: 'Document was successfully updated.' }
+        if session[:ret_url] == "insurance"
+          format.html { redirect_to insurance_path(@document), notice: 'Document was successfully updated.' }
+        else
+          format.html { redirect_to documents_path, notice: 'Document was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @document }
       else
         format.html { render :edit }

@@ -39,7 +39,7 @@
                 "Contact",
                 "Financial Information",
                 "Estate Planning",
-                "Insurance",
+                ["Insurance", "insurance"],
                 "Taxes",
                 "Healthcare Choices",
                 "Final Wishes",
@@ -49,10 +49,6 @@
 
         <label class="form-disabled">Card</label><br>
         <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
-        <div class="styled-select form-disabled">
-          <%= select_tag :folder, options_for_select(options, @document.folder), :disabled =>true %><br />
-        </div>
-
         <div class="flex-box">
         <label>Notes
         <%= f.text_area :description %>

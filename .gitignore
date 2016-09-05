@@ -23,3 +23,7 @@
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/zoku-vault-staging-rm.iml
+Development__zoku_vault_staging_rm.xml
+Production__zoku_vault_staging_rm.xml
+spec__zoku_vault_staging_rm.xml
+test__zoku_vault_staging_rm.xml

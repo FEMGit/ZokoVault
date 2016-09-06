@@ -2,7 +2,14 @@
 
   <% if user_signed_in? %>
 
-    <a class="main-nav <%= 'active' if current_page?(root_url) %>" href="/">
+  <a class="main-nav <%= 'active' if current_page?(root_url) %>"
+    href="/">
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-dashboard"></use>
+    </svg>Dashboard
+  </a>
+    <a class="main-nav <%= 'active' if current_page?(my_profile_url) %>"
+      href="/my_profile">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-contacts-2"></use>
       </svg>My Profile
@@ -23,7 +30,7 @@
        href="estate_planning">
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>
-      </svg>Estate Planning
+      </svg>Wills Trusts &amp; Legal
     </a>
     <% insurance_current = 'active' if current_page?(insurance_url) %>
     <%= link_to insurance_path, class: "main-nav #{insurance_current}" do %>
@@ -68,6 +75,6 @@
       </svg>Documents
     </a>
 
-    
+
   <% end %>
 </nav>

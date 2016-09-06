@@ -1,8 +1,33 @@
-.flex-boxes {
+.flex-boxes{
   display: -ms-flex;
 	display: -webkit-flex;
 	display: flex;
 }
+.flex-column{
+  display: -ms-flex;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  @include media($ninesixty) {
+    flex-direction: column;
+  }
+}
+.flex-card-column{
+  display: -ms-flex;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  width:33%;
+  float:left;
+
+  @include media($ninesixty) {
+    width: 50%;
+  }
+}
+
+
 .flex-box {
   width: 50%;
 
@@ -12,6 +37,10 @@
 }
 .flex-33{
   width: 33%;
+
+  @include media($ninesixty) {
+    width: 50%
+  }
 }
 
 .flex-box-big {

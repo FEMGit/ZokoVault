@@ -1,4 +1,4 @@
-class SharesController < ApplicationController
+class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
 
     def index

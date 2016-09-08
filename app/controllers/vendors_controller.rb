@@ -1,4 +1,4 @@
-class VendorsController < ApplicationController
+class VendorsController < AuthenticatedController
   before_action :set_vendor, only: [:show, :edit, :update, :destroy]
 
   # GET /vendors

@@ -20,6 +20,8 @@ require 'rails_helper'
 
 RSpec.describe RelationshipsController, type: :controller do
 
+  before { sign_in create(:user) }
+
   # This should return the minimal set of attributes required to create a valid
   # Relationship. As you add validations to Relationship, be sure to
   # adjust the attributes here as well.

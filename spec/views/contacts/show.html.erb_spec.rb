@@ -8,7 +8,7 @@ RSpec.describe "contacts/show", type: :view do
       :lastname => "Lastname",
       :emailaddress => "Emailaddress",
       :phone => "Phone",
-      :category => "Category",
+      :contact_type => "Contact Type",
       :relationship => "Relationship",
       :beneficiarytype => "Beneficiarytype",
       :ssn => "Ssn",
@@ -32,7 +32,7 @@ RSpec.describe "contacts/show", type: :view do
     expect(rendered).to match(/Lastname/)
     expect(rendered).to match(/Emailaddress/)
     expect(rendered).to match(/Phone/)
-    expect(rendered).to match(/Category/)
+    expect(rendered).to match(/Contact Type/)
     expect(rendered).to match(/Relationship/)
     expect(rendered).to match(/Beneficiarytype/)
     expect(rendered).to match(/Ssn/)

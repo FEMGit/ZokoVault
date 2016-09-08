@@ -55,56 +55,69 @@
           <%= f.label :phone %><br>
           <%= f.text_field :phone %>
         </div>
+
         <div class="field">
-          <%= f.label :category %><br>
-          <%= f.text_field :category %>
+          <%= f.label :contact_type, 'Contact Type' %><br>
+          <div class="styled-select">
+            <%= f.select :contact_type, options_for_select(Contact::CONTACT_TYPES) %>
+          </div>
         </div>
+
       </div>
       <div id="category-form">
         <div class="field">
           <%= f.label :relationship %><br>
           <%= f.text_field :relationship %>
         </div>
-        <div class="field">
-          <%= f.label :beneficiarytype, 'Beneficiary Type' %><br>
-          <%= f.text_field :beneficiarytype %>
-        </div>
-        <div class="field">
-          <%= f.label :ssn, 'SSN' %><br>
-          <%= f.text_field :ssn %>
-        </div>
-        <div class="field">
-          <%= f.label :birthdate %><br>
-          <%= f.date_select :birthdate %>
-        </div>
-        <div class="field">
-          <%= f.label :address %><br>
-          <%= f.text_field :address %>
-        </div>
-        <div class="field">
-          <%= f.label :zipcode %><br>
-          <%= f.text_field :zipcode %>
-        </div>
-        <div class="field">
-          <%= f.label :state %><br>
-          <%= f.text_field :state %>
+
+        <div id="personal_relationship">
+          <div class="field">
+            <%= f.label :beneficiarytype, 'Beneficiary Type' %><br>
+            <%= f.text_field :beneficiarytype %>
+          </div>
+          <div class="field">
+            <%= f.label :ssn, 'SSN' %><br>
+            <%= f.text_field :ssn %>
+          </div>
+          <div class="field">
+            <%= f.label :birthdate %><br>
+            <%= f.date_select :birthdate %>
+          </div>
+          <div class="field">
+            <%= f.label :address %><br>
+            <%= f.text_field :address %>
+          </div>
+          <div class="field">
+            <%= f.label :zipcode %><br>
+            <%= f.text_field :zipcode %>
+          </div>
+          <div class="field">
+            <%= f.label :state %><br>
+            <%= f.text_field :state %>
+          </div>
         </div>
 
-        <div class="field">
-          <%= f.label :businessname, 'Business Name' %><br>
-          <%= f.text_field :businessname %>
-        </div>
-        <div class="field">
-          <%= f.label :businesswebaddress, 'Business Web Address' %><br>
-          <%= f.text_field :businesswebaddress %>
-        </div>
-        <div class="field">
-          <%= f.label :businessphone, 'Business Phone' %><br>
-          <%= f.text_field :businessphone %>
-        </div>
-        <div class="field">
-          <%= f.label :businessfax, 'Business Fax' %><br>
-          <%= f.text_field :businessfax %>
+        <div id="professional_relationship">
+          <div class="field">
+            <%= f.label :businessname, 'Business Name' %><br>
+            <%= f.text_field :businessname %>
+          </div>
+          <div class="field">
+            <%= f.label :businesswebaddress, 'Business Web Address' %><br>
+            <%= f.text_field :businesswebaddress %>
+          </div>
+          <div class="field">
+            <%= f.label :business_street_address, 'Business Street Address' %><br>
+            <%= f.text_field :business_street_address %>
+          </div>
+          <div class="field">
+            <%= f.label :businessphone, 'Business Phone' %><br>
+            <%= f.text_field :businessphone %>
+          </div>
+          <div class="field">
+            <%= f.label :businessfax, 'Business Fax' %><br>
+            <%= f.text_field :businessfax %>
+          </div>
         </div>
 
 
@@ -187,6 +200,15 @@ var wizNav = function(step){
     $("#step-3").removeClass().addClass("inner-counter current-step");
     $("#step-3").html('3');
   }
+
+  if ($("#contact_contact_type").val() === "Family & Beneficiaries") {
+    $('#personal_relationship').show();
+    $('#professional_relationship').hide();
+  }
+  else {
+  $('#personal_relationship').hide();
+  $('#professional_relationship').show();
+  }
 }
 var submitContact = function(){
   var contactForm = document.getElementById("contact-form");
@@ -237,6 +259,5 @@ $(function(){
     });
   });
   $(window).resize();
-
 });
 </script>

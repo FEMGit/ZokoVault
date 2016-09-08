@@ -6,6 +6,10 @@ class Contact < ActiveRecord::Base
   validates :firstname, presence: true
   validates :user_id, presence: true
 
+  CONTACT_TYPES = [
+    'Family & Beneficiaries', 'Advisor', 'Service Provider', 'Medical Professional'
+  ]
+
   def name(biblio = false)
     if biblio
       [firstname,lastname].compact.join(' ')

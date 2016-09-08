@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819033402) do
+ActiveRecord::Schema.define(version: 20160907230050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20160819033402) do
     t.string   "lastname"
     t.string   "emailaddress"
     t.string   "phone"
-    t.string   "category"
+    t.string   "contact_type"
     t.string   "relationship"
     t.string   "beneficiarytype"
     t.string   "ssn"
@@ -36,9 +36,11 @@ ActiveRecord::Schema.define(version: 20160819033402) do
     t.string   "businesswebaddress"
     t.string   "businessphone"
     t.string   "businessfax"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "user_id"
+    t.integer  "relationship_id"
+    t.string   "business_street_address"
   end
 
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
@@ -71,6 +73,13 @@ ActiveRecord::Schema.define(version: 20160819033402) do
 
   add_index "folders", ["parent_id"], name: "index_folders_on_parent_id", using: :btree
   add_index "folders", ["user_id"], name: "index_folders_on_user_id", using: :btree
+
+  create_table "relationships", force: :cascade do |t|
+    t.string   "name"
+    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "shares", force: :cascade do |t|
     t.integer  "document_id"

@@ -7,7 +7,7 @@ RSpec.describe "contacts/new", type: :view do
       :lastname => "MyString",
       :emailaddress => "MyString",
       :phone => "MyString",
-      :category => "MyString",
+      :contact_type => Contact::CONTACT_TYPES.sample,
       :relationship => "MyString",
       :beneficiarytype => "MyString",
       :ssn => "MyString",
@@ -37,7 +37,7 @@ RSpec.describe "contacts/new", type: :view do
 
       assert_select "input#contact_phone[name=?]", "contact[phone]"
 
-      assert_select "input#contact_category[name=?]", "contact[category]"
+      assert_select "select#contact_contact_type[name=?]", "contact[contact_type]"
 
       assert_select "input#contact_relationship[name=?]", "contact[relationship]"
 

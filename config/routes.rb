@@ -12,8 +12,10 @@ Rails.application.routes.draw do
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
+  get 'cards' => 'welcome#cards'
 
   # Default category pages ?Could probably be done better programatically?
+  get 'my_profile' => 'categories#my_profile'
   get 'estate_planning' => 'categories#estate_planning'
   get 'final_wishes' => 'categories#final_wishes'
   get 'financial_information' => 'categories#financial_information'

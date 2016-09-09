@@ -9,7 +9,7 @@ RSpec.describe "contacts/edit", type: :view do
       :lastname => "MyString",
       :emailaddress => "MyString",
       :phone => "MyString",
-      :contact_type => "MyString",
+      :contact_type => Contact::CONTACT_TYPES.keys.first,
       :relationship => "MyString",
       :beneficiarytype => "MyString",
       :ssn => "MyString",
@@ -42,7 +42,9 @@ RSpec.describe "contacts/edit", type: :view do
 
       assert_select "select#contact_contact_type[name=?]", "contact[contact_type]"
 
-      assert_select "input#contact_relationship[name=?]", "contact[relationship]"
+      assert_select "select#personal_relationships_select[name=?]", "contact[relationship]"
+
+      assert_select "select#professional_relationships_select[name=?]", "contact[relationship]"
 
       assert_select "input#contact_beneficiarytype[name=?]", "contact[beneficiarytype]"
 

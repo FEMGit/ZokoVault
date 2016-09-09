@@ -6,9 +6,33 @@ class Contact < ActiveRecord::Base
   validates :firstname, presence: true
   validates :user_id, presence: true
 
-  CONTACT_TYPES = [
-    'Family & Beneficiaries', 'Advisor', 'Service Provider', 'Medical Professional'
-  ]
+  RELATIONSHIP_TYPES = {
+    personal: [
+      'Son',
+      'Daughter',
+      'Sibling',
+      'Spouse/Domestic Partner',
+      'Parent',
+      'Grandparent',
+      'Other Benificiary',
+    ],
+    professional: [
+      'Accountant',
+      'Attorney',
+      'Financial Advisor / Broker',
+      'Insurance Agent',
+      'Commercial Banker',
+      'Trustee',
+      'Broker',
+    ]
+  }
+
+  CONTACT_TYPES = {
+    'Family & Beneficiaries' => RELATIONSHIP_TYPES[:personal],
+    'Advisor' => RELATIONSHIP_TYPES[:professional],
+    'Service Provider' => RELATIONSHIP_TYPES[:professional],
+    'Medical Professional' => RELATIONSHIP_TYPES[:professional]
+  }
 
   def name(biblio = false)
     if biblio

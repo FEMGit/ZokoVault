@@ -1,4 +1,10 @@
 <header>
+  <% if !user_signed_in? %>
+
+    <%= link_to('Login', new_user_session_path, :class=>"logout-link") %>
+
+  <% end %>
+
   <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
   <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
   <% if user_signed_in? %>

@@ -72,9 +72,11 @@ a.main-nav:hover .nav-icon{
 }
 
 main{
-  margin-left: 240px;
   height: 100%;
   overflow:hidden;
+}
+main.app-nav{
+  margin-left: 240px;
 }
 
 .content{

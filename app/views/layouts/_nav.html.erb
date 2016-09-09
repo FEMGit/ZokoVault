@@ -1,7 +1,5 @@
 <nav>
 
-  <% if user_signed_in? %>
-
   <a class="main-nav <%= 'active' if current_page?(root_url) %>"
     href="/">
     <svg class="icon nav-icon">
@@ -75,6 +73,4 @@
       </svg>Documents
     </a>
 
-
-  <% end %>
 </nav>

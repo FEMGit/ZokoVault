@@ -30,8 +30,27 @@ header{
   color: $color-link-blue;
   margin-top: 10px;
 }
+.login-link{
+  float:right;
+  color: $color-link-blue;
+  margin: 10px 0 0;
+  padding:0 20px;
+  text-decoration: none;
+}
 
-nav{
+//MARKEITNG NAVIGATION
+nav.marketing-nav{
+  float: right;
+  margin-top: 10px;
+  margin-right: 30px;
+}
+a.marketing-link{
+  color: $color-primary-shaded;
+  padding: 10px;
+}
+
+//APPLICATION NAVIGATION
+nav.primary-nav{
   width: 240px;
   float:left;
   background: $color-gray-dark;

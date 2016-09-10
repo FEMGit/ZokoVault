@@ -11,9 +11,14 @@
 </head>
 <body>
   <%= render :partial => 'layouts/svgdefs' %>
-  <%= render :partial => 'layouts/nav' %>
 
-  <main>
+  <% if user_signed_in? %>
+    <%= render :partial => 'layouts/nav' %>
+
+    <main class="app-nav">
+  <% else %>
+    <main>
+  <% end %>
 
     <%= render :partial => 'layouts/header' %>
 

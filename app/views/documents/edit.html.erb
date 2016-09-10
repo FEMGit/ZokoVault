@@ -62,10 +62,9 @@
           <label>Shared With</label>
         </div>
         <a class="add-link" href="" onclick="addContact(); return false;">
-          <span class="circle-button small">
-            <svg class="icon circle-icon">
-              <use xlink:href="#icon-plus-1"></use>
-            </svg>
+          <svg class="icon add-icon">
+            <use xlink:href="#icon-add-1"></use>
+          </svg> Add Additional Contact<br>
           </span>
         </a>
 
@@ -99,7 +98,7 @@
                  big-button"
           onclick="submitForm(event)" >
           Save</button>
-        <%= link_to "Cancel", @document, 
+        <%= link_to "Cancel", @document,
           class: "js-modal-close button secondary-button big-button" %>
         <% if @document.persisted? %>
           <span class='footer_right'>
@@ -141,7 +140,7 @@
     //drop down;
     var name = "document[shares_attributes]["+ newContactsCount +"][contact_id]";
     var combo = $("<select></select>")
-      .attr({ 
+      .attr({
         id: "document_shares_attributes_" + newContactsCount + "_contact_id",
         name: "document[shares_attributes]["+ newContactsCount +"][contact_id]"
       });
@@ -154,7 +153,7 @@
 
     // Append combo to new div el
     $(combo).appendTo(divEl);
-    
+
     // Append div select to shared div
     $(divEl).appendTo('#shared-with-inputs');
 
@@ -162,6 +161,6 @@
     newContactsCount += 1;
   }
   addContact();
-      
+
 
 </script>

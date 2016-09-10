@@ -1,14 +1,10 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Firstname:</strong>
-  <%= @contact.firstname %>
+  <strong>Name:</strong>
+  <%= @contact.name(:biblio) %>
 </p>
 
-<p>
-  <strong>Lastname:</strong>
-  <%= @contact.lastname %>
-</p>
 
 <p>
   <strong>Emailaddress:</strong>
@@ -30,35 +26,55 @@
   <%= @contact.relationship %>
 </p>
 
-<p>
-  <strong>Beneficiarytype:</strong>
-  <%= @contact.beneficiarytype %>
-</p>
+<% if @contact.personal_relationship? %>
+  <p>
+    <strong>Beneficiarytype:</strong>
+    <%= @contact.beneficiarytype %>
+  </p>
 
-<p>
-  <strong>Ssn:</strong>
-  <%= @contact.ssn %>
-</p>
+  <p>
+    <strong>Ssn:</strong>
+    <%= @contact.ssn %>
+  </p>
 
-<p>
-  <strong>Birthdate:</strong>
-  <%= @contact.birthdate %>
-</p>
+  <p>
+    <strong>Birthdate:</strong>
+    <%= @contact.birthdate.try(:strftime, '%B %d, %Y') %>
+  </p>
+
+  <p>
+    <strong>Address:</strong>
+    <%= @contact.address %><br/>
+    <%= @contact.city%>, <%= @contact.state %> <%= @contact.zipcode %>
+  </p>
+<% end %>
+
+<% if @contact.professional_relationship? %>
+  <p>
+    <strong>Business Name:</strong>
+    <%= @contact.businessname %>
+  </p>
+
+  <p>
+    <strong>Url:</strong>
+    <%= @contact.businesswebaddress %>
+  </p>
 
 <p>
   <strong>Address:</strong>
-  <%= @contact.address %>
+  <%= @contact.business_street_address %>
 </p>
 
-<p>
-  <strong>Zipcode:</strong>
-  <%= @contact.zipcode %>
-</p>
+  <p>
+    <strong>Phone:</strong>
+    <%= @contact.businessphone %>
+  </p>
 
-<p>
-  <strong>State:</strong>
-  <%= @contact.state %>
-</p>
+  <p>
+    <strong>Fax:</strong>
+    <%= @contact.businessfax %>
+  </p>
+<% end %>
 
 <p>
   <strong>Notes:</strong>
@@ -73,26 +89,6 @@
 <p>
   <strong>Photourl:</strong>
   <%= @contact.photourl %>
-</p>
-
-<p>
-  <strong>Businessname:</strong>
-  <%= @contact.businessname %>
-</p>
-
-<p>
-  <strong>Businesswebaddress:</strong>
-  <%= @contact.businesswebaddress %>
-</p>
-
-<p>
-  <strong>Businessphone:</strong>
-  <%= @contact.businessphone %>
-</p>
-
-<p>
-  <strong>Businessfax:</strong>
-  <%= @contact.businessfax %>
 </p>
 
 <%= link_to 'Edit', edit_contact_path(@contact) %> |

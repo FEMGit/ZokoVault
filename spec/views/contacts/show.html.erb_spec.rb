@@ -2,14 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "contacts/show", type: :view do
   let(:user) { create :user }
-  before(:each) do
-    @contact = assign(:contact, Contact.create!(
+  let(:relationship_params) { { relationship: 'Son'} }
+
+  let(:options) do
+    {
       :firstname => "Firstname",
       :lastname => "Lastname",
       :emailaddress => "Emailaddress",
       :phone => "Phone",
       :contact_type => "Contact Type",
-      :relationship => "Relationship",
       :beneficiarytype => "Beneficiarytype",
       :ssn => "Ssn",
       :address => "Address",
@@ -23,10 +24,14 @@ RSpec.describe "contacts/show", type: :view do
       :businessphone => "Businessphone",
       :businessfax => "Businessfax",
       user: user
-    ))
+    }
   end
 
-  it "renders attributes in <p>" do
+  before(:each) do
+    assign(:contact, Contact.create!(options.merge(relationship_params)))
+  end
+
+  it "renders common attributes" do
     render
     expect(rendered).to match(/Firstname/)
     expect(rendered).to match(/Lastname/)
@@ -34,17 +39,32 @@ RSpec.describe "contacts/show", type: :view do
     expect(rendered).to match(/Phone/)
     expect(rendered).to match(/Contact Type/)
     expect(rendered).to match(/Relationship/)
-    expect(rendered).to match(/Beneficiarytype/)
-    expect(rendered).to match(/Ssn/)
-    expect(rendered).to match(/Address/)
-    expect(rendered).to match(/Zipcode/)
-    expect(rendered).to match(/State/)
     expect(rendered).to match(/MyText/)
     expect(rendered).to match(/Avatarcolor/)
     expect(rendered).to match(/Photourl/)
-    expect(rendered).to match(/Businessname/)
-    expect(rendered).to match(/Businesswebaddress/)
-    expect(rendered).to match(/Businessphone/)
-    expect(rendered).to match(/Businessfax/)
+  end
+
+  context "personal relation" do
+    let(:relationship_params) { { relationship: 'Son'} }
+
+    it "renders personal attributes" do
+      render
+      expect(rendered).to match(/Beneficiarytype/)
+      expect(rendered).to match(/Ssn/)
+      expect(rendered).to match(/Address/)
+      expect(rendered).to match(/Zipcode/)
+    end
+  end
+
+  context "professional relationship" do
+    let(:relationship_params) { { relationship: 'Attorney'} }
+
+    it "renders professional attributes" do
+      render
+      expect(rendered).to match(/Businessname/)
+      expect(rendered).to match(/Businesswebaddress/)
+      expect(rendered).to match(/Businessphone/)
+      expect(rendered).to match(/Businessfax/)
+    end
   end
 end

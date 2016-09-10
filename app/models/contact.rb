@@ -34,11 +34,20 @@ class Contact < ActiveRecord::Base
     'Medical Professional' => RELATIONSHIP_TYPES[:professional]
   }
 
+
+  def personal_relationship?
+    relationship.in? RELATIONSHIP_TYPES[:personal]
+  end
+
+  def professional_relationship?
+    relationship.in? RELATIONSHIP_TYPES[:professional]
+  end
+
   def name(biblio = false)
     if biblio
-      [firstname,lastname].compact.join(' ')
-    else
       [lastname,firstname].compact.join(', ')
+    else
+      [firstname,lastname].compact.join(' ')
     end
   end
 end

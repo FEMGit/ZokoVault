@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   resources :vendor_accounts
   resources :vendors
   resources :contacts
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
   get 'cards' => 'welcome#cards'
+  get 'thank_you' => 'welcome#thank_you'
 
   # Default category pages ?Could probably be done better programatically?
   get 'my_profile' => 'categories#my_profile'
@@ -34,6 +36,12 @@ Rails.application.routes.draw do
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
   resources :documents
+
+  resource :account, only: [:update, :show] do
+    collection do
+      get :setup
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

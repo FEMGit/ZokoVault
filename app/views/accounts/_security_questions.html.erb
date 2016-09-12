@@ -1,0 +1,20 @@
+<h1>Security Questions</h1>
+
+These are used during password recovery to verify your identity
+when logging in from an unrecognized device.
+
+
+<% SecurityQuestions::SECURITY_QUESTIONS.each_with_index do |question_sets, i| %>
+  <% ordinal, questions = question_sets %>
+  <div class="field">
+    <%= label_tag "user_user_profile_attributes_security_questions_attributes_#{i}_question", "Question #{ordinal}" %>
+    <div class='styled-select'>
+      <%= select_tag "user[user_profile_attributes][security_questions_attributes][#{i}][question]", options_for_select(questions) %>
+    </div>
+    <div>
+      <%= "Answer #{ordinal}" %>
+      <%= label_tag "user_user_profile_attributes_security_questions_attributes_#{i}_answer", "Answer #{ordinal}" %>
+      <%= text_field_tag "user[user_profile_attributes][security_questions_attributes][#{i}[answer]" %>
+    </div>
+  </div>
+<% end %>

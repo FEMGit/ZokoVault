@@ -1,0 +1,12 @@
+<h1>Login Settings</h1>
+
+Please choose how you would like us to verify your identity on future logins.
+
+<div>
+  <%= radio_button_tag "login_phone_verification", "every_time" %>
+  Verify using my phone every time
+  <%= radio_button_tag "login_phone_verification", "new_device" %>
+  Verify using my phone when logging in from a new device.
+  <%= radio_button_tag "login_phone_verification", "off" %>
+  Do no use my phone for login.
+</div>

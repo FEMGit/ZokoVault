@@ -1,0 +1,30 @@
+<h1><% current_user.name %> User Profile </h1>
+
+
+<p>
+  <b>Signed ToS:</b><br/>
+  <%= current_user.user_profile.signed_terms_of_service? %>
+</p>
+
+<p>
+  <b>Phone Number:</b><br/>
+  <%= current_user.user_profile.phone_number_formatted %>
+</p>
+
+<p>
+  <b>Phone Code: (not persisted)</b><br/>
+  <%= current_user.user_profile.phone_code %>
+</p>
+
+<p>
+  <b>MFA Frequency:</b><br/>
+  <%= current_user.user_profile.mfa_frequency %>
+</p>
+
+<p>
+  <b>Security Questions:</b><br/>
+  <% current_user.user_profile.security_questions.each do |sq| %>
+    <b><%= sq.question %>:</b><br/>
+    <i><%= sq.answer %></i>
+  <% end %>
+</p>

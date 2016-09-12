@@ -1,0 +1,147 @@
+<% current_user = User.last %>
+<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+  Wizard Modal
+</button>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js">
+  <div class="step-wizard">
+    <div class="inner-step" onclick="wizNav(1)">
+      <span id="step-1" class="inner-counter">
+        1
+      </span>
+      Terms
+    </div>
+    <div class="inner-step" onclick="wizNav(2)">
+      <span id="step-2" class="inner-counter">
+        2
+      </span>
+      Sec Qs
+    </div>
+    <div class="inner-step" onclick="wizNav(3)">
+      <span id="step-3" class="inner-counter">
+        3
+      </span>
+      Phone
+    </div>
+    <div class="inner-step" onclick="wizNav(4)">
+      <span id="step-4" class="inner-counter">
+        4
+      </span>
+      Settings
+    </div>
+  </div>
+  <div class="modal-header">
+    <h2>Account Setup</h2>
+  </div>
+  <div class="modal-content">
+    <%= form_tag :account, { method: :put, id: 'contact-form' } do %>
+      <div id="form-step-1">
+        <%= render partial: "terms_of_service" %>
+      </div>
+      <div id="form-step-2">
+        <%= render partial: "security_questions" %>
+      </div>
+      <div id="form-step-3">
+        <%= render partial: "phone" %>
+      </div>
+      <div id="form-step-4">
+        <%= render partial: "settings" %>
+      </div>
+    <% end %>
+  </div>
+  <footer class="modal-footer">
+    <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
+    onclick="wizNav(currentStep+1); return false;">Next</a>
+    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
+    <%= link_to 'Cancel', contacts_path, class: "js-modal-close button secondary-button big-button" %>
+  </footer>
+</div>
+
+
+<%#= link_to 'Back', contacts_path #%>
+<script>
+
+var currentStep = 1;
+var maxStep = 4;
+
+var wizNav = function(step){
+  currentStep = step;
+  for(var i = 1; i < maxStep + 1; i++) {
+    var step_el = $("#step-" + i);
+    var form_el = $("#form-step-" + i);
+    if (i === currentStep) {
+      step_el.removeClass().addClass("inner-counter current-step")
+      step_el.html(i);
+      form_el.show();
+    }
+    else {
+      if (currentStep > i) {
+        step_el.removeClass().addClass("inner-counter completed-step");
+        step_el.html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
+      } else {
+        step_el.removeClass().addClass("inner-counter");
+        step_el.html(i);
+      }
+      form_el.hide();
+    }
+
+    if (maxStep === currentStep) {
+      $("#next-step").hide();
+      $("#save-btn").show();
+    }
+    else {
+      $("#next-step").show();
+      $("#save-btn").hide();
+    }
+  }
+}
+var submitContact = function(){
+  var contactForm = document.getElementById("contact-form");
+  contactForm.submit();
+}
+$(function(){
+
+  //SOMEONE PLEASE FIX THIS GARBAGE
+  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+  $(document).ready(function(){
+    $('button[data-modal-id]').click();
+
+    wizNav(1);
+  });
+  $('button[data-modal-id]').click(function(e) {
+    e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.8);
+    $(".js-modalbox").fadeIn(500);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+  });
+
+  $(".js-modal-close, .modal-overlay").click(function() {
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+    });
+
+  });
+
+  //ESPECIALLY THIS GARBAGE
+  $(window).resize(function() {
+    $(".large-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".medium-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".small-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize();
+});
+</script>

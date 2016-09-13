@@ -1,22 +1,26 @@
-<h1>Phone Setup</h1>
+<div class="modal-header">
+  <h2>Phone Setup</h2>
 
-A phone number is required for account recovery purposes. It can also be used to
-provide an extra layer of security for your account.
-Please enter your cell phone number below.
-
-<div class="field">
-  <%= label_tag "user_user_profile_attributes_phone_number", 'Cell Phone Number' %><br>
-  <%= text_field_tag "user[user_profile_attributes][phone_number]" %>
+  <p>A phone number is required for account recovery purposes. It can also be used to
+  provide an extra layer of security for your account.
+  Please enter your cell phone number below.</p>
 </div>
 
-<hr/>
+<div class="modal-content">
+  <div class="field">
+    <%= label_tag "user_user_profile_attributes_phone_number", 'Cell Phone Number' %><br>
+    <%= text_field_tag "user[user_profile_attributes][phone_number]" %>
+  </div>
 
-<h1>Enter Phone Code</h1>
+  <hr/>
 
-You should recieve your phone code within the next few minutes.
-Please enter the code below.
+  <h1>Enter Phone Code</h1>
 
-<div class="field">
-  <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
-  <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
+  You should recieve your phone code within the next few minutes.
+  Please enter the code below.
+
+  <div class="field">
+    <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
+    <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
+  </div>
 </div>

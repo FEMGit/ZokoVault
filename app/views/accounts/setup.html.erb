@@ -10,11 +10,11 @@
       </span>
       Terms
     </div>
-    <div class="inner-step" onclick="wizNav(2)">
+    <div class="inner-step questions-width" onclick="wizNav(2)">
       <span id="step-2" class="inner-counter">
         2
       </span>
-      Sec Qs
+      Questions
     </div>
     <div class="inner-step" onclick="wizNav(3)">
       <span id="step-3" class="inner-counter">
@@ -29,15 +29,13 @@
       Settings
     </div>
   </div>
-  <div class="modal-header">
-    <h2>Account Setup</h2>
-  </div>
-  <div class="modal-content">
+
     <%= form_tag :account, { method: :put, id: 'contact-form' } do %>
       <div id="form-step-1">
         <%= render partial: "terms_of_service" %>
       </div>
       <div id="form-step-2">
+
         <%= render partial: "security_questions" %>
       </div>
       <div id="form-step-3">
@@ -47,12 +45,12 @@
         <%= render partial: "settings" %>
       </div>
     <% end %>
-  </div>
+
   <footer class="modal-footer">
-    <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
+    <a href="javascript:;" id='next-step' class=" button primary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
-    <%= link_to 'Cancel', contacts_path, class: "js-modal-close button secondary-button big-button" %>
+    <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitContact(event)">Save</button>
+    <%= link_to 'Cancel', contacts_path, class: "js-modal-close" %>
   </footer>
 </div>
 

@@ -1,12 +1,28 @@
-<h1>Login Settings</h1>
+<div class="modal-header">
+  <h2>Login Settings</h2>
+  <p>Please choose how you would like us to verify your identity on future logins.</p>
+</div>
 
-Please choose how you would like us to verify your identity on future logins.
+<div class="modal-content">
 
-<div>
-  <%= radio_button_tag "login_phone_verification", "every_time" %>
-  Verify using my phone every time
-  <%= radio_button_tag "login_phone_verification", "new_device" %>
-  Verify using my phone when logging in from a new device.
-  <%= radio_button_tag "login_phone_verification", "off" %>
-  Do no use my phone for login.
+  <ul class="radio-list">
+   <li class="radio-list">
+     <%= radio_button_tag "login_phone_verification", "every_time" %>
+     <label for="f-option">Verify using my phone every time.</label>
+     <div class="check"></div>
+   </li>
+
+   <li class="radio-list">
+     <%= radio_button_tag "login_phone_verification", "new_device" %>
+     <label for="s-option">Verify using my phone when logging in from a new device.</label>
+     <div class="check"></div>
+   </li>
+
+   <li class="radio-list">
+     <%= radio_button_tag "login_phone_verification", "off" %>
+     <label for="t-option">Do no use my phone for login.</label>
+     <div class="check"></div>
+   </li>
+  </ul>
+
 </div>

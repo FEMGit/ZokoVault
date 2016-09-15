@@ -97,6 +97,10 @@
             <%= f.label :address %><br>
             <%= f.text_field :address %>
           </div>
+<<<<<<< e5b759ea15fe9a393507e18c979f1b7496a9b06f
+=======
+          <%= render 'common_address' %>
+>>>>>>> Fix bug with not showing address after adding extra fields to business contacts
         </div>
         <div id="professional_relationship">
           <div class="field">
@@ -124,18 +128,7 @@
             <%= f.label :business_street_address, 'Street Address 2' %><br>
             <%= f.text_field :business_street_address_2 %>
           </div>
-          <div class="field">
-            <%= f.label :city, 'City' %><br>
-            <%= f.text_field :city %>
-          </div>
-          <div class="field">
-            <%= f.label :state, 'State' %><br>
-            <%= f.text_field :state %>
-          </div>
-          <div class="field">
-            <%= f.label :zipcode, 'Zip Code' %><br>
-            <%= f.text_field :zipcode %>
-          </div>
+          <%= render 'common_address' %>
           <div class="field">
             <%= f.label :businessphone, 'Business Phone' %><br>
             <%= f.text_field :businessphone %>
@@ -180,7 +173,10 @@
           <%= f.label :photourl, 'Photo Url' %><br>
           <%= f.text_field :photourl %>
         </div>
+<<<<<<< e5b759ea15fe9a393507e18c979f1b7496a9b06f
       </div>
+=======
+>>>>>>> Fix bug with not showing address after adding extra fields to business contacts
     <% end %>
   </div>
   <footer class="modal-footer">

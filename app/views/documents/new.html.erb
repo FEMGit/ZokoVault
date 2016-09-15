@@ -17,6 +17,8 @@
 <input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3"
   data-fp-store-container="zoku-stage" onchange="fileToPage(event)"/>
 
+<div id="file-info" style="display: none;"></div>
+
 <%= form_for [@folder,@document], :html => {:id => "upload-form", :class => "form-hidden"} do |f| %>
   <div>
     <%= f.text_field :name, :id => "file-name" %><br>

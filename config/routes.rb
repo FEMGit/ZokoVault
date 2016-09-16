@@ -40,6 +40,10 @@ Rails.application.routes.draw do
   resource :account, only: [:update, :show] do
     collection do
       get :setup
+      post :send_code
+      put :send_code
+      post :verify_code
+      put :verify_code
     end
   end
 

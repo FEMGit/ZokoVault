@@ -61,7 +61,12 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'spring-commands-rspec'
+  gem 'dotenv-rails'
 end
+
+# Twilio 
+gem 'twilio-ruby', '~> 4.11.1'
+
 
 group :test do
   gem 'webmock'

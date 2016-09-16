@@ -30,7 +30,7 @@
     </div>
   </div>
 
-    <%= form_tag :account, { method: :put, id: 'contact-form' } do %>
+    <%= form_tag :account, { method: :put, id: 'account-form' } do %>
       <div id="form-step-1">
         <%= render partial: "terms_of_service" %>
       </div>
@@ -49,13 +49,11 @@
   <footer class="modal-footer">
     <a href="javascript:;" id='next-step' class=" button primary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitContact(event)">Save</button>
+    <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitAccount(event)">Save</button>
     <%= link_to 'Cancel', contacts_path, class: "js-modal-close" %>
   </footer>
 </div>
 
-
-<%#= link_to 'Back', contacts_path #%>
 <script>
 
 var currentStep = 1;
@@ -82,7 +80,11 @@ var wizNav = function(step){
       form_el.hide();
     }
 
-    if (maxStep === currentStep) {
+
+    if (currentStep == 3) {
+      $("#next-step").hide();
+    }
+    else if (maxStep === currentStep) {
       $("#next-step").hide();
       $("#save-btn").show();
     }
@@ -92,9 +94,9 @@ var wizNav = function(step){
     }
   }
 }
-var submitContact = function(){
-  var contactForm = document.getElementById("contact-form");
-  contactForm.submit();
+var submitAccount = function(){
+  var accountForm = document.getElementById("account-form");
+  accountForm.submit();
 }
 $(function(){
 

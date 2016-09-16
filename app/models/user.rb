@@ -8,5 +8,5 @@ class User < ActiveRecord::Base
   has_one :user_profile
   accepts_nested_attributes_for :user_profile
 
-  delegate :name, :signed_terms_of_service?, to: :user_profile
+  delegate :name, :phone_number, :signed_terms_of_service?, to: :user_profile
 end

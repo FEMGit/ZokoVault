@@ -2,10 +2,17 @@ require 'rails_helper'
 
 RSpec.describe AccountsController, type: :controller do
 
+  let(:current_user) { create :user, setup_complete: false, user_profile: UserProfile.new }
 
-  let(:current_user) { create :user, user_profile: UserProfile.new }
   before do
     sign_in current_user
+  end
+
+  context "invalid user" do
+    it "is redirected to accounts setup" do
+      get :show
+      expect(response).to redirect_to(setup_account_path)
+    end
   end
 
   describe "PUT #update" do
@@ -32,6 +39,10 @@ RSpec.describe AccountsController, type: :controller do
         current_user.reload
       end
 
+      it "sets setup_complete to true" do
+        expect(current_user).to be_setup_complete
+      end
+
       it "sets signed terms of service" do
         expect(current_user).to be_signed_terms_of_service
       end
@@ -51,7 +62,6 @@ RSpec.describe AccountsController, type: :controller do
       it "redirects to :show" do
         expect(response).to redirect_to(account_path)
       end
-
     end
   end
 end

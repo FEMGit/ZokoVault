@@ -1,6 +1,7 @@
 class AccountsController < AuthenticatedController
 
-  skip_before_filter :complete_setup!, only: [:setup, :update] 
+  skip_before_filter :complete_setup!, except: :show
+
   def setup
     nil
   end
@@ -16,13 +17,21 @@ class AccountsController < AuthenticatedController
 
   def send_code
     current_user.attributes = user_params
-    MultifactorAuthenticator.new(current_user).send_code
+    status = 
+      begin
+        MultifactorAuthenticator.new(current_user).send_code
+        :ok
+      rescue 
+        :bad_request
+      end
 
-    head :ok
+    head status
   end
 
   def verify_code
     current_user.attributes = user_params
+
+    puts current_user.user_profile.phone_code
 		
     verified = MultifactorAuthenticator.new(current_user).verify_code(current_user.user_profile.phone_code)
 
@@ -30,15 +39,15 @@ class AccountsController < AuthenticatedController
     head status
   end
 
-private
-  
+  private
+
   def user_params
     params.require(:user).permit(
       user_profile_attributes: [
         :signed_terms_of_service,
         :phone_number_raw,
         :mfa_frequency,
-				:phone_code,
+        :phone_code,
         security_questions_attributes: []
       ])
 

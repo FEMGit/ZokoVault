@@ -1,26 +1,24 @@
 <header>
 
-  <% if !user_signed_in? %>
+  <% if user_signed_in? %>
 
-   <a class="button fr primary-button big-button">Sign Up</a>
+    <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
 
-   <%= link_to('Login', new_user_session_path, :class=>"login-link") %>
+    <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
+  <% else %>
 
-   <nav class="marketing-nav">
-    <a class="marketing-link">About Zoku</a>
-    <a class="marketing-link">Easy Set Up</a>
-    <a class="marketing-link">Security</a>
-    <a class="marketing-link">Resources</a>
-  </nav>
+    <%= link_to "Sign up", new_registration_path('user'), class: "button fr primary-button big-button" %><br />
+
+    <%= link_to('Login', new_user_session_path, :class=>"login-link") %>
+
+    <nav class="marketing-nav">
+      <a class="marketing-link">About Zoku</a>
+      <a class="marketing-link">Easy Set Up</a>
+      <a class="marketing-link">Security</a>
+      <a class="marketing-link">Resources</a>
+    </nav>
 
   <% end %>
 
   <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
-
-  <% if user_signed_in? %>
-
-      <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
-
-    <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
-  <% end %>
 </header>

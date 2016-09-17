@@ -1,5 +1,5 @@
 class AuthenticatedController < ApplicationController
-  before_action :authenticate_user!, :complete_setup!
+  before_action :authenticate_user! #, :complete_setup!
 
 private
 

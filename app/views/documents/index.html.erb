@@ -19,7 +19,7 @@
     <% @documents.each do |document| %>
     <tr>
       <td>
-        <a><%= link_to document.name, document_path(document) %></a>
+        <a><%= link_to document.name, document.url %></a>
       </td>
       <td><%=document.updated_at%></td>
       <td>tags</td>

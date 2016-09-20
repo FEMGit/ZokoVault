@@ -1,12 +1,15 @@
 <script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 <script>
   var fileToPage = function(evt){
+    filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
+    var infoDiv = document.getElementById("file-info");
+    infoDiv.innerText=JSON.stringify(evt.fpfile,null,2);
     var nameField = document.getElementById("file-name");
     var locationField = document.getElementById("file-location");
     var typeField = document.getElementById("file-type");
     var uploadForm = document.getElementById("upload-form");
     nameField.value = evt.fpfile.filename;
-    locationField.value = evt.fpfile.key;
+    locationField.value = evt.fpfile.url;
     typeField.value = evt.fpfile.mimetype;
     uploadForm.submit();
   }

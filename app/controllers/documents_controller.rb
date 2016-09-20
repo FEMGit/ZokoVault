@@ -23,6 +23,9 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       if @document.save #TODO: dynamic route builder for categories
         if return_url?
+=======
+        if session[:ret_url] == "insurance" || session[:ret_url] == "/estate_planning"
+>>>>>>> Merge Ad-181 into develop
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
         else
           format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
@@ -61,7 +64,7 @@ class DocumentsController < AuthenticatedController
     @document.destroy
     redirect_page = session[:ret_url] || documents_path
     respond_to do |format|
-      format.html { redirect_to redirect_page, notice: 'Document was successfully destroyed.' }
+      format.html { redirect_to session[:ret_url], notice: 'Document was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

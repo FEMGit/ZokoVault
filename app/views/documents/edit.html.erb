@@ -102,25 +102,23 @@
 
     </div>
 
-    <div class="modal-footer bt-gray-light bottom-fixed edit-document-footer">
-      <div class="edit_document_footer_buttons">
-          <button
-            class="js-modal-close
-                   primary-button
-                   big-button"
-            onclick="submitForm(event)" >
-            Save</button>
-          <%= link_to "Cancel", session[:ret_url],
-            class: "js-modal-close button secondary-button big-button" %>
-          <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
-            class: "js-modal-close button secondary-button big-button"%>
-      </div>
-      <% if @document.persisted? %>
-        <span class='footer_right edit_document_footer_info'>
-          <span class="edit-data-label">Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
-          <span class="edit-data-label">Modified: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
-        </span>
-      <% end %>
+    <div class="modal-footer bt-gray-light bottom-fixed">
+        <button
+          class="js-modal-close
+                 primary-button
+                 big-button"
+          onclick="submitForm(event)" >
+          Save</button>
+        <%= link_to "Cancel", session[:ret_url],
+          class: "js-modal-close button secondary-button big-button" %>
+        <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
+          class: "js-modal-close button secondary-button big-button"%>
+        <% if @document.persisted? %>
+          <span class='footer_right'>
+            <span>Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
+            <span>Updated: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
+          </span>
+        <% end %>
     </div>
   <% end %>
 </div>

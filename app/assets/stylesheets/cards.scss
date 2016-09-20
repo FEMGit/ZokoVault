@@ -50,3 +50,19 @@ $edit-button-margin-top: 13px;
   margin-top: $edit-button-margin-top;
   text-decoration: none;
 }
+
+.wtl-card-info{
+  padding: 10px;
+  padding-left: 5px;
+  .wtl-start-button{
+    float: right;
+  }
+
+  .percent-complete{
+    float: left;
+  }
+}
+
+.edit-link-wtl{
+  float: right;
+}

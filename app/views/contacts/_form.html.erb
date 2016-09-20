@@ -97,23 +97,7 @@
             <%= f.label :address %><br>
             <%= f.text_field :address %>
           </div>
-
-          <div class="field">
-            <%= f.label :city %><br>
-            <%= f.text_field :city %>
-          </div>
-
-          <div class="field">
-            <%= f.label :state %><br>
-            <%= f.text_field :state %>
-          </div>
-
-          <div class="field">
-            <%= f.label :zipcode, 'Zip Code' %><br>
-            <%= f.text_field :zipcode %>
-          </div>
         </div>
-
         <div id="professional_relationship">
           <div class="field">
             <%= f.label :relationship %><br>
@@ -133,10 +117,6 @@
             <%= f.text_field :businesswebaddress %>
           </div>
           <div class="field">
-            <%= f.label :business_street_address, 'Business Street Address' %><br>
-            <%= f.text_field :business_street_address %>
-          </div>
-          <div class="field">
             <%= f.label :businessphone, 'Business Phone' %><br>
             <%= f.text_field :businessphone %>
           </div>
@@ -144,14 +124,22 @@
             <%= f.label :businessfax, 'Business Fax' %><br>
             <%= f.text_field :businessfax %>
           </div>
+          <div class="field">
+            <%= f.label :business_street_address, 'Street Address 1' %><br>
+            <%= f.text_field :business_street_address_1 %>
+          </div>
+          <div class="field">
+            <%= f.label :business_street_address, 'Street Address 2' %><br>
+            <%= f.text_field :business_street_address_2 %>
+          </div>
         </div>
-
-
+        <%= render 'common_address' %>
         <div class="field">
           <%= f.label :notes %><br>
           <%= f.text_area :notes %>
         </div>
       </div>
+      
       <div id="avatar-form">
         <div class="field">
           <%= f.label :avatarcolor, 'Avatar Color' %><br>
@@ -161,8 +149,7 @@
           <%= f.label :photourl, 'Photo Url' %><br>
           <%= f.text_field :photourl %>
         </div>
-
-
+      </div>
     <% end %>
   </div>
   <footer class="modal-footer">
@@ -172,7 +159,7 @@
     <%= link_to 'Cancel', contacts_path, class: "js-modal-close button secondary-button big-button" %>
     <span class='footer_right'>
       <% if @contact.persisted? %>
-        <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "js-modal-close button secondary-button big-button" %>
       <% end %>
     </span>
   </footer>
@@ -199,6 +186,7 @@ var wizNav = function(step){
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
+    $(".footer_right > a").css("float", "");
   }
   else if(step===2){
     $("#next-step").show();
@@ -212,6 +200,7 @@ var wizNav = function(step){
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
+    $(".footer_right > a").css("float", "");
   }
   else if(step===3){
     $("#next-step").hide();
@@ -225,6 +214,7 @@ var wizNav = function(step){
     $("#step-2").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
     $("#step-3").removeClass().addClass("inner-counter current-step");
     $("#step-3").html('3');
+    $(".footer_right > a").css("float", "right");
   }
 
   if ($("#contact_contact_type").val() === "Family & Beneficiaries") {

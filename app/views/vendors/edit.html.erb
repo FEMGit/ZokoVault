@@ -2,6 +2,8 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', vendor_path(@vendor, return: params[:return]) %> |
-<%= link_to 'Back', *return_to_path(vendors_path) %>
-<%= link_to 'Delete', vendor_path(@vendor), method: :delete, data: { confirm: 'Are you sure?' } %>
+<div class="vendor-button-group">
+	<%= link_to 'Show', vendor_path(@vendor, return: params[:return]), class: "js-modal-close button secondary-button big-button" %>
+	<%= link_to 'Back', *return_to_path(vendors_path), class: "js-modal-close button secondary-button big-button" %>
+	<%= link_to 'Delete', vendor_path(@vendor), method: :delete, data: { confirm: 'Are you sure?' }, class: "js-modal-close button secondary-button big-button" %>
+</div>

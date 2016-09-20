@@ -1,0 +1,15 @@
+<%= form_for @contact, :html => {:id => "contact-form"} do |f| %>
+    <div class="field">
+        <%= f.label :city %><br>
+        <%= f.text_field :city %>
+    </div>
+    <div class="field">
+        <%= f.label :state %><br>
+        <%= f.text_field :state %>
+    </div>
+    
+    <div class="field">
+        <%= f.label :zipcode, 'Zip Code' %><br>
+        <%= f.text_field :zipcode %>
+    </div>
+<% end %>

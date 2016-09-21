@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<h1>listing users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to user.email, user %></td>
+        <td><%= link_to 'destroy', user, method: :delete, data: { confirm: 'are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

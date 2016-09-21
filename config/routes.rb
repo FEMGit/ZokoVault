@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   get 'shares/new/:document' => 'shares#new'
 
-  resources :users
+  resources :users, only: [:index, :destroy]
 
   resources :categories
   resources :shares

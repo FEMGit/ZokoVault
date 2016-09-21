@@ -32,36 +32,30 @@
           <%= f.text_field :name, class: "document-text-field" %>
         </div>
 
-        <div class="edit-document-field">
-          <label>Category</label><br>
-          <div class="styled-select">
-            <% options = [
-                  ["Select...", ""],
-                  "Contact",
-                  "Financial Information",
-                  "Wills - Trusts - Legal",
-                  ["Insurance", "insurance"],
-                  "Taxes",
-                  "Healthcare Choices",
-                  "Final Wishes",
-                  "Web Accounts"] %>
-            <%= f.select :category, options_for_select(options, @document.category) %>
-          </div>
-        </div>
+        <label>Document Name</label><br>
+        <%= f.text_field :name %>
 
-        <div class="edit-document-field">
-          <label class="form-disabled">Card</label><br>
-          <div class="styled-select">
-            <% options = [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
-          </div>
-        </div>
-        
-        <div class="edit-document-field">
-          <div class="flex-box">
-            <label>Notes
-              <%= f.text_area :description %>
-            </label>
-          </div>
+        <label>Category</label><br>
+        <div class="styled-select ">
+          <% options = [
+                ["Select...", ""],
+                "Contact",
+                "Financial Information",
+                "Wills - Trusts - Legal",
+                ["Insurance", "insurance"],
+                "Taxes",
+                "Healthcare Choices",
+                "Final Wishes",
+                "Web Accounts"] %>
+          <%= f.select :category, options_for_select(options, @document.category) %>
+        </div><br>
+
+        <label class="form-disabled">Card</label><br>
+        <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
+        <div class="flex-box">
+        <label>Notes
+        <%= f.text_area :description %>
+        </label><br>
         </div>
 
       </div>

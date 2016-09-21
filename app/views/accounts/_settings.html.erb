@@ -10,7 +10,7 @@
   <ul class="radio-list">
    <li class="radio-list">
      <label for="f-option">
-     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "every_time" %>
+     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "everytime" %>
      Verify using my phone every time.</label>
      <div class="check"></div>
    </li>
@@ -24,7 +24,7 @@
 
    <li class="radio-list">
      <label for="t-option">
-     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "off" %>
+     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "never" %>
      Do no use my phone for login.</label>
      <div class="check"></div>
    </li>

@@ -9,7 +9,7 @@ RSpec.describe AccountsController, type: :controller do
   end
 
   context "invalid user" do
-    xit "is redirected to accounts setup" do
+    it "is redirected to accounts setup" do
       get :show
       expect(response).to redirect_to(setup_account_path)
     end
@@ -26,7 +26,7 @@ RSpec.describe AccountsController, type: :controller do
             2 => { question: 'q', answer: 'a' }
           },
           phone_number_raw:  "123-456-7890",
-          mfa_frequency: :everytime,
+          mfa_frequency: :always,
         }
       end
 
@@ -55,8 +55,8 @@ RSpec.describe AccountsController, type: :controller do
         expect(current_user.user_profile.phone_number).to eq "1234567890"
       end
 
-      it "sets the multi-factor auth frequency to 'everytime'" do
-        expect(current_user.user_profile.mfa_frequency).to eq 'everytime'
+      it "sets the multi-factor auth frequency to 'always'" do
+        expect(current_user.user_profile.mfa_frequency).to eq 'always'
       end
 
       it "redirects to :show" do

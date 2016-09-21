@@ -1,0 +1,6 @@
+<%= form_tag mfa_path do %>
+  <%= label_tag 'Phone Code' %>
+  <%= text_field_tag 'phone_code' %>
+  <%= submit_tag 'Verify code' %>
+<% end %>
+

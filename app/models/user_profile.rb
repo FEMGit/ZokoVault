@@ -8,7 +8,7 @@ class UserProfile < ActiveRecord::Base
 
   attr_accessor :phone_code
 
-  enum mfa_frequency: [:never, :new_device, :everytime]
+  enum mfa_frequency: [:never, :new_ip, :always]
 
   def name
     "#{first_name} #{last_name}"

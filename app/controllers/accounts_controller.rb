@@ -30,10 +30,9 @@ class AccountsController < AuthenticatedController
 
   def verify_code
     current_user.attributes = user_params
+    phone_code = current_user.user_profile.phone_code
 
-    puts current_user.user_profile.phone_code
-		
-    verified = MultifactorAuthenticator.new(current_user).verify_code(current_user.user_profile.phone_code)
+    verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
 
     status = verified ? :ok : :unauthorized
     head status

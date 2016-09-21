@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe MultifactorAuthenticator, type: :services do
-  let!(:user) { create(:user, user_profile: UserProfile.new(phone_number: 1111)) }
+  let!(:user) { create(:user) }
   let!(:phone_code) { MultifactorPhoneCode.generate_for(user) }
 
   subject { MultifactorAuthenticator.new(user) }
+
   describe "#send_code" do
+    before { user.user_profile.phone_number = '1111' }
     it "generates a code" do
       expect(MultifactorPhoneCode).to receive(:generate_for).with(user).and_return(phone_code)
 

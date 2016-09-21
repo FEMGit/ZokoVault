@@ -10,14 +10,14 @@
   <ul class="radio-list">
    <li class="radio-list">
      <label for="f-option">
-     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "everytime" %>
+     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "always" %>
      Verify using my phone every time.</label>
      <div class="check"></div>
    </li>
 
    <li class="radio-list">
      <label for="s-option">
-     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "new_device" %>
+     <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "new_ip" %>
      Verify using my phone when logging in from a new device.</label>
      <div class="check"></div>
    </li>

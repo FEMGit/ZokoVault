@@ -1,5 +1,5 @@
 class AuthenticatedController < ApplicationController
-  before_action :authenticate_user!, :complete_setup!
+  before_action :authenticate_user!, :complete_setup!, :mfa_verify!
 
 private
 
@@ -12,6 +12,12 @@ private
   def is_admin?
     unless current_user.admin?
       redirect_to root_path
+    end
+  end
+
+  def mfa_verify!  
+    if current_user.mfa_verify? && !session[:mfa] 
+      redirect_to mfa_path
     end
   end
 end

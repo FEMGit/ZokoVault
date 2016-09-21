@@ -1,6 +1,7 @@
 class AccountsController < AuthenticatedController
 
   skip_before_filter :complete_setup!, except: :show
+  skip_before_filter :mfa_verify!
 
   def setup
     nil

@@ -22,8 +22,25 @@
   <ul class="check-list">
     <li class="check-list">
       <label>
-        <%= check_box_tag 'user[user_profile_attributes][signed_terms_of_service]', 1, true %> <span></span>I agree to the Terms of Service
+        <%= check_box_tag 'user[user_profile_attributes][signed_terms_of_service]', 
+          1,
+          false,
+          onclick: "toggleNext(); return true;" 
+          %> <span></span>I agree to the Terms of Service
       </label>
     </li>
   </ul>
 </div>
+
+<script>
+function toggleNext() {
+  var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
+  var next_el = $("#next-step");
+  if (check_el.is(':checked')) {
+    next_el.show();
+  }
+  else {
+    next_el.hide();
+  }
+}
+</script>

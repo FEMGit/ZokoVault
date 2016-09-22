@@ -9,7 +9,7 @@ class AccountsController < AuthenticatedController
 
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
-    redirect_to account_path
+    redirect_to root_path
   end
 
   def show

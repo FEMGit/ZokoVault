@@ -59,8 +59,8 @@ RSpec.describe AccountsController, type: :controller do
         expect(current_user.user_profile.mfa_frequency).to eq 'always'
       end
 
-      it "redirects to :show" do
-        expect(response).to redirect_to(account_path)
+      it "redirects to dashboard" do
+        expect(response).to redirect_to(root_path)
       end
     end
   end

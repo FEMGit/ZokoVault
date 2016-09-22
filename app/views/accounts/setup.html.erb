@@ -81,7 +81,8 @@ var wizNav = function(step){
     }
 
 
-    if (currentStep == 3) {
+    if ((currentStep == 1) || (currentStep == 3)) {
+      $("#save-btn").hide();
       $("#next-step").hide();
     }
     else if (maxStep === currentStep) {

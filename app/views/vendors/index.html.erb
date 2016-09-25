@@ -17,7 +17,7 @@
   </thead>
 
   <tbody>
-    <% @vendors.each do |vendor| %>
+    <% @vendors.for_user(current_user).each do |vendor| %>
       <tr>
         <td><%= vendor.category %></td>
         <td><%= vendor.group %></td>

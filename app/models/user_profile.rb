@@ -8,7 +8,7 @@ class UserProfile < ActiveRecord::Base
 
   attr_accessor :phone_code
 
-  enum mfa_frequency: [:never, :new_device, :everytime]
+  enum mfa_frequency: [:never, :new_ip, :always]
 
   def name
     "#{first_name} #{last_name}"
@@ -23,7 +23,7 @@ class UserProfile < ActiveRecord::Base
   end
 
   def phone_number_formatted
-    "#{phone_number[0..3]}-#{phone_number[3..6]}-#{phone_number[6..10]}"
+    "#{phone_number[0..2]}-#{phone_number[3..5]}-#{phone_number[6..10]}"
   end
 
   def signed_terms_of_service=(val)

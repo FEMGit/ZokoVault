@@ -23,7 +23,8 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :webaddress %><br>
+   <div class="field">
+    Web Address<br>
     <%= f.text_field :webaddress %>
   </div>
   <div class="field">
@@ -34,18 +35,20 @@
     <%= f.fields_for :vendor_accounts do |vendor_account| %>
         <div class="field">
           Account Name<br>
-          <%= vendor_account.text_field :name %><br>
+          <%= vendor_account.text_field :name %>
         </div>
     <% end %>
 
   <div class="field">
-    <%= f.label :contact_id %><br>
+    <%= f.label :contact_id, "Primary Contact"%>
     <div class="styled-select">
       <%= f.select :contact_id, options_for_select(Contact.for_user(current_user).map{|c|[c.firstname + " " + c.lastname, c.id]}) %>
     </div>
   </div>
 
   <div class="actions">
+    <div class="blank-field">
+    </div>
     <%= f.submit %>
   </div>
 <% end %>

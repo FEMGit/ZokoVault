@@ -1,0 +1,112 @@
+
+
+    document creation returns user to insurance or documents contextually
+
+
+    Document creation from insurance. Redirects to the insurance page if created from documents too - dynamic routing is TODO
+
+
+    Fixed contact leaking across users in vendor create
+
+
+    Removed "to be removed" tabs
+    Fixed vendors terminal page bug
+
+
+    remove document dependency on folder
+
+
+    Fixed insurance navigation bugs, vendor creation brings back to insurance
+
+    Insurance cards page with variable number of cards
+
+    Group label displayed on insurance groups
+
+
+    Card grouping/style
+
+
+    Contact lookup pick list replace id field on vendor form
+
+
+    Vendors listed once, grouped by group
+
+
+    Update user icons and card colors
+
+
+    Add link to cards
+
+
+    Update insurance card view.
+
+
+    Category/group data structure, insurance vendor display/grouping
+
+
+    Removing auto-generated view tests that fail. Added pick list helper to vendor_account
+
+
+    Plumbing for cards page (vendors and vendor accounts)
+
+    Update Edit document form
+
+    Update Edit Document page.  Add utilities and flex css helpers
+
+
+    Shares for document pulled in dynamically
+
+
+    Added permission setting to shares
+
+
+    Shares (contact/document) structure and scaffolding
+
+
+    Updated Flash Messages UI
+
+
+    Update site navigation put in default category pages
+
+
+    Document categories updated per requirements and contacts related to users (can only see your contacts)
+
+
+    Document has category, this and folder on edit
+
+
+    Add icon actions
+
+    start of document edit page
+
+
+    Update styleguide format
+
+
+    Merge branch 'master' of github.com:Zokuvault/zoku-vault
+
+
+    Add colors to style guide. Update Nav
+
+
+    Removing scaffold-generated view test that requires column represent only a single resource. Bogus.
+
+
+    contact list page to spec
+
+
+    Modal wizard broken up into steps, breadcrumb transition, css fixes
+
+
+    Add contact form displayed in wizard modal
+
+
+    Base scaffolding for contact
+
+
+    add categories/folders
+
+
+    Add radio buttons and checkboxes    Table and styleguide updates    Merge branch 'master' of github.com:Zokuvault/zoku-vault    Update styleguide for modals and step through wizard css    Wired up #documents to full S3 file list    Hide upload form    Replace carrierwave bind with manual upload, fix edit    Add button, favicon, layout updates.    fixing merge    Updates to docs section, style guide and icons    Added document controller    Updates to docs section, style guide and icons    File upload table in /uploads to use style guide and prep for file schema    Production API key for filestack    Added document controller    fix merge cnflict for file stack    Add Modals and icons to style guide    Write file meta to div, JSON pretty printed (kind of)    Updates to forms variables and style guide    filestacktest page with filestack widget to see it in action. Removed files page    Show placeholder document image in list and file view    Associate file uploads to current_user. Only show user their files    add migrations to deployments    Carrierwave/fog-based file upload @/uploads. Standard scaffolding.    Updates to login area    configure sendgrid    fix mailer host    user cleanup    simple basic-auth devise    replace testunit with rspec    add devise; generate & configure    Change css background image path for asset pipeline    Add style guide page and new styles.    Static /files page for S3 dev
+    AWS Gem for S3
+    Ignore .env for Heroku local    Profile needed for Heroku local - base rails config    Two column layout, navigation rough draft, svgdefs, general css styling    postgres, DB configuration    add circle.ci configuration    Update SCSS    Add Neat and Bourbon    Configure welcome controller    generated rails - initial commit

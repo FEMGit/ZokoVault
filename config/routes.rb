@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   get 'shares/new/:document' => 'shares#new'
 
-  resources :users
+  resources :users, only: [:index, :destroy]
 
   resources :categories
   resources :shares
@@ -40,8 +40,14 @@ Rails.application.routes.draw do
   resource :account, only: [:update, :show] do
     collection do
       get :setup
+      post :send_code
+      put :send_code
+      post :verify_code
+      put :verify_code
     end
   end
+
+  resource :mfa, only: [:show, :create]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

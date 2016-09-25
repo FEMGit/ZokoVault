@@ -60,10 +60,14 @@
     <%= @contact.businesswebaddress %>
   </p>
 
-<p>
-  <strong>Address:</strong>
-  <%= @contact.business_street_address %>
-</p>
+  <p>
+    <strong>Address:</strong><br>
+    <span>Street address 1:</span>
+    <%= @contact.business_street_address_1 %><br>
+    <span>Street address 2:</span>
+    <%= @contact.business_street_address_2 %><br>
+    <%= @contact.city%>, <%= @contact.state %> <%= @contact.zipcode %>
+  </p>
 
   <p>
     <strong>Phone:</strong>
@@ -91,5 +95,5 @@
   <%= @contact.photourl %>
 </p>
 
-<%= link_to 'Edit', edit_contact_path(@contact) %> |
-<%= link_to 'Back', contacts_path %>
+<%= link_to 'Edit', edit_contact_path(@contact), class: "button secondary-button big-button" %>
+<%= link_to 'Back', contacts_path, class: "button secondary-button big-button" %>

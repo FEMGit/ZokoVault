@@ -2,10 +2,17 @@ require 'rails_helper'
 
 RSpec.describe AccountsController, type: :controller do
 
+  let(:current_user) { create :user, setup_complete: false, user_profile: UserProfile.new }
 
-  let(:current_user) { create :user, user_profile: UserProfile.new }
   before do
     sign_in current_user
+  end
+
+  context "invalid user" do
+    it "is redirected to accounts setup" do
+      get :show
+      expect(response).to redirect_to(setup_account_path)
+    end
   end
 
   describe "PUT #update" do
@@ -19,7 +26,7 @@ RSpec.describe AccountsController, type: :controller do
             2 => { question: 'q', answer: 'a' }
           },
           phone_number_raw:  "123-456-7890",
-          mfa_frequency: :everytime,
+          mfa_frequency: :always,
         }
       end
 
@@ -30,6 +37,10 @@ RSpec.describe AccountsController, type: :controller do
       before do
         put :update, { user: user_attributes }
         current_user.reload
+      end
+
+      it "sets setup_complete to true" do
+        expect(current_user).to be_setup_complete
       end
 
       it "sets signed terms of service" do
@@ -44,14 +55,13 @@ RSpec.describe AccountsController, type: :controller do
         expect(current_user.user_profile.phone_number).to eq "1234567890"
       end
 
-      it "sets the multi-factor auth frequency to 'everytime'" do
-        expect(current_user.user_profile.mfa_frequency).to eq 'everytime'
+      it "sets the multi-factor auth frequency to 'always'" do
+        expect(current_user.user_profile.mfa_frequency).to eq 'always'
       end
 
-      it "redirects to :show" do
-        expect(response).to redirect_to(account_path)
+      it "redirects to dashboard" do
+        expect(response).to redirect_to(root_path)
       end
-
     end
   end
 end

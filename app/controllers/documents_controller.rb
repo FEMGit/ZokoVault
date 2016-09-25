@@ -19,7 +19,7 @@ class DocumentsController < AuthenticatedController
 
   def create
     @document = Document.new(document_params.merge(user_id: current_user.id))
-
+    clear_notes_field
     respond_to do |format|
       if @document.save #TODO: dynamic route builder for categories
         if session[:ret_url] == "insurance"
@@ -72,5 +72,9 @@ class DocumentsController < AuthenticatedController
   def document_params
     params.require(:document).permit(:name, :description, :url, :category, :contact_ids, 
                                      shares_attributes: [:user_id, :contact_id])
+  end
+  
+  def clear_notes_field
+    @document.description = ""
   end
 end

@@ -2,8 +2,8 @@
 
 
 <p>
-  <b>Signed ToS:</b><br/>
-  <%= current_user.user_profile.signed_terms_of_service? %>
+  <b>Agreed to  Terms of Service?</b><br/>
+  <%= current_user.user_profile.signed_terms_of_service? ? 'yes' : 'no' %>
 </p>
 
 <p>
@@ -12,19 +12,21 @@
 </p>
 
 <p>
-  <b>Phone Code: (not persisted)</b><br/>
+  <b>Phone Code:</b>(not persisted)<br/>
   <%= current_user.user_profile.phone_code %>
 </p>
 
 <p>
   <b>MFA Frequency:</b><br/>
-  <%= current_user.user_profile.mfa_frequency %>
+  <%= current_user.user_profile.mfa_frequency || 'n/a' %>
 </p>
 
 <p>
   <b>Security Questions:</b><br/>
   <% current_user.user_profile.security_questions.each do |sq| %>
-    <b><%= sq.question %>:</b><br/>
-    <i><%= sq.answer %></i>
+    <p>
+      <%= sq.question %><br/>
+      <i><%= sq.answer %></i>
+    </p>
   <% end %>
 </p>

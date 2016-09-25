@@ -1,7 +1,70 @@
-Thank You 
 
-In order to activate your account, we need to verify your identity. We have sent you an email with a link to verify your identity to the email address you provided.
+<% current_user = User.last %>
+<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+  Wizard Modal
+</button>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js">
 
-Please allow a few minutes for the email to arrive. If you do not see the email, please check your spam or junk email folders.
-If you continue to have any issues, please reach out to customer support (insert link).
-The Zoku Vault Team
+      <div id="form-step-1">
+        <p>Thank You</p>
+
+        <p>In order to activate your account, we need to verify your identity. We have sent you an email with a link to verify your identity to the email address you provided.</p>
+
+        <p>Please allow a few minutes for the email to arrive. If you do not see the email, please check your spam or junk email folders.
+        If you continue to have any issues, please reach out to <%= mail_to "support@zokuvaults.com", "customer support team" %>.
+
+      </div>
+
+  <footer class="modal-footer">
+    <a href="/" id="save-btn" class="js-modal-close primary-button big-button">Save</a>
+  </footer>
+</div>
+
+<script>
+$(function(){
+
+  //SOMEONE PLEASE FIX THIS GARBAGE
+  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+  $(document).ready(function(){
+    $('button[data-modal-id]').click();
+
+    wizNav(1);
+  });
+  $('button[data-modal-id]').click(function(e) {
+    e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.8);
+    $(".js-modalbox").fadeIn(500);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+  });
+
+  $(".js-modal-close, .modal-overlay").click(function() {
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+    });
+
+  });
+
+  //ESPECIALLY THIS GARBAGE
+  $(window).resize(function() {
+    $(".large-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".medium-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".small-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize();
+});
+</script>

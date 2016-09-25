@@ -8,5 +8,16 @@ class User < ActiveRecord::Base
   has_one :user_profile
   accepts_nested_attributes_for :user_profile
 
-  delegate :name, :signed_terms_of_service?, to: :user_profile
+  delegate :mfa_frequency, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
+
+  def mfa_verify?
+    case mfa_frequency
+    when "never"
+      false
+    when "always"
+      true
+    else 
+      current_sign_in_ip != last_sign_in_ip
+    end
+  end
 end

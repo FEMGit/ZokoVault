@@ -16,6 +16,7 @@
 !/log/.keep
 /tmp
 .env
+.idea
 .idea/.generators
 .idea/.rakeTasks
 .idea/misc.xml

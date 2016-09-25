@@ -30,7 +30,7 @@
       </td>
       <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-        
+          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
       </td>
     </tr>
     <%end%>

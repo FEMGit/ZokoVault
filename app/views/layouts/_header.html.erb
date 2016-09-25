@@ -1,24 +1,44 @@
 <header>
+  <section class="header-inner">
+    <% if !user_signed_in? %>
 
-  <% if user_signed_in? %>
+       <a id="mobile-menu" class="mobile-menu button fr primary-button big-button">☰ Menu</a>
 
-    <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
+       <section class="slide-nav">
+         <a id="close-mobile-menu" class="close-link">
+           Close Menu
+           <svg class="icon close-icon fr">
+             <use xlink:href="#icon-x-2"></use>
+           </svg>
+         </a>
 
-    <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
-  <% else %>
+         <a class="button fr primary-button big-button menu-signup">Sign Up</a>
 
-    <%= link_to "Sign up", new_registration_path('user'), class: "button fr primary-button big-button" %><br />
+         <%= link_to('Login', new_user_session_path, :class=>"login-link") %>
 
-    <%= link_to('Login', new_user_session_path, :class=>"login-link") %>
+         <nav class="marketing-nav">
+          <a class="marketing-link">About Zoku</a>
+          <a class="marketing-link">Easy Set Up</a>
+          <a class="marketing-link">Security</a>
+          <a class="marketing-link">Resources</a>
+        </nav>
+      </section>
+    <% end %>
 
-    <nav class="marketing-nav">
-      <a class="marketing-link">About Zoku</a>
-      <a class="marketing-link">Easy Set Up</a>
-      <a class="marketing-link">Security</a>
-      <a class="marketing-link">Resources</a>
-    </nav>
+    <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
 
-  <% end %>
+    <% if user_signed_in? %>
+      <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
+      <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
+    <% end %>
 
-  <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
+  </section>
 </header>
+
+<script>
+$(function(){
+  $('#mobile-menu, #close-mobile-menu').click(function() {
+     $('.slide-nav').animate({width:'toggle'},150);
+  });
+});
+</script>

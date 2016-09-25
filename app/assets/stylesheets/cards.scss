@@ -9,8 +9,8 @@
   word-wrap: break-word;
 
   &:hover{
-    border: 1px solid  $color-link-blue;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    // border: 1px solid  $color-link-blue;
+    // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 }
 .card.life{
@@ -21,4 +21,9 @@
 }
 .card.health{
   border-left: 10px solid $color-card-3;
+}
+
+.card.login-card{
+  margin: 100px auto;
+  max-width: 400px;
 }

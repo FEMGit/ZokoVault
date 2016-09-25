@@ -1,0 +1,210 @@
+//LOGGED OUT SPECIFIC
+body.logged-out{
+
+  .header-inner{
+    max-width: 1065px;
+    margin: 0 auto;
+  }
+}
+
+//HOME PAGE
+.hero-01{
+  background: transparent asset-data-url('marketing/hero-01.jpg') center top;
+  background-size: cover;
+  height: 600px;
+  text-align: center;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
+                transparent asset-data-url('marketing/hero-01.jpg') center top;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    padding-top: 300px;
+    max-width: 500px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+  }
+
+
+}
+.logo-bg{
+  background: transparent asset-data-url('marketing/logo-bg.jpg') left top;
+  background-size: cover;
+  height: 615px;
+  text-align: center;
+  padding-top: 150px;
+
+  @include media($mobile) {
+    height: auto;
+    padding: 20px 0;
+  }
+
+}
+.security{
+  height: 450px;
+  background: white;
+  padding-top: 60px;
+
+  @include media($mobile) {
+    height: auto;
+    text-align:center;
+    padding-top: 0;
+  }
+
+  article{
+    margin: 0 auto;
+    max-width: 1020px;
+
+    @include media($mobile) {
+      max-width: 600px;
+      padding: 20px;
+    }
+  }
+  img{
+    margin-right: 50px;
+
+    @include media($mobile) {
+      height: 200px;
+      width: 200px;
+      float:none;
+      margin-right: 0;
+    }
+  }
+}
+.hero-02{
+  background: transparent asset-data-url('marketing/hero-02.jpg') center top;
+  background-size: cover;
+  height: 700px;
+  text-align: center;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0.15) 100%),
+                transparent asset-data-url('marketing/hero-02.jpg') center top;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    max-width: 500px;
+    padding-top: 350px;
+
+    @include media($mobile) {
+      padding: 20px 0;
+    }
+  }
+}
+.three-up{
+  background: white;
+  text-align: center;
+  padding-top: 100px;
+
+}
+.three-up img{
+  max-width: 240px;
+
+  @include media($eightfifty) {
+    max-width: 80%;
+  }
+}
+.hero-03{
+  background: transparent asset-data-url('marketing/hero-03.jpg') center top;
+  background-size: cover;
+  height: 700px;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, 0.35) 100%),
+                transparent asset-data-url('marketing/hero-03.jpg') center top;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 10%;
+    max-width: 500px;
+    padding-top: 100px;
+
+    @include media($mobile) {
+      padding: 20px 0;
+    }
+  }
+}
+.screen-text{
+  height: 330px;
+  background: white;
+  text-align: center;
+
+  @include media($mobile) {
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    padding-top: 50px;
+    max-width: 500px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+  }
+}
+
+.hero-04{
+  background: transparent asset-data-url('marketing/hero-04.jpg') center bottom;
+  background-size: cover;
+  height: 920px;
+  text-align: center;
+
+  @include media($mobile) {
+    height: 400px;
+  }
+}
+
+.hero-05{
+  background: transparent asset-data-url('marketing/hero-05.jpg') center top;
+  background-size: cover;
+  height: 700px;
+  text-align:center;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
+                transparent asset-data-url('marketing/hero-05.jpg') center top;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    max-width: 500px;
+    padding-top: 350px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+}
+
+.wrapper{
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 2em;
+}
+.hero-text{
+  color: white;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
+}
+.hero-text-dark{
+  text-shadow: 0 0 4px white;
+}

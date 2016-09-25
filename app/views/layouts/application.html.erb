@@ -9,7 +9,15 @@
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
+
+<% if user_signed_in? %>
+<body class="logged-in">
+<% else %>
+<body class="logged-out">
+<% end %>
+
+
+
   <%= render :partial => 'layouts/svgdefs' %>
 
   <% if user_signed_in? %>
@@ -17,7 +25,7 @@
 
     <main class="app-nav">
   <% else %>
-    <main>
+    <main class="marketing">
   <% end %>
 
     <%= render :partial => 'layouts/header' %>
@@ -26,6 +34,8 @@
       <%= render :partial => 'layouts/alerts' %>
 
       <%= yield %>
+
+
     </div>
 
   </main>

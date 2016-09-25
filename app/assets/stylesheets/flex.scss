@@ -1,8 +1,23 @@
 .flex-boxes{
-  display: -ms-flex;
-	display: -webkit-flex;
-	display: flex;
+  @include align-items(stretch);
+  @include display(flex);
+  @include flex-direction(row);
+  @include justify-content(flex-start);
+  @include display(flex);
+  flex-flow: row wrap;
+	justify-content: space-between;
 }
+
+.flex-marketing{
+  flex: 30%;
+  margin: 0 1.5% 2%;
+
+    @include media($mobile) {
+      flex: 100%;
+      margin: 0 0 2%;
+    }
+}
+
 .flex-column{
   display: -ms-flex;
   display: -webkit-flex;
@@ -35,13 +50,20 @@
     margin-right: $gu;
   }
 }
+.flex-100{
+  width:100%;
+}
 .flex-33{
   width: 33%;
 
   @include media($ninesixty) {
     width: 50%
   }
+  @include media($ninesixty) {
+    width: 50%
+  }
 }
+
 
 .flex-box-big {
   flex: 1 1 40em;

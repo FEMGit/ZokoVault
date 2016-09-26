@@ -2,6 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $standart-margin: 15px;
-.field, .blank-field, .vendor-button-group{
+$submit-button-size: 299px;
+
+.field, .actions, .vendor-button-group{
 	margin-top: $standart-margin;
+}
+
+.actions.vendor-update-button > button{
+	width: $submit-button-size;
 }

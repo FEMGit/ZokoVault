@@ -24,7 +24,7 @@
   </div>
   <div class="field">
    <div class="field">
-    Web Address<br>
+     <%= f.label :webaddress, 'Web Address' %><br>
     <%= f.text_field :webaddress %>
   </div>
   <div class="field">
@@ -34,7 +34,7 @@
 
     <%= f.fields_for :vendor_accounts do |vendor_account| %>
         <div class="field">
-          Account Name<br>
+          <%= vendor_account.label :account_name, 'Account Name' %><br>
           <%= vendor_account.text_field :name %>
         </div>
     <% end %>
@@ -46,9 +46,7 @@
     </div>
   </div>
 
-  <div class="actions">
-    <div class="blank-field">
-    </div>
-    <%= f.submit %>
+  <div class="actions vendor-update-button">
+    <%= f.button (f.object.new_record? ? "Create Vendor" : "Update Vendor"), class: 'primary-button big-button' %>
   </div>
 <% end %>

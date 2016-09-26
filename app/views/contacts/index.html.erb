@@ -14,21 +14,30 @@
 <table>
   <thead>
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Email</th>
       <th>Relationship</th>
       <th>Details</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @contacts.each do |contact| %>
       <tr>
-        <td><%= contact.firstname %> <%= contact.lastname %></td>
-        <td><%= contact.emailaddress %></td>
-        <td><%= contact.relationship %></td>
-        <td><%= link_to 'Details', contact %></td>
+        <td class="contact-avatar-td">
+          <%if contact.photourl? %>
+            <div class="contact-avatar-wrapper-size">
+              <%= image_tag(contact.photourl, :alt => "#{contact.firstname}-#{contact.lastname}-avatar") %>
+            </div>
+          <% end %>
+        </td>
+        <td style="width: 23%;">
+          <%= link_to "#{contact.firstname}#{contact.lastname}", contact, class: 'text-vertical-center' %>
+        </td>
+        <td style="width: 38%;"><%= contact.emailaddress %></td>
+        <td style="width: 38%;"><%= contact.relationship %></td>
+        <td style="width: 1%;"><%= link_to 'Details', contact %></td>
       </tr>
     <% end %>
   </tbody>

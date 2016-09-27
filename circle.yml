@@ -1,6 +1,6 @@
 deployment:
   prod:
-    branch: master
+    branch: production
     commands:
       - git push git@heroku.com:zoku-vault.git $CIRCLE_SHA1:master
       - heroku run rake db:migrate --app zoku-vault

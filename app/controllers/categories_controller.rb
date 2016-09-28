@@ -10,7 +10,13 @@ class CategoriesController < AuthenticatedController
     @groups = Rails.configuration.x.categories[@category]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category)
-    session[:ret_url] = "insurance"
+    session[:ret_url] = "/insurance"
+  end
+  
+  def estate_planning
+    @category = "Wills - Trusts - Legal"
+    @wtl_documents = Document.for_user(current_user).where(category: @category)
+    session[:ret_url] = "/estate_planning"
   end
 
   def show

@@ -38,7 +38,7 @@
                 ["Select...", ""],
                 "Contact",
                 "Financial Information",
-                "Estate Planning",
+                "Wills - Trusts - Legal",
                 ["Insurance", "insurance"],
                 "Taxes",
                 "Healthcare Choices",
@@ -98,7 +98,7 @@
                  big-button"
           onclick="submitForm(event)" >
           Save</button>
-        <%= link_to "Cancel", :back,
+        <%= link_to "Cancel", session[:ret_url],
           class: "js-modal-close button secondary-button big-button" %>
         <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
           class: "js-modal-close button secondary-button big-button"%>

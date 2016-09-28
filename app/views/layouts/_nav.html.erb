@@ -24,12 +24,12 @@
         <use xlink:href="#icon-activity-monitor-1"></use>
       </svg>Financial Information
     </a>
-    <a class="main-nav <%= 'active' if current_page?(estate_planning_url) %>"
-       href="estate_planning">
+    <% estate_planning = 'active' if current_page?(estate_planning_url) %>
+    <%= link_to estate_planning_path, class: "main-nav #{estate_planning}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>
       </svg>Wills Trusts &amp; Legal
-    </a>
+    <% end %>
     <% insurance_current = 'active' if current_page?(insurance_url) %>
     <%= link_to insurance_path, class: "main-nav #{insurance_current}" do %>
       <svg class="icon nav-icon">
@@ -72,5 +72,4 @@
         <use xlink:href="#icon-folder-1"></use>
       </svg>Documents
     </a>
-
 </nav>

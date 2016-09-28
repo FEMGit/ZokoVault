@@ -22,7 +22,7 @@ module ZokuVault
         ]
       },
       "estate" => {
-        "label" => "Estate Planning",
+        "label" => "Wills - Trusts - Legal",
         "groups" => [
           0,1,2
         ]

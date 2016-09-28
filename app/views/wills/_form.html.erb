@@ -1,0 +1,83 @@
+<div class="wtl-body-content">
+	<div class="field">
+		<label>Executor</label>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Add Contact...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	<div class="field">
+		<label>Primary Beneficiaries</label>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contacts...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	<div class="field">
+		<label>Secondary Beneficiaries</label>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contacts...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	<div class="field">
+		<label>Attorney, Accountant or Advisor(s)</label>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contacts...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	
+	<div class="field shared-field bt-gray-light bb-gray-light">
+		<span>
+			<label>Shared With</label>
+			<svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+				<use xlink:href="#icon-Safe"></use>
+			</svg>
+		</span>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contacts...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	
+  	<div class="field">
+	    <svg class="icon add-icon">
+		  <use xlink:href="#icon-add-1"></use>
+		</svg>
+	    Upload your Will documents<br>
+  	</div>
+</div>
+  
+<script>
+  	
+  $(document).ready(() => {
+    
+	//watch radio button state to show/hide Wills form
+	$('input[name="will_radio_group"]').change(function() {
+	  var selected = $('input:checked[name="will_radio_group"]').val();
+	  if(selected === "Yes"){
+	  	$('.wtl-body-content').show();
+		$('.wtl-footer-content').show();
+	  } else if(selected === "No"){
+	    $('.wtl-body-content').hide();
+		$('.wtl-footer-content').hide();
+	  }
+	});
+  });
+</script>

@@ -1,0 +1,50 @@
+$edit-form-width: 390px;
+$document-button-margin-top: 13px;
+
+.edit_document_footer_info{
+  margin-top: 13px;
+}
+
+.edit_document_footer_buttons{
+  display: inline-block;
+  padding-top: 5px;
+}
+
+.edit-document-footer{
+  padding: 10px 25px;
+  margin: 5px auto;
+}
+
+.edit-shared-with-table{
+  width: $edit-form-width;
+}
+
+.edit-document-field{
+  margin-bottom: 15px;
+  .styled-select{
+    width: $edit-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  select{
+    width: $edit-form-width + $gu;
+  }
+  textarea{
+    width: $edit-form-width;
+    resize: vertical;
+  }
+  input[type=text]{
+    width: $edit-form-width;
+  }
+}
+
+.edit-flex-boxes.flex-boxes{
+  flex-flow: row;
+}
+
+.edit-data-label{
+  font-weight: 600;
+}
+
+.add-link{
+	margin-top: $document-button-margin-top;
+}

@@ -9,14 +9,24 @@
   <h1>Wills - Trusts - Legal</h1>
 </div>
 <div class="flex-boxes">
+  
   <div class="flex-33">
     <div class="card wills">
       <h3>Wills</h3>
       <p class="wtl-card-info">
         <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', '#' %></span>
+        <span class="wtl-start-button"><%= link_to 'Start', new_will_path %></span>
       </p>
     </div>
+    
+    <%= link_to details_will_path(1), :class => "undo-link-style" do %>
+      <div class="card wills">
+        <h3>Details For Will</h3>
+        <p class="wtl-card-info">
+          <span class="percent-complete">100% Complete</span>
+        </p>
+      </div>
+    <% end %>
   </div>
 
   <div class="flex-33">

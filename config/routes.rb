@@ -31,6 +31,9 @@ Rails.application.routes.draw do
 
   resources :users, only: [:index, :destroy]
 
+  resources :wills
+  get 'wills/details/:will', to: 'wills#details', as: :details_will
+
   resources :categories
   resources :shares
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder

@@ -31,13 +31,13 @@ module ZokuVault
         "label" => "Insurance",
         "groups" => [
           {"value" => "life",
-            "label" => "Life & Disability Insurance"
+            "label" => "Life & Disability"
           },
           {"value" => "property",
-            "label" => "Property Insurance"
+            "label" => "Property & Casualty"
           },
           {"value" => "health",
-            "label" => "Health Insurance"
+            "label" => "Health"
           }
         ]
       }

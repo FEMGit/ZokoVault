@@ -12,8 +12,6 @@
   <% end %>
 </div>
 
-
-
 <div class="flex-boxes">
   <div class="flex-33">
     <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
@@ -60,7 +58,16 @@
   </div>
 </div>
 
-<h1>Documents</h1>
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h1>Documents</h1>
+</div>
 
 <table>
   <tr>
@@ -89,4 +96,3 @@
       </tr>
   <% end %>
 </table>
-

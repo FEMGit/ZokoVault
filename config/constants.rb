@@ -14,9 +14,9 @@ config.categories = {
   "insurance" => {
     "label" => "Insurance",
     "groups" => [
-      "Life & Disability Insurance",
-      "Property Insurance",
-      "Health Insurance"
+      "Life & Disability",
+      "Property & Casualty",
+      "Health"
     ]
   }
 }

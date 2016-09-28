@@ -10,7 +10,7 @@
 
   <%= form_for (@document), :html => {:id => "doc-form"} do |f| %>
 
-    <div class="modal-content flex-boxes">
+    <div class="modal-content edit-flex-boxes flex-boxes">
 
       <div class="flex-box br-gray-light">
 
@@ -28,47 +28,59 @@
 
         <%= f.hidden_field :folder_id %>
 
+        <div class="edit-document-field">
+          <label>Document Name</label><br>
+          <%= f.text_field :name, class: "document-text-field" %>
+        </div>
 
-        <label>Document Name</label><br>
-        <%= f.text_field :name %>
+        <div class="edit-document-field">
+          <label>Category</label><br>
+          <div class="styled-select">
+            <% options = [
+                  ["Select...", ""],
+                  "Contact",
+                  "Financial Information",
+                  "Wills - Trusts - Legal",
+                  ["Insurance", "insurance"],
+                  "Taxes",
+                  "Healthcare Choices",
+                  "Final Wishes",
+                  "Web Accounts"] %>
+            <%= f.select :category, options_for_select(options, @document.category) %>
+          </div>
+        </div>
 
-        <label>Category</label><br>
-        <div class="styled-select ">
-          <% options = [
-                ["Select...", ""],
-                "Contact",
-                "Financial Information",
-                "Wills - Trusts - Legal",
-                ["Insurance", "insurance"],
-                "Taxes",
-                "Healthcare Choices",
-                "Final Wishes",
-                "Web Accounts"] %>
-          <%= f.select :category, options_for_select(options, @document.category) %>
-        </div><br>
-
-        <label class="form-disabled">Card</label><br>
-        <% options= [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
-        <div class="flex-box">
-        <label>Notes
-        <%= f.text_area :description %>
-        </label><br>
+        <div class="edit-document-field">
+          <label class="form-disabled">Card</label><br>
+          <div class="styled-select">
+            <% options = [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
+          </div>
+        </div>
+        
+        <div class="edit-document-field">
+          <div class="flex-box">
+            <label>Notes
+              <%= f.text_area :description %>
+            </label>
+          </div>
         </div>
 
       </div>
 
       <div class="flex-box">
-        <div id='shared-with-inputs'>
-          <label>Shared With</label>
+        <div class="edit-document-field">
+          <div id='shared-with-inputs'>
+            <label>Add Contact(s)</label>
+          </div>
+          <a class="add-link" href="" onclick="addContact(); return false;">
+            <svg class="icon add-icon">
+              <use xlink:href="#icon-add-1"></use>
+            </svg> Add Additional Contact<br>
+            </span>
+          </a>
         </div>
-        <a class="add-link" href="" onclick="addContact(); return false;">
-          <svg class="icon add-icon">
-            <use xlink:href="#icon-add-1"></use>
-          </svg> Add Additional Contact<br>
-          </span>
-        </a>
 
-        <table>
+        <table class="edit-shared-with-table">
           <th>
             Shared With
           </th>
@@ -91,23 +103,25 @@
 
     </div>
 
-    <div class="modal-footer bt-gray-light bottom-fixed">
-        <button
-          class="js-modal-close
-                 primary-button
-                 big-button"
-          onclick="submitForm(event)" >
-          Save</button>
-        <%= link_to "Cancel", session[:ret_url],
-          class: "js-modal-close button secondary-button big-button" %>
-        <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
-          class: "js-modal-close button secondary-button big-button"%>
-        <% if @document.persisted? %>
-          <span class='footer_right'>
-            <span>Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
-            <span>Updated: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
-          </span>
-        <% end %>
+    <div class="modal-footer bt-gray-light bottom-fixed edit-document-footer">
+      <div class="edit_document_footer_buttons">
+          <button
+            class="js-modal-close
+                   primary-button
+                   big-button"
+            onclick="submitForm(event)" >
+            Save</button>
+          <%= link_to "Cancel", session[:ret_url],
+            class: "js-modal-close button secondary-button big-button" %>
+          <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
+            class: "js-modal-close button secondary-button big-button"%>
+      </div>
+      <% if @document.persisted? %>
+        <span class='footer_right edit_document_footer_info'>
+          <span class="edit-data-label">Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
+          <span class="edit-data-label">Modified: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
+        </span>
+      <% end %>
     </div>
   <% end %>
 </div>
@@ -129,7 +143,7 @@
   var addContact = function() {
 
     // Create new styled div
-    var divEl = $('<div>').attr({ class: 'styled-select'});
+    var divEl = $('<div>').attr({ class: 'styled-select edit-document-field'});
 
     //Hidden field, create and appendTo new div element
     $('<input>').attr({
@@ -147,7 +161,7 @@
       });
 
     // Add the options
-    combo.append("<option disabled selected value>Add contact...</option>");
+    combo.append("<option disabled selected value>Choose Contacts...</option>");
     $.each(contactsJson, function (i, el) {
         combo.append("<option value='" + el.id + "'>" + el.name + "</option>");
     });

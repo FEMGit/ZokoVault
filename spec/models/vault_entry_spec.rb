@@ -18,15 +18,23 @@ RSpec.describe VaultEntry, type: :model do
     end
   end
 
-  it "has beneficiaries" do
-    subject.vault_entry_beneficiaries
-      .build(type: :secondary, percentage: 80, contact: contacts.last)
-    subject.vault_entry_beneficiaries
-      .build(type: :primary, percentage: 20, contact: contacts.first)
+  context "with beneficiaries" do
+    before do
+      subject.vault_entry_beneficiaries
+        .build(type: :secondary, percentage: 80, contact: contacts.last)
+      subject.vault_entry_beneficiaries
+        .build(type: :primary, percentage: 20, contact: contacts.first)
 
-    subject.save!
+      subject.save!
+    end
 
-    expect(subject.beneficiaries(true).map(&:firstname)).to eq contacts.map(&:firstname)
+    it "has primary beneficiaries" do
+      expect(subject.primary_beneficiaries(true)).to eq [contacts.first]
+    end
+
+    it "has secondary beneficiaries" do
+      expect(subject.secondary_beneficiaries(true)).to eq [contacts.last]
+    end
   end
 
   it "has an executor" do

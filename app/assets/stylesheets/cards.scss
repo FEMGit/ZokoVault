@@ -1,3 +1,5 @@
+$edit-button-margin-top: 13px;
+
 .card{
   background: white;
   border-radius: 5px;
@@ -43,6 +45,8 @@
   }
 }
 
-.edit-link-wtl{
+.edit-link{
   float: right;
+  margin-top: $edit-button-margin-top;
+  text-decoration: none;
 }

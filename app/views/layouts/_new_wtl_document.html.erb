@@ -1,0 +1,64 @@
+<h1><%= yield(:title) + 's Setup' %></h1>
+
+<div class="wtl-header-content">
+  <h1 class="wtl-question-title"> Do you have a <%= yield(:title) %>? <span class="wtl-required-field"> Required</span> </h1>
+  <div>
+	  <ul class="radio-list">
+		<li class="">
+		  <input type="radio" id="yes-option" name="wtl_radio_group" checked="checked" value="Yes"/>
+		  <label for="yes-option">Yes</label>
+		  <div class="check"></div>
+		</li>
+		<li class="">
+		  <input type="radio" id="no-option" name="wtl_radio_group" value="No"/>
+		  <label for="no-option">No</label>
+		  <div class="check"></div>
+		</li>
+	  </ul>
+  </div>
+</div>
+
+<body>
+	<div id="wtl-forms">
+		<div id="wtl-form-1">
+		  <%= render yield(:partial_path) %>
+		</div>
+	</div>
+</body>
+
+<div class="wtl-footer-content">
+  <div class="add-new-field" href="" onclick="addNewField();">
+    <svg class="icon add-icon">
+	  <use xlink:href="#icon-add-1"></use>
+	</svg>
+	Add another <%= yield(:title) %><br>
+  </div>
+</div>
+
+<div class="wtl-btn-group">
+  <%= link_to "Save", '#',
+    class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', '#', class: "button secondary-button big-button"%>
+</div>
+
+<script>
+  addNewField = function(){
+    var $wtlForm = $('div[id^="wtl-form"]:last');
+    var num = parseInt($wtlForm.prop("id").match(/\d+/g), 10) + 1;
+	var $newWtlForm = $wtlForm.clone().prop('id', 'wtl-form-' + num).appendTo('#wtl-forms');
+  }
+  
+  $(document).ready(() => {
+	//watch radio button state to show/hide Wills form
+	$('input[name="wtl_radio_group"]').change(function() {
+	  var selected = $('input:checked[name="wtl_radio_group"]').val();
+	  if(selected === "Yes"){
+	  	$('.wtl-body-content').show();
+		$('.wtl-footer-content').show();
+	  } else if(selected === "No"){
+	    $('.wtl-body-content').hide();
+		$('.wtl-footer-content').hide();
+	  }
+	});
+  });
+</script>

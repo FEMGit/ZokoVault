@@ -42,7 +42,7 @@
   <div class="field">
     <%= f.label :contact_id, "Primary Contact"%>
     <div class="styled-select">
-      <%= f.select :contact_id, options_for_select(Contact.for_user(current_user).map{|c|[c.firstname + " " + c.lastname, c.id]}) %>
+      <%= f.select :contact_id, options_for_select(Contact.for_user(current_user).map{|c|[c.name, c.id]}) %>
     </div>
   </div>
 

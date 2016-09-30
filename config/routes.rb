@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'trusts/new'
+
+  get 'trust/new'
+
   resources :relationships
   resources :vendor_accounts
   resources :vendors
@@ -34,6 +38,8 @@ Rails.application.routes.draw do
   resources :wills
   get 'wills/details/:will', to: 'wills#details', as: :details_will
 
+  resources :trusts
+  
   resources :categories
   resources :shares
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder

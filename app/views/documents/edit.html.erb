@@ -27,7 +27,6 @@
         <% end %>
 
         <%= f.hidden_field :folder_id %>
-
         <div class="edit-document-field">
           <label>Document Name</label><br>
           <%= f.text_field :name, class: "document-text-field" %>
@@ -137,11 +136,15 @@
 
   // Keep the contacts in json form
   var contactsJson = <%=  Contact.for_user(current_user).map { |c| c.slice(:id, :name) }.to_json.html_safe %>;
-
+  
+  //id of 'create new contact' field to handle selection of it
+  var createNewContactId = 'create_new_contact';
+  
   // Dynamically add hidden field with user id and select box of contacts
   // to contact area
   var addContact = function() {
 
+    var createNewContactLabel = 'Create New Contact';
     // Create new styled div
     var divEl = $('<div>').attr({ class: 'styled-select edit-document-field'});
 
@@ -165,10 +168,16 @@
     $.each(contactsJson, function (i, el) {
         combo.append("<option value='" + el.id + "'>" + el.name + "</option>");
     });
-
+    
+    //Add 'create new contact' option
+    combo.append("<option id=" + createNewContactId + " value='<%= new_contact_path %>'>" + createNewContactLabel + "</option>");
+        
     // Append combo to new div el
     $(combo).appendTo(divEl);
-
+    
+    //Add listener for combo
+    $(combo).change(listenForCreateNewUser);
+    
     // Append div select to shared div
     $(divEl).appendTo('#shared-with-inputs');
 
@@ -176,6 +185,15 @@
     newContactsCount += 1;
   }
   addContact();
-
-
+  
+  var listenForCreateNewUser = function(){
+    var docForm = $('#doc-form');
+    var selectedId = $(this).children(':selected').attr('id');
+    //submit form for saving all data
+    if(selectedId === createNewContactId){
+      docForm.submit();
+    }
+  }
+  //Listen for change event on select box to handle 'create new contact' correctly
+  $('[id^="document_shares_attributes_"]').change(listenForCreateNewUser);
 </script>

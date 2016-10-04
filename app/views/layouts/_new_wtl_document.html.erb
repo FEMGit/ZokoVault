@@ -1,7 +1,7 @@
-<h1><%= yield(:title) + 's Setup' %></h1>
+<h1><%= yield(:title) + ' Setup' %></h1>
 
 <div class="wtl-header-content">
-  <h1 class="wtl-question-title"> Do you have a <%= yield(:title) %>? <span class="wtl-required-field"> Required</span> </h1>
+  <h1 class="wtl-question-title"> Do you have a <%= yield(:question_title) %>? <span class="wtl-required-field"> Required</span> </h1>
   <div>
 	  <ul class="radio-list">
 		<li class="">
@@ -27,11 +27,16 @@
 </body>
 
 <div class="wtl-footer-content">
-  <div class="add-new-field" href="" onclick="addNewField();">
+  <%# off this feature for attorneys to make it static - ToDo: bug fix duplicating checkboxes when press this button %>
+  <% if yield(:title) == "Legal - Power of Attorney"%>
+    <div class="add-new-field" href="" onclick="#">
+  <% else %>
+    <div class="add-new-field" href="" onclick="addNewField();">
+  <% end %>
     <svg class="icon add-icon">
 	  <use xlink:href="#icon-add-1"></use>
 	</svg>
-	Add another <%= yield(:title) %><br>
+	Add another <%= yield(:add_another_title) %><br>
   </div>
 </div>
 

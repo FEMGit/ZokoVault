@@ -167,7 +167,7 @@
     <a href="javascript:;" id='next-step' class=" button secondary-button big-button" 
     onclick="wizNav(currentStep+1); return false;">Next</a>
     <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
-    <%= link_to 'Cancel', contacts_path, class: "js-modal-close button secondary-button big-button" %>
+    <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button" %>
     <span class='footer_right'>
       <% if @contact.persisted? %>
         <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "js-modal-close button secondary-button big-button" %>

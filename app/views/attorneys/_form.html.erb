@@ -1,0 +1,49 @@
+<div class="wtl-body-content">
+	<div class="field">
+		<label>Power of Attorney</label>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contact...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+	<div class="field">
+	    <% check_box_options = ["Digital", 
+								"Financial",
+								"Healthcare",
+								"General",
+								"Limited",
+								"Durable",
+								"Springing"] %>
+      
+	  <label>This Agent's powers are (please choose all that apply):</label>
+      <ul class="check-list">
+		  <% check_box_options.each_with_index do |check_box_option, index| %>
+		    <li class="check-list">
+  			  <label>
+			    <%= check_box_tag 'checkbox', index, false %>
+				<span></span> <%= check_box_option %>
+			  </label>
+		    </li>
+	      <% end %>
+		</ul>
+	</div>
+
+    <div class="field shared-field bt-gray-light bb-gray-light">
+		<span>
+			<label>Shared With</label>
+			<svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+				<use xlink:href="#icon-Safe"></use>
+			</svg>
+		</span>
+		<div class="styled-select">
+		  <select>
+			<option value="empty">Choose Contacts...</option>
+			<option value="user1">User 1</option>
+			<option value="user2">User 2</option>
+		  </select>
+		</div>
+	</div>
+</div>

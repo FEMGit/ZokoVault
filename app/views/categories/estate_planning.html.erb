@@ -37,6 +37,15 @@
         <span class="wtl-start-button"><%= link_to 'Start', new_trust_path %></span>
       </p>
     </div>
+    
+    <%= link_to details_trust_path(1), :class => "undo-link-style" do %>
+      <div class="card trusts">
+        <h3>Details For Trust</h3>
+        <p class="wtl-card-info">
+          <span class="percent-complete">100% Complete</span>
+        </p>
+      </div>
+    <% end %>
   </div>
 
   <div class="flex-33">
@@ -44,9 +53,18 @@
       <h3>Power of Attorney</h3>
       <p class="wtl-card-info">
         <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', '#' %></span>
+        <span class="wtl-start-button"><%= link_to 'Start', new_attorney_path %></span>
       </p>
     </div>
+    
+    <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>
+      <div class="card attorney">
+        <h3>Details For Legal</h3>
+        <p class="wtl-card-info">
+          <span class="percent-complete">100% Complete</span>
+        </p>
+      </div>
+    <% end %>
   </div>
 </div>
 

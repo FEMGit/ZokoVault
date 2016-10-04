@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TrustsController, type: :controller do
+RSpec.describe AttorneysController, type: :controller do
 
   describe "GET #new" do
     it "returns http success" do
@@ -11,4 +11,5 @@ RSpec.describe TrustsController, type: :controller do
   
   describe "GET #details" do
   end
+
 end

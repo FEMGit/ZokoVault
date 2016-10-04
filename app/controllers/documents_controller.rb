@@ -37,6 +37,12 @@ class DocumentsController < AuthenticatedController
 
   def update
     respond_to do |format|
+      if document_params[:shares_attributes] && is_new_contact_creating
+        #delete 'share with' keyValue pair if 'create new user' has been selected
+        params[:document][:shares_attributes].delete_if{|k, v| v[:contact_id] == new_contact_path}
+        session[:ret_url] = "/documents/" + current_document_id + "/edit"
+        format.html { redirect_to new_contact_path }
+      end
       if @document.update(document_params)
         if return_url?
           format.html { redirect_to session[:ret_url], notice: 'Document was successfully updated.' }
@@ -71,12 +77,20 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :contact_ids, 
+    params.require(:document).permit(:name, :description, :url, :category, :contact_ids,
                                      shares_attributes: [:user_id, :contact_id])
   end
   
   def return_url?
     %w[/insurance /estate_planning].include? session[:ret_url]
+  end
+  
+  def current_document_id
+    params[:id]
+  end
+  
+  def is_new_contact_creating
+    document_params[:shares_attributes].values.any? {|value| value[:contact_id] == new_contact_path}
   end
   
   def clear_notes_field

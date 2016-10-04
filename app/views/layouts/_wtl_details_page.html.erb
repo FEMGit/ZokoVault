@@ -1,0 +1,49 @@
+<div>
+  <a class="edit-link" href='#'>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  </a>
+  <h1><%= yield(:title) %></h1>
+</div>
+
+<%= render yield(:card_details_partial_path) %>
+
+<div>
+  <a class="add-link fr" href="#">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h1><%= yield(:add_document_title) %> Documents</h1>
+</div>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+    <th>Shared With</th>
+    <th>Actions</th>
+  </tr>
+  <tr>
+    <td>
+      <a>Name</a>
+    </td>
+    <td>2016-09-19 02:42:12 UTC</td>
+    <td>tags</td>
+    <td>
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+    </td>
+    <td>
+      <%= link_to 'Edit', '#', class: "outline-button small-button" %>
+	  <%= link_to 'Delete', '#', class: "outline-button small-button" %>
+    </td>
+  </tr>
+</table>

@@ -5,6 +5,7 @@ class ContactsController < AuthenticatedController
   # GET /contacts.json
   def index
     @contacts = Contact.for_user(current_user)
+    session[:ret_url] = "/contacts"
   end
 
   # GET /contacts/1
@@ -27,7 +28,7 @@ class ContactsController < AuthenticatedController
     @contact = Contact.new(contact_params.merge(user_id: current_user.id))
     respond_to do |format|
       if @contact.save
-        format.html { redirect_to @contact, notice: 'Contact was successfully created.' }
+        format.html { redirect_to session[:ret_url] || @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else
         format.html { render :new }

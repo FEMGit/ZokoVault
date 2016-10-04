@@ -33,8 +33,10 @@
  * file per style scope.
  *
 */
-@import "vendors.scss";
+@import "vendors";
 @import "contacts";
 @import "documents";
 @import "accounts";
 @import "wills";
+@import "trusts";
+@import "attorneys";

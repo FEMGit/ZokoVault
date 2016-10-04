@@ -20,7 +20,7 @@ class VaultEntriesController < AuthenticatedController
 
     respond_to do |format|
       if @vault_entry.save
-        format.html { redirect_to @vault_entry, notice: 'Vault entry was successfully created.' }
+        format.html { redirect_to estate_planning_path, notice: 'Vault entry was successfully created.' }
         format.json { render :show, status: :created, location: @vault_entry }
       else
         format.html { render :new }

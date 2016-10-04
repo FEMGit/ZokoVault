@@ -3,6 +3,7 @@ class Document < ActiveRecord::Base
   belongs_to :folder
 
   scope :for_user, ->(user) {where(user: user)}
+  scope :wills, -> {where(category: "Wills - Trusts - Legal")}
 
   scope :in_folder, ->(folder) {where(folder: folder)}
   has_many :shares, foreign_key: "document_id" 

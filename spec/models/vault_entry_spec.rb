@@ -4,11 +4,9 @@ RSpec.describe VaultEntry, type: :model do
   let(:user) { create :user }
   let(:contacts) { 2.times.map { create(:contact, user_id: user.id) } } 
 
-  it "has many documents" do
-    5.times do |n|
-      subject.documents.build
-      expect(subject.documents.size).to eq (n+1)
-    end
+  it "has one document" do
+    subject.build_document
+    expect(subject.document).to_not be_nil
   end
 
   it "has many shares" do
@@ -38,10 +36,7 @@ RSpec.describe VaultEntry, type: :model do
   end
 
   it "has an executor" do
-    subject.vault_entry_contacts
-      .build(type: :executor, contact: contacts.first)
-    subject.save!
-    subject.reload
+    subject.update_attribute(:executor_id, contacts.first.id)
 
     expect(subject.executor).to eq contacts.first
   end

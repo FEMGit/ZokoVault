@@ -134,24 +134,6 @@ ActiveRecord::Schema.define(version: 20160925025219) do
     t.datetime "signed_terms_of_service_at"
     t.string   "phone_number"
     t.integer  "mfa_frequency"
-    t.string   "alternate_email"
-    t.string   "alternate_phone_number"
-    t.string   "social_security_number"
-    t.string   "street_address_1"
-    t.string   "street_address_2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip_code"
-    t.string   "business_name"
-    t.string   "business_url"
-    t.string   "business_email"
-    t.string   "business_phone_number"
-    t.string   "business_fax"
-    t.string   "business_street_address_1"
-    t.string   "business_street_address_2"
-    t.string   "business_city"
-    t.string   "business_state"
-    t.string   "business_zip_code"
   end
 
   create_table "users", force: :cascade do |t|
@@ -183,8 +165,10 @@ ActiveRecord::Schema.define(version: 20160925025219) do
 
   create_table "vault_entries", force: :cascade do |t|
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "document_id"
+    t.integer  "executor_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "vault_entry_beneficiaries", force: :cascade do |t|
@@ -249,11 +233,10 @@ ActiveRecord::Schema.define(version: 20160925025219) do
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "uploads", "users"
-  add_foreign_key "vault_entries", "users"
-  add_foreign_key "vault_entry_beneficiaries", "contacts"
-  add_foreign_key "vault_entry_beneficiaries", "vault_entries"
-  add_foreign_key "vault_entry_contacts", "contacts"
-  add_foreign_key "vault_entry_contacts", "vault_entries"
+  add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
+  add_foreign_key "vault_entry_beneficiaries", "vault_entries", on_delete: :cascade
+  add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
+  add_foreign_key "vault_entry_contacts", "vault_entries", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"
   add_foreign_key "vendors", "contacts"
   add_foreign_key "vendors", "users"

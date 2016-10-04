@@ -15,7 +15,7 @@ class CategoriesController < AuthenticatedController
   
   def estate_planning
     @category = "Wills - Trusts - Legal"
-    @wtl_documents = Document.for_user(current_user).where(category: @category)
+    @vault_entries = VaultEntry.for_user(current_user)
     session[:ret_url] = "/estate_planning"
   end
 

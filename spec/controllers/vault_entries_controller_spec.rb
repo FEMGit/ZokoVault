@@ -20,11 +20,22 @@ require 'rails_helper'
 
 RSpec.describe VaultEntriesController, type: :controller do
 
+  let(:contacts) { 3.times.map { create(:contact, user_id: user.id) } }
+  let(:document) { create(:document) }
   let(:user) { create :user }
 
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) do
+    {
+      user_id: user.id,
+      primary_beneficiary_ids: contacts.first(2).map(&:id),
+      secondary_beneficiary_ids: contacts.last(1).map(&:id),
+      executor_id: contacts[1].id,
+      agent_ids: contacts.map(&:id),
+      share_ids: contacts.map(&:id),
+      document_id: document.id
+    }
+  end
+
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
@@ -37,60 +48,45 @@ RSpec.describe VaultEntriesController, type: :controller do
   # VaultEntriesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
+  xdescribe "GET #index" do
     it "assigns all vault_entries as @vault_entries" do
       vault_entry = VaultEntry.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      get :index, {}, session: valid_session
       expect(assigns(:vault_entries)).to eq([vault_entry])
     end
   end
 
-  describe "GET #show" do
+  xdescribe "GET #show" do
     it "assigns the requested vault_entry as @vault_entry" do
       vault_entry = VaultEntry.create! valid_attributes
-      get :show, params: {id: vault_entry.to_param}, session: valid_session
+      get :show, {id: vault_entry.to_param}, session: valid_session
       expect(assigns(:vault_entry)).to eq(vault_entry)
     end
   end
 
   describe "GET #new" do
     it "assigns a new vault_entry as @vault_entry" do
-      get :new, params: {}, session: valid_session
+      get :new, {}, session: valid_session
       expect(assigns(:vault_entry)).to be_a_new(VaultEntry)
     end
   end
 
-  describe "GET #edit" do
+  xdescribe "GET #edit" do
     it "assigns the requested vault_entry as @vault_entry" do
       vault_entry = VaultEntry.create! valid_attributes
-      get :edit, params: {id: vault_entry.to_param}, session: valid_session
+      get :edit, {id: vault_entry.to_param}, session: valid_session
       expect(assigns(:vault_entry)).to eq(vault_entry)
     end
   end
 
   describe "POST #create" do
     context "with valid params" do
-      let(:contacts) { 3.times.map { create(:contact, user_id: user.id) } }
-      let(:documents) { [create(:document), create(:document)] } 
-      
       it "creates a new VaultEntry" do 
-        expect { post :create, params: {vault_entry: valid_attributes}, session: valid_session }
+        expect { post :create, {vault_entry: valid_attributes}, session: valid_session }
           .to change(VaultEntry, :count).by(1)
       end
 
       context "with attributes" do
-        let!(:valid_attributes) do
-          {
-            user_id: user.id,
-            primary_beneficiary_ids: contacts.first(2).map(&:id),
-            secondary_beneficiary_ids: contacts.last(1).map(&:id),
-            executor_ids: contacts[1].id,
-            agent_ids: contacts.map(&:id),
-            share_ids: contacts.map(&:id),
-            document_ids: documents.map(&:id),
-          }
-        end
-
         let(:vault_entry) { assigns(:vault_entry) }
 
         before do
@@ -120,11 +116,11 @@ RSpec.describe VaultEntriesController, type: :controller do
         end
 
         it "assigns shares" do
-          expect(vault_entry.shares.size).to eq (contacts.size * documents.size)
+          expect(vault_entry.shares.size).to eq contacts.size
         end
 
-        it "assigns documents" do
-          expect(vault_entry.documents).to eq documents
+        it "assigns document" do
+          expect(vault_entry.document).to eq document
         end
 
         it "assigns executor" do
@@ -137,25 +133,25 @@ RSpec.describe VaultEntriesController, type: :controller do
       end
 
       it "redirects to the created vault_entry" do
-        post :create, params: {vault_entry: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(VaultEntry.last)
+        post :create, {vault_entry: valid_attributes}, session: valid_session
+        expect(response).to redirect_to(estate_planning_path)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
-        post :create, params: {vault_entry: invalid_attributes}, session: valid_session
+        post :create, {vault_entry: invalid_attributes}, session: valid_session
         expect(assigns(:vault_entry)).to be_a_new(VaultEntry)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {vault_entry: invalid_attributes}, session: valid_session
+        post :create, {vault_entry: invalid_attributes}, session: valid_session
         expect(response).to render_template("new")
       end
     end
   end
 
-  describe "PUT #update" do
+  xdescribe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
@@ -163,20 +159,20 @@ RSpec.describe VaultEntriesController, type: :controller do
 
       it "updates the requested vault_entry" do
         vault_entry = VaultEntry.create! valid_attributes
-        put :update, params: {id: vault_entry.to_param, vault_entry: new_attributes}, session: valid_session
+        put :update, {id: vault_entry.to_param, vault_entry: new_attributes}, session: valid_session
         vault_entry.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested vault_entry as @vault_entry" do
         vault_entry = VaultEntry.create! valid_attributes
-        put :update, params: {id: vault_entry.to_param, vault_entry: valid_attributes}, session: valid_session
+        put :update, {id: vault_entry.to_param, vault_entry: valid_attributes}, session: valid_session
         expect(assigns(:vault_entry)).to eq(vault_entry)
       end
 
       it "redirects to the vault_entry" do
         vault_entry = VaultEntry.create! valid_attributes
-        put :update, params: {id: vault_entry.to_param, vault_entry: valid_attributes}, session: valid_session
+        put :update, {id: vault_entry.to_param, vault_entry: valid_attributes}, session: valid_session
         expect(response).to redirect_to(vault_entry)
       end
     end
@@ -184,29 +180,29 @@ RSpec.describe VaultEntriesController, type: :controller do
     context "with invalid params" do
       it "assigns the vault_entry as @vault_entry" do
         vault_entry = VaultEntry.create! valid_attributes
-        put :update, params: {id: vault_entry.to_param, vault_entry: invalid_attributes}, session: valid_session
+        put :update, {id: vault_entry.to_param, vault_entry: invalid_attributes}, session: valid_session
         expect(assigns(:vault_entry)).to eq(vault_entry)
       end
 
       it "re-renders the 'edit' template" do
         vault_entry = VaultEntry.create! valid_attributes
-        put :update, params: {id: vault_entry.to_param, vault_entry: invalid_attributes}, session: valid_session
+        put :update, {id: vault_entry.to_param, vault_entry: invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE #destroy" do
+  xdescribe "DELETE #destroy" do
     it "destroys the requested vault_entry" do
       vault_entry = VaultEntry.create! valid_attributes
       expect {
-        delete :destroy, params: {id: vault_entry.to_param}, session: valid_session
+        delete :destroy, {id: vault_entry.to_param}, session: valid_session
       }.to change(VaultEntry, :count).by(-1)
     end
 
     it "redirects to the vault_entries list" do
       vault_entry = VaultEntry.create! valid_attributes
-      delete :destroy, params: {id: vault_entry.to_param}, session: valid_session
+      delete :destroy, {id: vault_entry.to_param}, session: valid_session
       expect(response).to redirect_to(vault_entries_url)
     end
   end

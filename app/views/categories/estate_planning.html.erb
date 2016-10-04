@@ -11,11 +11,11 @@
 <div class="flex-boxes">
 	<div class="flex-33">
     	<div class="card wills">
-          <h3>Wills</h3>
-		  <p class="wtl-card-info">
-		  	<span class="percent-complete">0% Complete</span>
-			<span class="wtl-start-button"><%= link_to 'Start', '#' %></span>
-		  </p>
+        <h3>Wills</h3>
+        <p class="wtl-card-info">
+          <span class="percent-complete">0% Complete</span>
+          <span class="wtl-start-button"><%= link_to 'Start', new_vault_entry_path %></span>
+        </p>
 		</div>
 	</div>
 
@@ -77,7 +77,8 @@
     <th>Shared With</th>
     <th>Actions</th>
   </tr>
-  <% @wtl_documents.each do |document| %>
+  <% @vault_entries.each do |vault_entry| %>
+    <% next unless (document = vault_entry.document) %>
       <tr>
         <td>
           <a><%= link_to document.name, document.url %></a>
@@ -85,9 +86,9 @@
         <td><%= document.updated_at %></td>
         <td>tags</td>
         <td>
-          <span class="user-circle">AK</span>
-          <span class="user-circle">BM</span>
-          <span class="user-circle">MB</span>
+          <% vault_entry.share_with_contacts.each do |contact| %>
+            <span class="user-circle"><%= contact.initials %></span>
+          <% end %>
         </td>
         <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

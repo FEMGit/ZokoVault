@@ -1,7 +1,7 @@
 class VaultEntryBuilder
 
   def initialize(options = {})
-    self.vault_entry = VaultEntry.new(options.slice(:user_id, :document_ids))
+    self.vault_entry = VaultEntry.new(options.slice(:user_id, :document_id, :executor_id))
     self.options = options
   end
 
@@ -24,16 +24,9 @@ class VaultEntryBuilder
       )
     end
 
-     sanitize_data(options[:share_ids]).each do |contact_id|
-       sanitize_data(options[:document_ids]).each do |document_id|
-         vault_entry.shares.build(contact_id: contact_id, document_id: document_id, user_id: options[:user_id])
-       end
-     end
-
-    sanitize_data(options[:executor_ids]).each do |contact_id|
-      vault_entry.vault_entry_contacts.build(
-        active: true, type: :executor, contact_id: contact_id
-      )
+    share_options = { document_id: vault_entry.document_id, user_id: options[:user_id] }
+    sanitize_data(options[:share_ids]).each do |contact_id|
+      vault_entry.shares.build(share_options.merge(contact_id: contact_id))
     end
 
     vault_entry

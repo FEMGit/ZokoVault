@@ -1,33 +1,23 @@
 <div>
-  <a class="edit-link" href="#">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  </a>
-  <h1>Wills - Trusts - Legal</h1>
+	<a class="edit-link-wtl" href="#">
+        <span class="circle-button">
+			<svg class="icon circle-icon">
+				<use xlink:href="#icon-pencil-1"></use>
+			</svg>
+        </span>Edit
+    </a>
+	<h1>Wills - Trusts - Legal</h1>
 </div>
 <div class="flex-boxes">
-  
-  <div class="flex-33">
-    <div class="card wills">
-      <h3>Wills</h3>
-      <p class="wtl-card-info">
-        <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', new_will_path %></span>
-      </p>
-    </div>
-    
-    <%= link_to details_will_path(1), :class => "undo-link-style" do %>
-      <div class="card wills">
-        <h3>Details For Will</h3>
+	<div class="flex-33">
+    	<div class="card wills">
+        <h3>Wills</h3>
         <p class="wtl-card-info">
-          <span class="percent-complete">100% Complete</span>
+          <span class="percent-complete">0% Complete</span>
+          <span class="wtl-start-button"><%= link_to 'Start', new_vault_entry_path %></span>
         </p>
-      </div>
-    <% end %>
-  </div>
+		</div>
+	</div>
 
   <div class="flex-33">
     <div class="card trusts">
@@ -69,14 +59,14 @@
 </div>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-plus-1"></use>
-      </svg>
-    </span>Add Document
-  </a>
-  <h1>Wills - Trusts - Legal Documents</h1>
+	<a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
+	  <span class="circle-button">
+		<svg class="icon circle-icon">
+		  <use xlink:href="#icon-plus-1"></use>
+		</svg>
+	  </span>Add Document
+	</a>
+	<h1>Wills - Trusts - Legal Documents</h1>
 </div>
 
 <table>
@@ -87,17 +77,18 @@
     <th>Shared With</th>
     <th>Actions</th>
   </tr>
-  <% @wtl_documents.each do |document| %>
+  <% @vault_entries.each do |vault_entry| %>
+    <% next unless (document = vault_entry.document) %>
       <tr>
         <td>
-          <a><%= link_to document.name, document_path(document) %></a>
+          <a><%= link_to document.name, document.url %></a>
         </td>
         <td><%= document.updated_at %></td>
         <td>tags</td>
         <td>
-          <span class="user-circle">AK</span>
-          <span class="user-circle">BM</span>
-          <span class="user-circle">MB</span>
+          <% vault_entry.share_with_contacts.each do |contact| %>
+            <span class="user-circle"><%= contact.initials %></span>
+          <% end %>
         </td>
         <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

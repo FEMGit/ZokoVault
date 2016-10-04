@@ -43,6 +43,10 @@ class Contact < ActiveRecord::Base
     relationship.in? RELATIONSHIP_TYPES[:professional]
   end
 
+  def initials
+    [firstname, lastname].compact.map(&:first).join
+  end
+
   def name(biblio = false)
     if biblio
       [lastname,firstname].compact.join(', ')

@@ -1,6 +1,6 @@
 # Create users
 
-emails = %w[ admin@zokuvault.com user@zokuvault.com user@example.com ]
+emails = %w[ted.price@gmail.com admin@zokuvault.com user@zokuvault.com user@example.com ]
 
 users = emails.map do |email|
   user = User.find_or_initialize_by(email: email)
@@ -9,11 +9,6 @@ users = emails.map do |email|
   user.save
   user
 end
-
-#
-# Create a few contacts for each user
-#
-categories = %w[work sports social family religious in-law]
 
 user_contacts = users.map do |user|
   contacts = 10.times.map do 

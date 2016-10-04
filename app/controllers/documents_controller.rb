@@ -59,7 +59,7 @@ class DocumentsController < AuthenticatedController
 
   def destroy
     @document.destroy
-    redirect_page = session[:ret_url] || documents_path
+    redirect_page = session[:ret_url].nil? ? documents_path : session[:ret_url]
     respond_to do |format|
       format.html { redirect_to redirect_page, notice: 'Document was successfully destroyed.' }
       format.json { head :no_content }

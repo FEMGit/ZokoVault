@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Vault Entries</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vault_entries.each do |vault_entry| %>
+      <tr>
+        <td><%= link_to 'Show', vault_entry %></td>
+        <td><%= link_to 'Destroy', vault_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vault entry', new_vault_entry_path %>

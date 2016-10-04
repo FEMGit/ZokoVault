@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  executor:<br>
+  <%= @vault_entry.executor.try(:name) %>
+</p>
+  
+<p>
+  primary beneficiaries:<br>
+  <ul>
+    <% @vault_entry.primary_beneficiaries.each do |contact| %>
+      <li><%= contact.name %></li>
+    <% end %>
+  </ul>
+</p>
+    
+<p>
+  secondary beneficiaries:<br>
+  <ul>
+    <% @vault_entry.secondary_beneficiaries.each do |contact| %>
+      <li><%= contact.name %></li>
+    <% end %>
+  </ul>
+</p>
+      
+<p>
+  agents:<br>
+  <ul>
+    <% @vault_entry.agents.each do |contact| %>
+      <li><%= contact.name %></li>
+    <% end %>
+  </ul>
+</p>
+
+<p>
+  document shares with contacts:<br>
+  <ul>
+    <% @vault_entry.shares.each do |share| %>
+      <li><%= share.document.name %> - <%= share.contact.name %></li>
+    <% end %>
+  </ul>
+</p>
+<%= link_to 'Back', vault_entries_path %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160921035051) do
+ActiveRecord::Schema.define(version: 20160925025219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,13 +50,14 @@ ActiveRecord::Schema.define(version: 20160921035051) do
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "folder_id"
-    t.string   "name",        null: false
+    t.string   "name",           null: false
     t.text     "description"
-    t.string   "url",         null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "url",            null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "category"
     t.string   "group"
+    t.integer  "vault_entry_id"
   end
 
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
@@ -96,9 +97,10 @@ ActiveRecord::Schema.define(version: 20160921035051) do
     t.integer  "document_id"
     t.integer  "contact_id"
     t.string   "permission"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "user_id"
+    t.integer  "vault_entry_id"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
@@ -161,6 +163,40 @@ ActiveRecord::Schema.define(version: 20160921035051) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  create_table "vault_entries", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "document_id"
+    t.integer  "executor_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "vault_entry_beneficiaries", force: :cascade do |t|
+    t.integer  "vault_entry_id"
+    t.boolean  "active"
+    t.decimal  "percentage"
+    t.integer  "type"
+    t.integer  "contact_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "vault_entry_beneficiaries", ["contact_id"], name: "index_vault_entry_beneficiaries_on_contact_id", using: :btree
+  add_index "vault_entry_beneficiaries", ["vault_entry_id"], name: "index_vault_entry_beneficiaries_on_vault_entry_id", using: :btree
+
+  create_table "vault_entry_contacts", force: :cascade do |t|
+    t.integer  "vault_entry_id"
+    t.integer  "type"
+    t.boolean  "active",         default: true
+    t.integer  "contact_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "vault_entry_contacts", ["contact_id"], name: "index_vault_entry_contacts_on_contact_id", using: :btree
+  add_index "vault_entry_contacts", ["type"], name: "index_vault_entry_contacts_on_type", using: :btree
+  add_index "vault_entry_contacts", ["vault_entry_id"], name: "index_vault_entry_contacts_on_vault_entry_id", using: :btree
+
   create_table "vault_files", force: :cascade do |t|
     t.string "name"
     t.text   "description"
@@ -197,6 +233,10 @@ ActiveRecord::Schema.define(version: 20160921035051) do
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "uploads", "users"
+  add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
+  add_foreign_key "vault_entry_beneficiaries", "vault_entries", on_delete: :cascade
+  add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
+  add_foreign_key "vault_entry_contacts", "vault_entries", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"
   add_foreign_key "vendors", "contacts"
   add_foreign_key "vendors", "users"

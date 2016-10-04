@@ -61,6 +61,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :vault_entries, only: [:index, :new, :show, :create]
+
   resource :mfa, only: [:show, :create]
 
   # Example of regular route:

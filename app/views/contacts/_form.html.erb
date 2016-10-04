@@ -62,8 +62,8 @@
             <%= f.select :contact_type, options_for_select(Contact::CONTACT_TYPES.keys, @contact.contact_type) %>
           </div>
         </div>
-
       </div>
+
       <div id="category-form">
         <div id="personal_relationship">
           <div class="field">
@@ -98,6 +98,7 @@
             <%= f.text_field :address %>
           </div>
         </div>
+
         <div id="professional_relationship">
           <div class="field">
             <%= f.label :relationship %><br>

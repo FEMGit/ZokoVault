@@ -3,6 +3,7 @@ class Share < ActiveRecord::Base
   scope :for_user, ->(user) {where(user: user)}
   belongs_to :document
   belongs_to :contact
+  belongs_to :vault_entry
 
   validates :document_id, presence: true
   validates :contact_id, presence: true

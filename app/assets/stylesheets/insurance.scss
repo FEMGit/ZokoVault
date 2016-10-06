@@ -1,0 +1,123 @@
+// Place all the styles related to the Contacts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$insurance-form-width: 390px;
+$zipcode-width: 100px;
+$zipcode-right-margin: 10px;
+$state-width: 280px;
+$textarea-height: 120px;
+
+.insurance-header-content, .insurance-body-content {
+  display: block;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid  $color-gray-light-shaded;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 30px 10px 0;
+  word-wrap: break-word;
+  width: 100%;
+  height: auto;
+  .field {
+    padding-left: 20px;
+    label {
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+    textarea {
+      width: $insurance-form-width;
+      height: $textarea-height;
+      resize: vertical;
+    }
+    .policy-information-title, .provider-details-title {
+      float: right;
+      margin: 10px 30px 0 0;
+    }
+    &.notes-field {
+      padding-bottom: 15px;
+    }
+  }
+  
+  .zipcode-field {
+    .zipcode-text {
+      .insurance-zipcode {
+        input[type=text] {
+          width: $zipcode-width;
+          height: 32px;
+        }
+      }
+    }
+    display: inline-block;
+    float:left;
+    margin-right: 10px;
+  }
+  
+  .state-select {
+    display: inline-block;
+    float:left;
+    .insurance-state {
+      &.styled-select {
+        width: $state-width;
+      }
+      select {
+        width: $state-width + $gu;
+      }
+    }
+  }
+        
+  .field.address-field:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .styled-select {
+    width: $insurance-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  
+  select {
+    width: $insurance-form-width + $gu;
+  }
+  textarea {
+    width: $insurance-form-width;
+    resize: vertical;
+  }
+  input[type=text] {
+    width: $insurance-form-width;
+  }
+  
+  .input-symbol-dollar{
+    position: relative;
+    input{
+      padding-left: 15px;
+    }
+    &:after{
+      position: absolute;
+      top: 20%;
+      bottom: 20%;
+      left: 5px;
+      content: "$";
+    }
+  }
+}
+
+.insurance-body-content {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.styled-text-input {
+  border-radius: 5px;
+  height: 32px;
+  width: $form-width;
+  padding: 0;
+}
+
+.add-account {
+  text-decoration: none;
+  float: right;
+}
+.clear {
+  clear: right;
+  display: block;
+}

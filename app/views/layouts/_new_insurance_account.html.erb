@@ -1,0 +1,124 @@
+<h1><%= "#{yield(:title).gsub("&amp;", "&")} Insurance - Add Account" %></h1>
+<div class="insurance-header-content">
+  <div class="field">
+    <h2 class="provider-details-title">Insurance Provider Details</h2>
+    <label>Insurance Provider Name </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Insurance Provider Web Address </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Street Address </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field">
+    <label>City </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field address-field">
+    <div class="zipcode-field">
+      <label>Zip Code </label>
+      <div class="zipcode-text styled-input-text">
+        <div class="insurance-zipcode">
+          <input type = "text"/>
+        </div>
+      </div>
+    </div>
+    <div class="state-select">
+      <label>State </label>
+      <div class="styled-select insurance-state">
+        <select>
+          <option value="empty">Select...</option>
+          <option value="user1">State 1</option>
+          <option value="user2">State 2</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <label>Business Phone Number </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Business Fax Number </label>
+    <div class="styled-text-input">
+      <input type = "text" />
+    </div>
+  </div>
+  <div class="field">
+    <label>Primary Contact</label>
+    <div class="styled-select">
+      <select>
+        <option value="empty">Choose Contacts...</option>
+        <option value="user1">User 1</option>
+        <option value="user2">User 2</option>
+       </select>
+    </div>
+  </div>
+  <div class="field shared-field bt-gray-light bb-gray-light">
+    <span>
+      <label>Shared With</label>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="styled-select">
+      <select>
+        <option value="empty">Choose Contacts...</option>
+        <option value="user1">User 1</option>
+        <option value="user2">User 2</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<body>
+  <div id="insurance-forms">
+    <div id="insurance-form-1">
+      <%= render yield(:partial_path) %>
+    </div>
+  </div>
+</body>
+
+<div class="insurance-footer-content">
+  <div class="add-new-field" href="" onclick="addNewField()">
+    <svg class="icon add-icon">
+      <use xlink:href="#icon-add-1"></use>
+    </svg>
+    Add another <%= yield(:add_another_title) %><br>
+  </div>
+</div>
+
+<div class="wtl-btn-group">
+  <%= link_to "Save", '#',
+    class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', '#', class: "button secondary-button big-button"%>
+</div>
+
+<script>
+  addNewField = function(){
+    var $insuranceForm = $('div[id^="insurance-form"]:last');
+    var num = parseInt($insuranceForm.prop("id").match(/\d+/g), 10) + 1;
+    var $newInsuranceForm = $insuranceForm.clone().prop('id', 'insurance-form-' + num)
+    clearFormFields($newInsuranceForm);
+    $newInsuranceForm.appendTo('#insurance-forms');
+  }
+  
+  clearFormFields = function(form){
+    form.find(':text').val("");
+    form.find('textarea').val("");
+    form.find(':checked').prop('checked', false);
+  }
+</script>

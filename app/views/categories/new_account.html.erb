@@ -1,0 +1,4 @@
+<%= content_for :title, "#{@group['label']}" %>
+<%= content_for :add_another_title, "Policy" %>
+<%= content_for :partial_path, "categories/add_account/#{@group['value']}_add_account" %>
+<%= render partial: "layouts/new_insurance_account" %>

@@ -19,6 +19,13 @@ class CategoriesController < AuthenticatedController
     session[:ret_url] = "/estate_planning"
   end
 
+  def new_account
+    @category = params[:category]
+    group_for_new_account = params[:group]
+    groups = Rails.configuration.x.categories[@category]["groups"]
+    @group = groups.select {|group| group["value"] == group_for_new_account}.first
+  end
+  
   def show
   end
 

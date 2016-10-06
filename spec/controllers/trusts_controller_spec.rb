@@ -2,13 +2,23 @@ require 'rails_helper'
 
 RSpec.describe TrustsController, type: :controller do
 
+  let(:user) { create(:user) }
+  
+  before do
+    sign_in user
+  end
+  
   describe "GET #new" do
     it "returns http success" do
-      get :new
+      get :new, {}
       expect(response).to have_http_status(:success)
     end
   end
   
   describe "GET #details" do
+    it "returns http success" do
+      get :details, :trust => 1
+      expect(response).to have_http_status(:success)
+    end
   end
 end

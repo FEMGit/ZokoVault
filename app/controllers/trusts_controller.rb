@@ -1,4 +1,4 @@
-class TrustsController < ApplicationController
+class TrustsController < AuthenticatedController
   def new
   end
     

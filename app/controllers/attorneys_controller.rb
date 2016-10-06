@@ -1,4 +1,4 @@
-class AttorneysController < ApplicationController
+class AttorneysController < AuthenticatedController
   def new
   end
 

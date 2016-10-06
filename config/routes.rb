@@ -43,8 +43,6 @@ Rails.application.routes.draw do
   resources :attorneys
   get 'attorneys/details/:attorney', to: 'attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
 
-  resources :trusts
-  
   resources :categories
   resources :shares
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder

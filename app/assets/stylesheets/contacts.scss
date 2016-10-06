@@ -14,6 +14,7 @@ $common-font-size: 10px;
   width: $contact-avatar-size;
   border-radius: 52px;
   overflow: hidden;
+  display: inline-block;
 }
 .contact-avatar-wrapper-size img {
   width: 100%;
@@ -92,12 +93,12 @@ $common-font-size: 10px;
 	width: 90%;
 }
 
-.contact-avatar-wrapper-size.default {
-  border: $avatar-circle-border solid;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.contact-avatar-default {
-  font-size: 13px;
+.contact-table {
+  border-collapse: collapse;
+  .column-title > th {
+    background-color: $color-gray-light;
+  }
+  .column-title > th, .contact-row > td {
+    padding: 10px;
+  }
 }

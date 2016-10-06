@@ -14,8 +14,8 @@
 <table>
   <thead>
     <tr>
-      <th></th>
       <th>Name</th>
+      <th></th>
       <th>Email</th>
       <th>Relationship</th>
       <th>Details</th>
@@ -27,14 +27,10 @@
     <% @contacts.each do |contact| %>
       <tr>
         <td class="contact-avatar-td">
-          <%if contact.photourl? %>
-            <div class="contact-avatar-wrapper-size">
-              <%= image_tag(contact.photourl, :alt => "#{contact.firstname}-#{contact.lastname}-avatar") %>
-            </div>
-          <% end %>
+          <span class="user-circle"><%= contact.initials %></span>
         </td>
         <td style="width: 23%;">
-          <%= link_to "#{contact.firstname} #{contact.lastname}", contact, class: 'text-vertical-center' %>
+          <%= link_to "#{contact.name}", contact, class: 'text-vertical-center' %>
         </td>
         <td style="width: 38%;"><%= contact.emailaddress %></td>
         <td style="width: 38%;"><%= contact.relationship %></td>

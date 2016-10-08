@@ -1,54 +1,52 @@
-<div class="wtl-body-content">
-	<div class="field">
-		<label>Trust Name<span class="wtl-required-field"> Required</span></label>
-		<div class="styled-text-input">
-		  <input type = "text" />
-		</div>
-	</div>
-	<div class="field">
-		<label>Attorney, Accountant or Advisor(s)</label>
-		<div class="styled-select">
-		  <select>
-			<option value="empty">Choose Contact...</option>
-			<option value="user1">User 1</option>
-			<option value="user2">User 2</option>
-		  </select>
-		</div>
-	</div>
-	<div class="field">
-		<label>Trustee(s)</label>
-		<div class="styled-select">
-		  <select>
-			<option value="empty">Choose Contact(s)...</option>
-			<option value="user1">User 1</option>
-			<option value="user2">User 2</option>
-		  </select>
-		</div>
-	</div>
-	<div class="field">
-		<label>Successor Trustee(s)</label>
-		<div class="styled-select">
-		  <select>
-			<option value="empty">Choose Contact(s)...</option>
-			<option value="user1">User 1</option>
-			<option value="user2">User 2</option>
-		  </select>
-		</div>
-	</div>
-	
-	<div class="field shared-field bt-gray-light bb-gray-light">
-		<span>
-			<label>Shared With</label>
-			<svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-				<use xlink:href="#icon-Safe"></use>
-			</svg>
-		</span>
-		<div class="styled-select">
-		  <select>
-			<option value="empty">Choose Contacts...</option>
-			<option value="user1">User 1</option>
-			<option value="user2">User 2</option>
-		  </select>
-		</div>
-	</div>
-</div>
+<% @contacts = Contact.for_user(current_user) %>
+<%= form_for(@vault_entry) do |f| %>
+  <div class="wtl-body-content">
+    <div class="field">
+      <label>Trust Name<span class="wtl-required-field"> Required</span></label>
+      <div class="styled-text-input">
+        <input type = "text" />
+      </div>
+    </div>
+    <div class="field">
+      <label>Attorney, Accountant or Advisor(s)</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :agent_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Trustee(s)</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :trustee_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Successor Trustee(s)</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :succeeded_trustee_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light">
+      <span>
+        <label>Shared With</label>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :share_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+  </div>
+<% end %>

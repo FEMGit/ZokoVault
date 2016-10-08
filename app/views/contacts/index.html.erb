@@ -11,10 +11,9 @@
 
 <h1>Contacts and Permissions</h1>
 
-<table>
+<table class="contact-table">
   <thead>
-    <tr>
-      <th></th>
+    <tr class="column-title">
       <th>Name</th>
       <th>Email</th>
       <th>Relationship</th>
@@ -25,16 +24,10 @@
 
   <tbody>
     <% @contacts.each do |contact| %>
-      <tr>
-        <td class="contact-avatar-td">
-          <%if contact.photourl? %>
-            <div class="contact-avatar-wrapper-size">
-              <%= image_tag(contact.photourl, :alt => "#{contact.firstname}-#{contact.lastname}-avatar") %>
-            </div>
-          <% end %>
-        </td>
-        <td style="width: 23%;">
-          <%= link_to "#{contact.firstname} #{contact.lastname}", contact, class: 'text-vertical-center' %>
+      <tr class="contact-row">
+        <td class="contact-avatar-td" style="width: 23%;">
+          <span class="user-circle"><%= "#{contact.initials}" %></span>
+          <%= link_to "#{contact.name}", contact, class: 'text-vertical-center' %>
         </td>
         <td style="width: 38%;"><%= contact.emailaddress %></td>
         <td style="width: 38%;"><%= contact.relationship %></td>

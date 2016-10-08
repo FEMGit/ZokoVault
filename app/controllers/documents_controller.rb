@@ -37,10 +37,9 @@ class DocumentsController < AuthenticatedController
 
   def update
     respond_to do |format|
-      if document_params[:shares_attributes] && is_new_contact_creating
-        #delete 'share with' keyValue pair if 'create new user' has been selected
-        params[:document][:shares_attributes].delete_if{|k, v| v[:contact_id] == new_contact_path}
+      if is_new_contact_creating
         session[:ret_url] = "/documents/" + current_document_id + "/edit"
+        document_clean_from_create_new_user_id
         format.html { redirect_to new_contact_path }
       end
       if @document.update(document_params)
@@ -90,7 +89,11 @@ class DocumentsController < AuthenticatedController
   end
   
   def is_new_contact_creating
-    document_params[:shares_attributes].values.any? {|value| value[:contact_id] == new_contact_path}
+    document_params[:shares_attributes] && document_params[:shares_attributes].values.any? {|value| value[:contact_id] == new_contact_path}
+  end
+  
+  def document_clean_from_create_new_user_id
+    params[:document][:shares_attributes].delete_if{|k, v| v[:contact_id] == new_contact_path}
   end
   
   def clear_notes_field

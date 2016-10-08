@@ -1,0 +1,39 @@
+<% health_provider_data = [{
+          'card_title': {policy_type: 'Medicare Part A', policy_holder: 'Bruna Mars'},
+          'coverage amout': ['$1,500,000'],
+          'policy number': ['1894563215412554'],
+          'Insured members': ['BJ Mars', 'Ted Mars', 'Jackson Mars'],
+          'primary contact': ['John Ponzleford', 'link: j.ponzleford@allstate.com', '555-231-6754']}]
+          %>
+<% health_provider_data.each do |health_provider_data| %>
+  <div>
+    <h1><%= "#{health_provider_data[:card_title][:policy_type]} -  #{health_provider_data[:card_title][:policy_holder]}" %></h1>
+    <div class="card <%= @group['value'] %> details insurance">
+      <div class="details-wrapper">
+        <div class="details-card-info details">
+          <h2 class="provider-details-title">Policy Information</h2>
+          <% health_provider_data.except(:card_title).each do |field_title, field_values| %>
+            <div class = "details-card-field">
+              <label class="title"><%= field_title %></label>
+              <% field_values.each do |value| %>
+                <% if value.include? 'link' %>
+                  <a class="details-field details-field-value"><%= value.sub!('link:', '') %></a>
+                <% else %>
+                  <span class="details-field details-field-value"><%= value %></span>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        <div class = "details-card-field details-notes">
+            <label class="title">Notes</label>
+            <span class="details-field details-field-value">
+             Some text in here sdkjf haskj fdhaskf haslkdhsfkdash fdhsa fklds hkksdl
+             fhkjasd fhasd f das fj djsldksjdlas fjsd fj;lasdfjdlasfjasdlkfj asdlj 
+             sd jsdkl jsdkj fkj dfkjdkfjdkfj k
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

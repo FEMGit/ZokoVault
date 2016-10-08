@@ -23,6 +23,18 @@ class VaultEntryBuilder
         active: true, type: :agent, contact_id: contact_id
       )
     end
+    
+    sanitize_data(options[:trustee_ids]).each do |contact_id|
+      vault_entry.vault_entry_contacts.build(
+        active: true, type: :trustee, contact_id: contact_id
+      )
+    end
+    
+    sanitize_data(options[:succeeded_trustee_ids]).each do |contact_id|
+      vault_entry.vault_entry_contacts.build(
+        active: true, type: :succeeded_trustee, contact_id: contact_id
+      )
+    end
 
     share_options = { document_id: vault_entry.document_id, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|

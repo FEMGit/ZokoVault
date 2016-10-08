@@ -2,15 +2,8 @@
   <div class="field">
     <h2 class="policy-information-title">Policy Information</h2>
     <label>Policy Type</label>
-    <% policy_type_options = ["Choose Type...",
-        "Employer Health Care Plan", 
-        "Exchange Health Care Plan",
-        "Medicare Part A",
-        "Medicare Part B",
-        "Medicare Part C",
-        "Medicare Part D"]%>
     <div class="styled-select">
-      <%= select_tag 'policy_type', options_for_select(policy_type_options.collect.with_index{|p, i| [p, i]}, {disabled: '0', selected: '0'}) %>
+      <%= select_tag 'policy_type', options_for_select(PolicyTypeOptions::POLICY_TYPE[:health].collect.with_index{|p, i| [p, i]}, {disabled: '0', selected: '0'}) %>
     </div>
   </div>
   <div class="field">
@@ -36,7 +29,7 @@
     </div>
   </div>
   <div class="field">
-    <label>Insurared Members</label>
+    <label>Insured Members</label>
     <div class="styled-select">
       <select>
         <option value="empty">Choose Contacts...</option>

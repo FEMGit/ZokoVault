@@ -1,6 +1,6 @@
 $edit-button-margin-top: 13px;
 
-.card{
+.card {
   background: white;
   border-radius: 5px;
   border: 1px solid  $color-gray-light-shaded;
@@ -9,60 +9,172 @@ $edit-button-margin-top: 13px;
   margin: 0 0 30px 0;
   cursor:pointer;
   word-wrap: break-word;
+  &.details.insurance {
+    padding: 0;
+  }
 
-  &:hover{
+  &:hover {
     // border: 1px solid  $color-link-blue;
     // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   }
 }
-.card.life, .card.wills{
+.card.life, .card.wills {
   border-left: 10px solid $color-card-1;
   margin-right: 30px;
 }
-.card.property, .card.trusts{
+.card.property, .card.trusts {
   border-left: 10px solid $color-card-2;
   margin-right: 15px;
   margin-left: 15px;
+  &.details {
+    margin: 0 30px 30px 0;
+  }
 }
-.card.health, .card.attorney{
+.card.health, .card.attorney {
   border-left: 10px solid $color-card-3;
   margin-left: 30px;
+  &.details {
+    margin: 0 30px 30px 0;
+  }
 }
 
-.card.login-card{
+.card.login-card {
   margin: 100px auto;
   max-width: 400px;
 }
-.wtl-card-info{
+.wtl-card-info {
   padding: 10px;
   padding-left: 5px;
-  .wtl-start-button{
+  .wtl-start-button {
     float: right;
+    a {
+      text-decoration: none;
+    }
   }
 
-  .percent-complete{
+  .percent-complete {
     float: left;
   }
 }
 
-.edit-link{
+.edit-link {
   float: right;
   margin-top: $edit-button-margin-top;
   text-decoration: none;
 }
 
-.wtl-card-info{
+.shared-field {
+  .shared-with-title {
+    float: right;
+    padding-right: 30px;
+    color: $color-primary;
+  }
+  .shared-with-block {
+    .icon-Safe {
+      font-size: 38px;
+      color: $color-primary;
+      margin: 2px 12px 0 0;
+      opacity: 1;
+    }
+  }
+  &.details-bottom {
+    margin-top: 0;
+  }
+}
+.details-card-info {
   padding: 10px;
   padding-left: 5px;
-  .wtl-start-button{
+  &.details {
+    overflow: auto;
+    padding-top: 5px;
+  }
+  .provider-details-title, {
+      margin-top: 20px;
+      float: right;
+   }
+  .details-card-field {
+     margin-top: 20px;
+     &.details-notes {
+       width: 60%;
+     }
+    .title {
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    &.shared {
+      padding-left: 15px;
+      margin-top: 0;
+    }
+  }
+  .details-field {
+    display: block;
+    margin: 2px 0;
+    width: 60%;
+    .user-circle {
+      background: white;
+    }
+  }
+}
+.wtl-card-info {
+  padding: 10px;
+  padding-left: 5px;
+  .wtl-start-button {
     float: right;
   }
+  padding: 10px;
+  padding-left: 5px;
+  &.details {
+    overflow: auto;
+    padding-top: 5px;
+  }
+  .provider-details-title, {
+      margin-top: 20px;
+      float: right;
+   }
+  .details-card-field {
+     margin-top: 20px;
+     &.details-notes {
+       width: 60%;
+     }
+    .title {
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    &.shared {
+      padding-left: 15px;
+      margin-top: 0;
+    }
+  }
+  .details-field {
+    display: block;
+    margin: 2px 0;
+    width: 60%;
+    .user-circle {
+      background: white;
+    }
+  }
+}
 
-  .percent-complete{
+.details-wrapper {
+  padding: 15px;
+  padding-top: 0;
+  .add-document-field {
+    margin: 0 0;
+  }
+  .percent-complete {
     float: left;
   }
 }
 
-.edit-link-wtl{
+.edit-link-wtl {
   float: right;
+}
+
+.add-details-link {
+  text-decoration: none;
+  float: right;
+}
+.clear {
+  clear: right;
+  display: block;
 }

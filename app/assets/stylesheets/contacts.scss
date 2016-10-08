@@ -11,6 +11,7 @@ $contact-avatar-size: 50px;
   width: $contact-avatar-size;
   border-radius: 52px;
   overflow: hidden;
+  display: inline-block;
 }
 .contact-avatar-wrapper-size img {
   width: 100%;
@@ -89,26 +90,10 @@ $common-font-size: 10px;
 .notes{
 	width: 90%;
 }
-$contact-avatar-size: 50px;
 
-.contact-avatar-td {
-  width: $contact-avatar-size;
+.contact-table {
+  border-collapse: collapse;
+  .column-title > th, .contact-row > td {
+    padding: 10px;
+  }
 }
-.contact-avatar-wrapper-size {
-  height: $contact-avatar-size;
-  width: $contact-avatar-size;
-  border-radius: 52px;
-  overflow: hidden;
-}
-.contact-avatar-wrapper-size img {
-  width: 100%;
-  height: $contact-avatar-size;
-  font-size: 10px;
-}
-.inline-block {
-  display: inline-block;
-}
-.text-vertical-center {
-  vertical-align: middle;
-}
-

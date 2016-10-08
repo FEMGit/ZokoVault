@@ -44,9 +44,11 @@ Rails.application.routes.draw do
   get 'attorneys/details/:attorney', to: 'attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
 
   resources :categories
-  get 'categories/:category/:group/new_account', to: 'categories#new_account', as: :new_account_category
-
   
+  #insurance details and create new account routes
+  get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
+  get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category
+
   resources :shares
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 

@@ -13,17 +13,25 @@ class CategoriesController < AuthenticatedController
     session[:ret_url] = "/insurance"
   end
   
+  
   def estate_planning
     @category = "Wills - Trusts - Legal"
     @vault_entries = VaultEntry.for_user(current_user)
     session[:ret_url] = "/estate_planning"
+  end
+  
+  def details_account
+    @category = params[:category]
+    group_for_new_account = params[:group]
+    groups = Rails.configuration.x.categories[@category]["groups"]
+    @group = groups.detect {|group| group["value"] == group_for_new_account}
   end
 
   def new_account
     @category = params[:category]
     group_for_new_account = params[:group]
     groups = Rails.configuration.x.categories[@category]["groups"]
-    @group = groups.select {|group| group["value"] == group_for_new_account}.first
+    @group = groups.detect {|group| group["value"] == group_for_new_account}
   end
   
   def show

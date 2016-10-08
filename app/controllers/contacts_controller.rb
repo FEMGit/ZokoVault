@@ -28,6 +28,7 @@ class ContactsController < AuthenticatedController
     @contact = Contact.new(contact_params.merge(user_id: current_user.id))
     respond_to do |format|
       if @contact.save
+        UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
         format.html { redirect_to session[:ret_url] || @contact, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
       else

@@ -24,6 +24,18 @@ class VaultEntry < ActiveRecord::Base
                VaultEntryContact.types[:agent], true) },
     through: :vault_entry_contacts,
     source: :contact
+  
+  has_many :trustee,
+    -> { where("vault_entry_contacts.type = ? AND vault_entry_contacts.active = ?",
+               VaultEntryContact.types[:agent], true) },
+    through: :vault_entry_contacts,
+    source: :contact
+  
+  has_many :succeeded_trustee,
+    -> { where("vault_entry_contacts.type = ? AND vault_entry_contacts.active = ?",
+               VaultEntryContact.types[:agent], true) },
+    through: :vault_entry_contacts,
+    source: :contact
 
   has_many :shares, dependent: :destroy
   has_many :share_with_contacts, 

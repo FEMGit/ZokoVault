@@ -2,16 +2,8 @@
   <div class="field">
     <h2 class="policy-information-title">Policy Information</h2>
     <label>Policy Type</label>
-    <% policy_type_options = ["Choose Type...",
-        "Digital", 
-        "Term Life",
-        "Whole Life",
-        "Universal Life",
-        "Short Term Disability",
-        "Long Term Disability",
-        "Springing"]%>
     <div class="styled-select">
-      <%= select_tag 'policy_type', options_for_select(policy_type_options.collect.with_index{|p, i| [p, i]}, {disabled: '0', selected: '0'}) %>
+      <%= select_tag 'policy_type', options_for_select(PolicyTypeOptions::POLICY_TYPE[:life].collect.with_index{|p, i| [p, i]}, {disabled: '0', selected: '0'}) %>
     </div>
   </div>
   <div class="field">

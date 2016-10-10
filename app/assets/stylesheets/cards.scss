@@ -178,3 +178,22 @@ $edit-button-margin-top: 13px;
   clear: right;
   display: block;
 }
+.shared-field {
+  .shared-with-title {
+    float: right;
+    padding-right: 30px;
+    color: $color-primary;
+    padding-bottom: 20px;
+  }
+  .shared-with-block {
+    .icon-Safe {
+      font-size: 38px;
+      color: $color-primary;
+      margin: 2px 12px 0 0;
+      opacity: 1;
+    }
+  }
+  &.details-bottom {
+    margin-top: 0;
+  }
+}

@@ -1,26 +1,26 @@
 <% @contacts = Contact.for_user(current_user) %>
 <%= form_for(@vault_entry) do |f| %>
-<div class="wtl-body-content">
-	<div class="field">
-		<label>Power of Attorney</label>
-		<div class="styled-select">
-		  <select>
-			<option value="empty">Choose Contact...</option>
-			<option value="user1">User 1</option>
-			<option value="user2">User 2</option>
-		  </select>
-		</div>
-	</div>
-	<div class="field">
-	    <% check_box_options = ["Digital", 
-								"Financial",
-								"Healthcare",
-								"General",
-								"Limited",
-								"Durable",
-								"Springing"] %>
+  <div class="wtl-body-content">
+    <div class="field">
+      <label>Power of Attorney</label>
+      <div class="styled-select">
+        <select>
+          <option value="empty">Choose Contact...</option>
+          <option value="user1">User 1</option>
+          <option value="user2">User 2</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <% check_box_options = ["Digital", 
+        "Financial",
+        "Healthcare",
+        "General",
+        "Limited",
+        "Durable",
+        "Springing"] %>
       
-	  <label>This Agent's powers are (please choose all that apply):</label>
+      <label>This Agent's powers are (please choose all that apply):</label>
       <ul class="check-list">
         <% check_box_options.each_with_index do |check_box_option, index| %>
           <li class="check-list">

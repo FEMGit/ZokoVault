@@ -9,7 +9,7 @@ $edit-button-margin-top: 13px;
   margin: 0 0 30px 0;
   cursor:pointer;
   word-wrap: break-word;
-  &.details.insurance {
+  &.details.insurance, &.details.wtl {
     padding: 0;
   }
 
@@ -63,30 +63,20 @@ $edit-button-margin-top: 13px;
   text-decoration: none;
 }
 
-.shared-field {
-  .shared-with-title {
-    float: right;
-    padding-right: 30px;
-    color: $color-primary;
-  }
-  .shared-with-block {
-    .icon-Safe {
-      font-size: 38px;
-      color: $color-primary;
-      margin: 2px 12px 0 0;
-      opacity: 1;
-    }
-  }
-  &.details-bottom {
-    margin-top: 0;
-  }
-}
 .details-card-info {
   padding: 10px;
   padding-left: 5px;
   &.details {
     overflow: auto;
     padding-top: 5px;
+  }
+  .details-left-info{
+    float: left;
+    width: 40%;
+  }
+  .details-right-info{
+    float: left;
+    width: 60%;
   }
   .provider-details-title, {
       margin-top: 20px;
@@ -101,6 +91,9 @@ $edit-button-margin-top: 13px;
       text-transform: uppercase;
       font-weight: 700;
     }
+    &.bottom-fields{
+      margin-top: 20px;
+    }
     &.shared {
       padding-left: 15px;
       margin-top: 0;
@@ -112,6 +105,9 @@ $edit-button-margin-top: 13px;
     width: 60%;
     .user-circle {
       background: white;
+    }
+    .percent-value{
+      float: right;
     }
   }
 }
@@ -156,6 +152,9 @@ $edit-button-margin-top: 13px;
 }
 
 .details-wrapper {
+  &.wtl {
+    padding-bottom: 0;
+  }
   padding: 15px;
   padding-top: 0;
   .add-document-field {
@@ -178,7 +177,18 @@ $edit-button-margin-top: 13px;
   clear: right;
   display: block;
 }
+
 .shared-field {
+  background-color: $color-primary-light;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  .share-with-icon {
+    float: right;
+    opacity: 0.7;
+  }
   .shared-with-title {
     float: right;
     padding-right: 30px;
@@ -196,4 +206,11 @@ $edit-button-margin-top: 13px;
   &.details-bottom {
     margin-top: 0;
   }
+  &.insurance-shared-with {
+    padding-bottom: 20px;
+  }
+}
+
+.field.shared-field.wtl-shared-with {
+  padding-bottom: 20px;
 }

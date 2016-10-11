@@ -112,6 +112,24 @@
         </td>
       </tr>
   <% end %>
+  <% @wtl_documents.each do |wtl_doc| %>
+    <tr>
+      <td>
+        <a><%= link_to wtl_doc.name, wtl_doc.url %></a>
+      </td>
+      <td><%= wtl_doc.updated_at %></td>
+      <td>tags</td>
+      <td>
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>
+        <%= link_to 'Delete', document_path(wtl_doc), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
+      </td>
+    </tr>
+  <% end %>
 </table>
 
 <script>

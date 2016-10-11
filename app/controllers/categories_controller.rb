@@ -16,6 +16,8 @@ class CategoriesController < AuthenticatedController
   def estate_planning
     @category = "Wills - Trusts - Legal"
     @vault_entries = VaultEntry.for_user(current_user)
+    vault_documents = @vault_entries.map{|v_entry| v_entry.document}
+    @wtl_documents = get_not_assigned_documents(vault_documents)
     session[:ret_url] = "/estate_planning"
   end
 
@@ -71,5 +73,9 @@ class CategoriesController < AuthenticatedController
 
   def category_params
     params.require(:category).permit(:name, :description, :managed, :category, :group)
+  end
+  
+  def get_not_assigned_documents(vault_documents)
+    Document.for_user(current_user).where(category: @category).select{|doc| vault_documents.all? {|v_doc| v_doc != doc}}
   end
 end

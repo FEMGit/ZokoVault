@@ -9,23 +9,19 @@
   <h1>Wills - Trusts - Legal</h1>
 </div>
 
-<section class="flex-boxes">
-
-  <div class="flex-column">
-    <div class="card cg-1 column-card">
+<div class="flex-boxes">
+  <div class="flex-33">
+    <div class="card wills">
       <h3>Wills</h3>
-      <p class="wtl-card-info">
-        <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', new_vault_entry_path %></span>
-      </p>
+      <span class="percent-complete">0% Complete</span>
+      <%= link_to 'Add Details', new_will_path, class: "add-details-link" %>
+      <span class="clear"></span>
     </div>
 
     <%= link_to details_will_path(1), :class => "undo-link-style" do %>
       <div class="card cg-1 column-card">
         <h3>Details For Will</h3>
-        <p class="wtl-card-info">
-          <span class="percent-complete">100% Complete</span>
-        </p>
+        <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
   </div>
@@ -33,17 +29,13 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <h3>Trusts</h3>
-      <p class="wtl-card-info">
-        <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', new_trust_path %></span>
-      </p>
+      <span class="percent-complete">0% Complete</span>
+      <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
     </div>
-	<%= link_to details_trust_path(1), :class => "undo-link-style" do %>
-      <div class="card cg-2 column-card">
+    <%= link_to details_trust_path(1), :class => "undo-link-style" do %>
+      <div class="card trusts">
         <h3>Details For Legal</h3>
-        <p class="wtl-card-info">
-          <span class="percent-complete">100% Complete</span>
-        </p>
+        <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
   </div>
@@ -51,18 +43,14 @@
   <div class="flex-column">
     <div class="card cg-3 column-card">
       <h3>Power of Attorney</h3>
-      <p class="wtl-card-info">
-        <span class="percent-complete">0% Complete</span>
-        <span class="wtl-start-button"><%= link_to 'Start', new_attorney_path %></span>
-      </p>
+      <span class="percent-complete">0% Complete</span>
+      <%= link_to 'Add Details', new_attorney_path, class: "add-details-link" %>
     </div>
 
     <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>
       <div class="card cg-3 column-card">
         <h3>Details For Legal</h3>
-        <p class="wtl-card-info">
-          <span class="percent-complete">100% Complete</span>
-        </p>
+        <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
   </div>

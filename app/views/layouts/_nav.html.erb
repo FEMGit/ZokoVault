@@ -1,5 +1,12 @@
 <nav class="primary-nav">
 
+  <a id="close-mobile-app-menu" class="main-nav close-primary-nav">
+    Close Menu
+    <svg class="icon close-icon fr">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+
   <a class="main-nav <%= 'active' if current_page?(root_url) %>"
     href="/">
     <svg class="icon nav-icon">
@@ -72,4 +79,6 @@
         <use xlink:href="#icon-folder-1"></use>
       </svg>Documents
     </a>
+
+
 </nav>

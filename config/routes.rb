@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
   get 'cards' => 'welcome#cards'
+  get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
 
   # Default category pages ?Could probably be done better programatically?
@@ -36,7 +37,7 @@ Rails.application.routes.draw do
 
   resources :wills
   get 'wills/details/:will', to: 'wills#details', as: :details_will
-  
+
   resources :trusts
   get 'trusts/details/:trust', to: 'trusts#details', as: :details_trust
 
@@ -44,6 +45,8 @@ Rails.application.routes.draw do
   get 'attorneys/details/:attorney', to: 'attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
 
   resources :categories
+  get 'categories/:category/:group/new_account', to: 'categories#new_account', as: :new_account_category
+
   resources :shares
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 

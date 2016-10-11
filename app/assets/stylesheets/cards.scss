@@ -6,40 +6,44 @@ $edit-button-margin-top: 13px;
   border: 1px solid  $color-gray-light-shaded;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 0 0 30px 0;
   cursor:pointer;
   word-wrap: break-word;
+}
 
-  &:hover{
-    // border: 1px solid  $color-link-blue;
-    // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  }
-}
-.card.life, .card.wills{
+.cg-1,
+.card.life,
+.card.wills{
   border-left: 10px solid $color-card-1;
-  margin-right: 30px;
 }
-.card.property, .card.trusts{
+
+.cg-2,
+.card.property,
+.card.trusts{
   border-left: 10px solid $color-card-2;
-  margin-right: 15px;
-  margin-left: 15px;
 }
-.card.health, .card.attorney{
+
+.cg-3,
+.card.health,
+.card.attorney{
   border-left: 10px solid $color-card-3;
-  margin-left: 30px;
+}
+
+.dasboard-card{
+  margin-bottom: 30px;
 }
 
 .card.login-card{
   margin: 100px auto;
   max-width: 400px;
 }
+
 .wtl-card-info{
   padding: 10px;
   padding-left: 5px;
+
   .wtl-start-button{
     float: right;
   }
-
   .percent-complete{
     float: left;
   }
@@ -54,10 +58,10 @@ $edit-button-margin-top: 13px;
 .wtl-card-info{
   padding: 10px;
   padding-left: 5px;
+
   .wtl-start-button{
     float: right;
   }
-
   .percent-complete{
     float: left;
   }

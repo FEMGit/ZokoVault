@@ -8,19 +8,20 @@
   </a>
   <h1>Wills - Trusts - Legal</h1>
 </div>
-<div class="flex-boxes">
-  
-  <div class="flex-33">
-    <div class="card wills">
+
+<section class="flex-boxes">
+
+  <div class="flex-column">
+    <div class="card cg-1 column-card">
       <h3>Wills</h3>
       <p class="wtl-card-info">
         <span class="percent-complete">0% Complete</span>
         <span class="wtl-start-button"><%= link_to 'Start', new_vault_entry_path %></span>
       </p>
     </div>
-    
+
     <%= link_to details_will_path(1), :class => "undo-link-style" do %>
-      <div class="card wills">
+      <div class="card cg-1 column-card">
         <h3>Details For Will</h3>
         <p class="wtl-card-info">
           <span class="percent-complete">100% Complete</span>
@@ -29,8 +30,8 @@
     <% end %>
   </div>
 
-  <div class="flex-33">
-    <div class="card trusts">
+  <div class="flex-column">
+    <div class="card cg-2 column-card">
       <h3>Trusts</h3>
       <p class="wtl-card-info">
         <span class="percent-complete">0% Complete</span>
@@ -38,7 +39,7 @@
       </p>
     </div>
 	<%= link_to details_trust_path(1), :class => "undo-link-style" do %>
-      <div class="card trusts">
+      <div class="card cg-2 column-card">
         <h3>Details For Legal</h3>
         <p class="wtl-card-info">
           <span class="percent-complete">100% Complete</span>
@@ -47,17 +48,17 @@
     <% end %>
   </div>
 
-  <div class="flex-33">
-    <div class="card attorney">
+  <div class="flex-column">
+    <div class="card cg-3 column-card">
       <h3>Power of Attorney</h3>
       <p class="wtl-card-info">
         <span class="percent-complete">0% Complete</span>
         <span class="wtl-start-button"><%= link_to 'Start', new_attorney_path %></span>
       </p>
     </div>
-    
+
     <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>
-      <div class="card attorney">
+      <div class="card cg-3 column-card">
         <h3>Details For Legal</h3>
         <p class="wtl-card-info">
           <span class="percent-complete">100% Complete</span>
@@ -65,7 +66,9 @@
       </div>
     <% end %>
   </div>
-</div>
+  
+</section>
+
 
 <div>
   <a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
@@ -77,6 +80,10 @@
   </a>
   <h1>Wills - Trusts - Legal Documents</h1>
 </div>
+
+
+
+
 
 <table>
   <tr>
@@ -106,3 +113,19 @@
       </tr>
   <% end %>
 </table>
+
+<script>
+
+$(function() {
+
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+});
+
+
+</script>

@@ -1,3 +1,22 @@
+.flex-column{
+  width: 32%;
+
+  @include media($twelvesixty) {
+    width: 31%;
+  }
+  @include media($teneighty) {
+    width: 48%;
+  }
+  @include media($eightfifty) {
+    width: 100%;
+    min-width: 275px;
+  }
+}
+.column-card{
+  margin-bottom: 20px;
+}
+
+
 .flex-boxes{
   @include align-items(stretch);
   @include display(flex);
@@ -17,54 +36,81 @@
       margin: 0 0 2%;
     }
 }
-
-.flex-column{
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  @include media($ninesixty) {
-    flex-direction: column;
-  }
-}
-.flex-card-column{
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: column;
-  width:33%;
-  float:left;
-
-  @include media($ninesixty) {
-    width: 50%;
-  }
-}
-
-
-.flex-box {
-  width: 50%;
-
-  &:first-child{
-    margin-right: $gu;
-  }
-}
-.flex-100{
-  width:100%;
-}
-.flex-33{
-  width: 33%;
-
-  @include media($ninesixty) {
-    width: 50%
-  }
-  @include media($ninesixty) {
-    width: 50%
-  }
-}
-
-
-.flex-box-big {
-  flex: 1 1 40em;
-}
+//
+// .flex-card{
+//   flex: 31%;
+//   margin: 0 2% 2% 0;
+//
+//   @include media($ninesixty) {
+//     flex: 48%;
+//     margin: 0 2% 30px 0;
+//   }
+//
+//     @include media($eightfifty) {
+//       flex: 100%;
+//       margin: 0 0 2%;
+//     }
+// }
+//
+//
+// .flex-column{
+//   display: -ms-flex;
+//   display: -webkit-flex;
+//   display: flex;
+//   flex-wrap: wrap;
+//   flex-direction: column;
+//   width: 31%;
+//
+//   @include media($ninesixty) {
+//     width: 48%;
+//   }
+//
+//   @include media($eightfifty) {
+//     width: 100%;
+//   }
+// }
+// .column-card{
+//   width: 100%;
+//
+//   margin-bottom: 30px;
+// }
+//
+// .flex-card-column{
+//   display: -ms-flex;
+//   display: -webkit-flex;
+//   display: flex;
+//   flex-direction: column;
+//   width:33%;
+//   float:left;
+//
+//   @include media($ninesixty) {
+//     width: 50%;
+//   }
+// }
+//
+//
+// .flex-box {
+//   width: 50%;
+//
+//   &:first-child{
+//     margin-right: $gu;
+//   }
+// }
+// .flex-100{
+//   width:100%;
+// }
+// .flex-33{
+//   width: 33%;
+//
+//   @include media($ninesixty) {
+//     width: 50%
+//   }
+//   @include media($ninesixty) {
+//     width: 50%
+//   }
+// }
+//
+//
+// .flex-box-big {
+//   flex: 1 1 40em;
+// }

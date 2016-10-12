@@ -9,25 +9,25 @@
   <h1>Wills - Trusts - Legal</h1>
 </div>
 
-<div class="flex-boxes">
-  <div class="flex-33">
-    <div class="card wills">
+<section class="flex-boxes">
+  <div class="flex-column">
+    <div class="card cg-1 column-card">
       <h3>Wills</h3>
       <span class="percent-complete">0% Complete</span>
       <%= link_to 'Add Details', new_will_path, class: "add-details-link" %>
       <span class="clear"></span>
     </div>
-    
+
     <%= link_to details_will_path(1), :class => "undo-link-style" do %>
-      <div class="card wills">
+      <div class="card cg-1 column-card">
         <h3>Details For Will</h3>
         <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
   </div>
 
-  <div class="flex-33">
-    <div class="card trusts">
+  <div class="flex-column">
+    <div class="card cg-2 column-card">
       <h3>Trusts</h3>
       <span class="percent-complete">0% Complete</span>
       <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
@@ -40,21 +40,23 @@
     <% end %>
   </div>
 
-  <div class="flex-33">
-    <div class="card attorney">
+  <div class="flex-column">
+    <div class="card cg-3 column-card">
       <h3>Power of Attorney</h3>
       <span class="percent-complete">0% Complete</span>
       <%= link_to 'Add Details', new_attorney_path, class: "add-details-link" %>
     </div>
-    
+
     <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>
-      <div class="card attorney">
+      <div class="card cg-3 column-card">
         <h3>Details For Legal</h3>
         <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
   </div>
-</div>
+  
+</section>
+
 
 <div>
   <a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
@@ -94,4 +96,38 @@
         </td>
       </tr>
   <% end %>
+  <% @wtl_documents.each do |wtl_doc| %>
+    <tr>
+      <td>
+        <a><%= link_to wtl_doc.name, wtl_doc.url %></a>
+      </td>
+      <td><%= wtl_doc.updated_at %></td>
+      <td>tags</td>
+      <td>
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>
+        <%= link_to 'Delete', document_path(wtl_doc), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
+      </td>
+    </tr>
+  <% end %>
 </table>
+
+<script>
+
+$(function() {
+
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+});
+
+
+</script>

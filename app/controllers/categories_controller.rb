@@ -17,6 +17,8 @@ class CategoriesController < AuthenticatedController
   def estate_planning
     @category = "Wills - Trusts - Legal"
     @vault_entries = VaultEntry.for_user(current_user)
+    vault_documents = @vault_entries.map(&:document)
+    @wtl_documents = get_not_assigned_documents(vault_documents)
     session[:ret_url] = "/estate_planning"
   end
   
@@ -24,14 +26,14 @@ class CategoriesController < AuthenticatedController
     @category = params[:category]
     group_for_new_account = params[:group]
     groups = Rails.configuration.x.categories[@category]["groups"]
-    @group = groups.detect {|group| group["value"] == group_for_new_account}
+    @group = groups.detect { |group| group["value"] == group_for_new_account }
   end
 
   def new_account
     @category = params[:category]
     group_for_new_account = params[:group]
     groups = Rails.configuration.x.categories[@category]["groups"]
-    @group = groups.detect {|group| group["value"] == group_for_new_account}
+    @group = groups.detect { |group| group["value"] == group_for_new_account }
   end
   
   def show
@@ -90,6 +92,6 @@ class CategoriesController < AuthenticatedController
   
   def get_not_assigned_documents(vault_documents)
     Document.for_user(current_user).where(category: @category)
-      .where.not(id: vault_documents.map(&:id))
+            .where.not(id: vault_documents.map(&:id))
   end
 end

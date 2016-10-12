@@ -1,5 +1,7 @@
-<p>Welcome <%= @email %>!</p>
-
-<p>You can confirm your account email through the link below:</p>
-
+<p>Dear <%= "#{@first_name} #{@last_name}}" %>,</p>
+<p>Welcome to Zokuvault!</p>
+<p>To activate your account, please click on the link below:</p>
 <p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p>Once you successfully confirm via this email, you will be returned to the ZokuVault login, where you 
+will be prompted to re-enter your login and password. Please do so to continue with your sign up process.</p>
+<p>Thank you, <br> The ZokuVault Team</p>

@@ -2,67 +2,89 @@
 
 <section class="flex-boxes">
 
+  <div class="flex-column">
 
-    <div class="card cg-1 flex-card">
+    <div class="card cg-1 column-card">
       <h3>Card Group 1</h3>
       <a>Add Account<a>
     </div>
 
-    <div class="card cg-1 flex-card">
+    <div class="card cg-1 column-card">
       <h3>Card Account 1</h3>
       <p>Stuff Stuff Stuff</p>
       <p><a>www.card.com</a></p>
     </div>
-    <div class="card cg-1 flex-card">
+    <div class="card cg-1 column-card">
       <h3>Card Account 2</h3>
       <p><a>www.card.com</a></p>
     </div>
-    <div class="card cg-1 flex-card">
+    <div class="card cg-1 column-card">
       <h3>Card Documents 1</h3>
       <p><a>www.card.com</a></p>
     </div>
 
-    <div class="card cg-2 flex-card">
-      <h3>Card Group 1</h3>
+  </div>
+  <div class="flex-column">
+
+    <div class="card cg-2 column-card">
+      <h3>Card Group 2</h3>
       <a>Add Account<a>
     </div>
 
-    <div class="card cg-2 flex-card">
+    <div class="card cg-2 column-card">
       <h3>Card Account 1</h3>
       <p><a>www.card.com</a></p>
     </div>
 
-    <div class="card cg-2 flex-card">
+    <div class="card cg-2 column-card">
       <h3>Card Account 2</h3>
       <p><a>www.card.com</a></p>
       <p>Stuff Stuff Stuff</p>
       <p>Stuff Stuff Stuff</p>
     </div>
 
-    <div class="card cg-2 flex-card">
+    <div class="card cg-2 column-card">
       <h3>Card Documents 1</h3>
       <p><a>www.card.com</a></p>
     </div>
 
-    <div class="card cg-2 flex-card">
+    <div class="card cg-2 column-card">
       <h3>Card Documents 2</h3>
       <p><a>www.card.com</a></p>
     </div>
 
-    <div class="card cg-3 flex-card">
-      <h3>Card Group 1</h3>
+  </div>
+  <div class="flex-column">
+
+    <div class="card cg-3 column-card">
+      <h3>Card Group 3</h3>
       <a>Add Account<a>
     </div>
-    <div class="card cg-3 flex-card">
+    <div class="card cg-3 column-card">
       <h3>Card Account 1</h3>
       <p><a>www.card.com</a></p>
     </div>
-    <div class="card cg-3 flex-card">
+    <div class="card cg-3 column-card">
       <h3>Card Documents 1</h3>
       <p><a>www.card.com</a></p>
     </div>
 
   </div>
 
-
 </section>
+
+<script>
+
+$(function() {
+
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+});
+
+
+</script>

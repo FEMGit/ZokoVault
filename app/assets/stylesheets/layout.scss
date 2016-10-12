@@ -8,12 +8,15 @@ main{
 body{
   @include outer-container;
   background: $color-gray-light-tinted;
+  min-width: 320px;
 }
 
 header{
   background: white;
   padding: $bu $gu 5px;
   box-shadow: $drop-shadow;
+  z-index: 100;
+  position: relative;
 
   @include media($eightfifty) {
     padding: $bu 5px 5px $bu;
@@ -130,15 +133,38 @@ a.mobile-menu{
 nav.primary-nav{
   width: 240px;
   float:left;
-  background: $color-gray-dark;
+  background: #3B4A54;
   padding: $bu 0 0 0;
   position: fixed;
+  display: block;
+
+  @include media($mobile) {
+    display:none;
+    position: absolute;
+    top: -10px;
+    right: 0;
+    z-index: 102;
+    overflow-y:scroll;
+  }
+}
+
+.mobile-app-menu{
+  display:none;
+  @include media($mobile) {
+    display:block;
+  }
+}
+.logout-link{
+  display:block;
+  @include media($mobile) {
+    display:none;
+  }
 }
 
 a.main-nav,
 a:visited.main-nav{
   width: 100%;
-  color: $color-primary-light;
+  color: #C8C8C8;
   padding: $bu 0 $bu $gu;
   display:block;
   width:100%;
@@ -146,14 +172,23 @@ a:visited.main-nav{
   text-decoration: none;
 
   &.active{
-    background: black;
-    color: $color-white;
+    background: #22303A;
   }
   &.active:hover,
   &:hover{
-    background: black;
-    color: $color-primary;
+    background: #22303A;
     text-decoration: none;
+    color: #C8C8C8;
+  }
+
+  &.close-primary-nav{
+    padding: $bu $gu;
+    background: #22303A;
+    border-bottom: 1px solid black;
+    display:none;
+    @include media($mobile) {
+      display:block;
+    }
   }
 }
 
@@ -186,8 +221,15 @@ main.app-nav{
   margin-left: 240px;
 
   .content{
-    padding: 30px 30px 100px;
+    padding: 15px 25px 100px 25px;
     height:100%;
     overflow-y:scroll;
+
+    @include media($eightfifty) {
+      padding: 20px 20px 100px;
+    }
+  }
+  @include media($mobile) {
+    margin-left: 0 ;
   }
 }

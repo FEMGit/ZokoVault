@@ -29,8 +29,12 @@
     <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
 
     <% if user_signed_in? %>
+
+      <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
+
       <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
       <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
+
     <% end %>
 
   </section>
@@ -40,6 +44,9 @@
 $(function(){
   $('#mobile-menu, #close-mobile-menu').click(function() {
      $('.slide-nav').animate({width:'toggle'},150);
+  });
+  $('#mobile-app-menu, #close-mobile-app-menu').click(function() {
+     $('.primary-nav').animate({width:'toggle'},150);
   });
 });
 </script>

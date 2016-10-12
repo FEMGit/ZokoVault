@@ -33,14 +33,14 @@
  * file per style scope.
  *
 */
-@import "vendors";
+@import "accounts";
+@import "attorneys";
+@import "chosen_custom";
+@import "chosen.min.scss";
 @import "contacts";
 @import "documents";
-@import "accounts";
-@import "wills";
-@import "trusts";
-@import "attorneys";
-@import "chosen.min.scss";
 @import "insurance";
-@import "chosen_custom";
+@import "trusts";
+@import "vendors";
 @import "welcome";
+@import "wills";

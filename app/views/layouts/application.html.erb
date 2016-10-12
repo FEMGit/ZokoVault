@@ -10,34 +10,29 @@
 </head>
 
 <% if user_signed_in? %>
-<body class="logged-in">
+  <body class="logged-in">
 <% else %>
-<body class="logged-out">
+  <body class="logged-out">
 <% end %>
 
-
-
   <%= render :partial => 'layouts/svgdefs' %>
-
+  <%= render :partial => 'layouts/alerts' %>
   <% if user_signed_in? %>
     <%= render :partial => 'layouts/nav' %>
-
     <main class="app-nav">
+
   <% else %>
     <main class="marketing">
+
   <% end %>
 
     <%= render :partial => 'layouts/header' %>
 
     <div class="content">
-      <%= render :partial => 'layouts/alerts' %>
-
       <%= yield %>
-
-
     </div>
 
   </main>
 
-</body>
+  </body>
 </html>

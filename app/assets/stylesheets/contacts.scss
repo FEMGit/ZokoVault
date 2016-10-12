@@ -1,13 +1,16 @@
 // Place all the styles related to the Contacts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-$contact-avatar-size: 50px;
+$contact-avatar-size: 30px;
+$avatar-circle-border: 1px;
+$common-font-size: 10px;
 
 .contact-avatar-td {
   width: $contact-avatar-size;
 }
 .contact-avatar-wrapper-size {
   height: $contact-avatar-size;
+  line-height: 26px;
   width: $contact-avatar-size;
   border-radius: 52px;
   overflow: hidden;
@@ -25,8 +28,7 @@ $contact-avatar-size: 50px;
   vertical-align: middle;
 }
 
-$common-font-size: 10px;
-.contact-element-name{
+.contact-element-name {
 	font-family: "Helvetica Neue", sans-serif;
 	font-size: $common-font-size;
 	font-weight: bold;
@@ -35,59 +37,59 @@ $common-font-size: 10px;
 	text-transform: uppercase;
 }
 
-.back-link{
+.back-link {
 	text-decoration: none;
 }
 
-.contact-user-name{
+.contact-user-name {
 	display: inline; 
 }
 
-.contact-header-info{
+.contact-header-info {
 	height: 30em;
 	overflow: hidden;
 	text-align: justify;
 }
 
-.contact-element-value{
+.contact-element-value {
 	font-family: "Helvetica Neue", sans-serif;
 	font-size: 15px;
 }
 
-.contact-element-title{
+.contact-element-title {
 	display: block;
 	width: 100%;
 	margin-bottom: 10px;
-	.user-circle{
+	.user-circle {
 		background-color: white;
 		position: relative;
 		top: -5px;
 	}
 
-	.edit-link-contact{
+	.edit-link-contact {
 		margin-top: 5px;
 		float: right;
 	}
 }
 
-#left-contact-info{
+#left-contact-info {
 	width: 30%;
 	float: left;
 	display: inline-block;
 }
 
-#right-contact-info{
+#right-contact-info {
 	width: 70%;
 	float: left;
 	display: inline-block;
 }
 
-.contact-element{
+.contact-element {
 	margin-bottom: 10px;
 	display: block;
 }
 
-.notes{
+.notes {
 	width: 90%;
 }
 

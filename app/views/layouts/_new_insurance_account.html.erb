@@ -1,7 +1,7 @@
-<h1><%= "#{yield(:title).gsub("&amp;", "&")} Insurance - Add Account" %></h1>
+<h1><%= "#{yield(:title).gsub!("&amp;", "&")} - Add Account" %></h1>
+
 <div class="insurance-header-content">
   <div class="field">
-    <h2 class="provider-details-title">Insurance Provider Details</h2>
     <label>Insurance Provider Name </label>
     <div class="styled-text-input">
       <input type = "text" />

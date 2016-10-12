@@ -1,22 +1,17 @@
-
 <% current_user = User.last %>
 <button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
   Wizard Modal
 </button>
-<div id="wizard-modal" class="modal wizard-modal modal-no-js">
-
-      <div id="form-step-1">
-        <p>Thank You</p>
-
-        <p>In order to activate your account, we need to verify your identity. We have sent you an email with a link to verify your identity to the email address you provided.</p>
-
-        <p>Please allow a few minutes for the email to arrive. If you do not see the email, please check your spam or junk email folders.
-        If you continue to have any issues, please reach out to <%= mail_to "support@zokuvaults.com", "customer support team" %>.
-
-      </div>
-
-  <footer class="modal-footer">
-    <a href="/" id="save-btn" class="js-modal-close primary-button big-button">Save</a>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+<div class="confirmation-wrapper">
+    <h3 class="confirmation-title">Thank You</h3>
+    <p>Thank you for signing up for ZokuVault. In order to activate your account, we need to verify your identity. We have sent a link to the email address you provided.</p>
+    <p>Please allow a few minutes for the email to arrive. If you do not see the email in a few minutes, please check your spam and junk folders.
+      If you continue to have any issues, please reach out to our <%= mail_to "support@zokuvaults.com", "customer support team" %>.
+    </p>
+  </div>
+  <footer class="modal-footer confirmation-footer">
+    <%= link_to 'Close', '/', class: "js-modal-close button secondary-button big-button"%>
   </footer>
 </div>
 

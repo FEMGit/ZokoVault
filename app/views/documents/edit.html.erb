@@ -1,6 +1,6 @@
 <div id="large-modal" class="modal large-modal" style="display:block !important;">
   <div class="modal-header bb-gray-light">
-    <a href="<%= document_path(@document) %>" class="js-modal-close modal-close">
+    <a href="<%= session[:ret_url] || :back %>" class="js-modal-close modal-close">
       <svg class="icon">
         <use xlink:href="#icon-x-2"></use>
       </svg>

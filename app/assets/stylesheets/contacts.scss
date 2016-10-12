@@ -91,9 +91,11 @@ $common-font-size: 10px;
 	width: 90%;
 }
 
-.contact-table {
-  border-collapse: collapse;
-  .column-title > th, .contact-row > td {
-    padding: 10px;
+table {
+  td.details-col {
+    width: 1%;
+    & > a {
+      text-decoration: none;
+    }
   }
 }

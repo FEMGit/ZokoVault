@@ -1,0 +1,26 @@
+$cofirm-padding-left: 30px;
+$confirm-font-size: 14px;
+
+.modal.confirmation-modal {
+  min-height: auto;
+}
+
+.confirmation-wrapper {
+  padding: 20px 20px 0 $cofirm-padding-left;
+  .confirmation-title, p {
+    color: $color-gray-dark;
+  }
+  p {
+    font-size: $confirm-font-size;
+  }
+  .no-underline-link {
+    text-decoration: none;
+  }
+}
+
+.modal-footer.confirmation-footer {
+  padding-left: $cofirm-padding-left;
+  .button {
+    padding: 10px 15px;
+  }
+}

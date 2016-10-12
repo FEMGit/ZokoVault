@@ -87,4 +87,9 @@ class CategoriesController < AuthenticatedController
   def category_params
     params.require(:category).permit(:name, :description, :managed, :category, :group)
   end
+  
+  def get_not_assigned_documents(vault_documents)
+    Document.for_user(current_user).where(category: @category)
+      .where.not(id: vault_documents.map(&:id))
+  end
 end

@@ -6,33 +6,12 @@ class VaultEntryBuilder
   end
 
   def build
-    sanitize_data(options[:primary_beneficiary_ids]).each do |contact_id|
-      vault_entry.vault_entry_beneficiaries.build(
-        active: true, type: :primary, contact_id: contact_id
-      )
-    end
-
-    sanitize_data(options[:secondary_beneficiary_ids]).each do |contact_id|
-      vault_entry.vault_entry_beneficiaries.build(
-        active: true, type: :secondary, contact_id: contact_id
-      )
-    end
+    build_beneficiaries
+    build_trustees
 
     sanitize_data(options[:agent_ids]).each do |contact_id|
       vault_entry.vault_entry_contacts.build(
         active: true, type: :agent, contact_id: contact_id
-      )
-    end
-    
-    sanitize_data(options[:trustee_ids]).each do |contact_id|
-      vault_entry.vault_entry_contacts.build(
-        active: true, type: :trustee, contact_id: contact_id
-      )
-    end
-    
-    sanitize_data(options[:succeeded_trustee_ids]).each do |contact_id|
-      vault_entry.vault_entry_contacts.build(
-        active: true, type: :succeeded_trustee, contact_id: contact_id
       )
     end
 
@@ -45,6 +24,34 @@ class VaultEntryBuilder
   end
 
   private
+
+  def build_beneficiaries
+    sanitize_data(options[:primary_beneficiary_ids]).each do |contact_id|
+      vault_entry.vault_entry_beneficiaries.build(
+        active: true, type: :primary, contact_id: contact_id
+      )
+    end
+
+    sanitize_data(options[:secondary_beneficiary_ids]).each do |contact_id|
+      vault_entry.vault_entry_beneficiaries.build(
+        active: true, type: :secondary, contact_id: contact_id
+      )
+    end
+  end
+
+  def build_trustees
+    sanitize_data(options[:trustee_ids]).each do |contact_id|
+      vault_entry.vault_entry_contacts.build(
+        active: true, type: :trustee, contact_id: contact_id
+      )
+    end
+
+    sanitize_data(options[:succeeded_trustee_ids]).each do |contact_id|
+      vault_entry.vault_entry_contacts.build(
+        active: true, type: :succeeded_trustee, contact_id: contact_id
+      )
+    end
+  end
 
   def sanitize_data(data)
     [*data].select &:present?

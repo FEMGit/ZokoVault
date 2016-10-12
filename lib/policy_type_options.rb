@@ -31,5 +31,5 @@ module PolicyTypeOptions
       "Long Term Disability",
       "Springing"
     ]
-  }
+  }.freeze
 end

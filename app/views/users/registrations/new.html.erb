@@ -8,24 +8,24 @@
     <h3 class="confirmation-title">Sign Up</h3>
     <span class="title-login-link">Already a member? <%= link_to 'Login', new_session_path(resource_name), class: 'no-underline-link'%></span>
   </div>
-  <p class="information-title">Please tell us a little about yourself to create an account. We'll never share your personal information wtih anyone</p>
+  <p class="information-title">Please tell us a little about yourself to create an account. We'll never share your personal information wtih anyone.</p>
   <% resource.build_user_profile rescue nil %>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= devise_error_messages! %>
 
     <%= f.fields_for :user_profile do |user_profile_form| %>
       <div class="field">
-        <%= user_profile_form.label :first_name, autofocus: true %>
+        <%= user_profile_form.label :first_name, 'First Name', autofocus: true %>
         <%= user_profile_form.text_field :first_name %>
       </div>
 
       <div class="field">
-        <%= user_profile_form.label :middle_name %><span class="optional-field"> optional</span>
+        <%= user_profile_form.label :middle_name, 'Middle Name' %><span class="optional-field"> optional</span>
         <%= user_profile_form.text_field :middle_name %>
       </div>
 
       <div class="field">
-        <%= user_profile_form.label :last_name %>
+        <%= user_profile_form.label :last_name, 'Last Name' %>
         <%= user_profile_form.text_field :last_name %>
       </div>
 
@@ -35,7 +35,7 @@
       </div>
 
       <div class="field">
-        <%= user_profile_form.label :date_of_birth%>
+        <%= user_profile_form.label :date_of_birth, 'Date of Birth'%>
         <%= user_profile_form.date_field :date_of_birth %>
       </div>
 
@@ -55,7 +55,7 @@
       <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button' %>
       <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button" %>
     </footer>
-    <p class="submit-info">By submitting this information I agree to the Zoku Vault <%= link_to 'Terms of Service', '', class: "no-underline-link" %> and
+    <p class="submit-info">By submitting this information I agree to the ZokuVault <%= link_to 'Terms of Service', '', class: "no-underline-link" %> and
       <%= link_to 'Privacy Policy', '', class: "no-underline-link" %>.
     </p>
   <% end %>

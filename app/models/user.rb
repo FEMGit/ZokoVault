@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
 
   has_one :user_profile
-  accepts_nested_attributes_for :user_profile
+  accepts_nested_attributes_for :user_profile, update_only: true
 
   delegate :mfa_frequency, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
 

@@ -1,4 +1,4 @@
-<p>Dear <%= "#{@first_name} #{@last_name}}" %>,</p>
+<p>Dear <%= "#{@user.name}" %>,</p>
 <p>Welcome to Zokuvault!</p>
 <p>To activate your account, please click on the link below:</p>
 <p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>

@@ -48,3 +48,9 @@ $document-button-margin-top: 13px;
 .add-link{
 	margin-top: $document-button-margin-top;
 }
+
+.show-document-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

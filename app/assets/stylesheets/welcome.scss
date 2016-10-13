@@ -1,5 +1,6 @@
 $cofirm-padding-left: 30px;
 $confirm-font-size: 14px;
+$policy-info-font-size: 10px;
 
 .modal.confirmation-modal {
   min-height: auto;
@@ -13,14 +14,51 @@ $confirm-font-size: 14px;
   p {
     font-size: $confirm-font-size;
   }
+  color: $color-gray-dark;
+  .sign-up-title {
+    margin-bottom: 18px;
+    padding-right: 10px;
+    padding-top: 5px;
+  }
+  .confirmation-title, p {
+    color: $color-gray-dark;
+    display: inline-block;
+  }
+  .title-login-link {
+    float: right;
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 5px;
+  }
+  .optional-field {
+    color: $color-gray-med-shaded;
+    font-style: italic;
+    font-size: 14px;
+  }
+  p.information-title {
+    font-size: $confirm-font-size;
+    margin-bottom: 0;
+  }
+
   .no-underline-link {
     text-decoration: none;
   }
+  .submit-info {
+    font-size: $policy-info-font-size;
+    padding-bottom: 20px;
+    padding-left: 0;
+  }
 }
 
-.modal-footer.confirmation-footer {
-  padding-left: $cofirm-padding-left;
-  .button {
-    padding: 10px 15px;
+.modal-footer {
+  &.confirmation-footer {
+    padding-left: $cofirm-padding-left;
+    .button {
+      padding: 10px 15px;
+    }
+  }
+  &.sign-up-footer {
+    padding-top: 3px;
+    padding-left: 0;
   }
 }

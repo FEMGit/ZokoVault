@@ -1,54 +1,112 @@
-<h2>Sign up</h2>
-
-<% resource.build_user_profile rescue nil %>
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-
-
-  <%= f.fields_for :user_profile do |user_profile_form| %>
-    <div class="field">
-      <%= user_profile_form.label :first_name, autofocus: true %><br />
-      <%= user_profile_form.text_field :first_name %>
-    </div>
-
-    <div class="field">
-      <%= user_profile_form.label :middle_name %><br />
-      <%= user_profile_form.text_field :middle_name %>
-    </div>
-
-    <div class="field">
-      <%= user_profile_form.label :last_name %><br />
-      <%= user_profile_form.text_field :last_name %>
-    </div>
-
-    <div class="field">
-      <%= f.label :email %><br />
-      <%= f.email_field :email %>
-    </div>
-
-    <div class="field">
-      <%= user_profile_form.label :date_of_birth%><br />
-      <%= user_profile_form.date_field :date_of_birth %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password %>
-      <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em>
-      <% end %><br />
-      <%= f.password_field :password, autocomplete: "off" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "off" %>
-    </div>
-
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Sign up" %>
+<% current_user = User.last %>
+<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+  Wizard Modal
+</button>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+<div class="confirmation-wrapper">
+  <div class="sign-up-title">
+    <h3 class="confirmation-title">Sign Up</h3>
+    <span class="title-login-link">Already a member? <%= link_to 'Login', new_session_path(resource_name), class: 'no-underline-link'%></span>
   </div>
-<% end %>
+  <p class="information-title">Please tell us a little about yourself to create an account. We'll never share your personal information wtih anyone</p>
+  <% resource.build_user_profile rescue nil %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= devise_error_messages! %>
 
-<%= render "users/shared/links" %>
+    <%= f.fields_for :user_profile do |user_profile_form| %>
+      <div class="field">
+        <%= user_profile_form.label :first_name, autofocus: true %>
+        <%= user_profile_form.text_field :first_name %>
+      </div>
+
+      <div class="field">
+        <%= user_profile_form.label :middle_name %><span class="optional-field"> optional</span>
+        <%= user_profile_form.text_field :middle_name %>
+      </div>
+
+      <div class="field">
+        <%= user_profile_form.label :last_name %>
+        <%= user_profile_form.text_field :last_name %>
+      </div>
+
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email %>
+      </div>
+
+      <div class="field">
+        <%= user_profile_form.label :date_of_birth%>
+        <%= user_profile_form.date_field :date_of_birth %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation, 'Confirm Password' %>
+        <%= f.password_field :password_confirmation, autocomplete: "off" %>
+      </div>
+
+    <% end %>
+
+    <footer class="modal-footer sign-up-footer">
+      <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button' %>
+      <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button" %>
+    </footer>
+    <p class="submit-info">By submitting this information I agree to the Zoku Vault <%= link_to 'Terms of Service', '', class: "no-underline-link" %> and
+      <%= link_to 'Privacy Policy', '', class: "no-underline-link" %>.
+    </p>
+  <% end %>
+</div>
+</div>
+
+<script>
+$(function(){
+
+  //SOMEONE PLEASE FIX THIS GARBAGE
+  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+  $(document).ready(function(){
+    $('button[data-modal-id]').click();
+
+    wizNav(1);
+  });
+  $('button[data-modal-id]').click(function(e) {
+    e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.8);
+    $(".js-modalbox").fadeIn(500);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+  });
+
+  $(".js-modal-close, .modal-overlay").click(function() {
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+    });
+
+  });
+
+  //ESPECIALLY THIS GARBAGE
+  $(window).resize(function() {
+    $(".large-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".medium-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".small-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize();
+});
+</script>

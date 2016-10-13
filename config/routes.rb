@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :vendor_accounts
   resources :vendors
   resources :contacts
-  devise_for :users, controllers: { registrations: 'registrations' }
+  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations' }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get 'cards' => 'welcome#cards'
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
+  get 'email_confirmed' => 'welcome#email_confirmed'
 
   # Default category pages ?Could probably be done better programatically?
   get 'my_profile' => 'categories#my_profile'

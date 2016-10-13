@@ -37,6 +37,17 @@ header{
   color: $color-link-blue;
   margin-top: 10px;
 }
+
+.user-avatar {
+  padding-top: 8px;
+  color: #969696;
+
+  @include media($mobile) {
+    display:none;
+  }
+
+}
+
 .login-link{
   float:right;
   color: $color-link-blue;
@@ -232,4 +243,43 @@ main.app-nav{
   @include media($mobile) {
     margin-left: 0 ;
   }
+}
+
+//FOOTER
+body.logged-in{
+  .marketing-footer{
+    display:none;
+  }
+}
+.marketing-footer{
+  min-height: 200px;
+  background: #255984;
+  padding: 50px 0;
+
+  @include media($teneighty) {
+      padding: 50px 20px;
+  }
+}
+.footer-inner{
+  max-width: 1065px;
+  margin: 0 auto;
+}
+.copyright{
+  color:white;
+}
+a.footer-link{
+  color:white !important;
+  text-decoration: none;
+}
+.copyright{
+  float:left;
+  margin-right: 50px;
+
+  @include media($mobile) {
+      margin: 0 0 20px;
+      float:none;
+  }
+}
+.footer-nav{
+
 }

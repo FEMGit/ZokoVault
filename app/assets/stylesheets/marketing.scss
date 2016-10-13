@@ -38,7 +38,7 @@ body.logged-out{
 .hero-01a{
   background: transparent asset-data-url('marketing/hero-01a.jpg') center top;
   background-size: cover;
-  height: 600px;
+  height: 700px;
   text-align: center;
 
   @include media($mobile) {
@@ -50,7 +50,7 @@ body.logged-out{
 
   article{
     margin: 0 auto;
-    padding-top: 300px;
+    padding-top: 360px;
     max-width: 500px;
 
     @include media($mobile) {
@@ -59,14 +59,6 @@ body.logged-out{
     }
 
   }
-}
-.user-name-logo {
-  position: relative;
-  bottom: $logo-user-name-bottom;
-}
-.user-name-logo {
-  position: relative;
-  bottom: $logo-user-name-bottom;
 }
 .logo-bg{
   background: transparent asset-data-url('marketing/logo-bg.jpg') left top;

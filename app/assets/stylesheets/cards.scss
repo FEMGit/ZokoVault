@@ -22,15 +22,15 @@ $cards-margin: 12px;
 .card.life,
 .card.wills{
   border-left: 10px solid $color-card-1;
-  margin-right: $cards-margin;
+  // margin-right: $cards-margin;
 }
 
 .cg-2,
 .card.property,
 .card.trusts{
   border-left: 10px solid $color-card-2;
-  margin-right: $cards-margin / 2;
-  margin-left: $cards-margin / 2;
+  // margin-right: $cards-margin / 2;
+  // margin-left: $cards-margin / 2;
   &.details {
     margin: 0 30px 30px 0;
   }
@@ -39,7 +39,7 @@ $cards-margin: 12px;
 .card.health,
 .card.attorney{
   border-left: 10px solid $color-card-3;
-  margin-left: $cards-margin;
+  // margin-left: $cards-margin;
   &.details {
     margin: 0 30px 30px 0;
   }

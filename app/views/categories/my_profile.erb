@@ -1,35 +1,63 @@
 <h1>My Profile</h1>
 
 <div class="card mb-30">
-  <h3>User Name</h3>
-  <label>Username</label>
+  <h3 class="card-label">Personal Information</h3>
+
+  <label>Name</label>
   <p>Bruno Mars</p>
 
-  <label>Address</label>
-  <p>2233 Main Street<br>
-     Hollywood CA, 60504</p>
+  <label>Email Address</label>
+  <p>bruno@bruno.com</p>
 
-  <label>Cell Phone</label>
-  <p>888-674-3209</p>
+  <label>Phone</label>
+  <p>888-674-3209<span class="phone-type">home</span><br>
+     888-674-3209<span class="phone-type">cell</span></p>
 
   <label>Social Security Number</label>
-  <p><a>***-**-****</a></p>
+  <p>***-**-****</p>
 
   <label>Date of Birth</label>
   <p>09/04/1980</p>
+
+  <label>Address</label>
+  <p>2233 Main Street<br>
+     Hollywood CA, 60504
+  </p>
+
+</div>
+
+
+<div class="card mb-30 shared-card">
+  <h3 class="card-label">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>
+    Primary Shared With
+  </h3>
+  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
+    <label>Primary Shared With</label>
+    <section class="shared-list">
+      <p><span class="user-circle">BM</span>&nbsp;Bruna Mars</p>
+    </section>
+</div>
+
+
+<div class="card mb-30">
+  <h3 class="card-label">Employer Information</h3>
 
   <label>Buisness Information</label>
   <p>American Buisness Corp<br>
      456 Elm Parkway<br>
      Los Angeles CA, 60032</p>
 
-  <label>Primary Shared With</label>
-  <p><span class="user-circle">AK</span>&nbsp;Bruna Mars</p>
+     <label>Phone</label>
+     <p>888-674-3209<span class="phone-type">office</span><br>
+        888-674-3209<span class="phone-type">fax</span></p>
+
 </div>
 
-<h2>User Name Documents</h2>
-<p>Put Doc Table here that is all documents with the association Contact and Current User</p>
 
+<h2>Bruno Mars Documents</h2>
 <table>
     <tr>
       <th>Name</th>

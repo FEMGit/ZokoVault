@@ -1,6 +1,13 @@
 $edit-button-margin-top: 13px;
 $cards-margin: 12px;
 
+@mixin card-type-details{
+  &.details {
+    margin: 0 30px 30px 0;
+  }
+}
+
+//GENERIC CARD STYLE
 .card {
   background: white;
   border-radius: 5px;
@@ -9,47 +16,88 @@ $cards-margin: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor:pointer;
   word-wrap: break-word;
-  &.details.insurance, &.details.wtl {
+
+  &.details.insurance,
+  &.details.wtl {
     padding: 0;
   }
-
-  &:hover {
-    // border: 1px solid  $color-link-blue;
-    // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  }
 }
+
+//COLOR STRIPES FOR CARDS
 .cg-1,
 .card.life,
 .card.wills{
   border-left: 10px solid $color-card-1;
-  // margin-right: $cards-margin;
-}
 
+  @include card-type-details;
+}
 .cg-2,
 .card.property,
 .card.trusts{
   border-left: 10px solid $color-card-2;
-  // margin-right: $cards-margin / 2;
-  // margin-left: $cards-margin / 2;
-  &.details {
-    margin: 0 30px 30px 0;
-  }
+
+  @include card-type-details;
 }
 .cg-3,
 .card.health,
 .card.attorney{
   border-left: 10px solid $color-card-3;
-  // margin-left: $cards-margin;
-  &.details {
-    margin: 0 30px 30px 0;
-  }
+
+  @include card-type-details;
+}
+.cg-4{
+  border-left: 10px solid $color-card-1;
+  @include card-type-details;
+}
+.cg-5{
+  border-left: 10px solid $color-card-2;
+  @include card-type-details;
+}
+.cg-6{
+  border-left: 10px solid $color-card-3;
+  @include card-type-details;
+}
+.cg-7{
+  border-left: 10px solid $color-card-1;
+  @include card-type-details;
 }
 
+//CARD LABEL
+.card-label{
+  float: right;
+  color: $color-gray-dark-tinted;
+
+  @include media($eightfifty) {
+    float: none;
+  }
+}
+.shared-card{
+  background: $color-primary-tinted;
+  border: 1px solid $color-primary;
+
+  .card-label{
+    color: $color-primary;
+
+    svg{
+      position: relative;
+      top: 5px;
+    }
+  }
+  p.shared-description{
+    max-width: 500px;
+  }
+}
+.shared-list{
+  margin-top: 10px;
+}
+
+//LOGIN CARD
 .card.login-card {
   margin: 100px auto;
   max-width: 400px;
 }
 
+//CARD SPECIFIC FORMATTING
 .wtl-card-info{
   padding: 10px;
   padding-left: 5px;
@@ -189,12 +237,13 @@ $cards-margin: 12px;
 }
 
 .shared-field {
-  background-color: $color-primary-light;
+  background-color: $color-primary-tinted;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
   height: auto;
   overflow: visible;
+
   .share-with-icon {
     float: right;
     opacity: 0.7;
@@ -216,7 +265,7 @@ $cards-margin: 12px;
   &.details-bottom {
     margin-top: 0;
   }
-  &.insurance-shared-with {
+  &.insurance-shared-with{
     padding-bottom: 20px;
   }
 }

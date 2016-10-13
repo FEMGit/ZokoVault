@@ -34,7 +34,9 @@ select{
 }
 
 label{
-  color: $color-gray-dark-tinted;
+  color: $color-primary-shaded;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 //BUTTONS

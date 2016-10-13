@@ -78,6 +78,14 @@ body.logged-out{
   background: white;
   padding-top: 60px;
 
+  h3{
+    padding-top: 80px;
+
+    @include media($eightfifty) {
+      padding-top: 0;
+    }
+  }
+
   @include media($mobile) {
     height: auto;
     text-align:center;

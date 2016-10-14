@@ -1,4 +1,3 @@
-<% current_user = User.last %>
 <button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
   Wizard Modal
 </button>
@@ -10,19 +9,19 @@
       </span>
       Terms
     </div>
-    <div class="inner-step questions-width" onclick="wizNav(2)">
+    <div class="inner-step questions-width" onclick="guard() && wizNav(2)">
       <span id="step-2" class="inner-counter">
         2
       </span>
       Questions
     </div>
-    <div class="inner-step" onclick="wizNav(3)">
+    <div class="inner-step" onclick="guard() && wizNav(3)">
       <span id="step-3" class="inner-counter">
         3
       </span>
       Phone
     </div>
-    <div class="inner-step" onclick="wizNav(4)">
+    <div class="inner-step" onclick="guard() && wizNav(4)">
       <span id="step-4" class="inner-counter">
         4
       </span>
@@ -30,25 +29,24 @@
     </div>
   </div>
 
-    <%= form_tag :account, { method: :put, id: 'account-form' } do %>
-      <div id="form-step-1">
-        <%= render partial: "terms_of_service" %>
-      </div>
-      <div id="form-step-2">
-
-        <%= render partial: "security_questions" %>
-      </div>
-      <div id="form-step-3">
-        <%= render partial: "phone" %>
-      </div>
-      <div id="form-step-4">
-        <%= render partial: "settings" %>
-      </div>
-    <% end %>
+  <%= form_tag :account, { method: :put, id: 'account-form' } do %>
+    <div id="form-step-1">
+      <%= render partial: "terms_of_service" %>
+    </div>
+    <div id="form-step-2">
+      <%= render partial: "security_questions" %>
+    </div>
+    <div id="form-step-3">
+      <%= render partial: "phone" %>
+    </div>
+    <div id="form-step-4">
+      <%= render partial: "settings" %>
+    </div>
+  <% end %>
 
   <footer class="modal-footer">
     <a href="javascript:;" id='next-step' class=" button primary-button big-button"
-    onclick="wizNav(currentStep+1); return false;">Next</a>
+                                          onclick="wizNav(currentStep+1); return false;">Next</a>
     <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitAccount(event)">Save</button>
     <%= link_to 'Cancel', contacts_path, class: "js-modal-close" %>
   </footer>
@@ -59,14 +57,21 @@
 var currentStep = 1;
 var maxStep = 4;
 
+// Return true if form criteria is met.
+var guard = function() {
+  var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
+  return check_el.is(':checked');
+}
+
 var wizNav = function(step){
+
   currentStep = step;
   for(var i = 1; i < maxStep + 1; i++) {
     var step_el = $("#step-" + i);
     var form_el = $("#form-step-" + i);
     if (i === currentStep) {
       step_el.removeClass().addClass("inner-counter current-step")
-      step_el.html(i);
+        step_el.html(i);
       form_el.show();
     }
     else {
@@ -79,7 +84,6 @@ var wizNav = function(step){
       }
       form_el.hide();
     }
-
 
     if ((currentStep == 1) || (currentStep == 3)) {
       $("#save-btn").hide();
@@ -95,6 +99,7 @@ var wizNav = function(step){
     }
   }
 }
+
 var submitAccount = function(){
   var accountForm = document.getElementById("account-form");
   accountForm.submit();
@@ -105,7 +110,6 @@ $(function(){
   var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
   $(document).ready(function(){
     $('button[data-modal-id]').click();
-
     wizNav(1);
   });
   $('button[data-modal-id]').click(function(e) {
@@ -121,7 +125,6 @@ $(function(){
     $(".modal, .modal-overlay").fadeOut(500, function() {
       $(".modal-overlay").remove();
     });
-
   });
 
   //ESPECIALLY THIS GARBAGE

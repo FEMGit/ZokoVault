@@ -18,14 +18,17 @@ class DocumentsController < AuthenticatedController
   end
 
   def create
-    @document = Document.new(document_params.merge(user_id: current_user.id))
-    clear_notes_field
+    @document = Document.new(document_params.merge(:user_id => current_user.id))
     respond_to do |format|
-      if @document.save #TODO: dynamic route builder for categories
+      if @document.save && @document.update(document_share_params) #TODO: dynamic route builder for categories
+        if is_new_contact_creating
+          save_return_url_path(@document.id)
+          format.html { redirect_to new_contact_path }
+        end
         if return_url?
-          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
+          format.html { redirect_to session[:ret_url], notice: 'Document was successfully created.' }
         else
-          format.html { redirect_to edit_document_path(@document), notice: 'Document was successfully created.' }
+          format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
         end
         format.json { render :show, status: :created, location: @document }
       else
@@ -38,11 +41,10 @@ class DocumentsController < AuthenticatedController
   def update
     respond_to do |format|
       if is_new_contact_creating
-        session[:ret_url] = "/documents/" + current_document_id + "/edit"
-        document_clean_from_create_new_user_id
+        save_return_url_path(current_document_id)
         format.html { redirect_to new_contact_path }
       end
-      if @document.update(document_params)
+      if @document.update(document_share_params)
         if return_url?
           format.html { redirect_to session[:ret_url], notice: 'Document was successfully updated.' }
         else
@@ -58,7 +60,7 @@ class DocumentsController < AuthenticatedController
 
   def destroy
     @document.destroy
-    redirect_page = session[:ret_url].nil? ? documents_path : session[:ret_url]
+    redirect_page = session[:ret_url] || documents_path
     respond_to do |format|
       format.html { redirect_to redirect_page, notice: 'Document was successfully destroyed.' }
       format.json { head :no_content }
@@ -74,14 +76,19 @@ class DocumentsController < AuthenticatedController
   def base_params
     params.permit(:group, :category)
   end
+  
+  def document_share_params
+    share = ShareService.new(user_id: current_user.id, contact_ids: params[:document][:contact_ids]).fill_document_share
+    document_params.merge(:shares_attributes => share, :user_id => current_user.id)
+  end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :contact_ids,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids,
                                      shares_attributes: [:user_id, :contact_id])
   end
-  
+
   def return_url?
-    %w[/insurance /estate_planning].include? session[:ret_url]
+    %w[/insurance /documents /estate_planning].include? session[:ret_url]
   end
   
   def current_document_id
@@ -89,14 +96,15 @@ class DocumentsController < AuthenticatedController
   end
   
   def is_new_contact_creating
-    document_params[:shares_attributes] && document_params[:shares_attributes].values.any? {|value| value[:contact_id] == new_contact_path}
+    params_to_test = params[:document][:contact_ids]
+    params_to_test && params_to_test.any? {|value| value == 'create_new_contact'}
+  end
+
+  def save_return_url_path (document_id_to_change)
+    session[:ret_url] = "/documents/" + document_id_to_change.to_s + "/edit"
   end
   
   def document_clean_from_create_new_user_id
     params[:document][:shares_attributes].delete_if{|k, v| v[:contact_id] == new_contact_path}
-  end
-  
-  def clear_notes_field
-    @document.description = ""
   end
 end

@@ -1,13 +1,19 @@
-$edit-form-width: 390px;
+$document-form-width: 390px;
+$share-form-width: 390px;
 $document-button-margin-top: 13px;
+$date-time-changes-top-position: 15px;
 
 .edit_document_footer_info{
   margin-top: 13px;
 }
 
-.edit_document_footer_buttons{
+.edit_document_footer_buttons {
   display: inline-block;
   padding-top: 5px;
+  width: 100%;
+  .document-delete-button {
+    float: right;
+  }
 }
 
 .edit-document-footer{
@@ -16,24 +22,24 @@ $document-button-margin-top: 13px;
 }
 
 .edit-shared-with-table{
-  width: $edit-form-width;
+  width: $document-form-width;
 }
 
 .edit-document-field{
   margin-bottom: 15px;
   .styled-select{
-    width: $edit-form-width;
+    width: $document-form-width;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
   }
   select{
-    width: $edit-form-width + $gu;
+    width: $document-form-width + $gu;
   }
   textarea{
-    width: $edit-form-width;
+    width: $document-form-width;
     resize: vertical;
   }
   input[type=text]{
-    width: $edit-form-width;
+    width: $document-form-width;
   }
 }
 
@@ -53,4 +59,70 @@ $document-button-margin-top: 13px;
   width: 100%;
   height: 100%;
   border: none;
+}
+.documents-body-content {
+  display: block;
+  background: white;
+  border-bottom: 1px solid #aaa;
+  border-radius: 20px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0;
+  padding-bottom: 20px;
+  margin: 0 30px 30px 0;
+  word-wrap: break-word;
+  width: 100%;
+  height: auto;
+  .field{
+    padding-left: 20px;
+    padding-bottom: 10px;
+    label{
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+  }
+  input[type="radio"]{
+    margin-top: 5px;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+  .styled-select {
+    width: $document-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  select{
+    width: $document-form-width + $gu;
+  }
+  textarea{
+    width: $document-form-width;
+    resize: vertical;
+  }
+  input[type=text]{
+    width: $document-form-width;
+  }
+}
+
+.document-title {
+  display: inline-block;
+}
+
+.document-change-data {
+  float: right;
+  position: relative;
+  top: $date-time-changes-top-position;
+  padding-right: 5px;
+}
+
+.documents-wrapper {
+  &.wtl {
+    padding-bottom: 0;
+  }
+  padding: 20px;
+  padding-bottom: 0;
+  .add-document-field {
+    margin: 0 0;
+  }
+  .percent-complete {
+    float: left;
+  }
 }

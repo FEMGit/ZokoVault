@@ -35,6 +35,7 @@ class ContactsController < AuthenticatedController
         format.html { render :new }
         format.json { render json: @contact.errors, status: :unprocessable_entity }
       end
+      session[:ret_after_new_user] = session[:ret_url]
     end
   end
 

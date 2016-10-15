@@ -80,8 +80,7 @@ $wtl-form-width: 390px;
   background-color: $color-primary-light;
   padding: 10px 0;
   width: 100%;
-  heigth: auto;
-  overflow: auto;
+  height: auto;
   .share-with-icon{
     float: right;
     opacity: 0.7;
@@ -100,7 +99,7 @@ $wtl-form-width: 390px;
 
 .wtl-card-info{
   &.details{
-    overflow: auto;
+    
   }
   .will-left-info{
     float: left;

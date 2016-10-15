@@ -1,0 +1,125 @@
+<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
+<% @contacts = Contact.for_user(current_user) %>
+<%= form_for (@document), :html => {:id => "doc-form"} do |f| %>
+  <div>
+    <h2 class="document-title"> <%= yield(:title) %> </h2>
+    <% if @document.persisted? %>
+      <span class='document-change-data'>
+        <span class="edit-data-label">Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
+        <span class="edit-data-label">Modified: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
+      </span>
+   <% end %>
+  </div>
+  <div class="documents-body-content">
+    <div class="documents-wrapper">
+      <% if add_new_document?(yield(:title)) %>
+        <div class="edit-document-field">
+          <label>Attach File</label><br>
+          <div id="file-pick-section">
+            <input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3" data-fp-button-text="Select File"
+              data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" data-buttonText="Select file" id="select-file"/>
+          </div>
+        </div>
+      <% end %>
+        <%= f.hidden_field :folder_id %>
+        <%= f.hidden_field :url %>
+
+        <div class="edit-document-field">
+          <label>Document Name</label><br>
+          <%= f.text_field :name, class: "document-text-field" %>
+        </div>
+
+        <div class="edit-document-field">
+          <label>Category</label><br>
+          <div class="chosen-styled-select">
+            <% options = [
+                  "Contact",
+                  "Financial Information",
+                  "Wills - Trusts - Legal",
+                  "Insurance",
+                  "Taxes",
+                  "Healthcare Choices",
+                  "Final Wishes",
+                  "Web Accounts"] %>
+              <%= f.collection_select :category, 
+                options.prepend("Select..."), :to_s, :to_s, {}, 
+                { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, selected: '0' }
+              %>
+          </div>
+        </div>
+
+        <div class="edit-document-field">
+          <label class="form-disabled">Card</label><br>
+          <div class="styled-select">
+            <% options = [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
+          </div>
+        </div>
+        
+        <div class="edit-document-field">
+          <div class="flex-box">
+            <label>Notes
+              <%= f.text_area :description %>
+            </label>
+          </div>
+        </div>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+      <label>Shared With</label>
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :contact_ids,
+          @contacts.collect{|s| [s.id, s.name]} + [["create_new_contact", "Create New Contact"]], :first, :second, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+  </div>
+  <div class="edit_document_footer_buttons">
+    <button
+      class="js-modal-close
+        primary-button
+        big-button"
+        onclick="submitForm(event)" >
+        Save</button>
+    <%= link_to "Cancel", document_return_path(@document),
+      class: "js-modal-close button secondary-button big-button" %>
+    <% if !add_new_document?(yield(:title)) %>
+      <%= link_to 'Delete', document_return_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
+        class: "js-modal-close button outline-button big-button document-delete-button"%>
+    <% end %>
+  </div>
+<% end %>
+
+<script>
+  var fileToPage = function(evt){
+    filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
+    var documentNameField = document.getElementById("document_name");
+    var documentUrl = document.getElementById("document_url");
+    documentNameField.value = evt.fpfile.filename;
+    documentUrl.value = evt.fpfile.url;
+  }
+  
+  $('.chosen-select').chosen()
+  function showForm() { 
+    $('#form-fields').show();
+    $('#upload-will-message').hide();
+  }
+
+  function showUploadMessage() { 
+    $('#form-fields').hide();
+    $('#upload-will-message').show();
+  }
+  
+  var createNewContactId = 'create_new_contact';
+  $('.chosen-select').chosen().change(function(e, params){
+    if(params.selected === createNewContactId){
+      var docForm = $('#doc-form');
+      docForm.submit();
+    }
+  });
+</script>

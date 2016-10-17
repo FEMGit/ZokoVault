@@ -6,19 +6,11 @@ class DocumentsController < AuthenticatedController
     session[:ret_url] = "/documents"
   end
 
-  def get_drop_down_options
-    category = params[:category]
-    documents_helper = DocumentService.new(:category => params[:category]);
-    render :json => documents_helper.get_card_values
-  end
-
   def show
   end
 
   def new
     @document = Document.new(base_params.slice(:category, :group))
-    documents_helper = DocumentService.new(:category => @document.category);
-    @cards = documents_helper.get_card_values
   end
 
   def edit
@@ -79,8 +71,6 @@ class DocumentsController < AuthenticatedController
 
   def set_document
     @document = Document.for_user(current_user).find(params[:id])
-    documents_helper = DocumentService.new(:category => @document.category);
-    @cards = documents_helper.get_card_values
   end
 
   def base_params
@@ -93,7 +83,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :group, :contact_ids,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids,
                                      shares_attributes: [:user_id, :contact_id])
   end
 

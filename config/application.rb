@@ -15,21 +15,19 @@ module ZokuVault
     config.autoload_paths << Rails.root.join('app', 'services')
 
     config.x.categories = {
+      "financial" => {
+        "label" => "Financial Information",
+        "groups" => [
+          0,1,2
+        ]
+      },
       "estate" => {
         "label" => "Wills - Trusts - Legal",
         "groups" => [
-          {"value" => "will",
-            "label" => "Will"
-          },
-          {"value" => "trust",
-            "label" => "Trust"
-          },
-          {"value" => "attorney",
-            "label" => "Legal"
-          }
+          0,1,2
         ]
       },
-      "Insurance" => {
+      "insurance" => {
         "label" => "Insurance",
         "groups" => [
           {"value" => "life",

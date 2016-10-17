@@ -49,12 +49,9 @@
         </div>
 
         <div class="edit-document-field">
-          <label>Card</label><br>
-          <div class="chosen-styled-select">
-            <%= f.collection_select :group, 
-              @cards.prepend("Select..."), :to_s, :to_s, {}, 
-              { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", selected: '0' }
-            %>
+          <label class="form-disabled">Card</label><br>
+          <div class="styled-select">
+            <% options = [['Select...',""], 'My Profile', 'Contacts & Permissions', 'Financial Information','Estate Planning', 'Insurance', 'Taxes', 'Final Wishes', 'Web Accounts'] %>
           </div>
         </div>
         
@@ -125,19 +122,4 @@
       docForm.submit();
     }
   });
-  //get ajax request to update card drop down info based on chosen category
-  $("#document_category.chosen-select").chosen().change(function(e, params){
-    var url = '/documents/get_drop_down_options/' + params.selected
-    $.get(url, function(data) {
-      card_values = $('#document_group');
-      card_values.empty();
-      console.log(data);
-      data.forEach(function(group){
-        card_values.append("<option value='" + group + "'>" + group + "</option>");
-      });
-      //set default 'Select' value to allow user not to choose a card type
-      card_values.prepend("<option value='" + 0 + "' selected>Select...</option>");
-      card_values.trigger('chosen:updated');
-    });
-  })
 </script>

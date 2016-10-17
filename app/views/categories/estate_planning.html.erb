@@ -34,7 +34,7 @@
     </div>
     <%= link_to details_trust_path(1), :class => "undo-link-style" do %>
       <div class="card cg-2 column-card">
-        <h3>Details For Trust</h3>
+        <h3>Details For Legal</h3>
         <span class="percent-complete">100% Complete</span>
       </div>
     <% end %>
@@ -104,11 +104,9 @@
       <td><%= wtl_doc.updated_at %></td>
       <td>tags</td>
       <td>
-        <% wtl_doc.shares.each do |share| %>
-          <% if !share.contact.nil? %>
-            <span class="user-circle"><%= share.contact.initials %></span>
-          <% end %>
-        <% end %>
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
       </td>
       <td>
         <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>

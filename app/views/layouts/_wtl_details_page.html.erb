@@ -12,7 +12,7 @@
 <%= render yield(:card_details_partial_path) %>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+  <a class="add-link fr" href="#">
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
@@ -30,24 +30,20 @@
     <th>Shared With</th>
     <th>Actions</th>
   </tr>
-  <% @group_documents.each do |document| %>
-    <tr>
-      <td>
-        <a><%= link_to document.name, document_path(document) %></a>
-      </td>
-      <td><%= document.updated_at %></td>
-      <td>tags</td>
-      <td>
-        <% document.shares.each do |share| %>
-          <% if !share.contact.nil? %>
-            <span class="user-circle"><%= share.contact.initials %></span>
-          <% end %>
-        <% end %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-        <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
-      </td>
-    </tr>
-  <% end %>
+  <tr>
+    <td>
+      <a>Name</a>
+    </td>
+    <td>2016-09-19 02:42:12 UTC</td>
+    <td>tags</td>
+    <td>
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+    </td>
+    <td>
+      <%= link_to 'Edit', '#', class: "outline-button small-button" %>
+	  <%= link_to 'Delete', '#', class: "outline-button small-button" %>
+    </td>
+  </tr>
 </table>

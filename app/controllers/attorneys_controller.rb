@@ -1,10 +1,15 @@
-class AttorneysController < AuthenticatedController
-  def new
-    @vault_entry = VaultEntryBuilder.new.build
-    @vault_entry.vault_entry_contacts.build
-    @vault_entry.vault_entry_beneficiaries.build
+class AttorneysController < WtlBaseController
+  def set_group
+    @group = "Legal"
   end
-
-  def details
+  
+  def set_ret_url
+    session[:ret_url] = "/attorneys/details/#{current_wtl}"
+  end
+  
+  private
+  
+  def current_wtl
+    params[:attorney]
   end
 end

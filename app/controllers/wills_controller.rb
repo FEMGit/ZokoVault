@@ -1,10 +1,15 @@
-class WillsController < AuthenticatedController
-  def new
-    @vault_entry = VaultEntryBuilder.new.build
-    @vault_entry.vault_entry_contacts.build
-    @vault_entry.vault_entry_beneficiaries.build
+class WillsController < WtlBaseController
+  def set_group
+    @group = "Will"
   end
   
-  def details
+  def set_ret_url
+    session[:ret_url] = "/wills/details/#{current_wtl}"
+  end
+  
+  private
+  
+  def current_wtl
+    params[:will]
   end
 end

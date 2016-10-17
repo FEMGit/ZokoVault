@@ -114,9 +114,11 @@
         <td><%= document.updated_at %></td>
         <td>tags</td>
         <td>
-          <span class="user-circle">AK</span>
-          <span class="user-circle">BM</span>
-          <span class="user-circle">MB</span>
+          <% document.shares.each do |share| %>
+            <% if !share.contact.nil? %>
+              <span class="user-circle"><%= share.contact.initials %></span>
+            <% end %>
+          <% end %>
         </td>
         <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

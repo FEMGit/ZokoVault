@@ -11,6 +11,9 @@ class ContactsController < AuthenticatedController
   # GET /contacts/1
   # GET /contacts/1.json
   def show
+    @contact_documents = get_contact_share_documents
+    ventries = get_primary_contact_documents
+    session[:ret_url] = "/contacts/#{@contact.id}"
   end
 
   # GET /contacts/new
@@ -68,7 +71,15 @@ class ContactsController < AuthenticatedController
     def set_contact
       @contact = Contact.find(params[:id])
     end
-
+  
+    def get_contact_share_documents
+      Document.for_user(current_user).select{|doc| doc.shares.any?{|sh| sh.contact_id == @contact.id}}
+    end
+  
+    def get_primary_contact_documents
+      Document.for_user(current_user).select{|doc| doc.shares.any?{|sh| sh.contact_id == @contact.id}}
+    end
+  
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
       params.require(:contact).permit(:firstname, :lastname, :emailaddress, :phone, :contact_type, :relationship, :beneficiarytype, :ssn, :birthdate, :address, :zipcode, :city,

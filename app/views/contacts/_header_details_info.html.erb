@@ -1,0 +1,107 @@
+<div class="contact-header-info">
+  <div id="left-contact-info">
+    <div class="contact-element">
+      <span class="contact-element-name">Category</span>
+      <span class="contact-element-value"><%= @contact.contact_type %></span>
+    </div>
+
+    <div class="contact-element">
+      <span class="contact-element-name">Relationship</span>
+      <span class="contact-element-value"><%= @contact.relationship %></span>
+    </div>
+    <% if @contact.personal_relationship? %>
+      <div class="contact-element">
+        <span class="contact-element-name">Beneficiary Type</span>
+        <span class="contact-element-value"><%= @contact.beneficiarytype %></span>
+      </div>
+      
+      <div class="contact-element">
+          <span class="contact-element-name">SSN</span>
+          <span class="contact-element-value"><%= @contact.ssn %></span>
+      </div>
+    
+      <div class="contact-element">
+          <span class="contact-element-name">Date of Birth</span>
+          <span class="contact-element-value"><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></span>
+      </div>
+    <% end %>
+    <% if @contact.professional_relationship? %>
+      <div class="contact-element">
+        <span class="contact-element-name">Business Name</span>
+        <span class="contact-element-value"><%= @contact.businessname %></span>
+      </div>
+
+      <div class="contact-element">
+        <span class="contact-element-name">Business Web Address</span>
+        <span class="contact-element-value"><%= @contact.businesswebaddress %></span>
+      </div>
+      <div class="contact-element">
+        <span class="contact-element-name">Business Phone</span>
+        <span class="contact-element-value"><%= @contact.businessphone %></span>
+      </div>
+
+      <div class="contact-element">
+        <span class="contact-element-name">Fax</span>
+        <span class="contact-element-value"><%= @contact.businessfax %></span>
+      </div>
+    <% end %>
+    <div class="contact-element notes">
+      <span class="contact-element-name">Notes</span>
+      <span class="contact-element-value"><%= @contact.notes %></span>
+    </div>
+  </div>
+  
+  <div id="right-contact-info">
+    <div class="contact-element">
+      <span class="contact-element-name">Email</span>
+      <span class="contact-element-value"><%= @contact.emailaddress %></span>
+    </div>
+
+    <div class="contact-element">
+      <span class="contact-element-name">Phone</span>
+      <span class="contact-element-value"><%= @contact.phone %></span>
+    </div>
+    
+    <% if @contact.personal_relationship? %>
+      <div class="contact-element">
+        <span class="contact-element-name">Street Address</span>
+        <span class="contact-element-value"><%= @contact.address %><br/>
+      </div>
+    <% end %>
+
+    <% if @contact.professional_relationship? %>
+      <div class="contact-element">
+        <span class="contact-element-name">Business Street Address</span>
+        <span class="contact-element-value">
+            <%= @contact.business_street_address_1 %><br>
+            <%= @contact.business_street_address_2 %><br>
+        </span>
+      </div>
+    <% end %>
+    
+    <div class="contact-element">
+      <span class="contact-element-name">City</span>
+      <span class="contact-element-value"><%= @contact.city%></span>
+    </div>
+      
+    <div class="contact-element">
+      <span class="contact-element-name">State</span>
+      <span class="contact-element-value"><%= @contact.state%></span>
+    </div>
+      
+    <div class="contact-element">
+      <span class="contact-element-name">Zip</span>
+      <span class="contact-element-value"><%= @contact.zipcode%></span>
+    </div>
+    
+    <div class="contact-element">
+      <span class="contact-element-name">Avatar color</span>
+      <span class="contact-element-value"><%= @contact.avatarcolor%></span>
+    </div>
+    
+    <div class="contact-element">
+      <span class="contact-element-name">Photo url</span>
+      <span class="contact-element-value"><%= @contact.photourl%></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="contact-element-title">
+  <h1 class="contact-user-name">Contact Documents</h1>
+  <a class="add-link fr" href="<%= new_document_path(:share_with => @contact.name) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+</div>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+    <th>Shared With</th>
+    <th></th>
+  </tr>
+  <% @contact_documents && @contact_documents.each do |document| %>
+    <tr>
+      <td class="document-name">
+        <a><%= link_to document.name, document_path(document) %></a>
+      </td>
+       <td><%= date_format(document.updated_at) %> </td>
+      <td class="document-tags">
+        <span class="doc-tag">Contact</span>
+        <span class="doc-tag secondary-tag"><%= @contact.name %></span>
+      </td>
+      <td> 
+        <% share_with = document.shares.map{|sh| sh.contact}.uniq %>
+        <% share_with[0...3].each do |contact| %>
+          <span class="user-circle"><%= contact.initials %></span>
+        <% end %>
+        <% if share_with.length > 2 %>
+          <span>...</span>
+        <% end %>
+      </td>
+      <td class="share-col">
+        <%= link_to 'Share', edit_document_path(document), class: "outline-button small-button" %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="contact-element-title">
+  <h1 class="contact-user-name">Shared With Contact</h1>
+</div>
+<table class="share-with-contact">
+  <tr>
+  <col align="left">
+  <col align="left">
+  <col align="right">
+    <th>Name</th>
+    <th>Asset Type</th>
+    <th>Tags</th>
+  </tr>
+  <% @contact_documents && @contact_documents.each do |document| %>
+    <tr>
+      <td class="document-name-big">
+        <a><%= link_to document.name, document_path(document) %></a>
+      </td>
+      <td>
+        <%= document_group(document) %>
+      </td>
+      <td class="contact-tag-right">
+        <span class="doc-tag">Contact</span>
+        <span class="doc-tag secondary-tag"><%= @contact.name %></span>
+      </td>
+    </tr>
+  <% end %>
+</table>

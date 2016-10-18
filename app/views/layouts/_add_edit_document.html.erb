@@ -43,7 +43,7 @@
                   "Web Accounts"] %>
               <%= f.collection_select :category, 
                 options.prepend("Select..."), :to_s, :to_s, {}, 
-                { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, selected: '0' }
+                { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false }
               %>
           </div>
         </div>
@@ -96,6 +96,8 @@
 <% end %>
 
 <script>
+
+  
   var fileToPage = function(evt){
     filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
     var documentNameField = document.getElementById("document_name");

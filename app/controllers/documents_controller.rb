@@ -88,7 +88,11 @@ class DocumentsController < AuthenticatedController
   end
 
   def return_url?
-    %w[/insurance /documents /estate_planning].include? session[:ret_url]
+    if session[:ret_url]
+      %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)}
+    else
+      nil
+    end
   end
   
   def current_document_id

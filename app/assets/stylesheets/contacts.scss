@@ -45,10 +45,19 @@ $common-font-size: 10px;
 	display: inline; 
 }
 
-.contact-header-info {
+.contact-header-info, .contact-body-info {
 	height: 30em;
 	overflow: hidden;
 	text-align: justify;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid  $color-gray-light-shaded;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor:pointer;
+  word-wrap: break-word;
+  height: auto;
+  margin-bottom: 30px;
 }
 
 .contact-element-value {
@@ -94,10 +103,33 @@ $common-font-size: 10px;
 }
 
 table {
+  table-layout: auto;
+  td {
+    white-space: nowrap;
+  }
   td.details-col {
-    width: 1%;
     & > a {
       text-decoration: none;
     }
+  }
+  td:last-child {
+    width: 1%;
+  }
+}
+
+table.share-with-contact {
+  table-layout: auto;
+  td {
+    white-space: nowrap;
+  }
+  width: 100%;
+  td.document-name-big {
+    width: 60%;
+  }
+  td.contact-tag-right {
+    text-align: right;
+  }
+  td:last-child {
+    width: 10%;
   }
 }

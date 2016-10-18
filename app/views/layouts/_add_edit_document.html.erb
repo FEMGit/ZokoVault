@@ -32,17 +32,8 @@
         <div class="edit-document-field">
           <label>Category</label><br>
           <div class="chosen-styled-select">
-            <% options = [
-                  "Contact",
-                  "Financial Information",
-                  "Wills - Trusts - Legal",
-                  "Insurance",
-                  "Taxes",
-                  "Healthcare Choices",
-                  "Final Wishes",
-                  "Web Accounts"] %>
               <%= f.collection_select :category, 
-                options.prepend("Select..."), :to_s, :to_s, {}, 
+                CategoryDropdownOptions::CATEGORIES, :to_s, :to_s, {}, 
                 { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false }
               %>
           </div>

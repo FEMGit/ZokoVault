@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
   resources :documents
+  get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
 
   resource :account, only: [:update, :show] do
     collection do

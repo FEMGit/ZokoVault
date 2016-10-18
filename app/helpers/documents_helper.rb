@@ -12,6 +12,7 @@ module DocumentsHelper
   def document_group(document)
     asset_group(document.group) || asset_group(document.category) || 'Document'
   end
+
   private 
     def asset_group(asset)
       if @@empty_document_group.any? {|doc| asset.start_with? doc} 

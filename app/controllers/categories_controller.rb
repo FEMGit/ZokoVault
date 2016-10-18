@@ -6,7 +6,7 @@ class CategoriesController < AuthenticatedController
   end
 
   def insurance
-    @category = "insurance" #TODO: fix bug in padding out groups if missing
+    @category = "Insurance" #TODO: fix bug in padding out groups if missing
     @groups = Rails.configuration.x.categories[@category]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category)

@@ -11,6 +11,8 @@ class DocumentsController < AuthenticatedController
 
   def new
     @document = Document.new(base_params.slice(:category, :group))
+    documents_helper = DocumentService.new(:category => @document.category);
+    @cards = documents_helper.get_card_values
   end
 
   def edit
@@ -66,11 +68,19 @@ class DocumentsController < AuthenticatedController
       format.json { head :no_content }
     end
   end
+  
+  def get_drop_down_options
+    category = params[:category]
+    documents_helper = DocumentService.new(:category => params[:category]);
+    render :json => documents_helper.get_card_values
+  end
 
   private
 
   def set_document
     @document = Document.for_user(current_user).find(params[:id])
+    documents_helper = DocumentService.new(:category => @document.category);
+    @cards = documents_helper.get_card_values
   end
 
   def base_params

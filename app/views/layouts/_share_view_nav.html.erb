@@ -1,0 +1,23 @@
+<nav class="primary-nav">
+
+  <a id="close-mobile-app-menu" class="main-nav close-primary-nav">
+    Close Menu
+    <svg class="icon close-icon fr">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+
+  <a class="main-nav <%= 'active' if current_page?(root_url) %>"
+    href="/">
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-dashboard"></use>
+    </svg>Dashboard
+  </a>
+    <% estate_planning = 'active' if current_page?(estate_planning_url) %>
+    <%= link_to '', class: "main-nav #{estate_planning}" do %>
+    <%= link_to '', class: "main-nav #{estate_planning}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Wills Trusts &amp; Legal
+    <% end %>
+</nav>

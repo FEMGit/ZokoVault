@@ -1,8 +1,11 @@
 class CategoriesController < AuthenticatedController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
-
+  layout "shared_view", only: [:shared_view_dashboard]
   def index
     @categories = Category.for_user(current_user)
+  end
+  
+  def shared_view_dashboard
   end
 
   def insurance

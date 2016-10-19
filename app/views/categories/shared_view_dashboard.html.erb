@@ -1,0 +1,53 @@
+<% documents = [
+  {name: 'Bruno & Bruna Mars Living Will.pdf', modified: '8/25/2016', tags: ['W-T-L', 'Wills & Gifts']},
+  {name: 'Gift Distributions.pdf', modified: '8/25/2016', tags: ['W-T-L', 'Wills & Gifts']},
+  {name: 'Bruno Mars Power of Attorney.pdf', modified: '7/12/2016', tags: ['W-T-L', 'Power of Attorney']},
+  {name: 'Scottrade.pdf', modified: '5/02/2016', tags: ['W-T-L', 'Trusts']}
+  ]
+  %>
+
+<h2>Dashboard</h2>
+<table class="shared-view-dashboard">
+  <tr>
+    <td>
+      <svg class="icon dashboard-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>
+      <h5 class="category-title">Wills - Trusts - Legal</h5>
+      <%= link_to 'View Category', '', class: 'view-category' %>
+    </td>
+  </tr>
+    <tr>
+    <td>
+      <span>Wills & Gifts</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span>Power of Attorney</span>
+    </td>
+  </tr>
+
+</table>
+
+
+<h2>Documents</h2>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+  </tr>
+  <% documents.each do |document| %>
+    <tr>
+      <td>
+        <a><%= link_to document[:name], '' %></a>
+      </td>
+      <td><%= document[:modified] %></td>
+      <td>
+        <span class="doc-tag"><%= document[:tags][0] %></span>
+        <span class="doc-tag secondary-tag"><%= document[:tags][1] %></span>
+      </td>
+    </tr>
+  <% end %>
+</table>

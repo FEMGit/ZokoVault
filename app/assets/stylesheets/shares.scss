@@ -1,3 +1,40 @@
 // Place all the styles related to the shares controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$banner-height: 40px;
+$left-nav-margin-top: 10px;
+
+#header-wrap {
+  font-family: Open Sans, serif;
+  background: $color-primary;
+  position: fixed;
+  width: 100%;
+  height: $banner-height;
+  z-index: 1000;
+  .bold-title {
+    width: 100%;
+  }
+  .exit-button {
+    padding: 2px 8px;
+    float: right;
+  }
+  .bold-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: black;
+  } 
+  .title {
+    margin: 7px 15px;
+    .user-name {
+      font-size: 18px;
+      font-weight: 400;
+    }
+  }
+}
+
+.header-inner.shared-view {
+  margin-top: $banner-height;
+}
+.primary-nav.share-with {
+  margin-top: $banner-height - $left-nav-margin-top;
+}

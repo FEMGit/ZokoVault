@@ -39,9 +39,10 @@ Rails.application.routes.draw do
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
   get 'shared' => 'categories#shared'
+  get 'shared_view' => 'categories#shared_view_dashboard'
   get 'taxes' => 'categories#taxes'
   get 'web_accounts' => 'categories#web_accounts'
-
+  
   get 'shares/new/:document' => 'shares#new'
 
   resources :users, only: [:index, :destroy]

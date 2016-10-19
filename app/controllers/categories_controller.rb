@@ -19,7 +19,11 @@ class CategoriesController < AuthenticatedController
   
   def estate_planning
     @category = "Wills - Trusts - Legal"
-    @vault_entries = VaultEntry.for_user(current_user)
+
+    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
+    @trusts = Trust.for_user(current_user)
+    @wills = Will.for_user(current_user)
+    @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
     vault_documents = @vault_entries.map(&:document)
     @wtl_documents = get_not_assigned_documents(vault_documents)
     session[:ret_url] = "/estate_planning"
@@ -95,6 +99,6 @@ class CategoriesController < AuthenticatedController
   
   def get_not_assigned_documents(vault_documents)
     Document.for_user(current_user).where(category: @category)
-            .where.not(id: vault_documents.map(&:id))
+            .where.not(id: vault_documents.compact.map(&:id))
   end
 end

@@ -5,7 +5,7 @@ class Share < ActiveRecord::Base
   belongs_to :contact
   belongs_to :vault_entry
 
-  validates :document_id, presence: true
+  # validates :document_id, presence: true XXX: Does this need validation?
   validates :contact_id, presence: true
   validates :user_id, presence: true
 end

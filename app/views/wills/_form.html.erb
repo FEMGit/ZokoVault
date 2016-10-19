@@ -1,57 +1,54 @@
-<% @contacts = Contact.for_user(current_user) %>
-<%= form_for(@vault_entry) do |f| %>
-  <div class="wtl-body-content">
-    <div class="field">
-      <label>Executor</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :executor_id, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Primary Beneficiaries</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :primary_beneficiary_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Secondary Beneficiaries</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :secondary_beneficiary_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Attorney, Accountant or Advisor(s)</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :agent_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
+<%= @vault_entry.class %> <div class="wtl-body-content">
+  <div class="field">
+    <label>Executor</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :executor_id, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false }
+      %>
+  </div>
+  </div>
+  <div class="field">
+    <label>Primary Beneficiaries</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :primary_beneficiary_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+  </div>
+  <div class="field">
+    <label>Secondary Beneficiaries</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :secondary_beneficiary_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+  </div>
+  <div class="field">
+    <label>Attorney, Accountant or Advisor(s)</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :agent_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+  </div>
 
-    <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-      <label>Shared With</label>
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :share_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
+  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+    <label>Shared With</label>
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
     </div>
   </div>
-<% end %>
+</div>

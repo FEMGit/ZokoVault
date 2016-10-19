@@ -8,15 +8,16 @@ class ShareService
   end
   
   def fill_document_share
-    #remove empty values if is't inside
-    if(@contact_ids)
-      @contact_ids.reject!{|x| x.empty?}
-      hash = Hash.new
-      @contact_ids.each_with_index {|contact_id, index| hash.merge!({index => {"user_id" => @user_id, "contact_id" => contact_id}}) }
-      hash
-    else
-      Hash.new
+    # remove empty values if is't inside
+    doc_shares = {}
+    if @contact_ids
+      @contact_ids.reject!(&:empty?)
+      @contact_ids.each_with_index do |contact_id, index| 
+        doc_shares[index] = { "user_id" => @user_id, "contact_id" => contact_id }
+      end
     end
+
+    doc_shares
   end
   
   def clear_shares(document)

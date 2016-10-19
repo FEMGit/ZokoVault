@@ -4,5 +4,5 @@ class VaultEntryBeneficiary < ActiveRecord::Base
   enum type: [:primary, :secondary]
 
   belongs_to :contact
-  belongs_to :vault_entry
+  belongs_to :will
 end

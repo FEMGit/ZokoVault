@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get 'attorneys/new'
-  get 'trusts/new'
-
   resources :relationships
   resources :vendor_accounts
   resources :vendors
@@ -53,8 +50,8 @@ Rails.application.routes.draw do
   resources :trusts
   get 'trusts/details/:trust', to: 'trusts#details', as: :details_trust
 
-  resources :attorneys
-  get 'attorneys/details/:attorney', to: 'attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
+  resources :power_of_attorneys
+  get 'power_of_attorneys/details/:power_of_attorney', to: 'power_of_attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
 
   resources :categories
 

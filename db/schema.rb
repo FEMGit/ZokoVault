@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160925025219) do
+ActiveRecord::Schema.define(version: 20161018055203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "contacts", force: :cascade do |t|
     t.string   "firstname"
@@ -86,6 +87,15 @@ ActiveRecord::Schema.define(version: 20160925025219) do
 
   add_index "multifactor_phone_codes", ["user_id"], name: "index_multifactor_phone_codes_on_user_id", using: :btree
 
+  create_table "power_of_attorneys", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "power_of_attorney_id"
+    t.hstore   "powers"
+    t.integer  "user_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.string   "name"
     t.string   "type"
@@ -100,10 +110,20 @@ ActiveRecord::Schema.define(version: 20160925025219) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "user_id"
-    t.integer  "vault_entry_id"
+    t.integer  "shareable_id"
+    t.string   "shareable_type"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "trusts", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "executor_id"
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "uploads", force: :cascade do |t|
     t.string  "name"
@@ -163,39 +183,31 @@ ActiveRecord::Schema.define(version: 20160925025219) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
-  create_table "vault_entries", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "document_id"
-    t.integer  "executor_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "vault_entry_beneficiaries", force: :cascade do |t|
-    t.integer  "vault_entry_id"
+    t.integer  "will_id"
     t.boolean  "active"
     t.decimal  "percentage"
     t.integer  "type"
     t.integer  "contact_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "vault_entry_beneficiaries", ["contact_id"], name: "index_vault_entry_beneficiaries_on_contact_id", using: :btree
-  add_index "vault_entry_beneficiaries", ["vault_entry_id"], name: "index_vault_entry_beneficiaries_on_vault_entry_id", using: :btree
+  add_index "vault_entry_beneficiaries", ["will_id"], name: "index_vault_entry_beneficiaries_on_will_id", using: :btree
 
   create_table "vault_entry_contacts", force: :cascade do |t|
-    t.integer  "vault_entry_id"
     t.integer  "type"
-    t.boolean  "active",         default: true
+    t.boolean  "active",           default: true
     t.integer  "contact_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "contactable_id"
+    t.string   "contactable_type"
   end
 
   add_index "vault_entry_contacts", ["contact_id"], name: "index_vault_entry_contacts_on_contact_id", using: :btree
   add_index "vault_entry_contacts", ["type"], name: "index_vault_entry_contacts_on_type", using: :btree
-  add_index "vault_entry_contacts", ["vault_entry_id"], name: "index_vault_entry_contacts_on_vault_entry_id", using: :btree
 
   create_table "vault_files", force: :cascade do |t|
     t.string "name"
@@ -230,13 +242,19 @@ ActiveRecord::Schema.define(version: 20160925025219) do
   add_index "vendors", ["contact_id"], name: "index_vendors_on_contact_id", using: :btree
   add_index "vendors", ["user_id"], name: "index_vendors_on_user_id", using: :btree
 
+  create_table "wills", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "executor_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
-  add_foreign_key "vault_entry_beneficiaries", "vault_entries", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
-  add_foreign_key "vault_entry_contacts", "vault_entries", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"
   add_foreign_key "vendors", "contacts"
   add_foreign_key "vendors", "users"

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TrustsController, type: :controller do
+RSpec.describe PowerOfAttorneysController, type: :controller do
 
   let(:contacts) { Array.new(3) { create(:contact, user_id: user.id) } }
   let(:document) { create(:document) }
@@ -8,11 +8,8 @@ RSpec.describe TrustsController, type: :controller do
 
   let(:valid_attributes) do
     {
-      name: "Foo #{rand(1E6)}",
       user_id: user.id,
-      trustee_ids: contacts.first(2).map(&:id),
-      successor_trustee_ids: contacts.last(1).map(&:id),
-      executor_id: contacts[1].id,
+      powers: Hash[PowerOfAttorney::POWERS.sample(3).zip([true,true,true])],
       agent_ids: contacts.map(&:id),
       share_ids: contacts.map(&:id),
       document_id: document.id
@@ -20,7 +17,7 @@ RSpec.describe TrustsController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    { user_id: user.id }
+    { user_id: nil }
   end
 
   before { sign_in user }
@@ -29,14 +26,14 @@ RSpec.describe TrustsController, type: :controller do
 
   describe "GET #details" do
     it "returns http success" do
-      get :details, trust: 1
+      get :details, power_of_attorney: 1
       expect(response).to have_http_status(:success)
     end
   end
 
   xdescribe "GET #index" do
     it "assigns all vault_entries as @vault_entries" do
-      vault_entry = Trust.create! valid_attributes
+      vault_entry = PowerOfAttorney.create! valid_attributes
       get :index, {}, session: valid_session
       expect(assigns(:vault_entries)).to eq([vault_entry])
     end
@@ -44,7 +41,7 @@ RSpec.describe TrustsController, type: :controller do
 
   xdescribe "GET #show" do
     it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = Trust.create! valid_attributes
+      vault_entry = PowerOfAttorney.create! valid_attributes
       get :show, { id: vault_entry.to_param }, session: valid_session
       expect(assigns(:vault_entry)).to eq(vault_entry)
     end
@@ -53,13 +50,13 @@ RSpec.describe TrustsController, type: :controller do
   describe "GET #new" do
     it "assigns a new vault_entry as @vault_entry" do
       get :new, {}, session: valid_session
-      expect(assigns(:vault_entry)).to be_a_new(Trust)
+      expect(assigns(:vault_entry)).to be_a_new(PowerOfAttorney)
     end
   end
 
   xdescribe "GET #edit" do
     it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = Trust.create! valid_attributes
+      vault_entry = PowerOfAttorney.create! valid_attributes
       get :edit, { id: vault_entry.to_param }, session: valid_session
       expect(assigns(:vault_entry)).to eq(vault_entry)
     end
@@ -67,36 +64,29 @@ RSpec.describe TrustsController, type: :controller do
 
   describe "POST #create" do
     context "with invalid params" do
-      it "redirects to the created vault_entry" do
-        post :create, { trust: invalid_attributes }, session: valid_session
+      it "redirects to new" do
+        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
         expect(response).to render_template(:new)
       end
     end
 
     context "with valid params" do
-      it "creates a new Trust" do 
-        expect { post :create, { trust: valid_attributes }, session: valid_session }
-          .to change(Trust, :count).by(1)
+      it "creates a new PowerOfAttorney" do 
+        post :create, { power_of_attorney: valid_attributes }, session: valid_session 
+        expect { post :create, { power_of_attorney: valid_attributes }, session: valid_session }
+          .to change(PowerOfAttorney, :count).by(1)
       end
 
       context "with attributes" do
         let(:vault_entry) { assigns(:vault_entry) }
 
         before do
-          post :create, trust: valid_attributes, session: valid_session
+          post :create, power_of_attorney: valid_attributes, session: valid_session
         end
 
         it "assigns a newly created vault_entry as @vault_entry" do
-          expect(vault_entry).to be_a(Trust)
+          expect(vault_entry).to be_a(PowerOfAttorney)
           expect(vault_entry).to be_persisted
-        end
-
-        it "assigns trustees" do
-          expect(vault_entry.trustees).to eq contacts.first(2)
-        end
-
-        it "assigns successor trustees" do
-          expect(vault_entry.successor_trustees).to eq contacts.last(1)
         end
 
         it "assigns agents" do
@@ -117,19 +107,19 @@ RSpec.describe TrustsController, type: :controller do
       end
 
       it "redirects to the created vault_entry" do
-        post :create, { trust: valid_attributes }, session: valid_session
+        post :create, { power_of_attorney: valid_attributes }, session: valid_session
         expect(response).to redirect_to(estate_planning_path)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
-        post :create, { trust: invalid_attributes }, session: valid_session
-        expect(assigns(:vault_entry)).to be_a_new(Trust)
+        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
+        expect(assigns(:vault_entry)).to be_a_new(PowerOfAttorney)
       end
 
       it "re-renders the 'new' template" do
-        post :create, { trust: invalid_attributes }, session: valid_session
+        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -142,35 +132,35 @@ RSpec.describe TrustsController, type: :controller do
       end
 
       it "updates the requested vault_entry" do
-        vault_entry = Trust.create! valid_attributes
-        put :update, { id: vault_entry.to_param, trust: new_attributes }, session: valid_session
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: new_attributes }, session: valid_session
         vault_entry.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested vault_entry as @vault_entry" do
-        vault_entry = Trust.create! valid_attributes
-        put :update, { id: vault_entry.to_param, trust: valid_attributes }, session: valid_session
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: valid_attributes }, session: valid_session
         expect(assigns(:vault_entry)).to eq(vault_entry)
       end
 
       it "redirects to the vault_entry" do
-        vault_entry = Trust.create! valid_attributes
-        put :update, { id: vault_entry.to_param, trust: valid_attributes }, session: valid_session
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: valid_attributes }, session: valid_session
         expect(response).to redirect_to(vault_entry)
       end
     end
 
     context "with invalid params" do
       it "assigns the vault_entry as @vault_entry" do
-        vault_entry = Trust.create! valid_attributes
-        put :update, { id: vault_entry.to_param, trust: invalid_attributes }, session: valid_session
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: invalid_attributes }, session: valid_session
         expect(assigns(:vault_entry)).to eq(vault_entry)
       end
 
       it "re-renders the 'edit' template" do
-        vault_entry = Trust.create! valid_attributes
-        put :update, { id: vault_entry.to_param, trust: invalid_attributes }, session: valid_session
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: invalid_attributes }, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -178,13 +168,13 @@ RSpec.describe TrustsController, type: :controller do
 
   xdescribe "DELETE #destroy" do
     it "destroys the requested vault_entry" do
-      vault_entry = Trust.create! valid_attributes
+      vault_entry = PowerOfAttorney.create! valid_attributes
       expect { delete :destroy, { id: vault_entry.to_param }, session: valid_session }
-        .to change(Trust, :count).by(-1)
+        .to change(PowerOfAttorney, :count).by(-1)
     end
 
     it "redirects to the vault_entries list" do
-      vault_entry = Trust.create! valid_attributes
+      vault_entry = PowerOfAttorney.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
       expect(response).to redirect_to(vault_entries_url)
     end

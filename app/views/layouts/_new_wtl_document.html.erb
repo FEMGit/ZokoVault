@@ -19,9 +19,22 @@
 </div>
 
 <body>
+
+  <% if @vault_entry.errors.any? %>
+    <div>
+      Errors:
+      <ul>
+        <% @vault_entry.errors.full_messages.each do |message| %>
+          <li><%= message %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_for(@vault_entry) do |f| %>
   <div id="wtl-forms">
     <div id="wtl-form-1">
-      <%= render yield(:partial_path) %>
+      <%= render yield(:partial_path), f: f %>
     </div>
   </div>
 </body>
@@ -36,10 +49,10 @@
 </div>
 
 <div class="wtl-btn-group">
-  <%= link_to "Save", '#',
-    class: "button primary-button big-button" %>
+  <%= f.submit "Save", class: "button primary-button big-button" %>
   <%= link_to 'Cancel', '#', class: "button secondary-button big-button"%>
 </div>
+<% end %>
 
 <script>
   addNewField = function(){

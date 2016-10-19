@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Power Of Attorneys</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @power_of_attorneys.each do |power_of_attorney| %>
+      <tr>
+        <td><%= link_to 'Show', power_of_attorney %></td>
+        <td><%= link_to 'Edit', edit_power_of_attorney_path(power_of_attorney) %></td>
+        <td><%= link_to 'Destroy', power_of_attorney, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Power of attorney', new_power_of_attorney_path %>

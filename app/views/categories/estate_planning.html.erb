@@ -13,7 +13,21 @@
   <div class="flex-column">
     <div class="card cg-1 column-card">
       <h3>Wills</h3>
-      <span class="percent-complete">0% Complete</span>
+      <% if @wills.any? %>
+        <% @wills.each do |will| %>
+          <div>
+            <% will.primary_beneficiaries.each do |primary| %>
+              <%= primary.name %> [primary]<br/>
+            <% end %>
+
+            <% will.secondary_beneficiaries.each do |secondary| %>
+              <%= secondary.name %> [secondary]<br/>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <span class="percent-complete">0% Complete</span>
+      <% end %>
       <%= link_to 'Add Details', new_will_path, class: "add-details-link" %>
       <span class="clear"></span>
     </div>
@@ -29,7 +43,15 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <h3>Trusts</h3>
-      <span class="percent-complete">0% Complete</span>
+      <% if @trust.any? %>
+        <% @trusts.each do |trust| %>
+          <div>
+            <%= trust.name %>
+          </div>
+        <% end %>
+      <% else %>
+        <span class="percent-complete">0% Complete</span>
+      <% end %>
       <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
     </div>
     <%= link_to details_trust_path(1), :class => "undo-link-style" do %>
@@ -43,8 +65,17 @@
   <div class="flex-column">
     <div class="card cg-3 column-card">
       <h3>Power of Attorney</h3>
-      <span class="percent-complete">0% Complete</span>
-      <%= link_to 'Add Details', new_attorney_path, class: "add-details-link" %>
+      <% if @power_of_attorneys.any? %>
+        <% @power_of_attorneys.each do |power_of_attorney| %>
+          <div>
+            <b><%= power_of_attorney.agents.map(&:name).join(", ") %></b><br>
+            <%= power_of_attorney.powers.keys.join(",") %>
+          </div>
+        <% end %>
+      <% else %>
+        <span class="percent-complete">0% Complete</span>
+      <% end %>
+      <%= link_to 'Add Details', new_power_of_attorney_path, class: "add-details-link" %>
     </div>
 
     <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>

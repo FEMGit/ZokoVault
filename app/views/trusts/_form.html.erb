@@ -1,10 +1,8 @@
-<% @contacts = Contact.for_user(current_user) %>
-<%= form_for(@vault_entry) do |f| %>
   <div class="wtl-body-content">
     <div class="field">
       <label>Trust Name<span class="wtl-required-field"> Required</span></label>
       <div class="styled-text-input">
-        <input type = "text" />
+        <%= f.text_field :name %>
       </div>
     </div>
     <div class="field">
@@ -28,7 +26,7 @@
     <div class="field">
       <label>Successor Trustee(s)</label>
       <div class="chosen-styled-select">
-        <%= f.collection_select :succeeded_trustee_ids, 
+        <%= f.collection_select :successor_trustee_ids, 
           @contacts, :id, :name, {}, 
           { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
         %>
@@ -50,4 +48,3 @@
       </div>
     </div>
   </div>
-<% end %>

@@ -63,10 +63,11 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'dotenv-rails'
 end
-
-# Twilio 
+# Twilio
 gem 'twilio-ruby', '~> 4.11.1'
 
+# public pages
+gem 'high_voltage', '~> 3.0'
 
 group :test do
   gem 'webmock'

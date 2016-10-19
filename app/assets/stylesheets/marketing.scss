@@ -258,3 +258,37 @@ body.logged-out{
     padding: 0 20px;
   }
 }
+
+//SECURITY
+.security-1{
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
+              transparent asset-data-url('marketing/hero-01.jpg') center top;
+  background-size: cover;
+  height: 250px;
+  text-align: center;
+
+  @include media($mobile) {
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    padding-top: 70px;
+    max-width: 500px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+  }
+}
+.generic{
+  background: white;
+  padding: 20px;
+
+  article{
+    margin: 0 auto;
+    max-width:1065px;
+  }
+}

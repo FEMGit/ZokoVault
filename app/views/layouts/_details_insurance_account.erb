@@ -10,16 +10,16 @@
 </div>
 <div class="card <%= @group['value'] %> details insurance">
   <div class="details-wrapper">
-    <% static_insurance_provider_data = { 'web address': ['link:www.metlife.com'], 
-          address: ['1234 Pearl Street', 'Chicago IL, 60506'],
-          phone: ['555-231-6754', '555-231-6754 fax'],
-          'primary contact': ['John Ponzleford', 'link:j.ponzleford@allstate.com', '555-231-6754']} %>
+    <% static_insurance_provider_data = { 'Web Address': ['link:www.metlife.com'],
+          Address: ['1234 Pearl Street', 'Chicago IL, 60506'],
+          Phone: ['555-231-6754', '555-231-6754 fax'],
+          'Primary Contact': ['John Ponzleford', 'link:j.ponzleford@allstate.com', '555-231-6754']} %>
 
     <div class="details-card-info details">
       <h2 class="provider-details-title">Insurance Provider Details</h2>
       <% static_insurance_provider_data.each do |field_title, field_values| %>
         <div class = "details-card-field">
-          <label class="title"><%= field_title %></label>
+          <label class=""><%= field_title %></label>
           <% field_values.each do |value| %>
             <% if value.include? 'link' %>
               <a class="details-field details-field-value"><%= value.sub!('link:', '') %></a>
@@ -30,20 +30,26 @@
         </div>
       <% end %>
     </div>
-    <div class="add-document-field details-bottom">
+    <!-- <div class="add-document-field details-bottom">
       <svg class="icon add-icon">
         <use xlink:href="#icon-add-1"></use>
       </svg>
       Add Insurance Provider Documents<br>
-    </div>
-  </div>  
+    </div> -->
+  </div>
   <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-    <span class="shared-with-block">
+    <!-- <span class="shared-with-block">
       <h2 class="shared-with-title">Shared With</h2>
       <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
       </svg>
-    </span>
+    </span> -->
+    <h3 class="card-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Shared With
+    </h3>
     <div class="details-card-info details">
       <div class="details-card-field shared">
         <label class="title">Shared With</label>

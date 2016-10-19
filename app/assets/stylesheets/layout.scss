@@ -71,8 +71,9 @@ nav.marketing-nav{
     }
 }
 a.marketing-link{
-  color: $color-primary-shaded;
+  color: $color-primary-shaded !important;
   padding: 10px;
+  text-decoration: none;
 
 }
 .close-link,
@@ -215,13 +216,15 @@ a.main-nav:hover .nav-icon{
 
 //LOGGED OUT
 main.marketing{
+
   header{
     position: fixed;
     top: 0;
     width: 100%;
   }
   .content{
-    margin-top: 60px;
+    min-height: 100%;
+    margin-top:60px;
   }
 }
 

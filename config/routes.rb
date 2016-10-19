@@ -12,7 +12,17 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root to: 'welcome#index'
+  authenticated :user do
+    root 'welcome#index', as: :authenticated_root
+  end
+
+  #root "index"
+  #root "public#index"
+
+
+  #public
+  # get "/:page" => "public#show"
+
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
   get 'styleguide' => 'welcome#styleguide'
@@ -46,7 +56,7 @@ Rails.application.routes.draw do
   get 'attorneys/details/:attorney', to: 'attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
 
   resources :categories
-  
+
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
   get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category

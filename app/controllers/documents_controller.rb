@@ -88,7 +88,10 @@ class DocumentsController < AuthenticatedController
   end
   
   def document_share_params
-    share = ShareService.new(user_id: current_user.id, contact_ids: params[:document][:contact_ids]).fill_document_share
+    share_service = ShareService.new(user_id: current_user.id, contact_ids: params[:document][:contact_ids])
+    share = share_service.fill_document_share
+    #cleare document shares before updating current document
+    share_service.clear_shares(@document)
     document_params.merge(:shares_attributes => share, :user_id => current_user.id)
   end
 

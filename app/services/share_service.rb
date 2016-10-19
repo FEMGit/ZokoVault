@@ -18,4 +18,10 @@ class ShareService
       Hash.new
     end
   end
+  
+  def clear_shares(document)
+    if document.shares.present?
+      document.shares.clear
+    end
+  end
 end

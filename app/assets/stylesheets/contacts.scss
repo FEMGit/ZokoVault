@@ -29,26 +29,26 @@ $common-font-size: 10px;
 }
 
 .contact-element-name {
-	font-family: "Helvetica Neue", sans-serif;
-	font-size: $common-font-size;
-	font-weight: bold;
-	display: block;
-	color: #696969;
-	text-transform: uppercase;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: $common-font-size;
+  font-weight: bold;
+  display: block;
+  color: #696969;
+  text-transform: uppercase;
 }
 
 .back-link {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 .contact-user-name {
-	display: inline; 
+  display: inline; 
 }
 
 .contact-header-info, .contact-body-info {
-	height: 30em;
-	overflow: hidden;
-	text-align: justify;
+  height: 30em;
+  overflow: hidden;
+  text-align: justify;
   background: white;
   border-radius: 5px;
   border: 1px solid  $color-gray-light-shaded;
@@ -61,45 +61,45 @@ $common-font-size: 10px;
 }
 
 .contact-element-value {
-	font-family: "Helvetica Neue", sans-serif;
-	font-size: 15px;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 15px;
 }
 
 .contact-element-title {
-	display: block;
-	width: 100%;
-	margin-bottom: 10px;
-	.user-circle {
-		background-color: white;
-		position: relative;
-		top: -5px;
-	}
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  .user-circle {
+    background-color: white;
+    position: relative;
+    top: -5px;
+  }
 
-	.edit-link-contact {
-		margin-top: 5px;
-		float: right;
-	}
+  .edit-link-contact {
+    margin-top: 5px;
+    float: right;
+  }
 }
 
 #left-contact-info {
-	width: 30%;
-	float: left;
-	display: inline-block;
+  width: 30%;
+  float: left;
+  display: inline-block;
 }
 
 #right-contact-info {
-	width: 70%;
-	float: left;
-	display: inline-block;
+  width: 70%;
+  float: left;
+  display: inline-block;
 }
 
 .contact-element {
-	margin-bottom: 10px;
-	display: block;
+  margin-bottom: 10px;
+  display: block;
 }
 
 .notes {
-	width: 90%;
+  width: 90%;
 }
 
 table {

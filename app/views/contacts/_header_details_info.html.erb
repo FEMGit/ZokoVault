@@ -1,107 +1,105 @@
 <div class="contact-header-info">
   <div id="left-contact-info">
     <div class="contact-element">
-      <span class="contact-element-name">Category</span>
-      <span class="contact-element-value"><%= @contact.contact_type %></span>
+      <label>Category</label>
+      <p><%= @contact.contact_type %></p>
     </div>
 
     <div class="contact-element">
-      <span class="contact-element-name">Relationship</span>
-      <span class="contact-element-value"><%= @contact.relationship %></span>
+      <label>Relationship</label>
+      <p><%= @contact.relationship %></p>
     </div>
     <% if @contact.personal_relationship? %>
       <div class="contact-element">
-        <span class="contact-element-name">Beneficiary Type</span>
-        <span class="contact-element-value"><%= @contact.beneficiarytype %></span>
+        <label>Beneficiary Type</label>
+        <p><%= @contact.beneficiarytype %></p>
       </div>
       
       <div class="contact-element">
-          <span class="contact-element-name">SSN</span>
-          <span class="contact-element-value"><%= @contact.ssn %></span>
+        <label>Social Security Number</label>
+        <p><%= @contact.ssn %></p>
       </div>
     
       <div class="contact-element">
-          <span class="contact-element-name">Date of Birth</span>
-          <span class="contact-element-value"><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></span>
+        <label>Date of Birth</label>
+        <p><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></p>
       </div>
     <% end %>
     <% if @contact.professional_relationship? %>
       <div class="contact-element">
-        <span class="contact-element-name">Business Name</span>
-        <span class="contact-element-value"><%= @contact.businessname %></span>
+        <label>Business Name</label>
+        <p><%= @contact.businessname %></p>
       </div>
 
       <div class="contact-element">
-        <span class="contact-element-name">Business Web Address</span>
-        <span class="contact-element-value"><%= @contact.businesswebaddress %></span>
+        <label>Business Web Address</label>
+        <p><%= @contact.businesswebaddress %></p>
       </div>
       <div class="contact-element">
-        <span class="contact-element-name">Business Phone</span>
-        <span class="contact-element-value"><%= @contact.businessphone %></span>
+        <label>Business Phone</label>
+        <p><%= @contact.businessphone %></p>
       </div>
 
       <div class="contact-element">
-        <span class="contact-element-name">Fax</span>
-        <span class="contact-element-value"><%= @contact.businessfax %></span>
+        <label>Fax</label>
+        <p><%= @contact.businessfax %></p>
       </div>
     <% end %>
     <div class="contact-element notes">
-      <span class="contact-element-name">Notes</span>
-      <span class="contact-element-value"><%= @contact.notes %></span>
+      <label>Notes</label>
+      <p><%= @contact.notes %></p>
     </div>
   </div>
   
   <div id="right-contact-info">
     <div class="contact-element">
-      <span class="contact-element-name">Email</span>
-      <span class="contact-element-value"><%= @contact.emailaddress %></span>
+      <label>Email</label>
+      <a><p><%= @contact.emailaddress %></p></a>
     </div>
 
     <div class="contact-element">
-      <span class="contact-element-name">Phone</span>
-      <span class="contact-element-value"><%= @contact.phone %></span>
+      <label>Phone</label>
+      <p><%= @contact.phone %></p>
     </div>
     
     <% if @contact.personal_relationship? %>
       <div class="contact-element">
-        <span class="contact-element-name">Street Address</span>
-        <span class="contact-element-value"><%= @contact.address %><br/>
+        <label>Street Address</label>
+        <p><%= @contact.address %></p>
       </div>
     <% end %>
 
     <% if @contact.professional_relationship? %>
       <div class="contact-element">
-        <span class="contact-element-name">Business Street Address</span>
-        <span class="contact-element-value">
-            <%= @contact.business_street_address_1 %><br>
-            <%= @contact.business_street_address_2 %><br>
-        </span>
+        <label>Business Street Address</label>
+        <p><%= @contact.business_street_address_1 %></p>
+        <p><%= @contact.business_street_address_2 %></p>
       </div>
     <% end %>
     
     <div class="contact-element">
-      <span class="contact-element-name">City</span>
-      <span class="contact-element-value"><%= @contact.city%></span>
+      <label>City</label>
+      <p><%= @contact.city%></p>
     </div>
       
     <div class="contact-element">
-      <span class="contact-element-name">State</span>
-      <span class="contact-element-value"><%= @contact.state%></span>
+      <label>State</label>
+      <p><%= @contact.state%></p>
     </div>
       
     <div class="contact-element">
-      <span class="contact-element-name">Zip</span>
-      <span class="contact-element-value"><%= @contact.zipcode%></span>
+      <label>Zip</label>
+      <p><%= @contact.zipcode%></p>
     </div>
     
     <div class="contact-element">
-      <span class="contact-element-name">Avatar color</span>
-      <span class="contact-element-value"><%= @contact.avatarcolor%></span>
+      <label>Avatar color</label>
+      <p><%= @contact.avatarcolor%></p>
     </div>
     
     <div class="contact-element">
-      <span class="contact-element-name">Photo url</span>
-      <span class="contact-element-value"><%= @contact.photourl%></span>
+      <label>Photo url</label>
+      <p><%= @contact.photourl%></p>
     </div>
   </div>
 </div>

@@ -15,7 +15,7 @@ module DocumentsHelper
 
   private 
     def asset_group(asset)
-      if @@empty_document_group.any? {|doc| asset.start_with? doc} 
+      if !asset || @@empty_document_group.any? {|doc| asset.start_with? doc}
         nil
       else
         asset

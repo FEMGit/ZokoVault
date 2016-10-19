@@ -61,8 +61,12 @@ button{
   margin-right: 20px;
 }
 
+input[type=submit].button {
+  width: auto;
+  display: inline-block;
+}
 
-a.button{
+a.button, input[type=submit].button{
   cursor: pointer;
   text-decoration: none;
   border:0;

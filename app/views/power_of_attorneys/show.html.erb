@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Edit', edit_power_of_attorney_path(@power_of_attorney) %> |
-<%= link_to 'Back', power_of_attorneys_path %>
+<%= content_for :title, "Legal - Power of Attorney" %>
+<%= content_for :card_details_partial_path, "attorneys/attorney_details" %>
+<%= content_for :add_document_title, "Legal" %>
+<%= render partial: "layouts/wtl_details_page" %>

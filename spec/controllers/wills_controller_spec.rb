@@ -26,13 +26,6 @@ RSpec.describe WillsController, type: :controller do
 
   let(:valid_session) { {} }
 
-  describe "GET #details" do
-    it "returns http success" do
-      get :details, :will => 1
-      expect(response).to have_http_status(:success)
-    end
-  end
-
   xdescribe "GET #index" do
     it "assigns all vault_entries as @vault_entries" do
       vault_entry = Will.create! valid_attributes

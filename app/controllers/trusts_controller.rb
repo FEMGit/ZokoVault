@@ -1,5 +1,5 @@
 class TrustsController < AuthenticatedController
-  before_action :set_trust, only: [:show, :edit, :update, :destroy]
+  before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
 
   # GET /trusts
@@ -21,6 +21,12 @@ class TrustsController < AuthenticatedController
 
   # GET /trusts/1/edit
   def edit
+  end
+  
+  def set_document_params
+    @group = "Trust"
+    @category = Rails.application.config.x.WtlCategory
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
   end
 
   # POST /trusts
@@ -71,6 +77,7 @@ class TrustsController < AuthenticatedController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_trust
+      @group_documents = Document.for_user(current_user).where(:group => @group)
       @trust = Trust.find(params[:id])
     end
 

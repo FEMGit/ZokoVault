@@ -1,5 +1,5 @@
 class PowerOfAttorneysController < ApplicationController
-  before_action :set_power_of_attorney, only: [:show, :edit, :update, :destroy]
+  before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json
@@ -20,6 +20,12 @@ class PowerOfAttorneysController < ApplicationController
 
   # GET /power_of_attorneys/1/edit
   def edit
+  end
+  
+  def set_document_params
+    @group = "Legal"
+    @category = Rails.application.config.x.WtlCategory
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
   end
 
   # POST /power_of_attorneys
@@ -61,10 +67,6 @@ class PowerOfAttorneysController < ApplicationController
       format.html { redirect_to power_of_attorneys_url, notice: 'Power of attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-
-  def set_group
-    @group = "Legal"
   end
 
   def set_ret_url

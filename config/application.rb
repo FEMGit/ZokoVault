@@ -13,9 +13,11 @@ module ZokuVault
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'services')
-
+    config.x.WtlCategory = "Wills - Trusts - Legal"
+    config.x.InsuranceCategory = "Insurance"
+    
     config.x.categories = {
-      "estate" => {
+      config.x.WtlCategory => {
         "label" => "Wills - Trusts - Legal",
         "groups" => [
           {"value" => "will",
@@ -29,7 +31,7 @@ module ZokuVault
           }
         ]
       },
-      "Insurance" => {
+      config.x.InsuranceCategory => {
         "label" => "Insurance",
         "groups" => [
           {"value" => "life",

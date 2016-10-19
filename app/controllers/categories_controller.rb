@@ -9,7 +9,7 @@ class CategoriesController < AuthenticatedController
   end
 
   def insurance
-    @category = "Insurance" #TODO: fix bug in padding out groups if missing
+    @category = Rails.application.config.x.InsuranceCategory #TODO: fix bug in padding out groups if missing
     @groups = Rails.configuration.x.categories[@category]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category)
@@ -18,8 +18,7 @@ class CategoriesController < AuthenticatedController
   
   
   def estate_planning
-    @category = "Wills - Trusts - Legal"
-
+    @category = Rails.application.config.x.WtlCategory
     @power_of_attorneys = PowerOfAttorney.for_user(current_user)
     @trusts = Trust.for_user(current_user)
     @wills = Will.for_user(current_user)
@@ -34,6 +33,7 @@ class CategoriesController < AuthenticatedController
     group_for_new_account = params[:group]
     groups = Rails.configuration.x.categories[@category]["groups"]
     @group = groups.detect { |group| group["value"] == group_for_new_account }
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group["label"])
   end
 
   def new_account

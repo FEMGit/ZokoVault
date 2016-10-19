@@ -6,6 +6,10 @@ class DocumentService
     @category = params[:category]
   end
   
+  def get_group_documents(user, group)
+    Document.for_user(user).where(:category => @category, :group => group)
+  end
+  
   def get_all_groups
     @all_groups = Rails.configuration.x.categories.collect{|category| {:label => category[1]["label"], :groups => category[1]["groups"]}}
   end

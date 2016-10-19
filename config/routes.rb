@@ -45,13 +45,13 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :destroy]
 
   resources :wills
-  get 'wills/details/:will', to: 'wills#details', as: :details_will
+  get 'wills/:will', to: 'wills#show', as: :details_will
 
   resources :trusts
-  get 'trusts/details/:trust', to: 'trusts#details', as: :details_trust
+  get 'trusts/:trust', to: 'trusts#show', as: :details_trust
 
   resources :power_of_attorneys
-  get 'power_of_attorneys/details/:power_of_attorney', to: 'power_of_attorneys#details', as: :details_attorney, :defaults => {:attorney => 1}
+  get 'power_of_attorneys/:power_of_attorney', to: 'power_of_attorneys#show', as: :details_attorney
 
   resources :categories
 

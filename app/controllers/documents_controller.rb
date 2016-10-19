@@ -96,7 +96,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids,
                                      shares_attributes: [:user_id, :contact_id])
   end
 

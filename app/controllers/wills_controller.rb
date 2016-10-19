@@ -1,5 +1,5 @@
 class WillsController < ApplicationController
-  before_action :set_will, only: [:show, :edit, :update, :destroy]
+  before_action :set_will, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
 
   # GET /wills
@@ -25,6 +25,13 @@ class WillsController < ApplicationController
   # GET /wills/1/edit
   def edit
   end
+  
+  def set_document_params
+    @group = "Will"
+    @category = Rails.application.config.x.WtlCategory
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
+  end
+
 
   # POST /wills
   # POST /wills.json

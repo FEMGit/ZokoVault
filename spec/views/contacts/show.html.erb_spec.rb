@@ -21,8 +21,8 @@ RSpec.describe "contacts/show", type: :view do
       :photourl => "Photourl",
       :businessname => "Businessname",
       :businesswebaddress => "Businesswebaddress",
-      :businessphone => "Businessphone",
-      :businessfax => "Businessfax",
+      :businessphone => "Business Phone",
+      :businessfax => "Business Fax",
       user: user
     }
   end
@@ -63,8 +63,8 @@ RSpec.describe "contacts/show", type: :view do
       render
       expect(rendered).to match(/Businessname/)
       expect(rendered).to match(/Businesswebaddress/)
-      expect(rendered).to match(/Businessphone/)
-      expect(rendered).to match(/Businessfax/)
+      expect(rendered).to match(/Business Phone/)
+      expect(rendered).to match(/Business Fax/)
     end
   end
 end

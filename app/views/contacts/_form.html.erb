@@ -53,7 +53,7 @@
         </div>
         <div class="field">
           <%= f.label :phone %><br>
-          <%= f.text_field :phone %>
+          <%= f.text_field :phone, class: "form-control", :data => {:mask => '(999) 999-9999'} %>
         </div>
 
         <div class="field">
@@ -119,11 +119,11 @@
           </div>
           <div class="field">
             <%= f.label :businessphone, 'Business Phone' %><br>
-            <%= f.text_field :businessphone %>
+            <%= f.text_field :businessphone, class: "form-control", :data => {:mask => '(999) 999-9999'}  %>
           </div>
           <div class="field">
             <%= f.label :businessfax, 'Business Fax' %><br>
-            <%= f.text_field :businessfax %>
+            <%= f.text_field :businessfax, class: "form-control", :data => {:mask => '(999) 999-9999'}  %>
           </div>
           <div class="field">
             <%= f.label :business_street_address, 'Street Address 1' %><br>

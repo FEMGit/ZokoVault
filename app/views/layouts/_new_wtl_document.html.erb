@@ -53,14 +53,15 @@
 <% end %>
 
 <script>
+  //number of new forms
+  num = 0;
   addNewField = function(){
-    var $wtlForm = $('div[id^="wtl-form"]:last');
-    var num = parseInt($wtlForm.prop("id").match(/\d+/g), 10) + 1;
-    var $newWtlForm = $wtlForm.clone().prop('id', 'wtl-form-' + num);
+    var $wtlForm = $('div[class^="wtl-body-content"]:last');
+    var $newWtlForm = $wtlForm.clone().prop('id', 'wtl-body-content-' + num++);
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);
-    $newWtlForm.appendTo('#wtl-forms');
+    $newWtlForm.appendTo('#wtl-form-1');
     $('.chosen-select').chosen();
   };
   

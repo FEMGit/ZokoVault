@@ -1,6 +1,6 @@
 class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
-
+  @after_new_user_created = ""
   def index
     @documents = Document.for_user(current_user)
     session[:ret_url] = "/documents"
@@ -16,6 +16,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def edit
+    session[:ret_url] = get_return_url_path
     @shares = @document.shares
   end
 
@@ -25,7 +26,7 @@ class DocumentsController < AuthenticatedController
       if @document.save && @document.update(document_share_params) #TODO: dynamic route builder for categories
         if is_new_contact_creating
           save_return_url_path(@document.id)
-          format.html { redirect_to new_contact_path }
+          format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
         end
         if return_url?
           format.html { redirect_to session[:ret_url], notice: 'Document was successfully created.' }
@@ -44,7 +45,7 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       if is_new_contact_creating
         save_return_url_path(current_document_id)
-        format.html { redirect_to new_contact_path }
+        format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
       end
       if @document.update(document_share_params)
         if return_url?
@@ -102,7 +103,7 @@ class DocumentsController < AuthenticatedController
 
   def return_url?
     if session[:ret_url]
-      %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)}
+      %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
     else
       nil
     end
@@ -114,11 +115,23 @@ class DocumentsController < AuthenticatedController
   
   def is_new_contact_creating
     params_to_test = params[:document][:contact_ids]
-    params_to_test && params_to_test.any? {|value| value == 'create_new_contact'}
+    is_new = params_to_test && params_to_test.any? {|value| value == 'create_new_contact'}
+    #remove 'create new contact' field from parameters
+    if is_new
+      params[:document][:contact_ids].delete_if{|value| value == 'create_new_contact'}
+    end
+    is_new
   end
 
   def save_return_url_path (document_id_to_change)
+    @after_new_user_created = session[:ret_url]
     session[:ret_url] = "/documents/" + document_id_to_change.to_s + "/edit"
+  end
+  
+  def get_return_url_path
+    url = Rails.cache.read('after_new_user_created') || session[:ret_url]
+    Rails.cache.delete('after_new_user_created')
+    url
   end
   
   def document_clean_from_create_new_user_id

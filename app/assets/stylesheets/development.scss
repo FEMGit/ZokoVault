@@ -23,6 +23,20 @@
   color: #000 !important;
 }
 
+.flex-column a.whole-card-link {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+.add-details-link {
+  position: relative;
+  z-index: 1000;
+}
+
 //
 // .doc-details {
 //     width: 50%;

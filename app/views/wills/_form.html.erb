@@ -1,54 +1,129 @@
-<div class="wtl-body-content">
-  <div class="field">
-    <label>Executor</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :executor_id, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false }
-      %>
-  </div>
-  </div>
-  <div class="field">
-    <label>Primary Beneficiaries</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :primary_beneficiary_ids, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-      %>
-  </div>
-  </div>
-  <div class="field">
-    <label>Secondary Beneficiaries</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :secondary_beneficiary_ids, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-      %>
-  </div>
-  </div>
-  <div class="field">
-    <label>Attorney, Accountant or Advisor(s)</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :agent_ids, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false }
-      %>
-  </div>
-  </div>
+<% if @wills %>
+  <% @wills.each_with_index do |will, index| %>
+    <div class="wtl-body-content">
+      <div class="field">
+        <label>Executor</label>
+        <div class="chosen-styled-select">
+          <%= f.collection_select :executor_id, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "will_executor_id_#{index}" }
+          %>
+      </div>
+      </div>
+      <div class="field">
+        <label>Primary Beneficiaries</label>
+        <div class="chosen-styled-select">
+          <%= f.collection_select :primary_beneficiary_ids, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_primary_id_#{index}" }
+          %>
+        </div>
+      </div>
+      <div class="field">
+        <label>Secondary Beneficiaries</label>
+        <div class="chosen-styled-select">
+          <%= f.collection_select :secondary_beneficiary_ids, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_secondary_id_#{index}" }
+          %>
+        </div>
+      </div>
+      <div class="field">
+        <label>Attorney, Accountant or Advisor(s)</label>
+        <div class="chosen-styled-select">
+          <%= f.collection_select :agent_ids, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_agent_id_#{index}" }
+          %>
+        </div>
+      </div>
+      <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+        <label>Shared With</label>
+        <span class="shared-with-block">
+          <h2 class="shared-with-title">Shared With</h2>
+          <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+            <use xlink:href="#icon-Safe"></use>
+          </svg>
+        </span>
+        <div class="chosen-styled-select">
+          <%= f.collection_select :share_ids, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_share_id_#{index}" }
+          %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
 
-  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-    <label>Shared With</label>
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-      %>
+<% if @wills.empty? %>
+  <div class="wtl-body-content">
+    <div class="field">
+      <label>Executor</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :executor_id, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false }
+        %>
+    </div>
+    </div>
+    <div class="field">
+      <label>Primary Beneficiaries</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :primary_beneficiary_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Secondary Beneficiaries</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :secondary_beneficiary_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Attorney, Accountant or Advisor(s)</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :agent_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
+    </div>
+
+    <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+      <label>Shared With</label>
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :share_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
+
+<script>
+$(document).ready(function(){
+  url = "new/get_wills_details";
+  $.get(url, function(data) {
+    data.forEach(function(form_values, index){
+      $("#will_executor_id_" + index).val(form_values[0]).trigger("chosen:updated");
+      $("#will_primary_id_" + index).val(form_values[1]).trigger("chosen:updated");
+      $("#will_secondary_id_" + index).val(form_values[2]).trigger("chosen:updated");
+      $("#will_agent_id_" + index).val(form_values[3]).trigger("chosen:updated");
+      $("#will_share_id_" + index).val(form_values[4]).trigger("chosen:updated");
+    });
+  });
+});
+</script>

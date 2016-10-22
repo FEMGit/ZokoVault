@@ -46,12 +46,15 @@ Rails.application.routes.draw do
 
   resources :wills
   get 'wills/:will', to: 'wills#show', as: :details_will
+  get 'wills/new/get_wills_details', to: 'wills#get_wills_details'
 
   resources :trusts
   get 'trusts/:trust', to: 'trusts#show', as: :details_trust
+  get 'trusts/new/get_trusts_details', to: 'trusts#get_trusts_details'
 
   resources :power_of_attorneys
   get 'power_of_attorneys/:power_of_attorney', to: 'power_of_attorneys#show', as: :details_attorney
+  get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   resources :categories
 

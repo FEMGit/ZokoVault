@@ -1,12 +1,13 @@
 class WillsController < ApplicationController
   before_action :set_will, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_ret_url
   before_action :set_document_params, only: [:index]
 
   # GET /wills
   # GET /wills.json
   def index
-    @wills = Will.all
+    @wills = Will.for_user(current_user)
   end
 
   # GET /wills/1
@@ -20,6 +21,7 @@ class WillsController < ApplicationController
     @vault_entry = WillBuilder.new(type: 'will').build
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
+    @wills = Will.for_user(current_user)
   end
 
   # GET /wills/1/edit
@@ -73,12 +75,17 @@ class WillsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def get_wills_details
+    render :json => WtlService.get_wills_details(Will.for_user(current_user))
+  end
+  
   def set_group
     @group = "Will"
   end
 
   def set_ret_url
-    session[:ret_url] = "/wills/details/#{current_wtl}"
+    session[:ret_url] = wills_path
   end
 
   private

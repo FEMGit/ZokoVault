@@ -12,6 +12,10 @@ module DocumentsHelper
   def document_group(document)
     asset_group(document.group) || asset_group(document.category) || 'Document'
   end
+  
+  def document_count(user, group)
+    Document.for_user(user).where(group: group).count
+  end
 
   private 
     def asset_group(asset)

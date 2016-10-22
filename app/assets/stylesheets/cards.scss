@@ -123,17 +123,19 @@ $cards-margin: 12px;
     margin-top: 25px;
     &.header {
       margin-top: 0;
+      .document-number {
+        margin-top: 7px;
+        color: $color-gray-med-shaded;
+        font-weight: 600;
+      }
+      .icon-section {
+        float: right;
+      }
       .icon-document-1 {
         font-size: 40px;
         color: $color-gray-med-shaded;
         opacity: 0.9;
-        float: right;
         position: relative;
-        .text-document {
-          float: right;
-          color: red;
-          font-size: 100px;
-       }
       }
     }
     &.top {

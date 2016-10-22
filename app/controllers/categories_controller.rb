@@ -34,6 +34,7 @@ class CategoriesController < AuthenticatedController
     groups = Rails.configuration.x.categories[@category]["groups"]
     @group = groups.detect { |group| group["value"] == group_for_new_account }
     @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group["label"])
+    session[:ret_url] = details_account_category_path(:category => @category, :group => group_for_new_account, :name => params[:name], :return => params[:return])
   end
 
   def new_account

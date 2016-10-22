@@ -1,11 +1,12 @@
 class PowerOfAttorneysController < ApplicationController
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
+  before_action :set_ret_url
   before_action :set_document_params, only: [:index]
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json
   def index
-    @power_of_attorneys = PowerOfAttorney.all
+    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
   end
 
   # GET /power_of_attorneys/1
@@ -17,6 +18,7 @@ class PowerOfAttorneysController < ApplicationController
   def new
     @vault_entry = PowerOfAttorneyBuilder.new.build
     @vault_entry.vault_entry_contacts.build
+    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
   end
 
   # GET /power_of_attorneys/1/edit
@@ -69,9 +71,13 @@ class PowerOfAttorneysController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def get_powers_of_attorney_details
+    render :json => WtlService.get_powers_of_attorney_details(PowerOfAttorney.for_user(current_user))
+  end
 
   def set_ret_url
-    session[:ret_url] = "/power_of_attorneys/details/#{current_wtl}"
+    session[:ret_url] = power_of_attorneys_path
   end
 
   def details

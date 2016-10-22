@@ -1,12 +1,13 @@
 class TrustsController < AuthenticatedController
   before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_ret_url
   before_action :set_document_params, only: [:index]
 
   # GET /trusts
   # GET /trusts.json
   def index
-    @trusts = Trust.all
+    @trusts = Trust.for_user(current_user)
   end
 
   # GET /trusts/1
@@ -18,6 +19,7 @@ class TrustsController < AuthenticatedController
   def new
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.vault_entry_contacts.build
+    @trusts = Trust.for_user(current_user)
   end
 
   # GET /trusts/1/edit
@@ -69,6 +71,14 @@ class TrustsController < AuthenticatedController
       format.html { redirect_to trusts_url, notice: 'Trust was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+  
+  def set_ret_url
+    session[:ret_url] = trusts_path
+  end
+
+  def get_trusts_details
+    render :json => WtlService.get_trusts_details(Trust.for_user(current_user))
   end
 
   private

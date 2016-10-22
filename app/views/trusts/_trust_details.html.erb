@@ -1,102 +1,64 @@
-<div class="card trusts details wtl mb-30">
-  <div class="details-wrapper wtl">
-    <div class="details-card-info details">
-      <div>
-        <h2 class="trust-title">The Mars Family Trust</h2>
-        <a class="trust-view-edit-link">View/Edit Financial Details</a>
-      </div>
-      <div class = "details-left-info">
-        <div class = "details-card-field">
-          <label class="title">Trustees</label>
-          <div class="details-field">
-            <span class="details-field-value">Bruna Mars</span>
+<% @trusts.each do |trust| %>
+  <div class="card trusts details wtl mb-30">
+    <div class="details-wrapper wtl">
+      <div class="details-card-info details">
+        <div>
+          <h2 class="trust-title"><%= trust.name %></h2>
+          <a class="trust-view-edit-link">View/Edit Financial Details</a>
+        </div>
+        <div class = "details-left-info">
+          <div class = "details-card-field">
+            <label class="title">Trustees</label>
+            <% trust.trustees.each do |trustee| %>
+              <div class="details-field">
+                <span class="details-field-value"><%= trustee.name %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class = "details-card-field">
+            <label class="title">Successor Trustees</label>
+            <% trust.successor_trustees.each do |trustee| %>
+              <div class="details-field">
+                <span class="details-field-value"><%= trustee.name %></span>
+              </div>
+            <% end %>
           </div>
         </div>
-        <div class = "details-card-field">
-          <label class="title">Successor Trustees</label>
-          <div class="details-field">
-            <span class="details-field-value">Clindy Mars</span>
-          </div>
+        <div class = "details-right-info">
+          <% trust.agents.each_with_index do |advisor, index| %>
+            <div class = "details-card-field">
+              <% if index == 0 %>
+              <label class="title">Trust Advisor</label>
+              <% end %>
+              <div class="details-field">
+                <span class="details-field details-field-value"><%= advisor.name %></span>
+                <a class="details-field details-field-value"><%= advisor.emailaddress %></a>
+                <span class="details-field details-field-value"><%= advisor.phone %></span>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
-      <div class = "details-right-info">
-        <div class = "details-card-field">
-          <label class="title">Trust Advisor</label>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="details-card-info details">
+        <div class="details-card-field shared">
+          <label class="title">Shared With</label>
           <div class="details-field">
-            <span class="details-field details-field-value">Phil Collins</span>
-            <a class="details-field details-field-value">pcollins@drums.com</a>
-            <span class="details-field details-field-value">555-231-6754</span>
+            <% trust.shares.each do |share| %>
+              <% if share.contact.present? %>
+                <span class="user-circle"><%= share.contact.initials %></span>
+              <% end %>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
-    <div class="details-card-info details">
-      <div class="details-card-field shared">
-        <label class="title">Shared With</label>
-        <div class="details-field">
-         <span class="user-circle">PC</span>
-         <span class="user-circle">BM</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card trusts details wtl mb-30">
-  <div class="details-wrapper wtl">
-    <div class="details-card-info details">
-      <div>
-        <h2 class="trust-title">The Mars Charity Trust</h2>
-        <a class="trust-view-edit-link">View/Edit Financial Details</a>
-      </div>
-      <div class = "details-left-info">
-        <div class = "details-card-field">
-          <label class="title">Trustees</label>
-          <div class="details-field">
-            <span class="details-field-value">Habitat for Humanity</span>
-          </div>
-          <div class="details-field">
-            <span class="details-field-value">The Red Cross</span>
-          </div>
-          <div class="details-field">
-            <span class="details-field-value">The Highwater Foundation</span>
-          </div>
-        </div>
-      </div>
-      <div class = "details-right-info">
-        <div class = "details-card-field">
-          <label class="title">Trust Advisor</label>
-          <div class="details-field">
-            <span class="details-field details-field-value">Phil Collins</span>
-            <a class="details-field details-field-value">pcollins@drums.com</a>
-            <span class="details-field details-field-value">555-231-6754</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
-    <div class="details-card-info details">
-      <div class="details-card-field shared">
-        <label class="title">Shared With</label>
-        <div class="details-field">
-         <span class="user-circle">PC</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<% end %>

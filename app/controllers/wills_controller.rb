@@ -1,6 +1,7 @@
 class WillsController < ApplicationController
   before_action :set_will, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_document_params, only: [:index]
 
   # GET /wills
   # GET /wills.json
@@ -16,7 +17,6 @@ class WillsController < ApplicationController
   # GET /wills/new
   def new
     @will = Will.new
-    
     @vault_entry = WillBuilder.new(type: 'will').build
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build

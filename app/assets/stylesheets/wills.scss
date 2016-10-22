@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $wtl-form-width: 390px;
 
-.wtl-header-content, .wtl-body-content{
+.wtl-header-content, .wtl-body-content {
   display: block;
   background: white;
   border-radius: 5px;
@@ -14,15 +14,15 @@ $wtl-form-width: 390px;
   word-wrap: break-word;
   width: 100%;
   height: auto;
-  .field{
+  .field {
     padding-left: 20px;
     padding-bottom: 10px;
-    label{
+    label {
       margin-bottom: 5px;
       display: inline-block;
     }
   }
-  input[type="radio"]{
+  input[type="radio"] {
     margin-top: 5px;
     margin-right: 2px;
     vertical-align: middle;
@@ -31,27 +31,27 @@ $wtl-form-width: 390px;
     width: $wtl-form-width;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
   }
-  select{
+  select {
     width: $wtl-form-width + $gu;
   }
-  textarea{
+  textarea {
     width: $wtl-form-width;
     resize: vertical;
   }
-  input[type=text]{
+  input[type=text] {
     width: $wtl-form-width;
   }
 }
 
-.wtl-body-content{
+.wtl-body-content {
   margin-bottom: 10px;
 }
 
-.wtl-body-content{
+.wtl-body-content {
   padding: 0;
 }
 
-.wtl-footer-content{
+.wtl-footer-content {
   width: 100%;
   height: auto;
   .add-new-field{
@@ -61,27 +61,27 @@ $wtl-form-width: 390px;
   }
 }
 
-.wtl-btn-group{
+.wtl-btn-group {
   margin: 25px 0;
 }
 
-.wtl-question-title{
+.wtl-question-title {
   font-weight: normal;
   font-size: 18px;
   color: $color-gray-dark-tinted;
 }
 
-.wtl-required-field{
+.wtl-required-field {
   font-weight: 100 !important;
   opacity: 0.5;
 }
 
-.shared-field{
+.shared-field {
   background-color: $color-primary-light;
   padding: 10px 0;
   width: 100%;
   height: auto;
-  .share-with-icon{
+  .share-with-icon {
     float: right;
     opacity: 0.7;
   }
@@ -93,36 +93,33 @@ $wtl-form-width: 390px;
   }
 }
 
-.card.details{
+.card.details {
   width: 100%;
 }
 
-.wtl-card-info{
-  &.details{
-    
-  }
-  .will-left-info{
+.wtl-card-info {
+  .will-left-info {
     float: left;
     width: 40%;
   }
-  .will-right-info{
+  .will-right-info {
     float: left;
     width: 60%;
   }
-  .will-card-field{
-    .title{
+  .will-card-field {
+    .title {
       text-transform: uppercase;
       font-weight: 700;
     }
-    &.bottom-fields{
+    &.bottom-fields {
       margin-top: 20px;
     }
   }
-  .will-field{
+  .will-field {
     display: block;
     margin: 2px 0;
     width: 60%;
-    .will-percent-value{
+    .will-percent-value {
       float: right;
     }
   }

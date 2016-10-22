@@ -1,6 +1,7 @@
 class TrustsController < AuthenticatedController
   before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_document_params, only: [:index]
 
   # GET /trusts
   # GET /trusts.json

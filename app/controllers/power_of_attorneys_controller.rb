@@ -1,5 +1,6 @@
 class PowerOfAttorneysController < ApplicationController
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
+  before_action :set_document_params, only: [:index]
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json

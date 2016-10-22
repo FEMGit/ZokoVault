@@ -1,66 +1,66 @@
-<div class="card wills details wtl mb-30">
-  <div class="details-wrapper wtl">
-    <div class="details-card-info details">
-      <div class = "details-left-info">
-        <div class = "details-card-field">
-          <label class="title">Primary Beneficiaries</label>
-          <div class="details-field">
-            <span class="details-field-value">Bruna Mars</span>
-            <span class="percent-value">100%</span>
+<% @wills.each do |will| %>
+  <div class="card wills details wtl mb-30">
+    <div class="details-wrapper wtl">
+      <div class="details-card-info details">
+        <div class = "details-left-info">
+          <div class = "details-card-field">
+            <label class="title">Primary Beneficiaries</label>
+            <% will.primary_beneficiaries.each do |primary| %>
+              <div class="details-field">
+                <span class="details-field-value"><%= primary.name %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class = "details-card-field">
+            <label class="title">Secondary Beneficiaries</label>
+            <% will.secondary_beneficiaries.each do |secondary| %>
+              <div class="details-field">
+                <span class="details-field-value"><%= secondary.name %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class = "details-card-field">
+            <label class="title">Executor</label>
+            <div class="details-field">
+              <span class="details-field details-field-value"><%= will.executor.name %></span>
+              <a class="details-field details-field-value"><%= will.executor.emailaddress %></a>
+              <span class="details-field details-field-value"><%= will.executor.phone %></span>
+            </div>
           </div>
         </div>
-        <div class = "details-card-field">
-          <label class="title">Secondary Beneficiaries</label>
-          <div class="details-field">
-            <span class="details-field-value">BJ Mars</span>
-            <span class="percent-value">33.4%</span>
-          </div>
-          <div class="details-field">
-            <span class="details-field-value">Ted Mars</span>
-            <span class="percent-value">33.3%</span>
-          </div>
-          <div class="details-field">
-            <span class="details-field-value">Jackson Mars</span>
-            <span class="percent-value">33.3%</span>
-          </div>
-        </div>
-        <div class = "details-card-field">
-          <label class="title">Executor</label>
-          <div class="details-field">
-            <span class="details-field details-field-value">Paul Simon</span>
-            <a class="details-field details-field-value">psimon@graceland.com</a>
-            <span class="details-field details-field-value">555-231-6754</span>
+        <div class = "details-right-info">
+          <div class = "details-card-field">
+            <label class="title">Attorney, Accountant, Advisor</label>
+            <% will.agents.each do |agent| %>
+              <div class="details-field">
+                <span class="details-field details-field-value"><%= agent.name %></span>
+                <a class="details-field details-field-value"><%= agent.emailaddress %></a>
+                <span class="details-field details-field-value"><%= agent.phone %></span>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
-      <div class = "details-right-info">
-        <div class = "details-card-field">
-          <label class="title">Attorney, Accountant, Advisor</label>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="details-card-info details">
+        <div class="details-card-field shared">
+          <label class="title">Shared With</label>
           <div class="details-field">
-            <span class="details-field details-field-value">John Ponzleford</span>
-            <a class="details-field details-field-value">j.ponzleford@allstate.com</a>
-            <span class="details-field details-field-value">555-231-6754</span>
+            <% will.shares.each do |share| %>
+              <% if share.contact.present? %>
+                <span class="user-circle"><%= share.contact.initials %></span>
+              <% end %>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
-    <div class="details-card-info details">
-      <div class="details-card-field shared">
-        <label class="title">Shared With</label>
-        <div class="details-field">
-         <span class="user-circle">JF</span>
-         <span class="user-circle">EL</span>
-         <span class="user-circle">EM</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<% end %>

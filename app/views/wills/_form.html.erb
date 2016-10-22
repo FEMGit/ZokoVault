@@ -31,7 +31,7 @@
     <div class="chosen-styled-select">
       <%= f.collection_select :agent_ids, 
         @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false }
       %>
   </div>
   </div>

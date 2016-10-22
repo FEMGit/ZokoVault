@@ -97,6 +97,55 @@ $cards-margin: 12px;
   max-width: 400px;
 }
 
+//DYNAMIC CARD INFO REPRESENTATION
+.card.wills.wtl-info-wrapper, .card.trusts.wtl-info-wrapper, .card.attorney.wtl-info-wrapper {
+  .wtl-left-side {
+   float:left;
+    width: 60%;
+    .executor-info, .agent-info {
+      display: inline-block;
+    }
+ }
+  .wtl-right-side {
+    float: right;
+    width: 40%;
+    direction: rtl;
+  }
+  .clear::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .field {
+    margin: 3px 0;
+  }
+  .section {
+    margin-top: 25px;
+    &.header {
+      margin-top: 0;
+      .icon-document-1 {
+        font-size: 40px;
+        color: $color-gray-med-shaded;
+        opacity: 0.9;
+        float: right;
+        position: relative;
+        .text-document {
+          float: right;
+          color: red;
+          font-size: 100px;
+       }
+      }
+    }
+    &.top {
+      margin-top: 0;
+    }
+   &.bottom{
+      margin-top: 15px;
+      display: inline-block;
+    }
+  }
+}
+
 //CARD SPECIFIC FORMATTING
 .wtl-card-info{
   padding: 10px;
@@ -229,6 +278,7 @@ $cards-margin: 12px;
 .add-details-link {
   text-decoration: none;
   float: right;
+  margin-top: 15px;
 }
 
 .clear {

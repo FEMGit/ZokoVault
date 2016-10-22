@@ -1,0 +1,42 @@
+<% @power_of_attorneys.each do |attorney| %>
+  <div class="card attorney details wtl">
+    <div class="details-wrapper wtl">
+      <div class="details-card-info details">
+        <div class = "details-card-field">
+          <label class="title">Power of Attorney</label>
+          <div class="details-field">
+            <span class="details-field-value"><%= attorney.agents.map(&:name).join('') %></span>
+          </div>
+        </div>
+        <div class = "details-card-field">
+          <label class="title">Agent Powers</label>
+          <% attorney.powers.keys.each do |agent_power| %>
+            <div class="details-field">
+              <span class="details-field-value"><%= agent_power %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="details-card-info details">
+        <div class="details-card-field shared">
+          <label class="title">Shared With</label>
+          <div class="details-field">
+            <% attorney.shares.each do |share| %>
+              <% if share.contact.present? %>
+                <span class="user-circle"><%= share.contact.initials %></span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -10,87 +10,151 @@
 </div>
 
 <section class="flex-boxes">
-  <div class="flex-column">
-    <div class="card cg-1 column-card">
-      <h3>Wills</h3>
-      <% if @wills.any? %>
-        <% @wills.each do |will| %>
-          <div>
-            <% will.primary_beneficiaries.each do |primary| %>
-              <%= primary.name %> [primary]<br/>
+  <%= link_to wills_path, :class => "undo-link-style" do %>
+    <div class="flex-column">
+      <div class="card cg-1 column-card wtl-info-wrapper wills">
+        <% if @wills.any? %>
+          <div class="section header">
+            <svg class="icon icon-document-1">
+              <use xlink:href="#icon-document-1"></use>
+            </svg>
+            <h3>Wills</h3>
+          </div>
+          <div class="section">
+            <% get_primary_uniq(@wills).each do |primary| %>
+              <span class="wtl-left-side field"><%= primary.name %></span>
+              <span class="wtl-right-side field">Primary</span>
             <% end %>
-
-            <% will.secondary_beneficiaries.each do |secondary| %>
-              <%= secondary.name %> [secondary]<br/>
+            <% get_secondary_uniq(@wills).each do |secondary| %>
+              <span class="wtl-left-side field"><%= secondary.name %></span>
+              <span class="wtl-right-side field">Secondary</span>
+            <% end %>          
+          </div>
+          <span class="clear"></span>
+          <% get_advisor_uniq(@wills).each do |advisor| %>
+            <div class="section">
+              <div class="wtl-left-side">
+                <span class="agent-info field"><%= advisor.name %></span><br>
+                <a class="agent-info field"><%= advisor.emailaddress %></a><br>
+                <span class="agent-info field"><%= advisor.phone %></span>
+              </div>
+              <div class="wtl-right-side">
+                <span class="user-circle field"><%= advisor.initials %></span>
+              </div>
+            </div>
+            <span class="clear"></span>
+          <% end %>
+          <div class="section bottom">
+            <% get_shares_uniq(@wills).each do |share| %>
+              <% if share.present? %>
+                <span class="user-circle"><%= share.initials %></span>
+              <% end %>
             <% end %>
           </div>
-        <% end %>
-      <% else %>
-        <span class="percent-complete">0% Complete</span>
-      <% end %>
-      <%= link_to 'Add Details', new_will_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-    <% if @wills.any? %>
-      <%= link_to details_will_path(1), :class => "undo-link-style" do %>
-        <div class="card cg-1 column-card">
-          <h3>Details For Will</h3>
-          <span class="percent-complete">100% Complete</span>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-
-  <div class="flex-column">
-    <div class="card cg-2 column-card">
-      <h3>Trusts</h3>
-      <% if @trusts.any? %>
-        <% @trusts.each do |trust| %>
-          <div>
-            <%= trust.name %>
+        <% else %>
+          <h3>Wills</h3>
+          <div class="section bottom">
+            <span class="percent-complete">0% Complete</span>
           </div>
         <% end %>
-      <% else %>
-        <span class="percent-complete">0% Complete</span>
-      <% end %>
-      <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
-      <span class="clear"></span>
+        <%= link_to 'Add Details', new_will_path, class: "add-details-link" %>
+        <span class="clear"></span>
+      </div>
     </div>
-    <% if @trusts.any? %>
-      <%= link_to details_trust_path(1), :class => "undo-link-style" do %>
-        <div class="card cg-2 column-card">
-          <h3>Details For Trust</h3>
-          <span class="percent-complete">100% Complete</span>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-
-  <div class="flex-column">
-    <div class="card cg-3 column-card">
-      <h3>Powers of Attorney</h3>
-      <% if @power_of_attorneys.any? %>
-        <% @power_of_attorneys.each do |power_of_attorney| %>
-          <div>
-            <b><%= power_of_attorney.agents.map(&:name).join(", ") %></b><br>
-            <%= power_of_attorney.powers.keys.join(",") %>
+  <% end %>
+  
+  <%= link_to trusts_path, :class => "undo-link-style" do %>
+    <div class="flex-column">
+      <div class="card cg-2 column-card wtl-info-wrapper trusts">
+        <% if @trusts.any? %>
+          <div class="section header">
+            <svg class="icon icon-document-1">
+              <use xlink:href="#icon-document-1"></use>
+            </svg>
+            <h3>Trusts</h3>
+          </div>
+          <div class="section">
+            <% @trusts.each do |trust| %>
+              <span class="wtl-left-side field"><%= trust.name %></span>
+            <% end %>
+          </div>
+          <span class="clear"></span>
+          <% get_agents_uniq(@trusts).each do |agent| %>
+            <div class="section">
+              <div class="wtl-left-side">
+                <span class="agent-info field"><%= agent.name %></span><br>
+                <a class="agent-info field"><%= agent.emailaddress %></a><br>
+                <span class="agent-info field"><%= agent.phone %></span>
+              </div>
+              <div class="wtl-right-side">
+                <span class="user-circle field"><%= agent.initials %></span>
+              </div>
+            </div>
+            <span class="clear"></span>
+          <% end %>
+          <div class="section bottom">
+            <% get_shares_uniq(@trusts).each do |share| %>
+              <% if share.present? %>
+                <span class="user-circle"><%= share.initials %></span>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <h3>Trusts</h3>
+          <div class="section bottom">
+            <span class="percent-complete">0% Complete</span>
           </div>
         <% end %>
-      <% else %>
-        <span class="percent-complete">0% Complete</span>
-      <% end %>
-      <%= link_to 'Add Details', new_power_of_attorney_path, class: "add-details-link" %>
-      <span class="clear"></span>
+        <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
+        <span class="clear"></span>
+      </div>
     </div>
-    <% if @power_of_attorneys.any? %>
-      <%= link_to details_attorney_path(1), :class => "undo-link-style" do %>
-        <div class="card cg-3 column-card">
-          <h3>Details For Legal</h3>
-          <span class="percent-complete">100% Complete</span>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
+  <% end %>
+  
+
+  <%= link_to power_of_attorneys_path, :class => "undo-link-style" do %>
+    <div class="flex-column">
+      <div class="card cg-3 column-card wtl-info-wrapper attorney">
+        <% if @power_of_attorneys.any? %>
+          <div class="section header">
+            <svg class="icon icon-document-1">
+              <use xlink:href="#icon-document-1"></use>
+            </svg>
+            <h3>Powers of Attorney</h3>
+          </div>
+          <% @power_of_attorneys.each do |power_of_attorney| %>
+            <div class="section">
+              <div class="wtl-left-side">
+                <%= power_of_attorney.agents.map(&:name).join(", ") %>
+              </div>
+              <div class="wtl-right-side">
+                <% power_of_attorney.powers.keys.each do |agent_power| %>
+                  <div>
+                    <%= agent_power %>
+                  </div>
+                <% end %>
+              </div>
+              <span class="clear"></span>
+            </div>
+          <% end %>
+          <div class="section bottom">
+            <% get_shares_uniq(@power_of_attorneys).each do |share| %>
+              <% if share.present? %>
+                <span class="user-circle"><%= share.initials %></span>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <h3>Power of Attorney</h3>
+          <div class="section bottom">
+            <span class="percent-complete">0% Complete</span>
+          </div>
+        <% end %>
+        <%= link_to 'Add Details', new_power_of_attorney_path, class: "add-details-link" %>
+        <span class="clear"></span>
+      </div>
+    </div>
+  <% end %>
 
 </section>
 
@@ -141,9 +205,10 @@
       <td><%= wtl_doc.updated_at %></td>
       <td>tags</td>
       <td>
-        <% wtl_doc.shares.each do |share| %>
-          <span class="user-circle"><%= share.contact.initials %></span>
-        <% end %>
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
+      </td>
       <td>
         <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>
         <%= link_to 'Delete', document_path(wtl_doc), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
@@ -153,17 +218,12 @@
 </table>
 
 <script>
-
 $(function() {
-
   $('.flex-boxes').masonry({
     columnWidth: '.flex-column',
     gutter: 20,
     percentPosition: true,
     itemSelector: '.flex-column'
   });
-
 });
-
-
 </script>

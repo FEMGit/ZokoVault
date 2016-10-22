@@ -53,7 +53,7 @@
 
     <footer class="modal-footer sign-up-footer">
       <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button' %>
-      <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button" %>
+      <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>
     </footer>
     <p class="submit-info">By submitting this information I agree to the ZokuVault <%= link_to 'Terms of Service', '', class: "no-underline-link" %> and
       <%= link_to 'Privacy Policy', '', class: "no-underline-link" %>.
@@ -69,8 +69,6 @@ $(function(){
   var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
   $(document).ready(function(){
     $('button[data-modal-id]').click();
-
-    wizNav(1);
   });
   $('button[data-modal-id]').click(function(e) {
     e.preventDefault();

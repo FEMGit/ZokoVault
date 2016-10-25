@@ -213,9 +213,7 @@
       <td><%= wtl_doc.updated_at %></td>
       <td>tags</td>
       <td>
-        <span class="user-circle">AK</span>
-        <span class="user-circle">BM</span>
-        <span class="user-circle">MB</span>
+        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => wtl_doc.shares} %>
       </td>
       <td>
         <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>

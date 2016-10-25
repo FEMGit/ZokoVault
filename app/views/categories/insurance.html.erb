@@ -114,9 +114,7 @@
         <td><%= document.updated_at %></td>
         <td>tags</td>
         <td>
-          <% document.shares.each do |share| %>
-            <span class="user-circle"><%= share.contact.initials %></span>
-          <% end %>
+          <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
         </td>
         <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

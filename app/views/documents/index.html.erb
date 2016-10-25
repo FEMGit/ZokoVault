@@ -24,11 +24,7 @@
       <td><%=document.updated_at%></td>
       <td>tags</td>
       <td>
-        <% document.shares.each do |share| %>
-          <% if share.contact.present? %>
-            <span class="user-circle"><%= share.contact.initials %></span>
-          <% end %>
-        <% end %>
+        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
       </td>
       <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

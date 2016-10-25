@@ -1,0 +1,8 @@
+<% shares[0...3].each do |share| %>
+  <% if share.contact.present? %>
+    <span class="user-circle"><%= share.contact.initials %></span>
+  <% end %>
+<% end %>
+<% if shares.length > 2 %>
+  <span>...</span>
+<% end %>

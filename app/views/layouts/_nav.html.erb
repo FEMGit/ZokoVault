@@ -32,7 +32,7 @@
       </svg>Financial Information
     </a>
     <% estate_planning = 'active' if current_page?(estate_planning_url) %>
-    <%= link_to estate_planning_path, class: "main-nav #{estate_planning}" do %>
+    <%= link_to estate_planning_path, {class: "main-nav #{estate_planning}",  method: :get} do%>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>
       </svg>Wills Trusts &amp; Legal

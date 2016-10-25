@@ -81,7 +81,7 @@
         onclick="submitForm(event)" >
         Save</button>
     <%= link_to "Cancel", document_return_path(@document),
-      class: "js-modal-close button secondary-button big-button" %>
+      {class: "js-modal-close button secondary-button big-button", method: :get} %>
     <% if !add_new_document?(yield(:title)) %>
       <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
         class: "js-modal-close button outline-button big-button document-delete-button"%>

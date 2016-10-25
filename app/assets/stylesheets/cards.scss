@@ -127,6 +127,7 @@ $cards-margin: 12px;
         margin-top: 7px;
         color: $color-gray-med-shaded;
         font-weight: 600;
+        padding-right: 4px;
       }
       .icon-section {
         float: right;
@@ -135,6 +136,7 @@ $cards-margin: 12px;
         font-size: 40px;
         color: $color-gray-med-shaded;
         opacity: 0.9;
+        float: right;
         position: relative;
       }
     }

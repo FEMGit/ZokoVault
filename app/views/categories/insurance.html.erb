@@ -10,12 +10,19 @@
 </div>
 
 <section class="flex-boxes">
+  <% new_link_paths = {
+  "life" => new_life_path,
+  "property" => new_property_path,
+  "health" => new_health_path,
+  } %>
+  
+  >
   <% @groups.each do |group| %>
     <div class="flex-column">
 
       <div class="card <%= group['value'] %> column-card">
         <h3><%= group["label"] %></h3>
-        <%= link_to 'Add Details', new_account_category_path(:category => @category, :group => group["value"], :return => "insurance"), class: "add-details-link"%>
+        <%= link_to 'Add Details', new_link_paths[group['value']], class: "add-details-link" %>
         <span class="clear"></span>
       </div>
 

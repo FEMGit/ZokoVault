@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161018055203) do
+ActiveRecord::Schema.define(version: 20161021035003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,45 @@ ActiveRecord::Schema.define(version: 20161018055203) do
   add_index "folders", ["parent_id"], name: "index_folders_on_parent_id", using: :btree
   add_index "folders", ["user_id"], name: "index_folders_on_user_id", using: :btree
 
+  create_table "health_policies", force: :cascade do |t|
+    t.integer  "policy_type"
+    t.string   "policy_number"
+    t.string   "group_number"
+    t.integer  "policy_holder_id"
+    t.integer  "broker_or_primary_contact_id"
+    t.string   "notes"
+    t.integer  "vendor_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "health_policies_insured_members", force: :cascade do |t|
+    t.integer "health_policy_id"
+    t.integer "insured_member_id"
+  end
+
+  create_table "life_and_disability_policies", force: :cascade do |t|
+    t.integer  "policy_type"
+    t.integer  "policy_holder_id"
+    t.decimal  "coverage_amount",              precision: 11, scale: 2
+    t.string   "policy_number"
+    t.integer  "broker_or_primary_contact_id"
+    t.string   "notes"
+    t.integer  "vendor_id"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+  end
+
+  create_table "life_and_disability_policies_primary_beneficiaries", force: :cascade do |t|
+    t.integer "life_and_disability_policy_id"
+    t.integer "primary_beneficiary_id"
+  end
+
+  create_table "life_and_disability_policies_secondary_beneficiaries", force: :cascade do |t|
+    t.integer "life_and_disability_policy_id"
+    t.integer "secondary_beneficiary_id"
+  end
+
   create_table "multifactor_phone_codes", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "code"
@@ -94,6 +133,19 @@ ActiveRecord::Schema.define(version: 20161018055203) do
     t.integer  "user_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+  end
+
+  create_table "property_and_casualty_policies", force: :cascade do |t|
+    t.integer  "policy_type"
+    t.string   "insured_property"
+    t.integer  "policy_holder_id"
+    t.decimal  "coverage_amount",              precision: 10, scale: 2
+    t.string   "policy_number"
+    t.integer  "broker_or_primary_contact_id"
+    t.string   "notes"
+    t.integer  "vendor_id"
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -235,8 +287,15 @@ ActiveRecord::Schema.define(version: 20161018055203) do
     t.string   "phone"
     t.integer  "contact_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "fax"
+    t.string   "street_address_1"
+    t.string   "street_address_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "type"
   end
 
   add_index "vendors", ["contact_id"], name: "index_vendors_on_contact_id", using: :btree

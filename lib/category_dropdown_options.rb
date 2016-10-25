@@ -10,5 +10,5 @@ module CategoryDropdownOptions
     "Healthcare Choices",
     "Final Wishes",
     "Web Accounts"
-    ]
+  ]
 end

@@ -88,9 +88,8 @@ class ContactsController < AuthenticatedController
     end
   
     def set_redirect_new_user_creating
-      if params[:redirect]
-        Rails.cache.write('after_new_user_created', params[:redirect])
-      end
+      return unless params[:redirect]
+      Rails.cache.write('after_new_user_created', params[:redirect])
     end
   
     def get_redirect_new_user_creating

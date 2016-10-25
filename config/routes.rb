@@ -19,6 +19,12 @@ Rails.application.routes.draw do
 
   #public
   # get "/:page" => "public#show"
+  #
+  scope 'insurance' do
+    resources :lives, controller: :life_and_disabilities
+    resources :properties, controller: :property_and_casualties
+    resources :healths
+  end
 
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'

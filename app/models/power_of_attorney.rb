@@ -1,15 +1,7 @@
 class PowerOfAttorney < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
 
-  POWERS = [
-    "Digital", 
-    "Financial",
-    "Healthcare",
-    "General",
-    "Limited",
-    "Durable",
-    "Springing" 
-  ]
+  POWERS = %w(Digital Financial Healthcare General Limited Durable Springing)
 
   has_many :vault_entry_contacts, as: :contactable, dependent: :destroy
   has_many :shares, as: :shareable, dependent: :destroy

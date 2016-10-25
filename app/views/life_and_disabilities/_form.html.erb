@@ -1,0 +1,195 @@
+<%= form_for(@life_and_disability, url: lives_path(@life_and_disability)) do |f| %>
+  <% if @life_and_disability.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@life_and_disability.errors.count, "error") %> prohibited this health from being saved:</h2>
+
+      <ul>
+      <% @life_and_disability.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="insurance-header-content">
+    <div class="field">
+      <label>Insurance Provider Name </label>
+      <div class="styled-text-input">
+        <%= f.text_field :name %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Insurance Provider Web Address </label>
+      <div class="styled-text-input">
+        <%= f.text_field :webaddress %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Street Address</label>
+      <div class="styled-text-input">
+        <%= f.text_field :street_address_1 %>
+      </div>
+    </div>
+    <div class="field">
+      <label>City </label>
+      <div class="styled-text-input">
+        <%= f.text_field :city %>
+      </div>
+    </div>
+    <div class="field address-field">
+      <div class="zipcode-field">
+        <label>Zip Code </label>
+        <div class="zipcode-text styled-input-text">
+          <div class="insurance-zipcode">
+            <%= f.text_field :zip %>
+          </div>
+        </div>
+      </div>
+      <div class="state-select">
+        <label>State </label>
+        <div class="styled-select insurance-state">
+          <%= f.select :state, options_for_select(us_states) %>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Business Phone Number </label>
+      <div class="styled-text-input">
+        <%= f.text_field :phone %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Business Fax Number </label>
+      <div class="styled-text-input">
+        <%= f.text_field :fax %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Primary Contact</label>
+      <div class="chosen-styled-select">
+          <%= f.collection_select :contact_id, 
+            @contacts, :id, :name, {}, 
+            { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
+          %>
+      </div>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light insurance-shared-with">
+      <label>Shared With</label>
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :share_with_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contact...', multiple: true, class: "chosen-select"}
+        %>
+      </div>
+    </div>
+  </div>
+
+  <%= f.fields_for :policy do |ff| %>
+  <div class="insurance-body-content">
+    <div class="field">
+      <h2 class="policy-information-title">Policy Information</h2>
+      <label>Policy Type</label>
+      <div class="styled-select">
+        <%= ff.select :policy_type, LifeAndDisabilityPolicy::policy_types.keys %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Policy Holder</label>
+      <div class="chosen-styled-select">
+        <%= ff.collection_select :policy_holder_id, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
+        %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Coverage Amount</label>
+      <div class="styled-text-input">
+        <%= ff.text_field :coverage_amount %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Policy Number</label>
+      <div class="styled-text-input">
+        <%= ff.text_field :policy_number %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Primary Beneficiaries</label>
+      <div class="chosen-styled-select">
+        <%= ff.collection_select :primary_beneficiary_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contact...', 
+            multiple: true,
+            class: "chosen-select"}
+          %>
+      </div>
+    </div>
+    <div class="field">
+      <label>Secondary Beneficiaries</label>
+      <div class="chosen-styled-select">
+        <%= ff.collection_select :secondary_beneficiary_ids, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contact...', 
+            multiple: true,
+            class: "chosen-select"}
+          %>
+    </div>
+    </div>
+    <div class="field">
+      <label>Broker or Primary Contact</label>
+      <div class="chosen-styled-select">
+        <%= ff.collection_select :broker_or_primary_contact_id, 
+          @contacts, :id, :name, {}, 
+          { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
+        %>
+      </div>
+    </div>
+    <div class="field notes-field">
+      <label>Notes</label>
+      <%= ff.text_area :notes %>
+    </div>
+  </div>
+<% end %>
+
+<div class="insurance-footer-content">
+  <div class="add-new-field" href="" onclick="addNewField()">
+    <svg class="icon add-icon">
+      <use xlink:href="#icon-add-1"></use>
+    </svg>
+    Add another <%= yield(:add_another_title) %><br>
+  </div>
+</div>
+
+<div class="wtl-btn-group">
+  <div class="actions">
+    <%= f.submit 'Save', class: "button primary-button big-button" %>
+  </div>
+  <%= link_to 'Cancel', insurance_path, class: "button secondary-button big-button"%>
+</div>
+<% end %>
+
+
+<script>
+addNewField = function(){
+  var $insuranceForm = $('div[id^="insurance-form"]:last');
+  var num = parseInt($insuranceForm.prop("id").match(/\d+/g), 10) + 1;
+  var $newInsuranceForm = $insuranceForm.clone().prop('id', 'insurance-form-' + num)
+    clearFormFields($newInsuranceForm);
+  $newInsuranceForm.appendTo('#insurance-forms');
+}
+
+clearFormFields = function(form){
+  form.find(':text').val("");
+  form.find('textarea').val("");
+  form.find(':checked').prop('checked', false);
+}
+$('.chosen-select').chosen();
+</script>
+

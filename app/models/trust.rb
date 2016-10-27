@@ -4,7 +4,6 @@ class Trust < ActiveRecord::Base
   belongs_to :user
   belongs_to :document
 
-  has_many :vault_entry_beneficiaries, as: :contactable, dependent: :destroy
   has_many :vault_entry_contacts, as: :contactable, dependent: :destroy
   has_many :shares, as: :shareable, dependent: :destroy
 

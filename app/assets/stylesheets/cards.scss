@@ -332,3 +332,14 @@ $cards-margin: 12px;
   text-decoration: none;
   float: right;
 }
+
+.clear {
+  clear: right;
+  display: block;
+}
+
+.right-align-delete-link{
+  float: right;
+  text-decoration: none;
+  margin: 10px 10px 0 0;
+}

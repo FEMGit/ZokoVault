@@ -78,7 +78,7 @@ class PowerOfAttorneysController < AuthenticatedController
   def destroy
     @power_of_attorney.destroy
     respond_to do |format|
-      format.html { redirect_to power_of_attorneys_url, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to :back || power_of_attorneys_url, notice: 'Power of attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

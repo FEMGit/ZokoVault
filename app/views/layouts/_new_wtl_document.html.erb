@@ -17,6 +17,10 @@
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
         <%= fields_for "vault_entry_#{index}", data do |builder| %>
+          <% if data.id %>
+            <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete, 
+                data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." }, class: 'right-align-delete-link' %>
+          <% end %>
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
         <% end %>
       <% end %>
@@ -33,7 +37,7 @@
 </div>
 
 <%= f.submit "Save", class: "button primary-button big-button" %>
-<%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button", method: :get}%>
+<%= link_to 'Cancel', estate_planning_path, {class: "button secondary-button big-button", method: :get}%>
 <% end %>
 </body>
 <script>

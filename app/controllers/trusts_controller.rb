@@ -86,7 +86,7 @@ class TrustsController < AuthenticatedController
   def destroy
     @trust.destroy
     respond_to do |format|
-      format.html { redirect_to trusts_url, notice: 'Trust was successfully destroyed.' }
+      format.html { redirect_to :back || trusts_url, notice: 'Trust was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

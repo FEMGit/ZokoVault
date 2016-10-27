@@ -82,7 +82,7 @@ class WillsController < AuthenticatedController
   def destroy
     @will.destroy
     respond_to do |format|
-      format.html { redirect_to wills_url, notice: 'Will was successfully destroyed.' }
+      format.html { redirect_to :back || wills_url, notice: 'Will was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

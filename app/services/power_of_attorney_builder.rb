@@ -1,8 +1,27 @@
 class PowerOfAttorneyBuilder
 
   def initialize(options = {})
-    self.power_of_attorney = PowerOfAttorney.new(options.slice(:user_id, :document_id, :name, :powers))
+    if(options[:id] && !options[:id].empty?)
+      self.power_of_attorney = PowerOfAttorney.find(options[:id])
+    else
+      self.power_of_attorney = PowerOfAttorney.new(options.slice(:user_id, :document_id, :name, :powers))
+    end
     self.options = options
+    if(options[:id] && !options[:id].empty?)
+      clear_options
+    end
+  end
+  
+  def clear_options
+    clear_model
+    WtlService.clear_one_option(options)
+    power_of_attorney.powers = options[:powers]
+  end
+  
+  def clear_model
+    power_of_attorney.agents = []
+    power_of_attorney.powers = []
+    power_of_attorney.shares = []
   end
 
   def build

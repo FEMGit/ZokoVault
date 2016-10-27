@@ -1,4 +1,4 @@
-class WillsController < ApplicationController
+class WillsController < AuthenticatedController
   before_action :set_will, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
@@ -22,6 +22,10 @@ class WillsController < ApplicationController
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
     @wills = Will.for_user(current_user)
+    @vault_entries = Will.for_user(current_user)
+    if(@vault_entries.empty?)
+      @vault_entries << @vault_entry
+    end
   end
 
   # GET /wills/1/edit
@@ -38,11 +42,18 @@ class WillsController < ApplicationController
   # POST /wills
   # POST /wills.json
   def create
-    adjusted_params = will_params.merge(user_id: current_user.id)
-    @vault_entry = WillBuilder.new(adjusted_params).build
-
+    new_wills = WtlService.get_new_records(will_params)
+    old_wills = WtlService.get_old_records(will_params)
     respond_to do |format|
-      if @vault_entry.save
+      if(!new_wills.empty? || !old_wills.empty?)
+        new_wills.each do |new_will_params|
+          @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
+          @new_vault_entries.save
+        end
+        old_wills.each do |old_will|
+          @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+          @old_vault_entries.save
+        end
         format.html { redirect_to estate_planning_path, notice: 'Will was successfully created.' }
         format.json { render :show, status: :created, location: @will }
       else
@@ -110,6 +121,6 @@ class WillsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def will_params
-      params.require(:will).permit!
+      params.select {|x| x.starts_with?("vault_entry")}
     end
 end

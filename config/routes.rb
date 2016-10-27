@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   resources :trusts
   get 'trusts/:trust', to: 'trusts#show', as: :details_trust
   get 'trusts/new/get_trusts_details', to: 'trusts#get_trusts_details'
+  get 'trusts/create_empty_form/:category', to: 'trusts#create_empty_form'
 
   resources :power_of_attorneys
   get 'power_of_attorneys/:power_of_attorney', to: 'power_of_attorneys#show', as: :details_attorney

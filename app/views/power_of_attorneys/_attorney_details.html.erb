@@ -10,10 +10,12 @@
         </div>
         <div class = "details-card-field">
           <label class="title">Agent Powers</label>
-          <% attorney.powers.keys.each do |agent_power| %>
-            <div class="details-field">
-              <span class="details-field-value"><%= agent_power %></span>
-            </div>
+          <% if attorney.powers.present? %>
+            <% attorney.powers.keys.each do |agent_power| %>
+              <div class="details-field">
+                <span class="details-field-value"><%= agent_power %></span>
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>

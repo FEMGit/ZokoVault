@@ -39,4 +39,5 @@ class Trust < ActiveRecord::Base
   # validates :shares, presence: true
   validates :user, presence: true
   validates :name, presence: true
+  
 end

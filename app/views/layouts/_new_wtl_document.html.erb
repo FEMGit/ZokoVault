@@ -11,14 +11,17 @@
       </ul>
     </div>
   <% end %>
-
-  <%= form_for(@vault_entry) do |f| %>
+  
+  <%= form_for @vault_entry, :remote => true do |f| %>
   <div id="wtl-forms">
     <div id="wtl-form-1">
-      <%= render yield(:partial_path), f: f %>
+      <% @vault_entries.each_with_index do |data, index| %>
+        <%= fields_for "vault_entry_#{index}", data do |builder| %>
+          <%= render yield(:partial_path), f: builder, index: index, data: data %>
+        <% end %>
+      <% end %>
     </div>
   </div>
-</body>
 
 <div class="wtl-footer-content">
     <div class="add-new-field" href="" onclick="addNewField();">
@@ -32,13 +35,19 @@
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button", method: :get}%>
 <% end %>
-
+</body>
 <script>
-  //number of new forms
-  num = 0;
+  Array.prototype.last = function() {
+    return this[this.length - 1];
+  }
+ 
   addNewField = function(){
     var $wtlForm = $('div[class^="wtl-body-content"]:last');
-    var $newWtlForm = $wtlForm.clone().prop('id', 'wtl-body-content-' + num++);
+    var $newWtlForm = $wtlForm.clone();
+    old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
+    new_id_number = old_id_number + 1;
+    clearForm($newWtlForm, old_id_number, new_id_number);
+    
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);

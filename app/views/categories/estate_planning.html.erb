@@ -111,7 +111,6 @@
         <div class="section bottom">
           <span class="percent-complete">0% Complete</span>
         </div>
-        <span class="clear"></span>
       <% end %>
       <%= link_to 'Add Details', new_trust_path, class: "add-details-link" %>
       <span class="clear"></span>
@@ -138,10 +137,12 @@
               <%= power_of_attorney.agents.map(&:name).join(", ") %>
             </div>
             <div class="wtl-right-side">
-              <% power_of_attorney.powers.keys.each do |agent_power| %>
-                <div>
-                  <%= agent_power %>
-                </div>
+              <% if power_of_attorney.powers.present? %>
+                <% power_of_attorney.powers.keys.each do |agent_power| %>
+                  <div>
+                    <%= agent_power %>
+                  </div>
+                <% end %>
               <% end %>
             </div>
             <span class="clear"></span>

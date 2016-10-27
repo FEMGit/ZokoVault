@@ -1,113 +1,92 @@
-<% if @trusts %>
-  <% @trusts.each_with_index do |trust, index| %>
-    <div class="wtl-body-content">
-      <div class="field">
-        <label>Trust Name<span class="wtl-required-field"> Required</span></label>
-        <div class="styled-text-input">
-          <%= f.text_field :name, value: trust.name %>
-        </div>
-      </div>
-      <div class="field">
-        <label>Attorney, Accountant or Advisor(s)</label>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :agent_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_agent_id_#{index}" }
-          %>
-        </div>
-      </div>
-      <div class="field">
-        <label>Trustee(s)</label>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :trustee_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_trustee_id_#{index}" }
-          %>
-        </div>
-      </div>
-      <div class="field">
-        <label>Successor Trustee(s)</label>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :successor_trustee_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_successor_id_#{index}"  }
-          %>
-        </div>
-      </div>
-      <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-        <label>Shared With</label>
-        <span class="shared-with-block">
-          <h2 class="shared-with-title">Shared With</h2>
-          <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-            <use xlink:href="#icon-Safe"></use>
-          </svg>
-        </span>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :share_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_share_id_#{index}"  }
-          %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-<% end %>
-
-<% if @trusts.empty? %>
-  <div class="wtl-body-content">
-    <div class="field">
-      <label>Trust Name<span class="wtl-required-field"> Required</span></label>
-      <div class="styled-text-input">
-        <%= f.text_field :name %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Attorney, Accountant or Advisor(s)</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :agent_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Trustee(s)</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :trustee_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Successor Trustee(s)</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :successor_trustee_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-      <label>Shared With</label>
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :share_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
+<div class="wtl-body-content">
+  <%= f.hidden_field :id, id: "trust_id_#{index}" %>
+  <div class="field">
+    <label>Trust Name<span class="wtl-required-field"> Required</span></label>
+    <div class="styled-text-input">
+      <%= f.text_field :name, value: data.name %>
     </div>
   </div>
-<% end %>
-
+  <div class="field">
+    <label>Attorney, Accountant or Advisor(s)</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :agent_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "trust_agent_id_#{index}" }
+      %>
+    </div>
+  </div>
+  <div class="field">
+    <label>Trustee(s)</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :trustee_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_trustee_id_#{index}" }
+      %>
+    </div>
+  </div>
+  <div class="field">
+    <label>Successor Trustee(s)</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :successor_trustee_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_successor_id_#{index}"  }
+      %>
+    </div>
+  </div>
+  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+    <label>Shared With</label>
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_share_id_#{index}"  }
+      %>
+    </div>
+  </div>
+</div>
 
 <script>
+  clearForm = function($newWtlForm, old_id, new_id){
+    new_vault_entry_id = "vault_entry_" + new_id;
+    $newWtlForm.find("[id^='trust_id_']").attr({
+      id: "trust_id_" + new_id,
+      value: ""
+    });
+    $newWtlForm.find("[id^='trust_id_']").attr("name", new_vault_entry_id + "[id]");
+    $newWtlForm.find("[id^='vault_entry_']").attr({
+      name: new_vault_entry_id + "[name]",
+      id: new_vault_entry_id + "_name"
+    });
+    
+    $newWtlForm.find("#trust_agent_id_" + old_id).attr({
+      name: new_vault_entry_id +"[agent_ids][]",
+      id: "trust_agent_id_" + new_id
+    });
+    $newWtlForm.find("#trust_agent_id_" + new_id + " option").prop("selected", false);
+    
+    $newWtlForm.find("#trust_trustee_id_" + old_id).attr({
+      name: new_vault_entry_id +"[trustee_ids][]",
+      id: "trust_trustee_id_" + new_id
+    });
+    $newWtlForm.find("#trust_trustee_id_" + new_id + " option").prop("selected", false);
+    
+    $newWtlForm.find("#trust_successor_id_" + old_id).attr({
+      name: new_vault_entry_id +"[successor_trustee_ids][]",
+      id: "trust_successor_id_" + new_id
+    });
+    $newWtlForm.find("#trust_successor_id_" + new_id + " option").prop("selected", false);
+    
+    $newWtlForm.find("#trust_share_id_" + old_id).attr({
+      name: new_vault_entry_id +"[share_ids][]",
+      id: "trust_share_id_" + new_id
+    });
+    $newWtlForm.find("#trust_share_id_" + new_id + " option").prop("selected", false);
+  }
 $(document).ready(function(){
   url = "new/get_trusts_details";
   $.get(url, function(data) {
@@ -116,6 +95,7 @@ $(document).ready(function(){
       $("#trust_trustee_id_" + index).val(form_values[1]).trigger("chosen:updated");
       $("#trust_successor_id_" + index).val(form_values[2]).trigger("chosen:updated");
       $("#trust_share_id_" + index).val(form_values[3]).trigger("chosen:updated");
+      $("#trust_id_" + index).val(form_values[4]).trigger("chosen:updated");
     });
   });
 });

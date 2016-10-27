@@ -1,4 +1,4 @@
-class PowerOfAttorneysController < ApplicationController
+class PowerOfAttorneysController < AuthenticatedController
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
@@ -19,6 +19,10 @@ class PowerOfAttorneysController < ApplicationController
     @vault_entry = PowerOfAttorneyBuilder.new.build
     @vault_entry.vault_entry_contacts.build
     @power_of_attorneys = PowerOfAttorney.for_user(current_user)
+    @vault_entries = PowerOfAttorney.for_user(current_user)
+    if(@vault_entries.empty?)
+      @vault_entries << @vault_entry
+    end
   end
 
   # GET /power_of_attorneys/1/edit
@@ -34,15 +38,22 @@ class PowerOfAttorneysController < ApplicationController
   # POST /power_of_attorneys
   # POST /power_of_attorneys.json
   def create
-    adjusted_params = power_of_attorney_params.merge(user_id: current_user.id)
-    @vault_entry = PowerOfAttorneyBuilder.new(adjusted_params).build
-
+    new_attorneys = WtlService.get_new_records(power_of_attorney_params)
+    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
     respond_to do |format|
-      if @vault_entry.save
+      if(!new_attorneys.empty? || !old_attorneys.empty?)
+        new_attorneys.each do |new_attorney_params|
+          @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+          @new_vault_entries.save!
+        end
+        old_attorneys.each do |old_attorney|
+          @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
+          @old_vault_entries.save
+        end
         format.html { redirect_to estate_planning_path, notice: 'Power of Attorney was successfully created.' }
         format.json { render :show, status: :created, location: @power_of_attorney }
       else
-        format.html { render :new }
+        format.html { redirect_to :new }
         format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
       end
     end
@@ -96,6 +107,6 @@ class PowerOfAttorneysController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def power_of_attorney_params
-      params.require(:power_of_attorney).permit!
+      params.select {|x| x.starts_with?("vault_entry")}
     end
 end

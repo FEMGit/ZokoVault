@@ -1,13 +1,32 @@
 class TrustBuilder
 
   def initialize(options = {})
-    self.trust = Trust.new(options.slice(:user_id, :document_id, :name))
+    if(options[:id] && !options[:id].empty?)
+      self.trust = Trust.find(options[:id])
+    else
+      self.trust = Trust.new(options.slice(:user_id, :document_id, :name))
+    end
     self.options = options
+    if(options[:id] && !options[:id].empty?)
+      clear_options
+    end
   end
-
+  
+  def clear_options
+    clear_model
+    trust.name = options[:name]
+    WtlService.clear_one_option(options)
+  end
+  
+  def clear_model
+    trust.trustees = []
+    trust.successor_trustees = []
+    trust.shares = []
+    trust.agents = []
+  end
+  
   def build
     build_trustees
-
     sanitize_data(options[:agent_ids]).each do |contact_id|
       trust.vault_entry_contacts.build(
         active: true, type: :agent, contact_id: contact_id

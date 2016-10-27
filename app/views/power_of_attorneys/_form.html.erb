@@ -1,103 +1,86 @@
 <% @contacts = Contact.for_user(current_user) %>
-<% if @power_of_attorneys %>
-  <% @power_of_attorneys.each_with_index do |attorney, index| %>
-    <div class="wtl-body-content">
-      <div class="field">
-        <label>Power of Attorney</label>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :agent_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "attorney_agent_id_#{index}" }
-          %>
-        </div>
-      </div>
-      <div class="field">
-        <label>This Agent's powers are (please choose all that apply):</label>
-        <ul class="check-list">
-          <% PowerOfAttorney::POWERS.each do |option| %>
-            <li class="check-list">
-              <label>
-                <%= check_box_tag "power_of_attorney[powers][#{option}]", 
-                  option,
-                  @vault_entry.powers.try(:[], option), {:checked => attorney.powers.keys.any? {|check| check == option} }
-                %>
-              <span></span> <%= option %>
-            </label>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-      <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-        <label>Shared With</label>
-        <span class="shared-with-block">
-          <h2 class="shared-with-title">Shared With</h2>
-          <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-            <use xlink:href="#icon-Safe"></use>
-          </svg>
-        </span>
-        <div class="chosen-styled-select">
-          <%= f.collection_select :share_ids, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "attorney_share_id_#{index}"  }
-          %>
-        </div>
-      </div>
-    </div>
-  <% end %>
-<% end %>
-
-<% if @power_of_attorneys.empty? %>
-  <div class="wtl-body-content">
-    <div class="field">
-      <label>Power of Attorney</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :agent_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
-    </div>
-    <div class="field">
-      <label>This Agent's powers are (please choose all that apply):</label>
-      <ul class="check-list">
-        <% PowerOfAttorney::POWERS.each do |option| %>
-          <li class="check-list">
-            <label>
-              <%= check_box_tag "power_of_attorney[powers][#{option}]", 
-                option,
-                @vault_entry.powers.try(:[], option)
-              %>
-            <span></span> <%= option %>
-          </label>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-      <label>Shared With</label>
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :share_ids, 
-          @contacts, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
-      </div>
+<div class="wtl-body-content">
+  <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
+  <div class="field">
+    <label>Power of Attorney</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :agent_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "attorney_agent_id_#{index}" }
+      %>
     </div>
   </div>
-<% end %>
+  <div class="field">
+    <label>This Agent's powers are (please choose all that apply):</label>
+    <ul class="check-list">
+      <% PowerOfAttorney::POWERS.each do |option| %>
+        <li class="check-list">
+          <label>
+            <%= check_box_tag "vault_entry_#{index}[powers][#{option}]", 
+              option,
+              @vault_entry.powers.try(:[], option), {:checked => data.powers.present? && data.powers.keys.any? {|check| check == option} }
+            %>
+          <span></span> <%= option %>
+        </label>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+    <label>Shared With</label>
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "attorney_share_id_#{index}"  }
+      %>
+    </div>
+  </div>
+</div>
 
 <script>
+  clearForm = function($newWtlForm, old_id, new_id){
+    new_vault_entry_id = "vault_entry_" + new_id;
+    
+    $newWtlForm.find("[id^='attorney_id_']").attr({
+      id: "attorney_id_" + new_id,
+      value: ""
+    });
+    $newWtlForm.find("[id^='attorney_id_']").attr("name", new_vault_entry_id + "[id]");
+    $newWtlForm.find("[id^='vault_entry_']").attr({
+      name: new_vault_entry_id + "[name]",
+      id: new_vault_entry_id + "_name"
+    });
+
+    $newWtlForm.find(".check-list li").each(function() {
+      var checkBox = $(this).find("input[type=checkbox]");
+      checkBox.attr("name", "vault_entry_" + new_id + "[powers][" + checkBox.attr('value') + "]")
+      checkBox.attr("id", "vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
+    });
+    
+    $newWtlForm.find("#attorney_agent_id_" + old_id).attr({
+      name: new_vault_entry_id +"[agent_ids]",
+      id: "attorney_agent_id_" + new_id
+    });
+    
+    $newWtlForm.find("#attorney_share_id_" + old_id).attr({
+      name: new_vault_entry_id +"[share_ids][]",
+      id: "attorney_share_id_" + new_id
+    });
+  }
+
 $(document).ready(function(){
   url = "new/get_powers_of_attorney_details";
   $.get(url, function(data) {
     data.forEach(function(form_values, index){
       $("#attorney_agent_id_" + index).val(form_values[0]).trigger("chosen:updated");
       $("#attorney_share_id_" + index).val(form_values[1]).trigger("chosen:updated");
+      $("#attorney_id_" + index).val(form_values[2]).trigger("chosen:updated");
     });
   });
 });

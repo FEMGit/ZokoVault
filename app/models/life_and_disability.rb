@@ -1,9 +1,9 @@
 class LifeAndDisability < Vendor
 
-  has_one :policy, 
+  has_many :policy, 
     class_name: "LifeAndDisabilityPolicy",
     foreign_key: :vendor_id
-
+  
   accepts_nested_attributes_for :policy
 
   private

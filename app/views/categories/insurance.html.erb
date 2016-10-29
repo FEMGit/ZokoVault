@@ -28,7 +28,7 @@
 
       <% if group['value']=="life" %>
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
-          <%= link_to details_account_category_path(:category => @category, :group => 'life', :name => 'Met Life', :return => "insurance"), :class => "undo-link-style" do %>
+        <%= link_to life_path(vendor), :class => "undo-link-style" do %>
               <div class="card <%= group['value'] %> column-card">
                 <h3><%= vendor.name %></h3>
                 <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
@@ -37,20 +37,11 @@
               </div>
           <% end %>
         <% end %>
-        <%= link_to details_account_category_path(:category => @category, :group => 'life', :name => 'Met Life', :return => "insurance"), :class => "undo-link-style" do %>
-          <div class="card life column-card">
-            <h3>Met Life</h3>
-            <p>John Ponzleford</p>
-            <p>j.ponzleford@allstate.com</p>
-            <p>555-231-6754</p>
-          </div>
-        <% end %>
-
       <% end %>
 
       <% if group['value']=="property" %>
         <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
-          <%= link_to details_account_category_path(:category => @category, :group => 'property', :name => 'All State', :return => "insurance"), :class => "undo-link-style" do %>
+          <%= link_to property_path(vendor), :class => "undo-link-style" do %>
               <div class="card <%= group['value'] %> column-card">
                 <h3><%= vendor.name %></h3>
                 <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
@@ -59,20 +50,11 @@
               </div>
           <% end %>
         <% end %>
-        <%= link_to details_account_category_path(:category => @category, :group => 'property', :name => 'All State', :return => "insurance"), :class => "undo-link-style" do %>
-          <div class="card property column-card">
-            <h3>All State</h3>
-            <p>John Ponzleford</p>
-            <p>j.ponzleford@allstate.com</p>
-            <p>555-231-6754</p>
-          </div>
-        <% end %>
-
       <% end %>
 
       <% if group['value']=="health" %>
       <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
-          <%= link_to details_account_category_path(:category => @category, :group => 'health', :name => 'BCBSIL', :return => "insurance"), :class => "undo-link-style" do %>
+          <%= link_to health_path(vendor), :class => "undo-link-style" do %>
               <div class="card <%= group['value'] %> column-card">
                 <h3><%= vendor.name %></h3>
                 <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
@@ -80,14 +62,6 @@
                 <p><%= vendor.phone %></p>
               </div>
           <% end %>
-        <% end %>
-        <%= link_to details_account_category_path(:category => @category, :group => 'health', :name => 'BCBSIL', :return => "insurance"), :class => "undo-link-style" do %>
-          <div class="card health column-card">
-            <h3>BCBSIL</h3>
-            <p>John Ponzleford</p>
-            <p>j.ponzleford@allstate.com</p>
-            <p>555-231-6754</p>
-          </div>
         <% end %>
       <% end %>
     </div>

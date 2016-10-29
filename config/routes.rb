@@ -25,6 +25,10 @@ Rails.application.routes.draw do
     resources :properties, controller: :property_and_casualties
     resources :healths
   end
+  
+  delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
+  delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
+  delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
 
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'

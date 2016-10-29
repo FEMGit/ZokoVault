@@ -5,7 +5,7 @@ class LifeAndDisabilityPolicy < ActiveRecord::Base
   belongs_to :policy_holder, class_name: "Contact"
   belongs_to :broker_or_primary_contact, class_name: "Contact"
 
-  has_many :policy_beneficiaries, dependent: :destroy
+  has_many :policy_beneficiaries
   has_many :shares, as: :shareable,  dependent: :destroy
 
   has_and_belongs_to_many :primary_beneficiaries, class_name: "Contact",

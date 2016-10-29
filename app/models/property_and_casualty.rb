@@ -1,5 +1,5 @@
 class PropertyAndCasualty < Vendor
-  has_one :policy, 
+  has_many :policy, 
     class_name: "PropertyAndCasualtyPolicy",
     foreign_key: :vendor_id
 

@@ -342,4 +342,19 @@ $cards-margin: 12px;
   float: right;
   text-decoration: none;
   margin: 10px 10px 0 0;
+  &.insurance {
+    margin-left: -57px;
+  }
+}
+
+.card.details.insurance {
+  position: relative;
+  a.whole-card-link {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+  }
 }

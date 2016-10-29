@@ -7,5 +7,4 @@ class Share < ActiveRecord::Base
 
   # validates :document_id, presence: true XXX: Does this need validation?
   validates :contact_id, presence: true
-  validates :user_id, presence: true
 end

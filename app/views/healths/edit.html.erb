@@ -1,6 +1,6 @@
-<h1>Editing Health</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @health %> |
-<%= link_to 'Back', healths_path %>
+<%= content_for :title, "Health" %>
+<%= content_for :add_another_title, "Policy" %>
+<%= content_for :partial_path, "healths/health_add_account" %>
+<%= content_for :url_path, health_path %>
+<%= content_for :delete_path, "#{healths_path}/" %>
+<%= render partial: "layouts/new_insurance_account" %>

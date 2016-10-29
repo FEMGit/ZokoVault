@@ -41,10 +41,6 @@
 <% end %>
 </body>
 <script>
-  Array.prototype.last = function() {
-    return this[this.length - 1];
-  }
- 
   addNewField = function(){
     var $wtlForm = $('div[class^="wtl-body-content"]:last');
     var $newWtlForm = $wtlForm.clone();

@@ -1,4 +1,2 @@
-<p id="notice"><%= notice %></p>
-
-<%= link_to 'Edit', edit_life_path(@life_and_disability) %> |
-<%= link_to 'Back', lives_path %>
+<%= content_for :partial_path, "life_and_disabilities/life_details_account" %>
+<%= render partial: "layouts/details_insurance_account" %>

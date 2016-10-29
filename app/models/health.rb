@@ -1,5 +1,5 @@
 class Health < Vendor
-  has_one :policy, 
+  has_many :policy, 
     class_name: "HealthPolicy",
     foreign_key: :vendor_id
 

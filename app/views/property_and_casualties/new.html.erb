@@ -1,3 +1,5 @@
-<h1>Property Insurance Setup</h1>
-
-<%= render 'form' %>
+<%= content_for :title, "Property" %>
+<%= content_for :add_another_title, "Policy" %>
+<%= content_for :partial_path, "property_and_casualties/property_add_account" %>
+<%= content_for :url_path, properties_path %>
+<%= render partial: "layouts/new_insurance_account" %>

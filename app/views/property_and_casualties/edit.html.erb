@@ -1,6 +1,6 @@
-<h1>Editing Property</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', property_path(@property_and_casualty) %> |
-<%= link_to 'Back', properties_path %>
+<%= content_for :title, "Property" %>
+<%= content_for :add_another_title, "Policy" %>
+<%= content_for :partial_path, "property_and_casualties/property_add_account" %>
+<%= content_for :url_path, property_path %>
+<%= content_for :delete_path, "#{properties_path}/" %>
+<%= render partial: "layouts/new_insurance_account" %>

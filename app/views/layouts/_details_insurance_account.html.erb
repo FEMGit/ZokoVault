@@ -1,0 +1,104 @@
+<div>
+  <a class="edit-link" href='<%= "#{@insurance_card.id}/edit" %>'>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  </a>
+  <h1><%= @insurance_card.name %></h1>
+</div>
+
+<div class="card <%= @insurance_card.group %> details insurance">
+  <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link"%>
+  <div class="details-wrapper">
+    <div class="details-card-info details">
+      <h2 class="provider-details-title">Insurance Provider Details</h2>
+      <div class = "details-card-field">
+        <label class="">Web Address</label>
+        <span class="details-field details-field-value"><%= @insurance_card.webaddress %></span>
+      </div>
+      <div class = "details-card-field">
+        <label class="">Address</label>
+        <span class="details-field details-field-value"><%= @insurance_card.street_address_1 %></span>
+        <span class="details-field details-field-value">
+          <%= @insurance_card.city %>
+          <%= @insurance_card.state %>,
+          <%= @insurance_card.zip %>
+        </span>
+      </div>
+      <div class = "details-card-field">
+        <label class="">Phone</label>
+        <span class="details-field details-field-value"><%= @insurance_card.phone %></span>
+        <span class="details-field details-field-value"><%= @insurance_card.fax %> fax</span>
+      </div>
+      <div class = "details-card-field">
+        <label class="">Primary Contact</label>
+        <span class="details-field details-field-value"><%= @insurance_card.contact.name %></span>
+        <a class="details-field details-field-value"><%= @insurance_card.contact.emailaddress %></a>
+        <span class="details-field details-field-value"><%= @insurance_card.contact.phone %></span>
+      </div>
+    </div>
+  </div>
+  <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="details-card-info details">
+      <div class="details-card-field shared">
+        <label class="title">Shared With</label>
+        <div class="details-field">
+          <% @insurance_card.shares.each do |share| %>
+            <% if share.contact.present? %>
+              <span class="user-circle"><%= share.contact.initials %></span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render yield(:partial_path) %>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @insurance_card.category, :group => @grouop_label) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h1><%= params[:name] %> Documents</h1>
+</div>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+    <th>Shared With</th>
+    <th>Actions</th>
+  </tr>
+  <% @group_documents.each do |document| %>
+    <% if document.present? %>
+      <tr>
+        <td>
+          <a><%= link_to document.name, document_path(document) %></a>
+        </td>
+        <td><%= document.updated_at %></td>
+        <td>tags</td>
+        <td>
+          <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
+        </td>
+        <td>
+          <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
+          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+</table> 

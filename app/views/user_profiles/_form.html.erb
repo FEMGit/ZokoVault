@@ -31,10 +31,10 @@
   <p><%= f.text_field :email %></p>
 
   <label>Home Phone Number</label>
-  <p><%= f.text_field :phone_number %></p>
+  <p><%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
 
   <label>Cell Phone Number</label>
-  <p><%= f.text_field :phone_number_mobile %></p>
+  <p><%= f.text_field :phone_number_mobile, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
 
   <label>Birthdate mm/dd/yy </label>
 
@@ -102,10 +102,10 @@
     <p><%= ff.text_field :zip %></p>
 
     <label>Home Phone Number</label>
-    <p><%= ff.text_field :phone_number_office %></p>
+    <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
 
     <label>Cell Phone Number</label>
-    <p><%= ff.text_field :phone_number_fax %></p>
+    <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
 
     <label>Notes</label>
     <p><%= ff.text_field :notes  %></p>

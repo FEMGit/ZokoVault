@@ -37,12 +37,12 @@
       </div>
       <div class="contact-element">
         <label>Business Phone</label>
-        <p><%= phone_number(@contact.businessphone) %></p>
+        <p><%= @contact.businessphone %></p>
       </div>
 
       <div class="contact-element">
         <label>Business Fax</label>
-        <p><%= phone_number(@contact.businessfax) %></p>
+        <p><%= @contact.businessfax %></p>
       </div>
     <% end %>
     <div class="contact-element notes">
@@ -59,7 +59,7 @@
 
     <div class="contact-element">
       <label>Phone</label>
-      <p><%= phone_number(@contact.phone) %></p>
+      <p><%= @contact.phone %></p>
     </div>
     
     <% if @contact.personal_relationship? %>

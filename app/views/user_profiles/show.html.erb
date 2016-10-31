@@ -1,29 +1,30 @@
 <h1>My Profile</h1>
 
+<%= link_to "Edit Profile", edit_user_profile_path %>
+
 <div class="card mb-30">
   <h3 class="card-label">Personal Information</h3>
 
   <label>Name</label>
-  <p>Bruno Mars</p>
+  <p><%= @user_profile.name %></p>
 
   <label>Email Address</label>
-  <p>bruno@bruno.com</p>
+  <p><%= @user_profile.email %></p>
 
   <label>Phone</label>
-  <p>888-674-3209<span class="phone-type">home</span><br>
-     888-674-3209<span class="phone-type">cell</span></p>
+  <p><%= @user_profile.phone_number %><span class="phone-type">home</span><br>
+  <%= @user_profile.phone_number_mobile %><span class="phone-type">cell</span><br></p>
 
   <label>Social Security Number</label>
-  <p>***-**-****</p>
+  <p>****-**-<%= @user_profile.ssn.try(:last, 4) %></p>
 
   <label>Date of Birth</label>
-  <p>09/04/1980</p>
+  <p><%= @user_profile.date_of_birth.try(:strftim, '%m/%d/%Y') %></p>
 
   <label>Address</label>
-  <p>2233 Main Street<br>
-     Hollywood CA, 60504
+  <p>
+    <%= @user_profile.address_parts.join('<br/>').html_safe %>
   </p>
-
 </div>
 
 
@@ -42,22 +43,27 @@
 </div>
 
 
+<% employer = @user_profile.employers.first || @user_profile.employers.build %>
 <div class="card mb-30">
   <h3 class="card-label">Employer Information</h3>
 
   <label>Buisness Information</label>
-  <p>American Buisness Corp<br>
-     456 Elm Parkway<br>
-     Los Angeles CA, 60032</p>
+  <p>
+    <%= employer.name %><br>
+    <%= link_to employer.web_address, employer.web_address %><br>
+    <%= employer.address_parts.join('<br/>').html_safe %>
+  </p>
 
-     <label>Phone</label>
-     <p>888-674-3209<span class="phone-type">office</span><br>
-        888-674-3209<span class="phone-type">fax</span></p>
+   <label>Phone</label>
+   <p>
+     <%= employer.phone_number_office %><span class="phone-type">office</span><br>
+     <%= employer.phone_number_fax %><span class="phone-type">fax</span>
+   </p>
 
 </div>
 
 
-<h2>Bruno Mars Documents</h2>
+<h2><%= @user_profile.name %> Documents</h2>
 <table>
     <tr>
       <th>Name</th>

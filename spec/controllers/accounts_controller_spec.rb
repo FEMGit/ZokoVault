@@ -52,7 +52,7 @@ RSpec.describe AccountsController, type: :controller do
       end
 
       it "sets phone number without formatting" do
-        expect(current_user.user_profile.phone_number).to eq "1234567890"
+        expect(current_user.user_profile.phone_number).to eq "123-456-7890"
       end
 
       it "sets the multi-factor auth frequency to 'always'" do

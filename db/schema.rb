@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021035003) do
+ActiveRecord::Schema.define(version: 20161026224315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,22 @@ ActiveRecord::Schema.define(version: 20161021035003) do
 
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
   add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
+
+  create_table "employers", force: :cascade do |t|
+    t.integer  "user_profile_id"
+    t.string   "name"
+    t.string   "web_address"
+    t.string   "street_address_1"
+    t.string   "street_address_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "phone_number_office"
+    t.string   "phone_number_fax"
+    t.string   "notes"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
 
   create_table "folders", force: :cascade do |t|
     t.integer  "user_id"
@@ -206,6 +222,13 @@ ActiveRecord::Schema.define(version: 20161021035003) do
     t.datetime "signed_terms_of_service_at"
     t.string   "phone_number"
     t.integer  "mfa_frequency"
+    t.string   "ssn"
+    t.string   "phone_number_mobile"
+    t.string   "street_address_1"
+    t.string   "street_address_2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
   end
 
   create_table "users", force: :cascade do |t|

@@ -1,0 +1,119 @@
+<h1>My Profile</h1>
+
+<%= form_for(@user_profile, url: user_profile_path) do |f| %>
+
+  <% if @user_profile.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_profile.errors.count, "error") %> prohibited this from being saved:</h2>
+
+      <ul>
+        <% @user_profile.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+<div class="card mb-30">
+  <h3 class="card-label">Personal Information</h3>
+
+  <label>First Name</label>
+  <p><%= f.text_field :first_name %></p>
+
+  <label>Middle Name (optional)</label>
+  <p><%= f.text_field :middle_name %></p>
+
+  <label>Last Name</label>
+  <p><%= f.text_field :last_name %></p>
+
+  <label>Email Address</label>
+  <p><%= f.text_field :email %></p>
+
+  <label>Home Phone Number</label>
+  <p><%= f.text_field :phone_number %></p>
+
+  <label>Cell Phone Number</label>
+  <p><%= f.text_field :phone_number_mobile %></p>
+
+  <label>Birthdate mm/dd/yy </label>
+
+  <p><%= f.date_select :date_of_birth, default: 30.years.ago.to_date, start_year: 100.years.ago.year, end_year: 18.years.ago.year, use_month_numbers: true, order: %i[month day year] %></p>
+
+  <label>Street Address</label>
+  <p><%= f.text_field :street_address_1 %></p>
+
+  <label>City</label>
+  <p><%= f.text_field :city %></p>
+
+  <label>State</label>
+  <div class="styled-select">
+    <p><%= f.select :state, options_for_select(us_states, f.object.state) %></p>
+  </div>
+
+  <label>Zip</label>
+  <p><%= f.text_field :zip %></p>
+</div>
+
+
+<div class="card mb-30 shared-card">
+  <h3 class="card-label">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>
+    Primary Shared With
+  </h3>
+  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
+    <label>Primary Shared With</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+    <section class="shared-list">
+      <p><span class="user-circle">BM</span>&nbsp;Bruna Mars</p>
+    </section>
+</div>
+
+
+<%= f.fields_for :employers do |ff| %>
+  <div class="card mb-30">
+    <h3 class="card-label">Employer Information</h3>
+
+    <label>Business Name</label>
+    <p><%= ff.text_field :name %></p>
+
+    <label>Business Web Address</label>
+    <p><%= ff.text_field :web_address %></p>
+
+    <label>Street Address</label>
+    <p><%= ff.text_field :street_address_1 %></p>
+
+    <label>City</label>
+    <p><%= ff.text_field :city %></p>
+
+    <label>State</label>
+    <div class="styled-select">
+      <p><%= ff.select :state, options_for_select(us_states, ff.object.state) %></p>
+    </div>
+
+    <label>Zip</label>
+    <p><%= ff.text_field :zip %></p>
+
+    <label>Home Phone Number</label>
+    <p><%= ff.text_field :phone_number_office %></p>
+
+    <label>Cell Phone Number</label>
+    <p><%= ff.text_field :phone_number_fax %></p>
+
+    <label>Notes</label>
+    <p><%= ff.text_field :notes  %></p>
+
+  </div>
+  <% end %>
+
+  <%= f.submit "Save", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button"}%>
+<% end %>
+<script>$('.chosen-select').chosen();</script>

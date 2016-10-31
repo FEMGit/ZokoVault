@@ -39,7 +39,6 @@ Rails.application.routes.draw do
   get 'email_confirmed' => 'welcome#email_confirmed'
 
   # Default category pages ?Could probably be done better programatically?
-  get 'my_profile' => 'categories#my_profile'
   get 'estate_planning' => 'categories#estate_planning'
   get 'final_wishes' => 'categories#final_wishes'
   get 'financial_information' => 'categories#financial_information'
@@ -79,9 +78,12 @@ Rails.application.routes.draw do
   resources :documents
   get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
 
+  resource :user_profile
+  get 'my_profile' => 'user_profiles#show'
   resource :account, only: [:update, :show] do
     collection do
       get :setup
+      get :my_profile
       post :send_code
       put :send_code
       post :verify_code

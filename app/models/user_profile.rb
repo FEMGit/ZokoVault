@@ -1,14 +1,28 @@
 class UserProfile < ActiveRecord::Base
   belongs_to :user
+  has_many :employers
 
   has_many :security_questions,
     class_name: 'UserProfileSecurityQuestion'
 
-  accepts_nested_attributes_for :security_questions
+  delegate :email, :email=, to: :user
 
-  attr_accessor :phone_code
+  accepts_nested_attributes_for :security_questions
+  accepts_nested_attributes_for :employers
+
+  attr_accessor :phone_code, :share_ids
 
   enum mfa_frequency: [:never, :new_ip, :always]
+
+  validates_format_of :phone_number,
+    with: /\d{3}-\d{3}-\d{4}/, 
+    allow_blank: true, 
+    message: "must be in format 222-555-1111"
+
+  validates_format_of :phone_number_mobile, 
+    with: /\d{3}-\d{3}-\d{4}/, 
+    allow_blank: true, 
+    message: "must be in format 222-555-1111"
 
   def name
     "#{first_name} #{last_name}"
@@ -18,15 +32,29 @@ class UserProfile < ActiveRecord::Base
     !!signed_terms_of_service_at
   end
 
-  def phone_number_raw=(phone_number)
-    self.phone_number = phone_number.gsub(/[^0-9]/, '')
+  def address_parts
+    [
+      "#{street_address_1} #{street_address_2}".strip,
+      "#{city}, #{state} #{zip}".strip
+    ]
+  end
+
+  def phone_number_raw=(raw_phone_number)
+    self.phone_number = format_phone_number(raw_phone_number)
   end
 
   def phone_number_formatted
-    "#{phone_number[0..2]}-#{phone_number[3..5]}-#{phone_number[6..10]}"
+    phone_number
   end
 
   def signed_terms_of_service=(val)
     self.signed_terms_of_service_at = Time.now if val
+  end
+
+  private
+
+  def format_phone_number(raw_phone_number)
+    tmp = raw_phone_number.gsub(/[^0-9]/, '')
+    "#{tmp[0..2]}-#{tmp[3..5]}-#{tmp[6..10]}"
   end
 end

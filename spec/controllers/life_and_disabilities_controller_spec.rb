@@ -51,7 +51,8 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
 
   describe "GET #index" do
     it "assigns all life_and_disabilities as @life_and_disabilities" do
-      life = LifeAndDisability.create! valid_attributes
+      post :create, { life_and_disability: valid_attributes}, session: valid_session
+      life = assigns(:insurance_card)
       get :index, params: {}, session: valid_session
       expect(assigns(:life_and_disabilities)).to eq([life])
     end
@@ -68,9 +69,9 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
   describe "GET #new" do
     it "assigns a new life as @life_and_disability" do
       get :new, params: {}, session: valid_session
-      life_and_disability = assigns(:life_and_disability)
+      life_and_disability = assigns(:insurance_card)
       expect(life_and_disability).to be_a_new(LifeAndDisability)
-      expect(life_and_disability.policy).to be_a_new(LifeAndDisabilityPolicy)
+      expect(life_and_disability.policy.first).to be_a_new(LifeAndDisabilityPolicy)
     end
   end
 
@@ -94,7 +95,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
 
       it "assigns a newly created life as @life_and_disability" do
         post :create, { life_and_disability: valid_attributes}, session: valid_session
-        life_and_disability = assigns(:life_and_disability)
+        life_and_disability = assigns(:insurance_card)
 
         expect(life_and_disability).to be_a(LifeAndDisability)
         expect(life_and_disability).to be_persisted
@@ -103,7 +104,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
           expect(life_and_disability.send(attribute)).to eq value
         end
 
-        policy = life_and_disability.policy
+        policy = life_and_disability.policy.first
         valid_attributes[:policy_attributes].each do |attribute, value|
           expect(policy.send(attribute)).to eq value
         end
@@ -118,7 +119,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved life as @life" do
         post :create, { life_and_disability: invalid_attributes}, session: valid_session
-        expect(assigns(:life_and_disability)).to be_a_new(LifeAndDisability)
+        expect(assigns(:insurance_card)).to be_a_new(LifeAndDisability)
       end
 
       it "re-renders the 'new' template" do

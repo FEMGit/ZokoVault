@@ -50,18 +50,27 @@ class TrustsController < AuthenticatedController
     old_trusts = WtlService.get_old_records(trust_params)
     respond_to do |format|
       if(!new_trusts.empty? || !old_trusts.empty?)
-        new_trusts.each do |new_trust_params|
-          @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build 
-          @new_vault_entries.save
+        begin
+          new_trusts.each do |new_trust_params|
+            @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build 
+            if (!@new_vault_entries.save)
+              raise "error saving new trust"
+            end
+          end
+          old_trusts.each do |old_trust|
+            @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: current_user.id)).build
+            if (!@old_vault_entries.save)
+              raise "error saving new trust"
+            end
+          end
+          format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
+          format.json { render :show, status: :created, location: @trust }
+        rescue Exception
+          format.html { render :new }
+          format.json { render json: @trust.errors, status: :unprocessable_entity }
         end
-        old_trusts.each do |old_trust|
-          @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: current_user.id)).build
-          @old_vault_entries.save
-        end
-        format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
-        format.json { render :show, status: :created, location: @trust }
       else
-        format.html { redirect_to :new }
+        format.html { render :new }
         format.json { render json: @trust.errors, status: :unprocessable_entity }
       end
     end

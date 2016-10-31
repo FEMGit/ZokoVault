@@ -20,7 +20,7 @@ RSpec.describe TrustsController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    { user_id: user.id }
+    { id: "", user_id: user.id }
   end
 
   before { sign_in user }
@@ -61,22 +61,22 @@ RSpec.describe TrustsController, type: :controller do
   describe "POST #create" do
     context "with invalid params" do
       it "redirects to the created vault_entry" do
-        post :create, { trust: invalid_attributes }, session: valid_session
+        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
         expect(response).to render_template(:new)
       end
     end
 
     context "with valid params" do
       it "creates a new Trust" do 
-        expect { post :create, { trust: valid_attributes }, session: valid_session }
+        expect { post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(Trust, :count).by(1)
       end
 
       context "with attributes" do
-        let(:vault_entry) { assigns(:vault_entry) }
+        let(:vault_entry) { assigns(:new_vault_entries) }
 
         before do
-          post :create, trust: valid_attributes, session: valid_session
+          post :create, vault_entry_0: valid_attributes.merge(:id => ""), session: valid_session
         end
 
         it "assigns a newly created vault_entry as @vault_entry" do
@@ -111,14 +111,14 @@ RSpec.describe TrustsController, type: :controller do
 
       it "redirects to the created vault_entry" do
         post :create, { trust: valid_attributes }, session: valid_session
-        expect(response).to redirect_to(estate_planning_path)
+        expect(response).to be_success
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
-        post :create, { trust: invalid_attributes }, session: valid_session
-        expect(assigns(:vault_entry)).to be_a_new(Trust)
+        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
+        expect(assigns(:new_vault_entries)).to be_a_new(Trust)
       end
 
       it "re-renders the 'new' template" do

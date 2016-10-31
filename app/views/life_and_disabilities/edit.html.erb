@@ -1,6 +1,6 @@
 <%= content_for :title, "Life & Disability" %>
 <%= content_for :add_another_title, "Policy" %>
 <%= content_for :partial_path, "life_and_disabilities/life_add_account" %>
-<%= content_for :url_path, life_path %>
+<%= content_for :url_path, "#{life_path}" %>
 <%= content_for :delete_path, "#{lives_path}/" %>
 <%= render partial: "layouts/new_insurance_account" %>

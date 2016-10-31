@@ -46,16 +46,25 @@ class WillsController < AuthenticatedController
     old_wills = WtlService.get_old_records(will_params)
     respond_to do |format|
       if(!new_wills.empty? || !old_wills.empty?)
-        new_wills.each do |new_will_params|
-          @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
-          @new_vault_entries.save
+        begin
+          new_wills.each do |new_will_params|
+            @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
+            if (!@new_vault_entries.save)
+              raise "error saving new will"
+            end
+          end
+          old_wills.each do |old_will|
+            @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+            if (!@old_vault_entries.save)
+              raise "error saving new will"
+            end
+          end
+          format.html { redirect_to estate_planning_path, notice: 'Will was successfully created.' }
+          format.json { render :show, status: :created, location: @will }
+        rescue Exception
+          format.html { render :new }
+          format.json { render json: @will.errors, status: :unprocessable_entity }
         end
-        old_wills.each do |old_will|
-          @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-          @old_vault_entries.save
-        end
-        format.html { redirect_to estate_planning_path, notice: 'Will was successfully created.' }
-        format.json { render :show, status: :created, location: @will }
       else
         format.html { render :new }
         format.json { render json: @will.errors, status: :unprocessable_entity }

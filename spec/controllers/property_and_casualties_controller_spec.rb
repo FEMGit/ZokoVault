@@ -52,7 +52,8 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
   describe "GET #index" do
     it "assigns all property_and_casualties as @property_and_casualties" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
+      post :create, { property_and_casualty: valid_attributes}, session: valid_session
+      property_and_casualty = assigns(:insurance_card)
       get :index, params: {}, session: valid_session
       expect(assigns(:property_and_casualties)).to eq([property_and_casualty])
     end
@@ -69,9 +70,9 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
   describe "GET #new" do
     it "assigns a new property_and_casualty as @property_and_casualty" do
       get :new, params: {}, session: valid_session
-      property_and_casualty = assigns(:property_and_casualty)
+      property_and_casualty = assigns(:insurance_card)
       expect(property_and_casualty).to be_a_new(PropertyAndCasualty)
-      expect(property_and_casualty.policy).to be_a_new(PropertyAndCasualtyPolicy)
+      expect(property_and_casualty.policy.first).to be_a_new(PropertyAndCasualtyPolicy)
     end
   end
 
@@ -95,7 +96,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
       it "assigns a newly created property_and_casualty as @property_and_casualty" do
         post :create, { property_and_casualty: valid_attributes}, session: valid_session
-        property_and_casualty = assigns(:property_and_casualty)
+        property_and_casualty = assigns(:insurance_card)
 
         expect(property_and_casualty).to be_a(PropertyAndCasualty)
         expect(property_and_casualty).to be_persisted
@@ -104,7 +105,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
           expect(property_and_casualty.send(attribute)).to eq value
         end
 
-        policy = property_and_casualty.policy
+        policy = property_and_casualty.policy.first
         valid_attributes[:policy_attributes].each do |attribute, value|
           expect(policy.send(attribute)).to eq value
         end
@@ -119,7 +120,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved property_and_casualty as @property_and_casualty" do
         post :create, { property_and_casualty: invalid_attributes}, session: valid_session
-        expect(assigns(:property_and_casualty)).to be_a_new(PropertyAndCasualty)
+        expect(assigns(:insurance_card)).to be_a_new(PropertyAndCasualty)
       end
 
       it "re-renders the 'new' template" do

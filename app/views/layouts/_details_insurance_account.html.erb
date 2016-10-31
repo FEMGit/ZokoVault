@@ -34,9 +34,11 @@
       </div>
       <div class = "details-card-field">
         <label class="">Primary Contact</label>
-        <span class="details-field details-field-value"><%= @insurance_card.contact.name %></span>
-        <a class="details-field details-field-value"><%= @insurance_card.contact.emailaddress %></a>
-        <span class="details-field details-field-value"><%= @insurance_card.contact.phone %></span>
+        <% if @insurance_card.contact.present? %>
+          <span class="details-field details-field-value"><%= @insurance_card.contact.name %></span>
+          <a class="details-field details-field-value"><%= @insurance_card.contact.emailaddress %></a>
+          <span class="details-field details-field-value"><%= @insurance_card.contact.phone %></span>
+        <% end %>
       </div>
     </div>
   </div>
@@ -83,7 +85,7 @@
     <th>Shared With</th>
     <th>Actions</th>
   </tr>
-  <% @group_documents.each do |document| %>
+  <% @group_documents && @group_documents.each do |document| %>
     <% if document.present? %>
       <tr>
         <td>

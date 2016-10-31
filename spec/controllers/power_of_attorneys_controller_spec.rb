@@ -17,7 +17,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    { user_id: nil }
+    { id:"", user_id: nil }
   end
 
   before { sign_in user }
@@ -58,23 +58,22 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
   describe "POST #create" do
     context "with invalid params" do
       it "redirects to new" do
-        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
+        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
         expect(response).to render_template(:new)
       end
     end
 
     context "with valid params" do
       it "creates a new PowerOfAttorney" do 
-        post :create, { power_of_attorney: valid_attributes }, session: valid_session 
-        expect { post :create, { power_of_attorney: valid_attributes }, session: valid_session }
+        expect {post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(PowerOfAttorney, :count).by(1)
       end
 
       context "with attributes" do
-        let(:vault_entry) { assigns(:vault_entry) }
+        let(:vault_entry) { assigns(:new_vault_entries) }
 
         before do
-          post :create, power_of_attorney: valid_attributes, session: valid_session
+          post :create, {vault_entry_0: valid_attributes.merge(:id => "")}, session: valid_session
         end
 
         it "assigns a newly created vault_entry as @vault_entry" do
@@ -100,20 +99,20 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
       end
 
       it "redirects to the created vault_entry" do
-        post :create, { power_of_attorney: valid_attributes }, session: valid_session
+        post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session
         expect(response).to redirect_to(estate_planning_path)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
-        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
-        expect(assigns(:vault_entry)).to be_a_new(PowerOfAttorney)
+        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
+        expect(assigns(:new_vault_entries)).to be_a_new(PowerOfAttorney)
       end
 
       it "re-renders the 'new' template" do
         post :create, { power_of_attorney: invalid_attributes }, session: valid_session
-        expect(response).to render_template("new")
+        expect(response).to render_template(:new)
       end
     end
   end

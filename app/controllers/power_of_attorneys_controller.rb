@@ -42,18 +42,27 @@ class PowerOfAttorneysController < AuthenticatedController
     old_attorneys = WtlService.get_old_records(power_of_attorney_params)
     respond_to do |format|
       if(!new_attorneys.empty? || !old_attorneys.empty?)
-        new_attorneys.each do |new_attorney_params|
-          @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
-          @new_vault_entries.save!
+        begin
+          new_attorneys.each do |new_attorney_params|
+            @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+            if (!@new_vault_entries.save)
+              raise "error saving new power of attorney"
+            end
+          end
+          old_attorneys.each do |old_attorney|
+            @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
+            if (!@old_vault_entries.save)
+              raise "error saving new power of attorney"
+            end
+          end
+          format.html { redirect_to estate_planning_path, notice: 'Power of Attorney was successfully created.' }
+          format.json { render :show, status: :created, location: @power_of_attorney }
+        rescue Exception
+          format.html { render :new }
+          format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
         end
-        old_attorneys.each do |old_attorney|
-          @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
-          @old_vault_entries.save
-        end
-        format.html { redirect_to estate_planning_path, notice: 'Power of Attorney was successfully created.' }
-        format.json { render :show, status: :created, location: @power_of_attorney }
       else
-        format.html { redirect_to :new }
+        format.html { render :new }
         format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
       end
     end

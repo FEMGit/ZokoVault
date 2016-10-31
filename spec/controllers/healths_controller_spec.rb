@@ -51,7 +51,8 @@ RSpec.describe HealthsController, type: :controller do
 
   describe "GET #index" do
     it "assigns all healths as @healths" do
-      health = Health.create! valid_attributes
+      post :create, { health: valid_attributes}, session: valid_session
+      health = assigns(:insurance_card)
       get :index, params: {}, session: valid_session
       expect(assigns(:healths)).to eq([health])
     end
@@ -68,9 +69,9 @@ RSpec.describe HealthsController, type: :controller do
   describe "GET #new" do
     it "assigns a new health as @health" do
       get :new, params: {}, session: valid_session
-      health = assigns(:health)
+      health = assigns(:insurance_card)
       expect(health).to be_a_new(Health)
-      expect(health.policy).to be_a_new(HealthPolicy)
+      expect(health.policy.first).to be_a_new(HealthPolicy)
     end
   end
 
@@ -92,9 +93,9 @@ RSpec.describe HealthsController, type: :controller do
         }.to change(Health, :count).by(1)
       end
 
-      it "assigns a newly created health as @health" do
+      it "assigns a newly created health as @insurance_card" do
         post :create, { health: valid_attributes}, session: valid_session
-        health = assigns(:health)
+        health = assigns(:insurance_card)
 
         expect(health).to be_a(Health)
         expect(health).to be_persisted
@@ -103,7 +104,7 @@ RSpec.describe HealthsController, type: :controller do
           expect(health.send(attribute)).to eq value
         end
 
-        policy = health.policy
+        policy = health.policy.first
         valid_attributes[:policy_attributes].each do |attribute, value|
           expect(policy.send(attribute)).to eq value
         end
@@ -118,7 +119,7 @@ RSpec.describe HealthsController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved health as @health" do
         post :create, { health: invalid_attributes}, session: valid_session
-        expect(assigns(:health)).to be_a_new(Health)
+        expect(assigns(:insurance_card)).to be_a_new(Health)
       end
 
       it "re-renders the 'new' template" do

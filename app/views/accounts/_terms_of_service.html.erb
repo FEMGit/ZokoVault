@@ -25,7 +25,7 @@
         <%= check_box_tag 'user[user_profile_attributes][signed_terms_of_service]', 
           1,
           false,
-          onclick: "toggleNext(); return true;" 
+          onclick: "toggleNextOnTos(); return true;" 
           %> <span></span>I agree to the Terms of Service
       </label>
     </li>
@@ -33,7 +33,7 @@
 </div>
 
 <script>
-function toggleNext() {
+function toggleNextOnTos() {
   var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
   var next_el = $("#next-step");
   if (check_el.is(':checked')) {

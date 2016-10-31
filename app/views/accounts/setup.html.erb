@@ -3,25 +3,25 @@
 </button>
 <div id="wizard-modal" class="modal wizard-modal modal-no-js">
   <div class="step-wizard">
-    <div class="inner-step" onclick="wizNav(1)">
+    <div class="inner-step">
       <span id="step-1" class="inner-counter">
         1
       </span>
       Terms
     </div>
-    <div class="inner-step questions-width" onclick="guard() && wizNav(2)">
+    <div class="inner-step questions-width">
       <span id="step-2" class="inner-counter">
         2
       </span>
       Questions
     </div>
-    <div class="inner-step" onclick="guard() && wizNav(3)">
+    <div class="inner-step">
       <span id="step-3" class="inner-counter">
         3
       </span>
       Phone
     </div>
-    <div class="inner-step" onclick="guard() && wizNav(4)">
+    <div class="inner-step">
       <span id="step-4" class="inner-counter">
         4
       </span>
@@ -85,9 +85,13 @@ var wizNav = function(step){
       form_el.hide();
     }
 
-    if ((currentStep == 1) || (currentStep == 3)) {
+    if (currentStep == 1) {
       $("#save-btn").hide();
+      toggleNextOnTos();
+    } 
+    else if (currentStep == 3) {
       $("#next-step").hide();
+      $("#save-btn").hide();
     }
     else if (maxStep === currentStep) {
       $("#next-step").hide();

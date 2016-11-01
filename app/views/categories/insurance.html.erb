@@ -19,8 +19,7 @@
   >
   <% @groups.each do |group| %>
     <div class="flex-column">
-
-      <div class="card <%= group['value'] %> column-card">
+       <div class="card <%= group['value'] %> column-card">
         <h3><%= group["label"] %></h3>
         <%= link_to 'Add Details', new_link_paths[group['value']], class: "add-details-link" %>
         <span class="clear"></span>
@@ -28,40 +27,85 @@
 
       <% if group['value']=="life" %>
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
-        <%= link_to life_path(vendor), :class => "undo-link-style" do %>
-              <div class="card <%= group['value'] %> column-card">
-                <h3><%= vendor.name %></h3>
-                <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
-                <p><%= vendor.webaddress %></p>
-                <p><%= vendor.phone %></p>
-              </div>
-          <% end %>
+          <div class="card <%= group['value'] %> column-card info-wrapper">
+            <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link" %>
+            <h3><%= vendor.name %></h3>
+            <div class="section">
+              <% vendor.policy.each do |policy| %>
+                <span class="wtl-left-side field"><%= "#{policy.policy_type}: #{policy.policy_holder.name}" %></span>
+                <span class="wtl-right-side field">$<%= policy.coverage_amount %></span>
+              <% end %>
+            </div>
+            <span class="clear"></span>
+            <div class="section">
+              <a class="field field-block"><%= vendor.webaddress %></a>
+              <span class="field field-block"><%= vendor.phone %></span>
+            </div>
+            <span class="clear"></span>
+            <div class="section bottom">
+              <% vendor.shares.each do |share| %>
+                <% if share.contact.present? %>
+                  <span class="user-circle"><%= share.contact.initials %></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
         <% end %>
       <% end %>
 
       <% if group['value']=="property" %>
         <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
-          <%= link_to property_path(vendor), :class => "undo-link-style" do %>
-              <div class="card <%= group['value'] %> column-card">
-                <h3><%= vendor.name %></h3>
-                <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
-                <p><%= vendor.webaddress %></p>
-                <p><%= vendor.phone %></p>
-              </div>
-          <% end %>
+          <div class="card <%= group['value'] %> column-card info-wrapper">
+            <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link" %>
+            <h3><%= vendor.name %></h3>
+            <div class="section">
+              <% vendor.policy.each do |policy| %>
+                <span class="wtl-left-side field"><%= policy.insured_property %></span>
+                <span class="wtl-right-side field"><%= policy.policy_type %></span><br>
+              <% end %>
+            </div>
+            <span class="clear"></span>
+            <div class="section">
+              <a class="field field-block"><%= vendor.webaddress %></a>
+              <span class="field field-block"><%= vendor.phone %></span>
+            </div>
+            <span class="clear"></span>
+            <div class="section bottom">
+              <% vendor.shares.each do |share| %>
+                <% if share.contact.present? %>
+                  <span class="user-circle"><%= share.contact.initials %></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
         <% end %>
       <% end %>
 
       <% if group['value']=="health" %>
-      <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
-          <%= link_to health_path(vendor), :class => "undo-link-style" do %>
-              <div class="card <%= group['value'] %> column-card">
-                <h3><%= vendor.name %></h3>
-                <p><%= vendor.contact.firstname + " " + vendor.contact.lastname %></p>
-                <p><%= vendor.webaddress %></p>
-                <p><%= vendor.phone %></p>
-              </div>
-          <% end %>
+        <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
+          <div class="card <%= group['value'] %> column-card info-wrapper">
+            <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link" %>
+            <h3><%= vendor.name %></h3>
+            <div class="section">
+              <% vendor.policy.each do |policy| %>
+                <span class="wtl-left-side field"><%= policy.policy_holder.name %></span>
+                <span class="wtl-right-side field"><%= policy.policy_type %></span>
+              <% end %>
+            </div>
+            <span class="clear"></span>
+            <div class="section">
+              <a class="field field-block"><%= vendor.webaddress %></a>
+              <span class="field field-block"><%= vendor.phone %></span>
+            </div>
+            <span class="clear"></span>
+            <div class="section bottom">
+              <% vendor.shares.each do |share| %>
+                <% if share.contact.present? %>
+                  <span class="user-circle"><%= share.contact.initials %></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
         <% end %>
       <% end %>
     </div>

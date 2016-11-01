@@ -98,14 +98,20 @@ $cards-margin: 12px;
 }
 
 //DYNAMIC CARD INFO REPRESENTATION
-.card.wills.wtl-info-wrapper, .card.trusts.wtl-info-wrapper, .card.attorney.wtl-info-wrapper {
+.card.wills.wtl-info-wrapper, 
+.card.trusts.wtl-info-wrapper, 
+.card.attorney.wtl-info-wrapper,
+.column-card.info-wrapper {
   .wtl-left-side {
    float:left;
     width: 60%;
     .executor-info, .agent-info {
       display: inline-block;
     }
- }
+  }
+  .field-block {
+    display: block;
+  }
   .wtl-right-side {
     float: right;
     width: 40%;
@@ -347,7 +353,7 @@ $cards-margin: 12px;
   }
 }
 
-.card.details.insurance {
+.card.details.insurance, .column-card.info-wrapper {
   position: relative;
   a.whole-card-link {
     height: 100%;

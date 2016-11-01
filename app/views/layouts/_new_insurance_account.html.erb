@@ -60,13 +60,13 @@
     <div class="field">
       <label>Business Phone Number </label>
       <div class="styled-text-input">
-        <%= f.text_field :phone %>
+        <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
       </div>
     </div>
     <div class="field">
       <label>Business Fax Number </label>
       <div class="styled-text-input">
-        <%= f.text_field :fax %>
+        <%= f.text_field :fax, class: "form-control", :data => {:mask => '999-999-9999'} %>
       </div>
     </div>
     <div class="field">

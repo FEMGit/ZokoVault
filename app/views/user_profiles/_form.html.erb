@@ -80,7 +80,7 @@
     <div class="state-select">
       <label>State </label>
       <div class="styled-select state">
-        <p><%= f.select :state, options_for_select(us_states, f.object.state) %></p>
+        <p><%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..."  %></p>
       </div>
     </div>
   </div>
@@ -145,7 +145,7 @@
       <div class="state-select">
         <label>State </label>
         <div class="styled-select state">
-          <p><%= ff.select :state, options_for_select(us_states, ff.object.state) %></p>
+          <p><%= ff.select :state, options_for_select(us_states, ff.object.state), :include_blank => "Select..."  %></p>
         </div>
       </div>
     </div>

@@ -5,28 +5,41 @@
 <div class="card mb-30">
   <h3 class="card-label">Personal Information</h3>
 
-  <label>Name</label>
-  <p><%= @user_profile.name %></p>
+  <% if !@user_profile.name.blank? %>
+    <label>Name</label>
+    <p><%= @user_profile.name %></p>
+  <% end %>
 
   <label>Email Address</label>
   <p><%= @user_profile.email %></p>
 
-  <label>Phone</label>
-  <p><%= @user_profile.phone_number %><span class="phone-type">home</span><br>
-  <%= @user_profile.phone_number_mobile %><span class="phone-type">cell</span><br></p>
+  <% if !@user_profile.phone_number.blank? || !@user_profile.phone_number_mobile.blank?%>
+    <label>Phone</label>
+    <% if !@user_profile.phone_number.blank? %>
+      <span class="field-block"><%= @user_profile.phone_number %><span class="phone-type">home</span>
+    <% end %>
+    <% if !@user_profile.phone_number_mobile.blank? %>
+      <span class="field-block"><%= @user_profile.phone_number_mobile %><span class="phone-type">cell</span>
+    <% end %>
+    <br></p>
+  <% end %>
 
-  <label>Social Security Number</label>
-  <p>****-**-<%= @user_profile.ssn.try(:last, 4) %></p>
+  <% if @user_profile.ssn %>
+    <label>Social Security Number</label>
+    <p>****-**-<%= @user_profile.ssn.try(:last, 4) %></p>
+  <% end %>
 
   <% if @user_profile.date_of_birth %>
     <label>Date of Birth</label>
-    <p><%= @user_profile.date_of_birth.try(:strftim, '%m/%d/%Y') %></p>
+    <p><%= @user_profile.date_of_birth.try(:strftime, '%m/%d/%Y') %></p>
   <% end %>
 
-  <label>Address</label>
-  <p>
-    <%= @user_profile.address_parts.join('<br/>').html_safe %>
-  </p>
+  <% if show_street?(@user_profile) %>
+    <label>Address</label>
+    <p>
+      <%= @user_profile.address_parts.join('<br/>').html_safe %>
+    </p>
+  <% end %>
 </div>
 
 
@@ -51,21 +64,29 @@
 
   <label>Business Information</label>
   <p>
-    <%= employer.name %><br>
-    <%= link_to employer.web_address, employer.web_address %><br>
+    <span class="field-block"><%= employer.name %></span>
+    <% if !employer.web_address.blank? %>
+      <span class="field-block"><%= link_to employer.web_address, employer.web_address %><br></span>
+    <% end %>
   </p>
   
   <label>Business Address</label>
   <p>
-    <%= employer.address_parts.join('<br/>').html_safe %>
+    <% if show_street?(employer) %>
+      <span class="field-block"><%= employer.address_parts.join('<br/>').html_safe %></span>
+    <% end %>
   </p>
 
-   <label>Phone</label>
-   <p>
-     <%= employer.phone_number_office %><span class="phone-type">office</span><br>
-     <%= employer.phone_number_fax %><span class="phone-type">fax</span>
-   </p>
-
+  <% if !employer.phone_number_office.blank? || !employer.phone_number_fax.blank?%>
+    <label>Phone</label>
+    <% if !employer.phone_number_office.blank? %>
+      <span class="field-block"><%= employer.phone_number_office %><span class="phone-type">home</span>
+    <% end %>
+    <% if !employer.phone_number_fax.blank? %>
+      <span class="field-block"><%= employer.phone_number_fax %><span class="phone-type">cell</span>
+    <% end %>
+    <br></p>
+  <% end %>
 </div>
 
 

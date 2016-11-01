@@ -36,13 +36,14 @@ body.logged-out{
   }
 }
 .hero-01a{
-  background: transparent asset-data-url('marketing/hero-01a.jpg') center top;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .05) 0%, rgba(0, 0, 0, 0.6) 100%),
+              transparent asset-data-url('marketing/hero-01a.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align: center;
 
   @include media($mobile) {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.75) 100%),
                 transparent asset-data-url('marketing/hero-01a.jpg') center top;
     background-size: cover;
     height: auto;
@@ -113,13 +114,14 @@ body.logged-out{
   }
 }
 .hero-02{
-  background: transparent asset-data-url('marketing/hero-02.jpg') center top;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
+              transparent asset-data-url('marketing/hero-02.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align: center;
 
   @include media($mobile) {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0.15) 100%),
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0.75) 100%),
                 transparent asset-data-url('marketing/hero-02.jpg') center top;
     background-size: cover;
     height: auto;
@@ -156,13 +158,14 @@ body.logged-out{
   }
 }
 .hero-03{
-  background: transparent asset-data-url('marketing/hero-03.jpg') center top;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0.3) 100%),
+              transparent asset-data-url('marketing/hero-03.jpg') center top;
   background-size: cover;
   height: 700px;
 
-  @include media($mobile) {
-    background: linear-gradient(to bottom, rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, 0.35) 100%),
-                transparent asset-data-url('marketing/hero-03.jpg') center top;
+  @include media($eightfifty) {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.5) 100%),
+                transparent asset-data-url('marketing/hero-03.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -172,15 +175,15 @@ body.logged-out{
     max-width: 500px;
     padding-top: 100px;
 
-    @include media($mobile) {
+    @include media($eightfifty) {
+      margin: 0 auto;
       padding: 20px 0;
-      margin: 0;
       text-align:center;
     }
   }
 }
 .screen-text{
-  height: 330px;
+  height: 250px;
   background: white;
   text-align: center;
 
@@ -195,16 +198,15 @@ body.logged-out{
 
     @include media($mobile) {
       padding-top: 20px;
-      padding-bottom: 20px;
     }
 
   }
 }
 
 .hero-04{
-  background: transparent asset-data-url('marketing/hero-04.jpg') center bottom;
+  background: white asset-data-url('marketing/hero-04.png') center top;
   background-size: cover;
-  height: 920px;
+  height: 700px;
   text-align: center;
 
   @include media($mobile) {
@@ -213,13 +215,14 @@ body.logged-out{
 }
 
 .hero-05{
-  background: transparent asset-data-url('marketing/hero-05.jpg') center top;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
+              transparent asset-data-url('marketing/hero-05.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align:center;
 
   @include media($mobile) {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, 0.75) 100%),
                 transparent asset-data-url('marketing/hero-05.jpg') center top;
     background-size: cover;
     height: auto;
@@ -228,7 +231,7 @@ body.logged-out{
   article{
     margin: 0 auto;
     max-width: 500px;
-    padding-top: 350px;
+    padding-top: 400px;
 
     @include media($mobile) {
       padding-top: 20px;
@@ -261,19 +264,22 @@ body.logged-out{
 
 //SECURITY
 .security-1{
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
-              transparent asset-data-url('marketing/hero-01.jpg') center top;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
+              transparent asset-data-url('marketing/security-01.jpg') center top;
   background-size: cover;
-  height: 250px;
+  height: 450px;
   text-align: center;
 
   @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
+                transparent asset-data-url('marketing/security-01.jpg') center top;
+    background-size: cover;
     height: auto;
   }
 
   article{
     margin: 0 auto;
-    padding-top: 70px;
+    padding-top: 270px;
     max-width: 500px;
 
     @include media($mobile) {
@@ -283,6 +289,107 @@ body.logged-out{
 
   }
 }
+.security-2{
+  @include media($eightfifty) {
+    img{
+      width: 50%;
+    }
+  }
+  @include media($mobile) {
+    article{
+      background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.8) 100%),
+                  transparent asset-data-url('marketing/lock.png') center 50px no-repeat;
+    }
+    img{
+      display:none;
+    }
+  }
+}
+.security-3{
+  background: white;
+  padding: 40px 20px;
+
+  article{
+    margin: 0 auto;
+    max-width: 1065px;
+
+    @include media($tablet) {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, 0.85) 100%),
+                    transparent asset-data-url('marketing/safe.png') center top no-repeat;
+    }
+
+    h1,p{
+      margin-left: 340px;
+
+      @include media($tablet) {
+        margin-left: 0;
+      }
+    }
+  }
+  img{
+    max-width: 300px;
+
+      @include media($tablet) {
+        display: none;
+      }
+  }
+}
+.security-cta{
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0.8) 100%),
+              transparent asset-data-url('marketing/security-cta.jpg') center top;
+  background-size: cover;
+  height: 700px;
+  text-align:center;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.9) 100%),
+                transparent asset-data-url('marketing/security-cta.jpg') center center;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    max-width: 500px;
+    padding-top: 400px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+}
+
+//ABOUT
+.about-header{
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
+              transparent asset-data-url('marketing/about-header.jpg') center top;
+  background-size: cover;
+  height: 550px;
+  text-align: center;
+
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
+                transparent asset-data-url('marketing/about-header.jpg') center top;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    padding-top: 370px;
+    max-width: 500px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+  }
+}
+
+
+//GENERIC
 .generic{
   background: white;
   padding: 20px;
@@ -290,5 +397,41 @@ body.logged-out{
   article{
     margin: 0 auto;
     max-width:1065px;
+  }
+}
+
+.generic-dark{
+  border-top: 2px solid $color-secondary;
+  background: $color-primary-shaded;
+  padding: 40px 20px;
+  color: white;
+
+  h1,h2,h3{
+    color: $color-primary-light;
+  }
+
+  article{
+    margin: 0 auto;
+    max-width:1065px;
+  }
+}
+
+.generic.wall{
+  background: asset-data-url('marketing/wall.jpg');
+  padding: 60px 20px;
+  background-size: cover;
+}
+.superbutton{
+  background: asset-data-url('marketing/super_button.png') no-repeat top center;;
+  width: 250px;
+  height:350px;
+  margin-left: 20px;
+
+  &.short{
+    background: asset-data-url('marketing/super_button_short.png') no-repeat top center;;
+    height:175px;
+  }
+  span{
+    opacity: 0;
   }
 }

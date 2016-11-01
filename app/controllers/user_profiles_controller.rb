@@ -28,7 +28,6 @@ class UserProfilesController < AuthenticatedController
   # POST /user_profiles.json
   def create
     @user_profile = UserProfile.new(user_profile_params)
-
     respond_to do |format|
       if @user_profile.save
         format.html { redirect_to user_profile_path, notice: 'User profile was successfully created.' }

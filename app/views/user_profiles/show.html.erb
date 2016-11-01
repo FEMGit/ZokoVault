@@ -18,8 +18,10 @@
   <label>Social Security Number</label>
   <p>****-**-<%= @user_profile.ssn.try(:last, 4) %></p>
 
-  <label>Date of Birth</label>
-  <p><%= @user_profile.date_of_birth.try(:strftim, '%m/%d/%Y') %></p>
+  <% if @user_profile.date_of_birth %>
+    <label>Date of Birth</label>
+    <p><%= @user_profile.date_of_birth.try(:strftim, '%m/%d/%Y') %></p>
+  <% end %>
 
   <label>Address</label>
   <p>
@@ -47,10 +49,14 @@
 <div class="card mb-30">
   <h3 class="card-label">Employer Information</h3>
 
-  <label>Buisness Information</label>
+  <label>Business Information</label>
   <p>
     <%= employer.name %><br>
     <%= link_to employer.web_address, employer.web_address %><br>
+  </p>
+  
+  <label>Business Address</label>
+  <p>
     <%= employer.address_parts.join('<br/>').html_safe %>
   </p>
 

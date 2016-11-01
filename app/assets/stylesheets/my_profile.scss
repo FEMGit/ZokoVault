@@ -1,0 +1,125 @@
+$profile-form-width: 340px;
+$textarea-height: 120px;
+$zipcode-width: 80px;
+$state-width: 250px;
+$phone-number-form-width: 250px;
+$birthday-form-width: 220px;
+
+.pofile-shared-card {
+  cursor: auto;
+  display: block;
+  margin: 0 30px 10px 0;
+  width: 100%;
+  height: auto;
+  padding-bottom: 15px;
+  .field {
+    padding-left: 5px;
+  }
+  .styled-select {
+    width: $profile-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  select {
+    width: $profile-form-width + $gu;
+  }
+  .shared-description {
+    width: $profile-form-width;
+  }
+}
+
+.my-profile-content-card {
+  display: block;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid  $color-gray-light-shaded;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 30px 10px 0;
+  word-wrap: break-word;
+  width: 100%;
+  height: auto;
+  padding-bottom: 15px;
+  .field {
+    padding-left: 20px;
+    .field-description {
+      font-style: italic;
+      color: $color-gray-light-shaded;
+    }
+    label {
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+    textarea {
+      width: $profile-form-width;
+      height: $textarea-height;
+      resize: vertical;
+    }
+    .personal-form-title, .employer-form-title {
+      float: right;
+      margin: 10px 30px 0 0;
+    }
+  }
+  
+  .zipcode-field {
+    .zipcode-text {
+      .zipcode {
+        input[type=text] {
+          width: $zipcode-width;
+          height: 32px;
+        }
+      }
+    }
+    display: inline-block;
+    float:left;
+    margin-right: 10px;
+  }
+  
+  .state-select {
+    display: inline-block;
+    float:left;
+    .state {
+      &.styled-select {
+        width: $state-width;
+      }
+      select {
+        width: $state-width + $gu;
+      }
+    }
+  }
+        
+  .field.address-field:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .styled-select {
+    width: $profile-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  
+  select {
+    width: $profile-form-width + $gu;
+  }
+  textarea {
+    width: $profile-form-width;
+    resize: vertical;
+  }
+  input[type=text] {
+    width: $profile-form-width;
+  }
+}
+
+
+.styled-text-input {
+  &.phone-number {
+    input[type=text] {
+      width: $phone-number-form-width;
+    }
+  }
+  &.birthday-field {
+    input[type=text] {
+      width: $birthday-form-width;
+    }
+  }
+
+}

@@ -1,5 +1,3 @@
-<h1>My Profile</h1>
-
 <%= form_for(@user_profile, url: user_profile_path) do |f| %>
 
   <% if @user_profile.errors.any? %>
@@ -14,47 +12,79 @@
     </div>
   <% end %>
 
-
-<div class="card mb-30">
-  <h3 class="card-label">Personal Information</h3>
-
-  <label>First Name</label>
-  <p><%= f.text_field :first_name %></p>
-
-  <label>Middle Name (optional)</label>
-  <p><%= f.text_field :middle_name %></p>
-
-  <label>Last Name</label>
-  <p><%= f.text_field :last_name %></p>
-
-  <label>Email Address</label>
-  <p><%= f.text_field :email %></p>
-
-  <label>Home Phone Number</label>
-  <p><%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-
-  <label>Cell Phone Number</label>
-  <p><%= f.text_field :phone_number_mobile, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-
-  <label>Birthdate mm/dd/yy </label>
-
-  <p><%= f.date_select :date_of_birth, default: 30.years.ago.to_date, start_year: 100.years.ago.year, end_year: 18.years.ago.year, use_month_numbers: true, order: %i[month day year] %></p>
-
-  <label>Street Address</label>
-  <p><%= f.text_field :street_address_1 %></p>
-
-  <label>City</label>
-  <p><%= f.text_field :city %></p>
-
-  <label>State</label>
-  <div class="styled-select">
-    <p><%= f.select :state, options_for_select(us_states, f.object.state) %></p>
+<div class="my-profile-content-card mb-30">
+  <div class="field">
+    <h2 class="personal-form-title">Personal Information</h2>
+    <label>First Name</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :first_name %></p>
+    </div>
   </div>
-
-  <label>Zip</label>
-  <p><%= f.text_field :zip %></p>
+  <div class="field">
+    <label>Middle Name (optional)</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :middle_name %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Last Name</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :last_name %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Email Address</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :email %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Home Phone Number</label>
+    <div class="styled-text-input phone-number">
+      <p><%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Cell Phone Number</label>
+    <div class="styled-text-input phone-number">
+      <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Birthdate<span class="optional">mm/dd/yy</span> </label>
+    <div class="styled-text-input birthday-field">
+      <p><%= f.text_field :date_of_birth, value: f.object.date_of_birth && f.object.date_of_birth.strftime("%m/%d/%Y"), class: "form-control", :data => {:mask => '99/99/9999'} %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>Street Address</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :street_address_1 %></p>
+    </div>
+  </div>
+  <div class="field">
+    <label>City</label>
+    <div class="styled-text-input">
+      <p><%= f.text_field :city %></p>
+    </div>
+  </div>
+  <div class="field address-field">
+    <div class="zipcode-field">
+      <label>Zip Code </label>
+      <div class="zipcode-text styled-input-text">
+        <div class="zipcode">
+          <p><%= f.text_field :zip %></p>
+        </div>
+      </div>
+    </div>
+    <div class="state-select">
+      <label>State </label>
+      <div class="styled-select state">
+        <p><%= f.select :state, options_for_select(us_states, f.object.state) %></p>
+      </div>
+    </div>
+  </div>
 </div>
-
 
 <div class="card mb-30 shared-card">
   <h3 class="card-label">
@@ -76,40 +106,65 @@
     </section>
 </div>
 
-
 <%= f.fields_for :employers do |ff| %>
-  <div class="card mb-30">
-    <h3 class="card-label">Employer Information</h3>
-
-    <label>Business Name</label>
-    <p><%= ff.text_field :name %></p>
-
-    <label>Business Web Address</label>
-    <p><%= ff.text_field :web_address %></p>
-
-    <label>Street Address</label>
-    <p><%= ff.text_field :street_address_1 %></p>
-
-    <label>City</label>
-    <p><%= ff.text_field :city %></p>
-
-    <label>State</label>
-    <div class="styled-select">
-      <p><%= ff.select :state, options_for_select(us_states, ff.object.state) %></p>
+  <div class="my-profile-content-card mb-30">
+    <div class="field">
+      <h2 class="employer-form-title">Employer Information</h2>
+      <label>Business Name</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :name %></p>
+      </div>
     </div>
-
-    <label>Zip</label>
-    <p><%= ff.text_field :zip %></p>
-
-    <label>Home Phone Number</label>
-    <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-
-    <label>Cell Phone Number</label>
-    <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-
-    <label>Notes</label>
-    <p><%= ff.text_field :notes  %></p>
-
+    <div class="field">
+      <label>Business Web Address</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :web_address %></p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Street Address</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :street_address_1 %></p>
+      </div>
+    </div>
+    <div class="field">
+      <label>City</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :city %></p>
+      </div>
+    </div>
+    <div class="field address-field">
+      <div class="zipcode-field">
+        <label>Zip Code </label>
+        <div class="zipcode-text styled-input-text">
+          <div class="zipcode">
+            <p><%= ff.text_field :zip %></p>
+          </div>
+        </div>
+      </div>
+      <div class="state-select">
+        <label>State </label>
+        <div class="styled-select state">
+          <p><%= ff.select :state, options_for_select(us_states, ff.object.state) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Business Phone Number</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Business Fax Number</label>
+      <div class="styled-text-input">
+        <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+      </div>
+    </div>
+    <div class="field notes-field">
+      <label>Notes</label>
+      <p><%= ff.text_area :notes  %></p>
+    </div>
   </div>
   <% end %>
 

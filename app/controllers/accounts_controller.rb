@@ -35,7 +35,12 @@ class AccountsController < AuthenticatedController
 
     verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
 
-    status = verified ? :ok : :unauthorized
+    status = if verified
+               session[:mfa] = true
+               :ok
+             else
+               :unauthorized
+             end
     head status
   end
 

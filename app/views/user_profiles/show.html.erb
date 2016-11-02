@@ -97,34 +97,38 @@
 </div>
 
 
-<h2><%= @user_profile.name %> Documents</h2>
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h2><%= @user_profile.name %> Documents</h2>
+</div>
 <table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+   <th>Tags</th>
+    <th>Shared With</th>
+    <th>Actions</th>
+  </tr>
+  <% @my_profile_documents && @my_profile_documents.each do |document| %>
     <tr>
-      <th>Name</th>
-      <th>Modified</th>
-      <th>Tags</th>
-      <th>Shared With</th>
-      <th>Actions</th>
-    </tr>
-
-    <tr>
       <td>
-        <a>DocumentName.pdf</a>
+        <a><%= link_to document.name, document_path(document) %></a>
       </td>
-      <td>07/31/2016</td>
+      <td><%= document.updated_at %></td>
+      <td>tags</td>
       <td>
-        <span class="doc-tag">Insurance</span>
-        <span class="doc-tag secondary-tag">Car</span>
+        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
       </td>
       <td>
-        <span class="user-circle">AK</span>
-        <span class="user-circle">BM</span>
-        <span class="user-circle">MB</span>
-      </td>
-      <td>
-          <button class="outline-button small-button">
-            Edit
-          </button>
+        <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
+        <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
       </td>
     </tr>
+  <% end %>
 </table>

@@ -1,29 +1,29 @@
 <div>
-  <a class="edit-link" href='<%= "#{@insurance_card.id}/edit" %>'>
+  <%= link_to "#{@insurance_card.id}/edit", class: "edit-link", method: :get do%>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-pencil-1"></use>
       </svg>
     </span>Edit
-  </a>
+  <% end %>
   <h1><%= @insurance_card.name %></h1>
 </div>
 
 <div class="card <%= @insurance_card.group %> details insurance">
-  <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link"%>
+  <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link", method: :get%>
   <div class="details-wrapper">
     <div class="details-card-info details">
       <h2 class="provider-details-title">Insurance Provider Details</h2>
       <div class = "details-card-field">
         <label class="">Web Address</label>
-        <span class="details-field details-field-value"><%= @insurance_card.webaddress %></span>
+        <span class="details-field details-field-value"><%= show_email_address(@insurance_card.webaddress) %></span>
       </div>
       <div class = "details-card-field">
         <label class="">Address</label>
         <span class="details-field details-field-value"><%= @insurance_card.street_address_1 %></span>
         <span class="details-field details-field-value">
-          <%= @insurance_card.city %>
-          <%= @insurance_card.state %>,
+          <%= @insurance_card.city %>,
+          <%= @insurance_card.state %>
           <%= @insurance_card.zip %>
         </span>
       </div>

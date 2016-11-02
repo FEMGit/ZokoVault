@@ -1,3 +1,5 @@
+$avatar-circle-radius: 30px;
+
 .doc-tag{
   font-size: 12px;
   color: $color-white;
@@ -12,12 +14,18 @@
 .user-circle{
   text-transform: uppercase;
   color: $color-gray-med;
-  border-radius: 20px;
+  border-radius: 50%;
   border: 1px solid $color-gray-med;
-  padding:5px;
-  font-size: 13px;
+  width: $avatar-circle-radius;
+  height: $avatar-circle-radius;
+  padding-top: 5px;
   font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  line-height: 17px
 }
+
 .undo-link-style{
   text-decoration: none !important;
   color: #000 !important;

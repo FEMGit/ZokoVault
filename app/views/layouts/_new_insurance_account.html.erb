@@ -25,7 +25,7 @@
     </div>
     <div class="field">
       <label>Insurance Provider Web Address </label>
-      <div class="styled-text-input">
+      <div class="styled-text-input input-prefix-email">
         <%= f.text_field :webaddress %>
       </div>
     </div>
@@ -53,7 +53,7 @@
       <div class="state-select">
         <label>State </label>
         <div class="styled-select insurance-state">
-          <%= f.select :state, options_for_select(us_states) %>
+          <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
         </div>
       </div>
     </div>

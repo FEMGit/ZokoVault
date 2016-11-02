@@ -11,6 +11,9 @@ class UserProfilesController < AuthenticatedController
   # GET /user_profiles/1
   # GET /user_profiles/1.json
   def show
+    @category = "My Profile"
+    @my_profile_documents = Document.for_user(current_user).where(category: @category)
+    session[:ret_url] = user_profile_path
   end
 
   # GET /user_profiles/new

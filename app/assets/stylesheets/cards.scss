@@ -104,7 +104,7 @@ $cards-margin: 12px;
 .column-card.info-wrapper {
   .wtl-left-side {
    float:left;
-    width: 60%;
+    width: 55%;
     .executor-info, .agent-info {
       display: inline-block;
     }
@@ -114,7 +114,7 @@ $cards-margin: 12px;
   }
   .wtl-right-side {
     float: right;
-    width: 40%;
+    width: 45%;
     direction: rtl;
   }
   .clear::after {
@@ -144,6 +144,9 @@ $cards-margin: 12px;
         opacity: 0.9;
         float: right;
         position: relative;
+      }
+      .health-block {
+        display: block;
       }
     }
     &.top {
@@ -188,11 +191,11 @@ $cards-margin: 12px;
   }
   .details-left-info{
     float: left;
-    width: 40%;
+    width: 50%;
   }
   .details-right-info{
     float: left;
-    width: 60%;
+    width: 50%;
   }
   .provider-details-title, {
       margin-top: 20px;
@@ -201,7 +204,7 @@ $cards-margin: 12px;
   .details-card-field {
      margin-top: 20px;
      &.details-notes {
-       width: 60%;
+       width: 100%;
      }
     .title {
       text-transform: capitalize;
@@ -218,7 +221,7 @@ $cards-margin: 12px;
   .details-field {
     display: block;
     margin: 2px 0;
-    width: 60%;
+    width: 100%;
     .user-circle {
       background: white;
     }
@@ -353,7 +356,9 @@ $cards-margin: 12px;
   }
 }
 
-.card.details.insurance, .column-card.info-wrapper {
+.card.details.insurance, 
+.card.details.wtl, 
+.column-card.info-wrapper,{
   position: relative;
   a.whole-card-link {
     height: 100%;

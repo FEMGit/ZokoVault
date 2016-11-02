@@ -115,7 +115,9 @@
           </div>
           <div class="field">
             <%= f.label :businesswebaddress, 'Business Web Address' %><br>
-            <%= f.text_field :businesswebaddress %>
+            <div class="styled-text-input input-prefix-email">
+              <%= f.text_field :businesswebaddress %>
+            </div>
           </div>
           <div class="field">
             <%= f.label :businessphone, 'Business Phone' %><br>
@@ -126,12 +128,8 @@
             <%= f.text_field :businessfax, class: "form-control", :data => {:mask => '999-999-9999'}  %>
           </div>
           <div class="field">
-            <%= f.label :business_street_address, 'Street Address 1' %><br>
+            <%= f.label :business_street_address, 'Address' %><br>
             <%= f.text_field :business_street_address_1 %>
-          </div>
-          <div class="field">
-            <%= f.label :business_street_address, 'Street Address 2' %><br>
-            <%= f.text_field :business_street_address_2 %>
           </div>
         </div>
         <div class="field">

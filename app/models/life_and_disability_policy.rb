@@ -1,6 +1,6 @@
 class LifeAndDisabilityPolicy < ActiveRecord::Base
 
-  enum policy_type: [ "Digital", "Term Life", "Whole Life", "Universal Life", "Short Term Disability", "Long Term Disability", "Springing" ]
+  enum policy_type: [ "Term Life", "Whole Life", "Universal Life", "Short Term Disability", "Long Term Disability" ]
 
   belongs_to :policy_holder, class_name: "Contact"
   belongs_to :broker_or_primary_contact, class_name: "Contact"

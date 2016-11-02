@@ -1,13 +1,4 @@
-<div>
-  <a class="edit-link" href="#">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  </a>
-  <h1>Insurance</h1>
-</div>
+<h1>Insurance</h1>
 
 <section class="flex-boxes">
   <% new_link_paths = {
@@ -33,7 +24,7 @@
             <div class="section">
               <% vendor.policy.each do |policy| %>
                 <span class="wtl-left-side field"><%= "#{policy.policy_type}: #{policy.policy_holder.name}" %></span>
-                <span class="wtl-right-side field">$<%= policy.coverage_amount %></span>
+                <span class="wtl-right-side field"><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
               <% end %>
             </div>
             <span class="clear"></span>
@@ -88,8 +79,11 @@
             <h3><%= vendor.name %></h3>
             <div class="section">
               <% vendor.policy.each do |policy| %>
-                <span class="wtl-left-side field"><%= policy.policy_holder.name %></span>
-                <span class="wtl-right-side field"><%= policy.policy_type %></span>
+                <div class="health-block">
+                  <span class="wtl-left-side field"><%= policy.policy_holder.name %></span>
+                  <span class="wtl-right-side field"><%= policy_type_abbreviate(policy.policy_type) %></span>
+                </div>
+                <span class="clear"></span>
               <% end %>
             </div>
             <span class="clear"></span>

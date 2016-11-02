@@ -33,7 +33,7 @@
 
       <div class="contact-element">
         <label>Business Web Address</label>
-        <p><%= @contact.businesswebaddress %></p>
+        <p><%= show_email_address(@contact.businesswebaddress) %></p>
       </div>
       <div class="contact-element">
         <label>Business Phone</label>
@@ -64,33 +64,27 @@
     
     <% if @contact.personal_relationship? %>
       <div class="contact-element">
-        <label>Street Address</label>
-        <p><%= @contact.address %></p>
+        <label>Address</label>
+        <p>
+          <%= @contact.address %><br>
+          <%= @contact.city%>,
+          <%= @contact.state%>
+          <%= @contact.zipcode%>
+        </p>
       </div>
     <% end %>
 
     <% if @contact.professional_relationship? %>
       <div class="contact-element">
-        <label>Business Street Address</label>
-        <p><%= @contact.business_street_address_1 %></p>
-        <p><%= @contact.business_street_address_2 %></p>
+        <label>Business Address</label>
+        <p>
+          <%= @contact.business_street_address_1 %><br>
+          <%= @contact.city%>,
+          <%= @contact.state%>
+          <%= @contact.zipcode%>
+        </p>
       </div>
     <% end %>
-    
-    <div class="contact-element">
-      <label>City</label>
-      <p><%= @contact.city%></p>
-    </div>
-      
-    <div class="contact-element">
-      <label>State</label>
-      <p><%= @contact.state%></p>
-    </div>
-      
-    <div class="contact-element">
-      <label>Zip</label>
-      <p><%= @contact.zipcode%></p>
-    </div>
     
     <div class="contact-element">
       <label>Avatar color</label>

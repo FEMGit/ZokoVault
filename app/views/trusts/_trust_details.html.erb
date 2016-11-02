@@ -1,5 +1,6 @@
 <% @trusts.each do |trust| %>
   <div class="card trusts details wtl mb-30">
+    <%= link_to content_tag(:a), new_trust_path, class: "whole-card-link", method: :get %>
     <div class="details-wrapper wtl">
       <div class="details-card-info details">
         <div>

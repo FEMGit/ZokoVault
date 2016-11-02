@@ -2,12 +2,13 @@
   <div>
     <h1><%= "#{policy.policy_type} -  #{policy.policy_holder.name}" %></h1>
     <div class="card <%= @insurance_card.group %> details insurance">
+      <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link", method: :get%>
       <div class="details-wrapper">
         <div class="details-card-info details">
           <h2 class="provider-details-title">Policy Information</h2>
             <div class = "details-card-field">
             <label class="title">Coverage Amount</label>
-            <span class="details-field details-field-value"><%= policy.coverage_amount %></span>
+            <span class="details-field details-field-value"><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
           </div>
           <div class = "details-card-field">
             <label class="title">Policy Number</label>

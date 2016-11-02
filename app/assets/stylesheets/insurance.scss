@@ -122,3 +122,18 @@ $textarea-height: 120px;
   clear: right;
   display: block;
 }
+
+.input-prefix-email {
+   position: relative;
+   input {
+    padding-left: 45px;
+  }
+  &:after {
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left: 5px;
+    content: "www.";
+    font-weight: 400;
+  }
+}

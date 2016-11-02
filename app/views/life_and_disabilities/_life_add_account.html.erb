@@ -18,7 +18,8 @@
 <div class="field">
   <label>Coverage Amount</label>
   <div class="styled-text-input input-symbol-dollar">
-    <%= ff.text_field :coverage_amount, id: "life_coverage_amount_id_#{index}", maxlength: 9 %>
+    <%= ff.text_field :coverage_amount, id: "life_coverage_amount_id_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0} }, 
+      :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "") %>
   </div>
 </div>
 <div class="field">

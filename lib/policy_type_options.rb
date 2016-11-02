@@ -23,13 +23,11 @@ module PolicyTypeOptions
 
     life: [
       "Choose Type...",
-      "Digital", 
       "Term Life",
       "Whole Life",
       "Universal Life",
       "Short Term Disability",
-      "Long Term Disability",
-      "Springing"
+      "Long Term Disability"
     ]
   }.freeze
 end

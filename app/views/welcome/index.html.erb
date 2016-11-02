@@ -2,61 +2,76 @@
 
 <h1>Dashboard</h1>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-activity-monitor-1"></use>
-    </svg>Financial Information
-</h3>
-</div>
+<%= link_to financial_information_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-activity-monitor-1"></use>
+      </svg>Financial Information
+    </h3>
+  </div>
+<% end %>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-document-3"></use>
-    </svg>Wills Trusts &amp; Legal
-  </h3>
-</div>
+<%= link_to estate_planning_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Wills Trusts &amp; Legal
+    </h3>
+  </div>
+<% end %>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-umbrella-1"></use>
-    </svg>Insurance
-  </h3>
-</div>
+<%= link_to insurance_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-umbrella-1"></use>
+      </svg>Insurance
+    </h3>
+  </div>
+<% end %>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-book-6"></use>
-    </svg>Taxes
-  </h3>
-</div>
+<%= link_to taxes_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-book-6"></use>
+      </svg>Taxes
+    </h3>
+  </div>
+<% end %>
 
-<div class="card  mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>Healthcare Choices
-  </h3>
-</div>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-bookmark-2"></use>
-    </svg>Final Wishes
-  </h3>
-</div>
+<%= link_to healthcare_choices_path, class: "undo-link-style" do %>
+  <div class="card  mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>Healthcare Choices
+    </h3>
+  </div>
+<% end %>
 
-<div class="card mb-30">
-  <h3>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-cloud-1"></use>
-    </svg>Web Accounts
-  </h3>
-</div>
+<%= link_to final_wishes_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-bookmark-2"></use>
+      </svg>Final Wishes
+    </h3>
+  </div>
+<% end %>
+
+<%= link_to web_accounts_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-cloud-1"></use>
+      </svg>Web Accounts
+    </h3>
+  </div>
+<% end %>
 
 <% else %>
     <%= render :partial => 'welcome/marketing_home' %>

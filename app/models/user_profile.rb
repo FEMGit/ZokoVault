@@ -27,6 +27,11 @@ class UserProfile < ActiveRecord::Base
   def name
     "#{first_name} #{last_name}"
   end
+  
+  def initials
+    [first_name, last_name].compact.map(&:first).join
+  end
+
 
   def signed_terms_of_service?
     !!signed_terms_of_service_at

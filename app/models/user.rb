@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_one :user_profile, -> { order("created_at DESC") }
   accepts_nested_attributes_for :user_profile, update_only: true
 
-  delegate :mfa_frequency, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
+  delegate :mfa_frequency, :initials, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
 
   def mfa_verify?
     case mfa_frequency

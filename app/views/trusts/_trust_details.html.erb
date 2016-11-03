@@ -10,7 +10,7 @@
         <div class = "details-left-info">
           <div class = "details-card-field">
             <label class="title">Trustees</label>
-            <% trust.trustees.each do |trustee| %>
+            <% trust.trustees && trust.trustees.each do |trustee| %>
               <div class="details-field">
                 <span class="details-field-value"><%= trustee.name %></span>
               </div>
@@ -18,7 +18,7 @@
           </div>
           <div class = "details-card-field">
             <label class="title">Successor Trustees</label>
-            <% trust.successor_trustees.each do |trustee| %>
+            <% trust.successor_trustees && trust.successor_trustees.each do |trustee| %>
               <div class="details-field">
                 <span class="details-field-value"><%= trustee.name %></span>
               </div>
@@ -29,13 +29,15 @@
           <% trust.agents.each_with_index do |advisor, index| %>
             <div class = "details-card-field">
               <% if index == 0 %>
-              <label class="title">Trust Advisor</label>
+                <label class="title">Trust Advisor</label>
               <% end %>
-              <div class="details-field">
-                <span class="details-field details-field-value"><%= advisor.name %></span>
-                <a class="details-field details-field-value"><%= advisor.emailaddress %></a>
-                <span class="details-field details-field-value"><%= advisor.phone %></span>
-              </div>
+              <% if advisor %>
+                <div class="details-field">
+                  <span class="details-field details-field-value"><%= advisor.name %></span>
+                  <a class="details-field details-field-value"><%= advisor.emailaddress %></a>
+                  <span class="details-field details-field-value"><%= advisor.phone %></span>
+                </div>
+              <% end %>
             </div>
           <% end %>
         </div>
@@ -52,7 +54,7 @@
         <div class="details-card-field shared">
           <label class="title">Shared With</label>
           <div class="details-field">
-            <% trust.shares.each do |share| %>
+            <% trust.shares && trust.shares.each do |share| %>
               <% if share.contact.present? %>
                 <span class="user-circle"><%= share.contact.initials %></span>
               <% end %>

@@ -47,6 +47,7 @@ class DocumentsController < AuthenticatedController
         save_return_url_path(current_document_id)
         format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
       end
+      set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
         if return_url?
           format.html { redirect_to session[:ret_url], notice: 'Document was successfully updated.' }
@@ -136,5 +137,9 @@ class DocumentsController < AuthenticatedController
   
   def document_clean_from_create_new_user_id
     params[:document][:shares_attributes].delete_if{|k, v| v[:contact_id] == new_contact_path}
+  end
+  
+  def set_document_update_date_to_now(document)
+    document.updated_at = Time.now.utc
   end
 end

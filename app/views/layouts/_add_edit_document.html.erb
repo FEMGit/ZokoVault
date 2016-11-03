@@ -5,8 +5,8 @@
     <h2 class="document-title"> <%= yield(:title) %> </h2>
     <% if @document.persisted? %>
       <span class='document-change-data'>
-        <span class="edit-data-label">Created: </span><%= @document.created_at.strftime("%M/%d/%Y") %>
-        <span class="edit-data-label">Modified: </span><%= @document.updated_at.strftime("%M/%d/%Y") %>
+        <span class="edit-data-label">Created: </span><%= date_format(@document.created_at) %>
+        <span class="edit-data-label">Modified: </span><%= date_format(@document.updated_at) %>
       </span>
    <% end %>
   </div>

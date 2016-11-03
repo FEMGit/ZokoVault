@@ -1,8 +1,8 @@
-<% shares[0...3].each do |share| %>
+<% shares && shares[0...3].each do |share| %>
   <% if share.contact.present? %>
     <span class="user-circle"><%= share.contact.initials %></span>
   <% end %>
 <% end %>
-<% if shares.length > 3 %>
+<% if shares && shares.length > 3 %>
   <span>...</span>
 <% end %>

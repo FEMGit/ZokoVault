@@ -17,7 +17,6 @@ class WillsController < AuthenticatedController
 
   # GET /wills/new
   def new
-    @will = Will.new
     @vault_entry = WillBuilder.new(type: 'will').build
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build

@@ -13,9 +13,11 @@
   <% end %>
 
   <div class="insurance-header-content">
-   <%= link_to 'Delete', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete, 
-      data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
-     class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
+    <% if params[:id] %>
+      <%= link_to 'Delete', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete, 
+        data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
+        class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
+      <% end %>
 
     <div class="field">
       <label>Insurance Provider Name </label>

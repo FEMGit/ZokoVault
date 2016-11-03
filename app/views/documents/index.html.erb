@@ -22,7 +22,7 @@
         <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
       </td>
       <td>
-        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
+        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares && document.shares} %>
       </td>
       <td>
         <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

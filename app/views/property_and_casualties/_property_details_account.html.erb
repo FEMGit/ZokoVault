@@ -8,19 +8,21 @@
           <h2 class="provider-details-title">Policy Information</h2>
             <div class = "details-card-field">
             <label class="title">Coverage Amount</label>
-            <span class="details-field details-field-value"><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
+            <span class="details-field details-field-value"><%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
           </div>
           <div class = "details-card-field">
             <label class="title">Policy Number</label>
             <span class="details-field details-field-value"><%= policy.policy_number %></span>
           </div>
           <div class = "details-card-field">
-            <label class="title">Insured Members</label>
-            <span class="details-field details-field-value"><%= policy.policy_holder.name %></span>
+            <label class="title">Policy Holder</label>
+            <% if policy.policy_holder %>
+              <span class="details-field details-field-value"><%= policy.policy_holder && policy.policy_holder.name %></span>
+            <% end %>
           </div>
           <div class = "details-card-field">
-            <label class="title">Insured Members</label>
-            <span class="details-field details-field-value"><%= policy.broker_or_primary_contact.name %></span>
+            <label class="title">Primary Contact</label>
+            <span class="details-field details-field-value"><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></span>
           </div>
           <div class = "details-card-field details-notes">
             <label class="title">Notes</label>

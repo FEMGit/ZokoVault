@@ -6,7 +6,7 @@
         <div class = "details-card-field">
           <label class="title">Power of Attorney</label>
           <div class="details-field">
-            <span class="details-field-value"><%= attorney.agents.map(&:name).join('') %></span>
+            <span class="details-field-value"><%= attorney.agents && attorney.agents.map(&:name).join('') %></span>
           </div>
         </div>
         <div class = "details-card-field">

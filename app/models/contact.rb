@@ -5,6 +5,8 @@ class Contact < ActiveRecord::Base
 
   validates :firstname, presence: true
   validates :user_id, presence: true
+  has_many :vendors, dependent: :nullify
+  has_many :shares, dependent: :destroy
 
   RELATIONSHIP_TYPES = {
     personal: [

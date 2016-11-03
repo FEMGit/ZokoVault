@@ -1,6 +1,6 @@
 class WtlService
   def self.get_wills_details(wills)
-    wills.collect{|will| [will.executor.id, will.primary_beneficiary_ids,
+    wills.collect{|will| [will.executor.nil? ? "" : will.executor.id, will.primary_beneficiary_ids,
       will.secondary_beneficiary_ids, will.agent_ids, will.shares.map{|share| share.contact_id}, will.id]}
   end
   

@@ -22,9 +22,9 @@
             <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link", method: :get %>
             <h3><%= vendor.name %></h3>
             <div class="section">
-              <% vendor.policy.each do |policy| %>
-                <span class="wtl-left-side field"><%= "#{policy.policy_type}: #{policy.policy_holder.name}" %></span>
-                <span class="wtl-right-side field"><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
+              <% vendor.policy && vendor.policy.each do |policy| %>
+                <span class="wtl-left-side field"><%= "#{policy.policy_type}: #{policy.policy_holder && policy.policy_holder.name}" %></span>
+                <span class="wtl-right-side field"><%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></span>
               <% end %>
             </div>
             <span class="clear"></span>
@@ -34,7 +34,7 @@
             </div>
             <span class="clear"></span>
             <div class="section bottom">
-              <% vendor.shares.each do |share| %>
+              <% vendor.shares && vendor.shares.each do |share| %>
                 <% if share.contact.present? %>
                   <span class="user-circle"><%= share.contact.initials %></span>
                 <% end %>
@@ -50,7 +50,7 @@
             <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link", method: :get %>
             <h3><%= vendor.name %></h3>
             <div class="section">
-              <% vendor.policy.each do |policy| %>
+              <% vendor.policy && vendor.policy.each do |policy| %>
                 <span class="wtl-left-side field"><%= policy.insured_property %></span>
                 <span class="wtl-right-side field"><%= policy.policy_type %></span><br>
               <% end %>
@@ -62,7 +62,7 @@
             </div>
             <span class="clear"></span>
             <div class="section bottom">
-              <% vendor.shares.each do |share| %>
+              <% vendor.shares && vendor.shares.each do |share| %>
                 <% if share.contact.present? %>
                   <span class="user-circle"><%= share.contact.initials %></span>
                 <% end %>
@@ -78,9 +78,9 @@
             <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link", method: :get %>
             <h3><%= vendor.name %></h3>
             <div class="section">
-              <% vendor.policy.each do |policy| %>
+              <% vendor.policy && vendor.policy.each do |policy| %>
                 <div class="health-block">
-                  <span class="wtl-left-side field"><%= policy.policy_holder.name %></span>
+                  <span class="wtl-left-side field"><%= policy.policy_holder && policy.policy_holder.name %></span>
                   <span class="wtl-right-side field"><%= policy_type_abbreviate(policy.policy_type) %></span>
                 </div>
                 <span class="clear"></span>
@@ -93,7 +93,7 @@
             </div>
             <span class="clear"></span>
             <div class="section bottom">
-              <% vendor.shares.each do |share| %>
+              <% vendor.shares && vendor.shares.each do |share| %>
                 <% if share.contact.present? %>
                   <span class="user-circle"><%= share.contact.initials %></span>
                 <% end %>

@@ -1,12 +1,24 @@
-table{
+table {
   width: 100%;
   background: white;
   border: 1px solid $color-gray-light;
   border-radius: 5px;
   padding: 0;
   margin-bottom: 20px;
+  
+  td {
+    height: 40px;
+    display: table-cell;
+    vertical-align: middle;
+    border-bottom: 1px solid $color-gray-light;
+    padding: 5px;
+  }
+  tr:last-child td {
+    border-bottom: 0;
+    padding: 5px;
+  }
 }
-th{
+th {
   border-bottom: 1px solid $color-gray-light;
   text-align: left;
   padding: 5px;
@@ -15,12 +27,4 @@ th{
   color: $color-gray-med-shaded;
   background:$color-off-white;
   line-height: 14px;
-}
-td{
-  border-bottom: 1px solid $color-gray-light;
-  padding: 7px;
-}
-tr:last-child td{
-  border-bottom: 0;
-  padding: 7px;
 }

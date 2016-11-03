@@ -1,0 +1,14 @@
+.input-prefix-web {
+   position: relative;
+   input {
+    padding-left: 45px;
+  }
+  &:after {
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left: 5px;
+    content: "www.";
+    font-weight: 400;
+  }
+}

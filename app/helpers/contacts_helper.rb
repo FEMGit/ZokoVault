@@ -4,11 +4,11 @@ module ContactsHelper
       !user_profile.state.blank?
   end
   
-  def show_email_address(email)
-    if email.blank? || email.nil?
+  def show_web_address(web_address)
+    if web_address.blank? || web_address.nil?
       ""
     else
-      "www.#{email}"
+      "www.#{web_address}"
     end
   end
 end

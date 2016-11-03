@@ -421,17 +421,34 @@ body.logged-out{
   padding: 60px 20px;
   background-size: cover;
 }
-.superbutton{
-  background: asset-data-url('marketing/super_button.png') no-repeat top center;;
-  width: 250px;
-  height:350px;
-  margin-left: 20px;
 
-  &.short{
-    background: asset-data-url('marketing/super_button_short.png') no-repeat top center;;
-    height:175px;
-  }
-  span{
-    opacity: 0;
-  }
+//Call to action sections
+.cta{
+    background: asset-data-url('marketing/cta_bg.jpg') top center;
+    width: 250px;
+    text-align: center;
+    text-decoration: none;
+    display:block;
+    position: relative;
+    padding: 20px;
+
+    &.tall{
+      height:350px;
+    }
+    &.short{
+      height: 175px;
+    }
+    &:hover{
+      text-decoration:none;
+    }
+    h1{
+      color: white;
+      margin-top: 40px;
+      font-size: 2.75em;
+    }
+    button{
+      position: absolute;
+      bottom: 20px;
+      left: 90px;
+    }
 }

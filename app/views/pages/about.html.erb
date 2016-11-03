@@ -21,7 +21,7 @@
 <section class="generic-dark">
   <article>
 
-    <%= image_tag "marketing/about_team.png", :class => "fr" %>
+    <%= image_tag "marketing/about_team.png", :class => "fr mw-20" %>
     <h1>Who Do We Help?</h1>
 
 
@@ -39,9 +39,10 @@
 
 <section class="generic wall">
   <article>
-    <a class="superbutton fr">
-      <span class="text">Sign Up</span>
-    </a>
+    <div class="fr mw-20">
+    <%= render :partial => 'pages/cta_tall' %>
+  </div>
+
     <h1>Peace of Mind</h1>
     <p>Knowing that after their incapacitation or death, or on any given day, Users will have access to all of their critical information.</p>
     <h1>Confidence</h1>
@@ -114,9 +115,9 @@
 
 <section class="generic wall">
   <article>
-    <a class="superbutton short fr">
-      <span class="text">Sign Up</span>
-    </a>
+    <div class="fr mw-20">
+    <%= render :partial => 'pages/cta_short' %>
+  </div>
     <h1>Our Advice</h1>
     <p>Break the inertia! So many people do not begin their estate plan or documentation process out of a feeling of
 overwhelming inertia. There is a fear of needing to complete everything at once. The solution is to start small. Just identifying the top 4 or 5 key contacts is 50% of the battle to most families. Get them into ZokuVault now and chip away over time. Before you know it, you will have an estate plan to be proud of.</p>

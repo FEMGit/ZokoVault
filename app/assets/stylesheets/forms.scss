@@ -107,6 +107,11 @@ a.button, input[type=submit].button{
   border-radius: 5px;
 }
 
+.blue-button{
+  background: $color-primary-shaded;
+  border-radius: 5px;
+}
+
 .outline-button{
   border-radius: 5px;
   background: transparent;
@@ -292,7 +297,6 @@ label:hover input[type="checkbox"]:checked + span {
 .hidden{
   display:none;
 }
-
 
 
 /*****************************************

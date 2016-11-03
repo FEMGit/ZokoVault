@@ -25,14 +25,13 @@ Rails.application.routes.draw do
     resources :properties, controller: :property_and_casualties
     resources :healths
   end
-  
+
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
 
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
-  get 'styleguide' => 'welcome#styleguide'
   get 'cards' => 'welcome#cards'
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
@@ -48,7 +47,7 @@ Rails.application.routes.draw do
   get 'shared_view' => 'categories#shared_view_dashboard'
   get 'taxes' => 'categories#taxes'
   get 'web_accounts' => 'categories#web_accounts'
-  
+
   get 'shares/new/:document' => 'shares#new'
 
   resources :users, only: [:index, :destroy]

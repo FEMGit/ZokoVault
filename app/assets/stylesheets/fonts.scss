@@ -26,6 +26,9 @@ p{
   padding: 0;
   margin: 0 0 1em;
 }
+.small-text{
+  font-size: .75em;
+}
 a, a:visited{
   color: $color-link-blue;
   cursor: pointer;

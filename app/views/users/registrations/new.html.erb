@@ -1,14 +1,13 @@
 <% current_user = User.last %>
-<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
-  Wizard Modal
-</button>
-<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
-<div class="confirmation-wrapper">
-  <div class="sign-up-title">
-    <h3 class="confirmation-title">Sign Up</h3>
-    <span class="title-login-link">Already a member? <%= link_to 'Login', new_session_path(resource_name), class: 'no-underline-link'%></span>
-  </div>
-  <p class="information-title">Please tell us a little about yourself to create an account. We'll never share your personal information wtih anyone.</p>
+
+<section class="card signup-card">
+
+  <p class="fr">Already a member? <%= link_to 'Login', new_session_path(resource_name), class: 'no-underline-link'%></p>
+
+  <h3 class="confirmation-title">Sign Up</h3>
+
+  <p>Please tell us a little about yourself to create an account. We'll never share your personal information wtih anyone.</p>
+
   <% resource.build_user_profile rescue nil %>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= devise_error_messages! %>
@@ -51,60 +50,13 @@
 
     <% end %>
 
-    <footer class="modal-footer sign-up-footer">
+
       <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button' %>
       <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>
-    </footer>
-    <p class="submit-info">By submitting this information I agree to the ZokuVault <%= link_to 'Terms of Service', '', class: "no-underline-link" %> and
-      <%= link_to 'Privacy Policy', '', class: "no-underline-link" %>.
+
+    <p class="mt-20 small-text">By submitting this information I agree to the ZokuVault
+      <a herf="/terms-of-use">Terms of Use</a> and
+      <a herf="/privacy-policy">Privacy Policy</a>.
     </p>
   <% end %>
-</div>
-</div>
-
-<script>
-$(function(){
-
-  //SOMEONE PLEASE FIX THIS GARBAGE
-  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
-  $(document).ready(function(){
-    $('button[data-modal-id]').click();
-  });
-  $('button[data-modal-id]').click(function(e) {
-    e.preventDefault();
-    $("body").append(appendthis);
-    $(".modal-overlay").fadeTo(500, 0.8);
-    $(".js-modalbox").fadeIn(500);
-    var modalBox = $(this).attr('data-modal-id');
-    $('#'+modalBox).fadeIn($(this).data());
-  });
-
-  $(".js-modal-close, .modal-overlay").click(function() {
-    $(".modal, .modal-overlay").fadeOut(500, function() {
-      $(".modal-overlay").remove();
-    });
-
-  });
-
-  //ESPECIALLY THIS GARBAGE
-  $(window).resize(function() {
-    $(".large-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".medium-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".small-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize();
-});
-</script>
+</section>

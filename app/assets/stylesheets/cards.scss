@@ -95,11 +95,26 @@ $cards-margin: 12px;
 .card.login-card {
   margin: 100px auto;
   max-width: 400px;
+
+  @include media($mobile) {
+    margin: 80px 20px 0;
+    max-width: 100%;
+  }
 }
 
+//SIGNUP CARD
+.card.signup-card {
+  margin: 100px auto;
+  max-width: 600px;
+
+  @include media($mobile) {
+    margin: 80px 20px 0;
+    max-width: 100%;
+  }
+}
 //DYNAMIC CARD INFO REPRESENTATION
-.card.wills.wtl-info-wrapper, 
-.card.trusts.wtl-info-wrapper, 
+.card.wills.wtl-info-wrapper,
+.card.trusts.wtl-info-wrapper,
 .card.attorney.wtl-info-wrapper,
 .column-card.info-wrapper {
   .wtl-left-side {
@@ -356,8 +371,8 @@ $cards-margin: 12px;
   }
 }
 
-.card.details.insurance, 
-.card.details.wtl, 
+.card.details.insurance,
+.card.details.wtl,
 .column-card.info-wrapper,
 .contact-header-info,
 .my_profile_info {

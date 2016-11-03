@@ -14,7 +14,7 @@ class Contact < ActiveRecord::Base
       'Spouse/Domestic Partner',
       'Parent',
       'Grandparent',
-      'Other Benificiary',
+      'Other Beneficiary',
     ],
     professional: [
       'Accountant',

@@ -1,0 +1,8 @@
+<% if document_category(document).nil? %>
+  <span class="doc-tag"><%= empty_group_category %></span>
+<% else %>
+  <span class="doc-tag"><%= document_category(document) %></span>
+  <% if document_group(document) %>
+    <span class="doc-tag secondary-tag"><%= document_group(document) %></span>
+  <% end %>
+<% end %>

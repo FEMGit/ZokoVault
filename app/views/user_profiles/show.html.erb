@@ -9,7 +9,8 @@
   <h1>My Profile</h1>
 </div>
 
-<div class="card mb-30">
+<div class="card mb-30 my_profile_info">
+  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link", method: :get %>
   <h3 class="card-label">Personal Information</h3>
 
   <% if !@user_profile.name.blank? %>
@@ -50,7 +51,8 @@
 </div>
 
 
-<div class="card mb-30 shared-card">
+<div class="card mb-30 shared-card my_profile_info">
+  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link", method: :get %>
   <h3 class="card-label">
     <svg class="icon" viewBox="0 0 20 20">
       <use xlink:href="#icon-Safe"></use>
@@ -66,7 +68,8 @@
 
 
 <% employer = @user_profile.employers.first || @user_profile.employers.build %>
-<div class="card mb-30">
+<div class="card mb-30 my_profile_info">
+  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link", method: :get %>
   <h3 class="card-label">Employer Information</h3>
 
   <label>Business Information</label>
@@ -107,13 +110,9 @@
   </a>
   <h2><%= @user_profile.name %> Documents</h2>
 </div>
-<table>
+<table class="sortable">
   <tr>
-    <th>Name</th>
-    <th>Modified</th>
-   <th>Tags</th>
-    <th>Shared With</th>
-    <th>Actions</th>
+    <%= render :partial => "layouts/documents_common_columns" %>
   </tr>
   <% @my_profile_documents && @my_profile_documents.each do |document| %>
     <tr>
@@ -121,7 +120,9 @@
         <a><%= link_to document.name, document_path(document) %></a>
       </td>
       <td><%= document.updated_at %></td>
-      <td>tags</td>
+      <td>
+        <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
+      </td>
       <td>
         <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
       </td>

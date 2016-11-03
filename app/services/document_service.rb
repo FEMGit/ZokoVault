@@ -19,17 +19,33 @@ class DocumentService
   end
   
   def get_empty_card_values
-    ["Select..."]
+    [id: "Select...", name: "Select..."]
   end
   
-  def get_card_values
+  def contact_category?
+    @category == "Contact"
+  end
+  
+  def get_card_values(current_user)
     get_all_groups
     if category_exist?
-      @all_groups.detect{|x| x[:label] == @category}[:groups].collect{|x| x["label"]}
-        .prepend("Select...")
+      if contact_category?
+        Contact.for_user(current_user).collect{|x| [id: x.id, name: x.name]}
+          .prepend(get_empty_card_values)
+      else
+        @all_groups.detect{|x| x[:label] == @category}[:groups].collect{|x| [id: x["label"], name: x["label"]]}
+          .prepend(get_empty_card_values)
+      end
     else
-      get_empty_card_values
+      [get_empty_card_values]
     end
   end
 
+  def self.get_share_with_documents(user, contact_id)
+    Document.for_user(user).select{|doc| doc.shares.any?{|sh| sh.contact_id == contact_id}}
+  end
+  
+  def self.get_contact_documents(user, category, contact_id)
+    Document.for_user(user).where(:category => category, :group => contact_id)
+  end
 end

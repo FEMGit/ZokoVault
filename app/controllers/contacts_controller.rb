@@ -11,8 +11,8 @@ class ContactsController < AuthenticatedController
   # GET /contacts/1
   # GET /contacts/1.json
   def show
-    @contact_documents = get_contact_share_documents
-    ventries = get_primary_contact_documents
+    @share_documents = DocumentService.get_share_with_documents(current_user, @contact.id)
+    @contact_documents = DocumentService.get_contact_documents(current_user, @category, @contact.id)
     session[:ret_url] = "/contacts/#{@contact.id}"
   end
 
@@ -70,15 +70,8 @@ class ContactsController < AuthenticatedController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
+      @category = "Contact"
       @contact = Contact.find(params[:id])
-    end
-  
-    def get_contact_share_documents
-      Document.for_user(current_user).select{|doc| doc.shares.any?{|sh| sh.contact_id == @contact.id}}
-    end
-  
-    def get_primary_contact_documents
-      Document.for_user(current_user).select{|doc| doc.shares.any?{|sh| sh.contact_id == @contact.id}}
     end
   
     # Never trust parameters from the scary internet, only allow the white list through.

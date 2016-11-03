@@ -77,13 +77,9 @@
   <h1><%= params[:name] %> Documents</h1>
 </div>
 
-<table>
+<table class="sortable">
   <tr>
-    <th>Name</th>
-    <th>Modified</th>
-    <th>Tags</th>
-    <th>Shared With</th>
-    <th>Actions</th>
+    <%= render :partial => "layouts/documents_common_columns" %>
   </tr>
   <% @group_documents && @group_documents.each do |document| %>
     <% if document.present? %>
@@ -92,7 +88,9 @@
           <a><%= link_to document.name, document_path(document) %></a>
         </td>
         <td><%= document.updated_at %></td>
-        <td>tags</td>
+        <td>
+          <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
+        </td>
         <td>
           <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
         </td>

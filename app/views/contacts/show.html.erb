@@ -2,13 +2,13 @@
 
 <div class="contact-element-title">
   <h1 class="contact-user-name"><%=@contact.firstname%> <%=@contact.lastname%></h1>
-  <a class="edit-link" href=<%=edit_contact_path(@contact)%>>
+  <%= link_to edit_contact_path(@contact), class: "edit-link", method: :get do %>
     <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
     </svg>
     </span>Edit Contact
-  </a>
+  <% end %>
 </div>
 <%= render 'header_details_info' %>
 <%= render 'documents_details' %>

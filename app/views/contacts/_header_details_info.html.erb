@@ -1,4 +1,5 @@
 <div class="contact-header-info">
+  <%= link_to content_tag(:a), edit_contact_path(@contact), class: "whole-card-link", method: :get %>
   <div id="left-contact-info">
     <div class="contact-element">
       <label>Contact Type</label>
@@ -14,12 +15,7 @@
         <label>Beneficiary Type</label>
         <p><%= @contact.beneficiarytype %></p>
       </div>
-      
-      <div class="contact-element">
-        <label>Social Security Number</label>
-        <p><%= @contact.ssn %></p>
-      </div>
-    
+
       <div class="contact-element">
         <label>Date of Birth</label>
         <p><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></p>

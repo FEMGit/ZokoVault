@@ -4,7 +4,7 @@
   <div class="flex-column">
     <div class="card cg-1 column-card wtl-info-wrapper wills">
       <% if @wills.any? %>
-        <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
+        <%= link_to content_tag(:a), wills_path, class: "whole-card-link", method: :get %>
         <div class="section header">
           <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
@@ -60,7 +60,7 @@
   <div class="flex-column">
     <div class="card cg-2 column-card wtl-info-wrapper trusts">
       <% if @trusts.any? %>
-        <%= link_to content_tag(:a), trusts_path, class: "whole-card-link" %>
+        <%= link_to content_tag(:a), trusts_path, class: "whole-card-link", method: :get %>
         <div class="section header">
           <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
@@ -111,7 +111,7 @@
   <div class="flex-column">
     <div class="card cg-3 column-card wtl-info-wrapper attorney">
       <% if @power_of_attorneys.any? %>
-        <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
+        <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link", method: :get %>
         <div class="section header">
           <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
@@ -170,40 +170,19 @@
   <h1>Wills - Trusts - Legal Documents</h1>
 </div>
 
-<table>
+<table class="sortable">
   <tr>
-    <th>Name</th>
-    <th>Modified</th>
-    <th>Tags</th>
-    <th>Shared With</th>
-    <th>Actions</th>
+    <%= render :partial => "layouts/documents_common_columns" %>
   </tr>
-  <% @vault_entries.each do |vault_entry| %>
-    <% next unless (document = vault_entry.document) %>
-      <tr>
-        <td>
-          <a><%= link_to document.name, document_path(document) %></a>
-        </td>
-        <td><%= document.updated_at %></td>
-        <td>tags</td>
-        <td>
-          <% vault_entry.share_with_contacts.each do |contact| %>
-            <span class="user-circle"><%= contact.initials %></span>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
-        </td>
-      </tr>
-  <% end %>
   <% @wtl_documents.each do |wtl_doc| %>
     <tr>
       <td>
         <a><%= link_to wtl_doc.name, document_path(wtl_doc) %></a>
       </td>
       <td><%= wtl_doc.updated_at %></td>
-      <td>tags</td>
+      <td>
+        <%= render :partial => "layouts/document_tags", :locals => {:document => wtl_doc} %>
+      </td>
       <td>
         <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => wtl_doc.shares} %>
       </td>

@@ -179,7 +179,7 @@
       <td>
         <a><%= link_to wtl_doc.name, document_path(wtl_doc) %></a>
       </td>
-      <td><%= wtl_doc.updated_at %></td>
+      <td><%= date_format(wtl_doc.updated_at) %></td>
       <td>
         <%= render :partial => "layouts/document_tags", :locals => {:document => wtl_doc} %>
       </td>

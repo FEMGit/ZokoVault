@@ -64,7 +64,7 @@
         </div>
       </div>
 
-      <div id="category-form">
+      <div id="category-form" class="contact-profile">
         <div id="personal_relationship">
           <div class="field">
             <%= f.label :relationship %><br>
@@ -90,7 +90,7 @@
             %>
           </div>
           <div class="field">
-            <%= f.label :address %><br>
+            <%= f.label :address, 'Street Address' %><br>
             <%= f.text_field :address %>
           </div>
         </div>
@@ -124,23 +124,33 @@
             <%= f.text_field :businessfax, class: "form-control", :data => {:mask => '999-999-9999'}  %>
           </div>
           <div class="field">
-            <%= f.label :business_street_address, 'Address' %><br>
+            <%= f.label :business_street_address, 'Street Address' %><br>
             <%= f.text_field :business_street_address_1 %>
           </div>
         </div>
         <div class="field">
-          <%= f.label :city, 'City' %><br>
-          <%= f.text_field :city %>
+          <label>City</label>
+          <div class="styled-text-input">
+            <p><%= f.text_field :city %></p>
+          </div>
         </div>
-        <div class="field">
-          <%= f.label :state, 'State' %><br>
-          <%= f.text_field :state %>
+        <div class="field address-field">
+          <div class="zipcode-field">
+            <label>Zip Code </label>
+            <div class="zipcode-text styled-input-text">
+              <div class="zipcode">
+                <p><%= f.text_field :zipcode %></p>
+              </div>
+            </div>
+          </div>
+          <div class="state-select">
+            <label>State </label>
+            <div class="styled-select state">
+              <p><%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..."  %></p>
+            </div>
+          </div>
         </div>
-        <div class="field">
-          <%= f.label :zipcode, 'Zip Code' %><br>
-          <%= f.text_field :zipcode %>
-        </div>
-        <div class="field">
+        <div class="field bottom-field">
           <%= f.label :notes %><br>
           <%= f.text_area :notes %>
         </div>

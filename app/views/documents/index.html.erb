@@ -17,7 +17,7 @@
       <td>
         <a><%= link_to document.name, document_path(document) %></a>
       </td>
-      <td><%=document.updated_at%></td>
+      <td><%= date_format(document.updated_at) %></td>
       <td>
         <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
       </td>

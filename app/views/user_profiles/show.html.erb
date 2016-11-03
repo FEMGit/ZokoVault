@@ -50,23 +50,6 @@
   <% end %>
 </div>
 
-
-<div class="card mb-30 shared-card my_profile_info">
-  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link", method: :get %>
-  <h3 class="card-label">
-    <svg class="icon" viewBox="0 0 20 20">
-      <use xlink:href="#icon-Safe"></use>
-    </svg>
-    Primary Shared With
-  </h3>
-  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
-    <label>Primary Shared With</label>
-    <section class="shared-list">
-      <p><span class="user-circle">BM</span>&nbsp;Bruna Mars</p>
-    </section>
-</div>
-
-
 <% employer = @user_profile.employers.first || @user_profile.employers.build %>
 <div class="card mb-30 my_profile_info">
   <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link", method: :get %>
@@ -119,7 +102,7 @@
       <td>
         <a><%= link_to document.name, document_path(document) %></a>
       </td>
-      <td><%= document.updated_at %></td>
+      <td><%= date_format(document.updated_at) %></td>
       <td>
         <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
       </td>

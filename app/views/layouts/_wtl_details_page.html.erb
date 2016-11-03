@@ -31,7 +31,12 @@
       <td>
         <a><%= link_to document.name, document_path(document) %></a>
       </td>
+<<<<<<< HEAD
       <td><%= document.updated_at %></td>
+=======
+      <td><%= date_format(document.updated_at) %></td>
+      <td>tags</td>
+>>>>>>> 45a3f40... Ad-347 change date format in documents tables
       <td>
         <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
       </td>

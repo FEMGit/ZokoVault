@@ -64,7 +64,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     end
 
     context "with valid params" do
-      it "creates a new PowerOfAttorney" do 
+      it "creates a new PowerOfAttorney" do
         expect { post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(PowerOfAttorney, :count).by(1)
       end

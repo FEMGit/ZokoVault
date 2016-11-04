@@ -4,12 +4,18 @@
     position: absolute;
     top: 33px;
     margin: 0 auto;
-    width: 300px;
-    right: 50%;
-    left: 50%;
+    width: 40%;
+    right: 30%;
+    left: 30%;
     border: 1px solid $color-gray-med;
     border-radius: 5px;
     z-index: 101;
+
+    @include media($mobile) {
+      width: 80%;
+      right: 10%;
+      left: 10%;
+    }
 }
 
 $base-spacing: 1.5em !default;

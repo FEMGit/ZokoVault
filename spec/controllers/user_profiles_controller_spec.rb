@@ -2,16 +2,17 @@ require 'rails_helper'
 
 RSpec.describe UserProfilesController, type: :controller do
 
+  let(:user) { create :user }
   let(:valid_attributes) do
     attributes_for(:user_profile)
       .merge(employers_attributes: [attributes_for(:employer)])
+      .merge(user_id: user.id)
   end
 
   let(:invalid_attributes) do
     skip("Add a hash of attributes invalid for your model")
   end
 
-  let(:user) { create :user }
   before { sign_in user }
 
   # This should return the minimal set of values that should be in the session

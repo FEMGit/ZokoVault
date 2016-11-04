@@ -1,7 +1,7 @@
 class PolicyService
   def self.FillLifePolicies(policies, life_and_disability)
     policies.values.each do |policy|
-      if(!policy[:id].blank?)
+      if policy[:id].present?
         life_and_disability.policy.update(policy[:id], policy)
       else
         life_and_disability.policy << LifeAndDisabilityPolicy.new(policy)
@@ -11,7 +11,7 @@ class PolicyService
   
   def self.FillHealthPolicies(policies, health)
     policies.values.each do |policy|
-      if(!policy[:id].blank?)
+      if policy[:id].present?
         health.policy.update(policy[:id], policy)
       else
         health.policy << HealthPolicy.new(policy)
@@ -21,7 +21,7 @@ class PolicyService
   
   def self.FillPropertyAndCasualtyPolicies(policies, property_and_casualty)
     policies.values.each do |policy|
-      if(!policy[:id].blank?)
+      if policy[:id].present?
         property_and_casualty.policy.update(policy[:id], policy)
       else
         property_and_casualty.policy << PropertyAndCasualtyPolicy.new(policy)

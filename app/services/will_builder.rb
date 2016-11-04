@@ -1,15 +1,16 @@
 class WillBuilder
 
   def initialize(options = {})
-    if(options[:id] && !options[:id].empty?)
-      self.will = Will.find(options[:id])
-    else
-      self.will = Will.new(options.slice(:user_id, :document_id, :executor_id))
-    end
+    self.will = 
+      if options[:id].present?
+        Will.find(options[:id])
+      else
+        Will.new(options.slice(:user_id, :document_id, :executor_id))
+      end
+
     self.options = options
-    if(options[:id] && !options[:id].empty?)
-      clear_options
-    end
+
+    clear_options if options[:id].present?
   end
   
   def clear_options

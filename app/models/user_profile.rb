@@ -24,6 +24,8 @@ class UserProfile < ActiveRecord::Base
     allow_blank: true, 
     message: "must be in format 222-555-1111"
 
+  after_save :create_or_update_contact_card
+
   def name
     "#{first_name} #{last_name}"
   end
@@ -61,5 +63,25 @@ class UserProfile < ActiveRecord::Base
   def format_phone_number(raw_phone_number)
     tmp = raw_phone_number.gsub(/[^0-9]/, '')
     "#{tmp[0..2]}-#{tmp[3..5]}-#{tmp[6..10]}"
+  end
+
+  def create_or_update_contact_card
+    contact = Contact.for_user(user).find_or_initialize_by(emailaddress: email)
+    contact.update_attributes(
+      firstname: first_name,
+      lastname: last_name,
+      emailaddress: user.email,
+      phone: phone_number,
+      contact_type: nil,
+      relationship: nil,
+      beneficiarytype: nil,
+      ssn: ssn,
+      birthdate: date_of_birth,
+      address: [street_address_1, street_address_2].compact.join(" "),
+      zipcode: zip,
+      state: state,
+      user_id: user_id,
+      city: city,
+    )
   end
 end

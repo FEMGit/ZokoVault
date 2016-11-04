@@ -44,17 +44,17 @@ class WillsController < AuthenticatedController
     new_wills = WtlService.get_new_records(will_params)
     old_wills = WtlService.get_old_records(will_params)
     respond_to do |format|
-      if(!new_wills.empty? || !old_wills.empty?)
+      if(new_wills.any? || old_wills.any?)
         begin
           new_wills.each do |new_will_params|
             @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
-            if (!@new_vault_entries.save)
+            if !@new_vault_entries.save
               raise "error saving new will"
             end
           end
           old_wills.each do |old_will|
             @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-            if (!@old_vault_entries.save)
+            if !@old_vault_entries.save
               raise "error saving new will"
             end
           end

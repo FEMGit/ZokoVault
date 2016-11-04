@@ -1,15 +1,16 @@
 class TrustBuilder
 
   def initialize(options = {})
-    if(options[:id] && !options[:id].empty?)
-      self.trust = Trust.find(options[:id])
-    else
-      self.trust = Trust.new(options.slice(:user_id, :document_id, :name))
-    end
+    self.trust = 
+      if options[:id].present?
+        Trust.find(options[:id])
+      else
+        Trust.new(options.slice(:user_id, :document_id, :name))
+      end
+
     self.options = options
-    if(options[:id] && !options[:id].empty?)
-      clear_options
-    end
+
+    clear_options if options[:id].present?
   end
   
   def clear_options

@@ -20,7 +20,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # GET /properties/new
   def new
     initialize_insurance_card
-    @errors = @insurance_card.errors;
+    @errors = @insurance_card.errors
   end
   
   def initialize_insurance_card
@@ -28,19 +28,19 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @insurance_card.policy << PropertyAndCasualtyPolicy.new
   end
 
-
   # GET /properties/1/edit
   def edit
     @insurance_card = @property_and_casualty
-    @insurance_card.share_with_ids = @property_and_casualty.share_ids.collect{|x| Share.find(x).contact_id.to_s}
+    @insurance_card.share_with_ids = @property_and_casualty.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
+  
   # POST /properties
   # POST /properties.json
   def create
     policies = policy_params
-    policies.keys.each{|x| params[:property_and_casualty].delete(x)}
+    policies.keys.each { |x| params[:property_and_casualty].delete(x) }
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: current_user.id))
-    PolicyService.FillPropertyAndCasualtyPolicies(policies, @insurance_card)
+    PolicyService.fill_property_and_casualty_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -57,9 +57,9 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # PATCH/PUT /properties/1.json
   def update
     policies = policy_params
-    policies.keys.each{|x| params[:property_and_casualty].delete(x)}
+    policies.keys.each { |x| params[:property_and_casualty].delete(x) }
     @insurance_card = @property_and_casualty
-    PolicyService.FillPropertyAndCasualtyPolicies(policies, @insurance_card)
+    PolicyService.fill_property_and_casualty_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -111,6 +111,6 @@ class PropertyAndCasualtiesController < AuthenticatedController
     end
 
     def policy_params
-      property_and_casualty_params.select{|k, v| k.starts_with?("policy_")}
+      property_and_casualty_params.select { |k, _v| k.starts_with?("policy_") }
     end
 end

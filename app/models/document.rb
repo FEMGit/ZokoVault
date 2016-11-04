@@ -14,9 +14,9 @@ class Document < ActiveRecord::Base
 
   accepts_nested_attributes_for :shares, reject_if: proc { |attributes| attributes[:contact_id].blank? }
     
-  DOCUMENT_PREVIEW_FILES = %w[image text/plain text/html pdf]
+  DOCUMENT_PREVIEW_FILES = %w(image text/plain text/html pdf).freeze
     
-  def self.is_previewed?(extension)
-    DOCUMENT_PREVIEW_FILES.any?{|x| extension.include?(x)}
+  def self.previewed?(extension)
+    DOCUMENT_PREVIEW_FILES.any? { |x| extension.include?(x) }
   end
 end

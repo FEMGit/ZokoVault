@@ -37,7 +37,7 @@ gem 'aws-sdk', '~> 2'
 gem 'carrierwave', '0.10.0'
 gem "fog"
 
-#currency formatting
+# Currency formatting
 gem 'autonumeric-rails'
 
 # Use ActiveModel has_secure_password

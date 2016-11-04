@@ -22,9 +22,8 @@ class WillsController < AuthenticatedController
     @vault_entry.vault_entry_beneficiaries.build
     @wills = Will.for_user(current_user)
     @vault_entries = Will.for_user(current_user)
-    if(@vault_entries.empty?)
-      @vault_entries << @vault_entry
-    end
+    return unless @vault_entries.empty?
+    @vault_entries << @vault_entry
   end
 
   # GET /wills/1/edit
@@ -44,23 +43,12 @@ class WillsController < AuthenticatedController
     new_wills = WtlService.get_new_records(will_params)
     old_wills = WtlService.get_old_records(will_params)
     respond_to do |format|
-      if(new_wills.any? || old_wills.any?)
+      if new_wills.any? || old_wills.any?
         begin
-          new_wills.each do |new_will_params|
-            @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
-            if !@new_vault_entries.save
-              raise "error saving new will"
-            end
-          end
-          old_wills.each do |old_will|
-            @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-            if !@old_vault_entries.save
-              raise "error saving new will"
-            end
-          end
+          update_wills(new_wills, old_wills)
           format.html { redirect_to estate_planning_path, notice: 'Will was successfully created.' }
           format.json { render :show, status: :created, location: @will }
-        rescue Exception
+        rescue
           format.html { render :new }
           format.json { render json: @will.errors, status: :unprocessable_entity }
         end
@@ -130,6 +118,17 @@ class WillsController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def will_params
-      params.select {|x| x.starts_with?("vault_entry")}
+      params.select { |x| x.starts_with?("vault_entry") }
+    end
+  
+    def update_wills(new_wills, old_wills)
+      new_wills.each do |new_will_params|
+        @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
+        raise "error saving new will" unless @new_vault_entries.save
+      end
+      old_wills.each do |old_will|
+        @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+        raise "error saving new will" unless @old_vault_entries.save
+      end
     end
 end

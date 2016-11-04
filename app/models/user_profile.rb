@@ -34,7 +34,6 @@ class UserProfile < ActiveRecord::Base
     [first_name, last_name].compact.map(&:first).join
   end
 
-
   def signed_terms_of_service?
     !!signed_terms_of_service_at
   end
@@ -81,7 +80,7 @@ class UserProfile < ActiveRecord::Base
       zipcode: zip,
       state: state,
       user_id: user_id,
-      city: city,
+      city: city
     )
   end
 end

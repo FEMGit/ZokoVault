@@ -1,6 +1,6 @@
 class UserProfile < ActiveRecord::Base
   validates_with DateOfBirthValidator, fields: [:date_of_birth]
-  
+
   belongs_to :user
   has_many :employers
   has_one :contact
@@ -18,13 +18,13 @@ class UserProfile < ActiveRecord::Base
   enum mfa_frequency: [:never, :new_ip, :always]
 
   validates_format_of :phone_number,
-    with: /\d{3}-\d{3}-\d{4}/, 
-    allow_blank: true, 
+    with: /\d{3}-\d{3}-\d{4}/,
+    allow_blank: true,
     message: "must be in format 222-555-1111"
 
-  validates_format_of :phone_number_mobile, 
-    with: /\d{3}-\d{3}-\d{4}/, 
-    allow_blank: true, 
+  validates_format_of :phone_number_mobile,
+    with: /\d{3}-\d{3}-\d{4}/,
+    allow_blank: true,
     message: "must be in format 222-555-1111"
 
   after_save :create_or_update_contact_card
@@ -32,7 +32,7 @@ class UserProfile < ActiveRecord::Base
   def name
     "#{first_name} #{last_name}"
   end
-  
+
   def initials
     [first_name, last_name].compact.map(&:first).join
   end

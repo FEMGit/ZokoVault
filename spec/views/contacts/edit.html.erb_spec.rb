@@ -12,7 +12,6 @@ RSpec.describe "contacts/edit", type: :view do
       :contact_type => Contact::CONTACT_TYPES.keys.first,
       :relationship => "MyString",
       :beneficiarytype => "MyString",
-      :ssn => "MyString",
       :address => "MyString",
       :zipcode => "MyString",
       :state => "MyString",
@@ -48,13 +47,9 @@ RSpec.describe "contacts/edit", type: :view do
 
       assert_select "input#contact_beneficiarytype[name=?]", "contact[beneficiarytype]"
 
-      assert_select "input#contact_ssn[name=?]", "contact[ssn]"
-
       assert_select "input#contact_address[name=?]", "contact[address]"
 
       assert_select "input#contact_zipcode[name=?]", "contact[zipcode]"
-
-      assert_select "input#contact_state[name=?]", "contact[state]"
 
       assert_select "textarea#contact_notes[name=?]", "contact[notes]"
 

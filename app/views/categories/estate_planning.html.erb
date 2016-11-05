@@ -177,7 +177,7 @@
   <% @wtl_documents.each do |wtl_doc| %>
     <tr>
       <td>
-        <a><%= link_to wtl_doc.name, document_path(wtl_doc) %></a>
+        <%= render :partial => "layouts/document_links", :locals => {:document => wtl_doc} %>
       </td>
       <td><%= date_format(wtl_doc.updated_at) %></td>
       <td>

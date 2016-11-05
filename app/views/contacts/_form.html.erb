@@ -98,10 +98,19 @@
         <div id="professional_relationship">
           <div class="field">
             <%= f.label :relationship %><br>
-            <div class="styled-select">
-              <%= f.select :relationship, 
-                options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship), 
-                {}, id: :professional_relationships_select %>
+            <div id="common_professional">
+              <div class="styled-select">
+                <%= f.select :relationship, 
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship), 
+                  {}, id: :professional_relationships_select %>
+              </div>
+            </div>
+            <div id="medical_professional">
+              <div class="styled-select">
+                <%= f.select :relationship, 
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship), 
+                  {}, id: :professional_relationships_select %>
+              </div>
             </div>
           </div>
 
@@ -242,8 +251,22 @@ var wizNav = function(step){
   else {
     $('#personal_relationship').hide();
     $('#personal_relationships_select').prop('disabled', 'disabled');
-    $('#professional_relationship').show();
-    $('#professional_relationships_select').removeAttr("disabled");
+    if ($("#contact_contact_type").val() === "Medical Professional") {
+      $('#professional_relationship').show();
+      $('#professional_relationships_select').removeAttr("disabled");
+      $('#medical_professional').show();
+      $('#medical_professional').removeAttr("disabled");
+      $('#common_professional').hide();
+      $('#common_professional').prop('disabled', 'disabled');
+    }
+    else {
+      $('#professional_relationship').show();
+      $('#professional_relationships_select').removeAttr("disabled");
+      $('#medical_professional').hide();
+      $('#medical_professional').prop('disabled', 'disabled');
+      $('#common_professional').show();
+      $('#common_professional').removeAttr("disabled");
+    }
   }
 }
 var submitContact = function(){

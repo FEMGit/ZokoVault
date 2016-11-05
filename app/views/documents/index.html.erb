@@ -15,7 +15,7 @@
   <% @documents.each do |document| %>
     <tr>
       <td>
-        <a><%= link_to document.name, document_path(document) %></a>
+        <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
       </td>
       <td><%= date_format(document.updated_at) %></td>
       <td>

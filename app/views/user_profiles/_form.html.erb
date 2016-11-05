@@ -84,6 +84,10 @@
       </div>
     </div>
   </div>
+  <div class="field notes-field bottom-field">
+    <label>Notes</label>
+    <p><%= f.text_area :notes  %></p>
+  </div>
 </div>
 
 <%= f.fields_for :employers do |ff| %>
@@ -140,10 +144,6 @@
       <div class="styled-text-input">
         <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
       </div>
-    </div>
-    <div class="field notes-field">
-      <label>Notes</label>
-      <p><%= ff.text_area :notes  %></p>
     </div>
   </div>
   <% end %>

@@ -48,6 +48,13 @@
       <%= @user_profile.address_parts.join('<br/>').html_safe %>
     </p>
   <% end %>
+  
+  <% if @user_profile.notes %>
+    <label>Notes</label>
+    <p>
+      <%= @user_profile.notes %>
+    </p>
+  <% end %>
 </div>
 
 <% employer = @user_profile.employers.first || @user_profile.employers.build %>
@@ -73,10 +80,10 @@
   <% if !employer.phone_number_office.blank? || !employer.phone_number_fax.blank?%>
     <label>Phone</label>
     <% if !employer.phone_number_office.blank? %>
-      <span class="field-block"><%= employer.phone_number_office %><span class="phone-type">home</span>
+      <span class="field-block"><%= employer.phone_number_office %><span class="phone-type">business</span>
     <% end %>
     <% if !employer.phone_number_fax.blank? %>
-      <span class="field-block"><%= employer.phone_number_fax %><span class="phone-type">cell</span>
+      <span class="field-block"><%= employer.phone_number_fax %><span class="phone-type">fax</span>
     <% end %>
     <br></p>
   <% end %>
@@ -100,7 +107,7 @@
   <% @my_profile_documents && @my_profile_documents.each do |document| %>
     <tr>
       <td>
-        <a><%= link_to document.name, document_path(document) %></a>
+        <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
       </td>
       <td><%= date_format(document.updated_at) %></td>
       <td>

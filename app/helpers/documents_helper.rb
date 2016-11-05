@@ -40,6 +40,12 @@ module DocumentsHelper
   def document_count(user, group)
     Document.for_user(user).where(group: group).count
   end
+  
+  def is_previewed?(document)
+    data = open(document.url)
+    extension = data.meta['content-type']
+    is_previewed = Document.is_previewed?(extension)
+  end
 
   private
     def asset_group(asset)

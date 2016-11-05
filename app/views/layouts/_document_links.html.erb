@@ -1,0 +1,5 @@
+<% if is_previewed?(document) %>
+  <a><%= link_to document.name, document_path(document) %></a>
+<% else %>
+  <a><%= link_to document.name, document.url %></a>
+<% end %>

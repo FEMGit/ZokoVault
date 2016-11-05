@@ -12,7 +12,6 @@ RSpec.describe "contacts/show", type: :view do
       :phone => "Phone",
       :contact_type => "Contact Type",
       :beneficiarytype => "Beneficiarytype",
-      :ssn => "Ssn",
       :address => "Address",
       :zipcode => "Zipcode",
       :state => "State",
@@ -50,7 +49,6 @@ RSpec.describe "contacts/show", type: :view do
     it "renders personal attributes" do
       render
       expect(rendered).to match(/Beneficiarytype/)
-      expect(rendered).to match(/Ssn/)
       expect(rendered).to match(/Address/)
       expect(rendered).to match(/Zipcode/)
     end

@@ -82,14 +82,18 @@
       </div>
     <% end %>
     
-    <div class="contact-element">
-      <label>Avatar color</label>
-      <p><%= @contact.avatarcolor%></p>
-    </div>
+    <% if @contact.avatarcolor.present? %>
+      <div class="contact-element">
+        <label>Avatar color</label>
+        <p><%= @contact.avatarcolor %></p>
+      </div>
+    <% end %>
     
-    <div class="contact-element">
-      <label>Photo url</label>
-      <p><%= @contact.photourl%></p>
-    </div>
+    <% if @contact.photourl.present? %>
+      <div class="contact-element">
+        <label>Photo url</label>
+        <p><%= @contact.photourl %></p>
+      </div>
+    <% end %>
   </div>
 </div>

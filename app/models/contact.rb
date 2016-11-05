@@ -26,6 +26,18 @@ class Contact < ActiveRecord::Base
       'Commercial Banker',
       'Trustee',
       'Broker',
+    ],
+    medical_professional: [
+      'Accountant',
+      'Attorney',
+      'Financial Advisor / Broker',
+      'Insurance Agent',
+      'Commercial Banker',
+      'Trustee',
+      'Broker',
+      "Doctor",
+      "Nurse",
+      "Administrator"
     ]
   }
 

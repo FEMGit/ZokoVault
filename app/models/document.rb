@@ -13,4 +13,10 @@ class Document < ActiveRecord::Base
   validates :url, presence: true
 
   accepts_nested_attributes_for :shares, reject_if: proc { |attributes| attributes[:contact_id].blank? }
+    
+  DOCUMENT_PREVIEW_FILES = %w[image text/plain text/html pdf]
+    
+  def self.is_previewed?(extension)
+    DOCUMENT_PREVIEW_FILES.any?{|x| extension.include?(x)}
+  end
 end

@@ -90,6 +90,11 @@ $birthday-form-width: 220px;
     content: "";
     display: table;
     clear: both;
+    white-space: nowrap;
+  }
+
+  .bottom-field {
+    margin-top: 0;
   }
   
   .styled-select {

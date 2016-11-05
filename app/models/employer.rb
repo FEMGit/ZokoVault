@@ -1,8 +1,6 @@
 class Employer < ActiveRecord::Base
   belongs_to :user_profile
 
-  validates :name, presence: true
-
   validates_format_of :phone_number_office, 
                       with: /\d{3}-\d{3}-\d{4}/, 
                       allow_blank: true, 

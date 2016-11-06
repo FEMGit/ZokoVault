@@ -10,6 +10,7 @@ class Contact < ActiveRecord::Base
 
   RELATIONSHIP_TYPES = {
     personal: [
+      'Account Owner',
       'Son',
       'Daughter',
       'Sibling',

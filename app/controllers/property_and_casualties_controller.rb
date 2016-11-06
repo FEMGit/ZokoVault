@@ -103,6 +103,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
 
     def set_contacts
       @contacts = Contact.for_user(current_user)
+      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
     end
 
     def property_and_casualty_params

@@ -90,7 +90,7 @@ class HealthsController < AuthenticatedController
     def set_policy
       @policy = HealthPolicy.find(params[:id])
     end
-    
+
     def set_health
       @health = Health.find(params[:id])
     end
@@ -105,7 +105,7 @@ class HealthsController < AuthenticatedController
     def health_params
       params.require(:health).permit!
     end
-  
+
     def policy_params
       health_params.select { |k, _v| k.starts_with?("policy_") }
     end

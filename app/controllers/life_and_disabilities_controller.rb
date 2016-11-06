@@ -76,7 +76,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   # DELETE /provider/1
   def destroy_provider
     @life_and_disability.destroy
@@ -105,7 +105,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     def life_params
       params.fetch(:life_and_disability).permit!
     end
-  
+
     def policy_params
       life_params.select { |k, _v| k.starts_with?("policy_") }
     end

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe "user_profiles/edit", type: :view do
   before(:each) do
     assign(:contacts, [])
-    assign(:contacts_shareable, [])
     @user_profile = assign(:user_profile, create(:user_profile, user: create(:user)))
   end
 

@@ -73,7 +73,7 @@ class UserProfile < ActiveRecord::Base
       emailaddress: user.email,
       phone: phone_number,
       contact_type: nil,
-      relationship: 'Account Owner',
+      relationship: nil,
       beneficiarytype: nil,
       ssn: ssn,
       birthdate: date_of_birth,

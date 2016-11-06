@@ -46,7 +46,7 @@
     </span>
     <div class="chosen-styled-select">
       <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
+        @contacts, :id, :name, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_share_id_#{index}" }
       %>
     </div>

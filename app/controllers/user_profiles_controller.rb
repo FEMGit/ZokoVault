@@ -74,7 +74,6 @@ class UserProfilesController < AuthenticatedController
 
   def set_contacts
     @contacts = Contact.for_user(current_user)
-    @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
   end
 
   def user_profile_params

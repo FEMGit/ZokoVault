@@ -29,7 +29,7 @@ class WillsController < AuthenticatedController
   # GET /wills/1/edit
   def edit
   end
-  
+
   def set_document_params
     @group = "Will"
     @category = Rails.application.config.x.WtlCategory
@@ -82,11 +82,11 @@ class WillsController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   def get_wills_details
     render :json => WtlService.get_wills_details(Will.for_user(current_user))
   end
-  
+
   def set_group
     @group = "Will"
   end
@@ -121,10 +121,10 @@ class WillsController < AuthenticatedController
     def will_params
       params.select { |x| x.starts_with?("vault_entry") }
     end
-  
+
     def update_wills(new_wills, old_wills)
       new_wills.each do |new_will_params|
-        @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build 
+        @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
         raise "error saving new will" unless @new_vault_entries.save
       end
       old_wills.each do |old_will|

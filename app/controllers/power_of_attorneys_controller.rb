@@ -28,7 +28,7 @@ class PowerOfAttorneysController < AuthenticatedController
   # GET /power_of_attorneys/1/edit
   def edit
   end
-  
+
   def set_document_params
     @group = "Legal"
     @category = Rails.application.config.x.WtlCategory
@@ -80,7 +80,7 @@ class PowerOfAttorneysController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   def get_powers_of_attorney_details
     render :json => WtlService.get_powers_of_attorney_details(PowerOfAttorney.for_user(current_user))
   end
@@ -113,10 +113,10 @@ class PowerOfAttorneysController < AuthenticatedController
     def power_of_attorney_params
       params.select { |x| x.starts_with?("vault_entry") }
     end
-  
+
     def update_power_of_attorneys(new_attorneys, old_attorneys)
       new_attorneys.each do |new_attorney_params|
-        @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+        @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build
         raise "error saving new power of attorney" unless @new_vault_entries.save
       end
       old_attorneys.each do |old_attorney|

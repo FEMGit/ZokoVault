@@ -3,8 +3,8 @@
   <div class="field">
     <label>Power of Attorney</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :agent_ids, 
-        @contacts, :first, :second, {}, 
+      <%= f.collection_select :agent_ids,
+        @contacts, :first, :second, {},
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "attorney_agent_id_#{index}" }
       %>
     </div>
@@ -15,7 +15,7 @@
       <% PowerOfAttorney::POWERS.each do |option| %>
         <li class="check-list">
           <label>
-            <%= check_box_tag "vault_entry_#{index}[powers][#{option}]", 
+            <%= check_box_tag "vault_entry_#{index}[powers][#{option}]",
               option,
               @vault_entry.powers.try(:[], option), {:checked => data.powers.present? && data.powers.keys.any? {|check| check == option} }
             %>
@@ -34,8 +34,8 @@
       </svg>
     </span>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
+      <%= f.collection_select :share_ids,
+        @contacts_shareable, :id, :name, {},
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "attorney_share_id_#{index}"  }
       %>
     </div>
@@ -45,7 +45,7 @@
 <script>
   clearForm = function($newWtlForm, old_id, new_id){
     new_vault_entry_id = "vault_entry_" + new_id;
-    
+
     $newWtlForm.find("[id^='attorney_id_']").attr({
       id: "attorney_id_" + new_id,
       value: ""
@@ -61,13 +61,13 @@
       checkBox.attr("name", "vault_entry_" + new_id + "[powers][" + checkBox.attr('value') + "]")
       checkBox.attr("id", "vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
     });
-    
+
     $newWtlForm.find("#attorney_agent_id_" + old_id).attr({
       name: new_vault_entry_id +"[agent_ids]",
       id: "attorney_agent_id_" + new_id
     });
     $newWtlForm.find("#attorney_agent_id_" + new_id + " option").prop("selected", false);
-    
+
     $newWtlForm.find("#attorney_share_id_" + old_id).attr({
       name: new_vault_entry_id +"[share_ids][]",
       id: "attorney_share_id_" + new_id

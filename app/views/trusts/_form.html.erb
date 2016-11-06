@@ -30,7 +30,14 @@
     </h3>
     <label>Shared With</label><br>
     <div class="chosen-styled-select">
+<<<<<<< HEAD
       <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "trust_share_id_#{index}") %>
+=======
+      <%= f.collection_select :share_ids, 
+        @contacts_shareable, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_share_id_#{index}"  }
+      %>
+>>>>>>> cce1240... Updates to the self-referential contact (#262)
     </div>
   </section>
 

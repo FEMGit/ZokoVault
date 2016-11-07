@@ -12,10 +12,9 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'welcome#index', as: :authenticated_root
   end
-
+  
   #root "index"
   #root "public#index"
-
 
   #public
   # get "/:page" => "public#show"
@@ -49,7 +48,10 @@ Rails.application.routes.draw do
   get 'web_accounts' => 'categories#web_accounts'
 
   get 'shares/new/:document' => 'shares#new'
-
+  
+  resources :interested_users
+  get 'mailing_list_confirm' => 'interested_users#mailing_list_confirm'
+  
   resources :users, only: [:index, :destroy]
 
   resources :wills

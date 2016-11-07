@@ -9,16 +9,19 @@
   <article>
     <h1>Thanks for your interest.</h1>
     <p>ZokuVault isn't live yet, but if you are interested in receiving access to our beta program please provide your information below, and we will consider you in an upcoming release.</p>
+    <%= form_for :interested_user, remote: true, as: :user_data, url: interested_users_path do |f| %>
+      <%= f.label :name, autofocus: true %>
+      <%= f.text_field :name %>
 
-    <label>Name</label>
-    <input></input>
-    <label>Email</label>
-    <input></input>
-    <label>Phone Number</label>
-    <input></input>
-    <label>Message</label>
-    <textarea></textarea>
-    <button class="primary-button big-button">Submit</button>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
 
+      <%= f.label :phone_number, 'Phone Number' %>
+      <%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %>
+
+      <%= f.label :message %>
+      <%= f.text_area :message %>
+      <%= f.button "Submit", class: 'primary-button big-button' %>
+    <% end %>
   </article>
 </section>

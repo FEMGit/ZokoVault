@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Interested In ZokuVault Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone Number</th>
+      <th>Message</th>
+      <th colspan="2">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @interested_users.each do |interested_user| %>
+      <tr>
+        <td><%= interested_user.name %></td>
+        <td><a><%= interested_user.email %></a></td>
+        <td><%= interested_user.phone_number %></td>
+        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;"><%= interested_user.message %></td>
+        <td>
+          <%= link_to 'Delete', interested_user, method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button small-button" %>
+          <%= link_to 'Details', interested_user, method: :get, class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

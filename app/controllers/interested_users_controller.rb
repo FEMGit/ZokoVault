@@ -7,7 +7,7 @@ class InterestedUsersController < ApplicationController
   def index
     @interested_users = InterestedUser.all
   end
-  
+
   def mailing_list_confirm
   end
 
@@ -45,7 +45,7 @@ class InterestedUsersController < ApplicationController
   end
 
   private
-  
+
   # Use callbacks to share common setup or constraints between actions.
   def set_interested_user
     @interested_user = InterestedUser.find(params[:id])
@@ -55,7 +55,7 @@ class InterestedUsersController < ApplicationController
   def interested_user_params
     params.require(:interested_user).permit!
   end
-  
+
   def check_privileges
     if user_exists_and_admin?
       true
@@ -63,7 +63,7 @@ class InterestedUsersController < ApplicationController
       redirect_to root_path
     end
   end
-  
+
   def user_exists_and_admin?
     current_user && current_user.admin?
   end

@@ -51,9 +51,9 @@
     </div>
   </div>
   <div class="field">
-    <label>Birthdate<span class="optional">mm/dd/yy</span> </label>
+    <label>Birthdate (mm/dd/yyyy)</label>
     <div class="styled-text-input birthday-field">
-      <p><%= f.text_field :date_of_birth, value: f.object.date_of_birth && f.object.date_of_birth.strftime("%m/%d/%Y"), class: "form-control", :data => {:mask => '99/99/9999'} %></p>
+      <p><%= f.date_field :date_of_birth %></p>
     </div>
   </div>
   <div class="field">

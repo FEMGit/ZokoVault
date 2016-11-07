@@ -17,18 +17,18 @@ class MultifactorAuthenticator
     MultifactorPhoneCode.verify_latest(user, code)
   end
 
-  private 
+  private
 
   attr_internal_reader :user
 
   def client
     Twilio::REST::Client.new
   end
-  
+
   def phone_to_send_code_to
     @_user.user_profile.phone_number_mobile.split('-').join('').prepend(country_code)
   end
-  
+
   def country_code
     "+1"
   end

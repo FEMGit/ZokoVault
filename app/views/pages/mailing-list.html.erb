@@ -9,7 +9,7 @@
   <article>
     <h1>Thank you for your interest!</h1>
     <p>ZokuVault isn't live yet, but if you are interested in participating in our beta program, please provide your information below.  We will consider you in an upcoming release, and will provide you with progress updates along the way.</p>
-    
+
     <%= form_for :interested_user, url: '/mailing-list' do |f| %>
       <% if @interested_user && @interested_user.errors %>
         <div id="error_explanation">

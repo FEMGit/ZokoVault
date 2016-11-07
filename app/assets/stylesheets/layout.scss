@@ -74,7 +74,9 @@ a.marketing-link{
   color: $color-primary-shaded !important;
   padding: 10px;
   text-decoration: none;
-
+  @include media($mobile) {
+    color: white !important;
+  }
 }
 .close-link,
 a.mobile-menu{

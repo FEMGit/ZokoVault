@@ -72,7 +72,13 @@ body.logged-out{
     height: auto;
     padding: 20px 0;
   }
+  .flex-boxes{
+    margin-top:100px;
 
+    @include media($mobile) {
+      margin-top: 20px;
+    }
+  }
 }
 .security{
   height: 450px;
@@ -130,7 +136,7 @@ body.logged-out{
   article{
     margin: 0 auto;
     max-width: 500px;
-    padding-top: 350px;
+    padding-top:400px;
 
     @include media($mobile) {
       padding: 20px 0;
@@ -341,7 +347,7 @@ h1.hero-text-dark{
 }
 .security-cta{
   background: linear-gradient(to bottom, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0.8) 100%),
-              transparent asset-data-url('marketing/security-cta.jpg') center top;
+              transparent asset-data-url('marketing/family.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align:center;
@@ -427,6 +433,12 @@ h1.hero-text-dark{
   background-size: cover;
 }
 
+.generic.paper{
+  background: asset-data-url('marketing/paper.jpg') center center;
+  padding: 60px 20px;
+  background-size: cover;
+}
+
 //RESOURCES
 .resources-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
@@ -458,29 +470,63 @@ h1.hero-text-dark{
 
 //SETUP
 .setup-1{
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/setup.jpg') center top;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0.8) 100%),
+              transparent asset-data-url('marketing/security-cta.jpg') center top;
   background-size: cover;
-  height: 450px;
-  text-align: center;
+  height: 600px;
+  text-align:center;
 
   @include media($mobile) {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/setup.jpg') center top;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.9) 100%),
+                transparent asset-data-url('marketing/security-cta.jpg') center center;
     background-size: cover;
     height: auto;
   }
 
   article{
     margin: 0 auto;
-    padding-top: 270px;
     max-width: 500px;
+    padding-top: 400px;
 
     @include media($mobile) {
       padding-top: 20px;
       padding-bottom: 20px;
     }
+  }
+}
 
+.get-help{
+  float: right;
+  width: 300px;
+  background: asset-data-url('marketing/sidebar.jpg') top center;
+  color: white;
+  padding: 20px;
+  margin: 0 20px !important;
+
+  h1{
+    color: white;
+  }
+
+  @include media($mobile) {
+     float: none;
+     width: 100%;
+     margin: 0 auto 20px !important;
+  }
+}
+
+.setup-2{
+  img{
+    width: 250px;
+  }
+  @include media($eightfifty) {
+    img{
+      width: 50%;
+    }
+  }
+  @include media($mobile) {
+    img{
+      display:none;
+    }
   }
 }
 
@@ -541,6 +587,15 @@ h1.hero-text-dark{
 }
 
 //Call to action sections
+.cta-outer{
+  float:right;
+  margin: 0 20px;
+
+  @include media($mobile) {
+    display:none;
+  }
+}
+
 .cta{
     background: asset-data-url('marketing/cta_bg.jpg') top center;
     width: 250px;
@@ -568,5 +623,13 @@ h1.hero-text-dark{
       position: absolute;
       bottom: 20px;
       left: 90px;
+    }
+    &.fr{
+      @include media($mobile) {
+         float: none;
+      }
+    }
+    @include media($mobile) {
+       width: 100%;
     }
 }

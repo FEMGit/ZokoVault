@@ -17,18 +17,19 @@
           </ul>
         </div>
       <% end %>
-      <%= f.label :name %><span class="required">(Required)</span>
+      <label>Name<span>required</span></label>
       <%= f.text_field :name %>
 
-      <%= f.label :email %><span class="required">(Required)</span>
+      <label>Email<span>required</span></label>
       <%= f.text_field :email %>
 
-      <%= f.label :phone_number, 'Phone Number' %>
+      <label>Phone Number<span>optional</span></label>
       <%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %>
 
       <%= f.label :message_content, 'Message' %>
       <%= f.text_area :message_content %>
       <%= f.button 'Submit', class: "primary-button big-button" %>
     <% end %>
+
   </article>
 </section>

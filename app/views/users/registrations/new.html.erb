@@ -55,8 +55,8 @@
       <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>
 
     <p class="mt-20 small-text">By submitting this information I agree to the ZokuVault
-      <a herf="/terms-of-service">Terms of Service</a> and
-      <a herf="/privacy-policy">Privacy Policy</a>.
+      <%= link_to 'Terms of Service', '/terms-of-service', class: "no-underline-link" %> and
+      <%= link_to 'Privacy Policy', '/privacy-policy', class: "no-underline-link" %>
     </p>
   <% end %>
 </section>

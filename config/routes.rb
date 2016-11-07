@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'welcome#index', as: :authenticated_root
   end
-
+  
   #root "index"
   #root "public#index"
 

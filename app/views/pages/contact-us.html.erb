@@ -9,15 +9,31 @@
   <article>
     <h1>Contact Us</h1>
     <p>Let us know how we can help you.  A member of our team will get back to you shortly.</p>
+    
+    <%= form_for :user_message, url: '/contact-us' do |f| %>
+      <% if @message && @message.errors %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@message.errors.count, "error") %> prohibited this from being sent:</h2>
 
-    <label>Name</label>
-    <input></input>
-    <label>Email</label>
-    <input></input>
-    <label>Phone Number</label>
-    <input></input>
-    <label>Message</label>
-    <textarea></textarea>
-    <button class="primary-button big-button">Submit</button>
+          <ul>
+            <% @message.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+
+      <%= f.label :phone_number, 'Phone Number' %>
+      <%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %>
+
+      <%= f.label :message_content, 'Message' %>
+      <%= f.text_area :message_content %>
+      <%= f.button 'Submit', class: "primary-button big-button" %>
+    <% end %>
   </article>
 </section>

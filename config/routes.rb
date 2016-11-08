@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   
   # Mailer
   post 'contact-us', to: 'messages#create'
+  post 'mailing-list', to: 'interested_users#create'
 
   # Mailer
   post 'contact-us', to: 'messages#create'

@@ -22,10 +22,10 @@
           </ul>
         </div>
       <% end %>
-      <label>Name<span>required</span></label>
+      <%= f.label :name %><span class="required">(Required)</span>
       <%= f.text_field :name %>
 
-      <label>Email<span>required</span></label>
+      <%= f.label :email %><span class="required">(Required)</span>
       <%= f.text_field :email %>
 
       <label>Phone Number</label>

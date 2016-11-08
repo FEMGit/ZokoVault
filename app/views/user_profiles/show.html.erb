@@ -48,7 +48,7 @@
       <%= @user_profile.address_parts.join('<br/>').html_safe %>
     </p>
   <% end %>
-  
+
   <% if @user_profile.notes %>
     <label>Notes</label>
     <p>
@@ -69,7 +69,7 @@
       <span class="field-block"><%= link_to show_web_address(employer.web_address), employer.web_address %><br></span>
     <% end %>
   </p>
-  
+
   <label>Business Address</label>
   <p>
     <% if show_street?(employer) %>

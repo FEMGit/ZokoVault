@@ -87,6 +87,7 @@
   <div class="field notes-field bottom-field">
     <label>Notes</label>
     <p><%= f.text_area :notes  %></p>
+  </div>
 </div>
 
 
@@ -152,7 +153,7 @@
         </div>
       </div>
     </div>
-    <div class="field">
+    <div class="field bottom-field">
       <label>Business Phone Number</label>
       <div class="styled-text-input">
         <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
@@ -165,7 +166,7 @@
       </div>
     </div>
   </div>
-  <% end %>
+<% end %>
 
   <%= f.submit "Save", class: "button primary-button big-button" %>
   <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button"}%>

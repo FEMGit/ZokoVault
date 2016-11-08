@@ -1,15 +1,19 @@
 class TaxesController < AuthenticatedController
   before_action :set_tax, only: [:edit, :update, :destroy]
-
+  before_action :set_category_and_documents, only: [:index, :show]
+  
   # GET /taxes
   # GET /taxes.json
   def index
-    @taxes = Tax.all
+    @taxes = Tax.for_user(current_user)
+    session[:ret_url] = taxes_path
   end
 
   # GET /taxes/1
   # GET /taxes/1.json
   def show
+    @year = params[:year]
+    session[:ret_url] = "#{taxes_path}/1"
   end
 
   # GET /taxes/new
@@ -65,11 +69,16 @@ class TaxesController < AuthenticatedController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tax
-    @tax = Tax.find(params[:id])
+    @tax = Tax.for_user(current_user).find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def tax_params
     params.require(:tax).permit(:document_id, :tax_preparer_id, :notes, :user_id, :tax_year)
+  end
+  
+  def set_category_and_documents
+    @category = "Taxes"
+    @documents = Document.for_user(current_user).where(category: @category)
   end
 end

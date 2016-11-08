@@ -10,7 +10,19 @@
 
   <% resource.build_user_profile rescue nil %>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= devise_error_messages! %>
+    <% if resource.errors.any? %>
+    <div>
+      <ul>
+        <% resource.errors.full_messages.each do |message| %>
+          <% if date_of_bitrh_error?(message) %>
+            <li><%= date_of_birth_error(message).html_safe %>
+          <% else %>
+            <li><%= message %>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
 
     <%= f.fields_for :user_profile do |user_profile_form| %>
       <div class="field">

@@ -83,4 +83,9 @@ class TaxesController < AuthenticatedController
     @category = "Taxes"
     @documents = Document.for_user(current_user).where(category: @category)
   end
+
+  def set_category_and_documents
+    @category = "Taxes"
+    @documents = Document.for_user(current_user).where(category: @category)
+  end
 end

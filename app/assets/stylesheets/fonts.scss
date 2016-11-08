@@ -51,10 +51,15 @@ ol li {
     margin-right: 10px;
   }
 }
-.phone-type, .optional{
+.phone-type, .optional, .required {
   padding-left: 10px;
   color: $color-gray-med;
 }
+
 .nowrap{
   white-space: nowrap;
+}
+
+.required {
+  font-size: 14px;
 }

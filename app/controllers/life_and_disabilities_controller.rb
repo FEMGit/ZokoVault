@@ -98,6 +98,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     def set_contacts
       @contacts = Contact.for_user(current_user)
+      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

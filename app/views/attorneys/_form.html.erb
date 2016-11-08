@@ -1,4 +1,5 @@
 <% @contacts = Contact.for_user(current_user) %>
+<% @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } %>
 <div class="wtl-body-content">
   <div class="field">
     <label>Power of Attorney</label>
@@ -39,7 +40,7 @@
     </span>
     <div class="chosen-styled-select">
       <%= f.collection_select :share_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts_shareable, :id, :name, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
       %>
   </div>

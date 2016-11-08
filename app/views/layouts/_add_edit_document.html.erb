@@ -1,5 +1,6 @@
 <script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 <% @contacts = Contact.for_user(current_user) %>
+<% @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } %>
 <%= form_for (@document), :html => {:id => "doc-form"} do |f| %>
   <div>
     <h2 class="document-title"> <%= yield(:title) %> </h2>
@@ -67,7 +68,7 @@
       </span>
       <div class="chosen-styled-select">
         <%= f.collection_select :contact_ids,
-          @contacts.collect{|s| [s.id, s.name]} + [["create_new_contact", "Create New Contact"]], :first, :second, {}, 
+          @contacts_shareable.collect{|s| [s.id, s.name]} + [["create_new_contact", "Create New Contact"]], :first, :second, {}, 
           { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
         %>
       </div>

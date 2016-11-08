@@ -120,6 +120,7 @@ class WillsController < AuthenticatedController
   private
     def set_contacts
       @contacts = Contact.for_user(current_user)
+      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
     end
 
     # Use callbacks to share common setup or constraints between actions.

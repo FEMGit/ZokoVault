@@ -449,6 +449,22 @@ $cards-margin: 12px;
   }
 }
 
+.card.details.insurance
+.card.details.wtl,
+.column-card.info-wrapper,
+.contact-header-info,
+.my_profile_info {
+  position: relative;
+  a.whole-card-link {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+  }
+}
+
 .field-block {
   display: block;
 }

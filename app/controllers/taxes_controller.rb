@@ -3,7 +3,7 @@ class TaxesController < AuthenticatedController
   before_action :set_category, only: [:index, :show]
   before_action :set_year_documents, only: [:show]
   before_action :set_all_documents, only: [:index]
-  
+
   # GET /taxes
   # GET /taxes.json
   def index
@@ -89,19 +89,19 @@ class TaxesController < AuthenticatedController
   def tax_params
     params.require(:tax_year_info).permit!
   end
-  
+
   def set_category
     @category = "Taxes"
   end
-  
+
   def set_all_documents
     @documents = Document.for_user(current_user).where(category: @category)
   end
-  
+
   def set_year_documents
     @documents = Document.for_user(current_user).where(category: @category, group: @tax.year)
   end
-  
+
   def tax_form_params
     tax_params.select { |k, _v| k.starts_with?("tax_") }
   end

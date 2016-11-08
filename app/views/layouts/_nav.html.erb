@@ -26,7 +26,6 @@
     </svg>Contacts &amp; Permissions
   <% end %>
 <!--   <% financial_information_current = 'active' if current_page?(financial_information_url) %>
->>>>>>> Ad-376 disable non-active links
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
@@ -51,7 +50,7 @@
     </svg>Taxes
   <% end %>
 <!--  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) %>
-  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}", method: :get do %>
+  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices

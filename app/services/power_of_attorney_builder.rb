@@ -1,15 +1,9 @@
 class PowerOfAttorneyBuilder
 
   def initialize(options = {})
-    if(options[:id] && !options[:id].empty?)
-      self.power_of_attorney = PowerOfAttorney.find(options[:id])
-    else
-      self.power_of_attorney = PowerOfAttorney.new(options.slice(:user_id, :document_id, :name, :powers))
-    end
+    self.power_of_attorney = get_power_of_attorney(options)
     self.options = options
-    if(options[:id] && !options[:id].empty?)
-      clear_options
-    end
+    options[:id] && options[:id].present? && clear_options
   end
   
   def clear_options
@@ -41,6 +35,14 @@ class PowerOfAttorneyBuilder
 
   private
 
+  def get_power_of_attorney(options)
+    if options[:id] && options[:id].present?
+      PowerOfAttorney.find(options[:id])
+    else
+      PowerOfAttorney.new(options.slice(:user_id, :document_id, :name, :powers))
+    end
+  end
+  
   def sanitize_data(data)
     [*data].select &:present?
   end

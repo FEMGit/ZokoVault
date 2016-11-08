@@ -26,7 +26,6 @@ class WillBuilder
     will.secondary_beneficiaries = []
   end
 
-
   def build
     build_beneficiaries
 

@@ -20,9 +20,8 @@ class PowerOfAttorneysController < AuthenticatedController
     @vault_entry.vault_entry_contacts.build
     @power_of_attorneys = PowerOfAttorney.for_user(current_user)
     @vault_entries = PowerOfAttorney.for_user(current_user)
-    if(@vault_entries.empty?)
-      @vault_entries << @vault_entry
-    end
+    return unless @vault_entries.empty?
+    @vault_entries << @vault_entry
   end
 
   # GET /power_of_attorneys/1/edit
@@ -41,23 +40,12 @@ class PowerOfAttorneysController < AuthenticatedController
     new_attorneys = WtlService.get_new_records(power_of_attorney_params)
     old_attorneys = WtlService.get_old_records(power_of_attorney_params)
     respond_to do |format|
-      if(!new_attorneys.empty? || !old_attorneys.empty?)
+      if !new_attorneys.empty? || !old_attorneys.empty?
         begin
-          new_attorneys.each do |new_attorney_params|
-            @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
-            if (!@new_vault_entries.save)
-              raise "error saving new power of attorney"
-            end
-          end
-          old_attorneys.each do |old_attorney|
-            @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
-            if (!@old_vault_entries.save)
-              raise "error saving new power of attorney"
-            end
-          end
+          update_power_of_attorneys(new_attorneys, old_attorneys)
           format.html { redirect_to estate_planning_path, notice: 'Power of Attorney was successfully created.' }
           format.json { render :show, status: :created, location: @power_of_attorney }
-        rescue Exception
+        rescue
           format.html { render :new }
           format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
         end
@@ -116,6 +104,17 @@ class PowerOfAttorneysController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def power_of_attorney_params
-      params.select {|x| x.starts_with?("vault_entry")}
+      params.select { |x| x.starts_with?("vault_entry") }
+    end
+  
+    def update_power_of_attorneys(new_attorneys, old_attorneys)
+      new_attorneys.each do |new_attorney_params|
+        @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+        raise "error saving new power of attorney" unless @new_vault_entries.save
+      end
+      old_attorneys.each do |old_attorney|
+        @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
+        raise "error saving new power of attorney" unless @old_vault_entries.save
+      end
     end
 end

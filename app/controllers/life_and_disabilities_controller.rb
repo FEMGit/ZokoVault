@@ -26,16 +26,16 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # GET /lives/1/edit
   def edit
     @insurance_card = @life_and_disability
-    @insurance_card.share_with_ids = @life_and_disability.share_ids.collect{|x| Share.find(x).contact_id.to_s}
+    @insurance_card.share_with_ids = @life_and_disability.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
 
   # POST /lives
   # POST /lives.json
   def create
     policies = policy_params
-    policies.keys.each{|x| params[:life_and_disability].delete(x)}
+    policies.keys.each { |x| params[:life_and_disability].delete(x) }
     @insurance_card = LifeAndDisability.new(life_params.merge(user_id: current_user.id))
-    PolicyService.FillLifePolicies(policies, @insurance_card)
+    PolicyService.fill_life_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -52,9 +52,9 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # PATCH/PUT /lives/1.json
   def update
     policies = policy_params
-    policies.keys.each{|x| params[:life_and_disability].delete(x)}
+    policies.keys.each { |x| params[:life_and_disability].delete(x) }
     @insurance_card = @life_and_disability
-    PolicyService.FillLifePolicies(policies, @insurance_card)
+    PolicyService.fill_life_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -86,7 +86,6 @@ class LifeAndDisabilitiesController < AuthenticatedController
     end
   end
 
-
   private
     def set_life
       @life_and_disability = LifeAndDisability.find(params[:id])
@@ -107,6 +106,6 @@ class LifeAndDisabilitiesController < AuthenticatedController
     end
   
     def policy_params
-      life_params.select{|k, v| k.starts_with?("policy_")}
+      life_params.select { |k, _v| k.starts_with?("policy_") }
     end
 end

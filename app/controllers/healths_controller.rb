@@ -26,16 +26,16 @@ class HealthsController < AuthenticatedController
   # GET /healths/1/edit
   def edit
     @insurance_card = @health
-    @insurance_card.share_with_ids = @health.share_ids.collect{|x| Share.find(x).contact_id.to_s}
+    @insurance_card.share_with_ids = @health.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
 
   # POST /healths
   # POST /healths.json
   def create
     policies = policy_params
-    policies.keys.each{|x| params[:health].delete(x)}
+    policies.keys.each { |x| params[:health].delete(x) }
     @insurance_card = Health.new(health_params.merge(user_id: current_user.id))
-    PolicyService.FillHealthPolicies(policies, @insurance_card)
+    PolicyService.fill_health_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -52,9 +52,9 @@ class HealthsController < AuthenticatedController
   # PATCH/PUT /healths/1.json
   def update
     policies = policy_params
-    policies.keys.each{|x| params[:health].delete(x)}
+    policies.keys.each { |x| params[:health].delete(x) }
     @insurance_card = @health
-    PolicyService.FillHealthPolicies(policies, @insurance_card)
+    PolicyService.fill_health_policies(policies, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -106,6 +106,6 @@ class HealthsController < AuthenticatedController
     end
   
     def policy_params
-      health_params.select{|k, v| k.starts_with?("policy_")}
+      health_params.select { |k, _v| k.starts_with?("policy_") }
     end
 end

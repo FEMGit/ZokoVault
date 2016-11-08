@@ -1,5 +1,5 @@
 class PolicyService
-  def self.FillLifePolicies(policies, life_and_disability)
+  def self.fill_life_policies(policies, life_and_disability)
     policies.values.each do |policy|
       if policy[:id].present?
         life_and_disability.policy.update(policy[:id], policy)
@@ -9,7 +9,7 @@ class PolicyService
     end
   end
   
-  def self.FillHealthPolicies(policies, health)
+  def self.fill_health_policies(policies, health)
     policies.values.each do |policy|
       if policy[:id].present?
         health.policy.update(policy[:id], policy)
@@ -19,7 +19,7 @@ class PolicyService
     end
   end
   
-  def self.FillPropertyAndCasualtyPolicies(policies, property_and_casualty)
+  def self.fill_property_and_casualty_policies(policies, property_and_casualty)
     policies.values.each do |policy|
       if policy[:id].present?
         property_and_casualty.policy.update(policy[:id], policy)

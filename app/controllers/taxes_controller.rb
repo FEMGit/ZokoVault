@@ -1,7 +1,7 @@
 class TaxesController < AuthenticatedController
   before_action :set_tax, only: [:edit, :update, :destroy]
   before_action :set_category_and_documents, only: [:index, :show]
-  
+
   # GET /taxes
   # GET /taxes.json
   def index
@@ -78,7 +78,7 @@ class TaxesController < AuthenticatedController
   def tax_params
     params.require(:tax).permit!
   end
-  
+
   def set_category_and_documents
     @category = "Taxes"
     @documents = Document.for_user(current_user).where(category: @category)

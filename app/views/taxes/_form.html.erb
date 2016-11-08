@@ -4,8 +4,8 @@
   <div class="field">
     <label>Tax Preparer</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :tax_preparer_id, 
-        @contacts, :id, :name, {}, 
+      <%= f.collection_select :tax_preparer_id,
+        @contacts, :id, :name, {},
         { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "tax_preparer_id_#{index}" }
       %>
     </div>
@@ -23,8 +23,8 @@
       </svg>
     </span>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_with_contact_ids, 
-        @contacts, :id, :name, {}, 
+      <%= f.collection_select :share_with_contact_ids,
+        @contacts, :id, :name, {},
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "tax_share_id_#{index}" }
       %>
     </div>

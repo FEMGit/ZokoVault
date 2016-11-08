@@ -18,7 +18,7 @@
         <% @taxes.each_with_index do |data, index| %>
           <%= fields_for "tax_#{index}", data do |builder| %>
             <% if data.id %>
-              <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete, 
+              <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,
                   data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." }, class: 'right-align-delete-link' %>
               <% end %>
             <%= render 'form', f: builder, index: index, data: data %>
@@ -49,18 +49,18 @@
       value: ""
     });
     $newWtlForm.find("[id^='tax_id_']").attr("name", new_vault_entry_id + "[id]");
-    
+
     $newWtlForm.find("#tax_preparer_id_" + old_id).attr({
       name: new_vault_entry_id +"[tax_preparer_id]",
       id: "tax_preparer_id_" + new_id
     });
     $newWtlForm.find("#tax_preparer_id_" + new_id + " option").prop("selected", false);
-    
+
     $newWtlForm.find("#tax_notes_id_" + old_id).attr({
       name: new_vault_entry_id +"[notes]",
       id: "tax_notes_id_" + new_id
     });
-	
+
     $newWtlForm.find("#tax_share_id_" + old_id).attr({
       name: new_vault_entry_id +"[share_with_contact_ids][]",
       id: "tax_share_id_" + new_id
@@ -73,7 +73,7 @@
     old_id_number = parseInt($form.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
     clearForm($newForm, old_id_number, new_id_number);
-    
+
     $('.chosen-container',$newForm).remove();
     $newForm.find(':text').val("");
     $newForm.appendTo('#taxes-form-1');

@@ -6,13 +6,13 @@
       <% if @wills.any? %>
         <%= link_to content_tag(:a), wills_path, class: "whole-card-link", method: :get %>
         <div class="section header">
-          <span class="fa-stack fa-1x icon-section">
+          <!-- <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
               <use xlink:href="#icon-document-1">
               </use>
               <span class="fa-stack-1x document-number"><%= document_count(current_user, @wills.name) %></span>
             </svg>
-          </span>
+          </span> -->
           <h3>Wills</h3>
         </div>
         <div class="section">
@@ -62,13 +62,13 @@
       <% if @trusts.any? %>
         <%= link_to content_tag(:a), trusts_path, class: "whole-card-link", method: :get %>
         <div class="section header">
-          <span class="fa-stack fa-1x icon-section">
+          <!-- <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
               <use xlink:href="#icon-document-1">
               </use>
               <span class="fa-stack-1x document-number"><%= document_count(current_user, @trusts.name) %></span>
             </svg>
-          </span>
+          </span> -->
           <h3>Trusts</h3>
         </div>
         <div class="section">
@@ -113,13 +113,13 @@
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link", method: :get %>
         <div class="section header">
-          <span class="fa-stack fa-1x icon-section">
+          <!-- <span class="fa-stack fa-1x icon-section">
             <svg class="icon icon-document-1 ">
               <use xlink:href="#icon-document-1">
               </use>
               <span class="fa-stack-1x document-number"><%= document_count(current_user, "Legal") %></span>
             </svg>
-          </span>
+          </span> -->
           <h3>Powers of Attorney</h3>
         </div>
         <% @power_of_attorneys.each do |power_of_attorney| %>
@@ -170,7 +170,7 @@
   <h1>Wills - Trusts - Legal Documents</h1>
 </div>
 
-<table class="sortable">
+<table>
   <tr>
     <%= render :partial => "layouts/documents_common_columns" %>
   </tr>

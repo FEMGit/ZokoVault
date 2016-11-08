@@ -2,9 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "taxes/new", type: :view do
   before(:each) do
-    assign(:taxes, [])
-    assign(:contacts, [])
-    assign(:tax, Tax.new)
+    assign(:tax, Tax.new(
+                   :document_id => "",
+                   :tax_preparer_id => "",
+                   :notes => "",
+                   :user_id => "",
+                   :tax_year => 1
+    ))
   end
 
   it "renders new tax form" do

@@ -11,6 +11,7 @@
 
 <% if user_signed_in? %>
   <body class="logged-in">
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 <% else %>
   <body class="logged-out">
 <% end %>

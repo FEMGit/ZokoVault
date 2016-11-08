@@ -13,12 +13,15 @@ class TaxesController < AuthenticatedController
   # GET /taxes/1.json
   def show
     @year = params[:year]
-    session[:ret_url] = "#{taxes_path}/1"
+    session[:ret_url] = "#{taxes_path}/1/#{@year}"
   end
 
   # GET /taxes/new
   def new
     @tax = Tax.new
+    @taxes = Tax.for_user(current_user)
+    return unless @taxes.empty?
+    @taxes << @tax
   end
 
   # GET /taxes/1/edit
@@ -28,11 +31,10 @@ class TaxesController < AuthenticatedController
   # POST /taxes
   # POST /taxes.json
   def create
-    @tax = Tax.new(tax_params)
-
+    @tax = Tax.new(tax_params.merge(user_id: current_user.id))
     respond_to do |format|
       if @tax.save
-        format.html { redirect_to @tax, notice: 'Tax was successfully created.' }
+        format.html { redirect_to session[:ret_url] || @tax, notice: 'Tax was successfully created.' }
         format.json { render :show, status: :created, location: @tax }
       else
         format.html { render :new }
@@ -60,7 +62,7 @@ class TaxesController < AuthenticatedController
   def destroy
     @tax.destroy
     respond_to do |format|
-      format.html { redirect_to taxes_url, notice: 'Tax was successfully destroyed.' }
+      format.html { redirect_to new_tax_path, notice: 'Tax was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -74,7 +76,7 @@ class TaxesController < AuthenticatedController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def tax_params
-    params.require(:tax).permit(:document_id, :tax_preparer_id, :notes, :user_id, :tax_year)
+    params.require(:tax).permit!
   end
   
   def set_category_and_documents

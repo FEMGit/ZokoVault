@@ -1,5 +1,5 @@
 <div>
-  <%= link_to "", class: "edit-link" do%>
+  <%= link_to new_tax_path, class: "edit-link" do%>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-pencil-1"></use>
@@ -8,8 +8,9 @@
   <% end %>
   <h1><%= @year %></h1>
 </div>
+
 <div class="card cg-<%= @year %> details taxes">
-  <%= link_to content_tag(:a), "", :class => "whole-card-link" %>
+  <%= link_to content_tag(:a), new_tax_path, :class => "whole-card-link" %>
   <div class="details-wrapper">
     <div class="details-card-info details">
       <div class = "details-card-field">

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :taxes
   resources :relationships
   resources :vendor_accounts
   resources :vendors

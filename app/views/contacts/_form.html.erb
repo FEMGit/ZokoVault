@@ -70,7 +70,7 @@
           <div class="field">
             <%= f.label :relationship %><br>
             <div class="styled-select">
-              <%= f.select :relationship, 
+              <%= f.select :relationship,
                 options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
                 {}, id: :personal_relationships_select %>
             </div>
@@ -97,15 +97,15 @@
             <%= f.label :relationship %><br>
             <div id="common_professional">
               <div class="styled-select">
-                <%= f.select :relationship, 
-                  options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship), 
+                <%= f.select :relationship,
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship),
                   {}, id: :common_professional_select %>
               </div>
             </div>
             <div id="medical_professional">
               <div class="styled-select">
-                <%= f.select :relationship, 
-                  options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship), 
+                <%= f.select :relationship,
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship),
                   {}, id: :medical_professional_select %>
               </div>
             </div>
@@ -159,7 +159,7 @@
           <%= f.text_area :notes %>
         </div>
       </div>
-      
+
       <div id="avatar-form">
         <div class="field">
           <%= f.label :avatarcolor, 'Avatar Color' %><br>
@@ -173,7 +173,7 @@
     <% end %>
   </div>
   <footer class="modal-footer">
-    <a href="javascript:;" id='next-step' class=" button secondary-button big-button" 
+    <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
     <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
     <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button" %>

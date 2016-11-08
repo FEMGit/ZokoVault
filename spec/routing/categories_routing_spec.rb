@@ -43,7 +43,6 @@ RSpec.describe CategoriesController, type: :routing do describe "routing" do
           'healthcare_choices' => 'categories#healthcare_choices',
           'insurance' => 'categories#insurance',
           'shared' => 'categories#shared',
-          'taxes' => 'categories#taxes',
           'web_accounts' => 'categories#web_accounts',
         }.each do |path, route|
           expect(get: path).to route_to(route)

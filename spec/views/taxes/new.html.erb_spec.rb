@@ -5,7 +5,6 @@ RSpec.describe "taxes/new", type: :view do
     assign(:taxes, [])
     assign(:contacts, [])
     assign(:tax, Tax.new)
-
   end
 
   it "renders new tax form" do

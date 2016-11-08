@@ -56,7 +56,11 @@ ol li {
   color: $color-gray-med;
 }
 
-.required {
+.nowrap{
+  white-space: nowrap;
+}
+
+.optional, .required {
   font-size: 14px;
 }
 

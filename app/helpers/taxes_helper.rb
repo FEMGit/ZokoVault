@@ -1,5 +1,4 @@
 module TaxesHelper
-
   def link_to_details(year)
     tax_year = @taxes.where(:year => year).first
     if tax_year

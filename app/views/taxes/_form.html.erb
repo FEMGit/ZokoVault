@@ -1,5 +1,4 @@
 <% @contacts = Contact.for_user(current_user) %>
-<<<<<<< 1e4050aa9d0e67fc75a176f46d5a6b2b30dd7f01
 <%= ff.hidden_field :id, id: "tax_id_#{index}" %>
 <div class="field">
   <label>Tax Preparer</label>
@@ -30,38 +29,6 @@
   </div>
 </div>
 
-=======
-  <%= ff.hidden_field :id, id: "tax_id_#{index}" %>
-  <div class="field">
-    <label>Tax Preparer</label>
-    <div class="chosen-styled-select">
-      <%= ff.collection_select :tax_preparer_id, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "tax_preparer_id_#{index}" }
-      %>
-    </div>
-  </div>
-  <div class="field">
-    <label>Notes</label>
-    <%= ff.text_area :notes, id: "tax_notes_id_#{index}" %>
-  </div>
-  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-    <label>Shared With</label>
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
-    <div class="chosen-styled-select">
-      <%= ff.collection_select :share_with_contact_ids, 
-        @contacts, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "tax_share_id_#{index}" }
-      %>
-    </div>
-  </div>
-  
->>>>>>> Ad-403 Save Edit Dynamics on taxes form
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){
     $form.find("#" + old_id).attr({
@@ -71,17 +38,10 @@
     });
     $form.find("#" + new_id + " option").prop("selected", false);
   };
-<<<<<<< 1e4050aa9d0e67fc75a176f46d5a6b2b30dd7f01
 
   clearForm = function($newWtlForm, old_id, new_id) {
     new_tax_name = "tax_year_info[tax_" + new_id + "]";
 
-=======
-  
-  clearForm = function($newWtlForm, old_id, new_id) {
-    new_tax_name = "tax_year_info[tax_" + new_id + "]";
-    
->>>>>>> Ad-403 Save Edit Dynamics on taxes form
     changeIdAndName($newWtlForm, "tax_id_" + old_id,
       "tax_id_" + new_id, new_tax_name + "[id]")
 
@@ -90,16 +50,8 @@
 
     changeIdAndName($newWtlForm, "tax_notes_id_" + old_id,
       "tax_notes_id_" + new_id, new_tax_name + "[notes]")
-<<<<<<< 1e4050aa9d0e67fc75a176f46d5a6b2b30dd7f01
 
     changeIdAndName($newWtlForm, "tax_share_id_" + old_id,
       "tax_share_id_" + new_id, new_tax_name + "[share_with_contact_ids][]")
   }
 </script>
-=======
-	
-    changeIdAndName($newWtlForm, "tax_share_id_" + old_id,
-      "tax_share_id_" + new_id, new_tax_name + "[share_with_contact_ids][]")
-  }
-</script>
->>>>>>> Ad-403 Save Edit Dynamics on taxes form

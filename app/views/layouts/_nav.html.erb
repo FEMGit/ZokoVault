@@ -25,12 +25,12 @@
       <use xlink:href="#icon-share-3"></use>
     </svg>Contacts &amp; Permissions
   <% end %>
-  <% financial_information_current = 'active' if current_page?(financial_information_url) %>
+<!--  <% financial_information_current = 'active' if current_page?(financial_information_url) %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}", method: :get do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
     </svg>Financial Information
-  <% end %>
+  <% end %> -->
   <% estate_planning = 'active' if current_page?(estate_planning_url) %>
   <%= link_to estate_planning_path, class: "main-nav #{estate_planning}", method: :get do%>
     <svg class="icon nav-icon">
@@ -43,7 +43,7 @@
       <use xlink:href="#icon-umbrella-1"></use>
     </svg>Insurance
   <% end %>
-  <% taxes_current = 'active' if current_page?(taxes_url) %>
+<!--  <% taxes_current = 'active' if current_page?(taxes_url) %>
   <%= link_to taxes_path, class: "main-nav #{taxes_current}", method: :get do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-book-6"></use>
@@ -72,7 +72,7 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me
-  <% end %>
+  <% end %> -->
   <% documents_current = 'active' if current_page?(documents_url) %>
   <%= link_to documents_path, class: "main-nav #{documents_current}", method: :get do %>
     <svg class="icon nav-icon">

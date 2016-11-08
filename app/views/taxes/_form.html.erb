@@ -1,37 +1,32 @@
-<%= form_for(@tax) do |f| %>
-  <% if @tax.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tax.errors.count, "error") %> prohibited this tax from being saved:</h2>
-
-      <ul>
-      <% @tax.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+<% @contacts = Contact.for_user(current_user) %>
+<div class="body-content">
+  <%= f.hidden_field :id, id: "tax_id_#{index}" %>
+  <div class="field">
+    <label>Tax Preparer</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :tax_preparer_id, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "tax_preparer_id_#{index}" }
+      %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :document_id %><br>
-    <%= f.text_field :document_id %>
   </div>
   <div class="field">
-    <%= f.label :tax_preparer_id %><br>
-    <%= f.text_field :tax_preparer_id %>
+    <label>Notes</label>
+    <%= f.text_area :notes, id: "tax_notes_id_#{index}" %>
   </div>
-  <div class="field">
-    <%= f.label :notes %><br>
-    <%= f.text_field :notes %>
+  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
+    <label>Shared With</label>
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_with_contact_ids, 
+        @contacts, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "tax_share_id_#{index}" }
+      %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
-  <div class="field">
-    <%= f.label :tax_year %><br>
-    <%= f.number_field :tax_year %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>

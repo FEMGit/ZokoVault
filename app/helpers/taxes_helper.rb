@@ -1,4 +1,5 @@
 module TaxesHelper
+<<<<<<< HEAD
   def link_to_details(year)
     tax_year = @taxes.where(:year => year).first
     if tax_year
@@ -25,4 +26,6 @@ module TaxesHelper
   def year_exist?(taxes, year)
     taxes.any? { |x| x.year == year }
   end
+=======
+>>>>>>> d74ad9e... Ad-379 - details tax card
 end

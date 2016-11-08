@@ -1,13 +1,11 @@
-<div>
-  <%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  <% end %>
-  <h1><%= @tax.year %></h1>
-</div>
+<%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1><%= @tax.year %></h1>
 
 <% @tax.taxes.each do |tax| %>
   <div class="card cg-<%=@tax.year%> details taxes">

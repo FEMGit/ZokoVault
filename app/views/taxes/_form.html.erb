@@ -1,5 +1,5 @@
 <%= ff.hidden_field :id, id: "tax_id_#{index}" %>
-<div class="card no-pointer-cursor mb-30">
+<div class="card cg-<%=@tax_year.year%> mb-30">
   <label>Tax Preparer</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :tax_preparer_id, @contacts, id: "tax_preparer_id_#{index}", multiple: false) %>

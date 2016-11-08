@@ -22,7 +22,7 @@
         <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;"><%= interested_user.message %></td>
         <td>
           <%= link_to 'Delete', interested_user, method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button small-button" %>
-          <%= link_to 'Details', interested_user, method: :get, class: "outline-button small-button" %>
+          <%= link_to 'Details', interested_user, class: "outline-button small-button" %>
         </td>
       </tr>
     <% end %>

@@ -1,5 +1,5 @@
 <div>
-  <%= link_to "#{@insurance_card.id}/edit", class: "edit-link", method: :get do%>
+  <%= link_to "#{@insurance_card.id}/edit", class: "edit-link" do%>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-pencil-1"></use>
@@ -10,7 +10,7 @@
 </div>
 
 <div class="card <%= @insurance_card.group %> details insurance">
-  <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link", method: :get%>
+  <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link" %>
   <div class="details-wrapper">
     <div class="details-card-info details">
       <h2 class="provider-details-title">Insurance Provider Details</h2>
@@ -77,7 +77,7 @@
   <h1><%= params[:name] %> Documents</h1>
 </div>
 
-<table class="sortable">
+<table>
   <tr>
     <%= render :partial => "layouts/documents_common_columns" %>
   </tr>

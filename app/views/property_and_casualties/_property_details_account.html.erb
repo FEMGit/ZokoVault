@@ -2,7 +2,7 @@
   <div>
     <h1><%= "#{policy.policy_type} -  #{policy.insured_property}" %></h1>
     <div class="card <%= @insurance_card.group %> details insurance">
-      <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link", method: :get %>
+      <%= link_to content_tag(:a), "#{@insurance_card.id}/edit", :class => "whole-card-link" %>
       <div class="details-wrapper">
         <div class="details-card-info details">
           <h2 class="provider-details-title">Policy Information</h2>

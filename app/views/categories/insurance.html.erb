@@ -19,7 +19,7 @@
       <% if group['value']=="life" %>
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card info-wrapper">
-            <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link", method: :get %>
+            <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link" %>
             <h3><%= vendor.name %></h3>
             <div class="section">
               <% vendor.policy && vendor.policy.each do |policy| %>
@@ -47,7 +47,7 @@
       <% if group['value']=="property" %>
         <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card info-wrapper">
-            <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link", method: :get %>
+            <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link" %>
             <h3><%= vendor.name %></h3>
             <div class="section">
               <% vendor.policy && vendor.policy.each do |policy| %>
@@ -75,7 +75,7 @@
       <% if group['value']=="health" %>
         <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card info-wrapper">
-            <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link", method: :get %>
+            <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link" %>
             <h3><%= vendor.name %></h3>
             <div class="section">
               <% vendor.policy && vendor.policy.each do |policy| %>
@@ -117,7 +117,7 @@
   <h1>Insurance Documents</h1>
 </div>
 
-<table class="sortable">
+<table>
   <tr>
     <%= render :partial => "layouts/documents_common_columns" %>
   </tr>

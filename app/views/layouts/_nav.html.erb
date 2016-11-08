@@ -14,67 +14,68 @@
     </svg>Dashboard
   </a>
   <% my_profile_current = 'active' if current_page?(my_profile_url) %>
-  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}", method: :get do %>
+  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
   <% end %>
   <% contacts_current = 'active' if current_page?(contacts_url) %>
-  <%= link_to contacts_path, class: "main-nav #{contacts_current}", method: :get do %>
+  <%= link_to contacts_path, class: "main-nav #{contacts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-share-3"></use>
     </svg>Contacts &amp; Permissions
   <% end %>
-<!--  <% financial_information_current = 'active' if current_page?(financial_information_url) %>
-  <%= link_to financial_information_path, class: "main-nav #{financial_information_current}", method: :get do %>
+<!--  
+  <% financial_information_current = 'active' if current_page?(financial_information_url) %>
+  <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
     </svg>Financial Information
   <% end %> -->
   <% estate_planning = 'active' if current_page?(estate_planning_url) %>
-  <%= link_to estate_planning_path, class: "main-nav #{estate_planning}", method: :get do%>
+  <%= link_to estate_planning_path, class: "main-nav #{estate_planning}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills Trusts &amp; Legal
   <% end %>
   <% insurance_current = 'active' if current_page?(insurance_url) %>
-  <%= link_to insurance_path, class: "main-nav #{insurance_current}", method: :get do %>
+  <%= link_to insurance_path, class: "main-nav #{insurance_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-umbrella-1"></use>
     </svg>Insurance
   <% end %>
 <!--  <% taxes_current = 'active' if current_page?(taxes_url) %>
-  <%= link_to taxes_path, class: "main-nav #{taxes_current}", method: :get do %>
+  <%= link_to taxes_path, class: "main-nav #{taxes_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-book-6"></use>
     </svg>Taxes
   <% end %>
   <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) %>
-  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}", method: :get do %>
+  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices
   <% end %>
   <% final_wishes_current = 'active' if current_page?(final_wishes_url) %>
-  <%= link_to final_wishes_path, class: "main-nav #{final_wishes_current}", method: :get do %>
+  <%= link_to final_wishes_path, class: "main-nav #{final_wishes_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-bookmark-2"></use>
     </svg>Final Wishes
   <% end %>
   <% web_accounts_current = 'active' if current_page?(web_accounts_url) %>
-  <%= link_to web_accounts_path, class: "main-nav #{web_accounts_current}", method: :get do %>
+  <%= link_to web_accounts_path, class: "main-nav #{web_accounts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Web Accounts
   <% end %>
   <% shared_current = 'active' if current_page?(shared_url) %>
-  <%= link_to shared_path, class: "main-nav #{shared_current}", method: :get do %>
+  <%= link_to shared_path, class: "main-nav #{shared_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me
   <% end %> -->
   <% documents_current = 'active' if current_page?(documents_url) %>
-  <%= link_to documents_path, class: "main-nav #{documents_current}", method: :get do %>
+  <%= link_to documents_path, class: "main-nav #{documents_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-folder-1"></use>
     </svg>Documents

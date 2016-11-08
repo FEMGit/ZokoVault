@@ -59,9 +59,9 @@
       </svg>
     </span>Edit
   <% end %>
-  <h1><%= 2016 %></h1>
+  <h1><%= @year %></h1>
 </div>
-<div class="card cg-2016 details taxes">
+<div class="card cg-<%= @year %> details taxes">
   <%= link_to content_tag(:a), "", :class => "whole-card-link" %>
   <div class="details-wrapper">
     <div class="details-card-info details">
@@ -103,7 +103,7 @@
 </div>
 
 <div>
-  <a class="add-link fr" href="">
+  <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
@@ -113,11 +113,11 @@
   <h1><%= params[:name] %> Documents</h1>
 </div>
 
-<table class="sortable">
+<table>
   <tr>
     <%= render :partial => "layouts/documents_common_columns" %>
   </tr>
-  <% @group_documents && @group_documents.each do |document| %>
+  <% @documents && @documents.each do |document| %>
     <% if document.present? %>
       <tr>
         <td>

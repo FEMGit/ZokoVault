@@ -167,7 +167,7 @@ table.share-with-contact {
       }
     }
   }
-        
+
   .field.address-field:after {
     content: "";
     display: table;
@@ -178,4 +178,7 @@ table.share-with-contact {
   .bottom-field {
     margin-top: 0;
   }
+}
+
+@media screen and (max-width: 525px) {
 }

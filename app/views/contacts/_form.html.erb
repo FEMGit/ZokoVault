@@ -7,18 +7,19 @@
       <span id="step-1" class="inner-counter">
         1
       </span>
-      Details
+      <span class="modal-step-title">Details</span>
     </div>
     <div class="inner-step" onclick="wizNav(2)">
       <span id="step-2" class="inner-counter">
         2
       </span>
-      Relationship
+      <span class="modal-step-title">Relations</span>
     </div>
     <div class="inner-step" onclick="wizNav(3)">
       <span id="step-3" class="inner-counter">
         3
-      </span>Avatar
+      </span>
+      <span class="modal-step-title">Avatar</span>
     </div>
   </div>
   <div class="modal-header">
@@ -120,7 +121,7 @@
           </div>
           <div class="field">
             <%= f.label :businesswebaddress, 'Business Web Address' %><br>
-            <div class="styled-text-input input-prefix-web">
+            <div class="input-prefix-web">
               <%= f.text_field :businesswebaddress %>
             </div>
           </div>
@@ -138,15 +139,13 @@
           </div>
         </div>
         <div class="field">
-          <label>City</label>
-          <div class="styled-text-input">
-            <p><%= f.text_field :city %></p>
-          </div>
+          <%= f.label :city %><br>
+          <%= f.text_field :city %>
         </div>
         <div class="field address-field">
           <div class="zipcode-field">
             <label>Zip Code </label>
-            <div class="zipcode-text styled-input-text">
+            <div class="zipcode-text">
               <div class="zipcode">
                 <p><%= f.text_field :zipcode %></p>
               </div>
@@ -159,7 +158,7 @@
             </div>
           </div>
         </div>
-        <div class="field bottom-field">
+        <div class="field">
           <%= f.label :notes %><br>
           <%= f.text_area :notes %>
         </div>

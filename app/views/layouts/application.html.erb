@@ -3,14 +3,14 @@
 <head>
   <title>ZokuVault</title>
   <link rel="icon" type="image/png" href="/favicon.png">
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <% if user_signed_in? %>
   <body class="logged-in">
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 <% else %>
   <body class="logged-out">
 <% end %>
@@ -34,5 +34,7 @@
     </div>
     <%= render :partial => 'layouts/footer' %>
   </main>
+  
+  <%= javascript_include_tag 'autonumeric', 'data-turbolinks-track' => true %>
   </body>
 </html>

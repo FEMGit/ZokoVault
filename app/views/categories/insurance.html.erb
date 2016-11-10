@@ -10,8 +10,11 @@
   >
   <% @groups.each do |group| %>
     <div class="flex-column">
-       <div class="card <%= group['value'] %> column-card">
-        <h3><%= group["label"] %></h3>
+       <div class="card <%= group['value'] %> column-card section-header">
+        <div class="section header">
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group['label']} %>
+          <h3><%= group["label"] %></h3>
+        </div>
         <%= link_to 'Add Details', new_link_paths[group['value']], class: "add-details-link" %>
         <span class="clear"></span>
       </div>

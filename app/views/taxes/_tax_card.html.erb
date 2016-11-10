@@ -1,7 +1,11 @@
 <div class="card cg-<%=year%> column-card">
   <%= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
   <div class="section header">
+<<<<<<< 1e4050aa9d0e67fc75a176f46d5a6b2b30dd7f01
     <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, :category => @category} %>
+=======
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
+>>>>>>> Ad-403 Save Edit Dynamics on taxes form
     <h3><%= year %> Taxes</h3>
   </div>
   <%= link_to 'Add Details', link_to_add_details(year), class: "add-details-link" %>

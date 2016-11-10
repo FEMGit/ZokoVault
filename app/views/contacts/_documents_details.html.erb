@@ -24,6 +24,11 @@
     </tr>
   </thead>
   <tbody>
+    <% if @share_documents.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
     <% @share_documents && @share_documents.each do |document| %>
       <tr>
         <td class="document-name-big">

@@ -21,6 +21,6 @@ module TaxesHelper
   private
   
   def year_exist?(taxes, year)
-    taxes.any?{|x| x.year == year}
+    taxes.any? { |x| x.year == year }
   end
 end

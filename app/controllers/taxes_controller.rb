@@ -94,7 +94,7 @@ class TaxesController < AuthenticatedController
   end
 
   def set_tax
-    @tax = Tax.for_user(current_user).find(params[:id])
+    @tax = TaxYearInfo.for_user(current_user).find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -116,10 +116,5 @@ class TaxesController < AuthenticatedController
 
   def tax_form_params
     tax_params.select { |k, _v| k.starts_with?("tax_") }
-  end
-  
-  def set_category_and_documents
-    @category = "Taxes"
-    @documents = Document.for_user(current_user).where(category: @category)
   end
 end

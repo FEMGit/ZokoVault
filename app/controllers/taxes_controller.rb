@@ -19,10 +19,8 @@ class TaxesController < AuthenticatedController
   def new
     year = params[:year] || Date.today.strftime("%Y").to_i
     tax = TaxesService.tax_by_year(year, current_user)
-    unless !tax 
-      redirect_to "#{taxes_path}/#{tax[:id]}/edit"
-    end
-    @tax_year = TaxYearInfo.new()
+    redirect_to "#{taxes_path}/#{tax[:id]}/edit" if tax 
+    @tax_year = TaxYearInfo.new
     @tax_year[:year] = year
     @tax_year.taxes << Tax.new
   end

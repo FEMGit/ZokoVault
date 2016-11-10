@@ -1,0 +1,63 @@
+<div>
+  <%= link_to new_tax_path, class: "edit-link" do%>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  <% end %>
+  <h1><%= @year %></h1>
+</div>
+<div class="card cg-<%= @year %> details taxes">
+  <%= link_to content_tag(:a), new_tax_path, :class => "whole-card-link" %>
+  <div class="details-wrapper">
+    <div class="details-card-info details">
+      <div class = "details-card-field">
+        <label class="">Tax Preparer</label>
+        <span class="details-field details-field-value">Bruna Mars</span>
+        <a class="details-field details-field-value">brunamars@mail.com</a>
+        <span class="details-field details-field-value">777-777-7777</span>
+      </div>
+      <div class = "details-card-field">
+        <label class="">Notes</label>
+        <p>
+          text for example. a lot of text. for the example
+          text for example. a lot of text. for the example
+          text for example. a lot of text. for the example
+          text for example. a lot of text. for the example
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+    <span class="shared-with-block">
+      <h2 class="shared-with-title">Shared With</h2>
+      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+    </span>
+    <div class="details-card-info details">
+      <div class="details-card-field shared">
+        <label class="title">Shared With</label>
+        <div class="details-field">
+          <span class="user-circle">BM</span>
+          <span class="user-circle">GD</span> 
+          <span class="user-circle">AD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h1><%= params[:name] %> Documents</h1>
+</div>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

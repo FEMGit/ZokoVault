@@ -100,26 +100,5 @@
   </a>
   <h2><%= @user_profile.name %> Documents</h2>
 </div>
-<table>
-  <tr>
-    <%= render :partial => "layouts/documents_common_columns" %>
-  </tr>
-  <% @my_profile_documents && @my_profile_documents.each do |document| %>
-    <tr>
-      <td>
-        <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
-      </td>
-      <td><%= date_format(document.updated_at) %></td>
-      <td>
-        <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
-      </td>
-      <td>
-        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-        <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @my_profile_documents} %>

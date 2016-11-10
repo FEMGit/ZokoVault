@@ -1,4 +1,6 @@
 class UserProfile < ActiveRecord::Base
+  validates_with DateOfBirthValidator, fields: [:date_of_birth]
+  
   belongs_to :user
   has_many :employers
 

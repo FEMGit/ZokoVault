@@ -64,6 +64,7 @@ class DocumentsController < AuthenticatedController
 
   def destroy
     @document.destroy
+    S3Service.delete_from_storage(@document.url)
     redirect_page = session[:ret_url] || documents_path
     respond_to do |format|
       format.html { redirect_to redirect_page, notice: 'Document was successfully destroyed.' }

@@ -97,7 +97,7 @@
     var documentNameField = document.getElementById("document_name");
     var documentUrl = document.getElementById("document_url");
     documentNameField.value = evt.fpfile.filename;
-    documentUrl.value = evt.fpfile.url;
+    documentUrl.value = evt.fpfile.key;
   }
   
   $('.chosen-select').chosen()

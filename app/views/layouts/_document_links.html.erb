@@ -1,5 +1,5 @@
 <% if previewed?(document) %>
   <a><%= link_to document.name, document_path(document) %></a>
 <% else %>
-  <a><%= link_to document.name, document.url %></a>
+  <a><%= link_to document.name, get_file_url(document.url) %></a>
 <% end %>

@@ -9,6 +9,13 @@
     </tr>
   </thead>
   <tbody>
+    <% if documents.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
     <% documents.each do |document| %>
       <tr>
         <td>

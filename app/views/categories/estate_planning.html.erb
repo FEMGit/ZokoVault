@@ -100,7 +100,7 @@
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
         <div class="section header">
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @power_of_attorneys.name} %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Legal'} %>
           <h3>Powers of Attorney</h3>
         </div>
         <% @power_of_attorneys.each do |power_of_attorney| %>

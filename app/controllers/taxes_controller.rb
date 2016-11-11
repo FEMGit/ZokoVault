@@ -97,10 +97,6 @@ class TaxesController < AuthenticatedController
     @tax = Tax.for_user(current_user).find(params[:id])
   end
 
-  def set_tax
-    @tax = TaxYearInfo.for_user(current_user).find(params[:id])
-  end
-
   # Never trust parameters from the scary internet, only allow the white list through.
   def tax_params
     params.require(:tax_year_info).permit!

@@ -13,6 +13,19 @@
   </div>
   <div class="documents-body-content">
     <div class="documents-wrapper">
+      <% if @document.errors.any? %>
+        <div>
+          <ul style="padding-left: 20px;">
+            <% @document.errors.full_messages.each do |message| %>
+              <% if message.include?("Url") %>
+                <li>You should select file before saving a document</li>
+              <% else %>
+                <li><%= message %></li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
       <% if add_new_document?(yield(:title)) %>
         <div class="edit-document-field">
           <label>Attach File</label><br>

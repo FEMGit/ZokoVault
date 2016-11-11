@@ -36,8 +36,8 @@ module DocumentsHelper
     end
   end
   
-  def document_count(user, group)
-    Document.for_user(user).where(group: group).count
+  def document_count(user, group, category)
+    Document.for_user(user).where(category: category, group: group).count
   end
   
   def previewed?(document)

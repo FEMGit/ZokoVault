@@ -1,6 +1,8 @@
 class TaxesController < AuthenticatedController
   before_action :set_tax, only: [:show, :edit, :update, :destroy]
-  before_action :set_category_and_documents, only: [:index, :show]
+  before_action :set_category, only: [:index, :show]
+  before_action :set_year_documents, only: [:show]
+  before_action :set_all_documents, only: [:index]
   
   # GET /taxes
   # GET /taxes.json
@@ -19,7 +21,7 @@ class TaxesController < AuthenticatedController
   def new
     year = params[:year] || Date.today.strftime("%Y").to_i
     tax = TaxesService.tax_by_year(year, current_user)
-    redirect_to "#{taxes_path}/#{tax[:id]}/edit" if tax 
+    redirect_to "#{taxes_path}/#{tax[:id]}/edit" if tax
     @tax_year = TaxYearInfo.new
     @tax_year[:year] = year
     @tax_year.taxes << Tax.new
@@ -88,9 +90,16 @@ class TaxesController < AuthenticatedController
     params.require(:tax_year_info).permit!
   end
   
-  def set_category_and_documents
+  def set_category
     @category = "Taxes"
+  end
+  
+  def set_all_documents
     @documents = Document.for_user(current_user).where(category: @category)
+  end
+  
+  def set_year_documents
+    @documents = Document.for_user(current_user).where(category: @category, group: @tax.year)
   end
   
   def tax_form_params

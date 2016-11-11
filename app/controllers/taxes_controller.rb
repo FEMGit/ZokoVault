@@ -92,6 +92,10 @@ class TaxesController < AuthenticatedController
   def set_tax_year
     @tax = TaxYearInfo.for_user(current_user).find(params[:id])
   end
+  
+  def set_tax
+    @tax = Tax.for_user(current_user).find(params[:id])
+  end
 
   def set_tax
     @tax = TaxYearInfo.for_user(current_user).find(params[:id])

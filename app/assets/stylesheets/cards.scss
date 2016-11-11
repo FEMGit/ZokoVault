@@ -126,7 +126,8 @@ $cards-margin: 12px;
 .card.attorney.wtl-info-wrapper,
 .column-card.info-wrapper,
 .flex-column {
-  .wtl-left-side {
+  .wtl-left-side,
+  .left-side {
    float:left;
     width: 55%;
     .executor-info, .agent-info {
@@ -136,7 +137,8 @@ $cards-margin: 12px;
   .field-block {
     display: block;
   }
-  .wtl-right-side {
+  .wtl-right-side,
+  .right-side {
     float: right;
     width: 45%;
     direction: rtl;
@@ -401,3 +403,4 @@ $cards-margin: 12px;
 .field-block {
   display: block;
 }
+

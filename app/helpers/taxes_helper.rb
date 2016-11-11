@@ -18,6 +18,11 @@ module TaxesHelper
     end
   end
 
+  def tax_by_year(year)
+    tax_year = @taxes.where(:year => year).first
+    tax_year.taxes.first
+  end
+
   private
 
   def year_exist?(taxes, year)

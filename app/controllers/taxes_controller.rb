@@ -1,5 +1,6 @@
 class TaxesController < AuthenticatedController
-  before_action :set_tax, only: [:show, :edit, :update, :destroy]
+  before_action :set_tax_year, only: [:show, :edit, :update]
+  before_action :set_tax, only: [:destroy]
   before_action :set_category, only: [:index, :show]
   before_action :set_year_documents, only: [:show]
   before_action :set_all_documents, only: [:index]
@@ -73,7 +74,7 @@ class TaxesController < AuthenticatedController
   def destroy
     @tax.destroy
     respond_to do |format|
-      format.html { redirect_to new_tax_path, notice: 'Tax was successfully destroyed.' }
+      format.html { redirect_to :back || taxes_url, notice: 'Tax was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -81,8 +82,12 @@ class TaxesController < AuthenticatedController
   private
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_tax
+  def set_tax_year
     @tax = TaxYearInfo.for_user(current_user).find(params[:id])
+  end
+  
+  def set_tax
+    @tax = Tax.for_user(current_user).find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

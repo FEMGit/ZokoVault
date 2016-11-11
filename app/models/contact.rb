@@ -57,6 +57,10 @@ class Contact < ActiveRecord::Base
   def professional_relationship?
     relationship.in? RELATIONSHIP_TYPES[:professional]
   end
+  
+  def medical_relationship?
+    relationship.in? RELATIONSHIP_TYPES[:medical_professional]
+  end
 
   def initials
     [firstname, lastname].compact.map(&:first).join

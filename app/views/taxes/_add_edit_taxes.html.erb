@@ -14,13 +14,25 @@
       </div>
     <% end %>
   
-  
     <% @tax_year.taxes.each_with_index do |data, index| %>
-        <%= f.fields_for "tax_#{index}", data do |ff| %>
+      <%= f.fields_for "tax_#{index}", data do |ff| %>
+        <% if data.id %>
+          <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete, 
+              data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
+              class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
+        <% end %>
         <div class="body-content">
           <%= render 'form', ff: ff, index: index, data: data %>
         </div>
-        <% end %>
+      <% end %>
+    <% end %>
+    <% if @tax_year.taxes.empty? %>
+      <% index = 0 %>
+      <%= f.fields_for "tax_#{index}" do |ff| %>
+        <div class="body-content">
+          <%= render 'form', ff: ff, index: index %>
+        </div>
+      <% end %>
     <% end %>
   
     <div class="wtl-footer-content">

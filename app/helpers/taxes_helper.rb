@@ -23,8 +23,6 @@ module TaxesHelper
     tax_year.taxes.first
   end
 
-  private
-
   def year_exist?(taxes, year)
     taxes.any? { |x| x.year == year }
   end

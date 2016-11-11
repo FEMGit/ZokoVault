@@ -8,6 +8,7 @@
   <% end %>
   <h1><%= @tax.year %></h1>
 </div>
+
 <% @tax.taxes.each do |tax| %>
   <div class="card cg-<%=@tax.year%> details taxes">
     <%= link_to content_tag(:a), "#{taxes_path}/#{@tax.id}/edit", :class => "whole-card-link" %>

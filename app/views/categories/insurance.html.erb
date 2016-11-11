@@ -12,7 +12,7 @@
     <div class="flex-column">
        <div class="card <%= group['value'] %> column-card section-header">
         <div class="section header">
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group['label']} %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group['label'], :category => @category} %>
           <h3><%= group["label"] %></h3>
         </div>
         <%= link_to 'Add Details', new_link_paths[group['value']], class: "add-details-link" %>

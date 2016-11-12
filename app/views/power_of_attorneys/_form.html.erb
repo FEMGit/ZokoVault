@@ -3,10 +3,7 @@
   <div class="field">
     <label>Power of Attorney</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :agent_ids,
-        @contacts, :first, :second, {},
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "attorney_agent_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false) %>
     </div>
   </div>
   <div class="field">
@@ -34,10 +31,7 @@
       </svg>
     </span>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids,
-        @contacts_shareable, :id, :name, {},
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "attorney_share_id_#{index}"  }
-      %>
+      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "attorney_share_id_#{index}") %>
     </div>
   </div>
 </div>

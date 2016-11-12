@@ -106,6 +106,7 @@ class WillsController < AuthenticatedController
   end
 
   private
+
     def set_contacts
       contact_service = ContactService.new(:user => current_user)
       @contacts = contact_service.contacts

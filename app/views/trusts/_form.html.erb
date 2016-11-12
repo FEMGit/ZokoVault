@@ -9,28 +9,20 @@
   <div class="field">
     <label>Attorney, Accountant or Advisor(s)</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :agent_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "trust_agent_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", multiple: false) %>
     </div>
   </div>
   <div class="field">
     <label>Trustee(s)</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :trustee_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_trustee_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}") %>
+    </div>
     </div>
   </div>
   <div class="field">
     <label>Successor Trustee(s)</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :successor_trustee_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_successor_id_#{index}"  }
-      %>
+      <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}") %>
     </div>
   </div>
   <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
@@ -42,10 +34,7 @@
       </svg>
     </span>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_share_id_#{index}"  }
-      %>
+      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "trust_share_id_#{index}") %>
     </div>
   </div>
 </div>

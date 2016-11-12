@@ -12,28 +12,19 @@
   <div class="field">
     <label>Primary Beneficiaries</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :primary_beneficiary_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_primary_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :primary_beneficiary_ids, @contacts, id: "will_primary_id_#{index}") %>
     </div>
   </div>
   <div class="field">
     <label>Secondary Beneficiaries</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :secondary_beneficiary_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_secondary_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :secondary_beneficiary_ids, @contacts, id: "will_secondary_id_#{index}") %>
     </div>
   </div>
   <div class="field">
     <label>Attorney, Accountant or Advisor(s)</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :agent_ids, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "will_agent_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "will_agent_id_#{index}", multiple: false) %>
     </div>
   </div>
   <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
@@ -45,10 +36,7 @@
       </svg>
     </span>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_share_id_#{index}" }
-      %>
+      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "will_share_id_#{index}") %>
     </div>
   </div>
 </div>

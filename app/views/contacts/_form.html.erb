@@ -175,8 +175,8 @@
   <footer class="modal-footer">
     <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
-    <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button" %>
+    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="$('#contact-form').submit();">Save</button>
+    <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button", method: :get %>
     <span class='footer_right'>
       <% if @contact.persisted? && @contact != current_user.user_profile.contact %>
         <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "button secondary-button big-button" %>
@@ -193,7 +193,6 @@ var currentStep = 1;
 
 var wizNav = function(step){
   currentStep = step;
-  console.log("in " + step);
   if(step===1){
     $("#next-step").show();
     $("#save-btn").hide();
@@ -266,53 +265,31 @@ var wizNav = function(step){
     }
   }
 }
-var submitContact = function(){
-  var contactForm = document.getElementById("contact-form");
-  contactForm.submit();
+
+var displayContactFormModal = function() {
+  $("body").append("<div class='modal-overlay js-modal-close'></div>");
+  $(".modal-overlay").fadeTo(500, 0.8);
+  $(".js-modalbox").fadeIn(500);
+  canvasEl = $('button[data-modal-id]');
+  var modalBox = $(canvasEl).attr('data-modal-id');
+  $('#' + modalBox).fadeIn($(canvasEl).data());
+  wizNav(1);
 }
+
 $(function(){
-
-  //SOMEONE PLEASE FIX THIS GARBAGE
-  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
-  $(document).ready(function(){
-    $('button[data-modal-id]').click();
-
-    wizNav(1);
-  });
-  $('button[data-modal-id]').click(function(e) {
-    e.preventDefault();
-    $("body").append(appendthis);
-    $(".modal-overlay").fadeTo(500, 0.8);
-    $(".js-modalbox").fadeIn(500);
-    var modalBox = $(this).attr('data-modal-id');
-    $('#'+modalBox).fadeIn($(this).data());
-  });
-
-
   $(".js-modal-close, .modal-overlay").click(function() {
     $(".modal, .modal-overlay").fadeOut(500, function() {
       $(".modal-overlay").remove();
     });
-
   });
 
   //ESPECIALLY THIS GARBAGE
-  $(window).resize(function() {
-    $(".large-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".medium-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".small-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
+  ['.small-modal', '.medium-modal', '.large-modal'].forEach(function(modalClass) {
+    $(window).resize(function() {
+      $(modalClass).css({
+        top: ($(window).height() - $(".modal").outerHeight()) / 2,
+        left: ($(window).width() - $(modalClass).outerWidth()) / 2,
+      });
     });
   });
   $(window).resize();

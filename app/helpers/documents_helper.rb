@@ -45,6 +45,11 @@ module DocumentsHelper
     Document.previewed?(s3_object.content_type)
   end
   
+  def previewed?(document)
+    s3_object = S3Service.get_object_by_key(document.url)
+    Document.previewed?(s3_object.content_type)
+  end
+  
   def get_file_url(key)
     s3_object = S3Service.get_object_by_key(key)
     s3_object.presigned_url(:get)

@@ -35,6 +35,7 @@ class DocumentsController < AuthenticatedController
         end
         format.json { render :show, status: :created, location: @document }
       else
+        @cards = DocumentService.new(:category => @document.category).get_card_values(current_user)
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end

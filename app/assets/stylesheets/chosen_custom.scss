@@ -1,32 +1,39 @@
+$arrow-dropdown-margin-right: 30px;
+
+.chosen-styled-select{
+  margin-bottom: 10px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type=text]{
+  font-family: "Open Sans", serif;
+}
+
 .chosen-container-single {
   .chosen-single {
     height: 32px !important;
     border: 1px solid $color-gray-med-tinted !important;
     border-radius: 5px !important;
-    width: $wtl-form-width !important;
     padding: 0 !important;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
     font-family: "Open Sans", serif;
     font-size: 16px;
     font-weight: normal;
+    @include form-width;
+
     span {
       padding-left: 5px;
       padding-top: 2px
     }
-    div b {
+    div b{
       visibility: hidden;
     }
   }
 }
 
-$arrow-dropdown-margin-right: 30px;
-.chosen-container-multi {
-  width: $wtl-form-width - $arrow-dropdown-margin-right !important;
-  .chosen-choices {
+.chosen-choices {
     border: 1px solid $color-gray-med-tinted !important;
     border-radius: 5px !important;
     min-height: 32px !important;
-    width: $wtl-form-width !important;
     padding: 0 !important;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
     font-family: "Open Sans", serif;
@@ -34,11 +41,17 @@ $arrow-dropdown-margin-right: 30px;
     font-weight: normal;
     padding-left: 5px !important;
     cursor: pointer !important;
-  }
+    @include form-width;
 }
 .chosen-drop {
    font-weight: normal;
    font-family: "Open Sans", serif;
    font-size: 16px;
-   width: $wtl-form-width !important;
+}
+
+//SET WIDTH
+.chosen-container-multi,
+.chosen-container-multi .chosen-choices,
+.chosen-container .chosen-drop{
+  @include form-width;
 }

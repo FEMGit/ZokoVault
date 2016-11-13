@@ -32,10 +32,13 @@ Rails.application.routes.draw do
   
   # Mailer
   post 'contact-us', to: 'messages#create'
+<<<<<<< HEAD
   post 'mailing-list', to: 'interested_users#create'
   
   # Taxes
   get 'taxes/:id/:year', to: 'taxes#show'
+=======
+>>>>>>> master
 
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'

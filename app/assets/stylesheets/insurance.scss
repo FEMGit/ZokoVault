@@ -7,7 +7,8 @@ $zipcode-right-margin: 10px;
 $state-width: 280px;
 $textarea-height: 120px;
 
-.insurance-header-content, .insurance-body-content {
+.insurance-header-content,
+.insurance-body-content {
   display: block;
   background: white;
   border-radius: 5px;
@@ -37,7 +38,7 @@ $textarea-height: 120px;
       padding-bottom: 15px;
     }
   }
-  
+
   .zipcode-field {
     .zipcode-text {
       .insurance-zipcode {
@@ -51,7 +52,7 @@ $textarea-height: 120px;
     float:left;
     margin-right: 10px;
   }
-  
+
   .state-select {
     display: inline-block;
     float:left;
@@ -64,18 +65,18 @@ $textarea-height: 120px;
       }
     }
   }
-        
+
   .field.address-field:after {
     content: "";
     display: table;
     clear: both;
   }
-  
+
   .styled-select {
     width: $insurance-form-width;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
   }
-  
+
   select {
     width: $insurance-form-width + $gu;
   }

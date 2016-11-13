@@ -1,0 +1,7 @@
+@mixin form-width{
+  width: $form-width;
+
+  @include media($mobile) {
+    width: 100%;
+  }
+}

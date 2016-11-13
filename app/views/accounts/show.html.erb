@@ -1,6 +1,5 @@
 <h1><% current_user.name %> User Profile </h1>
 
-
 <p>
   <b>Agreed to  Terms of Service?</b><br/>
   <%= current_user.user_profile.signed_terms_of_service? ? 'yes' : 'no' %>

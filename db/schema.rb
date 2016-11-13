@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161104132741) do
+ActiveRecord::Schema.define(version: 20161108061028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,15 @@ ActiveRecord::Schema.define(version: 20161104132741) do
     t.integer "insured_member_id"
   end
 
+  create_table "interested_users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone_number"
+    t.string   "message"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "life_and_disability_policies", force: :cascade do |t|
     t.integer  "policy_type"
     t.integer  "policy_holder_id"
@@ -183,6 +192,16 @@ ActiveRecord::Schema.define(version: 20161104132741) do
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "taxes", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "tax_preparer_id"
+    t.string   "notes"
+    t.integer  "user_id"
+    t.integer  "tax_year"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "trusts", force: :cascade do |t|
     t.integer  "document_id"

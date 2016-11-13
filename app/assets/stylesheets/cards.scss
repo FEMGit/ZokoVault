@@ -14,7 +14,6 @@ $cards-margin: 12px;
   border: 1px solid  $color-gray-light-shaded;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor:pointer;
   word-wrap: break-word;
 
   &.details.insurance,
@@ -70,24 +69,37 @@ $cards-margin: 12px;
   @include card-type-details;
 }
 
-//CARD LABEL
+//CARD LABELS
 .card-label{
   float: right;
   color: $color-gray-dark-tinted;
 
-  @include media($eightfifty) {
+  &.shared-label{
+    color: $color-primary;
+  }
+
+  @include media($ninesixty) {
     float: none;
   }
 }
 .shared-card{
   background: $color-primary-tinted;
   border: 1px solid $color-primary;
+  margin-top: 10px;
 
   p.shared-description{
     max-width: 500px;
   }
 }
 .card-label{
+  color: $color-gray-dark-tinted;
+
+  svg{
+    position: relative;
+    top: 5px;
+  }
+}
+.shared-card-label{
   color: $color-primary;
 
   svg{
@@ -120,6 +132,25 @@ $cards-margin: 12px;
     max-width: 100%;
   }
 }
+
+//SHARED DISPLAY
+.shared-with{
+  background-color: $color-primary-tinted;
+  padding: 15px;
+  margin: 10px -15px -14px -15px;
+  height: auto;
+  border-radius: 0 0 5px 0;
+  border-top: 1px solid $color-primary;
+
+  &.edit-shared{
+    margin: 10px -15px 10px -15px;
+    border-bottom: 1px solid $color-primary;
+  }
+}
+
+
+
+
 //DYNAMIC CARD INFO REPRESENTATION
 .card.wills.wtl-info-wrapper,
 .card.trusts.wtl-info-wrapper,
@@ -294,17 +325,18 @@ $cards-margin: 12px;
 }
 
 .details-wrapper {
+  padding: 0 15px 15px 15px;
+
   &.wtl {
     padding-bottom: 0;
   }
-  padding: 15px;
-  padding-top: 0;
   .add-document-field {
     margin: 0 0;
   }
   .percent-complete {
     float: left;
   }
+
 }
 
 .edit-link-wtl {
@@ -321,6 +353,9 @@ $cards-margin: 12px;
   clear: right;
   display: block;
 }
+
+
+
 
 .shared-field {
   background-color: $color-primary-tinted;
@@ -393,6 +428,7 @@ $cards-margin: 12px;
     top: 0px;
     left: 0px;
     z-index: 1;
+    cursor: pointer;
   }
 }
 

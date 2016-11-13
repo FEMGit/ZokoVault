@@ -5,22 +5,40 @@ textarea{
   display:block;
   margin-bottom: 10px;
   padding: 5px;
-  width: $form-width;
+  @include form-width;
 }
 input[type=radio]{
   display:inline;
   width: auto;
   margin-right: 10px;
 }
+input[type=tel]{
+  width: $medium-form-width;
+}
+.input-symbol-dollar {
+  position: relative;
+  input {
+    padding-left: 15px;
+  }
+  &:after {
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left: 5px;
+    content: "$";
+  }
+}
 
 .styled-select{
   border: 1px solid $color-gray-med-tinted;
   border-radius: 5px;
-  background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 269px center;
+  background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right center;
   height: 32px;
   overflow: hidden;
-  width: $form-width;
   padding: 0;
+  margin-bottom: 10px;
+
+  @include form-width;
 }
 
 select{
@@ -28,16 +46,16 @@ select{
   border: none;
   height: 30px;
   padding: 5px;
-  width: $form-width + $gu;
   box-shadow: none;
   -webkit-appearance: none;
+  @include form-width;
 }
 
 label{
   color: $color-primary-shaded;
   font-weight: 600;
   font-size: 14px;
-  
+
   span{
     font-weight: 400;
     color: $color-gray-med-tinted;
@@ -45,6 +63,26 @@ label{
     font-size: 12px;
   }
 }
+
+//STATE ZIP COMBO
+.state-input{
+  float: left;
+  margin-right: 10px;
+
+  .styled-select{
+    width: $medium-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 194px center;
+  }
+
+  @include media($mobile) {
+    float: none;
+  }
+}
+.zip-input input{
+  width: $short-form-width;
+}
+
+
 
 //BUTTONS
 
@@ -311,9 +349,9 @@ label:hover input[type="checkbox"]:checked + span {
 ******************************************/
 .show-terms{
   height: 200px;
-      overflow-y: scroll;
-      border: 1px solid #999;
-      padding: 10px;
-      margin-bottom: 10px;
-      color: #666;
+  overflow-y: scroll;
+  border: 1px solid #999;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #666;
 }

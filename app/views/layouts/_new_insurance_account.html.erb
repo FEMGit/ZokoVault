@@ -1,4 +1,4 @@
-<h1><%= "#{yield(:title).gsub("&amp;", "&")} Insurance Setup" %></h1>
+<h1><%= "#{yield(:title).gsub("&amp;", "&")} - Setup" %></h1>
 <%= form_for(@insurance_card, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
   <% if @insurance_card.errors.any? %>
@@ -12,113 +12,98 @@
     </div>
   <% end %>
 
-  <div class="insurance-header-content">
-    <% if params[:id] %>
-      <%= link_to 'Delete', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete, 
-        data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
-        class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
-      <% end %>
+  <div class="card <%= @insurance_card.group %> mb-20">
 
-    <div class="field">
-      <label>Insurance Provider Name </label>
-      <div class="styled-text-input">
-        <%= f.text_field :name %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Insurance Provider Web Address </label>
-      <div class="styled-text-input input-prefix-web">
-        <%= f.text_field :webaddress %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Street Address</label>
-      <div class="styled-text-input">
-        <%= f.text_field :street_address_1 %>
-      </div>
-    </div>
-    <div class="field">
-      <label>City </label>
-      <div class="styled-text-input">
-        <%= f.text_field :city %>
-      </div>
-    </div>
-    <div class="field address-field">
-      <div class="zipcode-field">
-        <label>Zip Code </label>
-        <div class="zipcode-text styled-input-text">
-          <div class="insurance-zipcode">
-            <%= f.text_field :zip %>
-          </div>
-        </div>
-      </div>
-      <div class="state-select">
-        <label>State </label>
-        <div class="styled-select insurance-state">
+    <h3 class="card-label">Provider Details</h3>
+
+    <label>Insurance Provider Name</label>
+    <%= f.text_field :name %>
+
+    <label>Insurance Provider Web Address</label>
+    <%= f.text_field :webaddress, type: "url"  %>
+
+    <label>Street Address</label>
+    <%= f.text_field :street_address_1 %>
+
+    <label>City </label>
+    <%= f.text_field :city %>
+
+      <span class="state-input">
+        <label>State</label>
+        <div class="styled-select">
           <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
         </div>
-      </div>
-    </div>
-    <div class="field">
-      <label>Business Phone Number </label>
-      <div class="styled-text-input">
-        <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Business Fax Number </label>
-      <div class="styled-text-input">
-        <%= f.text_field :fax, class: "form-control", :data => {:mask => '999-999-9999'} %>
-      </div>
-    </div>
-    <div class="field">
-      <label>Primary Contact</label>
-      <div class="chosen-styled-select">
-          <%= f.collection_select :contact_id, 
-            @contacts, :id, :name, {}, 
-            { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
-          %>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light insurance-shared-with">
-      <label>Shared With</label>
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
       </span>
+      <span class="zip-input">
+        <label>Zip Code</label>
+        <%= f.text_field :zip %>
+      </span>
+
+    <label>Business Phone Number</label>
+    <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'}, type: "tel" %>
+
+    <label>Business Fax Number</label>
+    <%= f.text_field :fax, class: "form-control", :data => {:mask => '999-999-9999'}, type: "tel"  %>
+
+    <label>Primary Contact</label>
+    <div class="chosen-styled-select">
+        <%= f.collection_select :contact_id,
+          @contacts, :id, :name, {},
+          { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
+        %>
+    </div>
+
+    <section class="shared-with edit-shared">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
+      <label>Shared With</label><br>
       <div class="chosen-styled-select">
-        <%= f.collection_select :share_with_ids, 
-          @contacts_shareable, :id, :name, {}, 
+        <%= f.collection_select :share_with_ids,
+          @contacts_shareable, :id, :name, {},
           { 'data-placeholder' => 'Choose Contact...', multiple: true, class: "chosen-select"}
         %>
       </div>
-    </div>
+    </section>
+
+    <% if params[:id] %>
+      <%= link_to 'Delete this Provider', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete,
+        data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-insurance' %>
+    <% end %>
+
   </div>
-  
 
   <% @insurance_card.policy.each_with_index do |data, index| %>
-    <div class="insurance-body-content">
+
+    <div class="card <%= @insurance_card.group %> mb-20 add-another">
+
       <%= f.fields_for "policy_#{index}", data do |ff| %>
-        <% if data.id %>
-          <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete, 
-              data: { confirm: "Deleting this '#{@insurance_card.group} policy' will permanently remove it from ZokuVault." },
-              class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
-        <% end %>
         <%= render yield(:partial_path), ff: ff, index: index, data: data %>
       <% end %>
+
+      <% if data.id %>
+        <span class="mt-20 mb-20">
+          <%= link_to 'Delete this policy', "#{yield(:delete_path)}#{data.id}", method: :delete,
+              data: { confirm: "Deleting this '#{@insurance_card.group} policy' will permanently remove it from ZokuVault." },
+              class: 'button small-button secondary-button', id: 'delete-insurance' %>
+        </span>
+      <% end %>
+
     </div>
   <% end %>
+
+
   <% if @insurance_card.policy.empty? %>
     <% index= 0 %>
-    <div class="insurance-body-content">
+    <div class="card <%= @insurance_card.group %> mb-20 add-another">
       <%= f.fields_for "policy_#{index}" do |ff| %>
         <%= render yield(:partial_path), ff: ff, index: index %>
       <% end %>
     </div>
   <% end %>
-
 
 <div class="insurance-footer-content">
   <div class="add-new-field" href="" onclick="addNewField()">
@@ -142,7 +127,7 @@
   }
 
   addNewField = function(){
-    var $insuranceForm = $('div[class^="insurance-body-content"]:last');
+    var $insuranceForm = $('.add-another:last');
     var $newWtlForm = $insuranceForm.clone();
     old_id_number = parseInt($newWtlForm.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
@@ -152,9 +137,10 @@
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.find("#delete-insurance").remove()
-    $newWtlForm.insertAfter('.insurance-body-content:last');
+    $newWtlForm.insertAfter('.add-another:last');
     $('.chosen-select').chosen();
+    $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   }
-  
+
   $('.chosen-select').chosen();
 </script>

@@ -40,6 +40,8 @@ GEM
     acts_as_tree (2.4.0)
       activerecord (>= 3.0.0)
     addressable (2.4.0)
+    ajax-datatables-rails (0.3.1)
+      railties (>= 3.1)
     arel (6.0.3)
     ast (2.3.0)
     autonumeric-rails (1.9.46.2)
@@ -258,6 +260,11 @@ GEM
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
     jmespath (1.3.0)
+    jquery-datatables-rails (3.4.0)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
+      sass-rails
     jquery-rails (4.1.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -432,6 +439,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_tree
+  ajax-datatables-rails
   autonumeric-rails
   aws-sdk (~> 2)
   bourbon
@@ -447,6 +455,7 @@ DEPENDENCIES
   guard-rspec
   high_voltage (~> 3.0)
   jbuilder (~> 2.0)
+  jquery-datatables-rails
   jquery-rails
   letter_opener
   neat

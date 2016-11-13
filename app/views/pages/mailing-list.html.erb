@@ -7,9 +7,8 @@
 
 <section class="generic">
   <article>
-    <h1>Thanks for your interest.</h1>
-    <p>ZokuVault isn't live yet, but if you are interested in receiving access to our beta program please provide your information below, and we will consider you in an upcoming release.</p>
-
+    <h1>Thank you for your interest!</h1>
+    <p>ZokuVault isn't live yet, but if you are interested in participating in our beta program, please provide your information below.  We will consider you in an upcoming release, and will provide you with progress updates along the way.</p>
     <%= form_for :interested_user, url: '/mailing-list' do |f| %>
       <% if @interested_user && @interested_user.errors %>
         <div id="error_explanation">
@@ -27,7 +26,7 @@
       <label>Email <span class="required">(Required)</span></label>
       <%= f.text_field :email %>
 
-      <label type="phone">Phone Number</label>
+      <%= f.label :phone_number, 'Phone Number' %>
       <%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %>
 
       <%= f.label :message %>

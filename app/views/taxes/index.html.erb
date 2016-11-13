@@ -2,69 +2,32 @@
 <section class="flex-boxes">
 
   <div class="flex-column">
-    <div class="card cg-1 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2016", class: "whole-card-link" %>
-      <h3>2016 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2016} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-2 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2015", class: "whole-card-link" %>
-      <h3>2015 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2015} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-3 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2014", class: "whole-card-link" %>
-      <h3>2014 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2014} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-4 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2013", class: "whole-card-link" %>
-      <h3>2013 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2013} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-5 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2012", class: "whole-card-link" %>
-      <h3>2012 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2012} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-6 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2011", class: "whole-card-link" %>
-      <h3>2011 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2011} %>
   </div>
+
   <div class="flex-column">
-    <div class="card cg-7 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2010", class: "whole-card-link" %>
-      <h3>2010 Taxes</h3>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2010} %>
   </div>
-
 </section>
 
 <div>
@@ -78,31 +41,7 @@
   <h2>Tax Documents</h2>
 </div>
 
-<table>
-  <tr>
-    <%= render :partial => "layouts/documents_common_columns" %>
-  </tr>
-  <% @documents && @documents.each do |document| %>
-    <% if document.present? %>
-      <tr>
-        <td>
-          <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
-        </td>
-        <td><%= date_format(document.updated_at) %></td>
-        <td>
-          <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
-        </td>
-        <td>
-          <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
-        </td>
-        <td>
-          <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
-        </td>
-      </tr>
-    <% end %>
-  <% end %>
-</table> 
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
 <script>
 

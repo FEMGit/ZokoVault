@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'welcome#index', as: :authenticated_root
   end
-  
+
   #root "index"
   #root "public#index"
 
@@ -29,16 +29,15 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
-  
+
   # Mailer
   post 'contact-us', to: 'messages#create'
-<<<<<<< HEAD
+
   post 'mailing-list', to: 'interested_users#create'
-  
+
   # Taxes
   get 'taxes/:id/:year', to: 'taxes#show'
-=======
->>>>>>> master
+  get 'taxes/new/:year', to: 'taxes#create'
 
   get 'files' => 'welcome#files'
   get 'filestacktest' => 'welcome#filestacktest'
@@ -59,10 +58,10 @@ Rails.application.routes.draw do
   get 'web_accounts' => 'categories#web_accounts'
 
   get 'shares/new/:document' => 'shares#new'
-  
+
   resources :interested_users
   get 'mailing_list_confirm' => 'interested_users#mailing_list_confirm'
-  
+
   resources :users, only: [:index, :destroy]
 
   resources :wills

@@ -1,8 +1,4 @@
 <section class="contact-1">
-  <article>
-    <h1 class="hero-text">Contact Us</h1>
-    <h5 class="hero-text">ZokuVault helps families plan, organize, and share the important details of their lives.</h5>
-  </article>
 </section>
 
 <section class="generic">
@@ -13,7 +9,6 @@
       <% if @message && @message.errors %>
         <div id="error_explanation">
           <h2><%= pluralize(@message.errors.count, "error") %> prohibited this from being sent:</h2>
-
           <ul>
             <% @message.errors.full_messages.each do |message| %>
               <li><%= message %></li>

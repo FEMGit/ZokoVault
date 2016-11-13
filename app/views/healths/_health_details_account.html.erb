@@ -1,24 +1,25 @@
 <% @insurance_card.policy.each do |policy| %>
+  <h2 class="mt-20"><%= "#{policy.policy_type} -  #{policy.policy_holder && policy.policy_holder.name}" %></h2>
 
-<h1><%= "#{policy.policy_type} -  #{policy.policy_holder && policy.policy_holder.name}" %></h1>
+  <div class="card <%= @insurance_card.group %>">
 
-<div class="card <%= @insurance_card.group %>">
+    <h3 class="card-label">Policy Information</h2>
 
-  <h3 class="card-label">Policy Information</h2>
+    <label>Policy Number</label>
+    <p><%= policy.policy_number %></p>
 
-  <label>Policy Number</label>
-  <p><%= policy.policy_number %></p>
+    <label>Insured Members</label>
+    <p>
+      <% policy.insured_members.each do |insured_member| %>
+        <%= insured_member && insured_member.name %><br>
+      <% end %>
+    </p>
 
-  <label>Insured Members</label>
-  <% policy.insured_members.each do |insured_member| %>
-    <p><%= insured_member && insured_member.name %></p>
-  <% end %>
+    <label class="title">Primary contact</label>
+    <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
 
-  <label class="title">Primary contact</label>
-  <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
+    <label class="title">Notes</label>
+    <p><%= policy.notes %></p>
 
-  <label class="title">Notes</label>
-  <p><%= policy.notes %></p>
-
-</div>
+  </div>
 <% end %>

@@ -35,6 +35,7 @@ class DocumentsController < AuthenticatedController
         end
         format.json { render :show, status: :created, location: @document }
       else
+        @cards = DocumentService.new(:category => @document.category).get_card_values(current_user)
         format.html { render :new }
         format.json { render json: @document.errors, status: :unprocessable_entity }
       end
@@ -64,6 +65,7 @@ class DocumentsController < AuthenticatedController
 
   def destroy
     @document.destroy
+    S3Service.delete_from_storage(@document.url)
     redirect_page = session[:ret_url] || documents_path
     respond_to do |format|
       format.html { redirect_to redirect_page, notice: 'Document was successfully destroyed.' }

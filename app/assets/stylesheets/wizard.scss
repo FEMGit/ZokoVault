@@ -40,10 +40,31 @@
   top: -1px;
 
   &.current-step{
-  background:$color-primary;
+    background:$color-primary;
   }
 
   &.completed-step{
     padding: 5px 8px 5px 9px;
+  }
+}
+
+@media screen and (max-width: 525px) {
+  .inner-counter {
+    padding: 2px 9.5px 2px 9.5px;
+    &.completed-step{
+      padding: 2px 3px 2px 7px;
+      .circle-icon {
+        margin-right: 2px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .inner-counter {
+    padding: 0.5px 7.5px 0.5px 7.5px;
+    &.completed-step{
+      padding: 0.5px 2.5px 0.5px 4.5px;
+    }
   }
 }

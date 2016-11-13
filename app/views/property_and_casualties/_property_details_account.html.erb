@@ -1,5 +1,5 @@
 <% @insurance_card.policy.each do |policy| %>
-  <h1><%= "#{policy.policy_type} -  #{policy.insured_property}" %></h1>
+  <h2 class="mt-20"><%= "#{policy.policy_type} -  #{policy.insured_property}" %></h2>
 
   <div class="card <%= @insurance_card.group %>">
 
@@ -12,10 +12,11 @@
     <p><%= policy.policy_number %></p>
 
     <label>Policy Holder</label>
+    <p>
     <% if policy.policy_holder %>
-      <p><%= policy.policy_holder && policy.policy_holder.name %></p>
+      <%= policy.policy_holder && policy.policy_holder.name %><br>
     <% end %>
-
+    </p>
     <label>Primary Contact</label>
     <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
 

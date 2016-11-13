@@ -1,3 +1,6 @@
+$zipcode-width: 80px;
+$state-width: 210px;
+
 .modal{
   display: none;
   position: absolute;
@@ -74,5 +77,62 @@ a.modal-close:hover {
   top: 30px;
   left: 50%;
   transform: translate(-50%);
-  width: 525px;
+  max-width: 525px;
+  width: 90%;
+}
+
+@media screen and (max-width: 525px) {
+  .modal-no-js {
+    .modal-step-title {
+      font-size: 0.9em;
+    }
+    .modal-content {
+      .field {
+        input[type=text], .styled-select, textarea, select {
+          width: 70%;
+          min-width: 200px;
+        }
+      }
+      .styled-select {
+        background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+        select {
+          width: 70%;
+          min-width: 200px;
+          text-overflow: ellipsis;
+          padding-right: 40px;
+          overflow: hidden;
+          white-space: no-wrap;
+          -moz-appearance: none;
+        }
+      }
+      
+      .state-select {
+        display: inline-block;
+        float:left;
+        .state {
+          &.styled-select {
+            max-width: 200px;
+          }
+          select {
+            max-width: 200px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .modal-no-js {
+    .modal-step-title {
+      font-size: 0.8em;
+      margin-left: -2px;
+    }
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .inner-step {
+    margin-left: -4px;
+  }
 }

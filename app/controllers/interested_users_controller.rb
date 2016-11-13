@@ -24,7 +24,6 @@ class InterestedUsersController < ApplicationController
   # POST /interested_users.json
   def create
     @interested_user = InterestedUser.new(interested_user_params)
-
     respond_to do |format|
       if @interested_user.save
         format.html { redirect_to mailing_list_confirm_path }

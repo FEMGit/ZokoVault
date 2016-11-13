@@ -7,18 +7,19 @@
       <span id="step-1" class="inner-counter">
         1
       </span>
-      Details
+      <span class="modal-step-title">Details</span>
     </div>
     <div class="inner-step" onclick="wizNav(2)">
       <span id="step-2" class="inner-counter">
         2
       </span>
-      Relationship
+      <span class="modal-step-title">Relations</span>
     </div>
     <div class="inner-step" onclick="wizNav(3)">
       <span id="step-3" class="inner-counter">
         3
-      </span>Avatar
+      </span>
+      <span class="modal-step-title">Avatar</span>
     </div>
   </div>
   <div class="modal-header">
@@ -69,7 +70,7 @@
           <div class="field">
             <%= f.label :relationship %><br>
             <div class="styled-select">
-              <%= f.select :relationship, 
+              <%= f.select :relationship,
                 options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
                 {}, id: :personal_relationships_select %>
             </div>
@@ -81,13 +82,9 @@
           </div>
           <div class="field">
             <%= f.label :birthdate %><br>
-            <%= f.date_select :birthdate, 
-              use_two_digit_numbers: true,
-              selected: 40.years.ago,
-              start_year: Date.today.year - 80,
-              end_year: Date.today.year,
-              order: [:month, :day, :year]
-            %>
+            <div class="styled-text-input birthday-field">
+              <p><%= f.text_field :birthdate, value: f.object.birthdate && f.object.birthdate.strftime("%m/%d/%Y"), class: "form-control", :data => {:mask => '99/99/9999'} %></p>
+            </div>
           </div>
           <div class="field">
             <%= f.label :address, 'Street Address' %><br>
@@ -100,16 +97,16 @@
             <%= f.label :relationship %><br>
             <div id="common_professional">
               <div class="styled-select">
-                <%= f.select :relationship, 
-                  options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship), 
-                  {}, id: :professional_relationships_select %>
+                <%= f.select :relationship,
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship),
+                  {}, id: :common_professional_select %>
               </div>
             </div>
             <div id="medical_professional">
               <div class="styled-select">
-                <%= f.select :relationship, 
-                  options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship), 
-                  {}, id: :professional_relationships_select %>
+                <%= f.select :relationship,
+                  options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship),
+                  {}, id: :medical_professional_select %>
               </div>
             </div>
           </div>
@@ -120,7 +117,7 @@
           </div>
           <div class="field">
             <%= f.label :businesswebaddress, 'Business Web Address' %><br>
-            <div class="styled-text-input input-prefix-web">
+            <div class="input-prefix-web">
               <%= f.text_field :businesswebaddress %>
             </div>
           </div>
@@ -138,15 +135,13 @@
           </div>
         </div>
         <div class="field">
-          <label>City</label>
-          <div class="styled-text-input">
-            <p><%= f.text_field :city %></p>
-          </div>
+          <%= f.label :city %><br>
+          <%= f.text_field :city %>
         </div>
         <div class="field address-field">
           <div class="zipcode-field">
             <label>Zip Code </label>
-            <div class="zipcode-text styled-input-text">
+            <div class="zipcode-text">
               <div class="zipcode">
                 <p><%= f.text_field :zipcode %></p>
               </div>
@@ -159,12 +154,12 @@
             </div>
           </div>
         </div>
-        <div class="field bottom-field">
+        <div class="field">
           <%= f.label :notes %><br>
           <%= f.text_area :notes %>
         </div>
       </div>
-      
+
       <div id="avatar-form">
         <div class="field">
           <%= f.label :avatarcolor, 'Avatar Color' %><br>
@@ -178,15 +173,10 @@
     <% end %>
   </div>
   <footer class="modal-footer">
-    <a href="javascript:;" id='next-step' class=" button secondary-button big-button" 
+    <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
     <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
     <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button" %>
-    <span class='footer_right'>
-      <% if @contact.persisted? %>
-        <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "button secondary-button big-button" %>
-      <% end %>
-    </span>
   </footer>
 </div>
 
@@ -247,6 +237,8 @@ var wizNav = function(step){
     $('#personal_relationships_select').removeAttr("disabled");
     $('#professional_relationship').hide();
     $('#professional_relationships_select').prop('disabled', 'disabled');
+    $('#medical_professional_select').prop('disabled', 'disabled');
+    $('#common_professional_select').prop('disabled', 'disabled');
   }
   else {
     $('#personal_relationship').hide();
@@ -255,17 +247,17 @@ var wizNav = function(step){
       $('#professional_relationship').show();
       $('#professional_relationships_select').removeAttr("disabled");
       $('#medical_professional').show();
-      $('#medical_professional').removeAttr("disabled");
+      $('#medical_professional_select').removeAttr("disabled");
       $('#common_professional').hide();
-      $('#common_professional').prop('disabled', 'disabled');
+      $('#common_professional_select').prop('disabled', 'disabled');
     }
     else {
       $('#professional_relationship').show();
       $('#professional_relationships_select').removeAttr("disabled");
       $('#medical_professional').hide();
-      $('#medical_professional').prop('disabled', 'disabled');
+      $('#medical_professional_select').prop('disabled', 'disabled');
       $('#common_professional').show();
-      $('#common_professional').removeAttr("disabled");
+      $('#common_professional_select').removeAttr("disabled");
     }
   }
 }

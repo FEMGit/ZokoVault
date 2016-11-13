@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161108061028) do
+ActiveRecord::Schema.define(version: 20161110135556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -193,12 +193,21 @@ ActiveRecord::Schema.define(version: 20161108061028) do
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
 
+  create_table "tax_year_infos", force: :cascade do |t|
+    t.integer  "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "tax_year_infos", ["user_id"], name: "index_tax_year_infos_on_user_id", using: :btree
+
   create_table "taxes", force: :cascade do |t|
     t.integer  "document_id"
     t.integer  "tax_preparer_id"
     t.string   "notes"
     t.integer  "user_id"
-    t.integer  "tax_year"
+    t.integer  "tax_year_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
@@ -354,6 +363,7 @@ ActiveRecord::Schema.define(version: 20161108061028) do
 
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
+  add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade

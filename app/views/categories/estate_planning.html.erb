@@ -6,13 +6,7 @@
       <% if @wills.any? %>
         <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
         <div class="section header">
-          <!-- <span class="fa-stack fa-1x icon-section">
-            <svg class="icon icon-document-1 ">
-              <use xlink:href="#icon-document-1">
-              </use>
-              <span class="fa-stack-1x document-number"><%= document_count(current_user, @wills.name) %></span>
-            </svg>
-          </span> -->
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @wills.name, :category => @category} %>
           <h3>Wills</h3>
         </div>
         <div class="section">
@@ -62,13 +56,7 @@
       <% if @trusts.any? %>
         <%= link_to content_tag(:a), trusts_path, class: "whole-card-link" %>
         <div class="section header">
-          <!-- <span class="fa-stack fa-1x icon-section">
-            <svg class="icon icon-document-1 ">
-              <use xlink:href="#icon-document-1">
-              </use>
-              <span class="fa-stack-1x document-number"><%= document_count(current_user, @trusts.name) %></span>
-            </svg>
-          </span> -->
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @trusts.name, :category => @category} %>
           <h3>Trusts</h3>
         </div>
         <div class="section">
@@ -107,19 +95,12 @@
       <span class="clear"></span>
     </div>
   </div>
-
   <div class="flex-column">
     <div class="card cg-3 column-card wtl-info-wrapper attorney">
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
         <div class="section header">
-          <!-- <span class="fa-stack fa-1x icon-section">
-            <svg class="icon icon-document-1 ">
-              <use xlink:href="#icon-document-1">
-              </use>
-              <span class="fa-stack-1x document-number"><%= document_count(current_user, "Legal") %></span>
-            </svg>
-          </span> -->
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Legal', :category => @category} %>
           <h3>Powers of Attorney</h3>
         </div>
         <% @power_of_attorneys.each do |power_of_attorney| %>
@@ -158,7 +139,6 @@
   </div>
 </section>
 
-
 <div>
   <a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
     <span class="circle-button">
@@ -170,29 +150,7 @@
   <h1>Wills - Trusts - Legal Documents</h1>
 </div>
 
-<table>
-  <tr>
-    <%= render :partial => "layouts/documents_common_columns" %>
-  </tr>
-  <% @wtl_documents.each do |wtl_doc| %>
-    <tr>
-      <td>
-        <%= render :partial => "layouts/document_links", :locals => {:document => wtl_doc} %>
-      </td>
-      <td><%= date_format(wtl_doc.updated_at) %></td>
-      <td>
-        <%= render :partial => "layouts/document_tags", :locals => {:document => wtl_doc} %>
-      </td>
-      <td>
-        <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => wtl_doc.shares} %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_document_path(wtl_doc), class: "outline-button small-button" %>
-        <%= link_to 'Delete', document_path(wtl_doc), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
 
 <script>
 $(function() {

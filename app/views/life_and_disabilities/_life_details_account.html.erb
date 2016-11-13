@@ -1,5 +1,5 @@
 <% @insurance_card.policy.each do |policy| %>
-  <h1><%= "#{policy.policy_type} -  #{policy.policy_holder && policy.policy_holder.name}" %></h1>
+  <h2 class="mt-20"><%= "#{policy.policy_type} -  #{policy.policy_holder && policy.policy_holder.name}" %></h2>
 
   <div class="card <%= @insurance_card.group %>">
 
@@ -12,14 +12,18 @@
     <p><%= policy.policy_number %></p>
 
     <label>Primary Beneficiaries</label>
-    <% policy.primary_beneficiaries.each do |primary| %>
-      <p><%= primary && primary.name %></p>
-    <% end %>
+    <p>
+      <% policy.primary_beneficiaries.each do |primary| %>
+        <%= primary && primary.name %><br>
+      <% end %>
+    </p>
 
     <label>Secondary Beneficiaries</label>
-    <% policy.secondary_beneficiaries.each do |secondary| %>
-      <p><%= secondary && secondary.name %></p>
-    <% end %>
+    <p>
+      <% policy.secondary_beneficiaries.each do |secondary| %>
+        <%= secondary && secondary.name %><br>
+      <% end %>
+    </p>
 
     <label>Primary contact</label>
     <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>

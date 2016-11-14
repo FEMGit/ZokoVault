@@ -68,7 +68,7 @@ class UserProfile < ActiveRecord::Base
   end
 
   def create_or_update_contact_card
-    contact = Contact.for_user(user).find_or_initialize_by(emailaddress: email)
+    contact =  Contact.for_user(user).find_or_initialize_by(emailaddress: email)
     contact.update_attributes(
       firstname: first_name,
       lastname: last_name,

@@ -18,13 +18,15 @@ $cards-margin: 12px;
   word-wrap: break-word;
 
   &.details.insurance,
-  &.details.wtl {
+  &.details.wtl,
+  &.details.taxes{
     padding: 0;
   }
 }
 
 //COLOR STRIPES FOR CARDS
 .cg-1,
+.cg-2016,
 .card.life,
 .card.wills{
   border-left: 10px solid $color-card-1;
@@ -32,6 +34,7 @@ $cards-margin: 12px;
   @include card-type-details;
 }
 .cg-2,
+.cg-2015,
 .card.property,
 .card.trusts{
   border-left: 10px solid $color-card-2;
@@ -39,25 +42,30 @@ $cards-margin: 12px;
   @include card-type-details;
 }
 .cg-3,
+.cg-2014,
 .card.health,
 .card.attorney{
   border-left: 10px solid $color-card-3;
 
   @include card-type-details;
 }
-.cg-4{
+.cg-4,
+.cg-2013 {
   border-left: 10px solid $color-card-4;
   @include card-type-details;
 }
-.cg-5{
+.cg-5,
+.cg-2012 {
   border-left: 10px solid $color-card-5;
   @include card-type-details;
 }
-.cg-6{
+.cg-6,
+.cg-2011 {
   border-left: 10px solid $color-card-6;
   @include card-type-details;
 }
-.cg-7{
+.cg-7,
+.cg-2010 {
   border-left: 10px solid $color-card-7;
   @include card-type-details;
 }
@@ -373,7 +381,8 @@ $cards-margin: 12px;
 }
 
 .card.details.insurance,
-.card.details.wtl,
+.column-card,
+.card.details,
 .column-card.info-wrapper,
 .contact-header-info,
 .my_profile_info {

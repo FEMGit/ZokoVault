@@ -2,90 +2,32 @@
 <section class="flex-boxes">
 
   <div class="flex-column">
-    <div class="card cg-1 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2016", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2016 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2016} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-2 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2015", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2015 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2015} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-3 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2014", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2014 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2014} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-4 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2013", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2013 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2013} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-5 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2012", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2012 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2012} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-6 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2011", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2011 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2011} %>
   </div>
+  
   <div class="flex-column">
-    <div class="card cg-7 column-card">
-      <%= link_to content_tag(:a), "#{taxes_path}/1/2010", class: "whole-card-link" %>
-      <div class="section header">
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
-        <h3>2010 Taxes</h3>
-      </div>
-      <%= link_to 'Add Details', new_tax_path, class: "add-details-link" %>
-      <span class="clear"></span>
-    </div>
-
+    <%= render :partial => 'tax_card', :locals => {:year => 2010} %>
   </div>
-
 </section>
 
 <div>
@@ -100,6 +42,7 @@
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
 <script>
 
 $(function() {

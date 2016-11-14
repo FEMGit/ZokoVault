@@ -1,0 +1,9 @@
+<div class="card cg-<%=year%> column-card">
+  <%= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
+  <div class="section header">
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, :category => @category} %>
+    <h3><%= year %> Taxes</h3>
+  </div>
+  <%= link_to 'Add Details', link_to_add_details(year), class: "add-details-link" %>
+  <span class="clear"></span>
+</div>

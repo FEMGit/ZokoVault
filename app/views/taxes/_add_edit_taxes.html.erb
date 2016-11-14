@@ -13,11 +13,11 @@
         </ul>
       </div>
     <% end %>
-  
+
     <% @tax_year.taxes.each_with_index do |data, index| %>
       <%= f.fields_for "tax_#{index}", data do |ff| %>
         <% if data.id %>
-          <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete, 
+          <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
               data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
               class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
         <% end %>
@@ -34,7 +34,7 @@
         </div>
       <% end %>
     <% end %>
-  
+
     <div class="wtl-footer-content">
       <div class="add-new-field" href="" onclick="addNewField();">
         <svg class="icon add-icon">
@@ -54,7 +54,7 @@
     form.find('textarea').val("");
     form.find(':checked').prop('checked', false);
   }
-  
+
   addNewField = function(){
     var $form = $('div[class^="body-content"]:last');
     var $newForm = $form.clone();

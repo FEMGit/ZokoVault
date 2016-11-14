@@ -50,7 +50,7 @@
     </svg>Taxes
   <% end %>
 <!--  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) %>
-  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
+  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}", method: :get do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices

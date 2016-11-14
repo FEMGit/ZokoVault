@@ -36,13 +36,6 @@ Rails.application.routes.draw do
   
   # Taxes
   get 'taxes/:id/:year', to: 'taxes#show'
-
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-  get 'taxes/new/:year', to: 'taxes#create'
-
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
   get 'taxes/new/:year', to: 'taxes#create'
 
   get 'files' => 'welcome#files'

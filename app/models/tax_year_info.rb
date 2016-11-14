@@ -3,6 +3,6 @@ class TaxYearInfo < ActiveRecord::Base
 
   belongs_to :user
   has_many :taxes, class_name: "Tax", foreign_key: :tax_year_id
-  
+
   accepts_nested_attributes_for :taxes
 end

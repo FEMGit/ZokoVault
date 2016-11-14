@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161104132741) do
+ActiveRecord::Schema.define(version: 20161114034108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,9 +44,11 @@ ActiveRecord::Schema.define(version: 20161104132741) do
     t.string   "city"
     t.string   "business_street_address_1"
     t.string   "business_street_address_2"
+    t.integer  "user_profile_id"
   end
 
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
+  add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
 
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
@@ -109,6 +111,15 @@ ActiveRecord::Schema.define(version: 20161104132741) do
   create_table "health_policies_insured_members", force: :cascade do |t|
     t.integer "health_policy_id"
     t.integer "insured_member_id"
+  end
+
+  create_table "interested_users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone_number"
+    t.string   "message"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "life_and_disability_policies", force: :cascade do |t|
@@ -183,6 +194,25 @@ ActiveRecord::Schema.define(version: 20161104132741) do
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "tax_year_infos", force: :cascade do |t|
+    t.integer  "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "tax_year_infos", ["user_id"], name: "index_tax_year_infos_on_user_id", using: :btree
+
+  create_table "taxes", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "tax_preparer_id"
+    t.string   "notes"
+    t.integer  "user_id"
+    t.integer  "tax_year_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "trusts", force: :cascade do |t|
     t.integer  "document_id"
@@ -335,6 +365,7 @@ ActiveRecord::Schema.define(version: 20161104132741) do
 
   add_foreign_key "contacts", "users"
   add_foreign_key "shares", "users"
+  add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade

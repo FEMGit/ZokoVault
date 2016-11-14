@@ -71,7 +71,7 @@ class ContactsController < AuthenticatedController
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
       @category = "Contact"
-      @contact = Contact.find(params[:id])
+      @contact = Contact.for_user(current_user).find(params[:id])
     end
   
     # Never trust parameters from the scary internet, only allow the white list through.

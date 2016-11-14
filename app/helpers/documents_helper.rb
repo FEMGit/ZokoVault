@@ -49,6 +49,11 @@ module DocumentsHelper
     s3_object = S3Service.get_object_by_key(key)
     s3_object.presigned_url(:get)
   end
+  
+  def download_file(document_url)
+    s3_object = S3Service.get_object_by_key(document_url)
+    s3_object.presigned_url(:get, response_content_disposition: "attachment")
+  end
 
   private
     def asset_group(asset)

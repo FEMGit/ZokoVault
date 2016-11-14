@@ -21,7 +21,7 @@
         <p><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></p>
       </div>
     <% end %>
-    <% if @contact.professional_relationship? %>
+    <% if @contact.professional_relationship? || @contact.medical_relationship? %>
       <div class="contact-element">
         <label>Business Name</label>
         <p><%= @contact.businessname %></p>
@@ -70,7 +70,7 @@
       </div>
     <% end %>
 
-    <% if @contact.professional_relationship? %>
+    <% if @contact.professional_relationship? || @contact.medical_relationship?  %>
       <div class="contact-element">
         <label>Business Address</label>
         <p>

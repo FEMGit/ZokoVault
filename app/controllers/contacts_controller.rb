@@ -1,10 +1,12 @@
 class ContactsController < AuthenticatedController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
+  before_action :my_profile_contact?, only: [:show, :edit]
 
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.for_user(current_user)
+    my_profile_contact = current_user.user_profile.contact
+    @contacts = Contact.for_user(current_user).reject { |cont| cont == my_profile_contact}
     session[:ret_url] = "/contacts"
   end
 
@@ -87,5 +89,9 @@ class ContactsController < AuthenticatedController
   
     def get_redirect_new_user_creating
       Rails.cache.read('after_new_user_created')
+    end
+  
+    def my_profile_contact?
+      redirect_to contacts_path if @contact == current_user.user_profile.contact
     end
 end

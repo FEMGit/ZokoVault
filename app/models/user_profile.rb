@@ -1,6 +1,7 @@
 class UserProfile < ActiveRecord::Base
   belongs_to :user
   has_many :employers
+  has_one :contact
 
   has_many :security_questions,
     class_name: 'UserProfileSecurityQuestion'
@@ -80,7 +81,8 @@ class UserProfile < ActiveRecord::Base
       zipcode: zip,
       state: state,
       user_id: user_id,
-      city: city
+      city: city,
+      user_profile_id: id
     )
   end
 end

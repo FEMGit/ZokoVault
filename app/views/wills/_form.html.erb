@@ -3,10 +3,7 @@
   <div class="field">
     <label>Executor</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :executor_id, 
-        @contacts, :first, :second, {}, 
-        { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "will_executor_id_#{index}" }
-      %>
+    <%= contact_select_with_create_new(f, :executor_id, @contacts, id: "will_executor_id_#{index}", multiple: false) %>
   </div>
   </div>
   <div class="field">

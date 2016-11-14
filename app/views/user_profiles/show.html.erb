@@ -23,11 +23,11 @@
 
   <% if !@user_profile.phone_number.blank? || !@user_profile.phone_number_mobile.blank?%>
     <label>Phone</label>
-    <% if !@user_profile.phone_number.blank? %>
-      <span class="field-block"><%= @user_profile.phone_number %><span class="phone-type">home</span>
-    <% end %>
     <% if !@user_profile.phone_number_mobile.blank? %>
       <span class="field-block"><%= @user_profile.phone_number_mobile %><span class="phone-type">cell</span>
+    <% end %>
+    <% if !@user_profile.phone_number.blank? %>
+      <span class="field-block"><%= @user_profile.phone_number %><span class="phone-type">home</span>
     <% end %>
     <br></p>
   <% end %>

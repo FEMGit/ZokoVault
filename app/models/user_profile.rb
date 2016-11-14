@@ -46,11 +46,11 @@ class UserProfile < ActiveRecord::Base
   end
 
   def phone_number_raw=(raw_phone_number)
-    self.phone_number = format_phone_number(raw_phone_number)
+    self.phone_number_mobile = format_phone_number(raw_phone_number)
   end
 
   def phone_number_formatted
-    phone_number
+    phone_number_mobile
   end
 
   def signed_terms_of_service=(val)
@@ -70,7 +70,7 @@ class UserProfile < ActiveRecord::Base
       firstname: first_name,
       lastname: last_name,
       emailaddress: user.email,
-      phone: phone_number,
+      phone: phone_number_mobile,
       contact_type: nil,
       relationship: 'Account Owner',
       beneficiarytype: nil,

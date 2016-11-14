@@ -42,3 +42,8 @@ $arrow-dropdown-margin-right: 30px;
    font-size: 16px;
    width: $wtl-form-width !important;
 }
+
+.chosen-single > .search-choice-close {
+  right: 35px !important;
+  top: 10px !important;
+}

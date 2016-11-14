@@ -4,7 +4,7 @@
     <label>Executor</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :executor_id, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Add Contact...', class: "chosen-select", multiple: false, id: "will_executor_id_#{index}" }
       %>
   </div>
@@ -13,7 +13,7 @@
     <label>Primary Beneficiaries</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :primary_beneficiary_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_primary_id_#{index}" }
       %>
     </div>
@@ -22,7 +22,7 @@
     <label>Secondary Beneficiaries</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :secondary_beneficiary_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "will_secondary_id_#{index}" }
       %>
     </div>
@@ -31,7 +31,7 @@
     <label>Attorney, Accountant or Advisor(s)</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :agent_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "will_agent_id_#{index}" }
       %>
     </div>

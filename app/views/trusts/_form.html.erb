@@ -10,7 +10,7 @@
     <label>Attorney, Accountant or Advisor(s)</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :agent_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "trust_agent_id_#{index}" }
       %>
     </div>
@@ -19,7 +19,7 @@
     <label>Trustee(s)</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :trustee_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_trustee_id_#{index}" }
       %>
     </div>
@@ -28,7 +28,7 @@
     <label>Successor Trustee(s)</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :successor_trustee_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_successor_id_#{index}"  }
       %>
     </div>

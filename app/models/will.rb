@@ -30,7 +30,6 @@ class Will < ActiveRecord::Base
     source: :contact
 
   attr_accessor :has_will
-  validates :executor, presence: true
   # validates :shares, presence: true
   validates :user, presence: true
   # validates :vault_entry_contacts, presence: true

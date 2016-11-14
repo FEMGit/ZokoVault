@@ -96,8 +96,9 @@ class LifeAndDisabilitiesController < AuthenticatedController
     end
 
     def set_contacts
-      @contacts = Contact.for_user(current_user)
-      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+      contact_service = ContactService.new(:user => current_user)
+      @contacts = contact_service.contacts
+      @contacts_shareable = contact_service.contacts_shareable
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

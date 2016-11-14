@@ -52,8 +52,9 @@
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.appendTo('#wtl-form-1');
-    $('.chosen-select').chosen();
+    $('.chosen-select').chosen({allow_single_deselect: true});
   };
+  $('.chosen-select').chosen({allow_single_deselect: true});
   
   $('.chosen-select').chosen()
   function showForm() { 

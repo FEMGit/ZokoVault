@@ -107,8 +107,9 @@ class WillsController < AuthenticatedController
 
   private
     def set_contacts
-      @contacts = Contact.for_user(current_user)
-      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+      contact_service = ContactService.new(:user => current_user)
+      @contacts = contact_service.contacts
+      @contacts_shareable = contact_service.contacts_shareable
     end
 
     # Use callbacks to share common setup or constraints between actions.

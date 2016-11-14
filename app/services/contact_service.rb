@@ -9,7 +9,7 @@ class ContactService
   end
   
   def contacts
-    @contacts.collect { |s| [s.id, s.name] }.prepend([])
+    @contacts
   end
   
   private 

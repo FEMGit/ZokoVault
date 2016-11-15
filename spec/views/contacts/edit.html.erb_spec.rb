@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "contacts/edit", type: :view do
   let(:user) { create :user }
-
   before(:each) do
     @contact = assign(:contact, Contact.create!(
       :firstname => "MyString",
@@ -24,6 +23,11 @@ RSpec.describe "contacts/edit", type: :view do
       :businessfax => "MyString",
       user: user
     ))
+    user.user_profile.contact = @contact
+  end
+
+  before do
+    sign_in user
   end
 
   it "renders the edit contact form" do
@@ -44,7 +48,7 @@ RSpec.describe "contacts/edit", type: :view do
       assert_select "select#personal_relationships_select[name=?]", "contact[relationship]"
 
       assert_select "select#common_professional_select[name=?]", "contact[relationship]"
-      
+
       assert_select "select#medical_professional_select[name=?]", "contact[relationship]"
 
       assert_select "input#contact_beneficiarytype[name=?]", "contact[beneficiarytype]"

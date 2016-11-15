@@ -1,6 +1,4 @@
 class ContactService
-  attr_reader :contacts
-
   def initialize(params)
     @user = params[:user]
     set_contacts
@@ -8,6 +6,10 @@ class ContactService
 
   def contacts_shareable
     @contacts.reject { |c| c.emailaddress == @user.email }
+  end
+  
+  def contacts
+    @contacts.collect { |c| [c.id, c.name] }.prepend([])
   end
 
   private

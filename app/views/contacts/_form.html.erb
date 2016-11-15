@@ -178,7 +178,7 @@
     <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
     <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button" %>
     <span class='footer_right'>
-      <% if @contact.persisted? %>
+      <% if @contact.persisted? && @contact != current_user.user_profile.contact %>
         <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "button secondary-button big-button" %>
       <% end %>
     </span>

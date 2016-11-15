@@ -65,7 +65,7 @@ module ApplicationHelper
   def contact_select_with_create_new(form, name, contacts, html_options = {})
     initialize_new_contact_form
 
-    select_options = contacts.collect { |s| [s.id, s.name] }.prepend([])
+    select_options = contacts ? contacts.collect { |s| [s.id, s.name] }.prepend([]) : []
     select_options << ["create_new_contact", "Create New Contact"]
 
     local_options = { 

@@ -48,11 +48,11 @@ class PowerOfAttorneysController < AuthenticatedController
           format.json { render :show, status: :created, location: @power_of_attorney }
         rescue
           format.html { render :new }
-          format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
+          format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
         end
       else
         format.html { render :new }
-        format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
+        format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -19,7 +19,7 @@ RSpec.describe AccountsController, type: :controller do
     context "with valid params" do
       let(:user_profile_attributes) do
         {
-          signed_terms_of_service: 1, 
+          signed_terms_of_service: 1,
           security_questions_attributes: {
             0 => { question: 'foo', answer: 'bar' },
             1 => { question: 'baz', answer: 'quux' },
@@ -52,7 +52,7 @@ RSpec.describe AccountsController, type: :controller do
       end
 
       it "sets phone number without formatting" do
-        expect(current_user.user_profile.phone_number).to eq "123-456-7890"
+        expect(current_user.user_profile.phone_number_mobile).to eq "123-456-7890"
       end
 
       it "sets the multi-factor auth frequency to 'always'" do

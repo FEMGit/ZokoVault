@@ -50,7 +50,7 @@ class AccountsController < AuthenticatedController
     params.require(:user).permit(
       user_profile_attributes: [
         :signed_terms_of_service,
-        :phone_number_raw,
+        :phone_number_mobile,
         :mfa_frequency,
         :phone_code,
         security_questions_attributes: []

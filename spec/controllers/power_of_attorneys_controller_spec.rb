@@ -17,7 +17,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    { id: "", user_id: nil }
+    { id: "", user_id: user.id }
   end
 
   before { sign_in user }
@@ -59,7 +59,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     context "with invalid params" do
       it "redirects to new" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to estate_planning_path
       end
     end
 
@@ -107,12 +107,12 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(assigns(:new_vault_entries)).to be_a_new(PowerOfAttorney)
+        expect(assigns(:new_vault_entries)).to be_a(PowerOfAttorney)
       end
 
       it "re-renders the 'new' template" do
-        post :create, { power_of_attorney: invalid_attributes }, session: valid_session
-        expect(response).to render_template(:new)
+        post :create, { trust: invalid_attributes }, session: valid_session
+        expect(response).to render_template("new")
       end
     end
   end

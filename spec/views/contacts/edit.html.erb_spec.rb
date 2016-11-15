@@ -4,6 +4,7 @@ RSpec.describe "contacts/edit", type: :view do
   let(:user) { create :user }
 
   before(:each) do
+    current_user = nil
     @contact = assign(:contact, Contact.create!(
       :firstname => "MyString",
       :lastname => "MyString",

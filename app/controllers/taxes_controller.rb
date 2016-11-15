@@ -4,6 +4,7 @@ class TaxesController < AuthenticatedController
   before_action :set_category, only: [:index, :show]
   before_action :set_year_documents, only: [:show]
   before_action :set_all_documents, only: [:index]
+  before_action :set_contacts, only: [:new, :edit]
 
   # GET /taxes
   # GET /taxes.json
@@ -81,11 +82,17 @@ class TaxesController < AuthenticatedController
 
   private
 
+  def set_contacts
+    contact_service = ContactService.new(:user => current_user)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_tax_year
     @tax = TaxYearInfo.for_user(current_user).find(params[:id])
   end
-  
+
   def set_tax
     @tax = Tax.for_user(current_user).find(params[:id])
   end

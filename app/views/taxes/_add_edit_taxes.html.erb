@@ -64,7 +64,7 @@
     clearFormFields($newForm);
     $('.chosen-container',$newForm).remove();
     $newForm.insertAfter('.body-content:last');
-    $('.chosen-select').chosen();
+    $('.chosen-select').chosen({allow_single_deselect: true});
   };
-  $('.chosen-select').chosen();
+  $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

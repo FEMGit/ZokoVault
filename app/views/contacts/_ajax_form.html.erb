@@ -295,13 +295,17 @@ var closeContactFormModal = function() {
 }
 
 var addContactAndCloseModal = function(json) { 
-  var select = currentSelectedInput;
 
   $('.add-new-contactable').each(function(i, obj) {
     $(this).append($('<option>', {
       value: json['id'], 
       text: json['firstname'] + ' ' + json['lastname']
     }));
+
+    // XXX: This is a hack to select the new value
+    if (!!currentSelectedInput) { 
+      currentSelectedInput.find("[value='"+json['id']+"']").prop('selected', true);
+    }
     $(this).trigger("chosen:updated");
   })
 

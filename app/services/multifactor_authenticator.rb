@@ -14,8 +14,7 @@ class MultifactorAuthenticator
   end
 
   def verify_code(code)
-    #MultifactorPhoneCode.verify_latest(user, code)
-    true
+    MultifactorPhoneCode.verify_latest(user, code)
   end
 
   private 

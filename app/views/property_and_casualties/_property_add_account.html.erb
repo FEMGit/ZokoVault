@@ -16,7 +16,7 @@
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
     <%= ff.collection_select :policy_holder_id, 
-      @contacts, :id, :name, {}, 
+      @contacts, :first, :second, {}, 
       { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "property_policy_holder_id_#{index}" }
     %>
   </div>
@@ -38,7 +38,7 @@
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
     <%= ff.collection_select :broker_or_primary_contact_id, 
-      @contacts, :id, :name, {}, 
+      @contacts, :first, :second, {}, 
       { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "property_broker_id_#{index}" }
     %>
   </div>

@@ -55,11 +55,11 @@ class TrustsController < AuthenticatedController
           format.json { render :show, status: :created, location: @trust }
         rescue
           format.html { render :new }
-          format.json { render json: @trust.errors, status: :unprocessable_entity }
+          format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
         end
       else
         format.html { render :new }
-        format.json { render json: @trust.errors, status: :unprocessable_entity }
+        format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -98,8 +98,9 @@ class TrustsController < AuthenticatedController
 
   private
     def set_contacts
-      @contacts = Contact.for_user(current_user)
-      @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+      contact_service = ContactService.new(:user => current_user)
+      @contacts = contact_service.contacts
+      @contacts_shareable = contact_service.contacts_shareable
     end
 
     # Use callbacks to share common setup or constraints between actions.

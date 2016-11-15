@@ -22,7 +22,7 @@
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
     <%= ff.collection_select :policy_holder_id, 
-      @contacts, :id, :name, {}, 
+      @contacts, :first, :second, {}, 
       { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "health_policy_holder_id_#{index}"}
     %>
   </div>
@@ -31,7 +31,7 @@
   <label>Insured Members</label>
   <div class="chosen-styled-select">
     <%= ff.collection_select :insured_member_ids, 
-      @contacts, :id, :name, {}, 
+      @contacts, :first, :second, {}, 
       { 'data-placeholder' => 'Choose Contact...', 
         multiple: true,
         class: "chosen-select", id: "health_insured_id_#{index}"}
@@ -42,7 +42,7 @@
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
     <%= ff.collection_select :broker_or_primary_contact_id, 
-      @contacts, :id, :name, {}, 
+      @contacts, :first, :second, {}, 
       { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "health_broker_id_#{index}"}
     %>
   </div>

@@ -6,7 +6,11 @@
       <h2><%= pluralize(@insurance_card.errors.count, "error") %> prohibited this <%= @insurance_card.group %> from being saved:</h2>
       <ul>
       <% @insurance_card.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <% if message.include?("Contact") %>
+        <li>Primary <%= message %></li>
+        <% else %>
+          <li><%= message %></li>
+        <% end %>
       <% end %>
       </ul>
     </div>
@@ -75,7 +79,7 @@
       <label>Primary Contact</label>
       <div class="chosen-styled-select">
           <%= f.collection_select :contact_id, 
-            @contacts, :id, :name, {}, 
+          @contacts, :first, :second, {}, 
             { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
           %>
       </div>
@@ -153,8 +157,7 @@
     $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.find("#delete-insurance").remove()
     $newWtlForm.insertAfter('.insurance-body-content:last');
-    $('.chosen-select').chosen();
+    $('.chosen-select').chosen({allow_single_deselect: true});
   }
-  
-  $('.chosen-select').chosen();
+  $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

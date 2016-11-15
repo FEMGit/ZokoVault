@@ -1,5 +1,6 @@
 class PowerOfAttorneysController < AuthenticatedController
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
+  before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
 
@@ -92,6 +93,12 @@ class PowerOfAttorneysController < AuthenticatedController
   end
 
   private
+
+    def set_contacts
+      contact_service = ContactService.new(:user => current_user)
+      @contacts = contact_service.contacts
+      @contacts_shareable = contact_service.contacts_shareable
+    end
 
     def current_wtl
       params[:attorney]

@@ -1,12 +1,10 @@
-<% @contacts = Contact.for_user(current_user) %>
-<% @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } %>
 <div class="wtl-body-content">
   <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
   <div class="field">
     <label>Power of Attorney</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :agent_ids, 
-        @contacts, :id, :name, {}, 
+        @contacts, :first, :second, {}, 
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: false, id: "attorney_agent_id_#{index}" }
       %>
     </div>
@@ -68,6 +66,7 @@
       name: new_vault_entry_id +"[agent_ids]",
       id: "attorney_agent_id_" + new_id
     });
+    $newWtlForm.find("#attorney_agent_id_" + new_id + " option").prop("selected", false);
     
     $newWtlForm.find("#attorney_share_id_" + old_id).attr({
       name: new_vault_entry_id +"[share_ids][]",

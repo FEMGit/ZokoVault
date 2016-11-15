@@ -18,6 +18,4 @@ class PowerOfAttorney < ActiveRecord::Base
   has_many :share_with_contacts, 
     through: :shares,
     source: :contact
-
-  validates :vault_entry_contacts, presence: true
 end

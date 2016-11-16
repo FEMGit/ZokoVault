@@ -8,6 +8,10 @@ $arrow-dropdown-margin-right: 30px;
   font-family: "Open Sans", serif;
 }
 
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  background-url: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
+}
+
 .chosen-container-single {
   .chosen-single {
     height: 32px !important;
@@ -26,6 +30,12 @@ $arrow-dropdown-margin-right: 30px;
     }
     div b{
       visibility: hidden;
+    }
+    abbr {
+      top: 10px !important;
+      right: 35px !important;
+      background-url: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
+      font-size: 1px;
     }
   }
 }

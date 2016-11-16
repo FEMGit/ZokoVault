@@ -1,26 +1,32 @@
 <%= ff.hidden_field :id, id: "tax_id_#{index}" %>
-<div class="card cg-<%=@tax_year.year%> mb-30">
+<div class="card cg-<%= @tax_year.year %> mb-30">
   <label>Tax Preparer</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :tax_preparer_id, @contacts, id: "tax_preparer_id_#{index}", multiple: false) %>
-  </div><br>
+  </div>
 
   <label>Notes</label>
-  <p><%= ff.text_area :notes, id: "tax_notes_id_#{index}" %></p><br>
+  <p><%= ff.text_area :notes, id: "tax_notes_id_#{index}" %></p>
 
-  <div class="shared-card width-justify">
-    <h3 class="card-label">
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
       <svg class="icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
       </svg>
       Shared With
     </h3>
 
-    <label>Shared With</label><br>
+    <label>Shared With</label>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "tax_share_id_#{index}") %>
     </div>
-  </div>
+  </section>
+  
+  <% if data && data.id %>
+    <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
+        data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-tax' %>
+  <% end %>
 </div>
 
 <script>
@@ -32,20 +38,16 @@
     });
     $form.find("#" + new_id + " option").prop("selected", false);
   };
-
   clearForm = function($newWtlForm, old_id, new_id) {
     new_tax_name = "tax_year_info[tax_" + new_id + "]";
-
     changeIdAndName($newWtlForm, "tax_id_" + old_id,
       "tax_id_" + new_id, new_tax_name + "[id]")
-
     changeIdAndName($newWtlForm, "tax_preparer_id_" + old_id,
       "tax_preparer_id_" + new_id, new_tax_name + "[tax_preparer_id]")
-
     changeIdAndName($newWtlForm, "tax_notes_id_" + old_id,
       "tax_notes_id_" + new_id, new_tax_name + "[notes]")
-
     changeIdAndName($newWtlForm, "tax_share_id_" + old_id,
       "tax_share_id_" + new_id, new_tax_name + "[share_with_contact_ids][]")
+    $newWtlForm.find("#delete-tax").remove();
   }
 </script>

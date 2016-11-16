@@ -22,6 +22,16 @@ $cards-margin: 12px;
   &.details.taxes{
     padding: 0;
   }
+
+  position: relative;
+  a.whole-card-link {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+  }
 }
 
 .no-pointer-cursor {
@@ -142,6 +152,43 @@ $cards-margin: 12px;
   &.edit-shared{
     margin: 10px -15px 10px -15px;
     border-bottom: 1px solid $color-primary;
+  }
+}
+
+//DYNAMIC CARD REPRESENTATION UNIVERSAL
+.flex-column {
+  .left {
+    float:left;
+    width: 55%;
+  }
+  .right {
+    float: right;
+    width: 45%;
+    direction: rtl;
+  }
+  .clear::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .document-number {
+    margin-top: 7px;
+    color: $color-gray-med-shaded;
+    font-weight: 600;
+    padding-right: 4px;
+  }
+  .icon-section {
+    float: right;
+  }
+  .icon-document-1 {
+    font-size: 40px;
+    color: $color-gray-med-shaded;
+    opacity: 0.9;
+    float: right;
+    position: relative;
   }
 }
 

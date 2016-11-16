@@ -16,11 +16,6 @@
 
   <% @tax_year.taxes.each_with_index do |data, index| %>
     <%= f.fields_for "tax_#{index}", data do |ff| %>
-      <% if data.id %>
-        <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
-            data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
-            class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
-      <% end %>
       <div class="body-content">
         <%= render 'form', ff: ff, index: index, data: data %>
       </div>
@@ -30,7 +25,7 @@
     <% index = 0 %>
     <%= f.fields_for "tax_#{index}" do |ff| %>
       <div class="body-content">
-        <%= render 'form', ff: ff, index: index %>
+        <%= render 'form', ff: ff, index: index, data: nil %>
       </div>
     <% end %>
   <% end %>
@@ -63,6 +58,8 @@
     $('.chosen-container',$newForm).remove();
     $newForm.insertAfter('.body-content:last');
     $('.chosen-select').chosen({allow_single_deselect: true});
+	$('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
+
 </script>

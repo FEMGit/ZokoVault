@@ -17,22 +17,18 @@
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
         <%= fields_for "vault_entry_#{index}", data do |builder| %>
-
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
-
         <% end %>
       <% end %>
     </div>
   </div>
 
-<div class="wtl-footer-content">
-    <div class="add-new-field" href="" onclick="addNewField();">
+  <div class="add-new-button" href="" onclick="addNewField();">
     <svg class="icon add-icon">
       <use xlink:href="#icon-add-1"></use>
     </svg>
-  Add another <%= yield(:add_another_title) %><br>
+    Add another <%= yield(:add_another_title) %><br>
   </div>
-</div>
 
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button"}%>
@@ -55,15 +51,4 @@
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
-
-  $('.chosen-select').chosen()
-  function showForm() {
-    $('#form-fields').show();
-    $('#upload-will-message').hide();
-  }
-
-  function showUploadMessage() {
-    $('#form-fields').hide();
-    $('#upload-will-message').show();
-  }
 </script>

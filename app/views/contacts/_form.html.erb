@@ -82,8 +82,8 @@
           </div>
           <div class="field">
             <%= f.label :birthdate %><br>
-            <div class="styled-text-input birthday-field">
-              <p><%= f.text_field :birthdate, value: f.object.birthdate && f.object.birthdate.strftime("%m/%d/%Y"), class: "form-control", :data => {:mask => '99/99/9999'} %></p>
+            <div class="birthday-field">
+              <p><%= f.date_field :birthdate %></p>
             </div>
           </div>
           <div class="field">

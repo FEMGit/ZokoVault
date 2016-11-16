@@ -8,7 +8,7 @@ class MultifactorAuthenticator
       code = MultifactorPhoneCode.generate_for(user)
       client.messages.create(
         from: TWILIO_PHONE_NUMBER,
-        to: user.phone_number,
+        to: phone_to_send_code_to,
         body: "ZokuVault code is: #{code.code}")
     end
   end
@@ -23,5 +23,13 @@ class MultifactorAuthenticator
 
   def client
     Twilio::REST::Client.new
+  end
+  
+  def phone_to_send_code_to
+    @_user.user_profile.phone_number_mobile.split('-').join('').prepend(country_code)
+  end
+  
+  def country_code
+    "+1"
   end
 end

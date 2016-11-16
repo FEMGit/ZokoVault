@@ -61,7 +61,7 @@ RSpec.describe WillsController, type: :controller do
     context "with invalid params" do
       it "redirects to the created vault_entry" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to estate_planning_path
       end
     end
 
@@ -123,7 +123,7 @@ RSpec.describe WillsController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved vault_entry as @vault_entry" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(assigns(:new_vault_entries)).to be_a_new(Will)
+        expect(assigns(:new_vault_entries)).to be_a(Will)
       end
 
       it "re-renders the 'new' template" do

@@ -40,7 +40,9 @@ RSpec.describe "contacts/new", type: :view do
 
       assert_select "select#personal_relationships_select[name=?]", "contact[relationship]"
 
-      assert_select "select#professional_relationships_select[name=?]", "contact[relationship]"
+      assert_select "select#common_professional_select[name=?]", "contact[relationship]"
+      
+      assert_select "select#medical_professional_select[name=?]", "contact[relationship]"
 
       assert_select "input#contact_beneficiarytype[name=?]", "contact[beneficiarytype]"
 

@@ -8,23 +8,23 @@
 <h1><%= @tax.year %></h1>
 
 <% @tax.taxes.each do |tax| %>
-  <div class="card cg-<%= @tax.year %> column-card mb-30">
+  <div class="card cg-<%= @tax.year %> mb-30">
     <%= link_to content_tag(:a), "#{taxes_path}/#{@tax.id}/edit", :class => "whole-card-link" %>
 
-    <label>Tax Preparer</label><br>
-    <% if tax.tax_preparer.present? %>
-      <p>
+    <label>Tax Preparer</label>
+    <p>
+      <% if tax.tax_preparer.present? %>
         <%= tax.tax_preparer.name %><br>
         <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top"><%= tax.tax_preparer.emailaddress %></a><br>
         <%= tax.tax_preparer.phone %>
-      </p>
-    <% end %>
+      <% end %>
+    </p>
 
     <label>Notes</label><br>
     <p><%= tax.notes %></p><br>
 
-    <div class="shared-card width-justify">
-      <h3 class="card-label">
+    <div class="shared-with">
+      <h3 class="card-label shared-label">
         <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
         </svg>
@@ -46,6 +46,6 @@
     </svg>
   </span>Add Document
 </a>
-<h1><%= params[:name] %> Documents</h1>
+<h2><%= @tax && @tax.year %> Taxes Documents</h2>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

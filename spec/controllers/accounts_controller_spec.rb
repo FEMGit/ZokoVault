@@ -27,6 +27,7 @@ RSpec.describe AccountsController, type: :controller do
           },
           phone_number_raw:  "123-456-7890",
           mfa_frequency: :always,
+          date_of_birth: Date.today - 14.year
         }
       end
 

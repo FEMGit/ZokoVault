@@ -9,14 +9,14 @@
     </tr>
   </thead>
   <tbody>
-    <% if documents.empty? %>
+    <% if documents && documents.empty? %>
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
     <% end %>
-    <% documents.each do |document| %>
+    <% documents && documents.each do |document| %>
       <tr>
         <td>
           <%= render :partial => "layouts/document_links", :locals => {:document => document} %>

@@ -7,7 +7,7 @@ FactoryGirl.define do
     setup_complete true
 
     after(:build) do |user|
-      user.build_user_profile(mfa_frequency: :never)
+      user.build_user_profile(mfa_frequency: :never, date_of_birth: Date.today - 14.year)
     end
   end
 end

@@ -34,6 +34,10 @@ $cards-margin: 12px;
   }
 }
 
+.no-pointer-cursor {
+  cursor: auto;
+}
+
 //COLOR STRIPES FOR CARDS
 .cg-1,
 .cg-2016,
@@ -519,24 +523,6 @@ $cards-margin: 12px;
   margin: 10px 10px 0 0;
   &.insurance {
     margin-left: -57px;
-  }
-}
-
-.card.details.insurance,
-.column-card,
-.card.details,
-.card.details.wtl,
-.column-card.info-wrapper,
-.contact-header-info,
-.my_profile_info {
-  position: relative;
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
   }
 }
 

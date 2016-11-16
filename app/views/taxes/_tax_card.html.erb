@@ -3,7 +3,7 @@
   <div class = "info-wrapper">
     <div class="section header">
       <% if year_exist?(@taxes, year) %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => "Taxes"} %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :category => @category, :group => year} %>
       <% end %>
       <h3><%= year %> Taxes</h3>
     </div>

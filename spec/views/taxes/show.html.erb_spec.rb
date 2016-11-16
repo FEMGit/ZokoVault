@@ -2,12 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "taxes/show", type: :view do
   before(:each) do
-    @tax = assign(:tax, Tax.create!(
-                          :document_id => "",
-                          :tax_preparer_id => "",
-                          :notes => "",
+    @tax = assign(:tax, TaxYearInfo.create!(
                           :user_id => "",
-                          :tax_year => 2
+                          :year => 2
     ))
   end
 

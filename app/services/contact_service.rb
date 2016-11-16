@@ -1,4 +1,6 @@
 class ContactService
+  attr_reader :contacts
+  
   def initialize(params)
     @user = params[:user]
     set_contacts
@@ -8,11 +10,7 @@ class ContactService
     @contacts.reject { |c| c.emailaddress == @user.email } 
   end
   
-  def contacts
-    @contacts
-  end
-  
-  private 
+  private
   
   def set_contacts
     @contacts = Contact.for_user(@user)

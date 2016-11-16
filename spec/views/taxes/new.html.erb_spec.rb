@@ -4,7 +4,7 @@ RSpec.describe "taxes/new", type: :view do
   before(:each) do
     assign(:taxes, [])
     assign(:contacts, [])
-    assign(:tax, Tax.new)
+    assign(:tax_year, TaxYearInfo.create!(:year => 2016))
   end
 
   it "renders new tax form" do
@@ -12,9 +12,9 @@ RSpec.describe "taxes/new", type: :view do
 
     assert_select "form[action=?][method=?]", taxes_path, "post" do
 
-      assert_select "select#tax_preparer_id_?"
+      assert_select "#tax_preparer_id_0?"
 
-      assert_select "textarea#tax_notes_id_?"
+      assert_select "#tax_notes_id_0?"
     end
   end
 end

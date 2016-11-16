@@ -1,24 +1,25 @@
 <%= ff.hidden_field :id, id: "tax_id_#{index}" %>
-<div class="field">
+<div class="card no-pointer-cursor mb-30">
   <label>Tax Preparer</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :tax_preparer_id, @contacts, id: "tax_preparer_id_#{index}", multiple: false) %>
-  </div>
-</div>
-<div class="field">
+  </div><br>
+
   <label>Notes</label>
-  <%= ff.text_area :notes, id: "tax_notes_id_#{index}" %>
-</div>
-<div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-  <label>Shared With</label>
-  <span class="shared-with-block">
-    <h2 class="shared-with-title">Shared With</h2>
-    <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
-      <use xlink:href="#icon-Safe"></use>
-    </svg>
-  </span>
-  <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "tax_share_id_#{index}") %>
+  <p><%= ff.text_area :notes, id: "tax_notes_id_#{index}" %></p><br>
+
+  <div class="shared-card width-justify">
+    <h3 class="card-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Shared With
+    </h3>
+
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "tax_share_id_#{index}") %>
+    </div>
   </div>
 </div>
 

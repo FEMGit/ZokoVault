@@ -37,12 +37,35 @@ label{
   color: $color-primary-shaded;
   font-weight: 600;
   font-size: 14px;
-  
+
   span{
     font-weight: 400;
     color: $color-gray-med-tinted;
     padding-left: 10px;
     font-size: 12px;
+  }
+}
+
+//CARD FORMS
+.body-content {
+  $width-percent: 80%;
+  .styled-select {
+    width: $form-width;
+    max-width: $form-width + $gu;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+  }
+  select {
+    width: $width-percent;
+    max-width: $form-width + $gu;
+  }
+  textarea {
+    width: $width-percent;
+    max-width: $text-area-with;
+    resize: vertical;
+  }
+  input[type=text] {
+    width: $width-percent;
+    max-width: $form-width;
   }
 }
 

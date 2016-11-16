@@ -122,8 +122,8 @@
   <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
     <label>Primary Shared With</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
+      <%= f.collection_select :share_ids,
+        @contacts_shareable, :id, :name, {},
         { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
       %>
   </div>

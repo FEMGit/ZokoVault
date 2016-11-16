@@ -1,44 +1,20 @@
 <h1>Taxes</h1>
 <section class="flex-boxes">
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2016} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2015} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2014} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2013} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2012} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2011} %>
-  </div>
-
-  <div class="flex-column">
-    <%= render :partial => 'tax_card', :locals => {:year => 2010} %>
-  </div>
+  <% 2016.downto(2010) do |year| %>
+    <div class="flex-column">
+      <%= render :partial => 'tax_card', :locals => {:year => year} %>
+    </div>
+  <% end %>
 </section>
 
-<div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-plus-1"></use>
-      </svg>
-    </span>Add Document
-  </a>
-  <h2>Tax Documents</h2>
-</div>
+<a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h2>Tax Documents</h2>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 

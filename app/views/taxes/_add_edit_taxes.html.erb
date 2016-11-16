@@ -1,52 +1,50 @@
 <h1><%= @tax_year.year %> Taxes Setup</h1>
 
-  <%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>
-    <%= f.hidden_field :id %>
-    <%= f.hidden_field :year %>
-    <% if @tax_year.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@tax_year.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
-        <ul>
-        <% @tax_year.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-  
-    <% @tax_year.taxes.each_with_index do |data, index| %>
-      <%= f.fields_for "tax_#{index}", data do |ff| %>
-        <% if data.id %>
-          <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete, 
-              data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
-              class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
-        <% end %>
-        <div class="body-content">
-          <%= render 'form', ff: ff, index: index, data: data %>
-        </div>
+<%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :year %>
+  <% if @tax_year.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tax_year.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
+      <ul>
+      <% @tax_year.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
       <% end %>
-    <% end %>
-    <% if @tax_year.taxes.empty? %>
-      <% index = 0 %>
-      <%= f.fields_for "tax_#{index}" do |ff| %>
-        <div class="body-content">
-          <%= render 'form', ff: ff, index: index %>
-        </div>
-      <% end %>
-    <% end %>
-  
-    <div class="wtl-footer-content">
-      <div class="add-new-field" href="" onclick="addNewField();">
-        <svg class="icon add-icon">
-          <use xlink:href="#icon-add-1"></use>
-        </svg>
-        Add another Tax<br>
-      </div>
+      </ul>
     </div>
-
-    <%= f.submit 'Save', class: "button primary-button big-button" %>
-    <%= link_to 'Cancel', :back || taxes_path, {class: "button secondary-button big-button", method: :get}%>
   <% end %>
+
+  <% @tax_year.taxes.each_with_index do |data, index| %>
+    <%= f.fields_for "tax_#{index}", data do |ff| %>
+      <% if data.id %>
+        <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
+            data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
+            class: 'right-align-delete-link insurance', id: 'delete-insurance' %>
+      <% end %>
+      <div class="body-content">
+        <%= render 'form', ff: ff, index: index, data: data %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @tax_year.taxes.empty? %>
+    <% index = 0 %>
+    <%= f.fields_for "tax_#{index}" do |ff| %>
+      <div class="body-content">
+        <%= render 'form', ff: ff, index: index %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="add-new-button" href="" onclick="addNewField();">
+    <svg class="icon add-icon">
+      <use xlink:href="#icon-add-1"></use>
+    </svg>
+    Add another Tax<br>
+  </div>
+
+  <%= f.submit 'Save', class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', :back || taxes_path, class: "button secondary-button big-button" %>
+<% end %>
 
 <script>
   clearFormFields = function(form){

@@ -1,6 +1,5 @@
-<h1><%= yield(:title) + ' Setup' %></h1>
+<h1><%= yield(:title) + ' - Setup' %></h1>
 
-<body>
   <% if @vault_entry.errors.any? %>
     <div>
       Errors:
@@ -11,17 +10,16 @@
       </ul>
     </div>
   <% end %>
-  
+
   <%= form_for @vault_entry, :remote => true do |f| %>
+
   <div id="wtl-forms">
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
         <%= fields_for "vault_entry_#{index}", data do |builder| %>
-          <% if data.id %>
-            <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete, 
-                data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." }, class: 'right-align-delete-link' %>
-          <% end %>
+
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
+
         <% end %>
       <% end %>
     </div>
@@ -39,30 +37,32 @@
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button"}%>
 <% end %>
-</body>
+
+
 <script>
   addNewField = function(){
-    var $wtlForm = $('div[class^="wtl-body-content"]:last');
+    var $wtlForm = $('.card:last');
     var $newWtlForm = $wtlForm.clone();
     old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
     clearForm($newWtlForm, old_id_number, new_id_number);
-    
+
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.appendTo('#wtl-form-1');
     $('.chosen-select').chosen({allow_single_deselect: true});
+    $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
-  
+
   $('.chosen-select').chosen()
-  function showForm() { 
+  function showForm() {
     $('#form-fields').show();
     $('#upload-will-message').hide();
   }
 
-  function showUploadMessage() { 
+  function showUploadMessage() {
     $('#form-fields').hide();
     $('#upload-will-message').show();
   }

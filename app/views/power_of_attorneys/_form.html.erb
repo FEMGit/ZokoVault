@@ -1,39 +1,46 @@
-<div class="wtl-body-content">
+<div class="card trusts mb-20">
+
   <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
-  <div class="field">
-    <label>Power of Attorney</label>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false) %>
-    </div>
+  <h3 class="card-label">Legal Details</h3>
+
+  <label>Power of Attorney</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false) %>
   </div>
-  <div class="field">
-    <label>This Agent's powers are (please choose all that apply):</label>
-    <ul class="check-list">
-      <% PowerOfAttorney::POWERS.each do |option| %>
-        <li class="check-list">
-          <label>
-            <%= check_box_tag "vault_entry_#{index}[powers][#{option}]",
-              option,
-              @vault_entry.powers.try(:[], option), {:checked => data.powers.present? && data.powers.keys.any? {|check| check == option} }
-            %>
-          <span></span> <%= option %>
-        </label>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-    <label>Shared With</label>
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+
+  <label>This Agent's powers are (please choose all that apply):</label>
+  <ul class="check-list">
+    <% PowerOfAttorney::POWERS.each do |option| %>
+      <li class="check-list">
+        <label>
+          <%= check_box_tag "vault_entry_#{index}[powers][#{option}]",
+            option,
+            @vault_entry.powers.try(:[], option), {:checked => data.powers.present? && data.powers.keys.any? {|check| check == option} }
+          %>
+        <span></span> <%= option %>
+      </label>
+      </li>
+    <% end %>
+  </ul>
+
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "attorney_share_id_#{index}") %>
     </div>
-  </div>
+  </section>
+
+  <% if data.id %>
+    <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,
+        data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-legal' %>
+  <% end %>
+
 </div>
 
 <script>
@@ -66,6 +73,7 @@
       name: new_vault_entry_id +"[share_ids][]",
       id: "attorney_share_id_" + new_id
     });
+    $newWtlForm.find("#delete-legal").remove();
   }
 
 $(document).ready(function(){

@@ -19,7 +19,7 @@
       </svg>
     </span>Add Document
   </a>
-  <h1><%= yield(:add_document_title) %> Documents</h1>
+  <h2><%= yield(:add_document_title) %> Documents</h2>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

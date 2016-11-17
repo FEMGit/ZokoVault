@@ -1,45 +1,38 @@
 <% @power_of_attorneys.each do |attorney| %>
-  <div class="card attorney details wtl">
+
+  <div class="card attorney mb-30">
     <%= link_to content_tag(:a), new_power_of_attorney_path, class: "whole-card-link" %>
-    <div class="details-wrapper wtl">
-      <div class="details-card-info details">
-        <div class = "details-card-field">
-          <label class="title">Power of Attorney</label>
-          <div class="details-field">
-            <span class="details-field-value"><%= attorney.agents && attorney.agents.map(&:name).join('') %></span>
-          </div>
-        </div>
-        <div class = "details-card-field">
-          <label class="title">Agent Powers</label>
-          <% if attorney.powers.present? %>
-            <% attorney.powers.keys.each do |agent_power| %>
-              <div class="details-field">
-                <span class="details-field-value"><%= agent_power %></span>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+
+    <h3 class="card-label">Legal Details</h3>
+
+    <label class="title">Power of Attorney</label>
+    <p><%= attorney.agents && attorney.agents.map(&:name).join('') %></p>
+
+    <label class="title">Agent Powers</label>
+    <p>
+      <% if attorney.powers.present? %>
+        <% attorney.powers.keys.each do |agent_power| %>
+          <%= agent_power %><br>
+        <% end %>
+      <% end %>
+    </p>
+
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="details-card-info details">
-        <div class="details-card-field shared">
-          <label class="title">Shared With</label>
-          <div class="details-field">
-            <% attorney.shares.each do |share| %>
-              <% if share.contact.present? %>
-                <span class="user-circle"><%= share.contact.initials %></span>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+        </svg> Shared With
+      </h3>
+
+      <label>Shared With</label>
+      <div>
+        <% attorney.shares.each do |share| %>
+          <% if share.contact.present? %>
+            <span class="user-circle"><%= share.contact.initials %></span>
+          <% end %>
+        <% end %>
       </div>
-    </div>
+    </section>
+
   </div>
 <% end %>

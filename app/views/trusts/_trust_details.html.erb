@@ -1,67 +1,54 @@
 <% @trusts.each do |trust| %>
-  <div class="card trusts details wtl mb-30">
+  <div class="card trusts mb-30">
     <%= link_to content_tag(:a), new_trust_path, class: "whole-card-link" %>
-    <div class="details-wrapper wtl">
-      <div class="details-card-info details">
-        <div>
-          <h2 class="trust-title"><%= trust.name %></h2>
-          <a class="trust-view-edit-link">View/Edit Financial Details</a>
-        </div>
-        <div class = "details-left-info">
-          <div class = "details-card-field">
-            <label class="title">Trustees</label>
-            <% trust.trustees && trust.trustees.each do |trustee| %>
-              <div class="details-field">
-                <span class="details-field-value"><%= trustee.name %></span>
-              </div>
-            <% end %>
-          </div>
-          <div class = "details-card-field">
-            <label class="title">Successor Trustees</label>
-            <% trust.successor_trustees && trust.successor_trustees.each do |trustee| %>
-              <div class="details-field">
-                <span class="details-field-value"><%= trustee.name %></span>
-              </div>
-            <% end %>
-          </div>
-        </div>
-        <div class = "details-right-info">
-          <% trust.agents.each_with_index do |advisor, index| %>
-            <div class = "details-card-field">
-              <% if index == 0 %>
-                <label class="title">Trust Advisor</label>
-              <% end %>
-              <% if advisor %>
-                <div class="details-field">
-                  <span class="details-field details-field-value"><%= advisor.name %></span>
-                  <a class="details-field details-field-value"><%= advisor.emailaddress %></a>
-                  <span class="details-field details-field-value"><%= advisor.phone %></span>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+
+    <h3 class="card-label"><%= trust.name %></h3>
+
+    <label class="title">Trustees</label>
+    <p>
+      <% trust.trustees && trust.trustees.each do |trustee| %>
+        <%= trustee.name %><br>
+      <% end %>
+    </p>
+
+    <label class="title">Successor Trustees</label>
+    <p>
+      <% trust.successor_trustees && trust.successor_trustees.each do |trustee| %>
+        <%= trustee.name %><br>
+      <% end %>
+    </p>
+
+    <% trust.agents.each_with_index do |advisor, index| %>
+        <% if index == 0 %>
+          <label class="title">Trust Advisor</label>
+        <% end %>
+        <% if advisor %>
+          <p>
+            <%= advisor.name %><br>
+            <a href="mailto:<%= advisor.emailaddress %>">
+              <%= advisor.emailaddress %>
+            </a><br>
+            <%= advisor.phone %>
+          </p>
+        <% end %>
+    <% end %>
+
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="details-card-info details">
-        <div class="details-card-field shared">
-          <label class="title">Shared With</label>
-          <div class="details-field">
-            <% trust.shares && trust.shares.each do |share| %>
-              <% if share.contact.present? %>
-                <span class="user-circle"><%= share.contact.initials %></span>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+        </svg> Shared With
+      </h3>
+
+      <label>Shared With</label>
+      <div>
+        <% trust.shares && trust.shares.each do |share| %>
+          <% if share.contact.present? %>
+            <span class="user-circle"><%= share.contact.initials %></span>
+          <% end %>
+        <% end %>
       </div>
-    </div>
+    </section>
+
   </div>
 <% end %>

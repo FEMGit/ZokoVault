@@ -1,69 +1,60 @@
 <% @wills.each do |will| %>
-  <div class="card wills details wtl mb-30">
-    <%= link_to content_tag(:a), new_will_path, class: "whole-card-link" %>
-    <div class="details-wrapper wtl">
-      <div class="details-card-info details">
-        <div class = "details-left-info">
-          <div class = "details-card-field">
-            <label class="title">Primary Beneficiaries</label>
-            <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
-              <div class="details-field">
-                <span class="details-field-value"><%= primary.name %></span>
-              </div>
-            <% end %>
-          </div>
-          <div class = "details-card-field">
-            <label class="title">Secondary Beneficiaries</label>
-            <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
-              <div class="details-field">
-                <span class="details-field-value"><%= secondary.name %></span>
-              </div>
-            <% end %>
-          </div>
-          <div class = "details-card-field">
-            <label class="title">Executor</label>
-            <div class="details-field">
-              <% if will.executor %>
-                <span class="details-field details-field-value"><%= will.executor.name %></span>
-                <a class="details-field details-field-value"><%= will.executor.emailaddress %></a>
-                <span class="details-field details-field-value"><%= will.executor.phone %></span>
-              <% end %>
-            </div>
-          </div>
-        </div>
-        <div class = "details-right-info">
-          <div class = "details-card-field">
-            <label class="title">Attorney, Accountant, Advisor</label>
-            <% will.agents && will.agents.each do |agent| %>
-              <div class="details-field">
-                <span class="details-field details-field-value"><%= agent.name %></span>
-                <a class="details-field details-field-value"><%= agent.emailaddress %></a>
-                <span class="details-field details-field-value"><%= agent.phone %></span>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+  <div class="card trusts mb-30">
+
+    <h3 class="card-label">Will Details</h3>
+
+    <label class="title">Primary Beneficiaries</label>
+    <p>
+      <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
+        <%= primary.name %><br>
+      <% end %>
+    </p>
+
+    <label class="title">Secondary Beneficiaries</label>
+    <p>
+      <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
+        <%= secondary.name %><br>
+      <% end %>
+    </p>
+
+    <% if will.executor %>
+      <label class="title">Executor</label>
+        <p><%= will.executor.name %><br>
+           <a href="mailto:<%= will.executor.emailaddress %>">
+             <%= will.executor.emailaddress %>
+           </a><br>
+          <%= will.executor.phone %>
+        </p>
+    <% end %>
+
+    <label class="title">Attorney, Accountant, Advisor</label>
+
+    <% will.agents && will.agents.each do |agent| %>
+      <p><%= agent.name %><br>
+        <a href="mailto:<%= agent.emailaddress %>">
+          <%= agent.emailaddress %>
+        </a><br>
+        <%= agent.phone %>
+      </p>
+    <% end %>
+
+
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
-        </svg>
-      </span>
-      <div class="details-card-info details">
-        <div class="details-card-field shared">
-          <label class="title">Shared With</label>
-          <div class="details-field">
-            <% will.shares && will.shares.each do |share| %>
-              <% if share.contact.present? %>
-                <span class="user-circle"><%= share.contact.initials %></span>
-              <% end %>
-            <% end %>
-          </div>
-        </div>
+        </svg> Shared With
+      </h3>
+
+      <label>Shared With</label>
+      <div>
+        <% will.shares && will.shares.each do |share| %>
+          <% if share.contact.present? %>
+            <span class="user-circle"><%= share.contact.initials %></span>
+          <% end %>
+        <% end %>
       </div>
-    </div>
+    </section>
+
   </div>
 <% end %>

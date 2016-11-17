@@ -1,41 +1,45 @@
-<div class="wtl-body-content">
+<div class="card trusts mb-20">
   <%= f.hidden_field :id, id: "trust_id_#{index}" %>
-  <div class="field">
-    <label>Trust Name<span class="wtl-required-field"> Required</span></label>
-    <div class="styled-text-input">
-      <%= f.text_field :name, value: data.name %>
-    </div>
+
+  <h3 class="card-label">Trust Details</h3>
+
+  <label>Trust Name<span class="wtl-required-field"> Required</span></label>
+  <%= f.text_field :name, value: data.name %>
+
+  <label>Attorney, Accountant or Advisor(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", multiple: false) %>
   </div>
-  <div class="field">
-    <label>Attorney, Accountant or Advisor(s)</label>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", multiple: false) %>
-    </div>
+
+  <label>Trustee(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}") %>
   </div>
-  <div class="field">
-    <label>Trustee(s)</label>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}") %>
-    </div>
+
+  <label>Successor Trustee(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}") %>
   </div>
-  <div class="field">
-    <label>Successor Trustee(s)</label>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}") %>
-    </div>
-  </div>
-  <div class="field shared-field bt-gray-light bb-gray-light wtl-shared-with">
-    <label>Shared With</label>
-    <span class="shared-with-block">
-      <h2 class="shared-with-title">Shared With</h2>
-      <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+
+
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
-      </svg>
-    </span>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "trust_share_id_#{index}") %>
     </div>
-  </div>
+  </section>
+
+  <% if data.id %>
+    <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,
+        data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-trust' %>
+  <% end %>
+
 </div>
 
 <script>
@@ -50,30 +54,31 @@
       name: new_vault_entry_id + "[name]",
       id: new_vault_entry_id + "_name"
     });
-    
+
     $newWtlForm.find("#trust_agent_id_" + old_id).attr({
       name: new_vault_entry_id +"[agent_ids][]",
       id: "trust_agent_id_" + new_id
     });
     $newWtlForm.find("#trust_agent_id_" + new_id + " option").prop("selected", false);
-    
+
     $newWtlForm.find("#trust_trustee_id_" + old_id).attr({
       name: new_vault_entry_id +"[trustee_ids][]",
       id: "trust_trustee_id_" + new_id
     });
     $newWtlForm.find("#trust_trustee_id_" + new_id + " option").prop("selected", false);
-    
+
     $newWtlForm.find("#trust_successor_id_" + old_id).attr({
       name: new_vault_entry_id +"[successor_trustee_ids][]",
       id: "trust_successor_id_" + new_id
     });
     $newWtlForm.find("#trust_successor_id_" + new_id + " option").prop("selected", false);
-    
+
     $newWtlForm.find("#trust_share_id_" + old_id).attr({
       name: new_vault_entry_id +"[share_ids][]",
       id: "trust_share_id_" + new_id
     });
     $newWtlForm.find("#trust_share_id_" + new_id + " option").prop("selected", false);
+    $newWtlForm.find("#delete-trust").remove();
   }
 $(document).ready(function(){
   url = "new/get_trusts_details";

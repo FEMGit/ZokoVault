@@ -17,6 +17,10 @@ class MfasController < AuthenticatedController
     end
   end
 
+  def resend_code
+    render :json => {:success => true} if MultifactorAuthenticator.new(current_user).send_code
+  end
+
   private
 
   def phone_params

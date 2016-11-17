@@ -2,5 +2,22 @@
   <%= label_tag 'Phone Code' %>
   <%= text_field_tag 'phone_code' %>
   <%= submit_tag 'Verify code' %>
+  <%= link_to 'Resend code', 'javascript:;', class: "no-underline-link", id: 'resend-code' %><span id='send_code_text'></span>
 <% end %>
 
+<script>
+
+$('#resend-code').click(function() {
+  $.ajax({
+    url: "<%= resend_code_path %>",
+    type: "GET",
+    success: function() {
+      $('#send_code_text').html(' - Code sent!');
+    },
+    error: function() {
+      $('#send_code_text').html(' - Error!');
+    }
+  });
+});
+
+</script>

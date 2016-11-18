@@ -77,37 +77,37 @@ module ZokuVault
       config.x.FinalWishesCategory => {
         "label" => "Final Wishes",
         "groups" => [
-          {"value" => "Burial",
+          {"value" => "burial",
             "label" => "Burial"
           },
-          {"value" => "Charity",
+          {"value" => "charity",
             "label" => "Charity"
           },
-          {"value" => "Cremation",
+          {"value" => "cremation",
             "label" => "Cremation"
           },
-          {"value" => "Ethical Will",
+          {"value" => "ethetical_will",
             "label" => "Ethical Will"
           },
-          {"value" => "Funeral / Memorial",
+          {"value" => "funeral",
             "label" => "Funeral / Memorial"
           },
-          {"value" => "Items to Destroy",
+          {"value" => "items_destroy",
             "label" => "Items to Destroy"
           },
-          {"value" => "Miscellaneous",
+          {"value" => "miscellaneous",
             "label" => "Miscellaneous"
           },
-          {"value" => "Obituary",
+          {"value" => "obituary",
             "label" => "Obituary"
           },
-          {"value" => "Organ Donor",
+          {"value" => "organ_donor",
             "label" => "Organ Donor"
           },
-          {"value" => "Pet Care",
+          {"value" => "pet_care",
             "label" => "Pet Care"
           },
-          {"value" => "Veterans",
+          {"value" => "veterans",
             "label" => "Veterans"
           }
         ]

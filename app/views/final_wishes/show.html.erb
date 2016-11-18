@@ -8,7 +8,7 @@
 <h1><%= @group["label"] %></h1>
 
 <% @final_wish.final_wishes.each do |final_wish| %>
-  <div class="card cg-1 column-card mb-30">
+  <div class="card cg-<%= @group["value"] %> mb-30">
     <%= link_to content_tag(:a), "#{final_wishes_path}/#{@final_wish.id}/edit", :class => "whole-card-link" %>
 
     <label>Primary Contact</label><br>

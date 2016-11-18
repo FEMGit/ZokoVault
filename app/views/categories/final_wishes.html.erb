@@ -3,7 +3,7 @@
 <section class="flex-boxes">
   <% @groups.each_with_index do |group, index| %>
     <div class="flex-column">
-      <div class="card cg-1 column-card mb-30">
+      <div class="card cg-<%= index + 1 %> mb-30">
         <%= link_to content_tag(:a), '', class: "whole-card-link" %>
         <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group["value"], category: @category} %>
         <h3><%= group["label"] %></h3><br>

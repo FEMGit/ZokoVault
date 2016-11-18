@@ -46,29 +46,6 @@ label{
   }
 }
 
-//CARD FORMS
-.body-content {
-  $width-percent: 80%;
-  .styled-select {
-    width: $form-width;
-    max-width: $form-width + $gu;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
-  }
-  select {
-    width: $width-percent;
-    max-width: $form-width + $gu;
-  }
-  textarea {
-    width: $width-percent;
-    max-width: $text-area-with;
-    resize: vertical;
-  }
-  input[type=text] {
-    width: $width-percent;
-    max-width: $form-width;
-  }
-}
-
 //BUTTONS
 
 button{

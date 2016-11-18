@@ -1,8 +1,6 @@
 class FinalWishesController < AuthenticatedController
   before_action :set_final_wish_info, only: [:show, :edit, :update]
   before_action :set_final_wish, only: [:destroy]
-  before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit]
-  before_action :set_contacts, only: [:new, :edit]
 
   # GET /final_wishes
   # GET /final_wishes.json

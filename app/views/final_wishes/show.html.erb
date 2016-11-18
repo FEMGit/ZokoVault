@@ -1,0 +1,53 @@
+<%= link_to "#{final_wishes_path}/1/edit", class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1><%= @group["label"] %></h1>
+
+<div class="card cg-1 column-card mb-30">
+  <%= link_to content_tag(:a), "#{final_wishes_path}/1/edit", :class => "whole-card-link" %>
+
+  <label>Primary Contact</label><br>
+  <p>
+    Bruna Mars<br>
+    <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top">email@email.com</a><br>
+    777-777-7777
+  </p>
+
+  <label>Notes</label><br>
+  <p>
+    Some text in here for example
+    Some text in here for example
+    Some text in here for example
+    Some text in here for example
+    Some text in here for example
+  </p><br>
+
+  <div class="shared-card width-justify">
+    <h3 class="card-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Shared With
+    </h3>
+
+    <label>Shared With</label><br>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">AD</span>
+      <span class="user-circle">SG</span>
+  </div>
+</div>
+
+<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group["value"]) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h1><%= @group["label"] %> Documents</h1>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

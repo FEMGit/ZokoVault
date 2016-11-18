@@ -27,14 +27,6 @@ class CategoriesController < AuthenticatedController
     session[:ret_url] = "/estate_planning"
   end
 
-  def final_wishes
-    @category = Rails.application.config.x.FinalWishesCategory
-    @groups = Rails.configuration.x.categories[@category]["groups"]
-    @groups.sort_by { |group| group["label"] }
-    @documents = Document.for_user(current_user).where(:category => @category)
-    session[:ret_url] = final_wishes_path
-  end
-
   def details_account
     @category = params[:category]
     group_for_new_account = params[:group]

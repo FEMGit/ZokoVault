@@ -34,7 +34,7 @@
 <script>
 function sendCode() {
   var data = $('#account-form').serialize();
-  $.post("<%= send_code_account_path %>", 
+  $.post("<%= send_code_account_path %>",
       data,
       function() {
         $('#send_code_text').html('Code sent!');
@@ -45,7 +45,7 @@ function sendCode() {
 }
 function verifyCode() {
   var data = $('#account-form').serialize();
-  $.post("<%= verify_code_account_path %>", 
+  $.post("<%= verify_code_account_path %>",
       data,
       function() {
         $('#verify_code_text').html("You've been verified!");

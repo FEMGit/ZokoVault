@@ -4,6 +4,8 @@ class MfasController < AuthenticatedController
 
   def show
     MultifactorAuthenticator.new(current_user).send_code
+  rescue
+    @phone_number_error = true
   end
 
   def create

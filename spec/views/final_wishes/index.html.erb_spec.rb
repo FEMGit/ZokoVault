@@ -7,15 +7,13 @@ RSpec.describe "final_wishes/index", type: :view do
         :document_id => 2,
         :user_id => 3,
         :primary_contact_id => 4,
-        :notes => "Notes",
-        :group => "Group"
+        :notes => "Notes"
       ),
       FinalWish.create!(
         :document_id => 2,
         :user_id => 3,
         :primary_contact_id => 4,
-        :notes => "Notes",
-        :group => "Group"
+        :notes => "Notes"
       )
     ])
   end

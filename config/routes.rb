@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :final_wishes
   resources :taxes
   resources :relationships
   resources :vendor_accounts
@@ -55,7 +56,6 @@ Rails.application.routes.draw do
 
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
-  get 'final_wishes' => 'categories#final_wishes'
   get 'financial_information' => 'categories#financial_information'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'

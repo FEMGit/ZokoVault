@@ -17,6 +17,7 @@ module ZokuVault
     config.x.InsuranceCategory = "Insurance"
     config.x.ContactCategory = "Contact"
     config.x.TaxCategory = "Taxes"
+    config.x.FinalWishesCategory = "Final Wishes"
     
     config.x.categories = {
       config.x.WtlCategory => {
@@ -70,6 +71,44 @@ module ZokuVault
           },
           {"value" => "2010",
             "label" => "2010"
+          }
+        ]
+      },
+      config.x.FinalWishesCategory => {
+        "label" => "Final Wishes",
+        "groups" => [
+          {"value" => "Burial",
+            "label" => "Burial"
+          },
+          {"value" => "Charity",
+            "label" => "Charity"
+          },
+          {"value" => "Cremation",
+            "label" => "Cremation"
+          },
+          {"value" => "Ethical Will",
+            "label" => "Ethical Will"
+          },
+          {"value" => "Funeral / Memorial",
+            "label" => "Funeral / Memorial"
+          },
+          {"value" => "Items to Destroy",
+            "label" => "Items to Destroy"
+          },
+          {"value" => "Miscellaneous",
+            "label" => "Miscellaneous"
+          },
+          {"value" => "Obituary",
+            "label" => "Obituary"
+          },
+          {"value" => "Organ Donor",
+            "label" => "Organ Donor"
+          },
+          {"value" => "Pet Care",
+            "label" => "Pet Care"
+          },
+          {"value" => "Veterans",
+            "label" => "Veterans"
           }
         ]
       },

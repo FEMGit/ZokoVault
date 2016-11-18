@@ -25,7 +25,8 @@
       <use xlink:href="#icon-share-3"></use>
     </svg>Contacts &amp; Permissions
   <% end %>
-<!--   <% financial_information_current = 'active' if current_page?(financial_information_url) %>
+<!--
+  <% financial_information_current = 'active' if current_page?(financial_information_url) %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
@@ -54,14 +55,14 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices
-  <% end %>
+  <% end %> -->
   <% final_wishes_current = 'active' if current_page?(final_wishes_url) %>
   <%= link_to final_wishes_path, class: "main-nav #{final_wishes_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-bookmark-2"></use>
     </svg>Final Wishes
   <% end %>
-  <% web_accounts_current = 'active' if current_page?(web_accounts_url) %>
+<!--  <% web_accounts_current = 'active' if current_page?(web_accounts_url) %>
   <%= link_to web_accounts_path, class: "main-nav #{web_accounts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>

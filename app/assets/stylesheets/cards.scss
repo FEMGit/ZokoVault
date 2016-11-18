@@ -37,6 +37,7 @@ $cards-margin: 12px;
 //COLOR STRIPES FOR CARDS
 .cg-1,
 .cg-2016,
+.cg-burial,
 .card.life,
 .card.wills{
   border-left: 10px solid $color-card-1;
@@ -45,6 +46,7 @@ $cards-margin: 12px;
 }
 .cg-2,
 .cg-2015,
+.cg-charity,
 .card.property,
 .card.trusts{
   border-left: 10px solid $color-card-2;
@@ -52,44 +54,53 @@ $cards-margin: 12px;
 }
 .cg-3,
 .cg-2014,
+.cg-cremation,
 .card.health,
 .card.attorney{
   border-left: 10px solid $color-card-3;
   @include card-type-details;
 }
 .cg-4,
-.cg-2013 {
+.cg-2013,
+.cg-ethetical_will {
   border-left: 10px solid $color-card-4;
   @include card-type-details;
 }
 .cg-5,
-.cg-2012 {
+.cg-2012,
+.cg-funeral {
   border-left: 10px solid $color-card-5;
   @include card-type-details;
 }
 .cg-6,
-.cg-2011 {
+.cg-2011,
+.cg-items_destroy {
   border-left: 10px solid $color-card-6;
   @include card-type-details;
 }
 .cg-7,
-.cg-2010 {
+.cg-2010,
+.cg-miscellaneous {
   border-left: 10px solid $color-card-7;
   @include card-type-details;
 }
-.cg-8 {
+.cg-8,
+.cg-obituary {
   border-left: 10px solid $color-card-8;
   @include card-type-details;
 }
-.cg-9 {
+.cg-9,
+.cg-organ_donor {
   border-left: 10px solid $color-card-9;
   @include card-type-details;
 }
-.cg-10 {
+.cg-10,
+.cg-pet_care {
   border-left: 10px solid $color-card-10;
   @include card-type-details;
 }
-.cg-11 {
+.cg-11, 
+.cg-veterans {
   border-left: 10px solid $color-card-11;
   @include card-type-details;
 }

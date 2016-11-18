@@ -2,16 +2,16 @@
 
 <section class="flex-boxes">
   <% @groups && @groups.each do |group| %>
-    <% group = group["value"] %>
+    <% group_title = group["label"] %>
     <div class="flex-column">
-      <div class="card cg-1 column-card mb-30">
-        <%= link_to content_tag(:a), final_wish_details(group), class: "whole-card-link" %>
-        <% if final_wish_exists?(@final_wishes, group) %>
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group, category: @category} %>
+      <div class="card cg-<%= group["value"] %> mb-30">
+        <%= link_to content_tag(:a), final_wish_details(group_title), class: "whole-card-link" %>
+        <% if final_wish_exists?(@final_wishes, group_title) %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group_title, category: @category} %>
         <% end %>
-        <h3><%= group %></h3><br>
-        <% if final_wish_exists?(@final_wishes, group) %>
-          <% final_wish = wish_by_group(group) %>
+        <h3><%= group_title %></h3><br>
+        <% if final_wish_exists?(@final_wishes, group_title) %>
+          <% final_wish = wish_by_group(group_title) %>
           <% if final_wish && final_wish.primary_contact.present? %>
             <div class="left">
               <p>
@@ -32,7 +32,7 @@
             <% end %>
           </div>
         <% end %>
-        <%= link_to 'Add Details', final_wish_add_details(group), class: "link-on-top add-details" %>
+        <%= link_to 'Add Details', final_wish_add_details(group_title), class: "link-on-top add-details" %>
         <span class="clear"></span>
       </div>
     </div>

@@ -1,37 +1,53 @@
-<%= form_for(@final_wish) do |f| %>
-  <% if @final_wish.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@final_wish.errors.count, "error") %> prohibited this final_wish from being saved:</h2>
+<%= ff.hidden_field :id, id: "final_wish_id_#{index}" %>
+<div class="card cg-1 mb-30">
+  <label>Tax Preparer</label>
+  <div class="chosen-styled-select">
+   <%= contact_select_with_create_new(ff, :primary_contact_id, @contacts, id: "final_wish_primary_id_#{index}", multiple: false) %>
+  </div><br>
 
-      <ul>
-      <% @final_wish.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <label>Notes</label>
+  <p><%= ff.text_area :notes, id: "final_wish_notes_id_#{index}" %></p><br>
+
+  <section class="shared-with edit-shared">
+    <h3 class="card-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Shared With
+    </h3>
+
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+     <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "final_wish_share_id_#{index}") %>
     </div>
-  <% end %>
+  </section>
 
-  <div class="field">
-    <%= f.label :document_id %><br>
-    <%= f.number_field :document_id %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.number_field :user_id %>
-  </div>
-  <div class="field">
-    <%= f.label :primary_contact_id %><br>
-    <%= f.number_field :primary_contact_id %>
-  </div>
-  <div class="field">
-    <%= f.label :notes %><br>
-    <%= f.text_field :notes %>
-  </div>
-  <div class="field">
-    <%= f.label :group %><br>
-    <%= f.text_field :group %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+  <% if data && data.id %>
+    <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
+        data: { confirm: "Deleting this final wish will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-wish' %>
+  <% end %>
+</div>
+
+<script>
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
+      value: ""
+    });
+    $form.find("#" + new_id + " option").prop("selected", false);
+  };
+  clearForm = function($newWtlForm, old_id, new_id) {
+    new_field_name = "final_wish_info[final_wish_" + new_id + "]";
+    changeIdAndName($newWtlForm, "final_wish_id_" + old_id,
+      "final_wish_id_" + new_id, new_field_name + "[id]")
+    changeIdAndName($newWtlForm, "final_wish_primary_id_" + old_id,
+      "final_wish_primary_id_" + new_id, new_field_name + "[primary_contact_id]")
+    changeIdAndName($newWtlForm, "final_wish_notes_id_" + old_id,
+      "final_wish_notes_id_" + new_id, new_field_name + "[notes]")
+    changeIdAndName($newWtlForm, "final_wish_share_id_" + old_id,
+      "final_wish_share_id_" + new_id, new_field_name + "[share_with_contact_ids][]")
+    $newWtlForm.find("#delete-wish").remove();
+  }
+</script>

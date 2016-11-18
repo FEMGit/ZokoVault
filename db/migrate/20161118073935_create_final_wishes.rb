@@ -5,7 +5,7 @@ class CreateFinalWishes < ActiveRecord::Migration
       t.integer :user_id
       t.integer :primary_contact_id
       t.string :notes
-      t.string :group
+      t.integer :final_wish_info_id
 
       t.timestamps null: false
     end

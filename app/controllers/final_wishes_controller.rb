@@ -1,5 +1,6 @@
 class FinalWishesController < AuthenticatedController
-  before_action :set_category_and_group, :set_all_documents, only: [:index, :show]
+  before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit]
+  before_action :set_contacts, only: [:new, :edit]
 
   # GET /final_wishes
   # GET /final_wishes.json
@@ -17,10 +18,16 @@ class FinalWishesController < AuthenticatedController
 
   # GET /final_wishes/new
   def new
+    @final_wish_info = FinalWishInfo.new
+    @final_wish_info[:group] = params[:group]
+    @final_wish_info.final_wishes << FinalWish.new
   end
 
   # GET /final_wishes/1/edit
   def edit
+    @final_wish_info = FinalWishInfo.new
+    @final_wish_info[:group] = @groups[params[:id].to_i]["label"]
+    @final_wish_info.final_wishes << FinalWish.new
   end
 
   # POST /final_wishes
@@ -64,6 +71,12 @@ class FinalWishesController < AuthenticatedController
   end
 
   private
+
+  def set_contacts
+    contact_service = ContactService.new(:user => current_user)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_final_wish

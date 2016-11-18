@@ -1,0 +1,63 @@
+<h1><%= @final_wish_info.group %> Setup</h1>
+
+<%= form_for(@final_wish_info, url: "#{yield(:url_path)}") do |f| %>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :group %>
+  <% if @final_wish_info.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@final_wish_info.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
+      <ul>
+      <% @final_wish_info.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% @final_wish_info.final_wishes.each_with_index do |data, index| %>
+    <%= f.fields_for "final_wish_#{index}", data do |ff| %>
+      <div class="body-content">
+        <%= render 'form', ff: ff, index: index, data: data %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if @final_wish_info.final_wishes.empty? %>
+    <% index = 0 %>
+    <%= f.fields_for "final_wish_#{index}" do |ff| %>
+      <div class="body-content">
+        <%= render 'form', ff: ff, index: index, data: nil %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="add-new-button" href="" onclick="addNewField();">
+    <svg class="icon add-icon">
+      <use xlink:href="#icon-add-1"></use>
+    </svg>
+    Add another Final Wish<br>
+  </div>
+
+  <%= link_to 'Save', 'javascript:;', class: "button primary-button big-button", disabled: true %>
+  <%= link_to 'Cancel', :back || final_wishes_path, class: "button secondary-button big-button" %>
+<% end %>
+
+<script>
+  clearFormFields = function(form){
+    form.find(':text').val("");
+    form.find('textarea').val("");
+    form.find(':checked').prop('checked', false);
+  }
+  addNewField = function(){
+    var $form = $('div[class^="body-content"]:last');
+    var $newForm = $form.clone();
+    old_id_number = parseInt($form.find("input[type=hidden]").attr("id").split('_').last());
+    new_id_number = old_id_number + 1;
+    clearForm($newForm, old_id_number, new_id_number);
+    clearFormFields($newForm);
+    $('.chosen-container',$newForm).remove();
+    $newForm.insertAfter('.body-content:last');
+    $('.chosen-select').chosen({allow_single_deselect: true});
+    $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+  };
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

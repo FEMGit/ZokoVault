@@ -1,1 +1,59 @@
 <h1>Final Wishes</h1>
+
+<section class="flex-boxes">
+  <% @groups.each_with_index do |group, index| %>
+    <div class="flex-column">
+      <div class="card cg-1 column-card mb-30">
+        <%= link_to content_tag(:a), '', class: "whole-card-link" %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group["value"], category: @category} %>
+        <h3><%= group["label"] %></h3><br>
+        <div class="left">
+          <p>
+            Bruna Mars<br>
+            <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top">email@email.com</a><br>
+            777-777-7777
+          </p>
+        </div>
+
+        <div class="right">
+          <span class="user-circle field">BM</span>
+        </div>
+        <span class="clear"></span>
+
+        <div class="inline-block shared-list">
+          <span class="user-circle">BM</span>
+          <span class="user-circle">AD</span>
+          <span class="user-circle">SG</span>
+        </div>
+        <%= link_to 'Add Details', '', class: "link-on-top add-details" %>
+        <span class="clear"></span>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h1>Final Wish Documents</h1>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<script>
+
+$(function() {
+
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+});
+
+</script>

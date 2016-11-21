@@ -18,7 +18,7 @@ module ZokuVault
     config.x.ContactCategory = "Contact"
     config.x.TaxCategory = "Taxes"
     config.x.FinalWishesCategory = "Final Wishes"
-    
+
     config.x.categories = {
       config.x.WtlCategory => {
         "label" => "Wills - Trusts - Legal",

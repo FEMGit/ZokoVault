@@ -14,7 +14,6 @@ $cards-margin: 12px;
   border: 1px solid  $color-gray-light-shaded;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor:pointer;
   word-wrap: break-word;
 
   &.details.insurance,
@@ -72,18 +71,23 @@ $cards-margin: 12px;
   @include card-type-details;
 }
 
-//CARD LABEL
+//CARD LABELS
 .card-label{
   float: right;
   color: $color-gray-dark-tinted;
 
-  @include media($eightfifty) {
+  &.shared-label{
+    color: $color-primary;
+  }
+
+  @include media($ninesixty) {
     float: none;
   }
 }
 .shared-card{
   background: $color-primary-tinted;
   border: 1px solid $color-primary;
+  margin-top: 10px;
 
   p.shared-description{
     max-width: 500px;
@@ -97,6 +101,14 @@ $cards-margin: 12px;
   }
 }
 .card-label{
+  color: $color-gray-dark-tinted;
+
+  svg{
+    position: relative;
+    top: 5px;
+  }
+}
+.shared-card-label{
   color: $color-primary;
 
   svg{
@@ -130,68 +142,26 @@ $cards-margin: 12px;
   }
 }
 
-//WHOLE CARD LINK BEHAVIOR
-.card {
-  position: relative;
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
-  }
-}
+//SHARED DISPLAY
+.shared-with{
+  background-color: $color-primary-tinted;
+  padding: 15px;
+  margin: 10px -15px -14px -15px;
+  height: auto;
+  border-radius: 0 0 5px 0;
+  border-top: 1px solid $color-primary;
 
-//DYNAMIC CARD REPRESENTATION UNIVERSAL
-.flex-column {
-  .left {
-    float:left;
-    width: 55%;
+  &.edit-shared{
+    margin: 10px -15px 10px -15px;
+    border-bottom: 1px solid $color-primary;
   }
-  .right {
-    float: right;
-    width: 45%;
-    direction: rtl;
-  }
-  .clear::after {
-    display: block;
-    content: "";
-    clear: both;
-  }
-  .inline-block {
-    display: inline-block;
-  }
-  .document-number {
-    margin-top: 7px;
-    color: $color-gray-med-shaded;
-    font-weight: 600;
-    padding-right: 4px;
-  }
-  .icon-section {
-    float: right;
-  }
-  .icon-document-1 {
-    font-size: 40px;
-    color: $color-gray-med-shaded;
-    opacity: 0.9;
-    float: right;
-    position: relative;
-  }
-}
-
-.add-new-button{
-  padding-left: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.add-details {
-  float: right;
-  margin-top: 15px;
 }
 
 //DYNAMIC CARD INFO REPRESENTATION
+.card.wills.wtl-info-wrapper,
+.card.trusts.wtl-info-wrapper,
+.card.attorney.wtl-info-wrapper,
+.column-card.info-wrapper,
 .flex-column {
   .wtl-left-side,
   .left-side {
@@ -364,17 +334,18 @@ $cards-margin: 12px;
 }
 
 .details-wrapper {
+  padding: 0 15px 15px 15px;
+
   &.wtl {
     padding-bottom: 0;
   }
-  padding: 15px;
-  padding-top: 0;
   .add-document-field {
     margin: 0 0;
   }
   .percent-complete {
     float: left;
   }
+
 }
 
 .edit-link-wtl {
@@ -391,6 +362,9 @@ $cards-margin: 12px;
   clear: right;
   display: block;
 }
+
+
+
 
 .shared-field {
   background-color: $color-primary-tinted;

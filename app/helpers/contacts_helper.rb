@@ -8,7 +8,7 @@ module ContactsHelper
     if web_address.blank? || web_address.nil?
       ""
     else
-      "www.#{web_address}"
+      web_address.to_s
     end
   end
 end

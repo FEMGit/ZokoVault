@@ -37,7 +37,7 @@
     Add another Final Wish<br>
   </div>
 
-  <%= link_to 'Save', 'javascript:;', class: "button primary-button big-button", disabled: true %>
+  <%= f.submit 'Save', class: "button primary-button big-button" %>
   <%= link_to 'Cancel', :back || final_wishes_path, class: "button secondary-button big-button" %>
 <% end %>
 

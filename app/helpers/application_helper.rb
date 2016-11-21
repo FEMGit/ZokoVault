@@ -64,19 +64,17 @@ module ApplicationHelper
 
   def contact_select_with_create_new(form, name, contacts, html_options = {})
     initialize_new_contact_form
-
     select_options = contacts ? contacts.collect { |s| [s.id, s.name] }.prepend([]) : []
     select_options << ["create_new_contact", "Create New Contact"]
 
-    local_options = { 
-      'data-placeholder': 'Choose Contacts...', 
+    local_options = {
+      'data-placeholder': 'Choose Contacts...',
       class: 'chosen-select add-new-contactable',
       multiple: true,
       onchange: "handleSelectOnChange(this);"
     }.merge(html_options)
 
-    form.collection_select(name, select_options, 
+    form.collection_select(name, select_options,
                            :first, :second, {}, local_options)
-    
   end
 end

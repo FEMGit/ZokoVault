@@ -60,7 +60,7 @@ class TaxesController < AuthenticatedController
     @tax_year = @tax
     TaxesService.fill_taxes(taxes, @tax_year, current_user.id)
     respond_to do |format|
-      if @tax.update(tax_params)
+      if @tax_year.update(tax_params)
         format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully updated.' }
         format.json { render :show, status: :ok, location: @tax }
       else

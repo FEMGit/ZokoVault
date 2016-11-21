@@ -5,7 +5,7 @@
     </svg>
   </span>Edit
 <% end %>
-<h1><%= @group["label"] %></h1>
+<h1><%= @final_wish.group %></h1>
 
 <% @final_wish.final_wishes.each do |final_wish| %>
   <div class="card cg-<%= @group["value"] %> mb-30">
@@ -41,13 +41,13 @@
   </div>
 <% end %>
 
-<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group["value"]) %>">
+<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @final_wish.group) %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>
   </span>Add Document
 </a>
-<h1><%= @group["label"] %> Documents</h1>
+<h1><%= @final_wish.group %> Documents</h1>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

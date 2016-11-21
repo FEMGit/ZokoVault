@@ -20,7 +20,6 @@
                 <%= final_wish.primary_contact.phone %>
               </p>
             </div>
-
             <div class="right">
               <span class="user-circle field"><%= final_wish.primary_contact.initials %></span>
             </div>
@@ -51,16 +50,12 @@
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
 <script>
-
 $(function() {
-
   $('.flex-boxes').masonry({
     columnWidth: '.flex-column',
     gutter: 20,
     percentPosition: true,
     itemSelector: '.flex-column'
   });
-
 });
-
 </script>

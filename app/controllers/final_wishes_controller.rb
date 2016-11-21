@@ -1,6 +1,8 @@
 class FinalWishesController < AuthenticatedController
   before_action :set_final_wish_info, only: [:show, :edit, :update]
   before_action :set_final_wish, only: [:destroy]
+  before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit]
+  before_action :set_contacts, only: [:new, :edit]
 
   # GET /final_wishes
   # GET /final_wishes.json
@@ -13,7 +15,7 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes/1.json
   def show
     @group = @groups[params[:id].to_i]
-    @group_documents = Document.for_user(current_user).where(:category => @category, :group => @group["value"])
+    @group_documents = Document.for_user(current_user).where(:category => @category, :group => @final_wish.group)
     session[:ret_url] = "#{final_wishes_path}/#{params[:id]}"
   end
 

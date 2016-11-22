@@ -1,5 +1,5 @@
 <%= ff.hidden_field :id, id: "final_wish_id_#{index}" %>
-<div class="card cg-1 mb-30">
+<div class="card cg-<%= @group["value"] %> mb-30">
   <label>Primary Contact</label>
   <div class="chosen-styled-select">
    <%= contact_select_with_create_new(ff, :primary_contact_id, @contacts, id: "final_wish_primary_id_#{index}", multiple: false) %>

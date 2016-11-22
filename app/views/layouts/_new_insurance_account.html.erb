@@ -6,13 +6,17 @@
       <h2><%= pluralize(@insurance_card.errors.count, "error") %> prohibited this <%= @insurance_card.group %> from being saved:</h2>
       <ul>
       <% @insurance_card.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <% if message.include?("Contact") %>
+        <li>Primary <%= message %></li>
+        <% else %>
+          <li><%= message %></li>
+        <% end %>
       <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="card <%= @insurance_card.group %> mb-20">
+  <div class="card <%= @insurance_card.group %> mb-30">
 
     <h3 class="card-label">Provider Details</h3>
 
@@ -20,7 +24,7 @@
     <%= f.text_field :name %>
 
     <label>Insurance Provider Web Address</label>
-    <a href="<%= f.text_field :webaddress, type: 'url'  %>">
+    <a>
       <%= f.text_field :webaddress, type: "url"  %>
     </a>
 
@@ -49,10 +53,7 @@
 
     <label>Primary Contact</label>
     <div class="chosen-styled-select">
-        <%= f.collection_select :contact_id,
-          @contacts, :id, :name, {},
-          { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
-        %>
+        <%= contact_select_with_create_new(f, :contact_id, @contacts, multiple: false) %>
     </div>
 
     <section class="shared-with edit-shared">
@@ -63,10 +64,7 @@
       </h3>
       <label>Shared With</label><br>
       <div class="chosen-styled-select">
-        <%= f.collection_select :share_with_ids,
-          @contacts_shareable, :id, :name, {},
-          { 'data-placeholder' => 'Choose Contact...', multiple: true, class: "chosen-select"}
-        %>
+        <%= contact_select_with_create_new(f, :share_with_ids, @contacts_shareable) %>
       </div>
     </section>
 
@@ -80,14 +78,14 @@
 
   <% @insurance_card.policy.each_with_index do |data, index| %>
 
-    <div class="card <%= @insurance_card.group %> mb-20 add-another">
+    <div class="card <%= @insurance_card.group %> mb-30 add-another">
 
       <%= f.fields_for "policy_#{index}", data do |ff| %>
         <%= render yield(:partial_path), ff: ff, index: index, data: data %>
       <% end %>
 
       <% if data.id %>
-        <span class="mt-20 mb-20">
+        <span class="mt-30 mb-30">
           <%= link_to 'Delete this policy', "#{yield(:delete_path)}#{data.id}", method: :delete,
               data: { confirm: "Deleting this '#{@insurance_card.group} policy' will permanently remove it from ZokuVault." },
               class: 'button small-button secondary-button', id: 'delete-insurance' %>
@@ -100,7 +98,7 @@
 
   <% if @insurance_card.policy.empty? %>
     <% index= 0 %>
-    <div class="card <%= @insurance_card.group %> mb-20 add-another">
+    <div class="card <%= @insurance_card.group %> mb-30 add-another">
       <%= f.fields_for "policy_#{index}" do |ff| %>
         <%= render yield(:partial_path), ff: ff, index: index %>
       <% end %>
@@ -139,8 +137,8 @@
     $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.find("#delete-insurance").remove()
     $newWtlForm.insertAfter('.add-another:last');
-    $('.chosen-select').chosen();
+    $('.chosen-select').chosen({allow_single_deselect: true});
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   }
-  $('.chosen-select').chosen();
+  $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

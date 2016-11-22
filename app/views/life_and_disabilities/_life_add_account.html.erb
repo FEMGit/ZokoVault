@@ -1,55 +1,45 @@
 <%= ff.hidden_field :id, id: "policy_id_#{index}" %>
-<div class="field">
-  <h2 class="policy-information-title">Policy Information</h2>
+
+  <h3 class="card-label">Policy Information</h3>
+
   <label>Policy Type</label>
   <div class="styled-select">
     <%= ff.select :policy_type, LifeAndDisabilityPolicy::policy_types.keys, id: "life_policy_type_id_#{index}"%>
   </div>
-</div>
-<div class="field">
+
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
      <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "life_policy_holder_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field">
+
   <label>Coverage Amount</label>
-  <div class="styled-text-input input-symbol-dollar">
-    <%= ff.text_field :coverage_amount, id: "life_coverage_amount_id_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0} }, 
+  <div class="input-symbol-dollar">
+    <%= ff.text_field :coverage_amount, id: "life_coverage_amount_id_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0} },
       :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "") %>
   </div>
-</div>
-<div class="field">
+
   <label>Policy Number</label>
-  <div class="styled-text-input">
-    <%= ff.text_field :policy_number, id: "life_policy_number_id_#{index}" %>
-  </div>
-</div>
-<div class="field">
+  <%= ff.text_field :policy_number, id: "life_policy_number_id_#{index}" %>
+
   <label>Primary Beneficiaries</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :primary_beneficiary_ids, @contacts, id: "life_primary_id_#{index}") %>
   </div>
-</div>
-<div class="field">
+
   <label>Secondary Beneficiaries</label>
   <div class="chosen-styled-select">
       <%= contact_select_with_create_new(ff, :secondary_beneficiary_ids, @contacts, id: "life_secondary_id_#{index}") %>
   </div>
-</div>
-<div class="field">
+
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :broker_or_primary_contact_id, @contacts, id: "life_broker_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field notes-field">
+
   <label>Notes</label>
   <%= ff.text_area :notes %>
-</div>
 
 <script>
-
   changeIdAndName = function($form, old_id, new_id, new_name){
     $form.find("#" + old_id).attr({
       id: new_id,
@@ -58,35 +48,25 @@
     });
     $form.find("#" + new_id + " option").prop("selected", false);
   };
-
   clearForm = function($newWtlForm, old_id, new_id){
     var newPolicy = "[policy_" + new_id + "]"
     var newPolicyNameStart = "life_and_disability" + newPolicy
-    
     changeIdAndName($newWtlForm, "policy_id_" + old_id,
       "policy_id_" + new_id, newPolicyNameStart + "[id]")
-    
     changeIdAndName($newWtlForm, "life_and_disability_policy_" + old_id + "_policy_type",
       "life_and_disability_policy_" + new_id + "_policy_type", newPolicyNameStart + "[policy_type]")
-    
     changeIdAndName($newWtlForm, "life_policy_holder_id_" + old_id,
       "life_policy_holder_id_" + new_id, newPolicyNameStart + "[policy_holder_id]")
-    
     changeIdAndName($newWtlForm, "life_coverage_amount_id_" + old_id,
       "life_coverage_amount_id_" + new_id, newPolicyNameStart + "[coverage_amount]")
-    
     changeIdAndName($newWtlForm, "life_policy_number_id_" + old_id,
       "life_policy_number_id_" + new_id, newPolicyNameStart + "[policy_number]")
-    
     changeIdAndName($newWtlForm, "life_primary_id_" + old_id,
       "life_primary_id_" + new_id, newPolicyNameStart + "[primary_beneficiary_ids][]")
-    
     changeIdAndName($newWtlForm, "life_secondary_id_" + old_id,
       "life_secondary_id_" + new_id, newPolicyNameStart + "[secondary_beneficiary_ids][]")
-    
     changeIdAndName($newWtlForm, "life_broker_id_" + old_id,
       "life_broker_id_" + new_id, newPolicyNameStart + "[broker_or_primary_contact_id]")
-    
     changeIdAndName($newWtlForm, "life_and_disability_policy_" + old_id + "_notes",
       "life_and_disability_policy_" + new_id + "_notes", newPolicyNameStart + "[notes]")
   }

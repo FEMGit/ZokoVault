@@ -13,4 +13,12 @@ class FinalWishService
   def self.get_wish_info(group, user)
     FinalWishInfo.for_user(user).where(:group => group).first
   end
+  
+  def self.get_wish_group_value_by_id(groups, id)
+    groups.detect { |group| group["label"] == FinalWishInfo.find_by(:id => id).group }
+  end
+  
+  def self.get_wish_group_value_by_name(groups, name)
+    groups.detect { |group| group["label"] == name }
+  end
 end

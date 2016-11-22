@@ -1,7 +1,7 @@
 class FinalWishesController < AuthenticatedController
   before_action :set_final_wish_info, only: [:show, :edit, :update]
   before_action :set_final_wish, only: [:destroy]
-  before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit]
+  before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit, :new]
   before_action :set_contacts, only: [:new, :edit]
 
   # GET /final_wishes
@@ -14,15 +14,15 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes/1
   # GET /final_wishes/1.json
   def show
-    @group = @groups[params[:id].to_i]
+    @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
     @group_documents = Document.for_user(current_user).where(:category => @category, :group => @final_wish.group)
     session[:ret_url] = "#{final_wishes_path}/#{params[:id]}"
   end
 
   # GET /final_wishes/new
   def new
-    group = params[:group]
-    final_wish = FinalWishService.get_wish_info(group, current_user)
+    @group = FinalWishService.get_wish_group_value_by_name(@groups, params[:group])
+    final_wish = FinalWishService.get_wish_info(@group["label"], current_user)
     redirect_to "#{final_wishes_path}/#{final_wish[:id]}/edit" if final_wish
     @final_wish_info = FinalWishInfo.new
     @final_wish_info[:group] = params[:group]
@@ -31,6 +31,7 @@ class FinalWishesController < AuthenticatedController
 
   # GET /final_wishes/1/edit
   def edit
+    @group = FinalWishService.get_wish_group_value_by_id(@groups, @final_wish.id)
     @final_wish_info = @final_wish
   end
 

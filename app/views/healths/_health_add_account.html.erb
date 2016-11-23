@@ -1,45 +1,34 @@
 <%= ff.hidden_field :id, id: "policy_id_#{index}" %>
-<div class="field">
-  <h2 class="policy-information-title">Policy Information</h2>
+
+  <h3 class="card-label">Policy Information</h3>
   <label>Policy Type</label>
   <div class="styled-select">
     <%= ff.select :policy_type, HealthPolicy::policy_types.keys, id: "health_policy_type_id_#{index}" %>
   </div>
-</div>
-<div class="field">
+
   <label>Policy Number</label>
-  <div class="styled-text-input">
-    <%= ff.text_field :policy_number, id: "health_policy_number_id_#{index}" %>
-  </div>
-</div>
-<div class="field">
+  <%= ff.text_field :policy_number, id: "health_policy_number_id_#{index}" %>
+
   <label>Group Number</label>
-  <div class="styled-text-input">
-    <%= ff.text_field :group_number, id: "health_group_number_id_#{index}" %>
-  </div>
-</div>
-<div class="field">
+  <%= ff.text_field :group_number, id: "health_group_number_id_#{index}" %> 
+
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "health_policy_holder_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field">
+
   <label>Insured Members</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :insured_member_ids, @contacts, id: "health_insured_id_#{index}") %>
   </div>
-</div>
-<div class="field">
+
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :broker_or_primary_contact_id, @contacts, id: "health_broker_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field notes-field">
+
   <label>Notes</label>
   <%= ff.text_area :notes, id: "health_notes_id_#{index}" %>
-</div>
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){
@@ -50,32 +39,23 @@
     });
     $form.find("#" + new_id + " option").prop("selected", false);
   }
-
   clearForm = function($newWtlForm, old_id, new_id){
     var newPolicy = "[policy_" + new_id + "]"
     var newPolicyNameStart = "health" + newPolicy
-    
     changeIdAndName($newWtlForm, "policy_id_" + old_id,
       "policy_id_" + new_id, newPolicyNameStart + "[id]")
-
     changeIdAndName($newWtlForm, "health_policy_" + old_id + "_policy_type",
       "health_policy_" + new_id + "_policy_type", newPolicyNameStart + "[policy_type]")
-
     changeIdAndName($newWtlForm, "health_policy_holder_id_" + old_id,
       "health_policy_holder_id_" + new_id, newPolicyNameStart + "[policy_holder_id]")
-
     changeIdAndName($newWtlForm, "health_policy_number_id_" + old_id,
       "health_policy_number_id_" + new_id, newPolicyNameStart + "[policy_number]")
-    
     changeIdAndName($newWtlForm, "health_group_number_id_" + old_id,
       "health_group_number_id_" + new_id, newPolicyNameStart + "[group_number]")
-
     changeIdAndName($newWtlForm, "health_insured_id_" + old_id,
       "health_insured_id_" + new_id, newPolicyNameStart + "[insured_member_ids][]")
-
     changeIdAndName($newWtlForm, "health_broker_id_" + old_id,
       "health_broker_id_" + new_id, newPolicyNameStart + "[broker_or_primary_contact_id]")
-
     changeIdAndName($newWtlForm, "health_notes_id_" + old_id,
       "health_notes_id_" + new_id, newPolicyNameStart + "[notes]")
   };

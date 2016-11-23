@@ -1,46 +1,36 @@
 <%= ff.hidden_field :id, id: "policy_id_#{index}" %>
-<div class="field">
-  <h2 class="policy-information-title">Policy Information</h2>
+
+  <h3 class="card-label">Policy Information</h3>
+
   <label>Policy Type</label>
   <div class="styled-select">
     <%= ff.select :policy_type, PropertyAndCasualtyPolicy::policy_types.keys, id: "property_policy_type_id_#{index}"  %>
   </div>
-</div>
-<div class="field">
+
   <label>Insured Property</label>
-  <div class="styled-text-input">
-    <%= ff.text_field :insured_property, id: "property_insured_id_#{index}"  %>
-  </div>
-</div>
-<div class="field">
+  <%= ff.text_field :insured_property, id: "property_insured_id_#{index}"  %>
+
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "property_policy_holder_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field">
+
   <label>Coverage Amount</label>
-  <div class="styled-text-input input-symbol-dollar">
-    <%= ff.text_field :coverage_amount, id: "property_coverage_id_#{index}", maxLength: 8, :data => {autonumeric: {vMax: '99999999', mDec: 0} }, 
+  <div class="input-symbol-dollar">
+    <%= ff.text_field :coverage_amount, id: "property_coverage_id_#{index}", maxLength: 8, :data => {autonumeric: {vMax: '99999999', mDec: 0} },
     :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "") %>
   </div>
-</div>
-<div class="field">
+
   <label>Policy Number</label>
-  <div class="styled-text-input">
-    <%= ff.text_field :policy_number, id: "property_policy_number_id_#{index}"  %>
-  </div>
-</div>
-<div class="field">
+  <%= ff.text_field :policy_number, id: "property_policy_number_id_#{index}"  %>
+
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :broker_or_primary_contact_id, @contacts, id: "property_broker_id_#{index}", multiple: false) %>
   </div>
-</div>
-<div class="field notes-field">
+
   <label>Notes</label>
   <%= ff.text_area :notes, id: "property_notes_id_#{index}" %>
-</div>
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){
@@ -51,32 +41,23 @@
     });
     $form.find("#" + new_id + " option").prop("selected", false);
   }
-
   clearForm = function($newWtlForm, old_id, new_id){
     var newPolicy = "[policy_" + new_id + "]"
     var newPolicyNameStart = "property_and_casualty" + newPolicy
-    
     changeIdAndName($newWtlForm, "policy_id_" + old_id,
       "policy_id_" + new_id, newPolicyNameStart + "[id]")
-     
     changeIdAndName($newWtlForm, "property_and_casualty_policy_" + old_id + "_policy_type",
       "property_and_casualty_policy_" + new_id + "_policy_type", newPolicyNameStart + "[policy_type]")
-    
     changeIdAndName($newWtlForm, "property_policy_holder_id_" + old_id,
       "property_policy_holder_id_" + new_id, newPolicyNameStart + "[policy_holder_id]")
-      
     changeIdAndName($newWtlForm, "property_policy_number_id_" + old_id,
       "property_policy_number_id_" + new_id, newPolicyNameStart + "[policy_number]")
-    
     changeIdAndName($newWtlForm, "property_insured_id_" + old_id,
       "property_insured_id_" + new_id, newPolicyNameStart + "[insured_property]")
-    
     changeIdAndName($newWtlForm, "property_coverage_id_" + old_id,
       "property_coverage_id_" + new_id, newPolicyNameStart + "[coverage_amount]")
-
     changeIdAndName($newWtlForm, "property_broker_id_" + old_id,
       "property_broker_id_" + new_id, newPolicyNameStart + "[broker_or_primary_contact_id]")
-
     changeIdAndName($newWtlForm, "property_notes_id_" + old_id,
       "property_notes_id_" + new_id, newPolicyNameStart + "[notes]")
   };

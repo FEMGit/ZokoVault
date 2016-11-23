@@ -9,10 +9,7 @@
 
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
-    <%= ff.collection_select :policy_holder_id,
-      @contacts, :id, :name, {},
-      { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "life_policy_holder_id_#{index}"}
-     %>
+    <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "life_policy_holder_id_#{index}", multiple: false) %>
   </div>
 
   <label>Coverage Amount</label>
@@ -46,10 +43,7 @@
 
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
-    <%= ff.collection_select :broker_or_primary_contact_id,
-      @contacts, :id, :name, {},
-      { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "life_broker_id_#{index}"}
-    %>
+    <%= contact_select_with_create_new(ff, :broker_or_primary_contact_id, @contacts, id: "life_broker_id_#{index}", multiple: false) %>
   </div>
 
   <label>Notes</label>

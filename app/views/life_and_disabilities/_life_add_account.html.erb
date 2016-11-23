@@ -9,7 +9,10 @@
 
   <label>Policy Holder</label>
   <div class="chosen-styled-select">
-     <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "life_policy_holder_id_#{index}", multiple: false) %>
+    <%= ff.collection_select :policy_holder_id,
+      @contacts, :id, :name, {},
+      { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "life_policy_holder_id_#{index}"}
+     %>
   </div>
 
   <label>Coverage Amount</label>
@@ -23,21 +26,35 @@
 
   <label>Primary Beneficiaries</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :primary_beneficiary_ids, @contacts, id: "life_primary_id_#{index}") %>
+    <%= ff.collection_select :primary_beneficiary_ids,
+      @contacts, :id, :name, {},
+      { 'data-placeholder' => 'Choose Contact...',
+        multiple: true,
+        class: "chosen-select", id: "life_primary_id_#{index}"}
+      %>
   </div>
 
   <label>Secondary Beneficiaries</label>
   <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(ff, :secondary_beneficiary_ids, @contacts, id: "life_secondary_id_#{index}") %>
+    <%= ff.collection_select :secondary_beneficiary_ids,
+      @contacts, :id, :name, {},
+      { 'data-placeholder' => 'Choose Contact...',
+        multiple: true,
+         class: "chosen-select", id: "life_secondary_id_#{index}"}
+      %>
   </div>
 
   <label>Broker or Primary Contact</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :broker_or_primary_contact_id, @contacts, id: "life_broker_id_#{index}", multiple: false) %>
+    <%= ff.collection_select :broker_or_primary_contact_id,
+      @contacts, :id, :name, {},
+      { 'data-placeholder' => 'Choose Contact...', class: "chosen-select", id: "life_broker_id_#{index}"}
+    %>
   </div>
 
   <label>Notes</label>
   <%= ff.text_area :notes %>
+
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){

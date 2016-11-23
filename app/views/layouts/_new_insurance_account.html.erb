@@ -133,8 +133,6 @@
     clearFormFields($newWtlForm);
     clearForm($newWtlForm, old_id_number, new_id_number);
     $('.chosen-container',$newWtlForm).remove();
-    $newWtlForm.find(':text').val("");
-    $newWtlForm.find(':checked').prop('checked', false);
     $newWtlForm.find("#delete-insurance").remove()
     $newWtlForm.insertAfter('.add-another:last');
     $('.chosen-select').chosen({allow_single_deselect: true});

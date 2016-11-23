@@ -17,18 +17,22 @@
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
         <%= fields_for "vault_entry_#{index}", data do |builder| %>
+
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
+
         <% end %>
       <% end %>
     </div>
   </div>
 
-  <div class="add-new-button" href="" onclick="addNewField();">
+<div class="wtl-footer-content">
+    <div class="add-new-field" href="" onclick="addNewField();">
     <svg class="icon add-icon">
       <use xlink:href="#icon-add-1"></use>
     </svg>
-    Add another <%= yield(:add_another_title) %><br>
+  Add another <%= yield(:add_another_title) %><br>
   </div>
+</div>
 
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button"}%>
@@ -42,7 +46,6 @@
     old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
     clearForm($newWtlForm, old_id_number, new_id_number);
-
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);

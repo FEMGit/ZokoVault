@@ -120,6 +120,22 @@ $cards-margin: 12px;
     max-width: 100%;
   }
 }
+
+//SHARED DISPLAY
+.shared-with{
+  background-color: $color-primary-tinted;
+  padding: 15px;
+  margin: 10px -15px -14px -15px;
+  height: auto;
+  border-radius: 0 0 5px 0;
+  border-top: 1px solid $color-primary;
+
+  &.edit-shared{
+    margin: 10px -15px 10px -15px;
+    border-bottom: 1px solid $color-primary;
+  }
+}
+
 //DYNAMIC CARD INFO REPRESENTATION
 .card.wills.wtl-info-wrapper,
 .card.trusts.wtl-info-wrapper,

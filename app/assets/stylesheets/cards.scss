@@ -163,102 +163,19 @@ $cards-margin: 12px;
   }
 }
 
-//WHOLE CARD LINK BEHAVIOR
-.card {
-  position: relative;
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
-  }
-}
+//SHARED DISPLAY
+.shared-with{
+  background-color: $color-primary-tinted;
+  padding: 15px;
+  margin: 10px -15px -14px -15px;
+  height: auto;
+  border-radius: 0 0 5px 0;
+  border-top: 1px solid $color-primary;
 
-//DYNAMIC CARD REPRESENTATION UNIVERSAL
-.flex-column {
-  .left {
-    float:left;
-    width: 55%;
+  &.edit-shared{
+    margin: 10px -15px 10px -15px;
+    border-bottom: 1px solid $color-primary;
   }
-  .right {
-    float: right;
-    width: 45%;
-    direction: rtl;
-  }
-  .clear::after {
-    display: block;
-    content: "";
-    clear: both;
-  }
-  .inline-block {
-    display: inline-block;
-  }
-  .document-number {
-    margin-top: 7px;
-    color: $color-gray-med-shaded;
-    font-weight: 600;
-    padding-right: 4px;
-  }
-  .icon-section {
-    float: right;
-  }
-  .icon-document-1 {
-    font-size: 40px;
-    color: $color-gray-med-shaded;
-    opacity: 0.9;
-    float: right;
-    position: relative;
-  }
-}
-
-//DYNAMIC CARD REPRESENTATION UNIVERSAL
-.flex-column {
-  .left {
-    float:left;
-    width: 55%;
-  }
-  .right {
-    float: right;
-    width: 45%;
-    direction: rtl;
-  }
-  .clear::after {
-    display: block;
-    content: "";
-    clear: both;
-  }
-  .inline-block {
-    display: inline-block;
-  }
-  .document-number {
-    margin-top: 7px;
-    color: $color-gray-med-shaded;
-    font-weight: 600;
-    padding-right: 4px;
-  }
-  .icon-section {
-    float: right;
-  }
-  .icon-document-1 {
-    font-size: 40px;
-    color: $color-gray-med-shaded;
-    opacity: 0.9;
-    float: right;
-    position: relative;
-  }
-}
-
-.add-new-button{
-  padding-left: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.add-details {
-  float: right;
-  margin-top: 15px;
 }
 
 //DYNAMIC CARD INFO REPRESENTATION
@@ -516,24 +433,6 @@ $cards-margin: 12px;
   margin: 10px 10px 0 0;
   &.insurance {
     margin-left: -57px;
-  }
-}
-
-.card.details.insurance,
-.column-card,
-.card.details,
-.card.details.wtl,
-.column-card.info-wrapper,
-.contact-header-info,
-.my_profile_info {
-  position: relative;
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
   }
 }
 

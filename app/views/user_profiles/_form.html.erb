@@ -51,9 +51,9 @@
     </div>
   </div>
   <div class="field">
-    <label>Birthdate<span class="optional">mm/dd/yy</span> </label>
+    <label>Birthdate (mm/dd/yyyy)</label>
     <div class="styled-text-input birthday-field">
-      <p><%= f.text_field :date_of_birth, value: f.object.date_of_birth && f.object.date_of_birth.strftime("%m/%d/%Y"), class: "form-control", :data => {:mask => '99/99/9999'} %></p>
+      <p><%= f.date_field :date_of_birth %></p>
     </div>
   </div>
   <div class="field">
@@ -89,6 +89,46 @@
     <p><%= f.text_area :notes  %></p>
   </div>
 </div>
+
+
+<!--
+<div class="card mb-30 shared-card">
+  <h3 class="card-label">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>
+    Primary Shared With
+  </h3>
+  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
+    <label>Primary Shared With</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts_shareable, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+</div>
+-->
+
+
+<!--
+<div class="card mb-30 shared-card">
+  <h3 class="card-label">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>
+    Primary Shared With
+  </h3>
+  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
+    <label>Primary Shared With</label>
+    <div class="chosen-styled-select">
+      <%= f.collection_select :share_ids, 
+        @contacts_shareable, :id, :name, {}, 
+        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
+      %>
+  </div>
+</div>
+-->
 
 
 <!--

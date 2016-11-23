@@ -37,9 +37,11 @@ class ContactsController < AuthenticatedController
         UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
         format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, notice: 'Contact was successfully created.' }
         format.json { render :show, status: :created, location: @contact }
+        format.js { render json: @contact.slice(:id, :firstname, :lastname), status: :ok }
       else
         format.html { render :new }
         format.json { render json: @contact.errors, status: :unprocessable_entity }
+        format.js { render json: @contact.errors, status: :unprocessable_entity }
       end
       session[:ret_after_new_user] = session[:ret_url]
     end

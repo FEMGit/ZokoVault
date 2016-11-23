@@ -18,11 +18,11 @@ class AccountsController < AuthenticatedController
 
   def send_code
     current_user.attributes = user_params
-    status = 
+    status =
       begin
         MultifactorAuthenticator.new(current_user).send_code
         :ok
-      rescue 
+      rescue
         :bad_request
       end
 

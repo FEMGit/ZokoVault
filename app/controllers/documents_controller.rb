@@ -1,6 +1,9 @@
 class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
+  before_action :set_contacts, only: [:new, :create, :edit, :update]
+
   @after_new_user_created = ""
+
   def index
     @documents = Document.for_user(current_user)
     session[:ret_url] = "/documents"
@@ -45,9 +48,11 @@ class DocumentsController < AuthenticatedController
   def update
     respond_to do |format|
       if is_new_contact_creating
-        save_return_url_path(current_document_id)
+        save_return_url_path(params[:id])
+
         format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
       end
+
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
         if return_url?
@@ -81,6 +86,11 @@ class DocumentsController < AuthenticatedController
 
   private
 
+  def set_contacts
+    @contacts = Contact.for_user(current_user)
+    @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+  end
+
   def set_document
     @document = Document.for_user(current_user).find(params[:id])
     documents_helper = DocumentService.new(:category => @document.category);
@@ -105,15 +115,9 @@ class DocumentsController < AuthenticatedController
   end
 
   def return_url?
-    if session[:ret_url]
-      %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
-    else
-      nil
-    end
-  end
-  
-  def current_document_id
-    params[:id]
+    return if session[:ret_url].blank?
+
+    %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
   end
   
   def is_new_contact_creating
@@ -126,7 +130,7 @@ class DocumentsController < AuthenticatedController
     is_new
   end
 
-  def save_return_url_path (document_id_to_change)
+  def save_return_url_path(document_id_to_change)
     @after_new_user_created = session[:ret_url]
     session[:ret_url] = "/documents/" + document_id_to_change.to_s + "/edit"
   end

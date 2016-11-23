@@ -1,7 +1,5 @@
 <script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
-<% @contacts = Contact.for_user(current_user) %>
-<% @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } %>
-<%= form_for (@document), :html => {:id => "doc-form"} do |f| %>
+<%= form_for @document, html: { id: "doc-form" } do |f| %>
   <div>
     <h2 class="document-title"> <%= yield(:title) %> </h2>
     <% if @document.persisted? %>
@@ -80,10 +78,7 @@
         </svg>
       </span>
       <div class="chosen-styled-select">
-        <%= f.collection_select :contact_ids,
-          @contacts_shareable.collect{|s| [s.id, s.name]} + [["create_new_contact", "Create New Contact"]], :first, :second, {}, 
-          { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-        %>
+        <%= contact_select_with_create_new(f, :contact_ids, @contacts_shareable) %>
       </div>
     </div>
   </div>
@@ -103,8 +98,6 @@
 <% end %>
 
 <script>
-
-  
   var fileToPage = function(evt){
     filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
     var documentNameField = document.getElementById("document_name");
@@ -124,13 +117,6 @@
     $('#upload-will-message').show();
   }
   
-  var createNewContactId = 'create_new_contact';
-  $('.chosen-select').chosen().change(function(e, params){
-    if(params.selected === createNewContactId){
-      var docForm = $('#doc-form');
-      docForm.submit();
-    }
-  });
   //get ajax request to update card drop down info based on chosen category
   $("#document_category.chosen-select").chosen().change(function(e, params){
     var url = '/documents/get_drop_down_options/' + params.selected.replace('...', '');
@@ -144,3 +130,4 @@
     });
   })
 </script>
+<%= yield :new_contact_form %>

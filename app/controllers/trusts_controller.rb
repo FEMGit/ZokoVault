@@ -23,7 +23,7 @@ class TrustsController < AuthenticatedController
     return unless @vault_entries.empty?
     @vault_entries << @vault_entry
   end
-  
+
   def create_empty_form
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.vault_entry_contacts.build
@@ -35,7 +35,7 @@ class TrustsController < AuthenticatedController
   # GET /trusts/1/edit
   def edit
   end
-  
+
   def set_document_params
     @group = "Trust"
     @category = Rails.application.config.x.WtlCategory
@@ -87,7 +87,7 @@ class TrustsController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   def set_ret_url
     session[:ret_url] = trusts_path
   end
@@ -113,10 +113,10 @@ class TrustsController < AuthenticatedController
     def trust_params
       params.select { |x| x.starts_with?("vault_entry") }
     end
-  
+
     def update_trusts(new_trusts, old_trusts)
       new_trusts.each do |new_trust_params|
-        @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build 
+        @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build
         raise "error saving new trust" unless @new_vault_entries.save
       end
       old_trusts.each do |old_trust|

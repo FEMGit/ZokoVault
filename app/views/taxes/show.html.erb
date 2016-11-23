@@ -1,0 +1,65 @@
+<div>
+  <%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  <% end %>
+  <h1><%= @tax.year %></h1>
+</div>
+
+<% @tax.taxes.each do |tax| %>
+  <div class="card cg-<%=@tax.year%> details taxes">
+    <%= link_to content_tag(:a), "#{taxes_path}/#{@tax.id}/edit", :class => "whole-card-link" %>
+    <div class="details-wrapper">
+      <div class="details-card-info details">
+        <div class = "details-card-field">
+          <label class="">Tax Preparer</label>
+          <% if tax.tax_preparer.present? %>
+            <span class="details-field details-field-value"><%= tax.tax_preparer.name %></span>
+            <a class="details-field details-field-value"><%= tax.tax_preparer.emailaddress %></a>
+            <span class="details-field details-field-value"><%= tax.tax_preparer.phone %></span>
+          <% end %>
+        </div>
+        <div class = "details-card-field">
+          <label class="">Notes</label>
+          <p>
+            <%= tax.notes %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
+      <span class="shared-with-block">
+        <h2 class="shared-with-title">Shared With</h2>
+        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+      </span>
+      <div class="details-card-info details">
+        <div class="details-card-field shared">
+          <label class="title">Shared With</label>
+          <div class="details-field">
+            <% tax.share_with_contacts.each do |contact| %>
+              <span class="user-circle"><%= contact.initials %></span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @tax.year) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h1><%= params[:name] %> Documents</h1>
+</div>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

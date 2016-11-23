@@ -22,7 +22,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     initialize_insurance_card
     @errors = @insurance_card.errors
   end
-  
+
   def initialize_insurance_card
     @insurance_card = PropertyAndCasualty.new
     @insurance_card.policy << PropertyAndCasualtyPolicy.new
@@ -33,7 +33,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @insurance_card = @property_and_casualty
     @insurance_card.share_with_ids = @property_and_casualty.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
-  
+
   # POST /properties
   # POST /properties.json
   def create
@@ -81,7 +81,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   # DELETE /provider/1
   def destroy_provider
     @property_and_casualty.destroy
@@ -95,7 +95,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     def set_policy
       @policy = PropertyAndCasualtyPolicy.find(params[:id])
     end
-    
+
     # Use callbacks to share common setup or constraints between actions.
     def set_property_and_casualty
       @property_and_casualty = PropertyAndCasualty.find(params[:id])

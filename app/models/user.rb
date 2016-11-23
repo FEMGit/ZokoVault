@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
       false
     when "always"
       true
-    else 
+    else
       current_sign_in_ip != last_sign_in_ip
     end
   end

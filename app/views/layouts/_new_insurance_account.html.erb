@@ -78,10 +78,7 @@
     <div class="field">
       <label>Primary Contact</label>
       <div class="chosen-styled-select">
-          <%= f.collection_select :contact_id, 
-          @contacts, :first, :second, {}, 
-            { 'data-placeholder' => 'Choose Contact...', class: "chosen-select"}
-          %>
+        <%= contact_select_with_create_new(f, :contact_id, @contacts, multiple: false) %>
       </div>
     </div>
     <div class="field shared-field bt-gray-light bb-gray-light insurance-shared-with">
@@ -93,10 +90,7 @@
         </svg>
       </span>
       <div class="chosen-styled-select">
-        <%= f.collection_select :share_with_ids, 
-          @contacts_shareable, :id, :name, {}, 
-          { 'data-placeholder' => 'Choose Contact...', multiple: true, class: "chosen-select"}
-        %>
+        <%= contact_select_with_create_new(f, :share_with_ids, @contacts_shareable) %>
       </div>
     </div>
   </div>

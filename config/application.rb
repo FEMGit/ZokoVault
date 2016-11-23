@@ -15,6 +15,8 @@ module ZokuVault
     config.autoload_paths << Rails.root.join('app', 'services')
     config.x.WtlCategory = "Wills - Trusts - Legal"
     config.x.InsuranceCategory = "Insurance"
+    config.x.ContactCategory = "Contact"
+    config.x.TaxCategory = "Taxes"
     
     config.x.categories = {
       config.x.WtlCategory => {
@@ -42,6 +44,32 @@ module ZokuVault
           },
           {"value" => "health",
             "label" => "Health"
+          }
+        ]
+      },
+      config.x.TaxCategory => {
+        "label" => "Taxes",
+        "groups" => [
+          {"value" => "2016",
+            "label" => "2016"
+          },
+          {"value" => "2015",
+            "label" => "2015"
+          },
+          {"value" => "2014",
+            "label" => "2014"
+          },
+          {"value" => "2013",
+            "label" => "2013"
+          },
+          {"value" => "2012",
+            "label" => "2012"
+          },
+          {"value" => "2011",
+            "label" => "2011"
+          },
+          {"value" => "2010",
+            "label" => "2010"
           }
         ]
       },

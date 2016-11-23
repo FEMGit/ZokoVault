@@ -122,7 +122,7 @@ $birthday-form-width: 220px;
     }
   }
   &.birthday-field {
-    input[type=text] {
+    input[type=date] {
       width: $birthday-form-width;
     }
   }

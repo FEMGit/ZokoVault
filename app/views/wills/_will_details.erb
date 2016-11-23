@@ -1,6 +1,6 @@
 <% @wills.each do |will| %>
   <div class="card trusts mb-30">
-
+    <%= link_to content_tag(:a), new_will_path, class: "whole-card-link" %>
     <h3 class="card-label">Will Details</h3>
 
     <label class="title">Primary Beneficiaries</label>

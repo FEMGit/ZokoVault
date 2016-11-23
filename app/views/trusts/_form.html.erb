@@ -1,4 +1,4 @@
-<div class="card trusts mb-20">
+<div class="card trusts mb-30">
   <%= f.hidden_field :id, id: "trust_id_#{index}" %>
 
   <h3 class="card-label">Trust Details</h3>
@@ -30,14 +30,7 @@
     </h3>
     <label>Shared With</label><br>
     <div class="chosen-styled-select">
-<<<<<<< HEAD
       <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "trust_share_id_#{index}") %>
-=======
-      <%= f.collection_select :share_ids, 
-        @contacts_shareable, :id, :name, {}, 
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true, id: "trust_share_id_#{index}"  }
-      %>
->>>>>>> cce1240... Updates to the self-referential contact (#262)
     </div>
   </section>
 

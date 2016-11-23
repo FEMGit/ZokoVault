@@ -178,6 +178,54 @@ $cards-margin: 12px;
   }
 }
 
+//DYNAMIC CARD REPRESENTATION UNIVERSAL
+.flex-column {
+  .left {
+    float:left;
+    width: 55%;
+  }
+  .right {
+    float: right;
+    width: 45%;
+    direction: rtl;
+  }
+  .clear::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .document-number {
+    margin-top: 7px;
+    color: $color-gray-med-shaded;
+    font-weight: 600;
+    padding-right: 4px;
+  }
+  .icon-section {
+    float: right;
+  }
+  .icon-document-1 {
+    font-size: 40px;
+    color: $color-gray-med-shaded;
+    opacity: 0.9;
+    float: right;
+    position: relative;
+  }
+}
+
+.add-new-button{
+  padding-left: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.add-details {
+  float: right;
+  margin-top: 15px;
+}
+
 //DYNAMIC CARD INFO REPRESENTATION
 .flex-column {
   .wtl-left-side,

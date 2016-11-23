@@ -25,14 +25,12 @@
     </div>
   </div>
 
-<div class="wtl-footer-content">
-    <div class="add-new-field" href="" onclick="addNewField();">
+  <div class="add-new-button" href="" onclick="addNewField();">
     <svg class="icon add-icon">
       <use xlink:href="#icon-add-1"></use>
     </svg>
-  Add another <%= yield(:add_another_title) %><br>
+    Add another <%= yield(:add_another_title) %><br>
   </div>
-</div>
 
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button"}%>

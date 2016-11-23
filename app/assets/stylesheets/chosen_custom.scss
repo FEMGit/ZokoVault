@@ -1,32 +1,55 @@
+$arrow-dropdown-margin-right: 30px;
+
+.chosen-styled-select{
+  margin-bottom: 10px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type=text]{
+  font-family: "Open Sans", serif;
+}
+
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  background: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
+}
+
+.chosen-container-single .chosen-single abbr:hover,
+.chosen-container-single.chosen-disabled .chosen-single abbr:hover,
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+  background: asset-data-url('chosen-sprite.png') -42px -10px no-repeat !important;
+}
+
 .chosen-container-single {
   .chosen-single {
     height: 32px !important;
     border: 1px solid $color-gray-med-tinted !important;
     border-radius: 5px !important;
-    width: $wtl-form-width !important;
     padding: 0 !important;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
     font-family: "Open Sans", serif;
     font-size: 16px;
     font-weight: normal;
+    @include form-width;
+
     span {
       padding-left: 5px;
       padding-top: 2px
     }
-    div b {
+    div b{
       visibility: hidden;
+    }
+    abbr {
+      top: 10px !important;
+      right: 35px !important;
+      background: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
+      font-size: 1px;
     }
   }
 }
 
-$arrow-dropdown-margin-right: 30px;
-.chosen-container-multi {
-  width: $wtl-form-width - $arrow-dropdown-margin-right !important;
-  .chosen-choices {
+.chosen-choices {
     border: 1px solid $color-gray-med-tinted !important;
     border-radius: 5px !important;
     min-height: 32px !important;
-    width: $wtl-form-width !important;
     padding: 0 !important;
     background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
     font-family: "Open Sans", serif;
@@ -34,16 +57,17 @@ $arrow-dropdown-margin-right: 30px;
     font-weight: normal;
     padding-left: 5px !important;
     cursor: pointer !important;
-  }
+    @include form-width;
 }
 .chosen-drop {
    font-weight: normal;
    font-family: "Open Sans", serif;
    font-size: 16px;
-   width: $wtl-form-width !important;
 }
 
-.chosen-single > .search-choice-close {
-  right: 35px !important;
-  top: 10px !important;
+//SET WIDTH
+.chosen-container-multi,
+.chosen-container-multi .chosen-choices,
+.chosen-container .chosen-drop{
+  @include form-width;
 }

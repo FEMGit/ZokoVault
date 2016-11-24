@@ -135,10 +135,9 @@
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find("#delete-insurance").remove()
     $newWtlForm.insertAfter('.add-another:last');
-    $('.currency-format-life').autoNumeric('init', {vMax: '999999999', mDec: 0})
-    $('.currency-format-property').autoNumeric('init', {vMax: '99999999', mDec: 0})
     $('.chosen-select').chosen({allow_single_deselect: true});
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+    $(document).trigger('refresh_autonumeric')
   }
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

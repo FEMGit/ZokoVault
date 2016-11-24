@@ -25,7 +25,7 @@
 
     <label>Insurance Provider Web Address</label>
     <a>
-      <%= f.text_field :webaddress, type: "url"  %>
+      <%= f.text_field :webaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %>
     </a>
 
     <label>Street Address</label>

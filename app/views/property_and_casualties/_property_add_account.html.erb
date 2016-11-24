@@ -16,10 +16,8 @@
   </div>
 
   <label>Coverage Amount</label>
-  <div class="input-symbol-dollar">
-    <%= ff.text_field :coverage_amount, id: "property_coverage_id_#{index}", maxLength: 8, :data => {autonumeric: {vMax: '99999999', mDec: 0} },
-    :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "") %>
-  </div>
+  <%= ff.text_field :coverage_amount, id: "property_coverage_id_#{index}", maxLength: 8, :data => {autonumeric: {vMax: '99999999', mDec: 0, aSign: "$"} },
+  :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "$") %>
 
   <label>Policy Number</label>
   <%= ff.text_field :policy_number, id: "property_policy_number_id_#{index}"  %>

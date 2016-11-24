@@ -16,7 +16,7 @@ input[type=radio]{
 .styled-select{
   border: 1px solid $color-gray-med-tinted;
   border-radius: 5px;
-  background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 269px center;
+  background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right center;
   height: 32px;
   overflow: hidden;
   width: $form-width;

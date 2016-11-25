@@ -21,7 +21,7 @@
     <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}") %>
   </div>
 
-  <label>Notes</label>
+  <%= f.label :notes %>
   <p><%= f.text_area :notes, id: "trust_notes_id_#{index}" %></p>
 
   <section class="shared-with edit-shared">

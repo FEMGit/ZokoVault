@@ -23,7 +23,7 @@
     <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "will_agent_id_#{index}", multiple: false) %>
   </div>
   
-  <label>Notes</label>
+  <%= f.label :notes %>
   <p><%= f.text_area :notes, id: "will_notes_id_#{index}" %></p>
 
   <section class="shared-with edit-shared">

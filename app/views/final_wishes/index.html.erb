@@ -1,0 +1,61 @@
+<h1>Final Wishes</h1>
+
+<section class="flex-boxes">
+  <% @groups && @groups.each do |group| %>
+    <% group_title = group["label"] %>
+    <div class="flex-column">
+      <div class="card cg-<%= group["value"] %> mb-30">
+        <%= link_to content_tag(:a), final_wish_details(group_title), class: "whole-card-link" %>
+        <% if final_wish_exists?(@final_wishes, group_title) %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group_title, category: @category} %>
+        <% end %>
+        <h3><%= group_title %></h3><br>
+        <% if final_wish_exists?(@final_wishes, group_title) %>
+          <% final_wish = wish_by_group(group_title) %>
+          <% if final_wish && final_wish.primary_contact.present? %>
+            <div class="left">
+              <p>
+                <%= final_wish.primary_contact.name %><br>
+                <a href="mailto:#{final_wish.primary_contact.emailaddress}" class="link-on-top"><%= final_wish.primary_contact.emailaddress %></a><br>
+                <%= final_wish.primary_contact.phone %>
+              </p>
+            </div>
+            <div class="right">
+              <span class="user-circle field"><%= final_wish.primary_contact.initials %></span>
+            </div>
+            <span class="clear"></span>
+          <% end %>
+          <div class="inline-block shared-list">
+            <% final_wish && final_wish.share_with_contacts.each do |contact| %>
+              <span class="user-circle"><%= contact.initials %></span>
+            <% end %>
+          </div>
+        <% end %>
+        <%= link_to 'Add Details', final_wish_add_details(group_title), class: "link-on-top add-details" %>
+        <span class="clear"></span>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h1>Final Wish Documents</h1>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<script>
+$(function() {
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+});
+</script>

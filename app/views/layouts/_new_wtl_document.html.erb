@@ -44,7 +44,6 @@
     old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
     clearForm($newWtlForm, old_id_number, new_id_number);
-
     $('.chosen-container',$newWtlForm).remove();
     $newWtlForm.find(':text').val("");
     $newWtlForm.find(':checked').prop('checked', false);
@@ -53,15 +52,4 @@
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
-
-  $('.chosen-select').chosen()
-  function showForm() {
-    $('#form-fields').show();
-    $('#upload-will-message').hide();
-  }
-
-  function showUploadMessage() {
-    $('#form-fields').hide();
-    $('#upload-will-message').show();
-  }
 </script>

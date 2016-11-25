@@ -1,65 +1,51 @@
-<div>
-  <%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  <% end %>
-  <h1><%= @tax.year %></h1>
-</div>
+<%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1><%= @tax.year %></h1>
 
 <% @tax.taxes.each do |tax| %>
-  <div class="card cg-<%=@tax.year%> details taxes">
+  <div class="card cg-<%= @tax.year %> mb-30">
     <%= link_to content_tag(:a), "#{taxes_path}/#{@tax.id}/edit", :class => "whole-card-link" %>
-    <div class="details-wrapper">
-      <div class="details-card-info details">
-        <div class = "details-card-field">
-          <label class="">Tax Preparer</label>
-          <% if tax.tax_preparer.present? %>
-            <span class="details-field details-field-value"><%= tax.tax_preparer.name %></span>
-            <a class="details-field details-field-value"><%= tax.tax_preparer.emailaddress %></a>
-            <span class="details-field details-field-value"><%= tax.tax_preparer.phone %></span>
-          <% end %>
-        </div>
-        <div class = "details-card-field">
-          <label class="">Notes</label>
-          <p>
-            <%= tax.notes %>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="field shared-field bt-gray-light bb-gray-light details-bottom">
-      <span class="shared-with-block">
-        <h2 class="shared-with-title">Shared With</h2>
-        <svg class="icon icon-Safe share-with-icon" viewBox="0 0 20 20">
+
+    <label>Tax Preparer</label>
+    <p>
+      <% if tax.tax_preparer.present? %>
+        <%= tax.tax_preparer.name %><br>
+        <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top"><%= tax.tax_preparer.emailaddress %></a><br>
+        <%= tax.tax_preparer.phone %>
+      <% end %>
+    </p>
+
+    <label>Notes</label><br>
+    <p><%= tax.notes %></p><br>
+
+    <div class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
         </svg>
-      </span>
-      <div class="details-card-info details">
-        <div class="details-card-field shared">
-          <label class="title">Shared With</label>
-          <div class="details-field">
-            <% tax.share_with_contacts.each do |contact| %>
-              <span class="user-circle"><%= contact.initials %></span>
-            <% end %>
-          </div>
-        </div>
-      </div>
+        Shared With
+      </h3>
+
+      <label>Shared With</label><br>
+      <% tax.share_with_contacts && tax.share_with_contacts.each do |contact| %>
+        <span class="user-circle"><%= contact.initials %></span>
+      <% end %>
     </div>
   </div>
 <% end %>
 
-<div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @tax.year) %>">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-plus-1"></use>
-      </svg>
-    </span>Add Document
-  </a>
-  <h1><%= params[:name] %> Documents</h1>
-</div>
+<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @tax.year) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h2><%= @tax && @tax.year %> Taxes Documents</h2>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

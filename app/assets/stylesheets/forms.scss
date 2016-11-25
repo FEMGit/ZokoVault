@@ -21,6 +21,7 @@ input[type=radio]{
   overflow: hidden;
   width: $form-width;
   padding: 0;
+  margin-bottom: 10px;
 }
 
 select{
@@ -37,13 +38,31 @@ label{
   color: $color-primary-shaded;
   font-weight: 600;
   font-size: 14px;
-  
+
   span{
     font-weight: 400;
     color: $color-gray-med-tinted;
     padding-left: 10px;
     font-size: 12px;
   }
+}
+
+//STATE ZIP COMBO
+.state-input{
+  float: left;
+  margin-right: 10px;
+
+  .styled-select{
+    width: $medium-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 194px center;
+  }
+
+  @include media($mobile) {
+    float: none;
+  }
+}
+.zip-input input{
+  width: $short-form-width;
 }
 
 //BUTTONS
@@ -311,9 +330,9 @@ label:hover input[type="checkbox"]:checked + span {
 ******************************************/
 .show-terms{
   height: 200px;
-      overflow-y: scroll;
-      border: 1px solid #999;
-      padding: 10px;
-      margin-bottom: 10px;
-      color: #666;
+  overflow-y: scroll;
+  border: 1px solid #999;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #666;
 }

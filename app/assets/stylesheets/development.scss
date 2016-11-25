@@ -23,15 +23,17 @@ $avatar-circle-radius: 30px;
   display: inline-block;
   text-align: center;
   font-size: 12px;
-  line-height: 17px
+  line-height: 17px;
+  background: white;
 }
 
-.undo-link-style{
+.undo-link-style {
   text-decoration: none !important;
   color: #000 !important;
 }
 
-.add-details-link {
+.link-on-top {
+  text-decoration: none;
   position: relative;
   z-index: 1000;
 }

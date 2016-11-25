@@ -4,7 +4,7 @@ class CategoriesController < AuthenticatedController
   def index
     @categories = Category.for_user(current_user)
   end
-  
+
   def shared_view_dashboard
   end
 
@@ -15,8 +15,7 @@ class CategoriesController < AuthenticatedController
     @insurance_documents = Document.for_user(current_user).where(category: @category)
     session[:ret_url] = "/insurance"
   end
-  
-  
+
   def estate_planning
     @category = Rails.application.config.x.WtlCategory
     @power_of_attorneys = PowerOfAttorney.for_user(current_user)
@@ -27,7 +26,7 @@ class CategoriesController < AuthenticatedController
     @wtl_documents = get_not_assigned_documents(vault_documents)
     session[:ret_url] = "/estate_planning"
   end
-  
+
   def details_account
     @category = params[:category]
     group_for_new_account = params[:group]
@@ -43,7 +42,7 @@ class CategoriesController < AuthenticatedController
     groups = Rails.configuration.x.categories[@category]["groups"]
     @group = groups.detect { |group| group["value"] == group_for_new_account }
   end
-  
+
   def show
   end
 
@@ -97,7 +96,7 @@ class CategoriesController < AuthenticatedController
   def category_params
     params.require(:category).permit(:name, :description, :managed, :category, :group)
   end
-  
+
   def get_not_assigned_documents(vault_documents)
     Document.for_user(current_user).where(category: @category)
             .where.not(id: vault_documents.compact.map(&:id))

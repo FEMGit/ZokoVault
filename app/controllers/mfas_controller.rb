@@ -4,6 +4,8 @@ class MfasController < AuthenticatedController
 
   def show
     MultifactorAuthenticator.new(current_user).send_code
+  rescue
+    @phone_number_error = true
   end
 
   def create
@@ -15,6 +17,10 @@ class MfasController < AuthenticatedController
     else
       redirect_to mfa_path
     end
+  end
+
+  def resend_code
+    render :json => {:success => true} if MultifactorAuthenticator.new(current_user).send_code
   end
 
   private

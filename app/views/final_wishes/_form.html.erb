@@ -1,0 +1,53 @@
+<%= ff.hidden_field :id, id: "final_wish_id_#{index}" %>
+<div class="card cg-<%= @group["value"] %> mb-30">
+  <label>Primary Contact</label>
+  <div class="chosen-styled-select">
+   <%= contact_select_with_create_new(ff, :primary_contact_id, @contacts, id: "final_wish_primary_id_#{index}", multiple: false) %>
+  </div><br>
+
+  <label>Notes</label>
+  <p><%= ff.text_area :notes, id: "final_wish_notes_id_#{index}" %></p><br>
+
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Shared With
+    </h3>
+
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+     <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "final_wish_share_id_#{index}") %>
+    </div>
+  </section>
+
+  <% if data && data.id %>
+    <%= link_to 'Delete', "#{final_wishes_path}/#{data.id}", method: :delete,
+        data: { confirm: "Deleting this final wish will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-wish' %>
+  <% end %>
+</div>
+
+<script>
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
+      value: ""
+    });
+    $form.find("#" + new_id + " option").prop("selected", false);
+  };
+  clearForm = function($newWtlForm, old_id, new_id) {
+    new_field_name = "final_wish_info[final_wish_" + new_id + "]";
+    changeIdAndName($newWtlForm, "final_wish_id_" + old_id,
+      "final_wish_id_" + new_id, new_field_name + "[id]")
+    changeIdAndName($newWtlForm, "final_wish_primary_id_" + old_id,
+      "final_wish_primary_id_" + new_id, new_field_name + "[primary_contact_id]")
+    changeIdAndName($newWtlForm, "final_wish_notes_id_" + old_id,
+      "final_wish_notes_id_" + new_id, new_field_name + "[notes]")
+    changeIdAndName($newWtlForm, "final_wish_share_id_" + old_id,
+      "final_wish_share_id_" + new_id, new_field_name + "[share_with_contact_ids][]")
+    $newWtlForm.find("#delete-wish").remove();
+  }
+</script>

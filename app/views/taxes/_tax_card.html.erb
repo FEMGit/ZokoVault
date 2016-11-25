@@ -1,34 +1,32 @@
-<div class="card cg-<%=year%> column-card">
+<div class="card cg-<%=year%> column-card mb-30">
   <%= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
-  <div class = "info-wrapper">
-    <div class="section header">
-      <% if year_exist?(@taxes, year) %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :category => @category, :group => year} %>
-      <% end %>
-      <h3><%= year %> Taxes</h3>
-    </div>
+    <% if year_exist?(@taxes, year) %>
+      <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, category: @category} %>
+    <% end %>
+    <h3><%= year %> Taxes</h3><br>
     <% if year_exist?(@taxes, year) %>
       <% tax = tax_by_year(year) %>
       <% if tax && tax.tax_preparer.present? %>
-        <div class="section">
-          <div class="left-side">
-              <span class="field"><%= tax.tax_preparer.name %></span><br>
-              <a class="field"><%= tax.tax_preparer.emailaddress %></a><br>
-              <span class="field"><%= tax.tax_preparer.phone %></span>
-            </div>
-          <div class="right-side">
-            <span class="user-circle field"><%= tax.tax_preparer.initials %></span>
-          </div>
+        <div class="left">
+          <p>
+            <%= tax.tax_preparer.name %><br>
+            <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top"><%= tax.tax_preparer.emailaddress %></a><br>
+            <%= tax.tax_preparer.phone %>
+          </p>
+        </div>
+
+        <div class="right">
+          <span class="user-circle field"><%= tax.tax_preparer.initials %></span>
         </div>
         <span class="clear"></span>
-        <div class="section bottom">
+
+        <div class="inline-block shared-list">
           <% tax.share_with_contacts.each do |contact| %>
             <span class="user-circle"><%= contact.initials %></span>
           <% end %>
         </div>
       <% end %>
     <% end %>
-    <%= link_to 'Add Details', link_to_add_details(year), class: "add-details-link" %>
+    <%= link_to 'Add Details', link_to_add_details(year), class: "link-on-top add-details" %>
     <span class="clear"></span>
-  </div>
 </div>

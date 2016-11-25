@@ -22,11 +22,22 @@ $cards-margin: 12px;
   &.details.taxes{
     padding: 0;
   }
+
+  position: relative;
+  a.whole-card-link {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+  }
 }
 
 //COLOR STRIPES FOR CARDS
 .cg-1,
 .cg-2016,
+.cg-burial,
 .card.life,
 .card.wills{
   border-left: 10px solid $color-card-1;
@@ -35,38 +46,62 @@ $cards-margin: 12px;
 }
 .cg-2,
 .cg-2015,
+.cg-charity,
 .card.property,
 .card.trusts{
   border-left: 10px solid $color-card-2;
-
   @include card-type-details;
 }
 .cg-3,
 .cg-2014,
+.cg-cremation,
 .card.health,
 .card.attorney{
   border-left: 10px solid $color-card-3;
-
   @include card-type-details;
 }
 .cg-4,
-.cg-2013 {
+.cg-2013,
+.cg-ethetical_will {
   border-left: 10px solid $color-card-4;
   @include card-type-details;
 }
 .cg-5,
-.cg-2012 {
+.cg-2012,
+.cg-funeral {
   border-left: 10px solid $color-card-5;
   @include card-type-details;
 }
 .cg-6,
-.cg-2011 {
+.cg-2011,
+.cg-items_destroy {
   border-left: 10px solid $color-card-6;
   @include card-type-details;
 }
 .cg-7,
-.cg-2010 {
+.cg-2010,
+.cg-miscellaneous {
   border-left: 10px solid $color-card-7;
+  @include card-type-details;
+}
+.cg-8,
+.cg-obituary {
+  border-left: 10px solid $color-card-8;
+  @include card-type-details;
+}
+.cg-9,
+.cg-organ_donor {
+  border-left: 10px solid $color-card-9;
+  @include card-type-details;
+}
+.cg-10,
+.cg-pet_care {
+  border-left: 10px solid $color-card-10;
+  @include card-type-details;
+}
+.cg-11, 
+.cg-veterans {
+  border-left: 10px solid $color-card-11;
   @include card-type-details;
 }
 
@@ -85,6 +120,13 @@ $cards-margin: 12px;
 
   p.shared-description{
     max-width: 500px;
+  }
+  &.width-justify {
+    margin: -15px;
+    padding: 15px;
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 0;
   }
 }
 .card-label{
@@ -136,6 +178,43 @@ $cards-margin: 12px;
   }
 }
 
+//DYNAMIC CARD REPRESENTATION UNIVERSAL
+.flex-column {
+  .left {
+    float:left;
+    width: 55%;
+  }
+  .right {
+    float: right;
+    width: 45%;
+    direction: rtl;
+  }
+  .clear::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+  .inline-block {
+    display: inline-block;
+  }
+  .document-number {
+    margin-top: 7px;
+    color: $color-gray-med-shaded;
+    font-weight: 600;
+    padding-right: 4px;
+  }
+  .icon-section {
+    float: right;
+  }
+  .icon-document-1 {
+    font-size: 40px;
+    color: $color-gray-med-shaded;
+    opacity: 0.9;
+    float: right;
+    position: relative;
+  }
+}
+
 .add-new-button{
   padding-left: 20px;
   padding-bottom: 10px;
@@ -143,11 +222,12 @@ $cards-margin: 12px;
   margin-top: 10px;
 }
 
+.add-details {
+  float: right;
+  margin-top: 10px;
+}
+
 //DYNAMIC CARD INFO REPRESENTATION
-.card.wills.wtl-info-wrapper,
-.card.trusts.wtl-info-wrapper,
-.card.attorney.wtl-info-wrapper,
-.column-card.info-wrapper,
 .flex-column {
   .wtl-left-side,
   .left-side {
@@ -402,24 +482,6 @@ $cards-margin: 12px;
   margin: 10px 10px 0 0;
   &.insurance {
     margin-left: -57px;
-  }
-}
-
-.column-card,
-.card.details,
-.card.details.insurance
-.card.details.wtl,
-.column-card.info-wrapper,
-.contact-header-info,
-.my_profile_info {
-  position: relative;
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
   }
 }
 

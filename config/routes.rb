@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :final_wishes
   resources :taxes
   resources :relationships
   resources :vendor_accounts
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'welcome#index', as: :authenticated_root
   end
-
+  
   #root "index"
   #root "public#index"
 
@@ -29,10 +30,33 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
+  
+  # Mailer
+  post 'contact-us', to: 'messages#create'
+  post 'mailing-list', to: 'interested_users#create'
+  
+  # Taxes
+  get 'taxes/:id/:year', to: 'taxes#show'
+  get 'taxes/new/:year', to: 'taxes#create'
 
   # Mailer
   post 'contact-us', to: 'messages#create'
   post 'mailing-list', to: 'interested_users#create'
+  
+  # Taxes
+  get 'taxes/:id/:year', to: 'taxes#show'
+
+  # Taxes
+  get 'taxes/:id/:year', to: 'taxes#show'
+  get 'taxes/new/:year', to: 'taxes#create'
+
+  # Taxes
+  get 'taxes/:id/:year', to: 'taxes#show'
+  get 'taxes/new/:year', to: 'taxes#create'
+
+  # Taxes
+  get 'taxes/:id/:year', to: 'taxes#show'
+  get 'taxes/new/:year', to: 'taxes#create'
 
   # Taxes
   get 'taxes/:id/:year', to: 'taxes#show'
@@ -47,7 +71,6 @@ Rails.application.routes.draw do
 
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
-  get 'final_wishes' => 'categories#final_wishes'
   get 'financial_information' => 'categories#financial_information'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
@@ -102,7 +125,8 @@ Rails.application.routes.draw do
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 
-  resource :mfa, only: [:show, :create]
+  resource :mfa, only: [:show, :create, :resend_code]
+  get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

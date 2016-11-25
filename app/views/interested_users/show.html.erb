@@ -11,4 +11,7 @@
 <label>Message</label>
 <p><%= @interested_user.message %></p>
 
+<label>Date Beta Submitted</label>
+<p><%= date_format(@interested_user.created_at) %></p>
+
 <%= link_to 'Back', interested_users_path %>

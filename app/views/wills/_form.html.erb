@@ -22,6 +22,9 @@
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "will_agent_id_#{index}", multiple: false) %>
   </div>
+  
+  <label>Notes</label>
+  <p><%= f.text_area :notes, id: "will_notes_id_#{index}" %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -84,6 +87,12 @@
       name: new_vault_entry_id +"[share_ids][]",
       id: "will_share_id_" + new_id
     });
+    
+    $newWtlForm.find("#will_notes_id_" + old_id).attr({
+      name: new_vault_entry_id +"[notes]",
+      id: "will_notes_id_" + new_id
+    });
+    
     $newWtlForm.find("#will_share_id_" + new_id + " option").prop("selected", false);
     $newWtlForm.find("#delete-will").remove();
   }
@@ -98,6 +107,7 @@ $(document).ready(function(){
       $("#will_agent_id_" + index).val(form_values[3]).trigger("chosen:updated");
       $("#will_share_id_" + index).val(form_values[4]).trigger("chosen:updated");
       $("#will_id_" + index).val(form_values[5]).trigger("chosen:updated");
+      $("#will_notes_id_" + index).val(form_values[6]);
     });
   });
 });

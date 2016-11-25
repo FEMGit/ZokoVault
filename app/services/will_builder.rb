@@ -39,6 +39,8 @@ class WillBuilder
     sanitize_data(options[:share_ids]).each do |contact_id|
       will.shares.build(share_options.merge(contact_id: contact_id))
     end
+    
+    will.notes = options[:notes]
 
     will
   end

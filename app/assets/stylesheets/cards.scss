@@ -182,11 +182,11 @@ $cards-margin: 12px;
 .flex-column {
   .left {
     float:left;
-    width: 55%;
+    width: 85%;
   }
   .right {
     float: right;
-    width: 45%;
+    width: 15%;
     direction: rtl;
   }
   .clear::after {

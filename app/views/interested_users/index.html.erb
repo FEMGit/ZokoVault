@@ -8,6 +8,7 @@
       <th>Name</th>
       <th>Email</th>
       <th>Phone Number</th>
+      <th>Date Beta Submitted</th>
       <th>Message</th>
       <th colspan="2">Actions</th>
     </tr>
@@ -19,6 +20,7 @@
         <td><%= interested_user.name %></td>
         <td><a><%= interested_user.email %></a></td>
         <td><%= interested_user.phone_number %></td>
+        <td><%= date_format(interested_user.created_at) %></td>
         <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;"><%= interested_user.message %></td>
         <td>
           <%= link_to 'Delete', interested_user, method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button small-button" %>

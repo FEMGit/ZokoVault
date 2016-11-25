@@ -38,6 +38,8 @@ class TrustBuilder
     sanitize_data(options[:share_ids]).each do |contact_id|
       trust.shares.build(share_options.merge(contact_id: contact_id))
     end
+    
+    trust.notes = options[:notes]
 
     trust
   end

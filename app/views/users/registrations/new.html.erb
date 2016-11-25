@@ -72,3 +72,11 @@
     </p>
   <% end %>
 </section>
+
+<script>
+  $(function(){
+      if ( $('[type="date"]').prop('type') != 'date' ) {
+          $('[type="date"]').datepicker({ dateFormat: 'mm/dd/yy'});;
+      }
+  });
+</script>

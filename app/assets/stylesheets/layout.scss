@@ -248,6 +248,14 @@ main.app-nav{
   @include media($mobile) {
     margin-left: 0 ;
   }
+
+  @-moz-document url-prefix() {
+    .content:after {
+      content: "";
+      height: 100px;
+      display: block;
+    }
+  }
 }
 
 //MARKETING FOOTER

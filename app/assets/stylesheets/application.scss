@@ -33,6 +33,7 @@
  * file per style scope.
  *
 */
+
 @import "accounts";
 @import "attorneys";
 @import "chosen.min.scss";
@@ -48,5 +49,7 @@
 @import "font-awesome.min";
 @import "my_profile";
 @import "web_address";
+@import "jquery-ui/core";
+@import "jquery-ui/theme";
+@import "jquery-ui/datepicker";
 @import "jquery.dataTables";
-@import "jquery-ui.min.css";

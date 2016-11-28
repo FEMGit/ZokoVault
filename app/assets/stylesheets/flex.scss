@@ -1,6 +1,6 @@
 .flex-column{
   width: 32%;
-
+  
   @include media($twelvesixty) {
     width: 31%;
   }
@@ -35,6 +35,13 @@
   @include media($eightfifty) {
     width: 100%;
   }
+  
+  //Safari section
+  display: -webkit-flex;
+  -webkit-align-items: stretch;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: space-between;
+  -webkit-flex-flow: row wrap;
 }
 
 .flex-marketing{

@@ -69,7 +69,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
   describe "GET #new" do
     it "assigns a new property_and_casualty as @property_and_casualty" do
-      get :new, params: {}, session: valid_session
+      get :new, {}, session: valid_session
       property_and_casualty = assigns(:insurance_card)
       expect(property_and_casualty).to be_a_new(PropertyAndCasualty)
       expect(property_and_casualty.policy.first).to be_a_new(PropertyAndCasualtyPolicy)
@@ -90,7 +90,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
       it "creates a new PropertyAndCasualty" do
         expect {
-          post :create, { property_and_casualty: valid_attributes}, session: valid_session
+          post :create, { property_and_casualty: valid_attributes }, session: valid_session
         }.to change(PropertyAndCasualty, :count).by(1)
       end
 

@@ -6,13 +6,17 @@ class ContactsController < AuthenticatedController
   # GET /contacts.json
   def index
     my_profile_contact = current_user.user_profile.contact
-    @contacts = Contact.for_user(current_user).reject { |cont| cont == my_profile_contact}
+    @contacts = Contact.for_user(current_user)
+                       .reject { |c| c == my_profile_contact }
+                       .each { |c| authorize c }
     session[:ret_url] = "/contacts"
   end
 
   # GET /contacts/1
   # GET /contacts/1.json
   def show
+    authorize @contact
+
     @share_documents = DocumentService.get_share_with_documents(current_user, @contact.id)
     @contact_documents = DocumentService.get_contact_documents(current_user, @category, @contact.id)
     session[:ret_url] = "/contacts/#{@contact.id}"
@@ -21,27 +25,28 @@ class ContactsController < AuthenticatedController
   # GET /contacts/new
   def new
     set_redirect_new_user_creating
-    @contact = Contact.new
+    @contact = Contact.new(user: current_user)
+    
+    authorize @contact
   end
 
   # GET /contacts/1/edit
   def edit
+    authorize @contact
   end
 
   # POST /contacts
   # POST /contacts.json
   def create
-    @contact = Contact.new(contact_params.merge(user_id: current_user.id))
+    @contact = Contact.new(contact_params.merge(user: current_user))
+
+    authorize @contact
+
     respond_to do |format|
       if @contact.save
-        UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
-        format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, notice: 'Contact was successfully created.' }
-        format.json { render :show, status: :created, location: @contact }
-        format.js { render json: @contact.slice(:id, :firstname, :lastname), status: :ok }
+        handle_contact_saved(format)
       else
-        format.html { render :new }
-        format.json { render json: @contact.errors, status: :unprocessable_entity }
-        format.js { render json: @contact.errors, status: :unprocessable_entity }
+        handle_contact_not_saved(format)
       end
       session[:ret_after_new_user] = session[:ret_url]
     end
@@ -50,6 +55,8 @@ class ContactsController < AuthenticatedController
   # PATCH/PUT /contacts/1
   # PATCH/PUT /contacts/1.json
   def update
+    authorize @contact
+
     respond_to do |format|
       if @contact.update(contact_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
@@ -64,6 +71,8 @@ class ContactsController < AuthenticatedController
   # DELETE /contacts/1
   # DELETE /contacts/1.json
   def destroy
+    authorize @contact
+
     @contact.destroy
     respond_to do |format|
       format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
@@ -95,5 +104,18 @@ class ContactsController < AuthenticatedController
   
     def my_profile_contact?
       redirect_to contacts_path if @contact == current_user.user_profile.contact
+    end
+
+    def handle_contact_not_saved(format)
+      format.html { render :new }
+      format.json { render json: @contact.errors, status: :unprocessable_entity }
+      format.js { render json: @contact.errors, status: :unprocessable_entity }
+    end
+
+    def handle_contact_saved(format)
+      UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
+      format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, notice: 'Contact was successfully created.' }
+      format.json { render :show, status: :created, location: @contact }
+      format.js { render json: @contact.slice(:id, :firstname, :lastname), status: :ok }
     end
 end

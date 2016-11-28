@@ -7,7 +7,7 @@ class WillsController < AuthenticatedController
   # GET /wills
   # GET /wills.json
   def index
-    @wills = Will.for_user(current_user)
+    @wills = policy_scope(Will).each { |w| authorize w }
   end
 
   # GET /wills/1
@@ -17,12 +17,16 @@ class WillsController < AuthenticatedController
 
   # GET /wills/new
   def new
+    @wills = @vault_entries = Will.for_user(current_user)
+    return unless @vault_entries.empty?
+
     @vault_entry = WillBuilder.new(type: 'will').build
+    @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
-    @wills = Will.for_user(current_user)
-    @vault_entries = Will.for_user(current_user)
-    return unless @vault_entries.empty?
+
+    authorize @vault_entry
+
     @vault_entries << @vault_entry
   end
 
@@ -126,10 +130,12 @@ class WillsController < AuthenticatedController
     def update_wills(new_wills, old_wills)
       new_wills.each do |new_will_params|
         @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
+        authorize @new_vault_entries
         raise "error saving new will" unless @new_vault_entries.save
       end
       old_wills.each do |old_will|
         @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+        authorize @old_vault_entries
         raise "error saving new will" unless @old_vault_entries.save
       end
     end

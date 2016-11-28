@@ -5,47 +5,48 @@ class DocumentsController < AuthenticatedController
   @after_new_user_created = ""
 
   def index
-    @documents = Document.for_user(current_user)
+    @documents = policy_scope(Document).each { |d| authorize d }
     session[:ret_url] = "/documents"
   end
 
   def show
+    authorize @document
   end
 
   def new
-    @document = Document.new(base_params.slice(:category, :group))
+    @document = Document.new(base_params.slice(:category, :group).merge(user: current_user))
+
+    authorize @document
+
     documents_helper = DocumentService.new(:category => @document.category);
     @cards = documents_helper.get_card_values(current_user)
   end
 
   def edit
+    authorize @document
+
     session[:ret_url] = get_return_url_path
     @shares = @document.shares
   end
 
   def create
-    @document = Document.new(document_params.merge(:user_id => current_user.id))
+    options = document_params.merge(user: current_user)
+    @document = Document.new(options)
+
+    authorize @document
+
     respond_to do |format|
-      if @document.save && @document.update(document_share_params) #TODO: dynamic route builder for categories
-        if is_new_contact_creating
-          save_return_url_path(@document.id)
-          format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
-        end
-        if return_url?
-          format.html { redirect_to session[:ret_url], notice: 'Document was successfully created.' }
-        else
-          format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
-        end
-        format.json { render :show, status: :created, location: @document }
+      if @document.save && @document.update(document_share_params)
+        handle_document_saved(format)
       else
-        @cards = DocumentService.new(:category => @document.category).get_card_values(current_user)
-        format.html { render :new }
-        format.json { render json: @document.errors, status: :unprocessable_entity }
+        handle_document_not_saved(format)
       end
     end
   end
 
   def update
+    authorize @document
+
     respond_to do |format|
       if is_new_contact_creating
         save_return_url_path(params[:id])
@@ -69,6 +70,8 @@ class DocumentsController < AuthenticatedController
   end
 
   def destroy
+    authorize @document
+
     @document.destroy
     S3Service.delete_from_storage(@document.url)
     redirect_page = session[:ret_url] || documents_path
@@ -147,5 +150,25 @@ class DocumentsController < AuthenticatedController
   
   def set_document_update_date_to_now(document)
     document.updated_at = Time.now.utc
+  end
+
+  def handle_document_saved(format)
+    #TODO: dynamic route builder for categories
+    if is_new_contact_creating
+      save_return_url_path(@document.id)
+      format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
+    end
+    if return_url?
+      format.html { redirect_to session[:ret_url], notice: 'Document was successfully created.' }
+    else
+      format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
+    end
+    format.json { render :show, status: :created, location: @document }
+  end
+
+  def handle_document_not_saved(format)
+    @cards = DocumentService.new(:category => @document.category).get_card_values(current_user)
+    format.html { render :new }
+    format.json { render json: @document.errors, status: :unprocessable_entity }
   end
 end

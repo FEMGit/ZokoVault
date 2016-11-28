@@ -1,99 +1,73 @@
 <div class="contact-header-info">
   <%= link_to content_tag(:a), edit_contact_path(@contact), class: "whole-card-link" %>
   <div id="left-contact-info">
-    <div class="contact-element">
-      <label>Contact Type</label>
-      <p><%= @contact.contact_type %></p>
-    </div>
+    <label>Contact Type</label>
+    <p><%= @contact.contact_type %></p>
 
-    <div class="contact-element">
-      <label>Relationship</label>
-      <p><%= @contact.relationship %></p>
-    </div>
+    <label>Relationship</label>
+    <p><%= @contact.relationship %></p>
+
     <% if @contact.personal_relationship? %>
-      <div class="contact-element">
-        <label>Beneficiary Type</label>
-        <p><%= @contact.beneficiarytype %></p>
-      </div>
+      <label>Beneficiary Type</label>
+      <p><%= @contact.beneficiarytype %></p>
 
-      <div class="contact-element">
-        <label>Date of Birth</label>
-        <p><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></p>
-      </div>
+      <label>Date of Birth</label>
+      <p><%= @contact.birthdate.try(:strftime, '%m/%d/%Y') %></p>
     <% end %>
     <% if @contact.professional_relationship? || @contact.medical_relationship? %>
-      <div class="contact-element">
-        <label>Business Name</label>
-        <p><%= @contact.businessname %></p>
-      </div>
+      <label>Business Name</label>
+      <p><%= @contact.businessname %></p>
 
-      <div class="contact-element">
-        <label>Business Web Address</label>
-        <p><%= show_web_address(@contact.businesswebaddress) %></p>
-      </div>
-      <div class="contact-element">
-        <label>Business Phone</label>
-        <p><%= @contact.businessphone %></p>
-      </div>
+      <label>Business Web Address</label>
+      <p><%= link_to @contact.businesswebaddress, @contact.businesswebaddress, class: "no-underline-link" %></p>
 
-      <div class="contact-element">
-        <label>Business Fax</label>
-        <p><%= @contact.businessfax %></p>
-      </div>
+      <label>Business Phone</label>
+      <p><%= @contact.businessphone %></p>
+
+
+      <label>Business Fax</label>
+      <p><%= @contact.businessfax %></p>
     <% end %>
-    <div class="contact-element notes">
-      <label>Notes</label>
-      <p><%= @contact.notes %></p>
-    </div>
+
+    <label>Notes</label>
+    <p><%= @contact.notes %></p>
   </div>
   
   <div id="right-contact-info">
-    <div class="contact-element">
-      <label>Email</label>
-      <a><p><%= @contact.emailaddress %></p></a>
-    </div>
+    <label>Email</label>
+    <p><%= mail_to @contact.emailaddress, @contact.emailaddress, class: "no-underline-link" %></p>
 
-    <div class="contact-element">
-      <label>Phone</label>
-      <p><%= @contact.phone %></p>
-    </div>
+    <label>Phone</label>
+    <p><%= @contact.phone %></p>
     
     <% if @contact.personal_relationship? %>
-      <div class="contact-element">
-        <label>Address</label>
-        <p>
-          <%= @contact.address %><br>
-          <%= @contact.city%>,
-          <%= @contact.state%>
-          <%= @contact.zipcode%>
-        </p>
-      </div>
+      <label>Address</label>
+      <p>
+        <%= @contact.address %><br>
+        <%= @contact.city%>,
+        <%= @contact.state%>
+        <%= @contact.zipcode%>
+      </p>
     <% end %>
 
     <% if @contact.professional_relationship? || @contact.medical_relationship?  %>
-      <div class="contact-element">
-        <label>Business Address</label>
-        <p>
-          <%= @contact.business_street_address_1 %><br>
-          <%= @contact.city%>,
-          <%= @contact.state%>
-          <%= @contact.zipcode%>
-        </p>
-      </div>
+      <label>Business Address</label>
+      <p>
+        <%= @contact.business_street_address_1 %><br>
+        <%= @contact.city%>,
+        <%= @contact.state%>
+        <%= @contact.zipcode%>
+      </p>
     <% end %>
     
     <% if @contact.avatarcolor.present? %>
-      <div class="contact-element">
-        <label>Avatar color</label>
-        <p><%= @contact.avatarcolor %></p>
-      </div>
+      <label>Avatar color</label>
+      <p><%= @contact.avatarcolor %></p>
     <% end %>
     
     <% if @contact.photourl.present? %>
-      <div class="contact-element">
-        <label>Photo url</label>
-        <p><%= @contact.photourl %></p>
-      </div>
+      <label>Photo url</label>
+      <p><%= @contact.photourl %></p>
     <% end %>
   </div>
 </div>

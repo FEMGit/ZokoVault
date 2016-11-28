@@ -22,6 +22,9 @@
       </li>
     <% end %>
   </ul>
+  
+  <%= f.label :notes %>
+  <p><%= f.text_area :notes, id: "attorney_notes_id_#{index}" %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -68,6 +71,11 @@
       id: "attorney_agent_id_" + new_id
     });
     $newWtlForm.find("#attorney_agent_id_" + new_id + " option").prop("selected", false);
+	
+    $newWtlForm.find("#attorney_notes_id_" + old_id).attr({
+      name: new_vault_entry_id +"[notes]",
+      id: "attorney_notes_id_" + new_id
+    });
 
     $newWtlForm.find("#attorney_share_id_" + old_id).attr({
       name: new_vault_entry_id +"[share_ids][]",
@@ -83,6 +91,7 @@ $(document).ready(function(){
       $("#attorney_agent_id_" + index).val(form_values[0]).trigger("chosen:updated");
       $("#attorney_share_id_" + index).val(form_values[1]).trigger("chosen:updated");
       $("#attorney_id_" + index).val(form_values[2]).trigger("chosen:updated");
+      $("#attorney_notes_id_" + index).val(form_values[3]);
     });
   });
 });

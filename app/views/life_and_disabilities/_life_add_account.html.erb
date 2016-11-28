@@ -21,22 +21,12 @@
 
   <label>Primary Beneficiaries</label>
   <div class="chosen-styled-select">
-    <%= ff.collection_select :primary_beneficiary_ids,
-      @contacts, :id, :name, {},
-      { 'data-placeholder' => 'Choose Contact...',
-        multiple: true,
-        class: "chosen-select", id: "life_primary_id_#{index}"}
-      %>
+    <%= contact_select_with_create_new(ff, :primary_beneficiary_ids, @contacts, id: "life_primary_id_#{index}") %>
   </div>
 
   <label>Secondary Beneficiaries</label>
   <div class="chosen-styled-select">
-    <%= ff.collection_select :secondary_beneficiary_ids,
-      @contacts, :id, :name, {},
-      { 'data-placeholder' => 'Choose Contact...',
-        multiple: true,
-         class: "chosen-select", id: "life_secondary_id_#{index}"}
-      %>
+      <%= contact_select_with_create_new(ff, :secondary_beneficiary_ids, @contacts, id: "life_secondary_id_#{index}") %>
   </div>
 
   <label>Broker or Primary Contact</label>

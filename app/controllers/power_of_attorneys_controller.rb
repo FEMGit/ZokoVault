@@ -7,26 +7,33 @@ class PowerOfAttorneysController < AuthenticatedController
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json
   def index
-    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
+    @power_of_attorneys = policy_scope(PowerOfAttorney)
+                          .each { |p| authorize p }
   end
 
   # GET /power_of_attorneys/1
   # GET /power_of_attorneys/1.json
   def show
+    authorize @power_of_attorney
   end
 
   # GET /power_of_attorneys/new
   def new
+    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(current_user)
+    return if @vault_entries.present?
+
     @vault_entry = PowerOfAttorneyBuilder.new.build
+    @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build
-    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
-    @vault_entries = PowerOfAttorney.for_user(current_user)
-    return unless @vault_entries.empty?
+
+    authorize @vault_entry
+
     @vault_entries << @vault_entry
   end
 
   # GET /power_of_attorneys/1/edit
   def edit
+    authorize @power_of_attorney
   end
   
   def set_document_params
@@ -117,10 +124,16 @@ class PowerOfAttorneysController < AuthenticatedController
     def update_power_of_attorneys(new_attorneys, old_attorneys)
       new_attorneys.each do |new_attorney_params|
         @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+
+        authorize @new_vault_entries
+
         raise "error saving new power of attorney" unless @new_vault_entries.save
       end
       old_attorneys.each do |old_attorney|
         @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
+
+        authorize @old_vault_entries
+
         raise "error saving new power of attorney" unless @old_vault_entries.save
       end
     end

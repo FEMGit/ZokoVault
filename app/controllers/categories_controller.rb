@@ -2,14 +2,16 @@ class CategoriesController < AuthenticatedController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
   def index
-    @categories = Category.for_user(current_user)
+    @categories = policy_scope(Category).each { |c| authorize c }
   end
 
   def shared_view_dashboard
   end
 
   def insurance
-    @category = Rails.application.config.x.InsuranceCategory #TODO: fix bug in padding out groups if missing
+    #TODO: fix bug in padding out groups if missing
+    @category = Rails.application.config.x.InsuranceCategory 
+
     @groups = Rails.configuration.x.categories[@category]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category)
@@ -44,17 +46,23 @@ class CategoriesController < AuthenticatedController
   end
 
   def show
+    authorize @category
   end
 
   def new
-    @category = Category.new
+    @category = Category.new(user: current_user)
+
+    authorize @category
   end
 
   def edit
+    authorize @category
   end
 
   def create
     @category = Category.new(category_params.merge(user: current_user))
+
+    authorize @category
 
     respond_to do |format|
       if @category.save
@@ -68,6 +76,8 @@ class CategoriesController < AuthenticatedController
   end
 
   def update
+    authorize @category
+
     respond_to do |format|
       if @category.update(category_params)
         format.html { redirect_to @category, notice: 'category was successfully updated.' }
@@ -80,6 +90,8 @@ class CategoriesController < AuthenticatedController
   end
 
   def destroy
+    authorize @category
+
     @category.destroy
     respond_to do |format|
       format.html { redirect_to categories_url, notice: 'category was successfully destroyed.' }

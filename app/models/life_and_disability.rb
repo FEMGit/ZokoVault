@@ -6,6 +6,11 @@ class LifeAndDisability < Vendor
   
   accepts_nested_attributes_for :policy
 
+  # Name conflict with LifeAndDisabilityPolicy model
+  def self.policy_class
+    LifeAndDisabilityPunditPolicy
+  end
+
   private
 
   def initialize_category_and_group

@@ -24,7 +24,7 @@ RSpec.describe VendorsController, type: :controller do
 
   before { sign_in user }
 
-  let(:valid_attributes) { { name: Faker::Name.name } }
+  let(:valid_attributes) { { name: Faker::Name.name, user: user } }
 
   let(:invalid_attributes) { { name: nil } }
 

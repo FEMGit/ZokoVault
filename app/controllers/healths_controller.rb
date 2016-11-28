@@ -6,7 +6,7 @@ class HealthsController < AuthenticatedController
   # GET /healths
   # GET /healths.json
   def index
-    @healths = Health.all
+    @healths = policy_scope(Health).each { |h| authorize h }
   end
 
   # GET /healths/1
@@ -15,16 +15,22 @@ class HealthsController < AuthenticatedController
     @insurance_card = @health
     @grouop_label = "Health"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(current_user, @grouop_label)
+
+    authorize @health
   end
 
   # GET /healths/new
   def new
-    @insurance_card = Health.new
-    @insurance_card.policy << HealthPolicy.new
+    @insurance_card = Health.new(user: current_user)
+    @insurance_card.policy.build
+
+    authorize @insurance_card
   end
 
   # GET /healths/1/edit
   def edit
+    authorize @health
+
     @insurance_card = @health
     @insurance_card.share_with_ids = @health.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
@@ -66,6 +72,8 @@ class HealthsController < AuthenticatedController
   # DELETE /healths/1
   # DELETE /healths/1.json
   def destroy
+    authorize @policy
+
     @policy.destroy
     respond_to do |format|
       format.html { redirect_to :back || healths_url, notice: 'Health was successfully destroyed.' }
@@ -75,6 +83,8 @@ class HealthsController < AuthenticatedController
 
   # DELETE /provider/1
   def destroy_provider
+    authorize @health
+
     @health.destroy
     respond_to do |format|
       format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully destroyed.' }

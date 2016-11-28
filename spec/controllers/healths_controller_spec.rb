@@ -67,7 +67,7 @@ RSpec.describe HealthsController, type: :controller do
 
   describe "GET #new" do
     it "assigns a new health as @health" do
-      get :new, params: {}, session: valid_session
+      get :new, {}, session: valid_session
       health = assigns(:insurance_card)
       expect(health).to be_a_new(Health)
       expect(health.policy.first).to be_a_new(HealthPolicy)

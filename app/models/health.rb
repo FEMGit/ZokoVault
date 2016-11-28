@@ -5,6 +5,11 @@ class Health < Vendor
 
   accepts_nested_attributes_for :policy
 
+  # Name conflict with HealthPolicy model
+  def self.policy_class
+    HealthPunditPolicy
+  end
+
   private
 
   def initialize_category_and_group

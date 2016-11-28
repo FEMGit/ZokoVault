@@ -18,10 +18,10 @@ class WtlService
   end
   
   def self.get_new_records(params)
-    params.values.select{|x| x["id"] == ""}
+    params.values.select{ |values| values["id"].blank? }
   end
   
   def self.get_old_records(params)
-    params.values.select{|x| x["id"] != "" && !x["id"].nil?}
+    params.values.select{ |values| values["id"].present? }
   end
 end

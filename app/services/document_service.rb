@@ -42,10 +42,10 @@ class DocumentService
   end
 
   def self.get_share_with_documents(user, contact_id)
-    Document.for_user(user).select{|doc| doc.shares.any?{|sh| sh.contact_id == contact_id}}
+    Document.for_user(user).select{ |doc| doc.contact_ids.include?(contact_id) }
   end
   
   def self.get_contact_documents(user, category, contact_id)
-    Document.for_user(user).where(:category => category, :group => contact_id)
+    Document.where(user: user, category: category, group: contact_id)
   end
 end

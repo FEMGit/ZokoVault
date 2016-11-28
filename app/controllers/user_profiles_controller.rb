@@ -18,8 +18,9 @@ class UserProfilesController < AuthenticatedController
 
   # GET /user_profiles/new
   def new
-    @user_profile = UserProfile.new
+    @user_profile = UserProfile.new(user: current_user)
     @user_profile.employers.first_or_initialize
+    authorize @user_profile
   end
 
   # GET /user_profiles/1/edit
@@ -31,6 +32,7 @@ class UserProfilesController < AuthenticatedController
   # POST /user_profiles.json
   def create
     @user_profile = UserProfile.new(user_profile_params)
+    authorize @user_profile
     respond_to do |format|
       if @user_profile.save
         format.html { redirect_to user_profile_path, notice: 'User profile was successfully created.' }
@@ -71,6 +73,7 @@ class UserProfilesController < AuthenticatedController
 
   def set_user_profile
     @user_profile = current_user.user_profile
+    authorize @user_profile
   end
 
   def set_contacts

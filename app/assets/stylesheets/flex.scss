@@ -23,7 +23,18 @@
   @include justify-content(flex-start);
   @include display(flex);
   flex-flow: row wrap;
-  justify-content: space-between;
+	justify-content: space-between;
+  width: 100.3%;
+
+  @include media($twelvesixty) {
+    width: 102%;
+  }
+  @include media($teneighty) {
+    width: 101%;
+  }
+  @include media($eightfifty) {
+    width: 100%;
+  }
 }
 
 .flex-marketing{

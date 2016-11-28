@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114034108) do
+ActiveRecord::Schema.define(version: 20161118094201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,25 @@ ActiveRecord::Schema.define(version: 20161114034108) do
     t.string   "notes"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+  end
+
+  create_table "final_wish_infos", force: :cascade do |t|
+    t.string   "group"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "user_id"
+  end
+
+  add_index "final_wish_infos", ["user_id"], name: "index_final_wish_infos_on_user_id", using: :btree
+
+  create_table "final_wishes", force: :cascade do |t|
+    t.integer  "document_id"
+    t.integer  "user_id"
+    t.integer  "primary_contact_id"
+    t.string   "notes"
+    t.string   "group"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "folders", force: :cascade do |t|
@@ -364,6 +383,7 @@ ActiveRecord::Schema.define(version: 20161114034108) do
   end
 
   add_foreign_key "contacts", "users"
+  add_foreign_key "final_wish_infos", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"

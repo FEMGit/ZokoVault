@@ -51,16 +51,25 @@ ol li {
     margin-right: 10px;
   }
 }
-.phone-type, .optional, .required {
+
+.phone-type,
+.optional,
+.required {
   padding-left: 10px;
   color: $color-gray-med;
+  font-size: 14px;
 }
 
 .nowrap{
   white-space: nowrap;
 }
 
-.optional, .required {
-  font-size: 14px;
+//FIELD DATA PAIRS
+.data-right{
+  float: right;
+  font-weight: 300;
+  font-size: 16px;
 }
-
+.negative-value{
+  color: $color-alert;
+}

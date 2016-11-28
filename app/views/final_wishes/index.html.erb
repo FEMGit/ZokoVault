@@ -16,7 +16,7 @@
             <div class="left">
               <p>
                 <%= final_wish.primary_contact.name %><br>
-                <a href="mailto:#{final_wish.primary_contact.emailaddress}" class="link-on-top"><%= final_wish.primary_contact.emailaddress %></a><br>
+                <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
                 <%= final_wish.primary_contact.phone %>
               </p>
             </div>

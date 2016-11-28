@@ -9,13 +9,12 @@
 
 <% @final_wish.final_wishes.each do |final_wish| %>
   <div class="card cg-<%= @group["value"] %> mb-30">
-    <%= link_to content_tag(:a), "#{final_wishes_path}/#{@final_wish.id}/edit", :class => "whole-card-link" %>
 
     <label>Primary Contact</label><br>
     <p>
       <% if final_wish.primary_contact %>
         <%= final_wish.primary_contact.name %><br>
-        <a href="mailto:#{final_wish.primary_contact.emailaddress}" class="link-on-top"><%= final_wish.primary_contact.emailaddress %></a><br>
+        <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
         <%= final_wish.primary_contact.phone %>
       <% end %>
     </p>

@@ -50,7 +50,7 @@
     </span>
     <span class="zip-input">
       <%= f.label :zip, 'Zip Code' %>
-      <%= f.text_field :zip %>
+      <%= zip_code_form(f, :zip) %>
     </span>
 
     <%= f.label :notes %>
@@ -100,7 +100,7 @@
       </span>
       <span class="zip-input">
         <%= ff.label :zip, 'Zip Code' %>
-        <%= ff.text_field :zip %>
+        <%= zip_code_form(ff, :zip) %>
       </span>
 
       <%= ff.label :phone_number_office, 'Business Phone Number' %>

@@ -16,6 +16,9 @@ class TrustsController < AuthenticatedController
 
   # GET /trusts/new
   def new
+    @vault_entries = Trust.for_user(current_user)
+    return if @vault_entries.present?
+
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build
@@ -55,7 +58,7 @@ class TrustsController < AuthenticatedController
     respond_to do |format|
       if trusts.present?
         begin
-          update_trusts(new_trusts, old_trusts)
+          update_trusts(trusts)
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue

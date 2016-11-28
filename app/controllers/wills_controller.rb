@@ -16,6 +16,9 @@ class WillsController < AuthenticatedController
 
   # GET /wills/new
   def new
+    @wills = @vault_entries = Will.for_user(current_user)
+    return unless @vault_entries.empty?
+
     @vault_entry = WillBuilder.new(type: 'will').build
     @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build

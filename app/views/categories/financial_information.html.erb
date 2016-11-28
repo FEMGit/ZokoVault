@@ -1,1 +1,381 @@
+<a class="edit-link" id="toggle">
+  <span class="fin-overview">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Add Financial Information
+  </span>
+  <span class="fin-options" style="display:none;">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-left-1"></use>
+      </svg>
+    </span>Back to Overview
+  </span>
+
+</a>
 <h1>Financial Information</h1>
+
+
+<div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
+
+  <section class="fin-overview">
+    <div id="asset" class="pie-chart"></div>
+    <div id="debt"  class="pie-chart"></div>
+    <div class="pie-legend">
+
+      <div class="data-pair">
+        <h4>Cash
+          <span class="data-right">
+            $20,458
+          </span>
+        </h4>
+      </div>
+
+      <div class="data-pair">
+        <h4>Investments
+          <span class="data-right">
+            $20,458
+          </span>
+        </h4>
+      </div>
+
+      <div class="data-pair">
+        <h4>Property
+          <span class="data-right">
+            $20,458
+          </span>
+        </h4>
+      </div>
+
+      <div class="data-pair">
+        <h4>Credit Cards
+          <span class="data-right negative-value">
+            -$20,458
+          </span>
+        </h4>
+      </div>
+
+      <div class="data-pair">
+        <h4>Loans
+          <span class="data-right negative-value">
+            -$20,458
+          </span>
+        </h4>
+      </div>
+
+      <div class="sum-line"></div>
+
+      <div class="data-pair">
+        <h4>Net Worth
+          <span class="data-right">
+            $20,458
+          </span>
+        </h4>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="fin-options" style="display:none;">
+    <a class="fr button big-button primary-button">Add Account</a>
+    <h3>Add Account</h3>
+    <p>Checking, savings, brokerages, stocks, bonds, derivatives, government securities, mutual funds, IRAs, 401k, 403b, 529, credit cards, auto loans, mortgages, line of credits, student loans, financing, buisness loans, undrawn commitments, alternative investments, etc.</p>
+    <div class="sum-line"></div>
+
+    <a class="fr button big-button primary-button">Add Property</a>
+    <h3>Add Property</h3>
+    <p>Property owned outright, includes but is not limited to, homes, land, vehicles, jewelry, artwork, furniture, antiquities, etc.</p>
+    <div class="sum-line"></div>
+
+    <a class="fr button big-button primary-button">Add Investment</a>
+    <h3>Add Private Investment or Debt</h3>
+    <p>Private company stocks and/or bonds, personal loans, and IOUs, etc.</p>
+
+  </section>
+</div>
+
+<section class="flex-boxes ">
+
+  <div class="card cg-3 flex-column mb-20 cp cp">
+    <h3>Aurora Credit Union</h3>
+    <p><a>http://www.acu.com</a><br>
+       888-234-3456
+    </p>
+    <label>Primary Contact</label>
+    <p>Thedore Billington<br>
+       <a href="mailto:ted@mail.com">tbillington@acu.com</a><br>
+       555-231-9876
+    </p>
+    <label>Mortgage</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <br>
+    <label>Shared With</label><br>
+    <span class="user-circle">AK</span>
+    <span class="user-circle">BM</span>
+    <span class="user-circle">MB</span>
+
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp">
+    <h3>Chase</h3>
+    <p><a>www.card.com</a></p>
+    <label>Checking</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <label>Savings</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <label>Savings</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <label>529</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <br>
+    <label>Shared With</label><br>
+    <span class="user-circle">AK</span>
+    <span class="user-circle">BM</span>
+
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp ">
+    <h3>Fidelity</h3>
+    <p><a>http://fidelity.com<a></p>
+      <label>401k</label><br>
+      <br>
+      <label>Shared With</label><br>
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp">
+    <h3>Lake House</h3>
+    <label>Property</label><br>
+    <br>
+    <label>Shared With</label><br>
+    <span class="user-circle">AK</span>
+    <span class="user-circle">BM</span>
+    <span class="user-circle">MB</span>
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp ">
+    <h3>Picasso</h3>
+    <p><a>http://fidelity.com<a></p>
+      <label>Property</label><br>
+      <br>
+      <label>Shared With</label><br>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp">
+    <h3>Scottrade</h3>
+    <p><a>http://scottrade.com</a><br>
+       888-234-3456
+    </p>
+    <label>Brokerage</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <br>
+    <label>Shared With</label><br>
+    <span class="user-circle">AK</span>
+    <span class="user-circle">MB</span>
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp">
+    <h3>Toyota of America</h3>
+    <p><a>http://toyota.com</a><br>
+       888-234-3456
+    </p>
+    <label>Car Loan</label>
+    <span class="data-right">
+      $-20,458
+    </span><br>
+    <label>Shared With</label><br>
+    <span class="user-circle">BM</span>
+    <span class="user-circle">MB</span>
+  </div>
+
+  <div class="card cg-3 flex-column mb-20 cp">
+    <h3>ZokuVault</h3>
+    <p><a>http://wwww.zokuvault.com</a></p>
+    <label>Primary Contact</label>
+    <p>Thedore Billington<br>
+       <a href="mailto:ted@mail.com">tbillington@acu.com</a><br>
+       555-231-9876
+    </p>
+    <label>Private Investment</label>
+    <span class="data-right">
+      $20,458
+    </span><br>
+    <br>
+    <label>Shared With</label><br>
+    <span class="user-circle">AK</span>
+    <span class="user-circle">BM</span>
+    <span class="user-circle">MB</span>
+
+  </div>
+</section>
+
+
+<h3>Financial Documents</h3>
+<table>
+    <tr>
+      <th>Name</th>
+      <th>Modified</th>
+      <th>Tags</th>
+      <th>Shared With</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr>
+      <td>
+        <a>DocumentName.pdf</a>
+      </td>
+      <td>07/31/2016</td>
+      <td>
+        <span class="doc-tag">Insurance</span>
+        <span class="doc-tag secondary-tag">Car</span>
+      </td>
+      <td>
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
+      </td>
+      <td>
+          <button class="outline-button small-button">
+            Edit
+          </button>
+      </td>
+    </tr>
+</table>
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+
+  //Top Toggle
+  $( "#toggle" ).click(function() {
+    $( ".fin-options, .fin-overview" ).toggle();
+  });
+
+  //Masonry
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+  //Highcharts
+    Highcharts.chart('asset', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            style: {
+              fontFamily: "Open Sans"
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+        title: {
+            text: 'Assets',
+            verticalAlign: 'bottom'
+
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Investments',
+                y: 432584
+            }, {
+                name: 'Property',
+                y: 356987
+            }, {
+                name: 'Cash',
+                y: 42987
+            }]
+        }]
+    });
+    Highcharts.chart('debt', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            style: {
+              fontFamily: "Open Sans"
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+        title: {
+            text: 'Debt',
+            verticalAlign: 'bottom'
+
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Loans',
+                y: 60435
+            }, {
+                name: 'Credit Cards',
+                y: 32987
+            }]
+        }]
+    });
+});
+</script>
+<style>
+.highcharts-credits{
+  display:none;
+}

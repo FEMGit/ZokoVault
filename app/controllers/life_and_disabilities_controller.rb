@@ -6,12 +6,15 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # GET /lives
   # GET /lives.json
   def index
-    @life_and_disabilities = LifeAndDisability.for_user(current_user)
+    @life_and_disabilities = policy_scope(LifeAndDisability)
+                             .each { |l| authorize l }
   end
 
   # GET /lives/1
   # GET /lives/1.json
   def show
+    authorize @life_and_disability
+
     @insurance_card = @life_and_disability
     @grouop_label = "Life & Disability"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(current_user, @grouop_label)
@@ -19,12 +22,16 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   # GET /lives/new
   def new
-    @insurance_card = LifeAndDisability.new
-    @insurance_card.policy << LifeAndDisabilityPolicy.new
+    @insurance_card = LifeAndDisability.new(user: current_user)
+    @insurance_card.policy.build
+
+    authorize @insurance_card
   end
 
   # GET /lives/1/edit
   def edit
+    authorize @life_and_disability
+
     @insurance_card = @life_and_disability
     @insurance_card.share_with_ids = @life_and_disability.share_ids.collect { |x| Share.find(x).contact_id.to_s }
   end
@@ -66,6 +73,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # DELETE /lives/1
   # DELETE /lives/1.json
   def destroy
+    authorize @policy
+
     @policy.destroy
     respond_to do |format|
       format.html { redirect_to :back || lives_url, notice: 'Life was successfully destroyed.' }
@@ -75,6 +84,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   # DELETE /provider/1
   def destroy_provider
+    authorize @life_and_disability
+
     @life_and_disability.destroy
     respond_to do |format|
       format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully destroyed.' }

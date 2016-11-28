@@ -6,7 +6,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # GET /properties
   # GET /properties.json
   def index
-    @property_and_casualties = PropertyAndCasualty.all
+    @property_and_casualties = policy_scope(PropertyAndCasualty)
+                               .each { |p| authorize p }
   end
 
   # GET /properties/1
@@ -15,23 +16,29 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @insurance_card = @property_and_casualty
     @grouop_label = "Property & Casualty"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(current_user, @grouop_label)
+
+    authorize @property_and_casualty
   end
 
   # GET /properties/new
   def new
     initialize_insurance_card
+    authorize @insurance_card
+
     @errors = @insurance_card.errors
   end
 
   def initialize_insurance_card
-    @insurance_card = PropertyAndCasualty.new
-    @insurance_card.policy << PropertyAndCasualtyPolicy.new
+    @insurance_card = PropertyAndCasualty.new(user: current_user)
+    @insurance_card.policy.build
   end
 
   # GET /properties/1/edit
   def edit
     @insurance_card = @property_and_casualty
     @insurance_card.share_with_ids = @property_and_casualty.share_ids.collect { |x| Share.find(x).contact_id.to_s }
+
+    authorize @property_and_casualty
   end
 
   # POST /properties
@@ -71,6 +78,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # DELETE /properties/1
   # DELETE /properties/1.json
   def destroy
+    authorize @policy
     @policy.destroy
     respond_to do |format|
       format.html { redirect_to :back || properties_url, notice: 'PropertyAndCasualty was successfully destroyed.' }
@@ -80,6 +88,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
 
   # DELETE /provider/1
   def destroy_provider
+    authorize @property_and_casualty
+
     @property_and_casualty.destroy
     respond_to do |format|
       format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully destroyed.' }

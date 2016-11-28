@@ -2,19 +2,21 @@ class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
 
     def index
-      @shares = Share.all
+      @shares = policy_scope(Share).each { |s| authorize s }
     end
 
     def show; end
 
     def new
-      @share = Share.new
+      @share = Share.new user: current_user
+      authorize @share
     end
 
     def edit; end
 
     def create
       @share = Share.new(share_params.merge(user_id: current_user.id))
+      authorize @share
 
       respond_to do |format|
         if @share.save
@@ -28,6 +30,8 @@ class SharesController < AuthenticatedController
     end
 
     def update
+      authorize @share
+
       respond_to do |format|
         if @share.update(share_params)
           format.html { redirect_to @share, notice: 'share was successfully updated.' }
@@ -40,6 +44,8 @@ class SharesController < AuthenticatedController
     end
 
     def destroy
+      authorize @share
+
       @share.destroy
       respond_to do |format|
         format.html { redirect_to shares_url, notice: 'share was successfully destroyed.' }

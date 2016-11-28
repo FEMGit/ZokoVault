@@ -1,10 +1,16 @@
+.cp{
+  cursor: pointer;
+}
+
 .fr{
   float:right;
 }
 .fl{
   float: left;
 }
-
+.clear{
+  clear:both;
+}
 .bb-gray-light{
   border-bottom: 1px solid $color-gray-light;
 }

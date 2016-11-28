@@ -149,14 +149,3 @@
 <h1>Wills - Trusts - Legal Documents</h1>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
-
-<script>
-$(function() {
-  $('.flex-boxes').masonry({
-    columnWidth: '.flex-column',
-    gutter: 20,
-    percentPosition: true,
-    itemSelector: '.flex-column'
-  });
-});
-</script>

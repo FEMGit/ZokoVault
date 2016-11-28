@@ -12,84 +12,50 @@
     </div>
   <% end %>
 
-<div class="my-profile-content-card mb-30">
-  <div class="field">
-    <h2 class="personal-form-title">Personal Information</h2>
-    <label>First Name</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :first_name %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Middle Name (optional)</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :middle_name %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Last Name</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :last_name %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Email Address</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :email %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Cell Phone Number</label>
-    <div class="styled-text-input phone-number">
-      <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Home Phone Number</label>
-    <div class="styled-text-input phone-number">
-      <p><%= f.text_field :phone_number, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Birthdate (mm/dd/yyyy)</label>
-    <div class="styled-text-input birthday-field">
-      <p><%= f.date_field :date_of_birth %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>Street Address</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :street_address_1 %></p>
-    </div>
-  </div>
-  <div class="field">
-    <label>City</label>
-    <div class="styled-text-input">
-      <p><%= f.text_field :city %></p>
-    </div>
-  </div>
-  <div class="field address-field">
-    <div class="zipcode-field">
-      <label>Zip Code </label>
-      <div class="zipcode-text styled-input-text">
-        <div class="zipcode">
-          <p><%= f.text_field :zip %></p>
-        </div>
+  <div class="card mb-30">
+    <h3 class="card-label">Personal Information</h2>
+
+    <%= f.label :first_name, 'First Name' %>
+    <p><%= f.text_field :first_name %></p>
+
+    <%= f.label :middle_name, 'Middle Name (optional)' %>
+    <p><%= f.text_field :middle_name %></p>
+
+    <%= f.label :last_name, 'Last Name' %>
+    <p><%= f.text_field :last_name %></p>
+
+    <%= f.label :email, 'Email Address' %>
+    <p><%= f.email_field :email %></p>
+
+    <%= f.label :phone_number_mobile, 'Cell Phone Number' %>
+    <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
+
+    <%= f.label :phone_number, 'Home Phone Number' %>
+    <p><%= f.text_field :phone_number, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
+
+    <%= f.label :date_of_birth, 'Birthdate (mm/dd/yyyy)' %>
+    <p><%= f.date_field :date_of_birth %></p>
+
+    <%= f.label :street_address_1, 'Street Address' %>
+    <p><%= f.text_field :street_address_1 %></p>
+
+    <%= f.label :city %>
+    <p><%= f.text_field :city %></p>
+
+    <span class="state-input">
+      <%= f.label :state %>
+      <div class="styled-select">
+        <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
       </div>
-    </div>
-    <div class="state-select">
-      <label>State </label>
-      <div class="styled-select state">
-        <p><%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..."  %></p>
-      </div>
-    </div>
-  </div>
-  <div class="field notes-field bottom-field">
-    <label>Notes</label>
+    </span>
+    <span class="zip-input">
+      <%= f.label :zip, 'Zip Code' %>
+      <%= f.text_field :zip %>
+    </span>
+
+    <%= f.label :notes %>
     <p><%= f.text_area :notes  %></p>
   </div>
-</div>
-
 
 <!--
 <div class="card mb-30 shared-card">
@@ -110,82 +76,41 @@
 </div>
 -->
 
-<!--
-<div class="card mb-30 shared-card">
-  <h3 class="card-label">
-    <svg class="icon" viewBox="0 0 20 20">
-      <use xlink:href="#icon-Safe"></use>
-    </svg>
-    Primary Shared With
-  </h3>
-  <p class="shared-description">The contact(s) selected for ‘Primary Shared With has full read and write access to this ZokuVault account and all of its details.    </p>
-    <label>Primary Shared With</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :share_ids,
-        @contacts_shareable, :id, :name, {},
-        { 'data-placeholder' => 'Choose Contacts...', class: "chosen-select", multiple: true }
-      %>
-  </div>
-</div>
--->
+  <%= f.fields_for :employers do |ff| %>
+    <div class="card mb-30">
+      <h3 class="card-title">Employer Information</h2>
 
-<%= f.fields_for :employers do |ff| %>
-  <div class="my-profile-content-card mb-30">
-    <div class="field">
-      <h2 class="employer-form-title">Employer Information</h2>
-      <label>Business Name</label>
-      <div class="styled-text-input">
-        <p><%= ff.text_field :name %></p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Business Web Address</label>
-      <div class="styled-text-input input-prefix-web">
-        <p><%= ff.text_field :web_address %></p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Street Address</label>
-      <div class="styled-text-input">
-        <p><%= ff.text_field :street_address_1 %></p>
-      </div>
-    </div>
-    <div class="field">
-      <label>City</label>
-      <div class="styled-text-input">
-        <p><%= ff.text_field :city %></p>
-      </div>
-    </div>
-    <div class="field address-field">
-      <div class="zipcode-field">
-        <label>Zip Code </label>
-        <div class="zipcode-text styled-input-text">
-          <div class="zipcode">
-            <p><%= ff.text_field :zip %></p>
-          </div>
+      <%= ff.label :name, 'Business Name' %>
+      <p><%= ff.text_field :name %></p>
+
+      <%= ff.label :web_address, 'Business Web Address' %>
+      <p><%= ff.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %></p>
+
+      <%= ff.label :street_address_1, 'Street Address' %>
+      <p><%= ff.text_field :street_address_1 %></p>
+
+      <%= ff.label :city %>
+      <p><%= ff.text_field :city %></p>
+
+      <span class="state-input">
+        <%= ff.label :state %>
+        <div class="styled-select">
+          <%= ff.select :state, options_for_select(us_states, ff.object.state), :include_blank => "Select..." %>
         </div>
-      </div>
-      <div class="state-select">
-        <label>State </label>
-        <div class="styled-select state">
-          <p><%= ff.select :state, options_for_select(us_states, ff.object.state), :include_blank => "Select..."  %></p>
-        </div>
-      </div>
+      </span>
+      <span class="zip-input">
+        <%= ff.label :zip, 'Zip Code' %>
+        <%= ff.text_field :zip %>
+      </span>
+
+      <%= ff.label :phone_number_office, 'Business Phone Number' %>
+      <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+
+      <%= ff.label :phone_number_fax, 'Business Fax Number' %>
+      <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+
     </div>
-    <div class="field bottom-field">
-      <label>Business Phone Number</label>
-      <div class="styled-text-input">
-        <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-      </div>
-    </div>
-    <div class="field">
-      <label>Business Fax Number</label>
-      <div class="styled-text-input">
-        <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
-      </div>
-    </div>
-  </div>
-<% end %>
+  <% end %>
 
   <%= f.submit "Save", class: "button primary-button big-button" %>
   <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button"}%>

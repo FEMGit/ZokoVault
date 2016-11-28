@@ -10,12 +10,11 @@
 </div>
 
 <div class="card mb-30 my_profile_info">
-  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link" %>
   <h3 class="card-label">Personal Information</h3>
 
   <% if !@user_profile.name.blank? %>
     <label>Name</label>
-    <p><%= @user_profile.name %></p>
+    <p><%= @user_profile.full_name %></p>
   <% end %>
 
   <label>Email Address</label>
@@ -59,7 +58,6 @@
 
 <% employer = @user_profile.employers.first || @user_profile.employers.build %>
 <div class="card mb-30 my_profile_info">
-  <%= link_to content_tag(:a), edit_user_profile_path, class: "whole-card-link" %>
   <h3 class="card-label">Employer Information</h3>
 
   <label>Business Information</label>

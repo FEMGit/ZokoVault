@@ -13,7 +13,7 @@
   <% end %>
 
   <div class="card mb-30">
-    <h3 class="card-label">Personal Information</h2>
+    <h3 class="card-label">Personal Information</h3>
 
     <%= f.label :first_name, 'First Name' %>
     <p><%= f.text_field :first_name %></p>
@@ -78,7 +78,7 @@
 
   <%= f.fields_for :employers do |ff| %>
     <div class="card mb-30">
-      <h3 class="card-title">Employer Information</h2>
+      <h3 class="card-label">Employer Information</h3>
 
       <%= ff.label :name, 'Business Name' %>
       <p><%= ff.text_field :name %></p>

@@ -32,6 +32,10 @@ class UserProfile < ActiveRecord::Base
   def name
     "#{first_name} #{last_name}"
   end
+  
+  def full_name
+    "#{first_name} #{middle_name} #{last_name}"
+  end
 
   def initials
     [first_name, last_name].compact.map(&:first).join

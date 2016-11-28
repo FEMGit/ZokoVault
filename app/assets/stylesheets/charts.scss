@@ -1,0 +1,20 @@
+.pie-chart{
+  width: 35%;
+  height: 250px;
+  display: inline-block;
+}
+.pie-legend{
+  height:250px;
+  width: 25%;
+  display: inline-block;
+
+  h4{
+    color: $color-gray-med;
+    font-size: 20px;
+  }
+}
+.sum-line{
+  height: 1px;
+  background: $color-gray-dark;
+  margin: 10px 0 20px;
+}

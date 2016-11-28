@@ -1,6 +1,6 @@
 .flex-column{
   width: 32%;
-
+  
   @include media($twelvesixty) {
     width: 31%;
   }
@@ -16,14 +16,14 @@
   margin-bottom: 20px;
 }
 
-.flex-boxes{
-  @include align-items(stretch);
+.flex-boxes {
   @include display(flex);
+  @include flex-wrap(wrap);
+  @include align-items(stretch);
   @include flex-direction(row);
   @include justify-content(flex-start);
-  @include display(flex);
   flex-flow: row wrap;
-	justify-content: space-between;
+  justify-content: space-between;
   width: 100.3%;
 
   @include media($twelvesixty) {
@@ -35,6 +35,13 @@
   @include media($eightfifty) {
     width: 100%;
   }
+  
+  //Safari section
+  display: -webkit-flex;
+  -webkit-align-items: stretch;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: space-between;
+  -webkit-flex-flow: row wrap;
 }
 
 .flex-marketing{

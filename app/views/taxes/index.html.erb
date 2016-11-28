@@ -17,14 +17,3 @@
 <h2>Tax Documents</h2>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
-
-<script>
-$(function() {
-  $('.flex-boxes').masonry({
-    columnWidth: '.flex-column',
-    gutter: 20,
-    percentPosition: true,
-    itemSelector: '.flex-column'
-  });
-});
-</script>

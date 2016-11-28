@@ -150,3 +150,16 @@
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
 <%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

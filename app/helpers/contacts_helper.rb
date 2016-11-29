@@ -11,4 +11,8 @@ module ContactsHelper
       "www.#{web_address}"
     end
   end
+  
+  def zip_code_form(form, name)
+    form.text_field(name, class: "form-control", :data => {:mask => '99999'})
+  end
 end

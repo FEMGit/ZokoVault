@@ -7,6 +7,18 @@ $common-font-size: 10px;
 $zipcode-width: 80px;
 $state-width: 210px;
 
+.avatar-small {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $color-gray-med;
+  border-radius: 30px;
+}
+
+#remove-avatar-link {
+  position: relative;
+  top: -8px;
+}
+
 .contact-avatar-td {
   width: $contact-avatar-size;
 }

@@ -47,6 +47,7 @@ class TrustsController < AuthenticatedController
   def create
     new_trusts = WtlService.get_new_records(trust_params)
     old_trusts = WtlService.get_old_records(trust_params)
+    @vault_entries = []
     respond_to do |format|
       if !new_trusts.empty? || !old_trusts.empty?
         begin
@@ -54,12 +55,15 @@ class TrustsController < AuthenticatedController
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue
+          @vault_entry = Trust.new
+          @old_params.each { |trust| @vault_entries << trust }
+          @new_params.each { |trust| @vault_entries << trust }
           format.html { render :new }
-          format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
+          format.json { render json: @errors, status: :unprocessable_entity }
         end
       else
         format.html { render :new }
-        format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
+        format.json { render json: @errors, status: :unprocessable_entity }
       end
     end
   end
@@ -115,13 +119,25 @@ class TrustsController < AuthenticatedController
     end
 
     def update_trusts(new_trusts, old_trusts)
-      new_trusts.each do |new_trust_params|
-        @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build
-        raise "error saving new trust" unless @new_vault_entries.save
-      end
+      @errors = []
+      @new_params = []
+      @old_params = []
       old_trusts.each do |old_trust|
         @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: current_user.id)).build
-        raise "error saving new trust" unless @old_vault_entries.save
+        @old_params << @old_vault_entries
+        unless @old_vault_entries.save
+          @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
+        end
       end
+      new_trusts.each do |new_trust_params|
+        @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build
+        if !@new_vault_entries.save
+          @new_params << Trust.new(new_trust_params)
+          @errors << { id: "", error: @new_vault_entries.errors }
+        else
+          @new_params << @new_vault_entries
+        end
+      end
+      raise "error saving new trust" if @errors.any?
     end
 end

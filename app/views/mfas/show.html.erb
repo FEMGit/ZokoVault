@@ -6,13 +6,13 @@
 
     <%= label_tag 'Cell Phone Number' %>
     <span id='send_code_text'></span>
-    <%= text_field_tag "user[user_profile_attributes][phone_number_mobile]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
+    <%= text_field_tag "user[user_profile_attributes][phone_number_mobile]", "", class: "form-control", :data => {:mask => '999-999-9999'}, autofocus: true %>
     <input type="button" onClick="sendCode();" value="Send code">
   <% end %>
 
   <%= label_tag 'user_user_profile_attributes_phone_code', 'Phone Code' %>
   <span id='verify_code_text'></span>
-  <%= text_field_tag 'user[user_profile_attributes][phone_code]' %>
+  <%= text_field_tag 'user[user_profile_attributes][phone_code]', "", autofocus: true %>
   <input type="button" onClick="verifyCode();" value="Verify code">
   <% if !@phone_number_error %>
     <%= link_to 'Resend code', 'javascript:;', class: "no-underline-link", id: 'resend-code' %><span id='send_code_text'></span>
@@ -20,6 +20,19 @@
 <% end %>
 
 <script>
+
+// handle 'enter press' to verify code
+$('#user_user_profile_attributes_phone_code').keypress(function(e) {
+  if(e.which == 13) {
+    verifyCode();
+  }
+});
+
+$('#user_user_profile_attributes_phone_number_mobile').keypress(function(e) {
+  if(e.which == 13) {
+    sendCode();
+  }
+});
 
 $('#resend-code').click(function() {
   $.ajax({

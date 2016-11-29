@@ -32,7 +32,7 @@
     <% if errors && @user_profile.errors.messages[:'Date of Birth'] %>
       <span class="error-label"> - <%= @user_profile.errors.messages[:'Date of Birth'].first.html_safe %></span>
     <% end %>
-    <p><%= f.date_field :date_of_birth, { class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?) } %></p>
+    <p><%= f.date_field :date_of_birth, { class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?), value: f.object.date_of_birth } %></p>
 
     <%= f.label :street_address_1, 'Street Address' %>
     <p><%= f.text_field :street_address_1 %></p>

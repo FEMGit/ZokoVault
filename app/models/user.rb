@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true
-
+  
   delegate :mfa_frequency, :initials, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
 
   def mfa_verify?

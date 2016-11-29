@@ -4,6 +4,7 @@ class UserProfile < ActiveRecord::Base
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
                       :message => "Email should contain @ and domain like '.com'",
                       :on => :update
+
   belongs_to :user
   has_many :employers
   has_one :contact

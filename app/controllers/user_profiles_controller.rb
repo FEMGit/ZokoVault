@@ -47,6 +47,7 @@ class UserProfilesController < AuthenticatedController
   # PATCH/PUT /user_profiles/1
   # PATCH/PUT /user_profiles/1.json
   def update
+    user_profile_params[:date_of_birth] = date_format
     respond_to do |format|
       if @user_profile.update(user_profile_params)
         format.html { redirect_to user_profile_path, notice: 'User profile was successfully updated.' }
@@ -82,5 +83,14 @@ class UserProfilesController < AuthenticatedController
 
   def user_profile_params
     params.require(:user_profile).permit!
+  end
+  
+  def date_format
+    return user_profile_params[:date_of_birth] unless user_profile_params[:date_of_birth].include?('/')
+    date_params = user_profile_params[:date_of_birth].split('/')
+    year = date_params[2]
+    month = date_params[0]
+    day = date_params[1]
+    "#{year}-#{month}-#{day}"
   end
 end

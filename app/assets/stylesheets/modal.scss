@@ -12,7 +12,7 @@ $state-width: 210px;
   background-clip: padding-box;
   background: white;
 //  padding: 15px 25px 0;
-  min-height: 400px;
+  min-height: 200px;
   border: 1px solid $color-gray-med-tinted;
 }
 
@@ -40,10 +40,9 @@ $state-width: 210px;
   overflow-y: scroll;
 }
 .modal-footer{
-    width: 100%;
-    padding: 15px 25px;
-    margin: 15px 0;
-
+  width: 100%;
+  padding: 15px 25px;
+  margin: 15px 0;
 }
 .modal-overlay {
   opacity: 0;

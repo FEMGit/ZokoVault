@@ -66,8 +66,10 @@
     <% end %>
     
     <% if @contact.photourl.present? %>
-      <label>Photo url</label>
-      <p><%= @contact.photourl %></p>
+      <div class="contact-element">
+        <label>Photo</label>
+        <p><%= image_tag(get_file_url(@contact.photourl), size: "128") %></p>
+      </div>
     <% end %>
   </div>
 </div>

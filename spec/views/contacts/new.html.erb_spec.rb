@@ -14,7 +14,6 @@ RSpec.describe "contacts/new", type: :view do
       :zipcode => "MyString",
       :state => "MyString",
       :notes => "MyText",
-      :avatarcolor => "MyString",
       :photourl => "MyString",
       :businessname => "MyString",
       :businesswebaddress => "MyString",
@@ -52,9 +51,7 @@ RSpec.describe "contacts/new", type: :view do
 
       assert_select "textarea#contact_notes[name=?]", "contact[notes]"
 
-      assert_select "input#contact_avatarcolor[name=?]", "contact[avatarcolor]"
-
-      assert_select "input#contact_photourl[name=?]", "contact[photourl]"
+      assert_select "#photo_url[name=?]", "contact[photourl]"
 
       assert_select "input#contact_businessname[name=?]", "contact[businessname]"
 

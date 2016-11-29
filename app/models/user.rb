@@ -3,6 +3,10 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable
+  validates_format_of :email,
+                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
+                      :message => "Email should contain @ and domain like '.com'"
+
   has_many :vendors, dependent: :nullify
   has_many :shares, dependent: :destroy
 

@@ -12,3 +12,7 @@ ActionMailer::Base.smtp_settings = {
   :domain         => 'heroku.com',
   :enable_starttls_auto => true
 }
+
+ActionView::Base.field_error_proc = proc do |html_tag|
+  html_tag.html_safe
+end

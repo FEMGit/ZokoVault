@@ -129,11 +129,16 @@
       </div>
 
       <div id="avatar-form">
-        <%= f.label :avatarcolor, 'Avatar Color' %><br>
-        <%= f.text_field :avatarcolor %>
-
-        <%= f.label :photourl, 'Photo Url' %><br>
-        <%= f.text_field :photourl %>
+        <p>Upload Photo</p>
+        <a hfre="" onclick="saveFileUrl(event)">Choose file ...</a>
+        <%= f.text_field :photourl, id: "photo_url", style: "display: none;" %>
+        <p>
+          <% if f.object.photourl.present? %>
+            <%= image_tag(get_file_url(f.object.photourl), :id => "image_view" ) %>
+          <% else %>
+            <%= image_tag('', :id => "image_preview") %>
+          <% end %>
+        </p>
       </div>
     <% end %>
   </div>
@@ -152,13 +157,15 @@
 
 
 <%#= link_to 'Back', contacts_path #%>
+
+<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
+
 <script>
 
 var currentStep = 1;
 
 var wizNav = function(step){
   currentStep = step;
-  console.log("in " + step);
   if(step===1){
     $("#next-step").show();
     $("#save-btn").hide();
@@ -166,7 +173,7 @@ var wizNav = function(step){
     $("#avatar-form").hide();
     $("#category-form").hide();
     $("#step-1").removeClass().addClass("inner-counter current-step");
-    $("#step-1").html('1');
+    $("#step-1").html('1'); 
     $("#step-2").removeClass().addClass("inner-counter");
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");

@@ -24,12 +24,14 @@
 // handle 'enter press' to verify code
 $('#user_user_profile_attributes_phone_code').keypress(function(e) {
   if(e.which == 13) {
+    e.preventDefault();
     verifyCode();
   }
 });
 
 $('#user_user_profile_attributes_phone_number_mobile').keypress(function(e) {
   if(e.which == 13) {
+    e.preventDefault();
     sendCode();
   }
 });

@@ -5,22 +5,24 @@
     </svg>
   </span>Edit
 <% end %>
-<h1><%= @tax.year %></h1>
+<h3><%= @tax.year %> Tax Details</h3>
 
 <% @tax.taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">
 
-    <label>Tax Preparer</label>
-    <p>
-      <% if tax.tax_preparer.present? %>
+    <% if tax.tax_preparer.present? %>
+      <label>Tax Preparer</label>
+      <p>
         <%= tax.tax_preparer.name %><br>
         <%= mail_to tax.tax_preparer.emailaddress, tax.tax_preparer.emailaddress, class:"link-on-top" %><br>
         <%= tax.tax_preparer.phone %>
-      <% end %>
-    </p>
+      </p>
+    <% end %>
 
-    <label>Notes</label><br>
-    <p><%= tax.notes %></p><br>
+    <% if tax.notes.present? %>
+      <label>Notes</label>
+      <p><%= tax.notes %></p>
+    <% end %>
 
     <div class="shared-with">
       <h3 class="card-label shared-label">

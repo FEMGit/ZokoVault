@@ -1,27 +1,15 @@
 <h1><%= "#{yield(:title).gsub("&amp;", "&")} - Setup" %></h1>
 <%= form_for(@insurance_card, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
-  <% if @insurance_card.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@insurance_card.errors.count, "error") %> prohibited this <%= @insurance_card.group %> from being saved:</h2>
-      <ul>
-      <% @insurance_card.errors.full_messages.each do |message| %>
-        <% if message.include?("Contact") %>
-        <li>Primary <%= message %></li>
-        <% else %>
-          <li><%= message %></li>
-        <% end %>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="card <%= @insurance_card.group %> mb-30">
 
     <h3 class="card-label">Provider Details</h3>
 
     <label>Insurance Provider Name</label>
-    <%= f.text_field :name %>
+    <% if @insurance_card.errors && @insurance_card.errors.messages[:name] %>
+      <span class="error-label"> - <%= @insurance_card.errors.messages[:name].first %></span>
+    <% end %>
+    <%= f.text_field :name, { class: ("input-error" if @insurance_card.errors.messages[:name].present?) } %>
 
     <label>Insurance Provider Web Address</label>
     <a>

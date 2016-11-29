@@ -7,15 +7,14 @@ class WillBuilder
       else
         Will.new(options.slice(:user_id, :document_id, :executor_id))
       end
-
     self.options = options
-
     clear_options if options[:id].present?
   end
   
   def clear_options
     clear_model
-    will.executor = Contact.find(options[:executor_id])
+    contact = Contact.find(options[:executor_id]) if options[:executor_id].present?
+    will.executor = contact
     WtlService.clear_one_option(options)
   end
   

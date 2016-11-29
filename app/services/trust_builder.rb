@@ -15,15 +15,13 @@ class TrustBuilder
   
   def clear_options
     clear_model
-    trust.name = options[:name]
     WtlService.clear_one_option(options)
   end
   
   def clear_model
-    trust.trustees = []
-    trust.successor_trustees = []
-    trust.shares = []
-    trust.agents = []
+    return unless options[:name].present?
+    trust.agent_ids = []
+    trust.share_with_contacts = []
   end
   
   def build
@@ -33,14 +31,11 @@ class TrustBuilder
         active: true, type: :agent, contact_id: contact_id
       )
     end
-
     share_options = { document_id: trust.document_id, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|
       trust.shares.build(share_options.merge(contact_id: contact_id))
     end
-    
-    trust.notes = options[:notes]
-
+    set_options
     trust
   end
 
@@ -62,6 +57,14 @@ class TrustBuilder
 
   def sanitize_data(data)
     [*data].select &:present?
+  end
+  
+  def set_options
+    trust.notes = options[:notes]
+    trust.trustee_ids = options[:trustee_ids]
+    trust.agent_ids = options[:agent_ids]
+    trust.successor_trustee_ids = options[:successor_trustee_ids]
+    trust.name = options[:name]
   end
 
   attr_internal_accessor :trust, :options

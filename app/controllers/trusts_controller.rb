@@ -56,7 +56,6 @@ class TrustsController < AuthenticatedController
     old_trusts = WtlService.get_old_records(trust_params)
     @vault_entries = []
     trusts = new_trusts + old_trusts
-
     respond_to do |format|
       if trusts.present?
         begin

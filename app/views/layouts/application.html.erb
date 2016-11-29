@@ -40,6 +40,11 @@
 
 <script>
   if (!Modernizr.inputtypes.date) {
-     $('input[type=date]').datepicker({ dateFormat: 'mm/dd/yy'});
+     $('input[type=date]').datepicker({
+       onSelect: function() {
+         $('input[type=date]').attr('value', this.value)
+       },
+       dateFormat: 'mm/dd/yy'
+     });
   }
 </script>

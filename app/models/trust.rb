@@ -38,6 +38,6 @@ class Trust < ActiveRecord::Base
   # validates :successor_trustees, presence: true
   # validates :shares, presence: true
   validates :user, presence: true
-  validates :name, presence: true
+  validates :name, presence: { :message => "Required" }
   
 end

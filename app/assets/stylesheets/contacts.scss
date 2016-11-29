@@ -57,6 +57,18 @@ $base-line-height: 1.5em !default;
   padding-left: 10px;
 }
 
+.avatar-small {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $color-gray-med;
+  border-radius: 30px;
+}
+
+#remove-avatar-link {
+  position: relative;
+  top: -8px;
+}
+
 .contact-avatar-td {
   width: $contact-avatar-size;
 }

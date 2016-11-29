@@ -98,4 +98,13 @@ class UserProfilesController < AuthenticatedController
     day = date_params[1]
     "#{year}-#{month}-#{day}"
   end
+  
+  def date_format
+    return user_profile_params[:date_of_birth] unless user_profile_params[:date_of_birth].include?('/')
+    date_params = user_profile_params[:date_of_birth].split('/')
+    year = date_params[2]
+    month = date_params[0]
+    day = date_params[1]
+    "#{year}-#{month}-#{day}"
+  end
 end

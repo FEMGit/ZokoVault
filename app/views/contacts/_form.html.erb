@@ -1,3 +1,4 @@
+<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 <button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
   Wizard Modal
 </button>
@@ -30,7 +31,6 @@
       <% if @contact.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
-
           <ul>
           <% @contact.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -38,108 +38,7 @@
           </ul>
         </div>
       <% end %>
-
-      <div id="detail-form">
-        <%= f.label :firstname, 'First Name' %>
-        <%= f.text_field :firstname %>
-
-        <%= f.label :lastname, 'Last Name' %>
-        <%= f.text_field :lastname %>
-
-        <%= f.label :emailaddress, 'Email Address' %>
-        <%= f.email_field :emailaddress %>
-
-        <%= f.label :phone %>
-        <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
-
-        <%= f.label :contact_type, 'Contact Type' %>
-        <div class="styled-select">
-          <%= f.select :contact_type, options_for_select(Contact::CONTACT_TYPES.keys, @contact.contact_type) %>
-        </div>
-      </div>
-
-      <div id="category-form" class="contact-profile">
-        <div id="personal_relationship">
-          <%= f.label :relationship %>
-          <div class="styled-select">
-            <%= f.select :relationship,
-              options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
-              {}, id: :personal_relationships_select %>
-          </div>
-
-          <%= f.label :beneficiarytype, 'Beneficiary Type' %>
-          <%= f.text_field :beneficiarytype %>
-
-          <%= f.label :birthdate %>
-          <p><%= f.date_field :birthdate %></p>
-
-          <%= f.label :address, 'Street Address' %>
-          <%= f.text_field :address %>
-        </div>
-
-        <div id="professional_relationship">
-          <%= f.label :relationship %><br>
-          <div id="common_professional">
-            <div class="styled-select">
-              <%= f.select :relationship,
-                options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship),
-                {}, id: :common_professional_select %>
-            </div>
-          </div>
-          <div id="medical_professional">
-            <div class="styled-select">
-              <%= f.select :relationship,
-                options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship),
-                {}, id: :medical_professional_select %>
-            </div>
-          </div>
-
-          <%= f.label :businessname, 'Business Name' %>
-          <%= f.text_field :businessname %>
-
-          <%= f.label :businesswebaddress, 'Business Web Address' %>
-          <%= f.text_field :businesswebaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %>
-          
-          <%= f.label :businessphone, 'Business Phone' %>
-          <%= f.text_field :businessphone, class: "form-control", :data => {:mask => '999-999-9999'}  %>
-
-          <%= f.label :businessfax, 'Business Fax' %>
-          <%= f.text_field :businessfax, class: "form-control", :data => {:mask => '999-999-9999'}  %>
-
-          <%= f.label :business_street_address, 'Street Address' %>
-          <%= f.text_field :business_street_address_1 %>
-        </div>
-
-        <%= f.label :city %><br>
-        <%= f.text_field :city %>
-
-        <span class="state-input">
-          <%= f.label :state %>
-          <div class="styled-select">
-            <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
-          </div>
-        </span>
-        <span class="zip-input">
-          <%= f.label :zip, 'Zip Code' %>
-          <%= zip_code_form(f, :zipcode) %>
-        </span>
-
-        <%= f.label :notes %><br>
-        <%= f.text_area :notes %>
-      </div>
-
-      <div id="avatar-form">
-        <p>Upload Photo</p>
-        <a hfre="" onclick="saveFileUrl(event)">Choose file ...</a>
-        <%= f.text_field :photourl, id: "photo_url", style: "display: none;" %>
-        <p>
-          <% if f.object.photourl.present? %>
-            <%= image_tag(get_file_url(f.object.photourl), :id => "image_view" ) %>
-          <% else %>
-            <%= image_tag('', :id => "image_preview") %>
-          <% end %>
-        </p>
-      </div>
+      <%= render :partial => '/contacts/form_content', locals: {f: f} %>
     <% end %>
   </div>
   <footer class="modal-footer">
@@ -157,8 +56,6 @@
 
 
 <%#= link_to 'Back', contacts_path #%>
-
-<script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 
 <script>
 

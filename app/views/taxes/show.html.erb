@@ -9,13 +9,12 @@
 
 <% @tax.taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">
-    <%= link_to content_tag(:a), "#{taxes_path}/#{@tax.id}/edit", :class => "whole-card-link" %>
 
     <label>Tax Preparer</label>
     <p>
       <% if tax.tax_preparer.present? %>
         <%= tax.tax_preparer.name %><br>
-        <a href="mailto:#{tax.tax_preparer.emailaddress}" class="link-on-top"><%= tax.tax_preparer.emailaddress %></a><br>
+        <%= mail_to tax.tax_preparer.emailaddress, tax.tax_preparer.emailaddress, class:"link-on-top" %><br>
         <%= tax.tax_preparer.phone %>
       <% end %>
     </p>

@@ -20,7 +20,7 @@
       </ul>
     <% end %>
     <% if add_new_document?(yield(:title)) %>
-      <label>Attach File</label><br>
+      <label>Attach File</label>
       <div id="file-pick-section">
         <input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3" data-fp-button-text="Select File"
           data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" data-buttonText="Select file" id="select-file"/>
@@ -29,10 +29,10 @@
     <%= f.hidden_field :folder_id %>
     <%= f.hidden_field :url %>
 
-    <label>Document Name</label><br>
+    <label>Document Name</label>
     <%= f.text_field :name %>
 
-    <label>Category</label><br>
+    <label>Category</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :category, 
         CategoryDropdownOptions::CATEGORIES, :to_s, :to_s, {}, 
@@ -40,7 +40,7 @@
       %>
     </div>
 
-    <label>Subcategory</label><br>
+    <label>Subcategory</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :group, 
         @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},

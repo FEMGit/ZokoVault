@@ -14,7 +14,7 @@
 
   <% if !@user_profile.name.blank? %>
     <label>Name</label>
-    <p><%= @user_profile.name %></p>
+    <p><%= @user_profile.full_name %></p>
   <% end %>
 
   <label>Email Address</label>
@@ -64,7 +64,7 @@
   <p>
     <span class="field-block"><%= employer.name %></span>
     <% if !employer.web_address.blank? %>
-      <span class="field-block"><%= link_to show_web_address(employer.web_address), employer.web_address %><br></span>
+      <span class="field-block"><%= link_to employer.web_address, employer.web_address %><br></span>
     <% end %>
   </p>
 

@@ -32,6 +32,9 @@ $cards-margin: 12px;
     left: 0px;
     z-index: 1;
   }
+  &.document {
+    border-radius: 20px;
+  }
 }
 
 //COLOR STRIPES FOR CARDS

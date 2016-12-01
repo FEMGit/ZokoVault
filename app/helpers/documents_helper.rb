@@ -46,6 +46,7 @@ module DocumentsHelper
   end
 
   def get_file_url(key)
+    return unless key.present?
     s3_object = S3Service.get_object_by_key(key)
     s3_object.presigned_url(:get)
   end

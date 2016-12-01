@@ -28,7 +28,7 @@
               <span class="agent-info field"><%= advisor.phone %></span>
             </div>
             <div class="wtl-right-side">
-              <%= avatar_circle(advisor) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => advisor } %>
             </div>
           </div>
           <span class="clear"></span>
@@ -36,7 +36,7 @@
         <div class="section bottom">
           <% get_shares_uniq(@wills) && get_shares_uniq(@wills).each do |share| %>
             <% if share.present? %>
-              <%= avatar_circle(share) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
             <% end %>
           <% end %>
         </div>
@@ -73,7 +73,7 @@
               <span class="agent-info field"><%= agent.phone %></span>
             </div>
             <div class="wtl-right-side">
-              <%= avatar_circle(agent) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => agent } %>
             </div>
           </div>
           <span class="clear"></span>
@@ -81,7 +81,7 @@
         <div class="section bottom">
           <% get_shares_uniq(@trusts) && get_shares_uniq(@trusts).each do |share| %>
             <% if share.present? %>
-              <%= avatar_circle(share) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
             <% end %>
           <% end %>
         </div>
@@ -123,7 +123,7 @@
         <div class="section bottom">
           <% get_shares_uniq(@power_of_attorneys) && get_shares_uniq(@power_of_attorneys).each do |share| %>
             <% if share.present? %>
-              <%= avatar_circle(share) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
             <% end %>
           <% end %>
         </div>

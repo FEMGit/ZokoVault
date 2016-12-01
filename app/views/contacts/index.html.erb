@@ -23,8 +23,7 @@
     <% @contacts.each do |contact| %>
       <tr>
         <td>
-          <span class="user-circle"><%= "#{contact.initials}" %></span>
-          <span><%= "#{contact.name}"%></span>
+          <%= avatar_circle(contact, true) %>
         </td>
         <td><%= contact.emailaddress %></td>
         <td><%= contact.relationship %></td>

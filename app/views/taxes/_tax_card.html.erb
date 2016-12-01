@@ -22,7 +22,7 @@
 
         <div class="inline-block shared-list">
           <% tax.share_with_contacts.each do |contact| %>
-            <span class="user-circle"><%= contact.initials %></span>
+            <%= avatar_circle(contact) %>
           <% end %>
         </div>
       <% end %>

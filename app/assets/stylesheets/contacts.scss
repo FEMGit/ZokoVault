@@ -62,6 +62,31 @@ $base-line-height: 1.5em !default;
   height: 30px;
   border: 1px solid $color-gray-med;
   border-radius: 30px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+
+.avatar-initials {
+  position: absolute;
+  z-index: 2;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  margin-top: 8px;
+  text-transform: uppercase;
+  color: $color-gray-med;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+}
+
+.avatar-name {
+  position: relative;
+  top: -7px;
 }
 
 #remove-avatar-link {

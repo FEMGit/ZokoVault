@@ -21,13 +21,13 @@
               </p>
             </div>
             <div class="right">
-              <%= avatar_circle(final_wish.primary_contact) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => final_wish.primary_contact } %>
             </div>
             <span class="clear"></span>
           <% end %>
           <div class="inline-block shared-list">
             <% final_wish && final_wish.share_with_contacts.each do |contact| %>
-              <%= avatar_circle(contact) %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
             <% end %>
           </div>
         <% end %>

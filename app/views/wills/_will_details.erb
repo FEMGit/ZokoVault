@@ -53,7 +53,7 @@
       <div>
         <% will.shares && will.shares.each do |share| %>
           <% if share.contact.present? %>
-            <%= avatar_circle(share.contact) %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
           <% end %>
         <% end %>
       </div>

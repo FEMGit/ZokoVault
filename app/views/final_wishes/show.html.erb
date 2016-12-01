@@ -34,7 +34,7 @@
 
       <label>Shared With</label><br>
         <% final_wish.share_with_contacts && final_wish.share_with_contacts.each do |contact| %>
-          <%= avatar_circle(contact) %>
+          <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
         <% end %>
     </div>
   </div>

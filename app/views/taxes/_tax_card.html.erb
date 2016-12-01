@@ -16,13 +16,13 @@
         </div>
 
         <div class="right">
-          <span class="user-circle field"><%= tax.tax_preparer.initials %></span>
+          <%= render partial: "layouts/avatar_circle", locals: { :contact => tax.tax_preparer } %>
         </div>
         <span class="clear"></span>
 
         <div class="inline-block shared-list">
           <% tax.share_with_contacts.each do |contact| %>
-            <%= avatar_circle(contact) %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
           <% end %>
         </div>
       <% end %>

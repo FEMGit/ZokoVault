@@ -1,6 +1,6 @@
 <% shares && shares[0...3].each do |share| %>
   <% if share.contact.present? %>
-    <span class="user-circle"><%= share.contact.initials %></span>
+    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
   <% end %>
 <% end %>
 <% if shares && shares.length > 3 %>

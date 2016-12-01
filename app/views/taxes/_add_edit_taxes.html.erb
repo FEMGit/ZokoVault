@@ -1,4 +1,4 @@
-<h3><%= @tax_year.year %> Taxes Setup</h3>
+<h1><%= @tax_year.year %> Taxes Setup</h1>
 
 <%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>

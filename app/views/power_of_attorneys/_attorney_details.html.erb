@@ -32,7 +32,7 @@
       <div>
         <% attorney.shares.each do |share| %>
           <% if share.contact.present? %>
-            <span class="user-circle"><%= share.contact.initials %></span>
+            <%= avatar_circle(share.contact) %>
           <% end %>
         <% end %>
       </div>

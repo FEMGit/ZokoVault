@@ -5,7 +5,7 @@
     </svg>
   </span>Edit
 <% end %>
-<h3><%= @tax.year %> Tax Details</h3>
+<h1><%= @tax.year %> Tax Details</h1>
 
 <% @tax.taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">
@@ -47,6 +47,6 @@
     </svg>
   </span>Add Document
 </a>
-<h2><%= @tax && @tax.year %> Taxes Documents</h2>
+<h3><%= @tax && @tax.year %> Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

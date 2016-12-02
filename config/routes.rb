@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :final_wishes
+  resources :usage_metrics
   resources :taxes
   resources :relationships
   resources :vendor_accounts
@@ -132,6 +133,13 @@ Rails.application.routes.draw do
 
   resource :mfa, only: [:show, :create, :resend_code]
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
+  
+  # Usage metrics path
+  get 'usage_metrics/details/:id', to: 'usage_metrics#details', as: :user_error_details
+  get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
+  
+  # Catch all routes so we can handle no route error
+  match "*path", to: "application#catch_404", via: :all
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

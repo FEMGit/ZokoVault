@@ -1,0 +1,13 @@
+<label>Name</label>
+<p><%= @user_death_trap.user.name %></p>
+
+<label>Page Terminated On</label>
+<p><%= @user_death_trap.page_terminated_on %></p>
+
+<label>Error Message</label>
+<p><%= @user_death_trap.error_message %></p>
+
+<label>Date</label>
+<p><%= date_format(@user_death_trap.created_at) %></p>
+
+<%= link_to 'Back', usage_metrics_path %>

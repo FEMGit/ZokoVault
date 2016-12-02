@@ -1,0 +1,29 @@
+<label>Name</label>
+<p><%= @user.name %></p>
+
+<label>Documents/User</label>
+<p><%= documents_per_user(@user) %></p>
+
+<label>Logins/Current Week</label>
+<p><%= login_count_per_week(@user) %></p>
+
+<label>Logins/Week AVG</label>
+<p><%= login_count_per_week_avg(@user) %></p>
+
+<label>Session Length AVG</label>
+<p><%= session_length_avg(@user) %></p>
+
+<label>Site Completed (%)</label>
+<p><%= site_completed(@user) %></p>
+
+<% left_to_complete = categories_left_to_complete(@user) %>
+<% if left_to_complete.any? %>
+  <label>Tables Without This User</label>
+  <ul>
+    <% left_to_complete.each do |category| %>
+      <li><%= category %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Back', usage_metrics_path %>

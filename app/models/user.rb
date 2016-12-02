@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable
 
@@ -24,6 +25,16 @@ class User < ActiveRecord::Base
       true
     else
       current_sign_in_ip != last_sign_in_ip
+    end
+  end
+  
+  def after_database_authentication
+    date = Date.current
+    if UserActivity.for_date(date).for_user(self).any?
+      u_activity = UserActivity.for_date(date).for_user(self).first
+      u_activity.update(user: self, login_count: u_activity.login_count + 1)
+    else
+      UserActivity.create(user: self, login_date: date, login_count: 1, session_length: 0)
     end
   end
 end

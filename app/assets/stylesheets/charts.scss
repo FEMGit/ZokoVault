@@ -2,19 +2,42 @@
   width: 35%;
   height: 250px;
   display: inline-block;
+
+
+  @include media($teneighty) {
+    width: 29.4%;
+  }
+  @include media($eightfifty) {
+    width: 27.6%;
+  }
+  @include media($tablet) {
+    width: 100%;
+  }
 }
 .pie-legend{
   height:250px;
   width: 25%;
+  min-width: 200px;
   display: inline-block;
+  float: right;
 
   h4{
-    color: $color-gray-med;
+    color: $color-gray-med-shaded;
     font-size: 20px;
+  }
+  .data-right{
+    margin-top: 4px;
+  }
+  @include media($tablet) {
+    width: 100%;
+    float: none;
   }
 }
 .sum-line{
   height: 1px;
-  background: $color-gray-dark;
+  background: $color-gray-light;
   margin: 10px 0 20px;
+}
+.highcharts-credits{
+  display:none;
 }

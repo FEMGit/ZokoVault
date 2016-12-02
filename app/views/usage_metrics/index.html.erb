@@ -1,0 +1,114 @@
+<label>Number of Unique Users</label>
+<p><%= @uniq_user_count %></p>
+
+<label>Number of Unique Documents</label>
+<p><%= @uniq_document_count %></p>
+
+<h3>User Statistics</h3>
+<table id="user-statistics-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Documents/User</th>
+      <th>Logins/Current Week</th>
+      <th>Logins/Week AVG</th>
+      <th>Session Length AVG</th>
+      <th>Site Completed (%)</th>
+      <th class="nosort">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @users && @users.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
+    <% @users && @users.each do |user| %>
+      <tr>
+        <td>
+          <%= user.name %>
+        </td>
+        <td>
+          <%= documents_per_user(user) %>
+        </td>
+        <td>
+          <%= login_count_per_week(user) %>
+        </td>
+        <td>
+          <%= login_count_per_week_avg(user) %>
+        </td>
+        <td>
+          <%= session_length_avg(user) %>
+        </td>
+        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">
+          <%= site_completed(user) %>
+        </td>
+        <td>
+          <%= link_to 'Details', statistic_details_path(user.id), class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3>User Errors</h3>
+<table id="user-errors-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Page Terminated On</th>
+      <th>Error Message</th>
+      <th>Date</th>
+      <th class="nosort">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @users && @users.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
+    <% @user_errors && @user_errors.each do |user_error| %>
+      <tr>
+        <td>
+          <%= user_error.user.name %>
+        </td>
+        <td>
+          <%= user_error.page_terminated_on %>
+        </td>
+        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">
+          <%= user_error.error_message %>
+        </td>
+        <td>
+          <%= date_format(user_error.created_at) %>
+        </td>
+        <td>
+          <%= link_to 'Details', user_error_details_path(user_error.id), class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function(){
+    var tableParams = {
+        paging: false,
+        searching: false,
+        info: false,
+        order: [],
+        'aoColumnDefs': [{
+          'bSortable': false,
+          'aTargets': ['nosort']
+        }]
+      };
+    $('#user-statistics-table').DataTable(tableParams);
+    $('#user-errors-table').DataTable(tableParams);
+  });
+</script>

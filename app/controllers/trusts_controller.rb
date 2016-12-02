@@ -56,7 +56,7 @@ class TrustsController < AuthenticatedController
     respond_to do |format|
       if trusts.present?
         begin
-          update_trusts(trusts)
+          update_trusts(new_trusts, old_trusts)
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue

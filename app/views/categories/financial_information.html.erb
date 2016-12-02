@@ -25,56 +25,53 @@
     <div id="debt"  class="pie-chart"></div>
     <div class="pie-legend">
 
-      <div class="data-pair">
-        <h4>Cash
-          <span class="data-right">
-            $20,458
-          </span>
-        </h4>
-      </div>
+      <ul class="data-summary">
+        <li class="data-pair">
+          <h4>Cash
+            <span class="data-right">
+              $220,458
+            </span>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Investments
+            <span class="data-right">
+              $1,220,458
+            </span>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Property
+            <span class="data-right">
+              $920,458
+            </span>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Credit Cards
+            <span class="data-right negative-value">
+              -$20,458
+            </span>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Loans
+            <span class="data-right negative-value">
+              -$20,458
+            </span>
+          </h4>
+        </li>
 
-      <div class="data-pair">
-        <h4>Investments
-          <span class="data-right">
-            $20,458
-          </span>
-        </h4>
-      </div>
+        <div class="sum-line"></div>
 
-      <div class="data-pair">
-        <h4>Property
-          <span class="data-right">
-            $20,458
-          </span>
-        </h4>
-      </div>
-
-      <div class="data-pair">
-        <h4>Credit Cards
-          <span class="data-right negative-value">
-            -$20,458
-          </span>
-        </h4>
-      </div>
-
-      <div class="data-pair">
-        <h4>Loans
-          <span class="data-right negative-value">
-            -$20,458
-          </span>
-        </h4>
-      </div>
-
-      <div class="sum-line"></div>
-
-      <div class="data-pair">
-        <h4>Net Worth
-          <span class="data-right">
-            $20,458
-          </span>
-        </h4>
-      </div>
-
+        <li class="data-pair">
+          <h4>Net Worth
+            <span class="data-right">
+              $1,920,458
+            </span>
+          </h4>
+        </li>
+    </ul>
     </div>
   </section>
 
@@ -103,42 +100,61 @@
        888-234-3456
     </p>
     <label>Primary Contact</label>
-    <p>Thedore Billington<br>
-       <a href="mailto:ted@mail.com">tbillington@acu.com</a><br>
-       555-231-9876
+    <ul class="data-list">
+      <li class="contact-pair">
+        Thedore Billington<br>
+        <a>tbilington@acu.com</a><br>
+        312-277-1161
+      </li>
+    </ul>
     </p>
-    <label>Mortgage</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <br>
-    <label>Shared With</label><br>
-    <span class="user-circle">AK</span>
-    <span class="user-circle">BM</span>
-    <span class="user-circle">MB</span>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Mortgage</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+    </section>
 
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp">
     <h3>Chase</h3>
     <p><a>www.card.com</a></p>
-    <label>Checking</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <label>Savings</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <label>Savings</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <label>529</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <br>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Checking</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+      <li class="data-pair">
+        <label>Savings</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+      <li class="data-pair">
+        <label>Credit Card</label>
+        <span class="data-right negative-value">
+          $-20,458
+        </span>
+      </li>
+      <li class="data-pair">
+        <label>529</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+    </ul>
     <label>Shared With</label><br>
     <span class="user-circle">AK</span>
     <span class="user-circle">BM</span>
@@ -147,33 +163,61 @@
 
   <div class="card cg-3 flex-column mb-20 cp ">
     <h3>Fidelity</h3>
-    <p><a>http://fidelity.com<a></p>
-      <label>401k</label><br>
-      <br>
-      <label>Shared With</label><br>
-      <span class="user-circle">AK</span>
-      <span class="user-circle">BM</span>
-      <span class="user-circle">MB</span>
+    <p><a>http://fidelity.com</a></p>
+
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>401k</label>
+        <span class="data-right">
+          $20,458
+        </span><br>
+      </li>
+    </ul>
+      <label>Shared With</label>
+      <section class="shared-list">
+        <span class="user-circle">AK</span>
+        <span class="user-circle">BM</span>
+        <span class="user-circle">MB</span>
+      </section>
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp">
     <h3>Lake House</h3>
-    <label>Property</label><br>
-    <br>
-    <label>Shared With</label><br>
-    <span class="user-circle">AK</span>
-    <span class="user-circle">BM</span>
-    <span class="user-circle">MB</span>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Property</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+    </section>
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp ">
     <h3>Picasso</h3>
-    <p><a>http://fidelity.com<a></p>
-      <label>Property</label><br>
-      <br>
-      <label>Shared With</label><br>
+
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Property</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </ki>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">AK</span>
       <span class="user-circle">BM</span>
       <span class="user-circle">MB</span>
+    </section>
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp">
@@ -181,14 +225,20 @@
     <p><a>http://scottrade.com</a><br>
        888-234-3456
     </p>
-    <label>Brokerage</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <br>
-    <label>Shared With</label><br>
-    <span class="user-circle">AK</span>
-    <span class="user-circle">MB</span>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Brokerage</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+    </section>
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp">
@@ -196,32 +246,47 @@
     <p><a>http://toyota.com</a><br>
        888-234-3456
     </p>
-    <label>Car Loan</label>
-    <span class="data-right">
-      $-20,458
-    </span><br>
-    <label>Shared With</label><br>
-    <span class="user-circle">BM</span>
-    <span class="user-circle">MB</span>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Car Loan</label>
+        <span class="data-right negative-value">
+          $-20,458
+        </span>
+      </li>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">MB</span>
+    </section>
   </div>
 
   <div class="card cg-3 flex-column mb-20 cp">
     <h3>ZokuVault</h3>
     <p><a>http://wwww.zokuvault.com</a></p>
     <label>Primary Contact</label>
-    <p>Thedore Billington<br>
-       <a href="mailto:ted@mail.com">tbillington@acu.com</a><br>
-       555-231-9876
-    </p>
-    <label>Private Investment</label>
-    <span class="data-right">
-      $20,458
-    </span><br>
-    <br>
-    <label>Shared With</label><br>
-    <span class="user-circle">AK</span>
-    <span class="user-circle">BM</span>
-    <span class="user-circle">MB</span>
+    <ul class="data-list">
+      <li class="contact-pair">
+        Thedore Billington<br>
+        <a>tbilington@acu.com</a><br>
+        312-277-1161
+      </li>
+    </ul>
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label>Private Investment</label>
+        <span class="data-right">
+          $20,458
+        </span>
+      </li>
+    </ul>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <span class="user-circle">AK</span>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">MB</span>
+    </section>
 
   </div>
 </section>
@@ -374,7 +439,3 @@ $(function () {
     });
 });
 </script>
-<style>
-.highcharts-credits{
-  display:none;
-}

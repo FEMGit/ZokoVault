@@ -7,20 +7,26 @@ class TrustsController < AuthenticatedController
   # GET /trusts
   # GET /trusts.json
   def index
-    @trusts = Trust.for_user(current_user)
+    @trusts = policy_scope(Trust).each { |t| authorize t }
   end
 
   # GET /trusts/1
   # GET /trusts/1.json
   def show
+    authorize @trust
   end
 
   # GET /trusts/new
   def new
-    @vault_entry = TrustBuilder.new(type: 'trust').build
-    @vault_entry.vault_entry_contacts.build
     @vault_entries = Trust.for_user(current_user)
-    return unless @vault_entries.empty?
+    return if @vault_entries.present?
+
+    @vault_entry = TrustBuilder.new(type: 'trust').build
+    @vault_entry.user = current_user
+    @vault_entry.vault_entry_contacts.build
+
+    authorize @vault_entry
+
     @vault_entries << @vault_entry
   end
 
@@ -34,6 +40,7 @@ class TrustsController < AuthenticatedController
 
   # GET /trusts/1/edit
   def edit
+    authorize @vault_entry
   end
 
   def set_document_params
@@ -48,10 +55,13 @@ class TrustsController < AuthenticatedController
     new_trusts = WtlService.get_new_records(trust_params)
     old_trusts = WtlService.get_old_records(trust_params)
     @vault_entries = []
+
+    trusts = new_trusts + old_trusts
+
     respond_to do |format|
-      if !new_trusts.empty? || !old_trusts.empty?
+      if trusts.present?
         begin
-          update_trusts(new_trusts, old_trusts)
+          update_trusts(trusts)
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue
@@ -124,6 +134,7 @@ class TrustsController < AuthenticatedController
       @old_params = []
       old_trusts.each do |old_trust|
         @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: current_user.id)).build
+        authorize @old_vault_entries
         @old_params << @old_vault_entries
         unless @old_vault_entries.save
           @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
@@ -131,6 +142,7 @@ class TrustsController < AuthenticatedController
       end
       new_trusts.each do |new_trust_params|
         @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build
+        authorize @new_vault_entries
         if !@new_vault_entries.save
           @new_params << Trust.new(new_trust_params)
           @errors << { id: "", error: @new_vault_entries.errors }

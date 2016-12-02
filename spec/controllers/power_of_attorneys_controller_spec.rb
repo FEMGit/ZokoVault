@@ -111,8 +111,8 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
       end
 
       it "re-renders the 'new' template" do
-        post :create, { trust: invalid_attributes }, session: valid_session
-        expect(response).to render_template("new")
+        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
+        expect(response).to redirect_to(estate_planning_path)
       end
     end
   end

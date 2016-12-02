@@ -7,6 +7,8 @@ gem 'rails', '4.2.6'
 gem 'pg'
 # Authentication
 gem 'devise'
+# Authorization
+gem "pundit"
 
 gem 'acts_as_tree'
 

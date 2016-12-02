@@ -14,6 +14,10 @@ class WillPolicy < BasicPolicy
     update?
   end
 
+  def index?
+    user_owned?
+  end
+
   class Scope
     attr_reader :user, :scope
 

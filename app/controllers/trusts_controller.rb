@@ -51,19 +51,18 @@ class TrustsController < AuthenticatedController
     new_trusts = WtlService.get_new_records(trust_params)
     old_trusts = WtlService.get_old_records(trust_params)
     @vault_entries = []
-
     trusts = new_trusts + old_trusts
 
     respond_to do |format|
       if trusts.present?
         begin
-          update_trusts(trusts)
+          update_trusts(new_trusts, old_trusts)
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue
           @vault_entry = Trust.new
-          @old_params.each { |trust| @vault_entries << trust }
-          @new_params.each { |trust| @vault_entries << trust }
+          @old_params.try(:each) { |trust| @vault_entries << trust }
+          @new_params.try(:each) { |trust| @vault_entries << trust }
           format.html { render :new }
           format.json { render json: @errors, status: :unprocessable_entity }
         end

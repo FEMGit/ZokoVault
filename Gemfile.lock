@@ -383,6 +383,8 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
     ruby_dep (1.5.0)
+    rufus-scheduler (3.3.0)
+      tzinfo
     safe_yaml (1.0.4)
     sass (3.4.22)
     sass-rails (5.0.6)
@@ -468,6 +470,7 @@ DEPENDENCIES
   rails (= 4.2.7.1)
   rspec-rails (~> 3.4)
   rubocop
+  rufus-scheduler
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

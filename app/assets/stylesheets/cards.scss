@@ -16,6 +16,7 @@ $cards-margin: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor:pointer;
   word-wrap: break-word;
+  position: relative;
 
   &.details.insurance,
   &.details.wtl,
@@ -23,7 +24,6 @@ $cards-margin: 12px;
     padding: 0;
   }
 
-  position: relative;
   a.whole-card-link {
     height: 100%;
     width: 100%;
@@ -113,6 +113,10 @@ $cards-margin: 12px;
   float: right;
   color: $color-gray-dark-tinted;
 
+  svg{
+    position: relative;
+    top: 5px;
+  }
   @include media($eightfifty) {
     float: none;
   }
@@ -124,6 +128,9 @@ $cards-margin: 12px;
   p.shared-description{
     max-width: 500px;
   }
+  .card-label{
+    color: $color-primary;
+  }
   &.width-justify {
     margin: -15px;
     padding: 15px;
@@ -132,14 +139,7 @@ $cards-margin: 12px;
     border-bottom: 0;
   }
 }
-.card-label{
-  color: $color-primary;
 
-  svg{
-    position: relative;
-    top: 5px;
-  }
-}
 .shared-list{
   margin-top: 10px;
 }

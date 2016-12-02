@@ -255,6 +255,41 @@ $cards-margin: 12px;
   margin-top: 5px;
 }
 
+//CATEGORY CARDS
+.data-list{
+  padding:0;
+  margin: 0 0 20px 0;
+}
+.data-pair{
+  border-bottom: 1px solid  $color-off-white-shaded-more;
+  padding: 3px 0;
+  list-style: none;
+  margin: 0;
+}
+.data-right{
+  float: right;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: .025em;
+}
+.contact-pair{
+  padding: 3px 0;
+  list-style: none;
+  margin: 0;
+}
+.data-summary{
+  padding:0;
+
+  .data-pair{
+    border-bottom: 0;
+    padding: 0;
+  }
+}
+
+.shared-list{
+  margin-top: 5px;
+}
+
 //FINANCIAL INFO
 .fin-toggle{
   clear: both;

@@ -110,8 +110,8 @@ RSpec.describe TrustsController, type: :controller do
       end
 
       it "redirects to the created vault_entry" do
-        post :create, { vault_entry_0: valid_attributes }, session: valid_session
-        expect(response).to be_redirect
+        post :create, { trust: valid_attributes }, session: valid_session
+        expect(response).to be_success
       end
     end
 
@@ -122,7 +122,7 @@ RSpec.describe TrustsController, type: :controller do
       end
 
       it "re-renders the 'new' template" do
-        post :create, { vault_entry_0: invalid_attributes }, session: valid_session
+        post :create, { trust: invalid_attributes }, session: valid_session
         expect(response).to render_template("new")
       end
     end

@@ -12,6 +12,14 @@
   width: 15px;
   height: 15px;
 }
+.social-icon{
+  fill: white;
+  font-size:25px;
+  &:hover{
+    cursor: pointer;
+    fill: $color-primary-light;
+  }
+}
 .add-icon{
   fill: $color-gray-light-shaded;
   color: $color-gray-light-shaded;

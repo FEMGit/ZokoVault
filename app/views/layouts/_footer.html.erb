@@ -1,12 +1,16 @@
 <footer class="marketing-footer">
   <section class="footer-inner">
 
-    <section class="copyright">
-      <%= image_tag "SVG/ZokuVault_logo_white.svg" %><br>
-      <p class="small-text">&copy; <%= Time.zone.now.year %> Zoku Technologies, LLC.</p>
-    </section>
 
     <nav class="footer-nav flex-boxes">
+
+      <section class="copyright flex-marketing">
+        <%= image_tag "SVG/ZokuVault_logo_white.svg", :class=>"mb-10"%><br>
+        <p class="small-text">&copy; <%= Time.zone.now.year %> Zoku Technologies, LLC.</p>
+        <a class="footer-link social-icon" href="https://twitter.com/zokuvault"><svg class="icon icon-twitter"><use xlink:href="#icon-twitter"></use></svg></a>
+        <a class="footer-link social-icon" href="https://www.linkedin.com/company/zoku-technologies-llc"><svg class="icon icon-linkedin-square"><use xlink:href="#icon-linkedin-square"></use></svg></a>
+        <a class="footer-link social-icon" href="https://www.facebook.com/zokuvault/"><svg class="icon icon-facebook-square"><use xlink:href="#icon-facebook-square"></use></svg></a>
+      </section>
       <section class="flex-marketing">
         <a class="footer-link" href="/about">About Zoku</a><br>
         <a class="footer-link" href="/setup">Easy Setup</a><br>

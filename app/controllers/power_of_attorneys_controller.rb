@@ -17,14 +17,14 @@ class PowerOfAttorneysController < AuthenticatedController
 
   # GET /power_of_attorneys/new
   def new
-    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(current_user)
-    return if @vault_entries.present?
-
     @vault_entry = PowerOfAttorneyBuilder.new.build
     @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build
 
     authorize @vault_entry
+
+    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(current_user)
+    return if @vault_entries.present?
 
     @vault_entries << @vault_entry
   end

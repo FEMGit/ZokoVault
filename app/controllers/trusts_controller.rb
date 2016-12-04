@@ -16,9 +16,6 @@ class TrustsController < AuthenticatedController
 
   # GET /trusts/new
   def new
-    @vault_entries = Trust.for_user(current_user)
-    return if @vault_entries.present?
-
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.user = current_user
     @vault_entry.vault_entry_contacts.build

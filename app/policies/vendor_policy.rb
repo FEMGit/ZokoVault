@@ -37,7 +37,5 @@ class VendorPolicy < BasicPolicy
     record.user == user
   end
 
-  def shared_with_user?
-   
-  end
+  def shared_with_user?; end
 end

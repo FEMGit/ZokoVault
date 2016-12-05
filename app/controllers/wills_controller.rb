@@ -12,8 +12,7 @@ class WillsController < AuthenticatedController
 
   # GET /wills/1
   # GET /wills/1.json
-  def show
-  end
+  def show; end
 
   # GET /wills/new
   def new
@@ -27,8 +26,7 @@ class WillsController < AuthenticatedController
   end
 
   # GET /wills/1/edit
-  def edit
-  end
+  def edit; end
 
   def set_document_params
     @group = "Will"
@@ -101,10 +99,6 @@ class WillsController < AuthenticatedController
     params[:will]
   end
 
-  def vault_entry_params
-    params.require(:will).permit!
-  end
-
   private
 
     def set_contacts
@@ -120,7 +114,12 @@ class WillsController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def will_params
-      params.select { |x| x.starts_with?("vault_entry") }
+      wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
+      permitted_params = {}
+      wills.keys.each do |will|
+        permitted_params[will] = [:id, :executor_id, :notes, :agent_ids, :document_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: [], share_ids: []]
+      end
+      wills.permit(permitted_params)
     end
 
     def update_wills(new_wills, old_wills)

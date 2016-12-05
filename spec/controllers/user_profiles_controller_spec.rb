@@ -7,6 +7,7 @@ RSpec.describe UserProfilesController, type: :controller do
     attributes_for(:user_profile)
       .merge(employers_attributes: [attributes_for(:employer)])
       .merge(user_id: user.id)
+      .merge(email: "Email@email.com")
   end
 
   let(:invalid_attributes) do

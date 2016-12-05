@@ -12,8 +12,7 @@ class PowerOfAttorneysController < AuthenticatedController
 
   # GET /power_of_attorneys/1
   # GET /power_of_attorneys/1.json
-  def show
-  end
+  def show; end
 
   # GET /power_of_attorneys/new
   def new
@@ -26,8 +25,7 @@ class PowerOfAttorneysController < AuthenticatedController
   end
 
   # GET /power_of_attorneys/1/edit
-  def edit
-  end
+  def edit; end
   
   def set_document_params
     @group = "Legal"
@@ -89,8 +87,7 @@ class PowerOfAttorneysController < AuthenticatedController
     session[:ret_url] = power_of_attorneys_path
   end
 
-  def details
-  end
+  def details; end
 
   private
 
@@ -111,7 +108,12 @@ class PowerOfAttorneysController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def power_of_attorney_params
-      params.select { |x| x.starts_with?("vault_entry") }
+      attorneys = params.select { |k, _v| k.starts_with?("vault_entry_") }
+      permitted_params = {}
+      attorneys.keys.each do |attorney|
+        permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_ids: []]
+      end
+      attorneys.permit(permitted_params)
     end
   
     def update_power_of_attorneys(new_attorneys, old_attorneys)

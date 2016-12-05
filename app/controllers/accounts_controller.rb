@@ -51,10 +51,7 @@ class AccountsController < AuthenticatedController
         :phone_number_mobile,
         :mfa_frequency,
         :phone_code,
-        security_questions_attributes: []
+        security_questions_attributes: [:question, :answer]
       ])
-
-    params.require(:user).permit! # TODO: fix the security questions array problem
-
   end
 end

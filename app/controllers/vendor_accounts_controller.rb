@@ -9,8 +9,7 @@ class VendorAccountsController < AuthenticatedController
 
   # GET /vendor_accounts/1
   # GET /vendor_accounts/1.json
-  def show
-  end
+  def show; end
 
   # GET /vendor_accounts/new
   def new
@@ -18,8 +17,7 @@ class VendorAccountsController < AuthenticatedController
   end
 
   # GET /vendor_accounts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /vendor_accounts
   # POST /vendor_accounts.json

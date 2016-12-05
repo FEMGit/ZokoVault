@@ -32,10 +32,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # POST /lives
   # POST /lives.json
   def create
-    policies = policy_params
-    policies.keys.each { |x| params[:life_and_disability].delete(x) }
     @insurance_card = LifeAndDisability.new(life_params.merge(user_id: current_user.id))
-    PolicyService.fill_life_policies(policies, @insurance_card)
+    PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -51,10 +49,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # PATCH/PUT /lives/1
   # PATCH/PUT /lives/1.json
   def update
-    policies = policy_params
-    policies.keys.each { |x| params[:life_and_disability].delete(x) }
     @insurance_card = @life_and_disability
-    PolicyService.fill_life_policies(policies, @insurance_card)
+    PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -103,10 +99,17 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def life_params
-      params.fetch(:life_and_disability).permit!
+      params.require(:life_and_disability).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+                                                  share_with_ids: [])
     end
 
     def policy_params
-      life_params.select { |k, _v| k.starts_with?("policy_") }
+      policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
+      permitted_params = {}
+      policies.keys.each do |policy_key|
+        permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes,
+                                        primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
+      end
+      policies.permit(permitted_params)
     end
 end

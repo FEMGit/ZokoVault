@@ -37,10 +37,8 @@ class TaxesController < AuthenticatedController
   # POST /taxes
   # POST /taxes.json
   def create
-    taxes = tax_form_params
-    taxes.keys.each { |x| params[:tax_year_info].delete(x) }
     @tax_year = TaxYearInfo.new(tax_params.merge(user_id: current_user.id))
-    TaxesService.fill_taxes(taxes, @tax_year, current_user.id)
+    TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
     respond_to do |format|
       if @tax_year.save
         format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully created.' }
@@ -55,10 +53,8 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1
   # PATCH/PUT /taxes/1.json
   def update
-    taxes = tax_form_params
-    taxes.keys.each { |x| params[:tax_year_info].delete(x) }
     @tax_year = @tax
-    TaxesService.fill_taxes(taxes, @tax_year, current_user.id)
+    TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
     respond_to do |format|
       if @tax_year.update(tax_params)
         format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully updated.' }
@@ -99,7 +95,7 @@ class TaxesController < AuthenticatedController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def tax_params
-    params.require(:tax_year_info).permit!
+    params.require(:tax_year_info).permit(:id, :year)
   end
 
   def set_category
@@ -115,6 +111,11 @@ class TaxesController < AuthenticatedController
   end
 
   def tax_form_params
-    tax_params.select { |k, _v| k.starts_with?("tax_") }
+    taxes = params[:tax_year_info].select { |k, _v| k.starts_with?("tax") }
+    permitted_params = {}
+    taxes.keys.each do |tax_key|
+      permitted_params[tax_key] = [:id, :tax_preparer_id, :notes, share_with_contact_ids: []]
+    end
+    taxes.permit(permitted_params)
   end
 end

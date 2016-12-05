@@ -1,5 +1,5 @@
 <div class="contact-element-title">
-  <h1 class="contact-user-name">Contact Documents</h1>
+  <h3 class="contact-user-name">Contact Documents</h3>
   <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @contact.id) %>">
     <span class="circle-button">
       <svg class="icon circle-icon">
@@ -12,7 +12,7 @@
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @contact_documents} %>
 
 <div class="contact-element-title">
-  <h1 class="contact-user-name">Shared With Contact</h1>
+  <h3 class="contact-user-name">Shared With Contact</h3>
 </div>
 
 <table id="share-with-table">

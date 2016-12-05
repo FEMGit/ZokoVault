@@ -25,8 +25,7 @@ class ContactsController < AuthenticatedController
   end
 
   # GET /contacts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /contacts
   # POST /contacts.json

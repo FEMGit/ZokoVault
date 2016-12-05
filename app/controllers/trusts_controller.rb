@@ -12,8 +12,7 @@ class TrustsController < AuthenticatedController
 
   # GET /trusts/1
   # GET /trusts/1.json
-  def show
-  end
+  def show; end
 
   # GET /trusts/new
   def new
@@ -33,8 +32,7 @@ class TrustsController < AuthenticatedController
   end
 
   # GET /trusts/1/edit
-  def edit
-  end
+  def edit; end
 
   def set_document_params
     @group = "Trust"

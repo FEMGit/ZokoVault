@@ -7,8 +7,7 @@ class UploadsController < AuthenticatedController
   end
 
   # GET /uploads/1
-  def show
-  end
+  def show; end
 
   # GET /uploads/new
   def new
@@ -25,8 +24,7 @@ class UploadsController < AuthenticatedController
   end
 
   # GET /uploads/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /uploads
   def create

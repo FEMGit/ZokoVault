@@ -12,8 +12,7 @@ class WillsController < AuthenticatedController
 
   # GET /wills/1
   # GET /wills/1.json
-  def show
-  end
+  def show; end
 
   # GET /wills/new
   def new
@@ -31,8 +30,7 @@ class WillsController < AuthenticatedController
   end
 
   # GET /wills/1/edit
-  def edit
-  end
+  def edit; end
 
   def set_document_params
     @group = "Will"

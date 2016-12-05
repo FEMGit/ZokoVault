@@ -8,17 +8,14 @@ class InterestedUsersController < ApplicationController
     @interested_users = InterestedUser.all
   end
 
-  def mailing_list_confirm
-  end
+  def mailing_list_confirm; end
 
   # GET /interested_users/1
   # GET /interested_users/1.json
-  def show
-  end
+  def show; end
 
   # GET /interested_users/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /interested_users
   # POST /interested_users.json

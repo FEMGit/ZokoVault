@@ -5,8 +5,7 @@ class CategoriesController < AuthenticatedController
     @categories = policy_scope(Category).each { |c| authorize c }
   end
 
-  def shared_view_dashboard
-  end
+  def shared_view_dashboard; end
 
   def insurance
     #TODO: fix bug in padding out groups if missing

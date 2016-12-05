@@ -96,8 +96,7 @@ class PowerOfAttorneysController < AuthenticatedController
     session[:ret_url] = power_of_attorneys_path
   end
 
-  def details
-  end
+  def details; end
 
   private
 

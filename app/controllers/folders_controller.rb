@@ -5,15 +5,13 @@ class FoldersController < AuthenticatedController
     @folders = Folder.just_folders.for_user(current_user)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @folder = Folder.new(parent_id: params[:parent_id])
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     parent = Folder.find_by_id(params[:folder].delete(:parent_id))

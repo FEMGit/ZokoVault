@@ -5,15 +5,13 @@ class SharesController < AuthenticatedController
       @shares = Share.all
     end
 
-    def show
-    end
+    def show; end
 
     def new
       @share = Share.new
     end
 
-    def edit
-    end
+    def edit; end
 
     def create
       @share = Share.new(share_params.merge(user_id: current_user.id))

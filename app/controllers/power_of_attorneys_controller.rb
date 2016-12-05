@@ -12,8 +12,7 @@ class PowerOfAttorneysController < AuthenticatedController
 
   # GET /power_of_attorneys/1
   # GET /power_of_attorneys/1.json
-  def show
-  end
+  def show; end
 
   # GET /power_of_attorneys/new
   def new
@@ -26,8 +25,7 @@ class PowerOfAttorneysController < AuthenticatedController
   end
 
   # GET /power_of_attorneys/1/edit
-  def edit
-  end
+  def edit; end
   
   def set_document_params
     @group = "Legal"
@@ -89,8 +87,7 @@ class PowerOfAttorneysController < AuthenticatedController
     session[:ret_url] = power_of_attorneys_path
   end
 
-  def details
-  end
+  def details; end
 
   private
 

@@ -13,9 +13,8 @@ class WtlService
   end
   
   def self.clear_one_option(options)
-    if options.present?
-      options.values.select{|x| x.is_a?(Array)}.map{|x| x.delete_if(&:empty?)}
-    end
+    return unless options.present?
+    options.values.select{|x| x.is_a?(Array)}.map{|x| x.delete_if(&:empty?)}
   end
   
   def self.get_new_records(params)

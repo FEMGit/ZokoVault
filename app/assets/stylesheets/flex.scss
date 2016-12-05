@@ -27,13 +27,17 @@
 }
 
 .flex-marketing{
-  flex: 30%;
-  margin: 0 1.5% 2%;
+  flex: 20%;
+  margin: 0 2% 2% 0;
 
-    @include media($mobile) {
-      flex: 100%;
-      margin: 0 0 2%;
-    }
+ &.copyright{
+   flex: 32%;
+   margin: 0 2% 2% 0;
+ }
+  @include media($mobile) {
+    flex: 100%;
+    margin: 0 0 2%;
+  }
 }
 //
 // .flex-card{

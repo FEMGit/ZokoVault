@@ -38,10 +38,8 @@ class FinalWishesController < AuthenticatedController
   # POST /final_wishes
   # POST /final_wishes.json
   def create
-    final_wishes = final_wish_form_params
-    final_wishes.keys.each { |x| params[:final_wish_info].delete(x) }
     @final_wish_info = FinalWishInfo.new(final_wish_params.merge(user_id: current_user.id))
-    FinalWishService.fill_wishes(final_wishes, @final_wish_info, current_user.id)
+    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
     respond_to do |format|
       if @final_wish_info.save
         format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully created.' }
@@ -56,10 +54,8 @@ class FinalWishesController < AuthenticatedController
   # PATCH/PUT /final_wishes/1
   # PATCH/PUT /final_wishes/1.json
   def update
-    final_wishes = final_wish_form_params
-    final_wishes.keys.each { |x| params[:final_wish_info].delete(x) }
     @final_wish_info = @final_wish
-    FinalWishService.fill_wishes(final_wishes, @final_wish_info, current_user.id)
+    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
     respond_to do |format|
       if @final_wish_info.update(final_wish_params)
         format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully updated.' }
@@ -110,10 +106,15 @@ class FinalWishesController < AuthenticatedController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def final_wish_params
-    params.require(:final_wish_info).permit!
+    params.require(:final_wish_info).permit(:id, :group)
   end
   
   def final_wish_form_params
-    final_wish_params.select { |k, _v| k.starts_with?("final_wish_") }
+    wishes = params[:final_wish_info].select { |k, _v| k.starts_with?("final_wish_") }
+    permitted_params = {}
+    wishes.keys.each do |final_wish_key|
+      permitted_params[final_wish_key] = [:id, :primary_contact_id, :notes, share_with_contact_ids: []]
+    end
+    wishes.permit(permitted_params)
   end
 end

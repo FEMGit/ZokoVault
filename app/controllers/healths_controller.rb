@@ -38,13 +38,9 @@ class HealthsController < AuthenticatedController
   # POST /healths
   # POST /healths.json
   def create
-    policies = policy_params
-    policies.keys.each { |x| params[:health].delete(x) }
     @insurance_card = Health.new(health_params.merge(user_id: current_user.id))
-
     authorize @insurance_card
-
-    PolicyService.fill_health_policies(policies, @insurance_card)
+    PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -61,11 +57,8 @@ class HealthsController < AuthenticatedController
   # PATCH/PUT /healths/1.json
   def update
     authorize @health
-
-    policies = policy_params
-    policies.keys.each { |x| params[:health].delete(x) }
     @insurance_card = @health
-    PolicyService.fill_health_policies(policies, @insurance_card)
+    PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -118,10 +111,17 @@ class HealthsController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def health_params
-      params.require(:health).permit!
+      params.require(:health).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+                                     share_with_ids: [])
     end
 
     def policy_params
-      health_params.select { |k, _v| k.starts_with?("policy_") }
+      policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
+      permitted_params = {}
+      policies.keys.each do |policy_key|
+        permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :policy_holder_id,
+                                        :broker_or_primary_contact_id, :notes, insured_member_ids: []]
+      end
+      policies.permit(permitted_params)
     end
 end

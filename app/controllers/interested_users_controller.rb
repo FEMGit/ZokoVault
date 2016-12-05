@@ -50,7 +50,7 @@ class InterestedUsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def interested_user_params
-    params.require(:interested_user).permit!
+    params.require(:interested_user).permit(:name, :email, :phone_number, :message)
   end
 
   def check_privileges

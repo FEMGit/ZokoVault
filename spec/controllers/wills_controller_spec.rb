@@ -12,7 +12,7 @@ RSpec.describe WillsController, type: :controller do
       primary_beneficiary_ids: contacts.first(2).map(&:id),
       secondary_beneficiary_ids: contacts.last(1).map(&:id),
       executor_id: contacts[1].id,
-      agent_ids: contacts.map(&:id),
+      agent_ids: contacts[0].id,
       share_ids: contacts.map(&:id),
       document_id: document.id
     }
@@ -94,7 +94,7 @@ RSpec.describe WillsController, type: :controller do
         end
 
         it "assigns agents" do
-          expect(vault_entry.agents).to eq contacts
+          expect(vault_entry.agents.first).to eq contacts[0]
         end
 
         it "assigns shares" do

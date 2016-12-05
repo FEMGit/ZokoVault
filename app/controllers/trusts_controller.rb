@@ -123,7 +123,12 @@ class TrustsController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def trust_params
-      params.select { |x| x.starts_with?("vault_entry") }
+      trusts = params.select { |k, _v| k.starts_with?("vault_entry_") }
+      permitted_params = {}
+      trusts.keys.each do |trust|
+        permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: []]
+      end
+      trusts.permit(permitted_params)
     end
 
     def update_trusts(new_trusts, old_trusts)

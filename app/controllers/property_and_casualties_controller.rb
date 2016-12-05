@@ -44,13 +44,9 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
-    policies = policy_params
-    policies.keys.each { |x| params[:property_and_casualty].delete(x) }
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: current_user.id))
-    PolicyService.fill_property_and_casualty_policies(policies, @insurance_card)
-
     authorize @insurance_card
-
+    PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -66,13 +62,9 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # PATCH/PUT /properties/1
   # PATCH/PUT /properties/1.json
   def update
-    policies = policy_params
-    policies.keys.each { |x| params[:property_and_casualty].delete(x) }
     @insurance_card = @property_and_casualty
-
     authorize @property_and_casualty
-
-    PolicyService.fill_property_and_casualty_policies(policies, @insurance_card)
+    PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
@@ -124,10 +116,17 @@ class PropertyAndCasualtiesController < AuthenticatedController
     end
 
     def property_and_casualty_params
-      params.require(:property_and_casualty).permit!
+      params.require(:property_and_casualty).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+                                                    share_with_ids: [])
     end
 
     def policy_params
-      property_and_casualty_params.select { |k, _v| k.starts_with?("policy_") }
+      policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
+      permitted_params = {}
+      policies.keys.each do |policy_key|
+        permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number, 
+                                        :broker_or_primary_contact_id, :notes]
+      end
+      policies.permit(permitted_params)
     end
 end

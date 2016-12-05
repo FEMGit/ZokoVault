@@ -117,7 +117,12 @@ class PowerOfAttorneysController < AuthenticatedController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def power_of_attorney_params
-      params.select { |x| x.starts_with?("vault_entry") }
+      attorneys = params.select { |k, _v| k.starts_with?("vault_entry_") }
+      permitted_params = {}
+      attorneys.keys.each do |attorney|
+        permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_ids: []]
+      end
+      attorneys.permit(permitted_params)
     end
   
     def update_power_of_attorneys(new_attorneys, old_attorneys)

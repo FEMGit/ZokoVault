@@ -21,11 +21,11 @@ RSpec.describe AccountsController, type: :controller do
         {
           signed_terms_of_service: 1,
           security_questions_attributes: {
-            0 => { question: 'foo', answer: 'bar' },
-            1 => { question: 'baz', answer: 'quux' },
-            2 => { question: 'q', answer: 'a' }
+            "0" => { question: 'foo', answer: 'bar' },
+            "1" => { question: 'baz', answer: 'quux' },
+            "2" => { question: 'q', answer: 'a' }
           },
-          phone_number_raw:  "123-456-7890",
+          phone_number_mobile: "123-456-7890",
           mfa_frequency: :always,
           date_of_birth: Date.today - 14.year
         }

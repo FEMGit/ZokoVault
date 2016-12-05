@@ -31,7 +31,6 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
       phone: Faker::PhoneNumber.phone_number,
       fax: Faker::PhoneNumber.phone_number,
       street_address_1: Faker::Address.street_address,
-      street_address_2: Faker::Address.secondary_address,
       city: Faker::Address.city,
       state: Faker::Address.state_abbr,
       user_id: user.id,

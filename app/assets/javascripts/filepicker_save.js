@@ -21,6 +21,8 @@ var saveFileUrl = function() {
       $('#new-avatar').show();
       $('#choose-avatar-section').hide();
       $('#preview-avatar-section').show();
+      $('#text-avatar').hide();
+      $('.remove-button').show();
     });
 };
 
@@ -31,4 +33,6 @@ var removePhoto = function() {
   $('#choose-avatar-section').show();
   $('#preview-avatar-section').hide();
   $('#new-avatar').hide();
+  $('#text-avatar').show();
+  $('.remove-button').hide();
 }

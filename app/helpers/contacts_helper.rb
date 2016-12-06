@@ -15,4 +15,8 @@ module ContactsHelper
   def zip_code_form(form, name)
     form.text_field(name, class: "form-control", :data => {:mask => '99999'})
   end
+  
+  def empty_image
+    asset_url('blank.gif')
+  end
 end

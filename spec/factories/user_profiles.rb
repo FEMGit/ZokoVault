@@ -12,6 +12,7 @@ FactoryGirl.define do
     phone_number { generate :phone_number }
     mfa_frequency { :never }
     phone_number_mobile { generate :phone_number }
+    two_factor_phone_number { generate :phone_number }
     street_address_1 { Faker::Address.street_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }

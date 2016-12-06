@@ -8,7 +8,7 @@ RSpec.describe MultifactorAuthenticator, type: :services do
   subject { MultifactorAuthenticator.new(user) }
 
   describe "#send_code" do
-    before { user.user_profile.phone_number_mobile = '111-111-1111' }
+    before { user.user_profile.two_factor_phone_number = '111-111-1111' }
 
     it "generates a code" do
       expect(MultifactorPhoneCode).to receive(:generate_for).with(user).and_return(phone_code)

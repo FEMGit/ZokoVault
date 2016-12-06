@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125062116) do
+ActiveRecord::Schema.define(version: 20161207022731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 20161125062116) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
@@ -254,6 +254,17 @@ ActiveRecord::Schema.define(version: 20161125062116) do
 
   add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
+  create_table "user_activities", force: :cascade do |t|
+    t.integer  "user_id"
+    t.date     "login_date"
+    t.integer  "login_count"
+    t.integer  "session_length"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "user_activities", ["user_id"], name: "index_user_activities_on_user_id", using: :btree
+
   create_table "user_profile_security_questions", force: :cascade do |t|
     t.integer  "user_profile_id"
     t.string   "question"
@@ -281,6 +292,7 @@ ActiveRecord::Schema.define(version: 20161125062116) do
     t.string   "state"
     t.string   "zip"
     t.string   "notes"
+    t.string   "two_factor_phone_number"
   end
 
   create_table "users", force: :cascade do |t|
@@ -390,6 +402,7 @@ ActiveRecord::Schema.define(version: 20161125062116) do
   add_foreign_key "shares", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
+  add_foreign_key "user_activities", "users"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"

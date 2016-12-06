@@ -1,5 +1,6 @@
 class FoldersController < AuthenticatedController
   before_action :set_folder, only: [:show, :edit, :update, :destroy]
+  before_action :set_new_folder, only: [:new]
   before_action :set_ret_url, only: [:new, :edit, :show]
 
   def index
@@ -8,9 +9,7 @@ class FoldersController < AuthenticatedController
 
   def show; end
 
-  def new
-    @folder = Folder.new(parent_id: params[:parent_id])
-  end
+  def new; end
 
   def edit; end
 
@@ -51,12 +50,17 @@ class FoldersController < AuthenticatedController
   end
 
   private
+  
+  def set_new_folder
+    @folder = Folder.new(parent_id: params[:parent_id])
+  end
 
   def set_folder
     @folder = Folder.for_user(current_user).find(params[:id])
   end
   
   def set_ret_url
+    return unless @folder.parent.present?
     session[:ret_url] = path_helper(@folder.parent)
   end
 

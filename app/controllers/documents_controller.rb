@@ -9,8 +9,7 @@ class DocumentsController < AuthenticatedController
     session[:ret_url] = "/documents"
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @document = Document.new(base_params.slice(:category, :group))

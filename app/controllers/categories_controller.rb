@@ -5,8 +5,7 @@ class CategoriesController < AuthenticatedController
     @categories = Category.for_user(current_user)
   end
 
-  def shared_view_dashboard
-  end
+  def shared_view_dashboard; end
 
   def insurance
     @category = Rails.application.config.x.InsuranceCategory #TODO: fix bug in padding out groups if missing
@@ -43,15 +42,13 @@ class CategoriesController < AuthenticatedController
     @group = groups.detect { |group| group["value"] == group_for_new_account }
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @category = Category.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @category = Category.new(category_params.merge(user: current_user))

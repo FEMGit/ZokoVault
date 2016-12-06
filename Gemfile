@@ -66,11 +66,11 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   # Rspec
-  gem 'rspec-rails', '~> 3.4'
-  gem 'factory_girl_rails'
   gem 'capybara'
-  gem 'spring-commands-rspec'
   gem 'dotenv-rails'
+  gem 'factory_girl_rails'
+  gem 'rspec-rails', '~> 3.4'
+  gem 'spring-commands-rspec'
 end
 # Twilio
 gem 'twilio-ruby', '~> 4.11.1'

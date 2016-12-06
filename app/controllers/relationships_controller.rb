@@ -9,8 +9,7 @@ class RelationshipsController < AuthenticatedController
 
   # GET /relationships/1
   # GET /relationships/1.json
-  def show
-  end
+  def show; end
 
   # GET /relationships/new
   def new
@@ -18,8 +17,7 @@ class RelationshipsController < AuthenticatedController
   end
 
   # GET /relationships/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /relationships
   # POST /relationships.json

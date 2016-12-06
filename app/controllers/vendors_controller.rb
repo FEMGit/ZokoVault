@@ -9,8 +9,7 @@ class VendorsController < AuthenticatedController
 
   # GET /vendors/1
   # GET /vendors/1.json
-  def show
-  end
+  def show; end
 
   # GET /vendors/new
   def new

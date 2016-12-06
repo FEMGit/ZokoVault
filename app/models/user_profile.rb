@@ -22,12 +22,12 @@ class UserProfile < ActiveRecord::Base
   enum mfa_frequency: [:never, :new_ip, :always]
 
   validates_format_of :phone_number,
-    with: /\d{3}-\d{3}-\d{4}/,
+    with: /\A\d{3}-\d{3}-\d{4}\z/,
     allow_blank: true,
     message: "must be in format 222-555-1111"
 
   validates_format_of :phone_number_mobile,
-    with: /\d{3}-\d{3}-\d{4}/,
+    with: /\A\d{3}-\d{3}-\d{4}\z/,
     allow_blank: true,
     message: "must be in format 222-555-1111"
 

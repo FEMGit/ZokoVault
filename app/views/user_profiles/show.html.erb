@@ -44,7 +44,10 @@
   <% if show_street?(@user_profile) %>
     <label>Address</label>
     <p>
-      <%= @user_profile.address_parts.join('<br/>').html_safe %>
+      <%= @user_profile.street_address_1 %><br>
+      <%= @user_profile.city %>,
+      <%= @user_profile.state %>
+      <%= @user_profile.zip %><br>
     </p>
   <% end %>
 

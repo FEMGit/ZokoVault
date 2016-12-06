@@ -74,7 +74,12 @@
   <label>Business Address</label>
   <p>
     <% if show_street?(employer) %>
-      <span class="field-block"><%= employer.address_parts.join('<br/>').html_safe %></span>
+      <span class="field-block">
+        <%= employer.street_address_1 %><br>
+        <%= employer.city %>,
+        <%= employer.state %>
+        <%= employer.zip %><br>
+      </span>
     <% end %>
   </p>
 

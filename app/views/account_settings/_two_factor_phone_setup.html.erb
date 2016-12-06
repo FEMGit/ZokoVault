@@ -1,0 +1,99 @@
+<button class="primary-button big-button hidden" data-modal-id="two-factor-phone-modal" id="show-modal-button">
+  Wizard Modal
+</button>
+<div id="two-factor-phone-modal" class="modal wizard-modal modal-no-js">
+  <div class="step-wizard">
+    <div class="inner-step" onclick="phoneSetupNext(1)">
+      <span id="step-1-phone" class="inner-counter">
+        1
+      </span>
+      Enter Cell Phone Number
+    </div>
+    <div class="inner-step" onclick="phoneSetupNext(2)">
+      <span id="step-2-phone" class="inner-counter">
+        2
+      </span>
+      Enter Phone Code
+    </div>
+  </div>
+  <div class="modal-header">
+    <div id="phone-setup-header">
+      <h2>Phone Setup</h2>
+      <p>A phone number is required for account recovery purposes. It can also be used to provide an extra layer of security for your account. Please enter your cell phone number below.</p>
+    </div>
+    <div id="phone-code-header">
+      <h2>Enter Phone Code</h2>
+      <p>You should receive your phone code within the next few minutes. Please enter the code below.</p>
+    </div>
+  </div>
+  <div class="modal-content">
+    <div id="phone-setup-form">
+      <label>Cell Phone Number</label>
+      <%= text_field_tag("phone", "", class: "form-control short", :data => {:mask => '999-999-9999'}) %>
+    </div>
+
+    <div id="phone-code-form">
+      <label>Cell Phone Code</label>
+      <%= text_field_tag("phone", "", class:"short") %>
+    </div>
+  </div>
+  <footer class="modal-footer">
+    <a href="javascript:;" id='next-step-phone' class=" button primary-button big-button"
+      onclick="phoneSetupNext(currentStep + 1); return false;">Next</a>
+      <button id="submit-btn-phone" class="js-modal-close primary-button big-button" onclick="">Submit</button>
+    <%= link_to 'Cancel', "javascript:closeContactFormModal()", class: "js-modal-close button secondary-button big-button", id: 'close-form-link' %>
+  </footer>
+</div>
+
+
+<%#= link_to 'Back', contacts_path #%>
+<script>
+
+var currentStep = 1;
+
+var phoneSetupNext = function(step){
+  currentStep = step;
+  if(step===1){
+    $("#next-step-phone").show();
+    $("#submit-btn-phone").hide();
+    $("#step-1-phone").removeClass().addClass("inner-counter current-step");
+    $("#step-1-phone").html('1');
+    $("#step-2-phone").removeClass().addClass("inner-counter");
+    $("#step-2-phone").html('2');
+    $("#phone-setup-header").show();
+    $("#phone-code-header").hide();
+    $("#phone-setup-form").show();
+    $("#phone-code-form").hide();
+  }
+  else if(step===2){
+    $("#next-step-phone").hide();
+    $("#submit-btn-phone").show();
+    $("#step-1-phone").removeClass().addClass("inner-counter completed-step");
+    $("#step-1-phone").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
+    $("#step-2-phone").removeClass().addClass("inner-counter current-step");
+    $("#step-2-phone").html('2');
+    $("#phone-setup-header").hide();
+    $("#phone-code-header").show();
+    $("#phone-setup-form").hide();
+    $("#phone-code-form").show();
+  }
+}
+
+var showModal = function() {
+  $("body").append("<div class='modal-overlay js-modal-close'></div>");
+  $(".modal-overlay").fadeTo(500, 0.8);
+  $(".js-modalbox").fadeIn(500);
+  canvasEl = $('button[data-modal-id="two-factor-phone-modal"]');
+  var modalBox = $(canvasEl).attr('data-modal-id');
+  $('#' + modalBox).fadeIn($(canvasEl).data());
+  phoneSetupNext(1);
+}
+
+var closeContactFormModal = function() {
+  $(".modal, .modal-overlay").fadeOut(500, function() {
+    $("#contact-form").trigger("reset");
+    $("#error_explanation ul").empty();
+    $(".modal-overlay").remove();
+  });
+}
+</script>

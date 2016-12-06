@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
   
   resources :account_settings
+  put 'account_settings/update', to: 'account_settings#update'
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'

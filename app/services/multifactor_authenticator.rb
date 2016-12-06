@@ -26,7 +26,7 @@ class MultifactorAuthenticator
   end
 
   def phone_to_send_code_to
-    @_user.user_profile.phone_number_mobile.split('-').join('').prepend(country_code)
+    @_user.user_profile.two_factor_phone_number.split('-').join('').prepend(country_code)
   end
 
   def country_code

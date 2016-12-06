@@ -96,11 +96,11 @@
     <p>
       <% if f.object.photourl.present? %>
         <%= image_tag(get_file_url(f.object.photourl), :id => "image_view", class: 'avatar-small') %>
-        <%= link_to 'Remove photo', 'javascript:removePhoto()', class: 'no-underline-link', id: "remove-avatar-link" %>
+        <%= link_to 'Remove photo', 'javascript:removePhoto()', class: 'no-underline-link', id: "action-avatar-link" %>
       <% else %>
         <div id="new-avatar" style="display: none;">
           <%= image_tag('', :id => "image_preview", class: 'avatar-small') %>
-          <%= link_to 'Remove photo', 'javascript:removePhoto();', class: 'no-underline-link', id: "remove-avatar-link" %>
+          <%= link_to 'Remove photo', 'javascript:removePhoto();', class: 'no-underline-link', id: "action-avatar-link" %>
         </div>
       <% end %>
     </p>

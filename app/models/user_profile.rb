@@ -1,5 +1,6 @@
 class UserProfile < ActiveRecord::Base
   validates_with DateOfBirthValidator, fields: [:date_of_birth]
+  scope :for_user, ->(user) { where(user: user).first }
  
   validates_format_of :email,
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
@@ -8,13 +9,21 @@ class UserProfile < ActiveRecord::Base
 
   belongs_to :user
   has_many :employers
-  has_one :contact
+  has_one :contact, autosave: true
 
   has_many :security_questions,
     class_name: 'UserProfileSecurityQuestion'
+  
+  has_many :shares, as: :shareable, dependent: :destroy
+  has_many :primary_shared_with, 
+    through: :shares,
+    source: :contact
 
   delegate :email, :email=, to: :user
-
+  delegate :photourl, :photourl=, to: :contact
+  delegate :password, :password=, to: :user
+  delegate :password_confirmation, :password_confirmation=, to: :user
+  
   accepts_nested_attributes_for :security_questions
   accepts_nested_attributes_for :employers
 
@@ -28,6 +37,11 @@ class UserProfile < ActiveRecord::Base
     message: "must be in format 222-555-1111"
 
   validates_format_of :phone_number_mobile,
+    with: /\A\d{3}-\d{3}-\d{4}\z/,
+    allow_blank: true,
+    message: "must be in format 222-555-1111"
+  
+  validates_format_of :two_factor_phone_number,
     with: /\A\d{3}-\d{3}-\d{4}\z/,
     allow_blank: true,
     message: "must be in format 222-555-1111"

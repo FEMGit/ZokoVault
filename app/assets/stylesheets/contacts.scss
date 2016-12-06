@@ -6,6 +6,14 @@ $avatar-circle-border: 1px;
 $common-font-size: 10px;
 $zipcode-width: 80px;
 $state-width: 210px;
+$base-line-height: 1.5em !default;
+
+.avatar-wrapper {
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  line-height: 15px;
+}
 
 .avatar-small {
   width: 30px;
@@ -25,7 +33,7 @@ $state-width: 210px;
   margin-right: auto;
   left: 0;
   right: 0;
-  margin-top: 8px;
+  top: 8px;
   text-transform: uppercase;
   color: $color-gray-med;
   font-weight: 600;
@@ -39,9 +47,13 @@ $state-width: 210px;
   top: -7px;
 }
 
-#remove-avatar-link {
+#action-avatar-link {
   position: relative;
   top: -8px;
+}
+
+.neighbour-link {
+  padding-left: 10px;
 }
 
 .contact-avatar-td {

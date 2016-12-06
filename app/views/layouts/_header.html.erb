@@ -28,8 +28,7 @@
     <% if user_signed_in? %>
       <a class="" href="/my_profile">
         <span class="user-avatar fr">
-          <span class="user-circle"><%= current_user.initials %></span>
-          <%= user_name(current_user.id) %>
+          <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true } %>
         </span>
       </a>
 

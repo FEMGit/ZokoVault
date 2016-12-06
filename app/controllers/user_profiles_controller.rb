@@ -84,8 +84,7 @@ class UserProfilesController < AuthenticatedController
   def user_profile_params
     params.require(:user_profile).permit(:user_id, :first_name, :middle_name, 
                                          :last_name, :email, :phone_number_mobile, :phone_number,
-                                         :date_of_birth, :street_address_1, :city, :state, :zip,
-                                         :notes,
+                                         :date_of_birth, :street_address_1, :city, :state, :zip, :notes,
                                          employers_attributes: [:name, :web_address, :street_address_1, 
                                                                 :city, :state, :zip, :phone_number_office,
                                                                 :phone_number_fax, :id])

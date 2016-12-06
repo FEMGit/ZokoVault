@@ -16,6 +16,7 @@ $cards-margin: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor:pointer;
   word-wrap: break-word;
+  position: relative;
 
   &.details.insurance,
   &.details.wtl,
@@ -23,7 +24,6 @@ $cards-margin: 12px;
     padding: 0;
   }
 
-  position: relative;
   a.whole-card-link {
     height: 100%;
     width: 100%;
@@ -102,7 +102,7 @@ $cards-margin: 12px;
   border-left: 10px solid $color-card-10;
   @include card-type-details;
 }
-.cg-11, 
+.cg-11,
 .cg-veterans {
   border-left: 10px solid $color-card-11;
   @include card-type-details;
@@ -113,6 +113,10 @@ $cards-margin: 12px;
   float: right;
   color: $color-gray-dark-tinted;
 
+  svg{
+    position: relative;
+    top: 5px;
+  }
   @include media($eightfifty) {
     float: none;
   }
@@ -124,6 +128,9 @@ $cards-margin: 12px;
   p.shared-description{
     max-width: 500px;
   }
+  .card-label{
+    color: $color-primary;
+  }
   &.width-justify {
     margin: -15px;
     padding: 15px;
@@ -132,14 +139,8 @@ $cards-margin: 12px;
     border-bottom: 0;
   }
 }
-.card-label{
-  color: $color-primary;
 
-  svg{
-    position: relative;
-    top: 5px;
-  }
-}
+
 .shared-list{
   margin-top: 10px;
 }
@@ -179,7 +180,54 @@ $cards-margin: 12px;
     margin: 10px -15px 10px -15px;
     border-bottom: 1px solid $color-primary;
   }
+  .card-label{
+    color: $color-primary;
+  }
 }
+
+//CATEGORY CARDS
+.data-list{
+  padding:0;
+  margin: 0 0 20px 0;
+}
+.data-pair{
+  border-bottom: 1px solid  $color-off-white-shaded-more;
+  padding: 3px 0;
+  list-style: none;
+  margin: 0;
+}
+.data-right{
+  float: right;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: .025em;
+}
+.contact-pair{
+  padding: 3px 0;
+  list-style: none;
+  margin: 0;
+}
+.data-summary{
+  padding:0;
+
+  .data-pair{
+    border-bottom: 0;
+    padding: 0;
+  }
+}
+
+.shared-list{
+  margin-top: 5px;
+}
+
+//FINANCIAL INFO
+.fin-toggle{
+  clear: both;
+}
+
+//FIELD DATA PAIRS
+
+
 
 //DYNAMIC CARD REPRESENTATION UNIVERSAL
 .flex-column {
@@ -216,13 +264,6 @@ $cards-margin: 12px;
     float: right;
     position: relative;
   }
-}
-
-.add-new-button{
-  padding-left: 20px;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  margin-top: 10px;
 }
 
 .add-details {
@@ -491,4 +532,3 @@ $cards-margin: 12px;
 .field-block {
   display: block;
 }
-

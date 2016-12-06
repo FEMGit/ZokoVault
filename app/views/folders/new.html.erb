@@ -2,4 +2,4 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Back', sanitize path_helper(@folder.parent) %>
+<%= link_to 'Back', session[:ret_url] || :back %>

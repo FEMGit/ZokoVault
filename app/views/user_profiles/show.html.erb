@@ -64,7 +64,7 @@
   <p>
     <span class="field-block"><%= employer.name %></span>
     <% if !employer.web_address.blank? %>
-      <span class="field-block"><%= link_to employer.web_address, employer.web_address %><br></span>
+      <span class="field-block"><%= web_address(employer) %><br></span>
     <% end %>
   </p>
 

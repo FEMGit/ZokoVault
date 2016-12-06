@@ -7,4 +7,8 @@ module ErrorsHelper
     error_message.slice!('User profile date of birth')
     error_message
   end
+  
+  def date_of_birth_error_safe(user_profile)
+    user_profile.errors.messages[:'Date of Birth'].first.html_safe
+  end
 end

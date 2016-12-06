@@ -75,7 +75,7 @@ $base-line-height: 1.5em !default;
   margin-right: auto;
   left: 0;
   right: 0;
-  margin-top: 8px;
+  top: 8px;
   text-transform: uppercase;
   color: $color-gray-med;
   font-weight: 600;
@@ -89,9 +89,13 @@ $base-line-height: 1.5em !default;
   top: -7px;
 }
 
-#remove-avatar-link {
+#action-avatar-link {
   position: relative;
   top: -8px;
+}
+
+.neighbour-link {
+  padding-left: 10px;
 }
 
 .contact-avatar-td {

@@ -6,6 +6,12 @@ textarea{
   margin-bottom: 10px;
   padding: 5px;
   width: $form-width;
+  &.short {
+    width: $short-form-width;
+  }
+  &.medium {
+    width: $medium-form-width;
+  }
 }
 input[type=radio]{
   display:inline;
@@ -226,6 +232,10 @@ li.check-list{
   display: block;
   position: relative;
   width: 100%;
+  label {
+    color: $color-black;
+    font-weight: 400;
+  }
 }
 
 // li.radio-list input[type=radio]{

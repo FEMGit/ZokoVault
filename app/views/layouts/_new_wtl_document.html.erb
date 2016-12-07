@@ -1,25 +1,10 @@
 <h1><%= yield(:title) + ' - Setup' %></h1>
-
-  <% if @vault_entry.errors.any? %>
-    <div>
-      Errors:
-      <ul>
-        <% @vault_entry.errors.full_messages.each do |message| %>
-          <li><%= message %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%= form_for @vault_entry, :remote => true do |f| %>
-
+  <%= form_for @vault_entry do |f| %>
   <div id="wtl-forms">
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
         <%= fields_for "vault_entry_#{index}", data do |builder| %>
-
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
-
         <% end %>
       <% end %>
     </div>

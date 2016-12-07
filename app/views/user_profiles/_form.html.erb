@@ -1,15 +1,7 @@
-<%= form_for(@user_profile, url: user_profile_path) do |f| %>
+<%= form_for(@user_profile, url: user_profile_path, html: {novalidate: true}) do |f| %>
 
   <% if @user_profile.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user_profile.errors.count, "error") %> prohibited this from being saved:</h2>
-
-      <ul>
-        <% @user_profile.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <% errors = true %>
   <% end %>
 
   <div class="card mb-30">
@@ -25,8 +17,11 @@
     <p><%= f.text_field :last_name %></p>
 
     <%= f.label :email, 'Email Address' %>
-    <p><%= f.email_field :email %></p>
-
+    <% if errors && @user_profile.errors.messages[:email] %>
+      <span class="error-label"> - <%= @user_profile.errors.messages[:email].first %></span>
+    <% end %>
+    <p><%= f.email_field :email, { class: ("input-error" if @user_profile.errors.messages[:email].present?) } %></p>
+    
     <%= f.label :phone_number_mobile, 'Cell Phone Number' %>
     <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
 
@@ -34,7 +29,10 @@
     <p><%= f.text_field :phone_number, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
 
     <%= f.label :date_of_birth, 'Birthdate (mm/dd/yyyy)' %>
-    <p><%= f.date_field :date_of_birth %></p>
+    <% if errors && @user_profile.errors.messages[:'Date of Birth'] %>
+      <span class="error-label"> - <%= date_of_birth_error_safe(@user_profile) %></span>
+    <% end %>
+    <p><%= f.date_field :date_of_birth, { class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?), value: f.object.date_of_birth } %></p>
 
     <%= f.label :street_address_1, 'Street Address' %>
     <p><%= f.text_field :street_address_1 %></p>

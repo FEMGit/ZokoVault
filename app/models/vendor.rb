@@ -11,7 +11,7 @@ class Vendor < ActiveRecord::Base
 
   accepts_nested_attributes_for :vendor_accounts
 
-  validates :name, presence: true
+  validates :name, presence: { :message => "Required" }
 
   after_initialize :initialize_category_and_group
   before_validation :build_shares

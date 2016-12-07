@@ -9,7 +9,7 @@ class Document < ActiveRecord::Base
   has_many :shares, dependent: :destroy, foreign_key: "document_id"
   has_many :contacts, through: :shares
 
-  validates :name, presence: true
+  validates :name, presence: { :message => "Required" }
   validates :url, presence: true
 
   accepts_nested_attributes_for :shares, reject_if: proc { |attributes| attributes[:contact_id].blank? }

@@ -9,7 +9,7 @@
       </span>
       Enter Cell Phone Number
     </div>
-    <div class="inner-step" onclick="phoneSetupNext(2)">
+    <div class="inner-step">
       <span id="step-2-phone" class="inner-counter">
         2
       </span>
@@ -26,33 +26,54 @@
       <p>You should receive your phone code within the next few minutes. Please enter the code below.</p>
     </div>
   </div>
-  <div class="modal-content">
-    <div id="phone-setup-form">
-      <label>Cell Phone Number</label>
-      <%= text_field_tag("phone", "", class: "form-control short", :data => {:mask => '999-999-9999'}) %>
-    </div>
+  <%= form_tag :account_settings, { method: :post, id: 'two_factor_phone' } do %>
+    <div class="modal-content">
+      <div id="phone-setup-form">
+        <%= label_tag "user_profile_two_factor_phone_number", 'Cell Phone Number' %>
+        <span class="error-label" id="phone-number-error" style="display: none;"> - Phone Number Invalid </span>
+        <%= text_field_tag "user_profile[two_factor_phone_number]", "", class: "form-control medium", :data => {:mask => '999-999-9999'}, autofocus: true %>
+      </div>
 
-    <div id="phone-code-form">
-      <label>Cell Phone Code</label>
-      <%= text_field_tag("phone", "", class:"short") %>
+      <div id="phone-code-form">
+        <%= label_tag "user_profile_phone_code", 'Phone Code' %>
+        <span class="error-label" id="phone-code-error" style="display: none;"> - Code Invalid </span>
+        <%= text_field_tag "user_profile[phone_code]", "", class:"short" %>
+      </div>
     </div>
-  </div>
-  <footer class="modal-footer">
-    <a href="javascript:;" id='next-step-phone' class=" button primary-button big-button"
-      onclick="phoneSetupNext(currentStep + 1); return false;">Next</a>
-      <button id="submit-btn-phone" class="js-modal-close primary-button big-button" onclick="">Submit</button>
-    <%= link_to 'Cancel', "javascript:closeContactFormModal()", class: "js-modal-close button secondary-button big-button", id: 'close-form-link' %>
-  </footer>
+    <footer class="modal-footer">
+      <a href="javascript:;" id='next-step-phone' class=" button primary-button big-button"
+        onclick="sendCode()">Next</a>
+      <%= link_to 'Submit', "javascript:verifyCode()", class: "button primary-button big-button", id: 'submit-btn-phone' %>
+      <%= link_to 'Cancel', "javascript:closeFormModal()", class: "js-modal-close button secondary-button big-button", id: 'close-form-link' %>
+    </footer>
+  <% end %>
 </div>
 
 
 <%#= link_to 'Back', contacts_path #%>
 <script>
 
+
+// handle 'enter press' to verify code
+$('#user_profile_phone_code').keypress(function(e) {
+  if(e.which == 13) {
+    e.preventDefault();
+    verifyCode();
+  }
+});
+
+$('#user_profile_two_factor_phone_number').keypress(function(e) {
+  if(e.which == 13) {
+    e.preventDefault();
+    sendCode();
+  }
+});
+
 var currentStep = 1;
 
 var phoneSetupNext = function(step){
   currentStep = step;
+  $(this).next('.inputs').focus();
   if(step===1){
     $("#next-step-phone").show();
     $("#submit-btn-phone").hide();
@@ -64,6 +85,7 @@ var phoneSetupNext = function(step){
     $("#phone-code-header").hide();
     $("#phone-setup-form").show();
     $("#phone-code-form").hide();
+    $("#user_profile_two_factor_phone_number").focus();
   }
   else if(step===2){
     $("#next-step-phone").hide();
@@ -76,6 +98,7 @@ var phoneSetupNext = function(step){
     $("#phone-code-header").show();
     $("#phone-setup-form").hide();
     $("#phone-code-form").show();
+    $("#user_profile_phone_code").focus();
   }
 }
 
@@ -89,11 +112,45 @@ var showModal = function() {
   phoneSetupNext(1);
 }
 
-var closeContactFormModal = function() {
+var closeFormModal = function() {
   $(".modal, .modal-overlay").fadeOut(500, function() {
     $("#contact-form").trigger("reset");
     $("#error_explanation ul").empty();
     $(".modal-overlay").remove();
   });
+}
+
+function sendCode() {
+  var data = $('#user_profile_two_factor_phone_number').serialize();
+  $.post("<%= send_code_account_settings_path %>",
+      data,
+      function() {
+        $('#phone-number-error').hide();
+        $('#user_profile_two_factor_phone_number').removeClass('input-error')
+        phoneSetupNext(currentStep + 1); return false;
+      })
+  .fail(function() {
+    $('#user_profile_two_factor_phone_number').addClass('input-error')
+    $('#phone-number-error').show();
+  })
+}
+
+function verifyCode() {
+  var data = $('#two_factor_phone').serialize();
+  var phoneNumber = $('#user_profile_two_factor_phone_number').val()
+  $.post("<%= verify_code_account_settings_path %>",
+      data,
+      function() {
+        $('#user_profile_phone_code').removeClass('input-error')
+        $('#phone-code-error').hide()
+        $("#user_profile_phone_code").text('');
+        $('#two_factor_phone_label').text(phoneNumber)
+        $('.flash-success').show().text("Phone number successfully updated.").fadeOut( 5000 )
+        closeFormModal()
+      })
+  .fail(function() {
+    $('#user_profile_phone_code').addClass('input-error')
+    $('#phone-code-error').show()
+  })
 }
 </script>

@@ -79,6 +79,12 @@
       <use xlink:href="#icon-folder-1"></use>
     </svg>Documents
   <% end %>
+  <% account_settings_current = 'active' if current_page?(account_settings_url) %>
+  <%= link_to account_settings_path, class: "main-nav #{account_settings_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-settings-1"></use>
+    </svg>Account Settings
+  <% end %>
   <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav") %>
 
 </nav>

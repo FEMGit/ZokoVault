@@ -1,0 +1,61 @@
+<%= form_for current_user do |f| %>
+  <div class="card mb-30">
+    <h3 class="card-label">Account Settings</h3>
+
+    <label>Two Factor Authentication Phone Number</label>
+    <p>630-885-9071</p>
+    <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button big-button"%></p>
+
+    <label>Login Settings</label>
+    <ul class="radio-list">
+      <li class="radio-list">
+        <input type="radio" id="mfa-1" name="mfa-select" checked="checked">
+        <label for="mfa-1">Verify login using my phone every time</label>
+        <div class="check"></div>
+      </li>
+      <li class="radio-list">
+        <input type="radio" id="mfa-2" name="mfa-select">
+        <label for="mfa-2">Verify login using my phone when logging in from a new device</label>
+        <div class="check"></div>
+      </li>
+      <li class="radio-list">
+        <input type="radio" id="mfa-3" name="mfa-select">
+        <label for="mfa-3">Do not use my phone for login</label>
+        <div class="check"></div>
+      </li>
+    </ul>
+
+    <label>Update Password</label>
+    <%= text_field_tag "update_password" %>
+
+    <label>Confirm Password</label>
+    <%= text_field_tag "confirm_password" %>
+
+    <span class="user-circle field">BM</span>
+    <a onclick="saveFileUrl()" class="no-underline-link">Update Photo</a>
+
+    <div class="card mb-30 shared-with">
+      <h3 class="card-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Primary Shared With
+      </h3>
+      <p class="shared-description">
+        The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
+      <label>Primary Shared With</label>
+      <div class="chosen-styled-select">
+        <%= contact_select_with_create_new(f, :shares, @contacts, id: "primary_shared_with") %>
+      </div>
+    </div>
+  </div>
+  <%= link_to "Save", "javascript:", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', :back, class: "button secondary-button big-button" %>
+<% end %>
+
+<%= yield :new_contact_form %>
+<%= render :partial => "account_settings/two_factor_phone_setup" %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

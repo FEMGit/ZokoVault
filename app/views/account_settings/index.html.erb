@@ -6,8 +6,7 @@
     <% end %>
 
     <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
-    <%= f.text_field :two_factor_phone_number, style: "display: none;" %>
-    <p><%= f.object.two_factor_phone_number %></p>
+    <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
     <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button"%></p>
 
     <%= f.label :mfa_frequency, "Login Settings" %>

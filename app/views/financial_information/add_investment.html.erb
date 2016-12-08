@@ -1,0 +1,73 @@
+<h1>Financial Info - Add Private Investment or Debt</h1>
+
+<div class="card mb-30">
+  <h3 class="card-label">Property Details</h3>
+  
+  <label>Investment Name</label>
+  <%= text_field_tag "" %>
+
+  <label>Investment Type</label>
+  <div class="chosen-styled-select">
+    <%= collection_select "", :primary_contact, ["Type1", "Type2", "Type3", "Type4", "Type5"].prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
+      'data-placeholder': 'Choose Type...', multiple: false} %>
+  </div>
+  
+  <label>Investment Owner</label>
+  <div class="chosen-styled-select">
+    <%= collection_select "", :primary_contact, @contacts.collect { |s| [s.id, s.name] }.prepend([]), :first, :second, {}, {class: 'chosen-select', 
+      'data-placeholder': 'Choose Contact...', multiple: false} %>
+  </div>
+
+  <label>Investment Value</label>
+  <%= text_field_tag "", "", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} } %>
+
+  <label>Web Address</label>
+  <%= text_field_tag "" %>
+  
+  <label>Phone Number</label>
+  <%= text_field_tag "", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
+
+  <label>Address</label>
+  <%= text_field_tag "" %>
+  
+  <label>City</label>
+  <%= text_field_tag "" %>
+  
+  <span class="state-input">
+    <label>State</label>
+    <div class="styled-select">
+      <%= select_tag :state, options_for_select(us_states), :include_blank => "Select..." %>
+    </div>
+  </span>
+  <span class="zip-input">
+    <label>Zip Code</label>
+    <%= text_field_tag "", "", class: "form-control", :data => {:mask => '99999'} %>
+  </span>
+  
+  <label>Primary Contact</label>
+  <div class="chosen-styled-select">
+    <%= collection_select "", :primary_contact, @contacts.collect { |s| [s.id, s.name] }.prepend([]), :first, :second, {}, {class: 'chosen-select', 
+      'data-placeholder': 'Choose Contact...', multiple: false} %>
+  </div>
+
+  <label>Notes</label>
+  <%= text_area_tag "", "" %>
+  
+  <section class="shared-with">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
+    <%= collection_select "", :primary_contact, @contacts.collect { |s| [s.id, s.name] }.prepend([]), :first, :second, {}, {class: 'chosen-select', 
+      'data-placeholder': 'Choose Contacts...', multiple: true} %>
+  </section>
+</div>
+
+<%= link_to 'Save', 'javascript:void(0)', class: "button primary-button big-button" %>
+<%= link_to 'Cancel', 'javascript:void(0)', class: "button secondary-button big-button"%>
+
+<script>
+$('.chosen-select').chosen({allow_single_deselect: true});
+</script>

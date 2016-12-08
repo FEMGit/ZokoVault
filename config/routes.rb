@@ -138,6 +138,9 @@ Rails.application.routes.draw do
   get 'usage_metrics/details/:id', to: 'usage_metrics#details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   
+  # Financial information
+  get 'financial_information/add_account', to: 'financial_information#add_account', as: :add_account
+
   # Catch all routes so we can handle no route error
   match "*path", to: "application#catch_404", via: :all
 

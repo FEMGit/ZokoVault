@@ -195,13 +195,21 @@ $cards-margin: 12px;
   padding: 3px 0;
   list-style: none;
   margin: 0;
-}
-.data-right{
-  float: right;
-  font-weight: 300;
-  font-size: 16px;
-  letter-spacing: .025em;
-}
+  @include display(flex);
+  justify-content: space-between;
+
+  label{
+    width: 60%;
+  }
+ .data-right{
+   width: 40%;
+   font-weight: 300;
+   font-size: 16px;
+   letter-spacing: .025em;
+   text-align: right;
+   white-space: nowrap;
+ }
+} 
 .contact-pair{
   padding: 3px 0;
   list-style: none;
@@ -215,77 +223,6 @@ $cards-margin: 12px;
     padding: 0;
   }
 }
-
-.shared-list{
-  margin-top: 5px;
-}
-
-//CATEGORY CARDS
-.data-list{
-  padding:0;
-  margin: 0 0 20px 0;
-}
-.data-pair{
-  border-bottom: 1px solid  $color-off-white-shaded-more;
-  padding: 3px 0;
-  list-style: none;
-  margin: 0;
-}
-.data-right{
-  float: right;
-  font-weight: 300;
-  font-size: 16px;
-  letter-spacing: .025em;
-}
-.contact-pair{
-  padding: 3px 0;
-  list-style: none;
-  margin: 0;
-}
-.data-summary{
-  padding:0;
-
-  .data-pair{
-    border-bottom: 0;
-    padding: 0;
-  }
-}
-
-.shared-list{
-  margin-top: 5px;
-}
-
-//CATEGORY CARDS
-.data-list{
-  padding:0;
-  margin: 0 0 20px 0;
-}
-.data-pair{
-  border-bottom: 1px solid  $color-off-white-shaded-more;
-  padding: 3px 0;
-  list-style: none;
-  margin: 0;
-}
-.data-right{
-  float: right;
-  font-weight: 300;
-  font-size: 16px;
-  letter-spacing: .025em;
-}
-.contact-pair{
-  padding: 3px 0;
-  list-style: none;
-  margin: 0;
-}
-.data-summary{
-  padding:0;
-
-  .data-pair{
-    border-bottom: 0;
-    padding: 0;
-  }
-}
-
 .shared-list{
   margin-top: 5px;
 }
@@ -295,9 +232,27 @@ $cards-margin: 12px;
   clear: both;
 }
 
-//FIELD DATA PAIRS
-
-
+//DOCUMENT COUNTER
+.fa-stack{
+  .document-number {
+    margin-top: 4px;
+    color: white;
+    font-weight: 300;
+    position: absolute;
+    z-index: 1;
+    font-size: 12px;
+  }
+  .icon-section {
+    float: right;
+  }
+  .icon-document-2 {
+    font-size: 32px;
+    color: $color-gray-light;
+    opacity: 0.9;
+    float: right;
+    position: relative;
+  }
+}
 
 //DYNAMIC CARD REPRESENTATION UNIVERSAL
 .flex-column {
@@ -318,24 +273,7 @@ $cards-margin: 12px;
   .inline-block {
     display: inline-block;
   }
-  .document-number {
-    margin-top: 7px;
-    color: $color-gray-med-shaded;
-    font-weight: 600;
-    padding-right: 4px;
-  }
-  .icon-section {
-    float: right;
-  }
-  .icon-document-1 {
-    font-size: 40px;
-    color: $color-gray-med-shaded;
-    opacity: 0.9;
-    float: right;
-    position: relative;
-  }
 }
-
 .add-details {
   float: right;
   margin-top: 10px;

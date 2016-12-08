@@ -6,17 +6,55 @@ $avatar-circle-border: 1px;
 $common-font-size: 10px;
 $zipcode-width: 80px;
 $state-width: 210px;
+$base-line-height: 1.5em !default;
+
+
+.avatar-wrapper {
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  line-height: 15px;
+}
 
 .avatar-small {
   width: 30px;
   height: 30px;
   border: 1px solid $color-gray-med;
   border-radius: 30px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
 }
 
-#remove-avatar-link {
+.avatar-initials {
+  position: absolute;
+  z-index: 2;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 8px;
+  text-transform: uppercase;
+  color: $color-gray-med;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+}
+
+.avatar-name {
+  position: relative;
+  top: -7px;
+}
+
+#action-avatar-link {
   position: relative;
   top: -8px;
+}
+
+.neighbour-link {
+  padding-left: 10px;
 }
 
 .contact-avatar-td {

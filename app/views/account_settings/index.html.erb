@@ -1,38 +1,47 @@
-<%= form_for current_user do |f| %>
+<%= form_for @user_profile, :url => url_for(action: :update, controller: :account_settings) do |f| %>
   <div class="card mb-30">
     <h3 class="card-label">Account Settings</h3>
+    <% if @user_profile.errors.any? %>
+      <% errors = true %>
+    <% end %>
 
-    <label>Two Factor Authentication Phone Number</label>
-    <p>630-885-9071</p>
-    <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button big-button"%></p>
+    <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
+    <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
+    <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button"%></p>
 
-    <label>Login Settings</label>
+    <%= f.label :mfa_frequency, "Login Settings" %>
     <ul class="radio-list">
       <li class="radio-list">
-        <input type="radio" id="mfa-1" name="mfa-select" checked="checked">
-        <label for="mfa-1">Verify login using my phone every time</label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "always", radio_button_checked?("always", @user_profile.mfa_frequency) %>
+        <label for="user_profile_mfa_frequency_always">Verify login using my phone every time</label>
         <div class="check"></div>
       </li>
       <li class="radio-list">
-        <input type="radio" id="mfa-2" name="mfa-select">
-        <label for="mfa-2">Verify login using my phone when logging in from a new device</label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "new_ip", radio_button_checked?("new_ip", @user_profile.mfa_frequency) %>
+        <label for="user_profile_mfa_frequency_new_ip">Verify login using my phone when logging in from a new device</label>
         <div class="check"></div>
       </li>
       <li class="radio-list">
-        <input type="radio" id="mfa-3" name="mfa-select">
-        <label for="mfa-3">Do not use my phone for login</label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "never", radio_button_checked?("never", @user_profile.mfa_frequency) %>
+        <label for="user_profile_mfa_frequency_never">Do not use my phone for login</label>
         <div class="check"></div>
       </li>
     </ul>
 
-    <label>Update Password</label>
-    <%= text_field_tag "update_password" %>
+    <%= f.label :password, 'Update Password' %>
+    <% if errors && @user_profile.errors.messages[:password].present? %>
+      <span class="error-label"> - <%= @user_profile.errors.messages[:password].first %></span>
+    <% end %>
+    <%= f.password_field :password, {autocomplete: "off", class: ("input-error" if @user_profile.errors.messages[:password].present?) } %>
 
-    <label>Confirm Password</label>
-    <%= text_field_tag "confirm_password" %>
-
-    <span class="user-circle field">BM</span>
-    <a onclick="saveFileUrl()" class="no-underline-link">Update Photo</a>
+    <%= f.label :password_confirmation, 'Confirm Password' %>
+    <% if errors && @user_profile.errors.messages[:password_confirmation].present? %>
+      <span class="error-label"> - <%= @user_profile.errors.messages[:password_confirmation].first %></span>
+    <% end %>
+    <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if @user_profile.errors.messages[:password_confirmation].present?) } %>
+    
+    <%= render :partial => "avatar_upload" %>
+    <%= f.text_field :photourl, id: "photo_url", style: "display: none;" %>
 
     <div class="card mb-30 shared-with">
       <h3 class="card-label">
@@ -45,12 +54,11 @@
         The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
       <label>Primary Shared With</label>
       <div class="chosen-styled-select">
-        <%= contact_select_with_create_new(f, :shares, @contacts, id: "primary_shared_with") %>
+        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, id: "primary_shared_with") %>
       </div>
     </div>
   </div>
-  <%= link_to "Save", "javascript:", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', :back, class: "button secondary-button big-button" %>
+  <%= f.submit "Update", class: "button primary-button big-button" %>
 <% end %>
 
 <%= yield :new_contact_form %>

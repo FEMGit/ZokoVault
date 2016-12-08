@@ -111,6 +111,9 @@ Rails.application.routes.draw do
   get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
   
   resources :account_settings
+  put 'account_settings/update', to: 'account_settings#update'
+  post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
+  post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'

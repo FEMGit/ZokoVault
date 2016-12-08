@@ -49,6 +49,7 @@ class AccountsController < AuthenticatedController
       user_profile_attributes: [
         :signed_terms_of_service,
         :phone_number_mobile,
+        :two_factor_phone_number,
         :mfa_frequency,
         :phone_code,
         security_questions_attributes: [:question, :answer]

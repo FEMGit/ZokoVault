@@ -5,3 +5,14 @@
     width: 100%;
   }
 }
+
+@mixin avatar-circle($radius) {
+  width: $radius;
+  height: $radius;
+  border: 1px solid $color-gray-med;
+  border-radius: 30px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}

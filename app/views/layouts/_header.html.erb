@@ -28,7 +28,7 @@
     <% if user_signed_in? %>
       <a class="" href="/my_profile">
         <span class="user-avatar fr">
-          <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true } %>
+          <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
         </span>
       </a>
 

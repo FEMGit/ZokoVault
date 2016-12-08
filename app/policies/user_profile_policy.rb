@@ -26,14 +26,4 @@ class UserProfilePolicy < BasicPolicy
   def set_user_profile?
     user_owned?
   end
-
-  private
-
-  def user_owned?
-    record.user == user
-  end
-
-  def shared?
-    false
-  end
 end

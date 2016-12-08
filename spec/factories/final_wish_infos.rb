@@ -1,4 +1,4 @@
 FactoryGirl.define do
-  factory :tax do
+  factory :final_wish_info do
   end
 end

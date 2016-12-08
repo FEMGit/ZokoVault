@@ -14,10 +14,6 @@ class WillPolicy < BasicPolicy
     update?
   end
 
-  def index?
-    user_owned?
-  end
-
   class Scope
     attr_reader :user, :scope
 
@@ -29,15 +25,5 @@ class WillPolicy < BasicPolicy
     def resolve
       scope.where(user: user)
     end
-  end
-
-  private
-
-  def user_owned?
-    record.user == user
-  end
-
-  def shared?
-    false
   end
 end

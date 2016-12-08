@@ -7,7 +7,7 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def index?
-    false
+    user_owned?
   end
 
   def show?
@@ -15,7 +15,7 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def create?
-    owned_or_shared?
+    user_owned?
   end
 
   def new?
@@ -62,10 +62,18 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def user_owned?
-    false
+    record.user == user
   end
 
   def shared_with_user?
-    false
+    owner_shared_account_with_user? || owner_shared_record_with_user?
+  end
+
+  def owner_shared_account_with_user?
+    Share.exists?(shareable: record.user, contact: Contact.for_user(user))
+  end
+
+  def owner_shared_record_with_user?
+    Share.exists?(shareable: record, contact: Contact.for_user(user))
   end
 end

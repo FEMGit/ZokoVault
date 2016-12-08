@@ -10,10 +10,6 @@ class SharePolicy < BasicPolicy
     Pundit.policy_scope!(user, record.class)
   end
 
-  def index?
-    user_owned?
-  end
-
   class Scope
     attr_reader :user, :scope
 
@@ -25,15 +21,5 @@ class SharePolicy < BasicPolicy
     def resolve
       scope.where(user: user)
     end
-  end
-
-  private
-
-  def user_owned?
-    record.user == user
-  end
-
-  def shared?
-    false
   end
 end

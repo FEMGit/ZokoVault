@@ -17,14 +17,11 @@ $base-line-height: 1.5em !default;
 }
 
 .avatar-small {
-  width: 30px;
-  height: 30px;
-  border: 1px solid $color-gray-med;
-  border-radius: 30px;
-  padding: 0;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
+  @include avatar-circle($small-radius)
+}
+
+.avatar-medium {
+  @include avatar-circle($medium-radius)
 }
 
 .avatar-initials {

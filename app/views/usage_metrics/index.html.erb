@@ -77,7 +77,7 @@
     <% @user_errors && @user_errors.each do |user_error| %>
       <tr>
         <td>
-          <%= user_error.user.name %>
+          <%= user_error.user && user_error.user.name %>
         </td>
         <td>
           <%= user_error.page_terminated_on %>

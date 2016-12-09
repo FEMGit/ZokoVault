@@ -1,5 +1,5 @@
 <label>Name</label>
-<p><%= @user_death_trap.user.name %></p>
+<p><%= @user_death_trap.user && @user_death_trap.user.name %></p>
 
 <label>Page Terminated On</label>
 <p><%= @user_death_trap.page_terminated_on %></p>

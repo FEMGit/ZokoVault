@@ -1,24 +1,24 @@
-<h1>Financial Info - Add Private Investment or Debt</h1>
+<h1>Financial Info - Add Other Investment or Debt</h1>
 
 <div class="card mb-30">
   <h3 class="card-label">Investment Details</h3>
   
-  <label>Investment Name</label>
+  <label>Investment or Debt Name<span class="required">Required</span></label>
   <%= text_field_tag "" %>
 
-  <label>Investment Type</label>
+  <label>Type</label>
   <div class="chosen-styled-select">
     <%= collection_select "", :primary_contact, ["Type1", "Type2", "Type3", "Type4", "Type5"].prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
       'data-placeholder': 'Choose Type...', multiple: false} %>
   </div>
   
-  <label>Investment Owner</label>
+  <label>Owner</label>
   <div class="chosen-styled-select">
     <%= collection_select "", :primary_contact, @contacts.collect { |s| [s.id, s.name] }.prepend([]), :first, :second, {}, {class: 'chosen-select', 
       'data-placeholder': 'Choose Contact...', multiple: false} %>
   </div>
 
-  <label>Investment Value</label>
+  <label>Value</label>
   <%= text_field_tag "", "", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} } %>
 
   <label>Web Address</label>

@@ -15,10 +15,10 @@
          <%= link_to 'Login', new_user_session_path, class: "login-link" %>
 
          <nav class="marketing-nav">
-          <a class="marketing-link" href="/about">About Zoku</a>
-          <a class="marketing-link" href="/setup">Easy Setup</a>
-          <a class="marketing-link" href="/security">Security</a>
-          <a class="marketing-link" href="/contact-us">Contact Us</a>
+          <%= link_to 'About Zoku', about_path, class: "marketing-link" %>
+          <%= link_to 'Easy Setup', setup_path, class: "marketing-link" %>
+          <%= link_to 'Security', security_path, class: "marketing-link" %>
+          <%= link_to 'Contact Us', contact_page_path, class: "marketing-link" %>
         </nav>
       </section>
     <% end %>

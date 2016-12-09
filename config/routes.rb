@@ -33,32 +33,9 @@ Rails.application.routes.draw do
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
   
   # Mailer
-  post 'contact-us', to: 'messages#create'
-  post 'mailing-list', to: 'interested_users#create'
+  post 'contact_us', to: 'messages#create'
+  post 'mailing_list', to: 'interested_users#create'
   
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-  get 'taxes/new/:year', to: 'taxes#create'
-
-  # Mailer
-  post 'contact-us', to: 'messages#create'
-  post 'mailing-list', to: 'interested_users#create'
-  
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-  get 'taxes/new/:year', to: 'taxes#create'
-
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-  get 'taxes/new/:year', to: 'taxes#create'
-
-  # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
-  get 'taxes/new/:year', to: 'taxes#create'
-
   # Taxes
   get 'taxes/:id/:year', to: 'taxes#show'
   get 'taxes/new/:year', to: 'taxes#create'
@@ -142,6 +119,16 @@ Rails.application.routes.draw do
   get 'financial_information/add_account', to: 'financial_information#add_account', as: :add_account
   get 'financial_information/add_property', to: 'financial_information#add_property', as: :add_property
   get 'financial_information/add_investment', to: 'financial_information#add_investment', as: :add_investment
+  
+  # Information pages
+  get "/about", to: "pages#about", as: :about
+  get "/setup", to: "pages#setup", as: :setup
+  get "/security", to: "pages#security", as: :security
+  get "/contact_us", to: "pages#contact_us", as: :contact_page
+  get "/careers", to: "pages#careers", as: :careers
+  get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
+  get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
+  get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
 
   # Catch all routes so we can handle no route error
   match "*path", to: "application#catch_404", via: :all

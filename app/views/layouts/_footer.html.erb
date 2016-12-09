@@ -12,20 +12,20 @@
         <a class="footer-link social-icon" href="https://www.facebook.com/zokuvault/"><svg class="icon icon-facebook-square"><use xlink:href="#icon-facebook-square"></use></svg></a>
       </section>
       <section class="flex-marketing">
-        <a class="footer-link" href="/about">About Zoku</a><br>
-        <a class="footer-link" href="/setup">Easy Setup</a><br>
-        <a class="footer-link" href="/security">Security</a><br>
+        <%= link_to 'About Zoku', about_path, class: "footer-link" %><br>
+        <%= link_to 'Easy Setup', setup_path, class: "footer-link" %><br>
+        <%= link_to 'Security', security_path, class: "footer-link" %><br>
       </section>
       <section class="flex-marketing">
         <!-- <a class="footer-link" href="">Become a Partner</a><br>
         <a class="footer-link" href="">Buisness Solutions</a><br>
         <a class="footer-link" href="/resources">Resources</a><br> -->
-        <a class="footer-link" href="/careers">Careers</a><br>
-        <a class="footer-link" href="/contact-us">Contact Us</a>
+        <%= link_to 'Careers', careers_path, class: "footer-link" %><br>
+        <%= link_to 'Contact Us', contact_page_path, class: "footer-link" %><br>
       </section>
       <section class="flex-marketing">
-        <a class="footer-link" href="/terms-of-service">Terms of Service</a><br>
-        <a class="footer-link" href="/privacy-policy">Privacy Policy</a>
+        <%= link_to 'Terms of Service', terms_of_service_path, class: "footer-link" %><br>
+        <%= link_to 'Privacy Policy', privacy_policy_path, class: "footer-link" %><br>
       </section>
     </nav>
 

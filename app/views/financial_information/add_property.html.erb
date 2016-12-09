@@ -3,7 +3,7 @@
 <div class="card mb-30">
   <h3 class="card-label">Property Details</h3>
   
-  <label>Provider Name</label>
+  <label>Property Name<span class="required">Required</span></label>
   <%= text_field_tag "" %>
 
   <label>Property Type</label>
@@ -20,7 +20,11 @@
 
   <label>Property Value</label>
   <%= text_field_tag "", "", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} } %>
-  
+
+  <label>Property Address or Location</label>
+  <%= text_field_tag "" %>
+
+
   <label>City</label>
   <%= text_field_tag "" %>
   

@@ -17,7 +17,6 @@ class SharesController < AuthenticatedController
     def create
       @share = Share.new(share_params.merge(user_id: current_user.id))
       authorize @share
-
       respond_to do |format|
         if @share.save
           format.html { redirect_to @share, notice: 'share was successfully created.' }

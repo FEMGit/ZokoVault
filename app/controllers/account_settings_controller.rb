@@ -1,6 +1,7 @@
 class AccountSettingsController < AuthenticatedController
   before_action :set_user_profile, only: [:index, :update, :send_code, :update_two_factor_phone, :verify_code]
   before_action :set_contacts_shareable, only: [:index, :update]
+  before_action :create_contact_if_not_exists, only: [:update]
   
   def index; end
 
@@ -55,6 +56,21 @@ class AccountSettingsController < AuthenticatedController
   end
   
   private
+
+  def create_contact_if_not_exists
+    contact = Contact.for_user(current_user).find_or_initialize_by(emailaddress: current_user.email)
+    contact.update_attributes(
+      firstname: @user_profile.first_name,
+      lastname: @user_profile.last_name,
+      emailaddress: current_user.email,
+      contact_type: nil,
+      relationship: 'Account Owner',
+      beneficiarytype: nil,
+      user_id: current_user.id,
+      user_profile_id: @user_profile.id,
+      photourl: account_settings_params[:photourl]
+    )
+  end
   
   def update_password
     @user = User.find(current_user.id)
@@ -77,7 +93,6 @@ class AccountSettingsController < AuthenticatedController
   def new_phone
     account_settings_params[:two_factor_phone_number]
   end
-  
   
   def set_contacts_shareable
     contact_service = ContactService.new(:user => current_user)

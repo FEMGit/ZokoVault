@@ -20,7 +20,7 @@ class UserProfile < ActiveRecord::Base
     source: :contact
 
   delegate :email, :email=, to: :user
-  delegate :photourl, :photourl=, to: :contact
+  delegate :photourl, :photourl=, to: :contact, allow_nil: true
   delegate :password, :password=, to: :user
   delegate :password_confirmation, :password_confirmation=, to: :user
   

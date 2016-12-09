@@ -87,6 +87,11 @@ button{
   }
 }
 
+.fixed-width {
+  @include button-fixed-width(110px)
+}
+
+
 .footer_right {
   float: right;
   margin-right: 20px;

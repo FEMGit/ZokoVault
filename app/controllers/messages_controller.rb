@@ -5,7 +5,7 @@ class MessagesController < ApplicationController
       MessageMailer.new_message(@message).deliver
       redirect_to contact_us_path, notice: "Your message has been sent."
     else
-      render 'pages/contact-us'
+      render contact_page_path
     end
   end
   

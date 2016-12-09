@@ -19,6 +19,9 @@ module ZokuVault
     config.x.TaxCategory = "Taxes"
     config.x.FinalWishesCategory = "Final Wishes"
     
+    config.x.UserOnlineRange = 5.minutes
+    config.x.UserOnlineRangeScheduleFormat = '5m'
+    
     config.x.categories = {
       config.x.WtlCategory => {
         "label" => "Wills - Trusts - Legal",

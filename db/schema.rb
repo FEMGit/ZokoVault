@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161207022731) do
+ActiveRecord::Schema.define(version: 20161208024321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,6 +265,16 @@ ActiveRecord::Schema.define(version: 20161207022731) do
 
   add_index "user_activities", ["user_id"], name: "index_user_activities_on_user_id", using: :btree
 
+  create_table "user_death_traps", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "page_terminated_on"
+    t.string   "error_message"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "user_death_traps", ["user_id"], name: "index_user_death_traps_on_user_id", using: :btree
+
   create_table "user_profile_security_questions", force: :cascade do |t|
     t.integer  "user_profile_id"
     t.string   "question"
@@ -403,6 +413,7 @@ ActiveRecord::Schema.define(version: 20161207022731) do
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"
+  add_foreign_key "user_death_traps", "users"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"

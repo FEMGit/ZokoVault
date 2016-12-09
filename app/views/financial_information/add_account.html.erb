@@ -106,6 +106,7 @@
     $newForm.insertAfter('.card.mb-30:last');
     $('.chosen-select').chosen({allow_single_deselect: true});
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+    $(document).trigger('refresh_autonumeric')
   }
 $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

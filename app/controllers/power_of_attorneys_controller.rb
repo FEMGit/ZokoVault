@@ -120,7 +120,7 @@ class PowerOfAttorneysController < AuthenticatedController
     attorneys = params.select { |k, _v| k.starts_with?("vault_entry_") }
     permitted_params = {}
     attorneys.keys.each do |attorney|
-      permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_ids: []]
+      permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_with_contact_ids: [], share_ids: []]
     end
     attorneys.permit(permitted_params)
   end

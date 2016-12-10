@@ -11,7 +11,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
       user_id: user.id,
       powers: Hash[PowerOfAttorney::POWERS.sample(3).zip([true,true,true])],
       agent_ids: contacts[0].id,
-      share_ids: contacts.map(&:id),
+      share_with_contact_ids: contacts.map(&:id),
       document_id: document.id
     }
   end
@@ -86,7 +86,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
         end
 
         it "assigns shares" do
-          expect(vault_entry.shares.size).to eq contacts.size
+          expect(vault_entry.share_with_contacts.size).to eq contacts.size
         end
 
         it "assigns document" do

@@ -32,6 +32,7 @@ class Will < ActiveRecord::Base
   attr_accessor :has_will
   # validates :shares, presence: true
   validates :user, presence: true
+  validates :title, presence: { :message => "Required" }
   # validates :vault_entry_contacts, presence: true
   # validates :vault_entry_beneficiaries, presence: true
 end

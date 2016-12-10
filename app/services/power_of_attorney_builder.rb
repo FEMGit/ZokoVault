@@ -15,7 +15,7 @@ class PowerOfAttorneyBuilder
   def clear_model
     power_of_attorney.agents = []
     power_of_attorney.powers = []
-    power_of_attorney.shares = []
+    power_of_attorney.share_with_contact_ids = []
   end
 
   def build
@@ -29,8 +29,9 @@ class PowerOfAttorneyBuilder
     sanitize_data(options[:share_ids]).each do |contact_id|
       power_of_attorney.shares.build(share_options.merge(contact_id: contact_id))
     end
-    
+
     power_of_attorney.notes = options[:notes]
+    power_of_attorney.share_with_contact_ids = options[:share_with_contact_ids]
 
     power_of_attorney
   end

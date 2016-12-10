@@ -50,12 +50,12 @@
             <% end %>
           <% end %>
         </section>
-        <%#= link_to 'Update Wills', new_will_path, class: "button small-button secondary-button  mr-0" %>
+        <%#= link_to 'Update Wills', new_will_path, class: "small-button outline-button mr-0" %>
       <% else %>
 
         <h3>Wills</h3>
-        <p>Add your will details here.</p>
-        <%= link_to 'Update Wills', new_will_path, class: "small-button outline-button" %>
+        <p>Add your details here.</p>
+        <%= link_to 'Add Wills', new_will_path, class: "small-button outline-button" %>
       <% end %>
     </div>
   </div>
@@ -98,9 +98,8 @@
       <% else %>
 
         <h3>Trusts</h3>
-        <p>Add your Trust details here.</p>
-        <%= link_to 'Add Trusts', new_trust_path, class: "button small-button secondary-button " %>
-
+        <p>Add your details here.</p>
+        <%= link_to 'Add Trusts', new_trust_path, class: "small-button outline-button" %>
       <% end %>
     </div>
   </div>
@@ -142,10 +141,9 @@
 
       <% else %>
         <h3>Power of Attorney</h3>
-        <p>Add your Power of Attorney details here.</p>
-        <%= link_to 'Add Details', new_power_of_attorney_path, class: "button small-button secondary-button " %>
+        <p>Add your details here.</p>
+        <%= link_to 'Add Details', new_power_of_attorney_path, class: "small-button outline-button" %>
       <% end %>
-
     </div>
   </div>
 </section>

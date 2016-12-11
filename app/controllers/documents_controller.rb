@@ -9,7 +9,9 @@ class DocumentsController < AuthenticatedController
     session[:ret_url] = "/documents"
   end
 
-  def show; end
+  def show
+    authorize @document
+  end
 
   def new
     @document = Document.new(base_params.slice(:category, :group).merge(user: current_user))

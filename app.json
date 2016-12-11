@@ -33,9 +33,6 @@
     },
     "TWILIO_PHONE_NUMBER": {
       "required": true
-    },
-    "ZOKU_VAULT_DATABASE_PASSWORD": {
-      "required": true
     }
   },
   "formation": {

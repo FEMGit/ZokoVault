@@ -15,7 +15,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   def show
     @insurance_card = @property_and_casualty
     @grouop_label = "Property & Casualty"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(current_user, @grouop_label)
+    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @grouop_label)
 
     authorize @property_and_casualty
   end
@@ -29,7 +29,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   def initialize_insurance_card
-    @insurance_card = PropertyAndCasualty.new(user: current_user)
+    @insurance_card = PropertyAndCasualty.new(user: resource_owner)
     @insurance_card.policy.build
   end
 
@@ -44,7 +44,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
-    @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: current_user.id))
+    @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id))
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
@@ -98,33 +98,38 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   private
-    def set_policy
-      @policy = PropertyAndCasualtyPolicy.find(params[:id])
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_property_and_casualty
-      @property_and_casualty = PropertyAndCasualty.find(params[:id])
-    end
+  def resource_owner
+    @property_and_casualty.present? ? @property_and_casualty.user : current_user
+  end
 
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
-    end
+  def set_policy
+    @policy = PropertyAndCasualtyPolicy.find(params[:id])
+  end
 
-    def property_and_casualty_params
-      params.require(:property_and_casualty).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
-                                                    share_with_ids: [])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_property_and_casualty
+    @property_and_casualty = PropertyAndCasualty.find(params[:id])
+  end
 
-    def policy_params
-      policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
-      permitted_params = {}
-      policies.keys.each do |policy_key|
-        permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number, 
-                                        :broker_or_primary_contact_id, :notes]
-      end
-      policies.permit(permitted_params)
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
+
+  def property_and_casualty_params
+    params.require(:property_and_casualty).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+                                                  share_with_ids: [])
+  end
+
+  def policy_params
+    policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
+    permitted_params = {}
+    policies.keys.each do |policy_key|
+      permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number, 
+                                      :broker_or_primary_contact_id, :notes]
     end
+    policies.permit(permitted_params)
+  end
 end

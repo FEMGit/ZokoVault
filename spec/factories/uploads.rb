@@ -1,4 +1,4 @@
 FactoryGirl.define do
-  factory :tax do
+  factory :upload do
   end
 end

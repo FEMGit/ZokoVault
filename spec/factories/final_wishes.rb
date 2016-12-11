@@ -4,6 +4,5 @@ FactoryGirl.define do
     user_id 1
     primary_contact_id 1
     notes "MyString"
-    group "MyString"
   end
 end

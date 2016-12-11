@@ -26,14 +26,4 @@ class LifeAndDisabilityPunditPolicy < BasicPolicy
       scope.where(user: user)
     end
   end
-
-  private
-
-  def user_owned?
-    record.user == user
-  end
-
-  def shared?
-    false
-  end
 end

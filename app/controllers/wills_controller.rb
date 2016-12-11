@@ -17,13 +17,13 @@ class WillsController < AuthenticatedController
   # GET /wills/new
   def new
     @vault_entry = WillBuilder.new(type: 'will').build
-    @vault_entry.user = current_user
+    @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
 
     authorize @vault_entry
 
-    @wills = @vault_entries = Will.for_user(current_user)
+    @wills = @vault_entries = Will.for_user(resource_owner)
     return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
@@ -35,7 +35,7 @@ class WillsController < AuthenticatedController
   def set_document_params
     @group = "Will"
     @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
 
 
@@ -86,7 +86,7 @@ class WillsController < AuthenticatedController
   end
 
   def get_wills_details
-    render :json => WtlService.get_wills_details(Will.for_user(current_user))
+    render :json => WtlService.get_wills_details(Will.for_user(resource_owner))
   end
 
   def set_group
@@ -99,43 +99,45 @@ class WillsController < AuthenticatedController
 
   private
 
+  def resource_owner 
+    @will.present? ?  @will.user : current_user
+  end
+
   def current_wtl
     params[:will]
   end
 
-  private
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
 
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_will
+    @will = Will.find(params[:id])
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_will
-      @will = Will.find(params[:id])
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def will_params
+    wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
+    permitted_params = {}
+    wills.keys.each do |will|
+      permitted_params[will] = [:id, :executor_id, :notes, :agent_ids, :document_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: [], share_ids: []]
     end
+    wills.permit(permitted_params)
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def will_params
-      wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
-      permitted_params = {}
-      wills.keys.each do |will|
-        permitted_params[will] = [:id, :executor_id, :notes, :agent_ids, :document_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: [], share_ids: []]
-      end
-      wills.permit(permitted_params)
+  def update_wills(new_wills, old_wills)
+    new_wills.each do |new_will_params|
+      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: resource_owner.id)).build
+      authorize @new_vault_entries
+      raise "error saving new will" unless @new_vault_entries.save
     end
-
-    def update_wills(new_wills, old_wills)
-      new_wills.each do |new_will_params|
-        @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
-        authorize @new_vault_entries
-        raise "error saving new will" unless @new_vault_entries.save
-      end
-      old_wills.each do |old_will|
-        @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-        authorize @old_vault_entries
-        raise "error saving new will" unless @old_vault_entries.save
-      end
+    old_wills.each do |old_will|
+      @old_vault_entries = WillBuilder.new(old_will.merge(user_id: resource_owner.id)).build
+      authorize @old_vault_entries
+      raise "error saving new will" unless @old_vault_entries.save
     end
+  end
 end

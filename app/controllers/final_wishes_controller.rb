@@ -7,7 +7,7 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes
   # GET /final_wishes.json
   def index
-    @final_wishes = FinalWishInfo.for_user(current_user)
+    @final_wishes = FinalWishInfo.for_user(resource_owner)
     session[:ret_url] = final_wishes_path
   end
 
@@ -15,14 +15,14 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes/1.json
   def show
     @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
-    @group_documents = Document.for_user(current_user).where(:category => @category, :group => @final_wish.group)
+    @group_documents = Document.for_user(resource_owner).where(:category => @category, :group => @final_wish.group)
     session[:ret_url] = "#{final_wishes_path}/#{params[:id]}"
   end
 
   # GET /final_wishes/new
   def new
     @group = FinalWishService.get_wish_group_value_by_name(@groups, params[:group])
-    final_wish = FinalWishService.get_wish_info(@group["label"], current_user)
+    final_wish = FinalWishService.get_wish_info(@group["label"], resource_owner)
     redirect_to "#{final_wishes_path}/#{final_wish[:id]}/edit" if final_wish
     @final_wish_info = FinalWishInfo.new
     @final_wish_info[:group] = params[:group]
@@ -38,8 +38,8 @@ class FinalWishesController < AuthenticatedController
   # POST /final_wishes
   # POST /final_wishes.json
   def create
-    @final_wish_info = FinalWishInfo.new(final_wish_params.merge(user_id: current_user.id))
-    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
+    @final_wish_info = FinalWishInfo.new(final_wish_params.merge(user_id: resource_owner.id))
+    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     respond_to do |format|
       if @final_wish_info.save
         format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully created.' }
@@ -55,7 +55,7 @@ class FinalWishesController < AuthenticatedController
   # PATCH/PUT /final_wishes/1.json
   def update
     @final_wish_info = @final_wish
-    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
+    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     respond_to do |format|
       if @final_wish_info.update(final_wish_params)
         format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully updated.' }
@@ -79,8 +79,12 @@ class FinalWishesController < AuthenticatedController
 
   private
 
+  def resource_owner
+    @final_wish.present? ? @final_wish.user : current_user
+  end
+
   def set_contacts
-    contact_service = ContactService.new(:user => current_user)
+    contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
@@ -101,7 +105,7 @@ class FinalWishesController < AuthenticatedController
   end
 
   def set_all_documents
-    @documents = Document.for_user(current_user).where(:category => @category)
+    @documents = Document.for_user(resource_owner).where(:category => @category)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

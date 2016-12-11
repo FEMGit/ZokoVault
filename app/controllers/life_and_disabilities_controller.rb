@@ -17,12 +17,12 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     @insurance_card = @life_and_disability
     @grouop_label = "Life & Disability"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(current_user, @grouop_label)
+    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @grouop_label)
   end
 
   # GET /lives/new
   def new
-    @insurance_card = LifeAndDisability.new(user: current_user)
+    @insurance_card = LifeAndDisability.new(user: resource_owner)
     @insurance_card.policy.build
 
     authorize @insurance_card
@@ -39,7 +39,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # POST /lives
   # POST /lives.json
   def create
-    @insurance_card = LifeAndDisability.new(life_params.merge(user_id: current_user.id))
+    @insurance_card = LifeAndDisability.new(life_params.merge(user_id: resource_owner.id))
     PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
@@ -94,33 +94,38 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
-    def set_life
-      @life_and_disability = LifeAndDisability.find(params[:id])
-    end
 
-    def set_policy
-      @policy = LifeAndDisabilityPolicy.find(params[:id])
-    end
+  def resource_owner
+    @life_and_disability.present? ? @life_and_disability.user : current_user
+  end
 
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
-    end
+  def set_life
+    @life_and_disability = LifeAndDisability.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def life_params
-      params.require(:life_and_disability).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
-                                                  share_with_ids: [])
-    end
+  def set_policy
+    @policy = LifeAndDisabilityPolicy.find(params[:id])
+  end
 
-    def policy_params
-      policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
-      permitted_params = {}
-      policies.keys.each do |policy_key|
-        permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes,
-                                        primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
-      end
-      policies.permit(permitted_params)
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def life_params
+    params.require(:life_and_disability).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+                                                share_with_ids: [])
+  end
+
+  def policy_params
+    policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
+    permitted_params = {}
+    policies.keys.each do |policy_key|
+      permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes,
+                                      primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
     end
+    policies.permit(permitted_params)
+  end
 end

@@ -18,12 +18,12 @@ class PowerOfAttorneysController < AuthenticatedController
   # GET /power_of_attorneys/new
   def new
     @vault_entry = PowerOfAttorneyBuilder.new.build
-    @vault_entry.user = current_user
+    @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
 
     authorize @vault_entry
 
-    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(current_user)
+    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(resource_owner)
     return if @vault_entries.present?
 
     @vault_entries << @vault_entry
@@ -35,7 +35,7 @@ class PowerOfAttorneysController < AuthenticatedController
   def set_document_params
     @group = "Legal"
     @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
 
   # POST /power_of_attorneys
@@ -85,7 +85,7 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def get_powers_of_attorney_details
-    render :json => WtlService.get_powers_of_attorney_details(PowerOfAttorney.for_user(current_user))
+    render :json => WtlService.get_powers_of_attorney_details(PowerOfAttorney.for_user(resource_owner))
   end
 
   def set_ret_url
@@ -96,45 +96,49 @@ class PowerOfAttorneysController < AuthenticatedController
 
   private
 
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
+  def resource_owner
+    @power_of_attorney.present? ? @power_of_attorney.user : current_user
+  end
+
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
+
+  def current_wtl
+    params[:attorney]
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_power_of_attorney
+    @power_of_attorney = PowerOfAttorney.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def power_of_attorney_params
+    attorneys = params.select { |k, _v| k.starts_with?("vault_entry_") }
+    permitted_params = {}
+    attorneys.keys.each do |attorney|
+      permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_ids: []]
     end
+    attorneys.permit(permitted_params)
+  end
 
-    def current_wtl
-      params[:attorney]
+  def update_power_of_attorneys(new_attorneys, old_attorneys)
+    new_attorneys.each do |new_attorney_params|
+      @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: resource_owner.id)).build 
+
+      authorize @new_vault_entries
+
+      raise "error saving new power of attorney" unless @new_vault_entries.save
     end
+    old_attorneys.each do |old_attorney|
+      @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_power_of_attorney
-      @power_of_attorney = PowerOfAttorney.find(params[:id])
+      authorize @old_vault_entries
+
+      raise "error saving new power of attorney" unless @old_vault_entries.save
     end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def power_of_attorney_params
-      attorneys = params.select { |k, _v| k.starts_with?("vault_entry_") }
-      permitted_params = {}
-      attorneys.keys.each do |attorney|
-        permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS, share_ids: []]
-      end
-      attorneys.permit(permitted_params)
-    end
-  
-    def update_power_of_attorneys(new_attorneys, old_attorneys)
-      new_attorneys.each do |new_attorney_params|
-        @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
-
-        authorize @new_vault_entries
-
-        raise "error saving new power of attorney" unless @new_vault_entries.save
-      end
-      old_attorneys.each do |old_attorney|
-        @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
-
-        authorize @old_vault_entries
-
-        raise "error saving new power of attorney" unless @old_vault_entries.save
-      end
-    end
+  end
 end

@@ -9,7 +9,7 @@ class TaxesController < AuthenticatedController
   # GET /taxes
   # GET /taxes.json
   def index
-    @taxes = TaxYearInfo.for_user(current_user)
+    @taxes = TaxYearInfo.for_user(resource_owner)
     session[:ret_url] = taxes_path
   end
 
@@ -22,7 +22,7 @@ class TaxesController < AuthenticatedController
   # GET /taxes/new
   def new
     year = params[:year] || Date.today.strftime("%Y").to_i
-    tax = TaxesService.tax_by_year(year, current_user)
+    tax = TaxesService.tax_by_year(year, resource_owner)
     redirect_to "#{taxes_path}/#{tax[:id]}/edit" if tax
     @tax_year = TaxYearInfo.new
     @tax_year[:year] = year
@@ -37,8 +37,8 @@ class TaxesController < AuthenticatedController
   # POST /taxes
   # POST /taxes.json
   def create
-    @tax_year = TaxYearInfo.new(tax_params.merge(user_id: current_user.id))
-    TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
+    @tax_year = TaxYearInfo.new(tax_params.merge(user_id: resource_owner.id))
+    TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     respond_to do |format|
       if @tax_year.save
         format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully created.' }
@@ -54,7 +54,7 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1.json
   def update
     @tax_year = @tax
-    TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
+    TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     respond_to do |format|
       if @tax_year.update(tax_params)
         format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully updated.' }
@@ -78,19 +78,23 @@ class TaxesController < AuthenticatedController
 
   private
 
+  def resource_owner
+    @tax.present? ? @tax.user : current_user
+  end
+
   def set_contacts
-    contact_service = ContactService.new(:user => current_user)
+    contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tax_year
-    @tax = TaxYearInfo.for_user(current_user).find(params[:id])
+    @tax = TaxYearInfo.for_user(resource_owner).find(params[:id])
   end
 
   def set_tax
-    @tax = Tax.for_user(current_user).find(params[:id])
+    @tax = Tax.for_user(resource_owner).find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -103,11 +107,11 @@ class TaxesController < AuthenticatedController
   end
 
   def set_all_documents
-    @documents = Document.for_user(current_user).where(category: @category)
+    @documents = Document.for_user(resource_owner).where(category: @category)
   end
 
   def set_year_documents
-    @documents = Document.for_user(current_user).where(category: @category, group: @tax.year)
+    @documents = Document.for_user(resource_owner).where(category: @category, group: @tax.year)
   end
 
   def tax_form_params

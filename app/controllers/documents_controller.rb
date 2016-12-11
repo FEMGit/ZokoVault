@@ -16,8 +16,7 @@ class DocumentsController < AuthenticatedController
 
     authorize @document
 
-    documents_helper = DocumentService.new(:category => @document.category);
-    @cards = documents_helper.get_card_values(current_user)
+    @cards = card_values(@document.category)
   end
 
   def edit
@@ -80,22 +79,29 @@ class DocumentsController < AuthenticatedController
   end
   
   def get_drop_down_options
-    category = params[:category]
-    documents_helper = DocumentService.new(:category => params[:category], :user => current_user);
-    render :json => documents_helper.get_card_values(current_user).flatten
+    render :json => card_values(params[:category]).flatten
   end
 
   private
 
+  def card_values(category)
+    service = DocumentService.new(:category => category)
+    service.get_card_values(resource_owner)
+  end
+
+  def resource_owner
+    @document.present? ? @document.user : current_user
+  end
+
   def set_contacts
-    @contacts = Contact.for_user(current_user)
-    @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
   end
 
   def set_document
-    @document = Document.for_user(current_user).find(params[:id])
-    documents_helper = DocumentService.new(:category => @document.category);
-    @cards = documents_helper.get_card_values(current_user)
+    @document = Document.find(params[:id])
+    @cards = card_values(@document.category)
   end
 
   def base_params
@@ -103,11 +109,11 @@ class DocumentsController < AuthenticatedController
   end
   
   def document_share_params
-    share_service = ShareService.new(user_id: current_user.id, contact_ids: params[:document][:contact_ids])
+    share_service = ShareService.new(user_id: resource_owner.id, contact_ids: params[:document][:contact_ids])
     share = share_service.fill_document_share
     #cleare document shares before updating current document
     share_service.clear_shares(@document)
-    document_params.merge(:shares_attributes => share, :user_id => current_user.id)
+    document_params.merge(:shares_attributes => share, :user_id => resource_owner.id)
   end
 
   def document_params
@@ -165,7 +171,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def handle_document_not_saved(format)
-    @cards = DocumentService.new(:category => @document.category).get_card_values(current_user)
+    @cards = card_values(@document.category)
     format.html { render :new }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end

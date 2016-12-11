@@ -1,7 +1,7 @@
 {
   "name": "zoku-vault",
   "scripts": {
-    "postdeploy":"bundle install && rake db:migrate && db:seed"
+    "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
     "LANG": {

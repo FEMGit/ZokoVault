@@ -1,0 +1,17 @@
+<% with_name ||= false %>
+<div class="tooltip-item top">
+  <% if contact.photourl.present? %>
+    <%= image_tag(get_file_url(contact.photourl), class: "avatar-small", alt: contact.initials.to_s) %>
+  <% else %>
+    <p class="avatar-initials"><%= contact.initials %></p>
+    <%= image_tag(empty_image, class: "avatar-small", alt: contact.initials.to_s) %>
+  <% end %>
+  <div class="tooltip">
+    <p><%= contact.name %></p>
+    <%= mail_to(contact.emailaddress.to_s, contact.emailaddress.to_s, class: "no-underline-link") %>
+    <p><%= contact.phone %></p>
+  </div>
+</div>
+<% if with_name %>
+  <span class="avatar-name"><%= contact.name %></span>
+<% end %>

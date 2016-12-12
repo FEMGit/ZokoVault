@@ -34,7 +34,7 @@
 
       <label>Shared With</label><br>
       <% tax.share_with_contacts && tax.share_with_contacts.each do |contact| %>
-        <span class="user-circle"><%= contact.initials %></span>
+        <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
       <% end %>
     </div>
   </div>

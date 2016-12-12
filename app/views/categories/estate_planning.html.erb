@@ -46,7 +46,7 @@
         <section class="shared-list">
           <% get_shares_uniq(@wills) && get_shares_uniq(@wills).each do |share| %>
             <% if share.present? %>
-              <span class="user-circle"><%= share.initials %></span>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
             <% end %>
           <% end %>
         </section>
@@ -135,7 +135,7 @@
         <section class="shared-list">
           <% get_shares_uniq(@power_of_attorneys) && get_shares_uniq(@power_of_attorneys).each do |share| %>
             <% if share.present? %>
-              <span class="user-circle"><%= share.initials %></span>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
             <% end %>
           <% end %>
         </section>

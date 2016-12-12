@@ -23,8 +23,7 @@
     <% @contacts.each do |contact| %>
       <tr>
         <td>
-          <span class="user-circle"><%= "#{contact.initials}" %></span>
-          <span><%= "#{contact.name}"%></span>
+          <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
         </td>
         <td><%= contact.emailaddress %></td>
         <td><%= contact.relationship %></td>

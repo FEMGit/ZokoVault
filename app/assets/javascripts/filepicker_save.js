@@ -1,4 +1,4 @@
-var saveFileUrl = function(option = "") {
+var saveFileUrl = function(option) {
   filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
   filepicker.pickAndStore({
       container: 'modal',
@@ -30,7 +30,7 @@ var saveFileUrl = function(option = "") {
     });
 };
 
-var removePhoto = function(option = "") {
+var removePhoto = function(option) {
   var id_append = ""
   if (option === "account") {
     id_append = "_account"

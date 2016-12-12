@@ -47,7 +47,7 @@
     <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if @user_profile.errors.messages[:password_confirmation].present?) } %>
     
     <%= render :partial => "avatar_upload" %>
-    <%= f.text_field :photourl, id: "photo_url", style: "display: none;" %>
+    <%= f.text_field :photourl, id: "photo_url_account", style: "display: none;" %>
 
     <div class="card mb-30 shared-with">
       <h3 class="card-label">

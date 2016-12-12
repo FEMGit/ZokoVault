@@ -152,6 +152,7 @@ var handleSelectOnChange = function(selectInput) {
 
 var closeContactFormModal = function() {
   $(".modal, .modal-overlay").fadeOut(500, function() {
+    removePhoto();
     $("#contact-form").trigger("reset");
     $("#error_explanation ul").empty();
     $(".modal-overlay").remove();

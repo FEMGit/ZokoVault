@@ -6,7 +6,7 @@ class ContactsController < AuthenticatedController
   # GET /contacts.json
   def index
     my_profile_contact = current_user.user_profile.contact
-    @contacts = Contact.for_user(current_user).reject { |cont| cont == my_profile_contact}
+    @contacts = Contact.for_user(current_user).reject { |cont| cont == my_profile_contact }
     session[:ret_url] = "/contacts"
   end
 

@@ -1,32 +1,36 @@
 <div class="card cg-<%=year%> column-card mb-30">
-  <%= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
     <% if year_exist?(@taxes, year) %>
+      <%#= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
       <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, category: @category} %>
     <% end %>
-    <h3><%= year %> Taxes</h3><br>
+    <h3><%= year %> Taxes</h3>
+
     <% if year_exist?(@taxes, year) %>
       <% tax = tax_by_year(year) %>
       <% if tax && tax.tax_preparer.present? %>
-        <div class="left">
-          <p>
+
+      <label>Tax Preparer</label>
+      <ul class="data-list">
+          <li class="contact-pair">
             <%= tax.tax_preparer.name %><br>
             <%= mail_to tax.tax_preparer.emailaddress, tax.tax_preparer.emailaddress, class:"link-on-top" %><br>
             <%= tax.tax_preparer.phone %>
-          </p>
-        </div>
+          </li>
+      </ul>
 
-        <div class="right">
-          <%= render partial: "layouts/avatar_circle", locals: { :contact => tax.tax_preparer } %>
-        </div>
-        <span class="clear"></span>
+      <label>Shared With</label>
+      <section class="shared-list mb-20">
+        <% tax.share_with_contacts.each do |contact| %>
+          <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+        <% end %>
+      </section>
 
-        <div class="inline-block shared-list">
-          <% tax.share_with_contacts.each do |contact| %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-          <% end %>
-        </div>
-      <% end %>
     <% end %>
-    <%= link_to 'Add Details', link_to_add_details(year), class: "link-on-top add-details" %>
-    <span class="clear"></span>
+  <% end %>
+
+  <% if year_exist?(@taxes, year) %>
+    <%= link_to 'View Details', link_to_details(year), class: "small-button outline-button mt-20" %>
+  <% else %>
+    <%= link_to 'Add Details', link_to_add_details(year), class: "small-button outline-button mt-20" %>
+  <% end %>
 </div>

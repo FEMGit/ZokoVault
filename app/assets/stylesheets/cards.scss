@@ -14,7 +14,6 @@ $cards-margin: 12px;
   border: 1px solid  $color-gray-light-shaded;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor:pointer;
   word-wrap: break-word;
   position: relative;
 
@@ -209,7 +208,7 @@ $cards-margin: 12px;
    text-align: right;
    white-space: nowrap;
  }
-} 
+}
 .contact-pair{
   padding: 3px 0;
   list-style: none;

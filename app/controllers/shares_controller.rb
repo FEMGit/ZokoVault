@@ -59,6 +59,6 @@ class SharesController < AuthenticatedController
     end
 
     def share_params
-      params.require(:share).permit(:contact_id, :document_id, :permission)
+      params.require(:share).permit(:contact_id, :shareable_id, :shareable_type, :permission)
     end
   end

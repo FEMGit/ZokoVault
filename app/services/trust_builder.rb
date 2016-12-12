@@ -31,7 +31,7 @@ class TrustBuilder
         active: true, type: :agent, contact_id: contact_id
       )
     end
-    share_options = { document_id: trust.document_id, user_id: options[:user_id] }
+    share_options = { shareable: trust.document, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|
       trust.shares.build(share_options.merge(contact_id: contact_id))
     end

@@ -25,7 +25,7 @@ class PowerOfAttorneyBuilder
       )
     end
 
-    share_options = { document_id: power_of_attorney.document_id, user_id: options[:user_id] }
+    share_options = { shareable: power_of_attorney.document, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|
       power_of_attorney.shares.build(share_options.merge(contact_id: contact_id))
     end

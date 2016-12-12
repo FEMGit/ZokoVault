@@ -5,7 +5,7 @@ RSpec.describe SharesController, type: :controller do
   let!(:contact) { create :contact, user: user }
   let!(:document) { create :document }
 
-  let(:valid_attributes) { { contact_id: contact.id, document_id: document.id, user: user } }
+  let(:valid_attributes) { { contact_id: contact.id, shareable_type: "Document", shareable_id: document.id, user: user } }
   let(:invalid_attributes) { { contact: contact } }
 
   let(:valid_session) { {} }

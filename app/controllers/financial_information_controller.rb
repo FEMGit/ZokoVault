@@ -1,7 +1,9 @@
 class FinancialInformationController < AuthenticatedController
-  before_action :set_contacts, only: [:add_account]
+  before_action :set_contacts, only: [:add_account, :add_property]
   
   def add_account; end
+  
+  def add_property; end
   
   private
   

@@ -9,15 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
-  <div>
-    <div id="header-wrap">
-      <div class="title">
-        <span class="bold-title">Shared View:</span><span class="user-name"> <%= current_user.name %> </span>
-        <%= link_to "Exit", shared_path,
-        class: "js-modal-close button primary-button big-button exit-button" %>
-      </div>
-    </div>
-  </div>
+  
+  
+  <span class="bold-title">Shared View:</span><span class="user-name"> <%= current_user.name %> </span>
+  <%= link_to "Exit", shared_path,
+    class: "js-modal-close button primary-button big-button exit-button" %>
+  
+
   <% if user_signed_in? %>
     <body class="logged-in">
   <% else %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212032738) do
+ActiveRecord::Schema.define(version: 20161212103755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,9 +45,11 @@ ActiveRecord::Schema.define(version: 20161212032738) do
     t.string   "business_street_address_1"
     t.string   "business_street_address_2"
     t.integer  "user_profile_id"
+    t.integer  "full_primary_shared_id"
   end
 
   add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
+  add_index "contacts", ["full_primary_shared_id"], name: "index_contacts_on_full_primary_shared_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
 
@@ -211,6 +213,7 @@ ActiveRecord::Schema.define(version: 20161212032738) do
     t.integer  "user_id"
     t.integer  "shareable_id"
     t.string   "shareable_type"
+    t.string   "contact_type"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
@@ -303,6 +306,7 @@ ActiveRecord::Schema.define(version: 20161212032738) do
     t.string   "zip"
     t.string   "notes"
     t.string   "two_factor_phone_number"
+    t.integer  "full_primary_share_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -405,8 +409,10 @@ ActiveRecord::Schema.define(version: 20161212032738) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "notes"
+    t.string   "title"
   end
 
+  add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "final_wish_infos", "users"
   add_foreign_key "shares", "users"

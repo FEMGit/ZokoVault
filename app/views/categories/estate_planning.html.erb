@@ -91,7 +91,7 @@
           <section class="shared-list">
             <% get_shares_uniq(@wills) && get_shares_uniq(@trusts).each do |share| %>
               <% if share.present? %>
-                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+                <span class="user-circle"><%= share.initials %></span>
               <% end %>
             <% end %>
           </section>

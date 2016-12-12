@@ -117,7 +117,6 @@ Rails.application.routes.draw do
   
   # Financial information
   get 'financial_information/add_account', to: 'financial_information#add_account', as: :add_account
-
   get 'financial_information/add_property', to: 'financial_information#add_property', as: :add_property
   get 'financial_information/add_investment', to: 'financial_information#add_investment', as: :add_investment
   

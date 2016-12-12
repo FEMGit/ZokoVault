@@ -1,13 +1,13 @@
 <div class="card cg-<%=year%> column-card mb-30">
-    <% if year_exist?(@taxes, year) %>
-      <%#= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
-      <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, category: @category} %>
-    <% end %>
-    <h3><%= year %> Taxes</h3>
+  <% if year_exist?(@taxes, year) %>
+    <%#= link_to content_tag(:a), link_to_details(year), class: "whole-card-link" %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => year, category: @category} %>
+  <% end %>
+  <h3><%= year %> Taxes</h3>
 
-    <% if year_exist?(@taxes, year) %>
-      <% tax = tax_by_year(year) %>
-      <% if tax && tax.tax_preparer.present? %>
+  <% if year_exist?(@taxes, year) %>
+    <% tax = tax_by_year(year) %>
+    <% if tax && tax.tax_preparer.present? %>
 
       <label>Tax Preparer</label>
       <ul class="data-list">

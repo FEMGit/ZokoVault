@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208024321) do
+ActiveRecord::Schema.define(version: 20161212032738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20161208024321) do
     t.integer  "user_profile_id"
   end
 
+  add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
 
@@ -203,7 +204,6 @@ ActiveRecord::Schema.define(version: 20161208024321) do
   end
 
   create_table "shares", force: :cascade do |t|
-    t.integer  "document_id"
     t.integer  "contact_id"
     t.string   "permission"
     t.datetime "created_at",     null: false

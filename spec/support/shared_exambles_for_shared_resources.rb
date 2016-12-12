@@ -1,6 +1,8 @@
 shared_examples "shared resource" do
   let(:non_owner) { create(:user) }
-  let(:non_owner_contact) { create(:contact, user: non_owner) }
+  let(:non_owner_contact) do
+    create(:contact, emailaddress: non_owner.email, user: non_owner)
+  end
 
   permissions :index?, :destroy?, :new?, :create? do
     context "resource is not shared" do

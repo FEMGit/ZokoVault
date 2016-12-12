@@ -74,6 +74,6 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def owner_shared_record_with_user?
-    Share.exists?(shareable: record, contact: Contact.for_user(user))
+    Share.exists?(shareable: record, contact: Contact.where(emailaddress: user.email))
   end
 end

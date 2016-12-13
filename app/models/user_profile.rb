@@ -15,6 +15,11 @@ class UserProfile < ActiveRecord::Base
     class_name: 'UserProfileSecurityQuestion'
   
   has_many :shares, as: :shareable, dependent: :destroy
+  
+  has_many :full_primary_shared_with,
+    class_name: "Contact",
+    foreign_key: "full_primary_shared_id"
+  
   has_many :primary_shared_with, 
     through: :shares,
     source: :contact

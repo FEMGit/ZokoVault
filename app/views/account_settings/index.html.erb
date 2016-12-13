@@ -4,6 +4,12 @@
     <% if @user_profile.errors.any? %>
       <% errors = true %>
     <% end %>
+    
+    <%= f.label :full_primary_shared_with, 'Upon presentation of a valid death certificate, please grant full Primary Share access of my vault to:' %>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :full_primary_shared_with_ids, @contacts_shareable, id: "full_primary_shared_with") %>
+    </div>
+
 
     <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
     <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
@@ -52,7 +58,7 @@
       </h3>
       <p class="shared-description">
         The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
-      <label>Primary Shared With</label>
+      <%= f.label :primary_shared_with, 'Primary Shared With' %>
       <div class="chosen-styled-select">
         <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, id: "primary_shared_with") %>
       </div>

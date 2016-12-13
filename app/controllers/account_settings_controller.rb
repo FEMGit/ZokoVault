@@ -79,7 +79,8 @@ class AccountSettingsController < AuthenticatedController
   end
   
   def account_settings_params
-    params.require(:user_profile).permit(:mfa_frequency, :photourl, :phone_code, :two_factor_phone_number, primary_shared_with_ids: [])
+    params.require(:user_profile).permit(:mfa_frequency, :photourl, :phone_code, :two_factor_phone_number,
+                                         full_primary_shared_with_ids: [], primary_shared_with_ids: [])
   end
   
   def password_change_params

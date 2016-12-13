@@ -9,6 +9,10 @@ class HealthPunditPolicy < BasicPolicy
   def index?
     user_owned?
   end
+  
+  def destroy_provider?
+    user_owned?
+  end
 
   def scope
     Pundit.policy_scope!(user, record.class)

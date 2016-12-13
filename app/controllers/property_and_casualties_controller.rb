@@ -1,6 +1,6 @@
 class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
-  before_action :set_policy, only: [:destroy]
+  before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
 
   # GET /properties
@@ -78,7 +78,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # DELETE /properties/1
   # DELETE /properties/1.json
   def destroy
-    authorize @policy
+    authorize @property_and_casualty
     @policy.destroy
     respond_to do |format|
       format.html { redirect_to :back || properties_url, notice: 'PropertyAndCasualty was successfully destroyed.' }
@@ -99,6 +99,10 @@ class PropertyAndCasualtiesController < AuthenticatedController
 
   private
 
+  def provider_by_policy
+    @property_and_casualty = PropertyAndCasualty.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
+  end
+  
   def resource_owner
     @property_and_casualty.present? ? @property_and_casualty.user : current_user
   end

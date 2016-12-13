@@ -1,6 +1,6 @@
 class HealthsController < AuthenticatedController
   before_action :set_health, only: [:show, :edit, :update, :destroy_provider]
-  before_action :set_policy, only: [:destroy]
+  before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
 
   # GET /healths
@@ -72,7 +72,7 @@ class HealthsController < AuthenticatedController
   # DELETE /healths/1
   # DELETE /healths/1.json
   def destroy
-    authorize @policy
+    authorize @health
 
     @policy.destroy
     respond_to do |format|
@@ -93,6 +93,10 @@ class HealthsController < AuthenticatedController
   end
 
   private
+  
+  def provider_by_policy
+    @health = Health.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
+  end
 
   def resource_owner
     @policy.present? ? @policy.user : current_user

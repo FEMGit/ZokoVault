@@ -1,6 +1,6 @@
 class LifeAndDisabilitiesController < AuthenticatedController
   before_action :set_life, only: [:show, :edit, :update, :destroy_provider]
-  before_action :set_policy, only: [:destroy]
+  before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
 
   # GET /lives
@@ -73,7 +73,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # DELETE /lives/1
   # DELETE /lives/1.json
   def destroy
-    authorize @policy
+    authorize @life_and_disability
 
     @policy.destroy
     respond_to do |format|
@@ -94,6 +94,10 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
+  
+  def provider_by_policy
+    @life_and_disability = LifeAndDisability.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
+  end
 
   def resource_owner
     @life_and_disability.present? ? @life_and_disability.user : current_user

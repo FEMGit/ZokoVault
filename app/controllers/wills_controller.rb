@@ -81,6 +81,7 @@ class WillsController < AuthenticatedController
   # DELETE /wills/1
   # DELETE /wills/1.json
   def destroy
+    authorize @will
     @will.destroy
     respond_to do |format|
       format.html { redirect_to :back || wills_url, notice: 'Will was successfully destroyed.' }

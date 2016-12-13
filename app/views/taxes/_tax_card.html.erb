@@ -5,9 +5,9 @@
   <% end %>
   <h3><%= year %> Taxes</h3>
 
-  <% if year_exist?(@taxes, year) %>
-    <% tax = tax_by_year(year) %>
-    <% if tax && tax.tax_preparer.present? %>
+    <% if year_exist?(@taxes, year) %>
+      <% tax = tax_by_year(year) %>
+      <% if tax && tax.tax_preparer.present? %>
 
       <label>Tax Preparer</label>
       <ul class="data-list">

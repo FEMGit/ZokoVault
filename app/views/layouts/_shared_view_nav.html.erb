@@ -13,8 +13,8 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <% estate_planning = 'active' if current_page?(estate_planning_url) %>
-  <%= link_to '', class: "main-nav #{estate_planning}" do %>
+  <% shared_estate_planning = 'active' if current_page?(shared_estate_planning_url) %>
+  <%= link_to shared_estate_planning_path, class: "main-nav #{shared_estate_planning}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills Trusts &amp; Legal

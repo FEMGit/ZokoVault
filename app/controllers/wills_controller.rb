@@ -117,7 +117,7 @@ class WillsController < AuthenticatedController
     @will = Will.find(params[:id])
   end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def will_params
     wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
     permitted_params = {}
@@ -150,6 +150,5 @@ class WillsController < AuthenticatedController
       end
     end
     raise "error saving new will" if @errors.any?
-    end
   end
 end

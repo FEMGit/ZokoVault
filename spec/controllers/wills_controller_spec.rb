@@ -129,7 +129,7 @@ RSpec.describe WillsController, type: :controller do
 
       it "re-renders the 'new' template" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to redirect_to estate_planning_path
+        expect(response).to render_template :new
       end
     end
   end

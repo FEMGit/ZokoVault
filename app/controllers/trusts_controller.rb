@@ -118,7 +118,7 @@ class TrustsController < AuthenticatedController
     @trust = Trust.find(params[:id])
   end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def trust_params
     trusts = params.select { |k, _v| k.starts_with?("vault_entry_") }
     permitted_params = {}

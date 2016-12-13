@@ -96,10 +96,6 @@ RSpec.describe TrustsController, type: :controller do
           expect(vault_entry.agents.first).to eq contacts[0]
         end
         
-        it "assigns document" do
-          expect(vault_entry.document).to eq document
-        end
-
         it "assigns shares" do
           expect(vault_entry.share_with_contacts.size).to eq contacts.size
         end

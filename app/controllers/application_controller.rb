@@ -20,8 +20,6 @@ class ApplicationController < ActionController::Base
     redirect_to(root_url)
   end
 
-  private
-  
   def user_activity
     current_user.try :touch
   end

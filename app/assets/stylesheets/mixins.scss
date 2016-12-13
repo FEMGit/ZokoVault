@@ -16,3 +16,9 @@
   position: relative;
   text-align: center;
 }
+
+@mixin button-fixed-width($width) {
+  width: $width;
+  text-align: center;
+  padding: 8px !important;
+}

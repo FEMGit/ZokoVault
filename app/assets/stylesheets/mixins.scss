@@ -22,3 +22,11 @@
   text-align: center;
   padding: 8px !important;
 }
+
+@mixin bottom-scroll-margin {
+  .content:after {
+    content: "";
+    height: 100px;
+    display: block;
+  }
+}

@@ -1,4 +1,5 @@
 var saveFileUrl = function(option) {
+  option = option || ""
   filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
   filepicker.pickAndStore({
       container: 'modal',
@@ -24,6 +25,7 @@ var saveFileUrl = function(option) {
 };
 
 var removePhoto = function(option) {
+  option = option || ""
   setViewParameters("", "", option)
   $('#new-avatar' + option).hide();
   $('#choose-avatar-section' + option).show();
@@ -33,7 +35,6 @@ var removePhoto = function(option) {
 }
 
 var setViewParameters = function(photo_url, image_src, option) {
-  option = option || ""
   $('#photo_url' + option).val(photo_url);
   $('#image_view' + option).attr('src', image_src);
   $('#image_preview' + option).attr('src', image_src);

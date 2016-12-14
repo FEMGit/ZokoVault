@@ -249,12 +249,18 @@ main.app-nav{
     margin-left: 0 ;
   }
 
-  //SCROLL TO BOTTOM FOR FIREFOX AND IE
+  //SCROLL TO BOTTOM FOR IE
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
     @include bottom-scroll-margin
   }
   
+  //SCROLL TO BOTTOM FOR FIREFOX
   @-moz-document url-prefix() {
+    @include bottom-scroll-margin
+  }
+  
+  //SCROLL TO BOTTOM FOR EDGE
+  _:-ms-lang(x), _:-webkit-full-screen {
     @include bottom-scroll-margin
   }
 }

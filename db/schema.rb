@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212095857) do
+ActiveRecord::Schema.define(version: 20161213055123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(version: 20161212095857) do
     t.integer  "shareable_id"
     t.string   "shareable_type"
     t.string   "contact_type"
+    t.integer  "document_id"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
@@ -305,8 +306,8 @@ ActiveRecord::Schema.define(version: 20161212095857) do
     t.string   "state"
     t.string   "zip"
     t.string   "notes"
-    t.string   "two_factor_phone_number"
     t.integer  "full_primary_share_id"
+    t.string   "two_factor_phone_number"
   end
 
   create_table "users", force: :cascade do |t|

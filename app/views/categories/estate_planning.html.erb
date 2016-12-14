@@ -4,55 +4,59 @@
   <div class="flex-column">
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
-        <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
+      
+        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @wills.name, :category => @category} %>
+        <h3>Wills</h3>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @wills.name, :category => @category} %>
-          <h3>Wills</h3>
+        <% @wills.each_with_index do |will, index| %>
+          <div <% if index != 0 %> class="data-border" <% end %>></div>
+          <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
 
-          <ul class="data-list mb-20">
-            <% get_primary_uniq(@wills) && get_primary_uniq(@wills).each do |primary| %>
-              <li class="data-pair">
-                <span class="pair-name"><%= primary.name %></span>
-                <span class="data-right">
-                  Primary
-                </span>
-              </li>
+            <label><%= will.title %></label>
+            <ul class="data-list mb-20">
+              <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
+                <li class="data-pair">
+                  <span class="pair-name"><%= primary.name %></span>
+                  <span class="data-right">
+                    Primary
+                  </span>
+                </li>
+              <% end %>
+
+              <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
+                <li class="data-pair">
+                  <span class="pair-name"><%= secondary.name %></span>
+                  <span class="data-right">
+                    Secondary
+                  </span>
+                </li>
+              <% end %>
+            </ul>
+
+            <% if will.agents.any? %>
+              <label>Advisor</label>
             <% end %>
+            <ul class="data-list">
+              <% will.agents && will.agents.each do |advisor| %>
+                <li class="contact-pair">
+                  <%= advisor.name %><br>
+                  <a href="mailto:<%= advisor.emailaddress %>"><%= advisor.emailaddress %></a><br>
+                  <%= advisor.phone %>
+                </li>
+              <% end %>
+            </ul>
 
-            <% get_secondary_uniq(@wills) && get_secondary_uniq(@wills).each do |secondary| %>
-              <li class="data-pair">
-                <span class="pair-name"><%= secondary.name %></span>
-                <span class="data-right">
-                  Secondary
-                </span>
-              </li>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <% will.share_with_contacts.each do |share| %>
+              <% if share.present? %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+              <% end %>
             <% end %>
-          </ul>
-
-          <% if get_advisor_uniq(@wills).any? %>
-            <label>Advisor</label>
-          <% end %>
-          <ul class="data-list">
-            <% get_advisor_uniq(@wills) && get_advisor_uniq(@wills).each do |advisor| %>
-              <li class="contact-pair">
-                <%= advisor.name %><br>
-                <a href="mailto:<%= advisor.emailaddress %>"><%= advisor.emailaddress %></a><br>
-                <%= advisor.phone %>
-              </li>
-            <% end %>
-          </ul>
-
-        <label>Shared With</label>
-        <section class="shared-list">
-          <% get_shares_uniq(@wills) && get_shares_uniq(@wills).each do |share| %>
-            <% if share.present? %>
-              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-            <% end %>
-          <% end %>
-        </section>
-        <%#= link_to 'Update Wills', new_will_path, class: "small-button outline-button mr-0" %>
+          </section>
+        <% end %>
+      
       <% else %>
-
         <h3>Wills</h3>
         <p>Add your details here.</p>
         <%= link_to 'Add Wills', new_will_path, class: "small-button outline-button" %>
@@ -89,7 +93,7 @@
 
           <label>Shared With</label>
           <section class="shared-list">
-            <% get_shares_uniq(@wills) && get_shares_uniq(@trusts).each do |share| %>
+            <% get_shares_uniq(@trusts) && get_shares_uniq(@trusts).each do |share| %>
               <% if share.present? %>
                 <span class="user-circle"><%= share.initials %></span>
               <% end %>
@@ -124,12 +128,12 @@
                 <% if power_of_attorney.powers.present? %>
                   <% power_of_attorney.powers.keys.each do |agent_power| %>
                     <%= agent_power %><br>
+                  <% end %>
                 <% end %>
                 </span>
               </li>
             <% end %>
           </ul>
-        <% end %>
 
         <label>Shared With</label>
         <section class="shared-list">

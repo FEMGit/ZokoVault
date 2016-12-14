@@ -1,30 +1,41 @@
 <div class="card wills mb-30">
   <%= f.hidden_field :id, id: "will_id_#{index}" %>
+  <% if data.id.present? && @errors %>
+    <% error_list = @errors.detect {|x| x[:id].to_i == data.id } %>
+  <% else %>
+    <% error_list = @errors && @errors.pop() %>
+  <% end %>
 
   <h3 class="card-label">Will Details</h3>
-
-  <label>Executor</label>
+  
+  <%= f.label :title, 'Will Title' %><span class="required">Required</span>
+  <% if error_list && error_list[:error].messages[:title].present? %>
+    <span class="error-label"> - <%= error_list[:error].messages[:title].first %></span>
+  <% end %>
+  <%= f.text_field :title, value: data.title, class: ("input-error" if error_list && error_list[:error].messages[:title].present?), id: "will_title_id_#{index}" %>
+    
+  <%= f.label :executor_id, 'Executor' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :executor_id, @contacts, id: "will_executor_id_#{index}", multiple: false) %>
+    <%= contact_select_with_create_new(f, :executor_id, @contacts, id: "will_executor_id_#{index}", multiple: false, value: data.executor_id) %>
   </div>
 
-  <label>Primary Beneficiaries</label>
+  <%= f.label :primary_beneficiary_ids, 'Primary Beneficiaries' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :primary_beneficiary_ids, @contacts, id: "will_primary_id_#{index}") %>
+    <%= contact_select_with_create_new(f, :primary_beneficiary_ids, @contacts, id: "will_primary_id_#{index}", value: data.primary_beneficiary_ids) %>
   </div>
 
-  <label>Secondary Beneficiaries</label>
+  <%= f.label :secondary_beneficiary_ids, 'Secondary Beneficiaries' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :secondary_beneficiary_ids, @contacts, id: "will_secondary_id_#{index}") %>
+    <%= contact_select_with_create_new(f, :secondary_beneficiary_ids, @contacts, id: "will_secondary_id_#{index}", value: data.secondary_beneficiary_ids) %>
   </div>
 
   <label>Attorney, Accountant or Advisor(s)</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "will_agent_id_#{index}", multiple: false) %>
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "will_agent_id_#{index}", multiple: false, value: data.agent_ids) %>
   </div>
   
   <%= f.label :notes %>
-  <p><%= f.text_area :notes, id: "will_notes_id_#{index}" %></p>
+  <p><%= f.text_area :notes, id: "will_notes_id_#{index}", value: data.notes %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -32,9 +43,9 @@
         <use xlink:href="#icon-Safe"></use>
       </svg> Shared With
     </h3>
-    <label>Shared With</label><br>
+    <%= f.label :share_ids, 'Shared With' %>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "will_share_id_#{index}") %>
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "will_share_id_#{index}", value: data.share_with_contact_ids) %>
     </div>
   </section>
 
@@ -53,10 +64,12 @@
       id: "will_id_" + new_id,
       value: ""
     });
+    $newWtlForm.find(".error-label").hide();
     $newWtlForm.find("[id^='will_id_']").attr("name", new_vault_entry_id + "[id]");
     $newWtlForm.find("[id^='vault_entry_']").attr({
       name: new_vault_entry_id + "[name]",
-      id: new_vault_entry_id + "_name"
+      id: new_vault_entry_id + "_name",
+      class: ""
     });
 
     $newWtlForm.find("#will_executor_id_" + old_id).attr({
@@ -78,13 +91,13 @@
     $newWtlForm.find("#will_secondary_id_" + new_id + " option").prop("selected", false);
 
     $newWtlForm.find("#will_agent_id_" + old_id).attr({
-      name: new_vault_entry_id +"[agent_ids][]",
+      name: new_vault_entry_id +"[agent_ids]",
       id: "will_agent_id_" + new_id
     });
     $newWtlForm.find("#will_agent_id_" + new_id + " option").prop("selected", false);
 
     $newWtlForm.find("#will_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_ids][]",
+      name: new_vault_entry_id +"[share_with_contact_ids][]",
       id: "will_share_id_" + new_id
     });
     
@@ -93,22 +106,13 @@
       id: "will_notes_id_" + new_id
     });
     
+    $newWtlForm.find("#will_title_id_" + old_id).attr({
+      name: new_vault_entry_id +"[title]",
+      id: "will_title_id_" + new_id
+    });
+    
     $newWtlForm.find("#will_share_id_" + new_id + " option").prop("selected", false);
     $newWtlForm.find("#delete-will").remove();
   }
 
-$(document).ready(function(){
-  url = "new/get_wills_details";
-  $.get(url, function(data) {
-    data.forEach(function(form_values, index){
-      $("#will_executor_id_" + index).val(form_values[0]).trigger("chosen:updated");
-      $("#will_primary_id_" + index).val(form_values[1]).trigger("chosen:updated");
-      $("#will_secondary_id_" + index).val(form_values[2]).trigger("chosen:updated");
-      $("#will_agent_id_" + index).val(form_values[3]).trigger("chosen:updated");
-      $("#will_share_id_" + index).val(form_values[4]).trigger("chosen:updated");
-      $("#will_id_" + index).val(form_values[5]).trigger("chosen:updated");
-      $("#will_notes_id_" + index).val(form_values[6]);
-    });
-  });
-});
 </script>

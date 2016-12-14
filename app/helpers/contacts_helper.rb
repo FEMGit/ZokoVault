@@ -17,6 +17,6 @@ module ContactsHelper
   end
   
   def empty_image
-    asset_url('blank.gif')
+    asset_url('blank.png')
   end
 end

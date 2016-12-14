@@ -260,7 +260,7 @@ main.app-nav{
   }
   
   //SCROLL TO BOTTOM FOR EDGE
-  _:-ms-lang(x), _:-webkit-full-screen {
+  @supports (-ms-accelerator:true) {
     @include bottom-scroll-margin
   }
 }

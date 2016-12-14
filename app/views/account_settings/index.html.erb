@@ -12,18 +12,35 @@
 
 
     <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
-    <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
-    <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button"%></p>
+    <% if f.object.phone_authentication_skip %>
+      <% phone_skip = true %>
+      <p id="two_factor_phone_label">No Phone Is Used For Authentication</p>
+    <% else %>
+      <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
+      <ul class="check-list">
+        <li class="check-list">
+          <label>
+            <%= f.check_box :phone_authentication_skip,
+              { id: "phone_authenticate_checkbox", onclick: "togglePhoneAuthentication()" },
+              'true',
+              'false'
+              %> <span></span> Don't Use Two Factor Authentication
+          </label>
+        </li>
+      </ul>
+    <% end %>
+    
+    <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button", id: "change-phone-btn"%></p>
 
     <%= f.label :mfa_frequency, "Login Settings" %>
     <ul class="radio-list">
       <li class="radio-list">
-        <%= radio_button_tag "user_profile[mfa_frequency]", "always", radio_button_checked?("always", @user_profile.mfa_frequency) %>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "always", radio_button_checked?("always", @user_profile.mfa_frequency), disabled: @user_profile.phone_authentication_skip %>
         <label for="user_profile_mfa_frequency_always">Verify login using my phone every time</label>
         <div class="check"></div>
       </li>
       <li class="radio-list">
-        <%= radio_button_tag "user_profile[mfa_frequency]", "new_ip", radio_button_checked?("new_ip", @user_profile.mfa_frequency) %>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "new_ip", radio_button_checked?("new_ip", @user_profile.mfa_frequency), disabled: @user_profile.phone_authentication_skip %>
         <label for="user_profile_mfa_frequency_new_ip">Verify login using my phone when logging in from a new device</label>
         <div class="check"></div>
       </li>
@@ -71,5 +88,22 @@
 <%= render :partial => "account_settings/two_factor_phone_setup" %>
 
 <script>
+  togglePhoneAuthentication = function() {
+    var check_el = $('#phone_authenticate_checkbox')
+    if (check_el.is(':checked')) {
+      $('p#two_factor_phone_label').wrap('<strike>')
+      $('#change-phone-btn').hide();
+      $('#user_profile_mfa_frequency_always').prop('disabled', true);
+      $('#user_profile_mfa_frequency_new_ip').prop('disabled', true);
+      $('#user_profile_mfa_frequency_never').prop('checked', true);
+    }
+    else {
+      $('p#two_factor_phone_label').unwrap()
+      $('#change-phone-btn').show();
+      $('#user_profile_mfa_frequency_always').prop('disabled', false);
+      $('#user_profile_mfa_frequency_new_ip').prop('disabled', false);
+    }
+  }
+  
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

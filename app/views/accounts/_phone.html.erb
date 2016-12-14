@@ -7,12 +7,24 @@
 </div>
 
 <div class="modal-content">
-  <div class="field">
-    <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number' %><br>
-    <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
-  </div>
 
-  <button class="button primary-button big-button" onClick="sendCode(); return false">Send code</button>
+  <ul class="check-list">
+    <li class="check-list">
+      <label>
+        <%= check_box 'user', 'user_profile_attributes[phone_authentication_skip]',
+          { onclick: "skipPhoneSetup();", id: "phone_authenticate_checkbox" },
+          'true',
+          'false'
+          %> <span></span>Don't Use My Phone
+      </label>
+    </li>
+  </ul>
+
+  <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number' %><br>
+  <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
+  <%= check_box_tag 'skip_auth', 'Skip dual setup', false %><br>
+
+  <button class="button primary-button big-button" onClick="sendCode(); return false" id="send-code-button">Send code</button>
   <span id='send_code_text'></span>
 
   <hr/>
@@ -22,16 +34,36 @@
   You should recieve your phone code within the next few minutes.
   Please enter the code below.
 
-  <div class="field">
-    <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
-    <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
-  </div>
-  <button class="button primary-button big-button" onClick="verifyCode(); return false">Verify code</button>
+  <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
+  <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
+  <button class="button primary-button big-button" onClick="verifyCode(); return false" id="verify-code-button">Verify code</button>
   <span id='verify_code_text'></span>
 
 </div>
 
 <script>
+function skipPhoneSetup() {
+  var check_el = $('#phone_authenticate_checkbox')
+  var next_el = $("#next-step");
+  if (check_el.is(':checked')) {
+    next_el.show();
+    disableNextParameters(true);
+  }
+  else {
+    next_el.hide();
+    disableNextParameters(false);
+  }
+}
+
+disableNextParameters = function(enabled) {
+  $('#user_user_profile_attributes_two_factor_phone_number').prop('disabled', enabled)
+  $('#user_user_profile_attributes_phone_code').prop('disabled', enabled)
+  $('#send-code-button').prop('disabled', enabled)
+  $('#verify-code-button').prop('disabled', enabled)
+  $('#user_user_profile_attributes_mfa_frequency_always').prop('disabled', enabled)
+  $('#user_user_profile_attributes_mfa_frequency_new_ip').prop('disabled', enabled)
+}
+
 function sendCode() {
   var data = $('#account-form').serialize();
   $.post("<%= send_code_account_path %>",

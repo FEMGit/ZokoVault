@@ -1,4 +1,5 @@
 var saveFileUrl = function(option) {
+  option = option || ""
   filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
   filepicker.pickAndStore({
       container: 'modal',
@@ -14,33 +15,27 @@ var saveFileUrl = function(option) {
       storeContainer: "zoku-stage"
     },
     function(Blobs) {
-      Blob = Blobs[0];
-      var id_append = ""
-      if (option === "account") {
-        id_append = "_account"
-      }
-      $('#photo_url' + id_append).val(Blob.key);
-      $('#image_view' + id_append).attr('src', Blob.url);
-      $('#image_preview' + id_append).attr('src', Blob.url);
-      $('#new-avatar' + id_append).show();
-      $('#choose-avatar-section' + id_append).hide();
-      $('#preview-avatar-section' + id_append).show();
-      $('#text-avatar' + id_append).hide();
-      $('.remove-button' + id_append).show();
+      setViewParameters(Blobs[0].key, Blobs[0].url, option)
+      $('#new-avatar' + option).show();
+      $('#choose-avatar-section' + option).hide();
+      $('#preview-avatar-section' + option).show();
+      $('#text-avatar' + option).hide();
+      $('.remove-button' + option).show();
     });
 };
 
 var removePhoto = function(option) {
-  var id_append = ""
-  if (option === "account") {
-    id_append = "_account"
-  }
-  $('#photo_url' + id_append).val("");
-  $('#image_view' + id_append).attr('src', "");
-  $('#image_preview' + id_append).attr('src', "");
-  $('#choose-avatar-section' + id_append).show();
-  $('#preview-avatar-section' + id_append).hide();
-  $('#new-avatar' + id_append).hide();
-  $('#text-avatar' + id_append).show();
-  $('.remove-button' + id_append).hide();
+  option = option || ""
+  setViewParameters("", "", option)
+  $('#new-avatar' + option).hide();
+  $('#choose-avatar-section' + option).show();
+  $('#preview-avatar-section' + option).hide();
+  $('#text-avatar' + option).show();
+  $('.remove-button' + option).hide();
+}
+
+var setViewParameters = function(photo_url, image_src, option) {
+  $('#photo_url' + option).val(photo_url);
+  $('#image_view' + option).attr('src', image_src);
+  $('#image_preview' + option).attr('src', image_src);
 }

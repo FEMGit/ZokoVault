@@ -49,23 +49,11 @@
 
 <script>
   if (!Modernizr.inputtypes.date) {
-     $('input[type=date]').datepicker({
-       onSelect: function() {
-         $('input[type=date]').attr('value', this.value)
-       },
-       dateFormat: 'mm/dd/yy',
-       changeYear: true,
-       changeMonth: true,
-       yearRange: "-100:+0"
-     }).mask("99/99/9999");
-     $('div.content').scroll(function() {
-       $('input[type=date]').datepicker("hide")
-       $('input[type=date]').blur()
-     });
      $('#html-5-date').hide();
      $('#html-5-date').prop('disabled', true);
      $('#datepicker-date').show();
      $('#datepicker-date').prop('disabled', false);
+     $('#datepicker-date').mask('99/99/9999', {placeholder: 'mm/dd/yyyy'});
   } else {
     $('#html-5-date').show();
     $('#html-5-date').prop('disabled', false);

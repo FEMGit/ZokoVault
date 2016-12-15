@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214090201) do
+ActiveRecord::Schema.define(version: 20161216023131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.integer  "full_primary_shared_id"
   end
 
-  add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
   add_index "contacts", ["full_primary_shared_id"], name: "index_contacts_on_full_primary_shared_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
@@ -175,6 +174,16 @@ ActiveRecord::Schema.define(version: 20161214090201) do
 
   add_index "multifactor_phone_codes", ["user_id"], name: "index_multifactor_phone_codes_on_user_id", using: :btree
 
+  create_table "old_passwords", force: :cascade do |t|
+    t.string   "encrypted_password",       null: false
+    t.string   "password_archivable_type", null: false
+    t.integer  "password_archivable_id",   null: false
+    t.datetime "created_at"
+    t.string   "password_salt"
+  end
+
+  add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
   create_table "power_of_attorneys", force: :cascade do |t|
     t.integer  "document_id"
     t.integer  "power_of_attorney_id"
@@ -206,6 +215,7 @@ ActiveRecord::Schema.define(version: 20161214090201) do
   end
 
   create_table "shares", force: :cascade do |t|
+    t.integer  "document_id"
     t.integer  "contact_id"
     t.string   "permission"
     t.datetime "created_at",     null: false
@@ -409,6 +419,10 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.datetime "updated_at",  null: false
     t.string   "notes"
     t.string   "title"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "word", null: false
   end
 
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"

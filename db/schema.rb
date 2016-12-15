@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.integer  "full_primary_shared_id"
   end
 
-  add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
   add_index "contacts", ["full_primary_shared_id"], name: "index_contacts_on_full_primary_shared_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
@@ -206,6 +205,7 @@ ActiveRecord::Schema.define(version: 20161214090201) do
   end
 
   create_table "shares", force: :cascade do |t|
+    t.integer  "document_id"
     t.integer  "contact_id"
     t.string   "permission"
     t.datetime "created_at",     null: false
@@ -305,7 +305,10 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.string   "zip"
     t.string   "notes"
     t.string   "two_factor_phone_number"
+<<<<<<< HEAD
     t.boolean  "phone_authentication_skip"
+=======
+>>>>>>> e3b820c... AD-542 - Change DatePicker Style
   end
 
   create_table "users", force: :cascade do |t|
@@ -408,7 +411,6 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "notes"
-    t.string   "title"
   end
 
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"

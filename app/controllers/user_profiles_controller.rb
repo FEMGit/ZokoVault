@@ -31,6 +31,7 @@ class UserProfilesController < AuthenticatedController
   # POST /user_profiles
   # POST /user_profiles.json
   def create
+    params[:user_profile][:date_of_birth] = date_format
     @user_profile = UserProfile.new(user_profile_params)
     authorize @user_profile
     respond_to do |format|

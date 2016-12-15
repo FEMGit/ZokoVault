@@ -30,7 +30,10 @@
     <%= f.text_field :beneficiarytype %>
 
     <%= f.label :birthdate %>
-    <p><%= f.date_field :birthdate %></p>
+    <p>
+      <%= f.date_field :birthdate, { id: "html-5-date", value: f.object.birthdate.try(:strftime, "%Y-%m-%d")} %>
+      <%= f.date_field :birthdate, { id: "datepicker-date", value: f.object.birthdate.try(:strftime, "%m/%d/%Y")} %>
+    </p>
 
     <%= f.label :address, 'Street Address' %>
     <%= f.text_field :address %>

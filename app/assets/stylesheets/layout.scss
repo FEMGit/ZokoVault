@@ -249,12 +249,19 @@ main.app-nav{
     margin-left: 0 ;
   }
 
+  //SCROLL TO BOTTOM FOR IE
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
+    @include bottom-scroll-margin
+  }
+  
+  //SCROLL TO BOTTOM FOR FIREFOX
   @-moz-document url-prefix() {
-    .content:after {
-      content: "";
-      height: 100px;
-      display: block;
-    }
+    @include bottom-scroll-margin
+  }
+  
+  //SCROLL TO BOTTOM FOR EDGE
+  @supports (-ms-accelerator:true) {
+    @include bottom-scroll-margin
   }
 }
 

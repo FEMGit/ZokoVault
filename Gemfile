@@ -7,6 +7,8 @@ gem 'rails', '4.2.7.1'
 gem 'pg'
 # Authentication
 gem 'devise'
+# 'To store old user passwords'
+gem 'devise_security_extension'
 
 gem 'acts_as_tree'
 

@@ -48,19 +48,20 @@ class User < ActiveRecord::Base
       errors.add :password, "Must include uppercase letters, lowercase letters, numbers and characters"
     elsif include_personal_data?
       errors.add :password, "Avoid using your personal information: name, username, company name"
-    elsif include_word?(password, 3)
-      errors.add :password, "Avoid using word spelled completely"
     end
   end
-  
-  def include_word?(password, word_length_filter)
-    words = Word.all_words.select { |word| word.length > word_length_filter }
-    downcase_password = password.downcase
-    words.any? { |word| downcase_password.include? word }
-  end
-  
+
   def satisfy_password_requirement?(password)
-    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!~'&,:;"\\.\\*@#\\$%\\^()_])/)
+    lowercase = password.match(/^(?=.*[a-z])/)
+    uppercase = password.match(/^(?=.*[A-Z])/)
+    number = password.match(/^(?=.*\d)/)
+    characters = password.match(/^(?=.*[&!',:\\;"\\.*@#\\$%\\^()_])/)
+    match_length(lowercase) + match_length(uppercase) + match_length(number) + match_length(characters) >= 3
+  end
+
+  def match_length(match)
+    return 0 unless match.present?
+    match.length 
   end
   
   def include_personal_data?

@@ -24,12 +24,10 @@ protected
         ])
   end
   
-  private
-  
   def date_format
-    user_profile_params = params[:user][:user_profile_attributes]
-    return user_profile_params[:date_of_birth] unless user_profile_params[:date_of_birth].include?('/')
-    date_params = user_profile_params[:date_of_birth].split('/')
+    user_profile_attributes = params[:user][:user_profile_attributes]
+    return user_profile_attributes[:date_of_birth] unless user_profile_attributes[:date_of_birth].include?('/')
+    date_params = user_profile_attributes[:date_of_birth].split('/')
     year = date_params[2]
     month = date_params[0]
     day = date_params[1]

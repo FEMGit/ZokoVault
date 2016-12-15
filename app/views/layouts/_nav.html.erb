@@ -67,8 +67,8 @@
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Web Accounts
   <% end %> -->
-  <% shared_current = 'active' if current_page?(shared_url) %>
-  <%= link_to shared_path, class: "main-nav #{shared_current}" do %>
+  <% shared_current = 'active' if current_page?(shares_url) %>
+  <%= link_to shares_path, class: "main-nav #{shared_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me

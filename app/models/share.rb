@@ -1,6 +1,7 @@
 class Share < ActiveRecord::Base
-  belongs_to :user
   scope :for_user, ->(user) {where(user: user)}
+
+  belongs_to :user
   belongs_to :contact
   belongs_to :shareable, polymorphic: true
 

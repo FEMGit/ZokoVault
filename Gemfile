@@ -9,6 +9,8 @@ gem 'pg'
 gem 'devise'
 # Authorization
 gem "pundit"
+# 'To store old user passwords'
+gem 'devise_security_extension'
 
 gem 'acts_as_tree'
 

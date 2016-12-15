@@ -11,8 +11,8 @@ RSpec.describe RegistrationsController, type: :controller do
     let(:user_params) do
       {
         email: Faker::Internet.free_email,
-        password: 'password',
-        password: 'password',
+        password: 'fgfdfGFGGF56@%FSfghhfasgd5',
+        password: 'fgfdfGFGGF56@%FSfghhfasgd5',
         user_profile_attributes: {
           first_name: Faker::Name.first_name, 
           middle_name: Faker::Name.first_name,

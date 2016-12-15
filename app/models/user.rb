@@ -3,11 +3,14 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
-         :recoverable, :timeoutable, :trackable, :validatable
+         :recoverable, :timeoutable, :trackable, :validatable,
+         :password_archivable
 
   validates_format_of :email,
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
                       :message => "Email should contain @ and domain like '.com'"
+  
+  validate :password_complexity
   
   has_many :vendors, dependent: :nullify
   has_many :shares, dependent: :destroy
@@ -15,7 +18,8 @@ class User < ActiveRecord::Base
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true
   
-  delegate :mfa_frequency, :initials, :name, :phone_number, :signed_terms_of_service?, to: :user_profile
+  delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
+           :name, :phone_number, :date_of_birth, :signed_terms_of_service?, to: :user_profile
 
   def mfa_verify?
     case mfa_frequency
@@ -36,5 +40,32 @@ class User < ActiveRecord::Base
     else
       UserActivity.create(user: self, login_date: date, login_count: 1, session_length: 0)
     end
+  end
+  
+  def password_complexity
+    return unless password.present?
+    if !satisfy_password_requirement?(password)
+      errors.add :password, "Must include uppercase letters, lowercase letters, numbers and characters"
+    elsif include_personal_data?
+      errors.add :password, "Avoid using your personal information: name, username, company name"
+    elsif include_word?(password, 3)
+      errors.add :password, "Avoid using word spelled completely"
+    end
+  end
+  
+  def include_word?(password, word_length_filter)
+    words = Word.all_words.select { |word| word.length > word_length_filter }
+    downcase_password = password.downcase
+    words.any? { |word| downcase_password.include? word }
+  end
+  
+  def satisfy_password_requirement?(password)
+    password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!~'&,:;"\\.\\*@#\\$%\\^()_])/)
+  end
+  
+  def include_personal_data?
+    email_nick = email.split("@").first
+    date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
+    [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.include?(x) }
   end
 end

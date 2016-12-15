@@ -8,12 +8,13 @@ RSpec.describe WillsController, type: :controller do
 
   let(:valid_attributes) do
     {
+      title: "Title",
       user_id: user.id,
       primary_beneficiary_ids: contacts.first(2).map(&:id),
       secondary_beneficiary_ids: contacts.last(1).map(&:id),
       executor_id: contacts[1].id,
       agent_ids: contacts[0].id,
-      share_ids: contacts.map(&:id),
+      share_with_contact_ids: contacts.map(&:id),
       document_id: document.id
     }
   end
@@ -61,7 +62,7 @@ RSpec.describe WillsController, type: :controller do
     context "with invalid params" do
       it "redirects to the created vault_entry" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to redirect_to estate_planning_path
+        expect(response).to render_template :new
       end
     end
 
@@ -96,13 +97,13 @@ RSpec.describe WillsController, type: :controller do
         it "assigns agents" do
           expect(vault_entry.agents.first).to eq contacts[0]
         end
-
-        it "assigns shares" do
-          expect(vault_entry.shares.size).to eq contacts.size
-        end
-
+        
         it "assigns document" do
           expect(vault_entry.document).to eq document
+        end
+
+        it "assigns shares" do
+          expect(vault_entry.share_with_contacts.size).to eq contacts.size
         end
 
         it "assigns executor" do

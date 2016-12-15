@@ -27,6 +27,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # Datatable for tables sorting
 gem 'ajax-datatables-rails'
 gem 'jquery-datatables-rails'
+gem 'maskedinput-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'

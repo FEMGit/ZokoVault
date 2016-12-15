@@ -53,7 +53,14 @@
        onSelect: function() {
          $('input[type=date]').attr('value', this.value)
        },
-       dateFormat: 'mm/dd/yy'
+       dateFormat: 'mm/dd/yy',
+       changeYear: true,
+       changeMonth: true,
+       yearRange: "-100:+0"
+     }).mask("99/99/9999");
+     $('div.content').scroll(function() {
+       $('input[type=date]').datepicker("hide")
+       $('input[type=date]').blur()
      });
   }
 </script>

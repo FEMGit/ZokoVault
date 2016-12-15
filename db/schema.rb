@@ -305,10 +305,7 @@ ActiveRecord::Schema.define(version: 20161214090201) do
     t.string   "zip"
     t.string   "notes"
     t.string   "two_factor_phone_number"
-<<<<<<< HEAD
     t.boolean  "phone_authentication_skip"
-=======
->>>>>>> e3b820c... AD-542 - Change DatePicker Style
   end
 
   create_table "users", force: :cascade do |t|

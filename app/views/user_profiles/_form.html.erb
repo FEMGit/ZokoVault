@@ -33,8 +33,7 @@
       <span class="error-label"> - <%= date_of_birth_error_safe(@user_profile) %></span>
     <% end %>
     <p>
-      <%= f.date_field :date_of_birth, { id: "html-5-date", class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?), value: f.object.date_of_birth.try(:strftime, "%Y-%m-%d")} %>
-      <%= f.date_field :date_of_birth, { id: "datepicker-date", class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?), value: f.object.date_of_birth.try(:strftime, "%m/%d/%Y")} %>
+      <%= render partial: 'layouts/date_picker', locals: { birth_value: f.object.date_of_birth, error_condition: @user_profile.errors.messages[:'Date of Birth'].present?, f: f, object: :date_of_birth} %>
     </p>
 
 

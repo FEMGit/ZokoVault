@@ -31,8 +31,7 @@
 
     <%= f.label :birthdate %>
     <p>
-      <%= f.date_field :birthdate, { id: "html-5-date", value: f.object.birthdate.try(:strftime, "%Y-%m-%d")} %>
-      <%= f.date_field :birthdate, { id: "datepicker-date", value: f.object.birthdate.try(:strftime, "%m/%d/%Y")} %>
+      <%= render partial: 'layouts/date_picker', locals: { birth_value: f.object.birthdate, error_condition: false, f: f, object: :birthdate} %>
     </p>
 
     <%= f.label :address, 'Street Address' %>

@@ -35,8 +35,7 @@
       <% if errors && resource.errors.messages[:'user_profile.Date of Birth'] %>
         <span class="error-label"> - <%= resource.errors.messages[:'user_profile.Date of Birth'].first.html_safe %></span>
       <% end %>
-      <%= user_profile_form.date_field :date_of_birth, { id: "html-5-date", class: ("input-error" if resource.errors.messages[:'user_profile.Date of Birth'].present?), value: user_profile_form.object.date_of_birth.try(:strftime, "%Y-%m-%d")} %>
-      <%= user_profile_form.date_field :date_of_birth, { id: "datepicker-date", class: ("input-error" if resource.errors.messages[:'user_profile.Date of Birth'].present?), value: user_profile_form.object.date_of_birth.try(:strftime, "%m/%d/%Y")} %>
+      <%= render partial: 'layouts/date_picker', locals: { birth_value: user_profile_form.object.date_of_birth, error_condition: resource.errors.messages[:'user_profile.Date of Birth'].present?, f: user_profile_form, object: :date_of_birth} %>
       <%= f.label :password %>
       <% if errors && resource.errors.messages[:password] %>
         <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>

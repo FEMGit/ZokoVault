@@ -5,18 +5,28 @@ textarea{
   display:block;
   margin-bottom: 10px;
   padding: 5px;
-  width: $form-width;
-  &.short {
-    width: $short-form-width;
-  }
-  &.medium {
-    width: $medium-form-width;
-  }
+  @include form-width;
 }
 input[type=radio]{
   display:inline;
   width: auto;
   margin-right: 10px;
+}
+input[type=tel]{
+  width: $medium-form-width;
+}
+.input-symbol-dollar {
+  position: relative;
+  input {
+    padding-left: 15px;
+  }
+  &:after {
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left: 5px;
+    content: "$";
+  }
 }
 
 .styled-select{
@@ -25,9 +35,10 @@ input[type=radio]{
   background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right center;
   height: 32px;
   overflow: hidden;
-  width: $form-width;
   padding: 0;
   margin-bottom: 10px;
+
+  @include form-width;
 }
 
 select{
@@ -35,9 +46,9 @@ select{
   border: none;
   height: 30px;
   padding: 5px;
-  width: $form-width + $gu;
   box-shadow: none;
   -webkit-appearance: none;
+  @include form-width;
 }
 
 label{
@@ -224,8 +235,7 @@ a.button, input[type=submit].button{
 }
 
 //RADIO BUTTONS & CHECKBOXES
-
- ul.radio-list,
+ul.radio-list,
 ul.check-list{
   list-style: none;
   margin: 0;

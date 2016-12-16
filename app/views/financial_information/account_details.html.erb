@@ -56,9 +56,12 @@
 </div>
 
 <% accounts = [
-  { type: 'Account Type 1', owner: 'Jack Brown', value: '10000', number: '15487', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' },
-  { type: 'Account Type 2', owner: 'Angelica DuBuque', value: '1000000', number: '7777', primary_contact: 'Shanny Bartell', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' },
-  { type: 'Account Type 3', owner: 'Jack Brown', value: '12345678', number: '666', primary_contact: 'Lawrence West', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' }
+  { type: 'Account Type 1', owner: 'Jack Brown', value: '10000', number: '15487', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
+  email:' wintheize@mail.com', phone: '777-777-7777'},
+  { type: 'Account Type 2', owner: 'Angelica DuBuque', value: '1000000', number: '7777', primary_contact: 'Shanny Bartell', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf',
+  email:' angelica@mail.com', phone: '888-788-1234'},
+  { type: 'Account Type 3', owner: 'Jack Brown', value: '12345678', number: '666', primary_contact: 'Lawrence West', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
+  email:' west@mail.com', phone: '123-456-7890'}
   ]
   %>
 
@@ -76,7 +79,11 @@
     <p><%= account[:number] %></p>
 
     <label>Primary Contact - Broker</label>
-    <p><%= account[:primary_contact] %></p>
+    <p>
+      <%= account[:primary_contact] %><br>
+      <a href="mailto:<%= account[:email] %>"><%= account[:email] %></a><br>
+      <%= account[:phone] %>
+    </p>
 
     <label class="title">Notes</label>
     <p><%= account[:notes] %></p>

@@ -52,6 +52,7 @@
     </ul>
 
     <%= f.label :password, 'Update Password' %>
+    <%= render partial: 'layouts/password_requirements' %>
     <% if errors && @user_profile.errors.messages[:password].present? %>
       <span class="error-label"> - <%= @user_profile.errors.messages[:password].first %></span>
     <% end %>

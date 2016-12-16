@@ -4,10 +4,12 @@
   $dark-gray: #333 !default;
   $base-font-color: $dark-gray !default;
   $tooltip-max-width: 32em;
+  $tooltip-min-width-wide: 20em;
   $tooltip-min-width: 16em;
   $tooltip-arrow-width: 8px;
   $tooltip-shadow: 0 2px 2px silver;
   $tooltip-distance-from-item: 3em;
+  $tooltip-distance-from-item-bottom: -20em;
   $tooltip-arrow-distance-from-box: -1.3em;
 
   display: inline-block;
@@ -44,6 +46,13 @@
       line-height: $base-line-height;
       margin: 0;
     }
+    
+    &.wide {
+      min-width: $tooltip-min-width-wide;
+    }
+    &.bottom {
+      @include position(absolute, null 0 $tooltip-distance-from-item-bottom 0);
+    }
 
     &::after {
       position: absolute;
@@ -56,6 +65,9 @@
        margin-left: -$tooltip-arrow-width;
        text-align: center;
        text-shadow: 0 2px .5px $color-primary-shaded;
+    }
+    &.bottom::after {
+      content: "";
     }
   }
 }

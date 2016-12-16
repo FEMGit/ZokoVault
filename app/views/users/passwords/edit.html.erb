@@ -7,6 +7,7 @@
   <%= f.hidden_field :reset_password_token %>
 
   <%= f.label :password, "New password" %>
+  <%= render partial: 'layouts/password_requirements', locals: {bottom: 'bottom'} %>
   <% if errors && resource.errors.messages[:password].present? %>
     <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
   <% end %>

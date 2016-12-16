@@ -1,0 +1,134 @@
+<%= link_to "javascript:void(0)", class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1>Bruna Mars</h1>
+
+
+<div class="card cg-3">
+  <h3 class="card-label">Account Provider Details</h3>
+
+  <label>Web Address</label>
+  <p>
+    <a href="https://develop.zokuvault.com">
+      https://develop.zokuvault.com
+    </a>
+  </p>
+
+  <label>Address</label>
+  <p>Street address<br>
+     City,
+     State
+     55555
+  </p>
+
+  <label>Phone</label>
+  <p>888-888-8888<br>
+     777-777-7777 fax
+  </p>
+
+  <label>Primary Contact</label>
+  <p>James Brown<br>
+     <a href="mailto:brown@mail.com">
+       brown@mail.com
+     </a><br>
+     666-666-6666
+  </p>
+
+  <section class="shared-with">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+
+    <label>Shared With</label>
+    <div>
+      <span class="user-circle">BM</span>
+      <span class="user-circle">JS</span>
+        <span class="user-circle">AK</span>
+    </div>
+  </section>
+
+</div>
+
+<% accounts = [
+  { type: 'Account Type 1', owner: 'Jack Brown', value: '10000', number: '15487', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' },
+  { type: 'Account Type 2', owner: 'Angelica DuBuque', value: '1000000', number: '7777', primary_contact: 'Shanny Bartell', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' },
+  { type: 'Account Type 3', owner: 'Jack Brown', value: '12345678', number: '666', primary_contact: 'Lawrence West', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ' }
+  ]
+  %>
+
+<% accounts.each do |account| %>
+  <h2 class="mt-20"><%= "#{account[:type]} -  #{account[:owner]}" %></h2>
+
+  <div class="card cg-3">
+
+    <h3 class="card-label">Account Information</h3>
+
+    <label>Account Value</label>
+    <p><%= number_to_currency(account[:value], unit: "$", precision: 0) %></p>
+
+    <label >Account Number</label>
+    <p><%= account[:number] %></p>
+
+    <label>Primary Contact - Broker</label>
+    <p><%= account[:primary_contact] %></p>
+
+    <label class="title">Notes</label>
+    <p><%= account[:notes] %></p>
+
+  </div>
+<% end %>
+
+<% documents = [
+  {name: 'Bruno & Bruna Mars Living Will.pdf', modified: '8/25/2016', tags: ['Will-Trusts-Legal', 'Will']},
+  {name: 'Gift Distributions.pdf', modified: '8/25/2016', tags: ['Will-Trusts-Legal', 'Will']},
+  {name: 'Bruno Mars Power of Attorney.pdf', modified: '7/12/2016', tags: ['Insurance', 'Life & Disability']},
+  {name: 'Scottrade.pdf', modified: '5/02/2016', tags: ['Taxes', '2016']}
+  ]
+  %>
+
+<div>
+  <a class="add-link fr" href="javascript:void(0)">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h3 class="mt-20">Account Documents</h3>
+</div>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+    <th>Shared With</th>
+    <th>Actions</th>
+  </tr>
+  <% documents.each do |document| %>
+    <tr>
+      <td>
+        <a><%= link_to document[:name], '' %></a>
+      </td>
+      <td><%= document[:modified] %></td>
+      <td>
+        <span class="doc-tag"><%= document[:tags][0] %></span>
+        <span class="doc-tag secondary-tag"><%= document[:tags][1] %></span>
+      </td>
+      <td>
+        <span class="user-circle">AM</span>
+        <span class="user-circle">DT</span>
+      </td>
+      <td>
+        <%= link_to 'Edit', 'javascript:void(0)', class: "outline-button small-button" %>
+        <%= link_to 'Delete', 'javascript:void(0)', class: "outline-button small-button" %>
+      </td>
+    </tr>
+  <% end %>
+</table>

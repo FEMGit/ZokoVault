@@ -38,9 +38,11 @@
       <%= user_profile_form.date_field :date_of_birth, { class: ("input-error" if resource.errors.messages[:'user_profile.Date of Birth'].present?) } %>
 
       <%= f.label :password %>
+      <%= render partial: 'layouts/password_requirements' %>
       <% if errors && resource.errors.messages[:password] %>
         <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
       <% end %>
+      
       <%= f.password_field :password, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
 
       <%= f.label :password_confirmation, 'Confirm Password' %>

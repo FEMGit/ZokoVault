@@ -149,6 +149,7 @@ class WillsController < AuthenticatedController
       else
         @new_params << @new_vault_entries
       end
+      raise "error saving new will" if @errors.any?
     end
     raise "error saving new will" if @errors.any?
   end

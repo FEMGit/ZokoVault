@@ -223,6 +223,8 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.integer  "user_id"
     t.integer  "shareable_id"
     t.string   "shareable_type"
+    t.string   "contact_type"
+    t.integer  "document_id"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
@@ -316,6 +318,7 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.string   "notes"
     t.string   "two_factor_phone_number"
     t.boolean  "phone_authentication_skip"
+    t.integer  "full_primary_share_id"
   end
 
   create_table "users", force: :cascade do |t|

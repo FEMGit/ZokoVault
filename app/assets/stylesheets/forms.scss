@@ -37,7 +37,6 @@ input[type=tel]{
   overflow: hidden;
   padding: 0;
   margin-bottom: 10px;
-
   @include form-width;
 }
 
@@ -48,6 +47,8 @@ select{
   padding: 5px;
   box-shadow: none;
   -webkit-appearance: none;
+  -moz-appearance:none;
+  appearance:none;
   @include form-width;
 }
 

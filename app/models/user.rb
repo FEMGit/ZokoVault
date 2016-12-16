@@ -66,6 +66,6 @@ class User < ActiveRecord::Base
   def include_personal_data?
     email_nick = email.split("@").first
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
-    [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.include?(x) }
+    [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.downcase.include?(x.downcase) }
   end
 end

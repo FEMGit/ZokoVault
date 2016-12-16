@@ -32,7 +32,10 @@
     <% if errors && @user_profile.errors.messages[:'Date of Birth'] %>
       <span class="error-label"> - <%= date_of_birth_error_safe(@user_profile) %></span>
     <% end %>
-    <p><%= f.date_field :date_of_birth, { class: ("input-error" if @user_profile.errors.messages[:'Date of Birth'].present?), value: f.object.date_of_birth } %></p>
+    <p>
+      <%= render partial: 'layouts/date_picker', locals: { birth_value: f.object.date_of_birth, error_condition: @user_profile.errors.messages[:'Date of Birth'].present?, f: f, object: :date_of_birth} %>
+    </p>
+
 
     <%= f.label :street_address_1, 'Street Address' %>
     <p><%= f.text_field :street_address_1 %></p>

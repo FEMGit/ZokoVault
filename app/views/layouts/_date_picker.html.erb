@@ -1,0 +1,2 @@
+<%= f.date_field object, { id: "html-5-date", class: ("input-error" if error_condition), value: birth_value.try(:strftime, "%Y-%m-%d")} %>
+<%= f.date_field object, { id: "datepicker-date", class: ("input-error" if error_condition), value: birth_value.try(:strftime, "%m/%d/%Y")} %>

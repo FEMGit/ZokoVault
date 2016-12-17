@@ -7,9 +7,7 @@ class TrustBuilder
       else
         Trust.new(options.slice(:user_id, :document_id, :name))
       end
-
     self.options = options
-
     clear_options if options[:id].present?
   end
   
@@ -26,15 +24,17 @@ class TrustBuilder
   
   def build
     build_trustees
+    
     sanitize_data(options[:agent_ids]).each do |contact_id|
       trust.vault_entry_contacts.build(
         active: true, type: :agent, contact_id: contact_id
       )
     end
-    share_options = { user_id: options[:user_id] }
+    share_options = { document_id: trust.document_id, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|
       trust.shares.build(share_options.merge(contact_id: contact_id))
     end
+
     set_options
     trust
   end
@@ -60,10 +60,11 @@ class TrustBuilder
   end
   
   def set_options
-    trust.notes = options[:notes]
     trust.trustee_ids = options[:trustee_ids]
     trust.agent_ids = options[:agent_ids]
     trust.successor_trustee_ids = options[:successor_trustee_ids]
+    trust.share_with_contact_ids = options[:share_with_contact_ids]
+    trust.notes = options[:notes]
     trust.name = options[:name]
   end
 

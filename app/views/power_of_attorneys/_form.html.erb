@@ -5,7 +5,7 @@
 
   <label>Power of Attorney</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false) %>
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false, value: data.agent_ids) %>
   </div>
 
   <label>This Agent's powers are (please choose all that apply):</label>
@@ -24,7 +24,7 @@
   </ul>
   
   <%= f.label :notes %>
-  <p><%= f.text_area :notes, id: "attorney_notes_id_#{index}" %></p>
+  <p><%= f.text_area :notes, id: "attorney_notes_id_#{index}", value: data.notes %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -34,7 +34,7 @@
     </h3>
     <label>Shared With</label><br>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "attorney_share_id_#{index}") %>
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "attorney_share_id_#{index}", value: data.share_with_contact_ids) %>
     </div>
   </section>
 
@@ -78,21 +78,9 @@
     });
 
     $newWtlForm.find("#attorney_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_ids][]",
+      name: new_vault_entry_id +"[share_with_contact_ids][]",
       id: "attorney_share_id_" + new_id
     });
     $newWtlForm.find("#delete-legal").remove();
   }
-
-$(document).ready(function(){
-  url = "new/get_powers_of_attorney_details";
-  $.get(url, function(data) {
-    data.forEach(function(form_values, index){
-      $("#attorney_agent_id_" + index).val(form_values[0]).trigger("chosen:updated");
-      $("#attorney_share_id_" + index).val(form_values[1]).trigger("chosen:updated");
-      $("#attorney_id_" + index).val(form_values[2]).trigger("chosen:updated");
-      $("#attorney_notes_id_" + index).val(form_values[3]);
-    });
-  });
-});
 </script>

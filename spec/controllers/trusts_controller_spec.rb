@@ -14,7 +14,7 @@ RSpec.describe TrustsController, type: :controller do
       successor_trustee_ids: contacts.last(1).map(&:id),
       executor_id: contacts[1].id,
       agent_ids: contacts[0].id,
-      share_ids: contacts.map(&:id),
+      share_with_contact_ids: contacts.map(&:id),
       document_id: document.id
     }
   end
@@ -95,13 +95,13 @@ RSpec.describe TrustsController, type: :controller do
         it "assigns agents" do
           expect(vault_entry.agents.first).to eq contacts[0]
         end
-
-        it "assigns shares" do
-          expect(vault_entry.shares.size).to eq contacts.size
-        end
-
+        
         it "assigns document" do
           expect(vault_entry.document).to eq document
+        end
+
+        it "assigns shares" do
+          expect(vault_entry.share_with_contacts.size).to eq contacts.size
         end
 
         it "assigns user" do

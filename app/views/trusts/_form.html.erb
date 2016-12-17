@@ -15,21 +15,21 @@
 
   <label>Attorney, Accountant or Advisor(s)</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", multiple: false) %>
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", multiple: false, value: data.agent_ids) %>
   </div>
 
   <label>Trustee(s)</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}") %>
+    <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}", value: data.trustee_ids) %>
   </div>
 
   <label>Successor Trustee(s)</label>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}") %>
+    <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}", value: data.successor_trustee_ids) %>
   </div>
 
   <%= f.label :notes %>
-  <p><%= f.text_area :notes, id: "trust_notes_id_#{index}" %></p>
+  <p><%= f.text_area :notes, id: "trust_notes_id_#{index}", value: data.notes %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -39,7 +39,7 @@
     </h3>
     <label>Shared With</label><br>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_ids, @contacts_shareable, id: "trust_share_id_#{index}") %>
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "trust_share_id_#{index}", value: data.share_with_contact_ids) %>
     </div>
   </section>
 
@@ -67,7 +67,7 @@
     });
 
     $newWtlForm.find("#trust_agent_id_" + old_id).attr({
-      name: new_vault_entry_id +"[agent_ids][]",
+      name: new_vault_entry_id +"[agent_ids]",
       id: "trust_agent_id_" + new_id
     });
     $newWtlForm.find("#trust_agent_id_" + new_id + " option").prop("selected", false);
@@ -85,7 +85,7 @@
     $newWtlForm.find("#trust_successor_id_" + new_id + " option").prop("selected", false);
 
     $newWtlForm.find("#trust_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_ids][]",
+      name: new_vault_entry_id +"[share_with_contact_ids][]",
       id: "trust_share_id_" + new_id
     });
     
@@ -97,17 +97,4 @@
     $newWtlForm.find("#trust_share_id_" + new_id + " option").prop("selected", false);
     $newWtlForm.find("#delete-trust").remove();
   }
-$(document).ready(function(){
-  url = "/trusts/new/get_trusts_details";
-  $.get(url, function(data) {
-    data.forEach(function(form_values, index){
-      $("#trust_agent_id_" + index).val(form_values[0]).trigger("chosen:updated");
-      $("#trust_trustee_id_" + index).val(form_values[1]).trigger("chosen:updated");
-      $("#trust_successor_id_" + index).val(form_values[2]).trigger("chosen:updated");
-      $("#trust_share_id_" + index).val(form_values[3]).trigger("chosen:updated");
-      $("#trust_id_" + index).val(form_values[4]).trigger("chosen:updated");
-      $("#trust_notes_id_" + index).val(form_values[5]);
-    });
-  });
-});
 </script>

@@ -66,13 +66,13 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Web Accounts
-  <% end %> -->
+  <% end %>
   <% shared_current = 'active' if current_page?(shared_url) %>
   <%= link_to shared_path, class: "main-nav #{shared_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me
-  <% end %>
+  <% end %> -->
   <% documents_current = 'active' if current_page?(documents_url) %>
   <%= link_to documents_path, class: "main-nav #{documents_current}" do %>
     <svg class="icon nav-icon">

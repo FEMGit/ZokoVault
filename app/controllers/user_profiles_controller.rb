@@ -30,6 +30,7 @@ class UserProfilesController < AuthenticatedController
   # POST /user_profiles
   # POST /user_profiles.json
   def create
+    params[:user_profile][:date_of_birth] = date_format
     @user_profile = UserProfile.new(user_profile_params)
     respond_to do |format|
       if @user_profile.save
@@ -45,7 +46,7 @@ class UserProfilesController < AuthenticatedController
   # PATCH/PUT /user_profiles/1
   # PATCH/PUT /user_profiles/1.json
   def update
-    user_profile_params[:date_of_birth] = date_format
+    params[:user_profile][:date_of_birth] = date_format
     respond_to do |format|
       if @user_profile.update(user_profile_params)
         format.html { redirect_to user_profile_path, notice: 'User profile was successfully updated.' }

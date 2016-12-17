@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :user, class: 'User' do
     email { Faker::Internet.free_email }
-    password 'password'
-    password_confirmation 'password'
+    password 'fgfdfGFGGF56@%FSfghhfasgd5'
+    password_confirmation 'fgfdfGFGGF56@%FSfghhfasgd5'
     confirmed_at { Time.now }
     setup_complete true
 

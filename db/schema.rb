@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213055123) do
+ActiveRecord::Schema.define(version: 20161216023131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,16 @@ ActiveRecord::Schema.define(version: 20161213055123) do
 
   add_index "multifactor_phone_codes", ["user_id"], name: "index_multifactor_phone_codes_on_user_id", using: :btree
 
+  create_table "old_passwords", force: :cascade do |t|
+    t.string   "encrypted_password",       null: false
+    t.string   "password_archivable_type", null: false
+    t.integer  "password_archivable_id",   null: false
+    t.datetime "created_at"
+    t.string   "password_salt"
+  end
+
+  add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
   create_table "power_of_attorneys", force: :cascade do |t|
     t.integer  "document_id"
     t.integer  "power_of_attorney_id"
@@ -308,6 +318,7 @@ ActiveRecord::Schema.define(version: 20161213055123) do
     t.string   "notes"
     t.integer  "full_primary_share_id"
     t.string   "two_factor_phone_number"
+    t.boolean  "phone_authentication_skip"
   end
 
   create_table "users", force: :cascade do |t|

@@ -3,147 +3,165 @@
 <section class="flex-boxes">
   <div class="flex-column">
     <div class="card cg-1 column-card">
+      <% if @wills.any? %>
+      
+        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Will', :category => @category} %>
+        <h3>Wills</h3>
 
-      <span class="fa-stack fa-1x icon-section fr">
-        <span class="fa-stack-1x document-number">7</span>
-        <svg class="icon icon-document-2">
-          <use xlink:href="#icon-document-2">
-          </use>
-        </svg>
-      </span>
-      <h3>Wills</h3>
+        <% @wills.each_with_index do |will, index| %>
+          <div <% if index != 0 %> class="data-border" <% end %>></div>
+          <%= link_to content_tag(:a), shared_view_wills_path(@shared_user), class: "whole-card-link" %>
 
-      <ul class="data-list mb-20">
-        <li class="data-pair">
-          <span class="pair-name">Bruna Mars</span>
-          <span class="data-right">
-            Primary
-          </span>
-        </li>
+            <label><%= will.title %></label>
+            <ul class="data-list mb-20">
+              <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
+                <li class="data-pair">
+                  <span class="pair-name"><%= primary.name %></span>
+                  <span class="data-right">
+                    Primary
+                  </span>
+                </li>
+              <% end %>
 
-        <li class="data-pair">
-          <span class="pair-name">BJ Mars</span>
-          <span class="data-right">
-            Secondary
-           </span>
-        </li>
-      </ul>
+              <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
+                <li class="data-pair">
+                  <span class="pair-name"><%= secondary.name %></span>
+                  <span class="data-right">
+                    Secondary
+                  </span>
+                </li>
+              <% end %>
+            </ul>
 
-      <label>Advisor</label>
-      <ul class="data-list">
-        <li class="contact-pair">
-          Bruna Mars <br>
-          <a href="mailto:brunamars@mail.com">brunamars@mail.com</a><br>
-          777-777-7777
-        </li>
-      </ul>
+            <% if will.agents.any? %>
+              <label>Advisor</label>
+            <% end %>
+            <ul class="data-list">
+              <% will.agents && will.agents.each do |advisor| %>
+                <li class="contact-pair">
+                  <%= advisor.name %><br>
+                  <a href="mailto:<%= advisor.emailaddress %>"><%= advisor.emailaddress %></a><br>
+                  <%= advisor.phone %>
+                </li>
+              <% end %>
+            </ul>
 
-      <label>Shared With</label>
-      <section class="shared-list">
-        <span class="user-circle">BM</span>
-        <span class="user-circle">TA</span>
-      </section>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <% will.share_with_contacts.each do |share| %>
+              <% if share.present? %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+              <% end %>
+            <% end %>
+          </section>
+        <% end %>
+      
+      <% else %>
+        <h3>Wills</h3>
+        <p>No shared items.</p>
+      <% end %>
     </div>
   </div>
 
   <div class="flex-column">
     <div class="card cg-2 column-card">
+      <% if @trusts.any? %>
+        <%= link_to content_tag(:a), shared_views_trusts_path(@shared_user), class: "whole-card-link" %>
 
-      <span class="fa-stack fa-1x icon-section fr">
-        <span class="fa-stack-1x document-number">3</span>
-        <svg class="icon icon-document-2">
-          <use xlink:href="#icon-document-2">
-          </use>
-        </svg>
-      </span>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Trust', :category => @category} %>
+          <h3>Trusts</h3>
 
-      <h3>Trusts</h3>
+          <section class="mb-20">
+            <% @trusts.each do |trust| %>
+              <label><%= trust.name %></label><br>
+            <% end %>
+          </section>
 
-      <section class="mb-20">
-        <label>Name 1</label><br>
-        <label>Name 2</label><br>
-        <label>Name 3</label><br>
-      </section>
+          <% if get_agents_uniq(@trusts).any? %>
+            <label>Advisor</label>
+          <% end %>
+          <ul class="data-list">
+            <% get_agents_uniq(@trusts) && get_agents_uniq(@trusts).each do |agent| %>
+              <li class="contact-pair">
+                <%= agent.name %><br>
+                <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
+                <%= agent.phone %>
+              </li>
+            <% end %>
+          </ul>
 
-      <label>Advisor</label>
-      <ul class="data-list">
-        <li class="contact-pair">
-          Bruna Mars<br>
-          <a href="mailto:brunamars@mail.com">brunamars@mail.com</a><br>
-          777-777-7777
-        </li>
-      </ul>
-
-      <label>Shared With</label>
-      <section class="shared-list">
-        <span class="user-circle">BM</span>
-        <span class="user-circle">TA</span>
-      </section>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <% get_shares_uniq(@trusts) && get_shares_uniq(@trusts).each do |share| %>
+              <% if share.present? %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+              <% end %>
+            <% end %>
+          </section>
+      <% else %>
+        <h3>Trusts</h3>
+        <p>No shared items.</p>
+      <% end %>
     </div>
   </div>
 
 
   <div class="flex-column">
     <div class="card cg-3 column-card">
-      <span class="fa-stack fa-1x icon-section fr">
-        <span class="fa-stack-1x document-number">7</span>
-        <svg class="icon icon-document-2">
-          <use xlink:href="#icon-document-2">
-          </use>
-        </svg>
-      </span>
+      <% if @power_of_attorneys.any? %>
+        <%= link_to content_tag(:a), shared_view_power_of_attorneys_path(@shared_user), class: "whole-card-link" %>
 
-      <h3>Powers of Attorney</h3>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Legal', :category => @category} %>
+          <h3>Powers of Attorney</h3>
 
-      <ul class="data-list mb-20">
-        <li class="data-pair">
-          <label>
-            Bruna Mars
-          </label>
-          <span class="data-right">
-            Primary
-          </span>
-        </li>
-      </ul>
+          <ul class="data-list mb-20">
+            <% @power_of_attorneys.each do |power_of_attorney| %>
+              <li class="data-pair">
+                <label>
+                  <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
+                </label>
+                <span class="data-right">
+                <% if power_of_attorney.powers.present? %>
+                  <% power_of_attorney.powers.keys.each do |agent_power| %>
+                    <%= agent_power %><br>
+                  <% end %>
+                <% end %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
 
-      <label>Shared With</label>
-      <section class="shared-list">
-        <span class="user-circle">BM</span>
-        <span class="user-circle">TA</span>
-      </section>
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% get_shares_uniq(@power_of_attorneys) && get_shares_uniq(@power_of_attorneys).each do |share| %>
+            <% if share.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+            <% end %>
+          <% end %>
+        </section>
+
+      <% else %>
+        <h3>Power of Attorney</h3>
+        <p>No shared items.</p>
+      <% end %>
     </div>
   </div>
 </section>
 
-<% documents = [
-  {name: 'Bruno & Bruna Mars Living Will.pdf', modified: '8/25/2016', tags: ['W-T-L', 'Wills & Gifts']},
-  {name: 'Gift Distributions.pdf', modified: '8/25/2016', tags: ['W-T-L', 'Wills & Gifts']},
-  {name: 'Bruno Mars Power of Attorney.pdf', modified: '7/12/2016', tags: ['W-T-L', 'Power of Attorney']},
-  {name: 'Scottrade.pdf', modified: '5/02/2016', tags: ['W-T-L', 'Trusts']}
-  ]
-  %>
+<h3>Wills - Trusts - Legal Documents</h3>
 
-<h1>Dashboard</h1>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Modified</th>
-    <th>Tags</th>
-    <th>Actions</th>
-  </tr>
-  <% documents.each do |document| %>
-    <tr>
-      <td>
-        <a><%= link_to document[:name], '' %></a>
-      </td>
-      <td><%= document[:modified] %></td>
-      <td>
-        <span class="doc-tag"><%= document[:tags][0] %></span>
-        <span class="doc-tag secondary-tag"><%= document[:tags][1] %></span>
-      </td>
-      <td>
-        <%= link_to 'Edit', '', class: "outline-button small-button" %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
+<%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

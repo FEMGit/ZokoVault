@@ -2,20 +2,12 @@ class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
 
     def index
-      @shares_by_contact = policy_scope(Share)
+      @shares_by_user = policy_scope(Share)
                            .each { |s| authorize s }
-                           .group_by(&:contact)
+                           .group_by(&:user)
     end
 
     def show; end
-
-    def dashboard
-      @document_shares, @other_shares = policy_scope(Share)
-                                        .where(user_id: params[:user_id])
-                                        .each { |s| authorize s }
-                                        .partition { |s| s.shareable.is_a? Document }
-        
-    end
 
     def new
       @share = Share.new user: current_user

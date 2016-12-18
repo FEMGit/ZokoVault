@@ -7,14 +7,14 @@
     </svg>
   </a>
 
-  <a class="main-nav <%= 'active' if current_page?(shared_view_path) %>"
-    href=<%= shared_view_path %> >
+  <a class="main-nav <%= 'active' if current_page?(shared_view_dashboard_path) %>"
+     href=<%= shared_view_dashboard_path(@shared_user) %> >
     <svg class="icon nav-icon">
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <% shared_estate_planning = 'active' if current_page?(shared_estate_planning_url) %>
-  <%= link_to shared_estate_planning_path, class: "main-nav #{shared_estate_planning}" do %>
+  <% shared_view_estate_planning = 'active' if current_page?(shared_view_estate_planning_path) %>
+  <%= link_to shared_view_estate_planning_path, class: "main-nav #{shared_view_estate_planning}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills Trusts &amp; Legal

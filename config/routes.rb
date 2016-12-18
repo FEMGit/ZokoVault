@@ -83,7 +83,6 @@ Rails.application.routes.draw do
   resources :shares
   get 'shares' => 'shares#index'
   get 'shares/new/:document' => 'shares#new'
-  get 'shares/:user_id/dashboard' => 'shares#dashboard', as: :shares_dashboard
 
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
@@ -124,7 +123,14 @@ Rails.application.routes.draw do
   get 'financial_information/account_details', to: 'financial_information#account_details', as: :account_details
   
   # Shared view
-  get 'shared_view/estate_planning', to: 'shared_view#estate_planning', as: :shared_estate_planning
+  get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
+  get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
+  get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
+
+  get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
+
+  get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
+
   
   # Information pages
   get "/about", to: "pages#about", as: :about

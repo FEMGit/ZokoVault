@@ -6,9 +6,18 @@ class SharePolicy < BasicPolicy
     @record = record
   end
 
-  def dashboard?
-    index?
+  def index?
+    owned_or_shared?
   end
+
+
+  # XXX: Move to SharedViewPolicy
+  # Shared view policies
+  def dashboard?; index?; end
+  def estate_planning?; index?; end
+  def power_of_attorneys?; index?; end
+  def trusts?; index?; end
+  def wills?; index?; end
 
   def scope
     Pundit.policy_scope!(user, record.class)

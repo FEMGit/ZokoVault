@@ -13,19 +13,19 @@
   </thead>
 
   <tbody>
-    <% @shares_by_contact.each do |contact, shares| %>
+    <% @shares_by_user.each do |user, shares| %>
       <tr>
         <td>
-          <span class="user-circle"><%= contact.try(:initials) %></span>
-          <%= contact.try(:name) %>
+          <span class="user-circle"><%= user.try(:initials) %></span>
+          <%= user.try(:name) %>
         </td>
         <td>
-          <%= contact.try(:emailaddress) %>
+          <%= user.try(:email) %>
         </td>
         <% shareables = shares.map(&:shareable) %>
         <td><%= shareables.count { |res| res.is_a? Document } %></td>
-        <td><%= shareables.count { |res| res.is_a? Category } %></td>
-        <td class="details-col"><%= link_to 'View', shares_dashboard_path(contact.user) %></td>
+        <td><%= shareables.count { |res| res.class.in? [Will, Trust, PowerOfAttorney]} %></td>
+        <td class="details-col"><%= link_to 'View', shared_view_dashboard_path(user) %></td>
       </tr>
     <% end %>
   </tbody>

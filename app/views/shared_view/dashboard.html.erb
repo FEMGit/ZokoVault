@@ -6,13 +6,13 @@
         <use xlink:href="#icon-document-3"></use>
       </svg>
       <h5 class="category-title">Wills - Trusts - Legal</h5>
-      <%= link_to 'View Category', shared_estate_planning_path, class: 'view-category' %>
+      <%= link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category' %>
     </td>
   </tr>
-  <% @other_shares.each do |share| %>
+  <% @other_shareables.each do |shareable| %>
     <tr>
       <td>
-        <span><%= share.sharable_type %></span>
+        <span><%= shareable.class %></span>
       </td>
     </tr>
   <% end %>
@@ -26,15 +26,14 @@
     <th>Modified</th>
     <th>Tags</th>
   </tr>
-  <% @document_shares.each do |share| %>
+  <% @document_shareables.each do |shareable| %>
     <tr>
       <td>
-        <a><%= link_to share.shareable.name, share.shareable %></a>
+        <a><%= link_to shareable.name, shareable %></a>
       </td>
-      <td><%= share.shareable.updated_at.strftime("%m/%d/%Y") %>
+      <td><%= shareable.updated_at.strftime("%m/%d/%Y") %>
       <td>
-        <span class="doc-tag"> [n/a] </span>
-        <span class="doc-tag secondary-tag">[n/a]</span>
+        <%= render :partial => "layouts/document_tags", :locals => {:document => shareable } %>
       </td>
     </tr>
   <% end %>

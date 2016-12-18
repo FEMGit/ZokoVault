@@ -2,23 +2,37 @@ require 'rails_helper'
 
 RSpec.describe SharesController, type: :controller do
   let!(:user) { create :user }
-  let!(:contact) { create :contact, user: user }
+  let(:shared_user) { create :user }
+  let(:contact) { create :contact, emailaddress: shared_user.email, user: shared_user }
   let!(:document) { create :document }
 
-  let(:valid_attributes) { { contact_id: contact.id, shareable_type: "Document", shareable_id: document.id, user: user } }
+  let(:valid_attributes) do
+    { 
+      contact_id: contact.id, 
+      shareable_type: "Document", 
+      shareable_id: document.id, 
+      user: user
+    }
+  end
+
   let(:invalid_attributes) { { contact: contact } }
 
   let(:valid_session) { {} }
+
 
   before do
     sign_in user
   end
 
   describe "GET #index" do
-    xit "assigns all shares as @shares" do
+    before do
+      sign_in shared_user
+    end
+
+    it "assigns all shares with me as @shares_by_contact" do
       share = Share.create! valid_attributes
       get :index, {}, valid_session
-      expect(assigns(:shares_by_contact)).to eq(contact => [share])
+      expect(assigns(:shares_by_user)).to eq(user => [share])
     end
   end
 
@@ -85,13 +99,6 @@ RSpec.describe SharesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url } }
-
-      it "updates the requested share" do
-        share = Share.create! valid_attributes
-        put :update, {id: share.to_param, share: new_attributes}, valid_session
-        share.reload
-        skip("Add assertions for updated state")
-      end
 
       it "assigns the requested share as @share" do
         share = Share.create! valid_attributes

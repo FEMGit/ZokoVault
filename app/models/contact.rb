@@ -48,6 +48,10 @@ class Contact < ActiveRecord::Base
   }
 
 
+  def canonical_user
+    User.find_by(email: emailaddress)
+  end
+
   def personal_relationship?
     relationship.in? RELATIONSHIP_TYPES[:personal]
   end

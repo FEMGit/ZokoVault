@@ -1,0 +1,93 @@
+<%= link_to edit_financial_property_url(@financial_property.id), class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1><%= @financial_property.name %></h1>
+
+<div class="card cg-3">
+
+  <h3 class="card-label">Property Details</h3>
+
+  <% if @financial_property.property_type.present? %>
+    <label>Property Type</label>
+    <p><%= @financial_property.property_type %></p>
+  <% end %>
+  
+  <% if !financial_property_present?(@financial_property) %>
+    <label>There is no information about Property</label>
+  <% end %>
+
+  <% if @financial_property.owner %>
+    <label>Property Owner</label>
+    <p>
+      <%= @financial_property.owner.name %><br>
+      <%= mail_to @financial_property.owner.emailaddress, @financial_property.owner.emailaddress %><br>
+      <%= @financial_property.owner.phone %>
+    </p>
+  <% end %>
+
+  <% if @financial_property.value %>
+    <label>Property Value</label>
+    <p>
+      <%= render partial: "financial_information/value_show", locals: { value: @financial_property.value, type: @financial_property.property_type } %>
+    </p>
+  <% end %>
+
+  <% if show_financial_property_address?(@financial_property) %>
+    <label>Property Address or Location</label>
+    <p>
+      <%= @financial_property.address %><br>
+      <%= @financial_property.city %>,
+      <%= @financial_property.state %>
+      <%= @financial_property.zip %>
+    </p>
+  <% end %>
+
+  <% if @financial_property.primary_contact %>
+    <label>Primary Contact - Broker</label>
+    <p>
+      <%= @financial_property.primary_contact.name %><br>
+      <%= mail_to @financial_property.primary_contact.emailaddress, @financial_property.primary_contact.emailaddress %><br>
+      <%= @financial_property.primary_contact.phone %>
+    </p>
+  <% end %>
+  
+  <% if @financial_property.notes.present? %>
+    <label class="title">Notes</label>
+    <p><%= @financial_property.notes %></p>
+  <% end %>
+  
+  <span class="clear"></span>
+  
+  <% if @financial_property.share_with_contacts.present? %>
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Shared With
+      </h3>
+
+      <label>Shared With</label><br>
+      <% @financial_property.share_with_contacts && @financial_property.share_with_contacts.each do |contact| %>
+        <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+      <% end %>
+    </section>
+  <% end %>
+</div>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h3 class="mt-20">Property Documents</h3>
+</div>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

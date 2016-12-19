@@ -1,0 +1,59 @@
+<%= ff.hidden_field :id, id: "account_id_#{index}" %>
+  <h3 class="card-label">Account Information</h3>
+  
+  <%= ff.label :account_type, 'Account Type' %>
+  <div class="styled-select">
+    <%= ff.select :account_type, FinancialAccountInformation::account_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_account_provider_account_#{index}_account_type'), 
+      $('#account_value_#{index}'))" %>
+  </div>
+
+  <%= ff.label :owner_id, 'Account Owner' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(ff, :owner_id, @contacts, id: "account_owner_#{index}", multiple: false) %>
+  </div>
+  
+  <%= ff.label :value, 'Account Value' %>
+  <%= ff.text_field :value, id: "account_value_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  :value => ff.object && number_to_currency(ff.object.value, precision: 0, unit: "$") %>
+
+  <%= ff.label :number, 'Account Number' %>
+  <%= ff.text_field :number, id: "account_number_#{index}" %>
+
+  <%= ff.label :primary_contact_broker_id, 'Primary Contact - Broker' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(ff, :primary_contact_broker_id, @contacts, id: "account_broker_#{index}", multiple: false) %>
+  </div>
+
+  <%= ff.label :notes %>
+  <%= ff.text_area :notes, id: "account_notes_#{index}" %>
+
+<script>
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
+      value: ""
+    });
+    $form.find("#" + new_id + " option").prop("selected", false);
+    $form.find("#" + new_id).css('color', 'black')
+  };
+  clearForm = function($newForm, old_id, new_id) {
+    new_element_name = "financial_account_provider[account_" + new_id + "]";
+    id_prefix = "financial_account_provider_account_"
+    changeIdAndName($newForm, "account_id_" + old_id,
+      "account_id_" + new_id, new_element_name + "[id]")
+    changeIdAndName($newForm, id_prefix + old_id + "_account_type",
+      id_prefix + new_id + "_account_type", new_element_name + "[account_type]")
+    changeIdAndName($newForm, "account_owner_" + old_id,
+      "account_owner_" + new_id, new_element_name + "[owner_id]")
+    changeIdAndName($newForm, "account_value_" + old_id,
+      "account_value_" + new_id, new_element_name + "[value]")
+    changeIdAndName($newForm, "account_number_" + old_id,
+      "account_number_" + new_id, new_element_name + "[number]")
+    changeIdAndName($newForm, "account_broker_" + old_id,
+      "account_broker_" + new_id, new_element_name + "[primary_contact_broker_id]")
+    changeIdAndName($newForm, "account_notes_" + old_id,
+      "account_notes_" + new_id, new_element_name + "[notes]")
+    $newForm.find("#delete-tax").remove();
+  }
+</script>

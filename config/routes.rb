@@ -50,7 +50,6 @@ Rails.application.routes.draw do
 
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
-  get 'financial_information' => 'categories#financial_information'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
   get 'shared' => 'categories#shared'
@@ -118,11 +117,40 @@ Rails.application.routes.draw do
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   
   # Financial information
-  get 'financial_information/add_account', to: 'financial_information#add_account', as: :add_account
-  get 'financial_information/add_property', to: 'financial_information#add_property', as: :add_property
-  get 'financial_information/add_investment', to: 'financial_information#add_investment', as: :add_investment
-  get 'financial_information/account_details', to: 'financial_information#account_details', as: :account_details
-  get 'financial_information/property_details', to: 'financial_information#property_details', as: :property_details
+  get 'financial_information' => 'financial_information#index', as: 'financial_information'
+  get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
+
+  # Financial Account
+  get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
+  get 'financial_information/account/show/:id', to: 'financial_account#show', as: :show_account
+  get 'financial_information/account/:id/edit', to: 'financial_account#edit', as: :edit_account
+  get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
+  post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
+  put 'financial_information/account/add_account', to: 'financial_account#update'
+  delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider
+  delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
+  
+  # Financial Property
+  get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
+  get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
+  get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
+  get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
+  put 'financial_information/property/add_property', to: 'financial_property#update'
+  post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
+  delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
+  
+  # Financial Investment
+  get 'financial_information/investment/new', to: 'financial_investment#new', as: :add_investment
+  get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
+  get 'financial_information/investment/:id/edit', to: 'financial_investment#edit', as: :edit_investment
+  get 'financial_information/investment/:id', to: 'financial_investment#show', as: :investment_details
+  put 'financial_information/investment/add_investment', to: 'financial_investment#update'
+  post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
+  delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
+  
+  resources :financial_account
+  resources :financial_property
+  resources :financial_investment
   
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard

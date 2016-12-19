@@ -25,12 +25,13 @@
       <use xlink:href="#icon-share-3"></use>
     </svg>Contacts &amp; Permissions
   <% end %>
-<!--   <% financial_information_current = 'active' if current_page?(financial_information_url) %>
+  <% financial_information_current = 'active' if current_page?(financial_information_url) || controller?('financial_account') ||
+      controller?('financial_property') || controller?('financial_investment') %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
     </svg>Financial Information
-  <% end %> -->
+  <% end %>
   <% estate_planning = 'active' if current_page?(estate_planning_url) || controller?('wills') ||
     controller?('trusts') || controller?('power_of_attorneys') %>
   <%= link_to estate_planning_path, class: "main-nav #{estate_planning}" do%>

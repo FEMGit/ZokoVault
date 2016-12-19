@@ -38,7 +38,6 @@ RSpec.describe CategoriesController, type: :routing do describe "routing" do
       it "routes insurance" do
         {
           'estate_planning' => 'categories#estate_planning',
-          'financial_information' => 'categories#financial_information',
           'healthcare_choices' => 'categories#healthcare_choices',
           'insurance' => 'categories#insurance',
           'web_accounts' => 'categories#web_accounts',

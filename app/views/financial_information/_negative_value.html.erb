@@ -1,0 +1,5 @@
+<% if value > 0 %>
+  <span class="negative-value">-<%= number_to_currency(value, unit: "$", precision: 0) %></span>
+<% else %>
+  <span><%= number_to_currency(value, unit: "$", precision: 0) %></span>
+<% end %>

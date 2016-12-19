@@ -1,0 +1,330 @@
+<a class="edit-link" id="toggle">
+  <span class="fin-overview">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Add Financial Information
+  </span>
+  <span class="fin-options" style="display:none;">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-left-1"></use>
+      </svg>
+    </span>Back to Overview
+  </span>
+
+</a>
+<h1>Financial Information</h1>
+
+<div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
+
+  <section class="fin-overview">
+    <div id="asset" class="pie-chart"></div>
+    <div id="debt"  class="pie-chart"></div>
+    <div class="pie-legend">
+
+      <ul class="data-summary">
+        <li class="data-pair">
+          <h4>Cash</h4>
+          <h4 class="data-right">
+            <%= number_to_currency(cash_sum, unit: "$", precision: 0) %>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Investments</h4>
+          <h4 class="data-right">
+            <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Property</h4>
+          <h4 class="data-right">
+            <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Credit Cards</h4>
+          <h4 class="data-right">
+            <%= render :partial => 'negative_value', locals: {value: credit_cards_sum} %>
+          </h4>
+        </li>
+        <li class="data-pair">
+          <h4>Loans</h4>
+          <h4 class="data-right">
+            <%= render :partial => 'negative_value', locals: {value: loans_sum} %>
+          </h4>
+        </li>
+
+        <div class="sum-line"></div>
+
+        <li class="data-pair">
+          <h4>Net Worth</h4>
+          <h4 class="data-right">
+            <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
+              <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
+            </span>
+          </h4>
+        </li>
+    </ul>
+    </div>
+  </section>
+
+  <section class="fin-options" style="display:none;">
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path %>">Add Account</a>
+    <h3>Add Institutional Account</h3>
+    <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
+    <div class="sum-line"></div>
+
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path %>">Add Property</a>
+    <h3>Add Property</h3>
+    <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
+    <div class="sum-line"></div>
+
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path %>">Add Other</a>
+    <h3>Add Other Investment or Debt</h3>
+    <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
+  </section>
+</div>
+
+<section class="flex-boxes ">
+  <% @account_providers.each do |provider| %>
+    <div class="card cg-3 flex-column mb-20 cp cp">
+      <%= link_to content_tag(:a), show_account_url(provider.id), class: "whole-card-link" %>
+      <h3><%= provider.name %></h3>
+      <p>
+        <%= link_to provider.web_address, provider.web_address %><br>
+        <%= provider.phone_number %>
+      </p>
+      
+      <% if provider.primary_contact.present? %>
+        <label>Primary Contact</label>
+        <ul class="data-list">
+          <li class="contact-pair">
+            <%= provider.primary_contact.name %><br>
+            <%= mail_to provider.primary_contact.emailaddress, provider.primary_contact.emailaddress %><br>
+            <%= provider.primary_contact.phone %><br>
+          </li>
+        </ul>
+      <% end %>
+      
+      <ul class="data-list mb-20">
+        <% provider.accounts.each do |account| %>
+          <li class="data-pair">
+            <label><%= account.account_type %></label>
+            <%= render partial: "value_show", locals: { value: account.value, type: account.account_type } %>
+          </li>
+        <% end %>
+      </ul>
+      
+      <% if provider.share_with_contacts.present? %>
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% provider.share_with_contacts.each do |share| %>
+            <% if share.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+            <% end %>
+           <% end %>
+         </section>
+       <% end %>
+    </div>
+  <% end %>
+  
+  <% @investments.each do |investment| %>
+    <div class="card cg-3 flex-column mb-20 cp">
+      <%= link_to content_tag(:a), show_investment_url(investment.id), class: "whole-card-link" %>
+      <h3><%= investment.name %></h3>
+      
+      <% if investment.primary_contact.present? %>
+        <label>Primary Contact</label>
+        <ul class="data-list">
+          <li class="contact-pair">
+            <%= investment.primary_contact.name %><br>
+            <%= mail_to investment.primary_contact.emailaddress, investment.primary_contact.emailaddress %><br>
+            <%= investment.primary_contact.phone %><br>
+          </li>
+        </ul>
+      <% end %>
+      
+      <ul class="data-list mb-20">
+        <li class="data-pair">
+          <label><%= investment.investment_type %></label>
+          <%= render partial: "value_show", locals: { value: investment.value, type: investment.investment_type } %>
+        </li>
+      </ul>
+      
+      <% if investment.share_with_contacts.present? %>
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% investment.share_with_contacts.each do |share| %>
+            <% if share.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+            <% end %>
+           <% end %>
+         </section>
+       <% end %>
+    </div>
+  <% end %>
+  
+  <% @properties.each do |property| %>
+    <div class="card cg-3 flex-column mb-20 cp cp">
+      <%= link_to content_tag(:a), show_property_url(property.id), class: "whole-card-link" %>
+      <h3><%= property.name %></h3>
+      
+      <% if property.primary_contact.present? %>
+        <label>Primary Contact</label>
+        <ul class="data-list">
+          <li class="contact-pair">
+            <%= property.primary_contact.name %><br>
+            <%= mail_to property.primary_contact.emailaddress, property.primary_contact.emailaddress %><br>
+            <%= property.primary_contact.phone %><br>
+          </li>
+        </ul>
+      <% end %>
+      
+      <ul class="data-list mb-20">
+        <li class="data-pair">
+          <label><%= property.property_type %></label>
+          <%= render partial: "value_show", locals: { value: property.value, type: property.property_type } %>
+        </li>
+      </ul>
+      
+      <% if property.share_with_contacts.present? %>
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% property.share_with_contacts.each do |share| %>
+            <% if share.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+            <% end %>
+           <% end %>
+         </section>
+       <% end %>
+    </div>
+  <% end %>
+</section>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h3 class="mt-20">Financial Documents</h3>
+</div>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<script>
+$(function () {
+
+  //Top Toggle
+  $( "#toggle" ).click(function() {
+    $( ".fin-options, .fin-overview" ).toggle();
+  });
+
+  //Masonry
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+  //Highcharts
+    Highcharts.chart('asset', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            style: {
+              fontFamily: "Open Sans"
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+        title: {
+            text: 'Assets',
+            verticalAlign: 'bottom'
+
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Investments',
+                y: <%= investments_sum %>
+            }, {
+                name: 'Property',
+                y: <%= properties_sum %>
+            }, {
+                name: 'Cash',
+                y: <%= cash_sum %>
+            }]
+        }]
+    });
+    Highcharts.chart('debt', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            style: {
+              fontFamily: "Open Sans"
+            }
+        },
+        navigation: {
+            buttonOptions: {
+                enabled: false
+            }
+        },
+        title: {
+            text: 'Liabilities',
+            verticalAlign: 'bottom'
+
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Loans',
+                y: <%= loans_sum %>
+            }, {
+                name: 'Credit Cards',
+                y: <%= credit_cards_sum %>
+            }]
+        }]
+    });
+});
+</script>

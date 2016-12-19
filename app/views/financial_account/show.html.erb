@@ -1,0 +1,127 @@
+<%= link_to edit_account_url(@financial_provider.id), class: "edit-link" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+<% end %>
+<h1><%= @financial_provider.name %></h1>
+
+<div class="card cg-3">
+  <h3 class="card-label">Account Provider Details</h3>
+  <% if !financial_provider_present?(@financial_provider) %>
+    <label>There is no information about Provider</label>
+  <% end %>
+
+  <% if @financial_provider.web_address.present? %>
+    <label>Web Address</label>
+    <p><%= link_to @financial_provider.web_address, @financial_provider.web_address %></p>
+  <% end %>
+
+  <% if show_financial_provider_address?(@financial_provider) %>
+    <label>Address</label>
+    <p><%= @financial_provider.street_address %><br>
+       <%= @financial_provider.city %>,
+       <%= @financial_provider.state %>
+       <%= @financial_provider.zip %>
+    </p>
+  <% end %>
+
+  <% if @financial_provider.phone_number.present? || @financial_provider.fax_number.present? %>
+    <label>Phone</label>
+    <% if @financial_provider.phone_number.present? %>
+      <span class="field-block"><%= @financial_provider.phone_number %>
+    <% end %>
+    <% if @financial_provider.fax_number.present? %>
+      <span class="field-block"><%= @financial_provider.fax_number %><span class="phone-type">fax</span>
+    <% end %>
+    <br></p>
+  <% end %>
+
+  <% if @financial_provider.primary_contact.present? %>
+    <label>Primary Contact</label>
+    <% primary = @financial_provider.primary_contact %>
+    <% if primary.present? %>
+      <p><%= primary.name %><br>
+         <%= mail_to primary.emailaddress, primary.emailaddress %><br>
+         <%= primary.phone %>
+      </p>
+    <% end %>
+  <% end %>
+  
+  <span class="clear"></span>
+
+  <% if @financial_provider.share_with_contacts.present? %>
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Shared With
+      </h3>
+
+      <label>Shared With</label><br>
+      <% @financial_provider.share_with_contacts && @financial_provider.share_with_contacts.each do |contact| %>
+        <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+      <% end %>
+    </section>
+  <% end %>
+
+</div>
+
+<% @financial_provider.accounts.each do |account| %>
+  
+  <div class="card cg-3 mt-20">
+    <h3 class="card-label"><%= account.account_type %></h3>
+    <% if !financial_account_present?(account) %>
+      <label>There is no information about Account</label>
+    <% end %>
+
+    <% if account.owner.present? %>
+      <label>Account Owner</label>
+      <p>
+        <%= account.owner.name %><br>
+        <%= mail_to account.owner.emailaddress, account.owner.emailaddress %><br>
+        <%= account.owner.phone %>
+      </p>
+    <% end %>
+
+    <% if account.value.present? %>
+      <label>Account Value</label>
+      <p><%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %></p>
+    <% end %>
+
+    <% if account.number.present? %>
+      <label >Account Number</label>
+      <p><%= account.number %></p>
+    <% end %>
+
+    <% if account.primary_contact_broker.present? %>
+      <label>Primary Contact - Broker</label>
+      <p>
+        <%= account.primary_contact_broker.name %><br>
+        <%= mail_to account.primary_contact_broker.emailaddress, account.primary_contact_broker.emailaddress %><br>
+        <%= account.primary_contact_broker.phone %>
+      </p>
+    <% end %>
+    
+    <% if account.notes.present? %>
+      <label class="title">Notes</label>
+      <p><%= account.notes %></p>
+    <% end %>
+    <span class="clear"></span>
+  </div>
+<% end %>
+
+<div>
+  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+  <h3 class="mt-20">Account Documents</h3>
+</div>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

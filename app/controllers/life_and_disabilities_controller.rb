@@ -44,7 +44,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
-        format.html { redirect_to insurance_path, notice: 'Life was successfully created.' }
+        format.html { redirect_to insurance_path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         format.html { render :new }
@@ -61,7 +61,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     respond_to do |format|
       if @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
-        format.html { redirect_to life_path(@insurance_card), notice: 'Life was successfully updated.' }
+        format.html { redirect_to life_path(@insurance_card), flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else
         format.html { render :edit }
@@ -77,7 +77,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to :back || lives_url, notice: 'Life was successfully destroyed.' }
+      format.html { redirect_to :back || lives_url, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -88,7 +88,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     @life_and_disability.destroy
     respond_to do |format|
-      format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully destroyed.' }
+      format.html { redirect_to insurance_path, notice: 'Insurance was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

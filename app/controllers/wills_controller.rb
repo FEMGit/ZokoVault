@@ -48,7 +48,7 @@ class WillsController < AuthenticatedController
       if new_wills.any? || old_wills.any?
         begin
           update_wills(new_wills, old_wills)
-          format.html { redirect_to estate_planning_path, notice: 'Will was successfully created.' }
+          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_wills) } }
           format.json { render :show, status: :created, location: @will }
         rescue
           @vault_entry = Will.new
@@ -69,7 +69,7 @@ class WillsController < AuthenticatedController
   def update
     respond_to do |format|
       if @will.update(will_params)
-        format.html { redirect_to @will, notice: 'Will was successfully updated.' }
+        format.html { redirect_to @will, flash: { success: 'Will was successfully updated.' } }
         format.json { render :show, status: :ok, location: @will }
       else
         format.html { render :edit }
@@ -128,13 +128,17 @@ class WillsController < AuthenticatedController
     wills.permit(permitted_params)
   end
 
+  def success_message(old_wills)
+    return 'Will was successfully created.' unless old_wills.any?
+    'Will was successfully updated.'
+  end
+
   def update_wills(new_wills, old_wills)
     @errors = []
     @new_params = []
     @old_params = []
     old_wills.each do |old_will|
       @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-      authorize @old_vault_entries
       @old_params << @old_vault_entries
       unless @old_vault_entries.save
         @errors << { id: old_will[:id], error: @old_vault_entries.errors }
@@ -142,14 +146,12 @@ class WillsController < AuthenticatedController
     end
     new_wills.each do |new_will_params|
       @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
-      authorize @new_vault_entries
       if !@new_vault_entries.save
         @new_params << Will.new(new_will_params)
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries
       end
-      raise "error saving new will" if @errors.any?
     end
     raise "error saving new will" if @errors.any?
   end

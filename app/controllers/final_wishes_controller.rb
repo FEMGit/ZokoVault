@@ -42,7 +42,7 @@ class FinalWishesController < AuthenticatedController
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     respond_to do |format|
       if @final_wish_info.save
-        format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully created.' }
+        format.html { redirect_to session[:ret_url] || final_wishes_path, flash: { success: 'Final Wish was successfully created.' } }
         format.json { render :show, status: :created, location: @final_wish_info }
       else
         format.html { render :new }
@@ -55,10 +55,11 @@ class FinalWishesController < AuthenticatedController
   # PATCH/PUT /final_wishes/1.json
   def update
     @final_wish_info = @final_wish
-    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
+    message = success_message
+    FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
     respond_to do |format|
       if @final_wish_info.update(final_wish_params)
-        format.html { redirect_to session[:ret_url] || final_wishes_path, notice: 'Final wish was successfully updated.' }
+        format.html { redirect_to session[:ret_url] || final_wishes_path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @final_wish_info }
       else
         format.html { render :edit }
@@ -72,7 +73,7 @@ class FinalWishesController < AuthenticatedController
   def destroy
     @final_wish.destroy
     respond_to do |format|
-      format.html { redirect_to :back || final_wishes_url, notice: 'Final wish was successfully destroyed.' }
+      format.html { redirect_to :back || final_wishes_url, notice: 'Final Wish was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -112,6 +113,12 @@ class FinalWishesController < AuthenticatedController
   def final_wish_params
     params.require(:final_wish_info).permit(:id, :group)
   end
+  
+  def success_message
+    return 'Final Wish was successfully created.' unless @final_wish.final_wishes.any?
+    'Final Wish was successfully updated.'
+  end
+
   
   def final_wish_form_params
     wishes = params[:final_wish_info].select { |k, _v| k.starts_with?("final_wish_") }

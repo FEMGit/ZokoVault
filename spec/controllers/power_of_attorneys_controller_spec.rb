@@ -76,6 +76,10 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
           post :create, {vault_entry_0: valid_attributes.merge(:id => "")}, session: valid_session
         end
 
+        it "shows correct flash message on create" do
+          expect(flash[:success]).to be_present
+        end
+        
         it "assigns a newly created vault_entry as @vault_entry" do
           expect(vault_entry).to be_a(PowerOfAttorney)
           expect(vault_entry).to be_persisted
@@ -129,6 +133,12 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
         vault_entry.reload
         skip("Add assertions for updated state")
       end
+      
+      it "shows correct flash message on update" do
+        vault_entry = PowerOfAttorney.create! valid_attributes
+        put :update, { id: vault_entry.to_param, power_of_attorney: valid_attributes }, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested vault_entry as @vault_entry" do
         vault_entry = PowerOfAttorney.create! valid_attributes
@@ -169,6 +179,12 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
       vault_entry = PowerOfAttorney.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
       expect(response).to redirect_to(vault_entries_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      vault_entry = PowerOfAttorney.create! valid_attributes
+      delete :destroy, { id: vault_entry.to_param }, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

@@ -62,6 +62,11 @@ RSpec.describe DocumentsController, type: :controller do
         expect(assigns(:document)).to be_persisted
         expect(assigns(:document).user).to eq(user)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, {document: valid_attributes}, valid_session
+        expect(flash[:success]).to be_present
+      end
 
       context "when return url is not 'insurance'" do
         let(:valid_session) { { ret_url: nil } }
@@ -104,6 +109,12 @@ RSpec.describe DocumentsController, type: :controller do
         expect(document.name).to eq(new_attributes[:name])
         expect(document.url).to eq(new_attributes[:url])
       end
+      
+      it "shows correct flash message on update" do
+        document = Document.create! valid_attributes
+        put :update, {id: document.to_param, document: valid_attributes}, valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested document as @document" do
         document = Document.create! valid_attributes
@@ -142,6 +153,12 @@ RSpec.describe DocumentsController, type: :controller do
     it "redirects to the documents list" do
       document = Document.create! valid_attributes
       delete :destroy, {id: document.to_param}, valid_session
+    end
+    
+    it "shows correct flash message on destroy" do
+      document = Document.create! valid_attributes
+      delete :destroy, {id: document.to_param}, valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

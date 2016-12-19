@@ -91,6 +91,11 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
           post :create, { life_and_disability: valid_attributes}, session: valid_session
         }.to change(LifeAndDisability, :count).by(1)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, { life_and_disability: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns a newly created life as @life_and_disability" do
         post :create, { life_and_disability: valid_attributes}, session: valid_session
@@ -133,12 +138,18 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
       let(:new_attributes) {
         skip("Add a hash of attributes valid for your model")
       }
-
+      
       it "updates the requested life" do
         life = LifeAndDisability.create! valid_attributes
         put :update, params: {id: life.to_param, life: new_attributes}, session: valid_session
         life.reload
         skip("Add assertions for updated state")
+      end
+      
+      it "shows correct flash message on update" do
+        life = LifeAndDisability.create! valid_attributes
+        put :update, params: {id: life.to_param, life: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
       end
 
       it "assigns the requested life as @life" do
@@ -181,6 +192,12 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
       life = LifeAndDisability.create! valid_attributes
       delete :destroy, params: {id: life.to_param}, session: valid_session
       expect(response).to redirect_to(lives_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      life = LifeAndDisability.create! valid_attributes
+      delete :destroy, params: {id: life.to_param}, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

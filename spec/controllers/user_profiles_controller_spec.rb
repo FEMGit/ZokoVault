@@ -50,6 +50,11 @@ RSpec.describe UserProfilesController, type: :controller do
         expect { post :create, {user_profile: valid_attributes}, session: valid_session }
           .to change(UserProfile, :count).by(1)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, {user_profile: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns a newly created user_profile as @user_profile" do
         post :create, {user_profile: valid_attributes}, session: valid_session
@@ -91,6 +96,11 @@ RSpec.describe UserProfilesController, type: :controller do
         user_profile.reload
         skip("Add assertions for updated state")
       end
+      
+      it "shows correct flash message on update" do
+        put :update, {id: user_profile.to_param, user_profile: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested user_profile as @user_profile" do
         put :update, {id: user_profile.to_param, user_profile: valid_attributes}, session: valid_session
@@ -131,6 +141,12 @@ RSpec.describe UserProfilesController, type: :controller do
       user_profile = UserProfile.create! valid_attributes
       delete :destroy, {id: user_profile.to_param}, session: valid_session
       expect(response).to redirect_to(user_profile_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      user_profile = UserProfile.create! valid_attributes
+      delete :destroy, {id: user_profile.to_param}, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 end

@@ -11,20 +11,26 @@
 
 <h1>Contacts and Permissions</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Relationship</th>
-    <th>Details</th>
-  </tr>
+<table id="documents-table">
+  <thead>
+    <tr>
+      <th class="nosort">Avatar</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Email</th>
+      <th>Relationship</th>
+      <th class="nosort">Details</th>
+    </tr>
+  </thead>
 
   <tbody>
     <% @contacts.each do |contact| %>
       <tr>
         <td>
-          <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
+          <%= render partial: "layouts/avatar_circle", locals: { :with_name => false, :contact => contact } %>
         </td>
+        <td><%= contact.firstname %></td>
+        <td><%= contact.lastname %></td>
         <td><%= contact.emailaddress %></td>
         <td><%= contact.relationship %></td>
         <td class="details-col"><%= link_to 'Details', contact %></td>
@@ -32,3 +38,18 @@
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $(document).ready(function(){
+      $('#documents-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[1, 'asc']],
+        'aoColumnDefs': [{
+          'bSortable': false,
+          'aTargets': ['nosort']
+        }]
+      } );
+  });
+</script>

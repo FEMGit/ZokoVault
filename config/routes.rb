@@ -122,6 +122,7 @@ Rails.application.routes.draw do
   get 'financial_information/add_property', to: 'financial_information#add_property', as: :add_property
   get 'financial_information/add_investment', to: 'financial_information#add_investment', as: :add_investment
   get 'financial_information/account_details', to: 'financial_information#account_details', as: :account_details
+  get 'financial_information/property_details', to: 'financial_information#property_details', as: :property_details
   
   # Shared view
   get 'shared_view/estate_planning', to: 'shared_view#estate_planning', as: :shared_estate_planning

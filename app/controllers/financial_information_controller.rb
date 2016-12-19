@@ -8,6 +8,8 @@ class FinancialInformationController < AuthenticatedController
   def add_investment; end
   
   def account_details; end
+
+  def peroperty_details; end
   
   private
   

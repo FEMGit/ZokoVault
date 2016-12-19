@@ -7,17 +7,29 @@
 <% end %>
 
 <% properties = [
-  { name: "Property Name 1", type: 'Account Type 1', owner: 'Jack Brown', value: '10000', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
+  { name: "1999 Audi A8", type: 'Property Type 1', owner: 'Jack Brown', value: '10000', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
   address: 'Address Or Location here', city: 'City', state: 'AL', zip: '88888'},
   ]
   %>
 
 <% properties.each do |property| %>
-  <h2 class="mt-20"><%= "#{property[:type]} -  #{property[:owner]}" %></h2>
+  <h2 class="mt-20"><%= "#{property[:name]}" %></h2>
 
   <div class="card cg-3">
 
-    <h3 class="card-label"><%= property[:name] %></h3>
+    <h3 class="card-label">Property Details</h3>
+
+    <label>Property Type</label>
+    <p><%= property[:type] %></p>
+
+    <label>Property Owner</label>
+    <p>
+      <%= property[:owner] %><br>
+      <a href="mailto:brown@mail.com">
+        brown@mail.com
+      </a><br>
+      666-666-6666
+    </p>
 
     <label>Property Value</label>
     <p><%= number_to_currency(property[:value], unit: "$", precision: 0) %></p>

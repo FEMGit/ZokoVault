@@ -1,12 +1,14 @@
 <div id="detail-form">
   <%= f.label :firstname, 'First Name' %>
-  <%= f.text_field :firstname %>
+  <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:firstname] } %>
+  <%= f.text_field :firstname, { class: ("input-error" if @contact.errors.messages[:firstname].present?) } %>
 
   <%= f.label :lastname, 'Last Name' %>
   <%= f.text_field :lastname %>
 
   <%= f.label :emailaddress, 'Email Address' %>
-  <%= f.email_field :emailaddress %>
+  <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:emailaddress] } %>
+  <%= f.email_field :emailaddress, { class: ("input-error" if @contact.errors.messages[:emailaddress].present?) } %>
 
   <%= f.label :phone %>
   <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>

@@ -28,17 +28,8 @@
   </div>
   <div class="modal-content">
     <%= form_for @contact, :html => {:id => "contact-form"} do |f| %>
-      <% if @contact.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
-          <ul>
-          <% @contact.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
-      <%= render :partial => '/contacts/form_content', locals: {f: f} %>
+      <% errors = @contact.errors.any? %>
+      <%= render :partial => '/contacts/form_content', locals: {f: f, errors: errors } %>
     <% end %>
   </div>
   <footer class="modal-footer">
@@ -65,7 +56,7 @@ var submitContact = function(){
   var contactForm = document.getElementById("contact-form");
   contactForm.submit();
 }
-$(function(){
+var displayContactFormModal = function(){
 
   //SOMEONE PLEASE FIX THIS GARBAGE
   var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
@@ -111,5 +102,5 @@ $(function(){
     });
   });
   $(window).resize();
-});
+}
 </script>

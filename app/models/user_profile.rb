@@ -50,7 +50,7 @@ class UserProfile < ActiveRecord::Base
     with: /\A\d{3}-\d{3}-\d{4}\z/,
     allow_blank: true,
     message: "must be in format 222-555-1111"
-
+  
   after_save :create_or_update_contact_card
 
   def name

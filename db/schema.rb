@@ -223,8 +223,6 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.integer  "user_id"
     t.integer  "shareable_id"
     t.string   "shareable_type"
-    t.string   "contact_type"
-    t.integer  "document_id"
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
@@ -316,7 +314,6 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.string   "state"
     t.string   "zip"
     t.string   "notes"
-    t.integer  "full_primary_share_id"
     t.string   "two_factor_phone_number"
     t.boolean  "phone_authentication_skip"
   end
@@ -422,6 +419,10 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.datetime "updated_at",  null: false
     t.string   "notes"
     t.string   "title"
+  end
+
+  create_table "words", force: :cascade do |t|
+    t.string "word", null: false
   end
 
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"

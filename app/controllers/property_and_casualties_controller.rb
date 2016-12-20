@@ -14,8 +14,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # GET /properties/1.json
   def show
     @insurance_card = @property_and_casualty
-    @grouop_label = "Property & Casualty"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @grouop_label)
+    @group_label = "Property & Casualty"
+    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @group_label)
 
     authorize @property_and_casualty
   end

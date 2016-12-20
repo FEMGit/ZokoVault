@@ -16,8 +16,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
     authorize @life_and_disability
 
     @insurance_card = @life_and_disability
-    @grouop_label = "Life & Disability"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @grouop_label)
+    @group_label = "Life & Disability"
+    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @group_label)
   end
 
   # GET /lives/new

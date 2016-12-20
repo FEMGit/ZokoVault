@@ -5,7 +5,7 @@
     </svg>
   </span>Edit
 <% end %>
-<h1>Bruna Mars</h1>
+<h1>Chase</h1>
 
 
 <div class="card cg-3">
@@ -56,21 +56,27 @@
 </div>
 
 <% accounts = [
-  { type: 'Account Type 1', owner: 'Jack Brown', value: '10000', number: '15487', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
+  { type: 'Stock', owner: 'Jack Brown', value: '10000', number: '15487', primary_contact: 'Rogers Wintheiser', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
   email:' wintheize@mail.com', phone: '777-777-7777'},
-  { type: 'Account Type 2', owner: 'Angelica DuBuque', value: '1000000', number: '7777', primary_contact: 'Shanny Bartell', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf',
+  { type: 'Savings', owner: 'Angelica DuBuque', value: '1000000', number: '7777', primary_contact: 'Shanny Bartell', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf',
   email:' angelica@mail.com', phone: '888-788-1234'},
-  { type: 'Account Type 3', owner: 'Jack Brown', value: '12345678', number: '666', primary_contact: 'Lawrence West', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
+  { type: 'Checking', owner: 'Jack Brown', value: '12345678', number: '666', primary_contact: 'Lawrence West', notes: 'some notes for example asdf  dshfkdhas fhads fdas fsdf ',
   email:' west@mail.com', phone: '123-456-7890'}
   ]
   %>
 
 <% accounts.each do |account| %>
-  <h2 class="mt-20"><%= "#{account[:type]} -  #{account[:owner]}" %></h2>
+  
+  <div class="card cg-3 mt-20">
 
-  <div class="card cg-3">
+    <h3 class="card-label"><%= account[:type] %></h3>
 
-    <h3 class="card-label">Account Information</h3>
+    <label>Account Owner</label>
+    <p>
+      <%= account[:owner] %><br>
+      <a href="mailto:<%= account[:email] %>"><%= account[:email] %></a><br>
+      <%= account[:phone] %>
+    </p>
 
     <label>Account Value</label>
     <p><%= number_to_currency(account[:value], unit: "$", precision: 0) %></p>

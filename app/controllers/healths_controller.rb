@@ -13,8 +13,8 @@ class HealthsController < AuthenticatedController
   # GET /healths/1.json
   def show
     @insurance_card = @health
-    @grouop_label = "Health"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @grouop_label)
+    @group_label = "Health"
+    @group_documents = DocumentService.new(:category => @insurance_card.category).get_group_documents(resource_owner, @group_label)
 
     authorize @health
   end

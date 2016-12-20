@@ -6,7 +6,6 @@ protected
     thank_you_path
   end
 
-
   def sign_up_params
     params[:user][:user_profile_attributes][:date_of_birth] = date_format
     params.require(:user)

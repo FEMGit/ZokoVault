@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
       errors.add :password, "Avoid using your personal information: name, username, company name"
     end
   end
-  
+
   def satisfy_password_requirement?(password)
     lowercase = password.match(/^(?=.*[a-z])/)
     uppercase = password.match(/^(?=.*[A-Z])/)

@@ -7,7 +7,7 @@ class TrustsController < AuthenticatedController
   # GET /trusts
   # GET /trusts.json
   def index
-    @trusts = Trust.for_user(current_user)
+    @trusts = policy_scope(Trust).each { |t| authorize t }
   end
 
   # GET /trusts/1
@@ -17,16 +17,21 @@ class TrustsController < AuthenticatedController
   # GET /trusts/new
   def new
     @vault_entry = TrustBuilder.new(type: 'trust').build
+    @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
-    @vault_entries = Trust.for_user(current_user)
-    return unless @vault_entries.empty?
+
+    authorize @vault_entry
+
+    @vault_entries = Trust.for_user(resource_owner)
+    return if @vault_entries.present?
+
     @vault_entries << @vault_entry
   end
 
   def create_empty_form
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.vault_entry_contacts.build
-    @vault_entries = Trust.for_user(current_user)
+    @vault_entries = Trust.for_user(resource_owner)
     @vault_entries << @vault_entry
     render :json => @vault_entries
   end
@@ -37,7 +42,7 @@ class TrustsController < AuthenticatedController
   def set_document_params
     @group = "Trust"
     @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
 
   # POST /trusts
@@ -46,16 +51,17 @@ class TrustsController < AuthenticatedController
     new_trusts = WtlService.get_new_records(trust_params)
     old_trusts = WtlService.get_old_records(trust_params)
     @vault_entries = []
+    trusts = new_trusts + old_trusts
     respond_to do |format|
-      if !new_trusts.empty? || !old_trusts.empty?
+      if trusts.present?
         begin
           update_trusts(new_trusts, old_trusts)
           format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
           format.json { render :show, status: :created, location: @trust }
         rescue
           @vault_entry = Trust.new
-          @old_params.each { |trust| @vault_entries << trust }
-          @new_params.each { |trust| @vault_entries << trust }
+          @old_params.try(:each) { |trust| @vault_entries << trust }
+          @new_params.try(:each) { |trust| @vault_entries << trust }
           format.html { render :new }
           format.json { render json: @errors, status: :unprocessable_entity }
         end
@@ -95,48 +101,55 @@ class TrustsController < AuthenticatedController
   end
 
   private
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_trust
-      @group_documents = Document.for_user(current_user).where(:group => @group)
-      @trust = Trust.find(params[:id])
-    end
+  def resource_owner 
+    @trust.present? ? @trust.user : current_user
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def trust_params
-      trusts = params.select { |k, _v| k.starts_with?("vault_entry_") }
-      permitted_params = {}
-      trusts.keys.each do |trust|
-        permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: [], share_with_contact_ids: []]
-      end
-      trusts.permit(permitted_params)
-    end
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
 
-    def update_trusts(new_trusts, old_trusts)
-      @errors = []
-      @new_params = []
-      @old_params = []
-      old_trusts.each do |old_trust|
-        @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: current_user.id)).build
-        @old_params << @old_vault_entries
-        unless @old_vault_entries.save
-          @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
-        end
-      end
-      new_trusts.each do |new_trust_params|
-        @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: current_user.id)).build
-        if !@new_vault_entries.save
-          @new_params << Trust.new(new_trust_params)
-          @errors << { id: "", error: @new_vault_entries.errors }
-        else
-          @new_params << @new_vault_entries
-        end
-      end
-      raise "error saving new trust" if @errors.any?
+  # Use callbacks to share common setup or constraints between actions.
+  def set_trust
+    @group_documents = Document.for_user(resource_owner).where(:group => @group)
+    @trust = Trust.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def trust_params
+    trusts = params.select { |k, _v| k.starts_with?("vault_entry_") }
+    permitted_params = {}
+    trusts.keys.each do |trust|
+      permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: [], share_with_contact_ids: []]
     end
+    trusts.permit(permitted_params)
+  end
+
+  def update_trusts(new_trusts, old_trusts)
+    @errors = []
+    @new_params = []
+    @old_params = []
+    old_trusts.each do |old_trust|
+      @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: resource_owner.id)).build
+      authorize @old_vault_entries
+      @old_params << @old_vault_entries
+      unless @old_vault_entries.save
+        @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
+      end
+    end
+    new_trusts.each do |new_trust_params|
+      @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: resource_owner.id)).build
+      authorize @new_vault_entries
+      if !@new_vault_entries.save
+        @new_params << Trust.new(new_trust_params)
+        @errors << { id: "", error: @new_vault_entries.errors }
+      else
+        @new_params << @new_vault_entries
+      end
+    end
+    raise "error saving new trust" if @errors.any?
+  end
 end

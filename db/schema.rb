@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 20161216023131) do
     t.string   "notes"
     t.string   "two_factor_phone_number"
     t.boolean  "phone_authentication_skip"
+    t.integer  "full_primary_share_id"
   end
 
   create_table "users", force: :cascade do |t|

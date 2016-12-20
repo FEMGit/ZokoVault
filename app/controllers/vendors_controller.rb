@@ -4,7 +4,7 @@ class VendorsController < AuthenticatedController
   # GET /vendors
   # GET /vendors.json
   def index
-    @vendors = Vendor.all
+    @vendors = policy_scope(Vendor).each { |v| authorize v }
   end
 
   # GET /vendors/1
@@ -13,8 +13,13 @@ class VendorsController < AuthenticatedController
 
   # GET /vendors/new
   def new
-    @vendor = Vendor.new(base_params.slice(:category, :group))
+    @vendor = Vendor.new(
+      base_params.slice(:category, :group)
+      .merge(user: current_user)
+    )
     @vendor.vendor_accounts.build
+
+    authorize @vendor
   end
 
   # GET /_new_vendor
@@ -24,9 +29,8 @@ class VendorsController < AuthenticatedController
 
   # GET /vendors/1/edit
   def edit
-    if @vendor.vendor_accounts.size==0
-      @vendor.vendor_accounts.build
-    end
+    authorize @vendor
+    @vendor.vendor_accounts.present? || @vendor.vendor_accounts.build
   end
 
   # POST /vendors
@@ -34,6 +38,8 @@ class VendorsController < AuthenticatedController
   def create
     @vendor = Vendor.new(vendor_params.merge(user_id: current_user.id))
     @vendor_accounts = @vendor.vendor_accounts
+
+    authorize @vendor
 
     respond_to do |format|
       if @vendor.save
@@ -49,6 +55,8 @@ class VendorsController < AuthenticatedController
   # PATCH/PUT /vendors/1
   # PATCH/PUT /vendors/1.json
   def update
+    authorize @vendor
+
     respond_to do |format|
       if @vendor.update(vendor_params)
         format.html { redirect_to @vendor, notice: 'Vendor was successfully updated.' }
@@ -63,6 +71,8 @@ class VendorsController < AuthenticatedController
   # DELETE /vendors/1
   # DELETE /vendors/1.json
   def destroy
+    authorize @vendor
+
     @vendor.destroy
     respond_to do |format|
       format.html { redirect_to vendors_url, notice: 'Vendor was successfully destroyed.' }

@@ -1,43 +1,32 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Shares</h1>
-
+<h1>Shared With Me</h1>
 <table>
   <thead>
     <tr>
-      <th>Contact</th>
-      <th>Document</th>
-      <th>Permission</th>
-      <th>Actions</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Documents</th>
+      <th>Categories</th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @shares.each do |share| %>
+    <% @shares_by_contact.each do |contact, shares| %>
       <tr>
         <td>
-          <%= share.contact.firstname %>
-          <%= share.contact.lastname %>
+          <span class="user-circle"><%= contact.try(:initials) %></span>
+          <%= contact.try(:name) %>
         </td>
         <td>
-          <%= share.document.name %>
+          <%= contact.try(:emailaddress) %>
         </td>
-        <td>
-          <%= share.permission %>
-        </td>
-        <td>
-          <button class="outline-button small-button">
-            <%= link_to 'Edit', edit_share_path(share) %>
-          </button>
-          <button class="outline-button small-button">
-            <%= link_to 'Destroy', share, method: :delete, data: { confirm: 'Are you sure?' } %>
-          </button>
-        </td>
+        <% shareables = shares.map(&:shareable) %>
+        <td><%= shareables.count { |res| res.is_a? Document } %></td>
+        <td><%= shareables.count { |res| res.is_a? Category } %></td>
+        <td class="details-col"><%= link_to 'View', shares_dashboard_path(contact.user) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Share', new_share_path %>

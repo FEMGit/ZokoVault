@@ -34,7 +34,7 @@ class WillBuilder
       )
     end
 
-    share_options = { document_id: will.document_id, user_id: options[:user_id] }
+    share_options = { shareable: will.document, user_id: options[:user_id] }
     sanitize_data(options[:share_ids]).each do |contact_id|
       will.shares.build(share_options.merge(contact_id: contact_id))
     end

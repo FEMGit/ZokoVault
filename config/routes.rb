@@ -56,8 +56,6 @@ Rails.application.routes.draw do
   get 'shared_view' => 'categories#shared_view_dashboard'
   get 'web_accounts' => 'categories#web_accounts'
 
-  get 'shares/new/:document' => 'shares#new'
-
   resources :interested_users
   get 'mailing_list_confirm' => 'interested_users#mailing_list_confirm'
 
@@ -83,6 +81,10 @@ Rails.application.routes.draw do
   get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category
 
   resources :shares
+  get 'shares' => 'shares#index'
+  get 'shares/new/:document' => 'shares#new'
+  get 'shares/:user_id/dashboard' => 'shares#dashboard', as: :shares_dashboard
+
   get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
   resources :documents

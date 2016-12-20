@@ -7,7 +7,7 @@ class WillsController < AuthenticatedController
   # GET /wills
   # GET /wills.json
   def index
-    @wills = Will.for_user(current_user)
+    @wills = policy_scope(Will).each { |w| authorize w }
   end
 
   # GET /wills/1
@@ -17,11 +17,15 @@ class WillsController < AuthenticatedController
   # GET /wills/new
   def new
     @vault_entry = WillBuilder.new(type: 'will').build
+    @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
-    @wills = Will.for_user(current_user)
-    @vault_entries = Will.for_user(current_user)
+
+    authorize @vault_entry
+
+    @wills = @vault_entries = Will.for_user(resource_owner)
     return unless @vault_entries.empty?
+
     @vault_entries << @vault_entry
   end
 
@@ -31,7 +35,7 @@ class WillsController < AuthenticatedController
   def set_document_params
     @group = "Will"
     @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(current_user, @group)
+    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
 
   # POST /wills
@@ -77,6 +81,7 @@ class WillsController < AuthenticatedController
   # DELETE /wills/1
   # DELETE /wills/1.json
   def destroy
+    authorize @will
     @will.destroy
     respond_to do |format|
       format.html { redirect_to :back || wills_url, notice: 'Will was successfully destroyed.' }
@@ -94,53 +99,58 @@ class WillsController < AuthenticatedController
 
   private
 
+  def resource_owner 
+    @will.present? ?  @will.user : current_user
+  end
+
   def current_wtl
     params[:will]
   end
 
-  private
+  def set_contacts
+    contact_service = ContactService.new(:user => resource_owner)
+    @contacts = contact_service.contacts
+    @contacts_shareable = contact_service.contacts_shareable
+  end
 
-    def set_contacts
-      contact_service = ContactService.new(:user => current_user)
-      @contacts = contact_service.contacts
-      @contacts_shareable = contact_service.contacts_shareable
+  # Use callbacks to share common setup or constraints between actions.
+  def set_will
+    @will = Will.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def will_params
+    wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
+    permitted_params = {}
+    wills.keys.each do |will|
+      permitted_params[will] = [:id, :title, :executor_id, :notes, :agent_ids, :document_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: [], share_ids: [], share_with_contact_ids: []]
     end
+    wills.permit(permitted_params)
+  end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_will
-      @will = Will.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def will_params
-      wills = params.select { |k, _v| k.starts_with?("vault_entry_") }
-      permitted_params = {}
-      wills.keys.each do |will|
-        permitted_params[will] = [:id, :title, :executor_id, :notes, :agent_ids, :document_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: [], share_ids: [], share_with_contact_ids: []]
+  def update_wills(new_wills, old_wills)
+    @errors = []
+    @new_params = []
+    @old_params = []
+    old_wills.each do |old_will|
+      @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+      authorize @old_vault_entries
+      @old_params << @old_vault_entries
+      unless @old_vault_entries.save
+        @errors << { id: old_will[:id], error: @old_vault_entries.errors }
       end
-      wills.permit(permitted_params)
     end
-
-    def update_wills(new_wills, old_wills)
-      @errors = []
-      @new_params = []
-      @old_params = []
-      old_wills.each do |old_will|
-        @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
-        @old_params << @old_vault_entries
-        unless @old_vault_entries.save
-          @errors << { id: old_will[:id], error: @old_vault_entries.errors }
-        end
-      end
-      new_wills.each do |new_will_params|
-        @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
-        if !@new_vault_entries.save
-          @new_params << Will.new(new_will_params)
-          @errors << { id: "", error: @new_vault_entries.errors }
-        else
-          @new_params << @new_vault_entries
-        end
+    new_wills.each do |new_will_params|
+      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
+      authorize @new_vault_entries
+      if !@new_vault_entries.save
+        @new_params << Will.new(new_will_params)
+        @errors << { id: "", error: @new_vault_entries.errors }
+      else
+        @new_params << @new_vault_entries
       end
       raise "error saving new will" if @errors.any?
     end
+    raise "error saving new will" if @errors.any?
+  end
 end

@@ -1,0 +1,41 @@
+<h1>Dashboard</h1>
+<table class="shared-view-dashboard">
+  <tr>
+    <td>
+      <svg class="icon dashboard-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>
+      <h5 class="category-title">Wills - Trusts - Legal</h5>
+      <%= link_to 'View Category', shared_estate_planning_path, class: 'view-category' %>
+    </td>
+  </tr>
+  <% @other_shares.each do |share| %>
+    <tr>
+      <td>
+        <span><%= share.sharable_type %></span>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+
+<h3>Documents</h3>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Modified</th>
+    <th>Tags</th>
+  </tr>
+  <% @document_shares.each do |share| %>
+    <tr>
+      <td>
+        <a><%= link_to share.shareable.name, share.shareable %></a>
+      </td>
+      <td><%= share.shareable.updated_at.strftime("%m/%d/%Y") %>
+      <td>
+        <span class="doc-tag"> [n/a] </span>
+        <span class="doc-tag secondary-tag">[n/a]</span>
+      </td>
+    </tr>
+  <% end %>
+</table>

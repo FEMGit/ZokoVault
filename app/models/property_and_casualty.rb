@@ -5,6 +5,11 @@ class PropertyAndCasualty < Vendor
 
   accepts_nested_attributes_for :policy
 
+  # Name conflict with PropertyAndCasualtyPolicy model
+  def self.policy_class
+    PropertyAndCasualtyPunditPolicy
+  end
+
   private
 
   def initialize_category_and_group

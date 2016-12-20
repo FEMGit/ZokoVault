@@ -14,7 +14,9 @@ class UpdateDocumentService
     return if document_id.nil?
 
     document = Document.for_user(@user).find(document_id)
-    document.shares << Share.new(document_id: document_id, contact_id: @contact, user_id: @user.id)
+    document.shares << Share.new(shareable: document,
+                                 contact_id: @contact, 
+                                 user_id: @user.id)
   end
   
   private 

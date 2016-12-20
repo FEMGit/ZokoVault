@@ -7,6 +7,8 @@ class FinancialInformationController < AuthenticatedController
   
   def add_investment; end
   
+  def account_details; end
+  
   private
   
   def set_contacts

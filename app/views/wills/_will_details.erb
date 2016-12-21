@@ -1,22 +1,29 @@
 <% @wills.each do |will| %>
   <div class="card wills mb-20">
     <h3 class="card-label"><%= will.title %></h3>
+    
+    <% if !will_present?(will) %>
+      <label>There is no information about this Will</label>
+    <% end %>
+    <% if will.primary_beneficiaries.present? %>
+      <label>Primary Beneficiaries</label>
+      <p>
+        <% will.primary_beneficiaries.each do |primary| %>
+          <%= primary.name %><br>
+        <% end %>
+      </p>
+    <% end %>
 
-    <label class="title">Primary Beneficiaries</label>
-    <p>
-      <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
-        <%= primary.name %><br>
-      <% end %>
-    </p>
+    <% if will.secondary_beneficiaries.present? %>
+      <label>Secondary Beneficiaries</label>
+      <p>
+        <% will.secondary_beneficiaries.each do |secondary| %>
+          <%= secondary.name %><br>
+        <% end %>
+      </p>
+    <% end %>
 
-    <label class="title">Secondary Beneficiaries</label>
-    <p>
-      <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
-        <%= secondary.name %><br>
-      <% end %>
-    </p>
-
-    <% if will.executor %>
+    <% if will.executor.present? %>
       <label class="title">Executor</label>
         <p><%= will.executor.name %><br>
            <a href="mailto:<%= will.executor.emailaddress %>">
@@ -26,38 +33,43 @@
         </p>
     <% end %>
 
-    <label class="title">Attorney, Accountant, Advisor</label>
-
-    <% will.agents && will.agents.each do |agent| %>
-      <p><%= agent.name %><br>
-        <a href="mailto:<%= agent.emailaddress %>">
-          <%= agent.emailaddress %>
-        </a><br>
-        <%= agent.phone %>
-      </p>
+    <% if will.agents.present? %>
+      <label class="title">Attorney, Accountant, Advisor</label>
+      <% will.agents.each do |agent| %>
+        <p><%= agent.name %><br>
+          <a href="mailto:<%= agent.emailaddress %>">
+            <%= agent.emailaddress %>
+          </a><br>
+          <%= agent.phone %>
+        </p>
+      <% end %>
     <% end %>
 
-    <label>Notes</label>
-    <p>
-      <%= will.notes %>
-    </p>
+    <% if will.notes.present? %>
+      <label>Notes</label>
+      <p><%= will.notes %></p>
+    <% end %>
+    <span class="clear"></span>
+    
+    <% if will.shares.present? %>
+      <section class="shared-with">
+        <h3 class="card-label shared-label">
+          <svg class="icon" viewBox="0 0 20 20">
+            <use xlink:href="#icon-Safe"></use>
+          </svg> Shared With
+        </h3>
 
-    <section class="shared-with">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg> Shared With
-      </h3>
 
-      <label>Shared With</label>
-      <div>
-        <% will.shares && will.shares.each do |share| %>
-          <% if share.contact.present? %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-          <% end %>
-        <% end %>
-      </div>
-    </section>
+          <label>Shared With</label>
+          <div>
+            <% will.shares && will.shares.each do |share| %>
+              <% if share.contact.present? %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+              <% end %>
+            <% end %>
+          </div>
 
+      </section>
+    <% end %>
   </div>
 <% end %>

@@ -4,32 +4,48 @@
   <div class="card <%= @insurance_card.group %>">
 
     <h3 class="card-label">Policy Information</h3>
+    <% if !life_policy_present?(policy) %>
+      <label>There is no information about Policy</label>
+    <% end %>
 
-    <label>Coverage Amount</label>
-    <p><%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></p>
+    <% if policy.coverage_amount.present? %>
+      <label>Coverage Amount</label>
+      <p><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></p>
+    <% end %>
 
-    <label >Policy Number</label>
-    <p><%= policy.policy_number %></p>
+    <% if policy.policy_number.present? %>
+      <label >Policy Number</label>
+      <p><%= policy.policy_number %></p>
+    <% end %>
 
-    <label>Primary Beneficiaries</label>
-    <p>
-      <% policy.primary_beneficiaries.each do |primary| %>
-        <%= primary && primary.name %><br>
-      <% end %>
-    </p>
+    <% if policy.primary_beneficiaries.present? %>
+      <label>Primary Beneficiaries</label>
+      <p>
+        <% policy.primary_beneficiaries.each do |primary| %>
+          <%= primary && primary.name %><br>
+        <% end %>
+      </p>
+    <% end %>
 
-    <label>Secondary Beneficiaries</label>
-    <p>
-      <% policy.secondary_beneficiaries.each do |secondary| %>
-        <%= secondary && secondary.name %><br>
-      <% end %>
-    </p>
+    <% if policy.secondary_beneficiaries.present? %>
+      <label>Secondary Beneficiaries</label>
+      <p>
+        <% policy.secondary_beneficiaries.each do |secondary| %>
+          <%= secondary && secondary.name %><br>
+        <% end %>
+      </p>
+    <% end %>
 
-    <label>Primary contact</label>
-    <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
+    <% if policy.broker_or_primary_contact.present? %>
+      <label>Primary contact</label>
+      <p><%= policy.broker_or_primary_contact.name %></p>
+    <% end %>
 
-    <label class="title">Notes</label>
-    <p><%= policy.notes %></p>
-
+    <% if policy.notes.present? %>
+      <label class="title">Notes</label>
+      <p><%= policy.notes %></p>
+    <% end %>
+    
+    <span class="clear"></span>
   </div>
 <% end %>

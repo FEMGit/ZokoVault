@@ -6,4 +6,9 @@ module TrustsHelper
   def get_agents_uniq(trusts)
     trusts.first.agents
   end
+  
+  def trust_present?(trust)
+    trust.trustees.present? || trust.successor_trustees.present? || trust.agents.present? || trust.notes.present? ||
+      trust.shares.present?
+  end
 end

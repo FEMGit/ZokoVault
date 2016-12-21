@@ -1,7 +1,17 @@
 module ContactsHelper
   def show_street?(user_profile)
-    !user_profile.street_address_1.blank? && !user_profile.city.blank? &&
-      !user_profile.state.blank?
+    user_profile.street_address_1.present? && user_profile.city.present? &&
+      user_profile.state.present?
+  end
+  
+  def show_street_contact?(contact)
+    contact.address.present? && contact.city.present? &&
+      contact.state.present?
+  end
+  
+  def show_street_contact_business?(contact)
+    contact.business_street_address_1.present? && contact.city.present? &&
+      contact.state.present?
   end
 
   def show_web_address(web_address)

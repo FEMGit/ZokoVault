@@ -16,25 +16,29 @@
           <% final_wish = wish_by_group(group_title) %>
           <% if final_wish && final_wish.primary_contact.present? %>
 
-          <label>Primary Contact</label>
-          <ul class="data-list">
+            <label>Primary Contact</label>
+            <ul class="data-list">
               <li class="contact-pair">
                 <%= final_wish.primary_contact.name %><br>
                 <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
                 <%= final_wish.primary_contact.phone %>
               </li>
-          </ul>
+            </ul>
 
           <% end %>
-
-          <label>Shared With</label>
-          <section class="shared-list mb-20">
-            <% final_wish && final_wish.share_with_contacts.each do |contact| %>
-              <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-            <% end %>
-         </section>
+          
+          <% final_wish_info = final_wish_info(group_title) %>
+          <% if final_wish_info && get_shares_contact_uniq(final_wish_info.final_wishes).present? %>
+            <label>Shared With</label>
+            <section class="shared-list mb-20">
+              <% get_shares_contact_uniq(final_wish_info.final_wishes).each do |contact| %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+              <% end %>
+           </section>
+         <% end %>
 
         <% end %>
+
         <% if final_wish_exists?(@final_wishes, group_title) %>
           <%= link_to 'View Details', final_wish_details(group_title), class: "small-button outline-button mt-20" %>
         <% else %>

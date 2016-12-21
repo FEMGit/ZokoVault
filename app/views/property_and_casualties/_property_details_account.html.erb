@@ -2,25 +2,36 @@
   <h2 class="mt-20"><%= "#{policy.policy_type} -  #{policy.insured_property}" %></h2>
 
   <div class="card <%= @insurance_card.group %>">
-
     <h3 class="card-label">Policy Information</h3>
-
-    <label>Coverage Amount</label>
-    <p><%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></p>
-
-    <label>Policy Number</label>
-    <p><%= policy.policy_number %></p>
-
-    <label>Policy Holder</label>
-    <p>
-    <% if policy.policy_holder %>
-      <%= policy.policy_holder && policy.policy_holder.name %><br>
+    <% if !property_policy_present?(policy) %>
+      <label>There is no information about Policy</label>
     <% end %>
-    </p>
-    <label>Primary Contact</label>
-    <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
 
-    <label>Notes</label>
-    <p><%= policy.notes %></p>
+    <% if policy.coverage_amount.present? %>
+      <label>Coverage Amount</label>
+      <p><%= number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %></p>
+    <% end %>
+
+    <% if policy.policy_number.present? %>
+      <label>Policy Number</label>
+      <p><%= policy.policy_number %></p>
+    <% end %>
+
+    <% if policy.policy_holder %>
+      <label>Policy Holder</label>
+      <p><%= policy.policy_holder.name %></p>
+    <% end %>
+    
+    <% if policy.broker_or_primary_contact.present? %>
+      <label>Primary Contact</label>
+      <p><%= policy.broker_or_primary_contact.name %></p>
+    <% end %>
+
+    <% if policy.notes.present? %>
+      <label>Notes</label>
+      <p><%= policy.notes %></p>
+    <% end %>
+    
+    <span class="clear"></span>
   </div>
 <% end %>

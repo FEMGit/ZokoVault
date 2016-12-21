@@ -3,23 +3,35 @@
 
   <div class="card <%= @insurance_card.group %>">
 
-    <h3 class="card-label">Policy Information</h2>
+    <h3 class="card-label">Policy Information</h3>
+    <% if !health_policy_present?(policy) %>
+      <label>There is no information about Policy</label>
+    <% end %>
 
-    <label>Policy Number</label>
-    <p><%= policy.policy_number %></p>
+    <% if policy.policy_number.present? %>
+      <label>Policy Number</label>
+      <p><%= policy.policy_number %></p>
+    <% end %>
 
-    <label>Insured Members</label>
-    <p>
-      <% policy.insured_members.each do |insured_member| %>
-        <%= insured_member && insured_member.name %><br>
-      <% end %>
-    </p>
+    <% if policy.insured_members.present? %>
+      <label>Insured Members</label>
+      <p>
+        <% policy.insured_members.each do |insured_member| %>
+          <%= insured_member && insured_member.name %><br>
+        <% end %>
+      </p>
+    <% end %>
 
-    <label class="title">Primary contact</label>
-    <p><%= policy.broker_or_primary_contact && policy.broker_or_primary_contact.name %></p>
+    <% if policy.broker_or_primary_contact.present? %>
+      <label class="title">Primary contact</label>
+      <p><%= policy.broker_or_primary_contact.name %></p>
+    <% end %>
 
-    <label class="title">Notes</label>
-    <p><%= policy.notes %></p>
+    <% if policy.notes.present? %>
+      <label class="title">Notes</label>
+      <p><%= policy.notes %></p>
+    <% end %>
 
+    <span class="clear"></span>
   </div>
 <% end %>

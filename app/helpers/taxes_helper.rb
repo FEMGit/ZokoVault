@@ -26,4 +26,12 @@ module TaxesHelper
     tax_year_info = taxes.detect { |x| x.year == year }
     tax_year_info && tax_year_info.taxes.any?
   end
+  
+  def tax_year_info(year)
+    @taxes.where(:year => year).first
+  end
+  
+  def tax_present?(tax)
+    tax.tax_preparer.present? || tax.notes.present? || tax.share_with_contacts.present?
+  end
 end

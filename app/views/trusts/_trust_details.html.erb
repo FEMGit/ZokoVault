@@ -2,57 +2,66 @@
   <div class="card trusts mb-30">
 
     <h3 class="card-label"><%= trust.name %></h3>
-
-    <label class="title">Trustees</label>
-    <p>
-      <% trust.trustees && trust.trustees.each do |trustee| %>
-        <%= trustee.name %><br>
-      <% end %>
-    </p>
-
-    <label class="title">Successor Trustees</label>
-    <p>
-      <% trust.successor_trustees && trust.successor_trustees.each do |trustee| %>
-        <%= trustee.name %><br>
-      <% end %>
-    </p>
-
-    <% trust.agents.each_with_index do |advisor, index| %>
-        <% if index == 0 %>
-          <label class="title">Trust Advisor</label>
+    
+    <% if !trust_present?(trust) %>
+      <label>There is no information about this Trust</label>
+    <% end %>
+    
+    <% if trust.trustees.present? %>
+      <label class="title">Trustees</label>
+      <p>
+        <% trust.trustees.each do |trustee| %>
+          <%= trustee.name %><br>
         <% end %>
-        <% if advisor %>
-          <p>
-            <%= advisor.name %><br>
-            <a href="mailto:<%= advisor.emailaddress %>">
-              <%= advisor.emailaddress %>
-            </a><br>
-            <%= advisor.phone %>
-          </p>
-        <% end %>
+      </p>
     <% end %>
 
-    <label>Notes</label>
-    <p>
-      <%= trust.notes %>
-    </p>
-
-    <section class="shared-with">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg> Shared With
-      </h3>
-
-      <label>Shared With</label>
-      <div>
-        <% trust.shares && trust.shares.each do |share| %>
-          <% if share.contact.present? %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-          <% end %>
+    <% if trust.successor_trustees.present? %>
+      <label class="title">Successor Trustees</label>
+      <p>
+        <% trust.successor_trustees.each do |trustee| %>
+          <%= trustee.name %><br>
         <% end %>
-      </div>
-    </section>
+      </p>
+    <% end %>
+
+    <% trust.agents.present? && trust.agents.each_with_index do |advisor, index| %>
+      <% if index == 0 %>
+        <label class="title">Trust Advisor</label>
+      <% end %>
+      <p>
+        <%= advisor.name %><br>
+        <a href="mailto:<%= advisor.emailaddress %>">
+          <%= advisor.emailaddress %>
+        </a><br>
+        <%= advisor.phone %>
+      </p>
+    <% end %>
+    
+    <% if trust.notes.present? %>
+      <label>Notes</label>
+      <p><%= trust.notes %></p>
+    <% end %>
+    <span class="clear"></span>
+
+    <% if trust.shares.present? %>
+      <section class="shared-with">
+        <h3 class="card-label shared-label">
+          <svg class="icon" viewBox="0 0 20 20">
+            <use xlink:href="#icon-Safe"></use>
+          </svg> Shared With
+        </h3>
+
+        <label>Shared With</label>
+        <div>
+          <% trust.shares.each do |share| %>
+            <% if share.contact.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+            <% end %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
 
   </div>
 <% end %>

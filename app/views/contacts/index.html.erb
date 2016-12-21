@@ -29,8 +29,8 @@
         <td>
           <%= render partial: "layouts/avatar_circle", locals: { :with_name => false, :contact => contact } %>
         </td>
-        <td><%= contact.firstname %></td>
         <td><%= contact.lastname %></td>
+        <td><%= contact.firstname %></td>
         <td><%= contact.emailaddress %></td>
         <td><%= contact.relationship %></td>
         <td class="details-col"><%= link_to 'Details', contact %></td>

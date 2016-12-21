@@ -17,7 +17,8 @@ class Contact < ActiveRecord::Base
       'Spouse/Domestic Partner',
       'Parent',
       'Grandparent',
-      'Other Beneficiary',
+      'Friend',
+      'Other'
     ],
     professional: [
       'Accountant',
@@ -26,26 +27,23 @@ class Contact < ActiveRecord::Base
       'Insurance Agent',
       'Commercial Banker',
       'Trustee',
-      'Broker',
+      'Consultant',
+      'Caregiver',
+      'Advisor',
+      'Other'
     ],
     medical_professional: [
-      'Accountant',
-      'Attorney',
-      'Financial Advisor / Broker',
-      'Insurance Agent',
-      'Commercial Banker',
-      'Trustee',
-      'Broker',
       "Doctor",
       "Nurse",
-      "Administrator"
+      "Administrator",
+      'Caregiver',
+      'Other'
     ]
   }
 
   CONTACT_TYPES = {
     'Family & Beneficiaries' => RELATIONSHIP_TYPES[:personal],
     'Advisor' => RELATIONSHIP_TYPES[:professional],
-    'Service Provider' => RELATIONSHIP_TYPES[:professional],
     'Medical Professional' => RELATIONSHIP_TYPES[:professional]
   }
 

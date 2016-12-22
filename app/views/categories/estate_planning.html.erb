@@ -13,47 +13,56 @@
           <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
 
             <label><%= will.title %></label>
+            <% if !will_present?(will) %>
+              <p>There is no information about this Will</p>
+            <% end %>
             <ul class="data-list mb-20">
-              <% will.primary_beneficiaries && will.primary_beneficiaries.each do |primary| %>
-                <li class="data-pair">
-                  <span class="pair-name"><%= primary.name %></span>
-                  <span class="data-right">
-                    Primary
-                  </span>
-                </li>
+              <% if will.primary_beneficiaries.present? %>
+                <% will.primary_beneficiaries.each do |primary| %>
+                  <li class="data-pair">
+                    <span class="pair-name"><%= primary.name %></span>
+                    <span class="data-right">
+                      Primary
+                    </span>
+                  </li>
+                <% end %>
               <% end %>
 
-              <% will.secondary_beneficiaries && will.secondary_beneficiaries.each do |secondary| %>
-                <li class="data-pair">
-                  <span class="pair-name"><%= secondary.name %></span>
-                  <span class="data-right">
-                    Secondary
-                  </span>
-                </li>
+              <% if will.secondary_beneficiaries.present? %>
+                <% will.secondary_beneficiaries.each do |secondary| %>
+                  <li class="data-pair">
+                    <span class="pair-name"><%= secondary.name %></span>
+                    <span class="data-right">
+                      Secondary
+                    </span>
+                  </li>
+                <% end %>
               <% end %>
             </ul>
 
-            <% if will.agents.any? %>
+            <% if will.agents.present? %>
               <label>Advisor</label>
+              <ul class="data-list">
+                <% will.agents && will.agents.each do |advisor| %>
+                  <li class="contact-pair">
+                    <%= advisor.name %><br>
+                    <a href="mailto:<%= advisor.emailaddress %>"><%= advisor.emailaddress %></a><br>
+                    <%= advisor.phone %>
+                  </li>
+                <% end %>
+              </ul>
             <% end %>
-            <ul class="data-list">
-              <% will.agents && will.agents.each do |advisor| %>
-                <li class="contact-pair">
-                  <%= advisor.name %><br>
-                  <a href="mailto:<%= advisor.emailaddress %>"><%= advisor.emailaddress %></a><br>
-                  <%= advisor.phone %>
-                </li>
-              <% end %>
-            </ul>
 
-          <label>Shared With</label>
-          <section class="shared-list">
-            <% will.share_with_contacts.each do |share| %>
-              <% if share.present? %>
-                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+          <% if will.share_with_contacts.present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <% will.share_with_contacts.each do |share| %>
+                <% if share.present? %>
+                  <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+                <% end %>
               <% end %>
-            <% end %>
-          </section>
+            </section>
+          <% end %>
         <% end %>
       
       <% else %>
@@ -71,7 +80,6 @@
 
           <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @trusts.name, :category => @category} %>
           <h3>Trusts</h3>
-
           <section class="mb-20">
             <% @trusts.each do |trust| %>
               <label><%= trust.name %></label><br>
@@ -91,14 +99,16 @@
             <% end %>
           </ul>
 
-          <label>Shared With</label>
-          <section class="shared-list">
-            <% get_shares_uniq(@trusts) && get_shares_uniq(@trusts).each do |share| %>
-              <% if share.present? %>
-                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+          <% if get_shares_uniq(@trusts).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <% get_shares_uniq(@trusts).each do |share| %>
+                <% if share.present? %>
+                  <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+                <% end %>
               <% end %>
-            <% end %>
-          </section>
+            </section>
+          <% end %>
       <% else %>
 
         <h3>Trusts</h3>
@@ -120,29 +130,33 @@
 
           <ul class="data-list mb-20">
             <% @power_of_attorneys.each do |power_of_attorney| %>
-              <li class="data-pair">
-                <label>
-                  <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
-                </label>
-                <span class="data-right">
-                <% if power_of_attorney.powers.present? %>
-                  <% power_of_attorney.powers.keys.each do |agent_power| %>
-                    <%= agent_power %><br>
+              <% if attorney_present?(power_of_attorney) %>
+                <li class="data-pair">
+                  <label>
+                    <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
+                  </label>
+                  <span class="data-right">
+                  <% if power_of_attorney.powers.present? %>
+                    <% power_of_attorney.powers.keys.each do |agent_power| %>
+                      <%= agent_power %><br>
+                    <% end %>
                   <% end %>
-                <% end %>
-                </span>
-              </li>
+                  </span>
+                </li>
+              <% end %>
             <% end %>
           </ul>
 
-        <label>Shared With</label>
-        <section class="shared-list">
-          <% get_shares_uniq(@power_of_attorneys) && get_shares_uniq(@power_of_attorneys).each do |share| %>
-            <% if share.present? %>
-              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+        <% if get_shares_uniq(@power_of_attorneys).present? %>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <% get_shares_uniq(@power_of_attorneys).each do |share| %>
+              <% if share.present? %>
+                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+              <% end %>
             <% end %>
-          <% end %>
-        </section>
+          </section>
+        <% end %>
 
       <% else %>
         <h3>Power of Attorney</h3>

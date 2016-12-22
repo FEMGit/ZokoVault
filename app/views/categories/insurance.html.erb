@@ -39,23 +39,28 @@
               </ul>
             <% end %>
 
+            <% if provider_main_page_present?(vendor) %>
+              <label>Provider Details</label>
+              <ul class="data-list">
+                <li class="contact-pair">
+                  <%if vendor.webaddress.present? %>
+                    <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                  <% end %>
+                  <%= vendor.phone %>
+                </li>
+              </ul>
+            <% end %>
 
-            <label>Provider Details</label>
-            <ul class="data-list">
-              <li class="contact-pair">
-                <a href="<%= vendor.webaddress %>"><%= vendor.webaddress %></a><br>
-                <%= vendor.phone %>
-              </li>
-            </ul>
-
-            <label>Shared With</label>
-            <section class="shared-list">
-              <% vendor.shares && vendor.shares.each do |share| %>
-                <% if share.contact.present? %>
-                  <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+            <% if vendor.share_with_contacts.present? %>
+              <label>Shared With</label>
+              <section class="shared-list">
+                <% vendor.shares.each do |share| %>
+                  <% if share.contact.present? %>
+                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </section>
+              </section>
+            <% end %>
           </div>
         <% end %>
       <% end %>
@@ -81,22 +86,28 @@
               </ul>
             <% end %>
 
-            <label>Provider Details</label>
-            <ul class="data-list">
+            <% if provider_main_page_present?(vendor) %>
+              <label>Provider Details</label>
+              <ul class="data-list">
                 <li class="contact-pair">
-                  <a href="<%= vendor.webaddress %>"><%= vendor.webaddress %></a><br>
+                  <% if vendor.webaddress.present? %>
+                    <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                  <% end %>
                   <%= vendor.phone %>
                 </li>
-            </ul>
+              </ul>
+            <% end %>
 
-            <label>Shared With</label>
-            <section class="shared-list">
-              <% vendor.shares && vendor.shares.each do |share| %>
-                <% if share.contact.present? %>
-                  <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+            <% if vendor.share_with_contacts.present? %>
+              <label>Shared With</label>
+              <section class="shared-list">
+                <% vendor.shares && vendor.shares.each do |share| %>
+                  <% if share.contact.present? %>
+                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </section>
+              </section>
+            <% end %>
 
           </div>
         <% end %>
@@ -121,22 +132,28 @@
                 </ul>
               <% end %>
 
-              <label>Provider Details</label>
-              <ul class="data-list">
+              <% if provider_main_page_present?(vendor) %>
+                <label>Provider Details</label>
+                <ul class="data-list">
                   <li class="contact-pair">
-                    <a href="<%= vendor.webaddress %>"><%= vendor.webaddress %></a><br>
+                    <% if vendor.webaddress.present? %>
+                      <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                    <% end %>
                     <%= vendor.phone %>
                   </li>
-              </ul>
+                </ul>
+              <% end %>
 
-              <label>Shared With</label>
-              <section class="shared-list">
-                <% vendor.shares && vendor.shares.each do |share| %>
-                  <% if share.contact.present? %>
-                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+              <% if vendor.share_with_contacts.present? %>
+                <label>Shared With</label>
+                <section class="shared-list">
+                  <% vendor.shares && vendor.shares.each do |share| %>
+                    <% if share.contact.present? %>
+                      <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                    <% end %>
                   <% end %>
-                <% end %>
-              </section>
+                </section>
+              <% end %>
 
           </div>
         <% end %>

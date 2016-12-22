@@ -14,9 +14,9 @@ RSpec.describe "contacts/show", type: :view do
       :beneficiarytype => "Beneficiarytype",
       :address => "Address",
       :zipcode => "Zipcode",
+      :city => "City",
       :state => "State",
       :notes => "MyText",
-      :avatarcolor => "Avatarcolor",
       :photourl => "Photourl",
       :businessname => "Businessname",
       :businesswebaddress => "Businesswebaddress",
@@ -39,7 +39,6 @@ RSpec.describe "contacts/show", type: :view do
     expect(rendered).to match(/Contact Type/)
     expect(rendered).to match(/Relationship/)
     expect(rendered).to match(/MyText/)
-    expect(rendered).to match(/Avatarcolor/)
     expect(rendered).to match(/Photourl/)
   end
 

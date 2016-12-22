@@ -10,25 +10,35 @@
 
 <div class="card <%= @insurance_card.group %>">
   <h3 class="card-label">Insurance Provider Details</h3>
+  <% if !provider_present?(@insurance_card) %>
+    <label>There is no information about Provider</label>
+  <% end %>
 
-  <label>Web Address</label>
-  <p>
-    <a href="<%= @insurance_card.webaddress %>">
-      <%= @insurance_card.webaddress %>
-    </a>
-  </p>
+  <% if @insurance_card.webaddress.present? %>
+    <label>Web Address</label>
+    <p><%= link_to @insurance_card.webaddress, @insurance_card.webaddress %></p>
+  <% end %>
 
-  <label>Address</label>
-  <p><%= @insurance_card.street_address_1 %><br>
-     <%= @insurance_card.city %>,
-     <%= @insurance_card.state %>
-     <%= @insurance_card.zip %>
-  </p>
+  <% if show_street?(@insurance_card) %>
+    <label>Address</label>
+    <p><%= @insurance_card.street_address_1 %><br>
+       <%= @insurance_card.city %>,
+       <%= @insurance_card.state %>
+       <%= @insurance_card.zip %>
+    </p>
+  <% end %>
 
-  <label>Phone</label>
-  <p><%= @insurance_card.phone %><br>
-     <%= @insurance_card.fax %> fax
-  </p>
+  <% if @insurance_card.phone.present? || @insurance_card.fax.present? %>
+    <label>Phone</label>
+    <p>
+      <% if @insurance_card.phone.present? %>
+        <%= @insurance_card.phone %><br>
+      <% end %>
+      <% if @insurance_card.fax.present? %>
+        <%= @insurance_card.fax %><span class="phone-type">fax</span>
+      <% end %>
+    </p>
+  <% end %>
 
   <% if @insurance_card.contact.present? %>
     <label>Primary Contact</label>
@@ -39,24 +49,26 @@
        <%= @insurance_card.contact.phone %>
     </p>
   <% end %>
+  <span class="clear"></span>
 
-  <section class="shared-with">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
+  <% if @insurance_card.share_with_contacts.present? %>
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
 
-    <label>Shared With</label>
-    <div>
-      <% @insurance_card.shares.each do |share| %>
-        <% if share.contact.present? %>
-          <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+      <label>Shared With</label>
+      <div>
+        <% @insurance_card.shares.each do |share| %>
+          <% if share.contact.present? %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
-  </section>
-
+      </div>
+    </section>
+  <% end %>
 </div>
 
 <%= render yield(:partial_path) %>

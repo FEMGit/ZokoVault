@@ -32,13 +32,7 @@ class Contact < ActiveRecord::Base
       'Advisor',
       'Other'
     ],
-    medical_professional: [
-      "Doctor",
-      "Nurse",
-      "Administrator",
-      'Caregiver',
-      'Other'
-    ]
+    medical_professional: %w(Doctor Nurse Administrator Caregiver Other)
   }
 
   CONTACT_TYPES = {

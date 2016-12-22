@@ -9,34 +9,39 @@
 
 <% @final_wish.final_wishes.each do |final_wish| %>
   <div class="card cg-<%= @group["value"] %> mb-30">
+    <% if !final_wish_present?(final_wish) %>
+      <label>There is no information about Final Wish</label>
+    <% end %>
 
-    <label>Primary Contact</label><br>
-    <p>
-      <% if final_wish.primary_contact %>
+    <% if final_wish.primary_contact.present? %>
+      <label>Primary Contact</label><br>
+      <p>
         <%= final_wish.primary_contact.name %><br>
         <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
         <%= final_wish.primary_contact.phone %>
-      <% end %>
-    </p>
+      </p>
+    <% end %>
 
-    <label>Notes</label><br>
-    <p>
-      <%= final_wish.notes %>
-    </p>
+    <% if final_wish.notes.present? %>
+      <label>Notes</label><br>
+      <p><%= final_wish.notes %></p>
+    <% end %>
 
-    <div class="shared-with">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-        Shared With
-      </h3>
+    <% if final_wish.share_with_contacts.present? %>
+      <div class="shared-with">
+        <h3 class="card-label shared-label">
+          <svg class="icon" viewBox="0 0 20 20">
+            <use xlink:href="#icon-Safe"></use>
+          </svg>
+          Shared With
+        </h3>
 
-      <label>Shared With</label><br>
-        <% final_wish.share_with_contacts && final_wish.share_with_contacts.each do |contact| %>
-          <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-        <% end %>
-    </div>
+        <label>Shared With</label><br>
+          <% final_wish.share_with_contacts.each do |contact| %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+          <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 

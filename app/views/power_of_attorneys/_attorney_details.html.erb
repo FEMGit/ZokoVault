@@ -3,40 +3,49 @@
   <div class="card attorney mb-30">
 
     <h3 class="card-label">Legal Details</h3>
-
-    <label class="title">Power of Attorney</label>
-    <p><%= attorney.agents && attorney.agents.map(&:name).join('') %></p>
-
-    <label class="title">Agent Powers</label>
-    <p>
-      <% if attorney.powers.present? %>
+    
+    <% if !attorney_present?(attorney) %>
+      <label>There is no information about this Power of Attorney</label>
+    <% end %>
+    
+    <% if attorney.agents.present? %>
+      <label class="title">Power of Attorney</label>
+      <p><%= attorney.agents.map(&:name).join('') %></p>
+    <% end %>
+    
+    <% if attorney.powers.present? %>
+      <label class="title">Agent Powers</label>
+      <p>
         <% attorney.powers.keys.each do |agent_power| %>
           <%= agent_power %><br>
         <% end %>
-      <% end %>
-    </p>
+      </p>
+    <% end %>
     
-    <label>Notes</label>
-    <p>
-      <%= attorney.notes %>
-    </p>
+    <% if attorney.notes.present? %>
+      <label>Notes</label>
+      <p><%= attorney.notes %></p>
+    <% end %>
+    <span class="clear"></span>
 
-    <section class="shared-with">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg> Shared With
-      </h3>
+    <% if attorney.shares.present? %>
+      <section class="shared-with">
+        <h3 class="card-label shared-label">
+          <svg class="icon" viewBox="0 0 20 20">
+            <use xlink:href="#icon-Safe"></use>
+          </svg> Shared With
+        </h3>
 
-      <label>Shared With</label>
-      <div>
-        <% attorney.shares.each do |share| %>
-          <% if share.contact.present? %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+        <label>Shared With</label>
+        <div>
+          <% attorney.shares.each do |share| %>
+            <% if share.contact.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+            <% end %>
           <% end %>
-        <% end %>
-      </div>
-    </section>
+        </div>
+      </section>
+    <% end %>
 
   </div>
 <% end %>

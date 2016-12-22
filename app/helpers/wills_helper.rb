@@ -18,4 +18,9 @@ module WillsHelper
   def get_advisor_uniq(wills)
     wills.first.agents
   end
+  
+  def will_present?(will)
+    will.primary_beneficiaries.present? || will.secondary_beneficiaries.present? || will.executor.present? ||
+      will.agents.present? || will.notes.present? || will.shares.present?
+  end
 end

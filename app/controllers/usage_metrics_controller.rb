@@ -93,7 +93,7 @@ class UsageMetricsController < AuthenticatedController
   def site_completed(user)
     all_models = ActiveRecord::Base.descendants
     delete_system_models(all_models)
-    models_with_user = all_models.select { |x| x.column_names.include?("user_id") }
+    models_with_user = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
     completed_count = models_with_user.collect { |x| x.where(:user_id => user.id).any? }.count(true)
     models_with_user_count = models_with_user.map(&:name).count
     ((completed_count.to_f / models_with_user_count) * 100).round(2)
@@ -103,7 +103,7 @@ class UsageMetricsController < AuthenticatedController
     update_model_list
     all_models = ActiveRecord::Base.descendants
     delete_system_models(all_models)
-    models_with_user = all_models.select { |x| x.column_names.include?("user_id") }
+    models_with_user = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
     completed = models_with_user.select { |x| x.where(:user_id => user.id).any? }
     (models_with_user - completed).map(&:name)
   end

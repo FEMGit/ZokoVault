@@ -88,7 +88,7 @@ RSpec.describe CategoriesController, type: :controller do
         category = Category.create! valid_attributes
         put :update, {id: category.to_param, category: new_attributes}, valid_session
         category.reload
-        skip("Add assertions for updated state")
+        expect(category.name).to eq(new_attributes[:name])
       end
 
       it "assigns the requested category as @category" do

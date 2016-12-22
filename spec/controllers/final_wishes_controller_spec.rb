@@ -20,6 +20,16 @@ require 'rails_helper'
 
 RSpec.describe FinalWishesController, type: :controller do
 
+  let!(:user) { create :user }
+  let!(:final_wish_info) do
+    create :final_wish_info,
+    user_id: user.id,
+    group: Rails.application.config.x.categories["Final Wishes"]["groups"].sample["label"]
+  end
+  let!(:document) do
+    create :document, user_id: user.id, category: "Final Wishes", group: final_wish_info.group
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # FinalWish. As you add validations to FinalWish, be sure to
   # adjust the attributes here as well.
@@ -32,19 +42,26 @@ RSpec.describe FinalWishesController, type: :controller do
   # FinalWishesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before do
+    sign_in user
+  end
+
   describe "GET #index" do
-    it "assigns all final_wishes as @final_wishes" do
-      final_wish = FinalWish.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(assigns(:final_wishes)).to eq([final_wish])
+    it "assigns all final_wish_infos as @final_wishes" do
+      get :index, {}, session: valid_session
+      expect(assigns(:final_wishes)).to eq([final_wish_info])
     end
   end
 
   describe "GET #show" do
-    it "assigns the requested final_wish as @final_wish" do
-      final_wish = FinalWish.create! valid_attributes
-      get :show, params: {id: final_wish.to_param}, session: valid_session
-      expect(assigns(:final_wish)).to eq(final_wish)
+    it "assigns @final_wish's group to @group" do
+      get :show, {id: final_wish_info.to_param}, session: valid_session
+      expect(assigns(:group)["label"]).to eq(final_wish_info.group)
+    end
+
+    it "assigns user's final wish docs in the appropriate group to @group_documents" do
+      get :show, {user: user, id: final_wish_info.to_param}, session: valid_session
+      expect(assigns(:group_documents)).to eq([document])
     end
   end
 
@@ -57,10 +74,9 @@ RSpec.describe FinalWishesController, type: :controller do
   # end
 
   describe "GET #edit" do
-    it "assigns the requested final_wish as @final_wish" do
-      final_wish = FinalWish.create! valid_attributes
-      get :edit, params: {id: final_wish.to_param}, session: valid_session
-      expect(assigns(:final_wish)).to eq(final_wish)
+    it "assigns @final_wish's group to @group" do
+      get :edit, {id: final_wish_info.to_param}, session: valid_session
+      expect(assigns(:group)["label"]).to eq(final_wish_info.group)
     end
   end
 

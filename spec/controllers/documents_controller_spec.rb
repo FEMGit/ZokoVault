@@ -101,7 +101,8 @@ RSpec.describe DocumentsController, type: :controller do
         document = Document.create! valid_attributes
         put :update, {id: document.to_param, document: new_attributes}, valid_session
         document.reload
-        skip("Add assertions for updated state")
+        expect(document.name).to eq(new_attributes[:name])
+        expect(document.url).to eq(new_attributes[:url])
       end
 
       it "assigns the requested document as @document" do
@@ -145,4 +146,3 @@ RSpec.describe DocumentsController, type: :controller do
   end
 
 end
-

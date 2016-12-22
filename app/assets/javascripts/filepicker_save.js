@@ -8,7 +8,8 @@ var saveFileUrl = function(option) {
       conversions: ['crop'],
       cropRatio: 1/1,
       cropForce: true,
-      multiple: false
+      multiple: false,
+      maxSize: 100*1024*1024
     },
     {
       location: "S3",

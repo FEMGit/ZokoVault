@@ -134,13 +134,15 @@ Rails.application.routes.draw do
   
   # Information pages
   get "/about", to: "pages#about", as: :about
-  get "/setup", to: "pages#setup", as: :setup
-  get "/security", to: "pages#security", as: :security
-  get "/contact_us", to: "pages#contact_us", as: :contact_page
   get "/careers", to: "pages#careers", as: :careers
-  get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
-  get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
+  get "/contact_us", to: "pages#contact_us", as: :contact_page
   get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
+  get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
+  get "/resources", to: "pages#resources", as: :resources
+  get "/security", to: "pages#security", as: :security
+  get "/setup", to: "pages#setup", as: :setup
+  get "/styleguide", to: "pages#styleguide"
+  get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
 
   # Catch all routes so we can handle no route error
   match "*path", to: "application#catch_404", via: :all

@@ -57,28 +57,42 @@ RSpec.describe HealthsController, type: :controller do
     end
   end
 
-  xdescribe "GET #show" do
-    it "assigns the requested health as @health" do
-      health = Health.create! valid_attributes
-      get :show, params: {id: health.to_param}, session: valid_session
-      expect(assigns(:health)).to eq(health)
+  describe "GET #show" do
+    before :each do
+      post :create, { health: valid_attributes}, session: valid_session
+      @insurance_card = assigns(:insurance_card)
+    end
+
+    it "assigns the requested health as @insurance_card" do
+      get :show, {id: @insurance_card.to_param}, session: valid_session
+      expect(assigns(:insurance_card)).to eq(@insurance_card)
+    end
+
+    it "assigns a group documents as @group_documents" do
+      document = create(:document, user_id: user.id, category: "Insurance", group: "Health")
+      get :show, {id: @insurance_card.to_param}, session: valid_session
+      expect(assigns(:group_documents)).to eq([document])
     end
   end
 
   describe "GET #new" do
-    it "assigns a new health as @health" do
+    it "assigns a new health as @insurance_card" do
       get :new, {}, session: valid_session
-      health = assigns(:insurance_card)
-      expect(health).to be_a_new(Health)
-      expect(health.policy.first).to be_a_new(HealthPolicy)
+      expect(assigns(:insurance_card)).to be_a_new(Health)
+    end
+
+    it "builds a health policy for @insurance_card" do
+      get :new, {}, session: valid_session
+      expect(assigns(:insurance_card).policy.first).to be_a_new(HealthPolicy)
     end
   end
 
-  xdescribe "GET #edit" do
-    it "assigns the requested health as @health" do
-      health = Health.create! valid_attributes
-      get :edit, params: {id: health.to_param}, session: valid_session
-      expect(assigns(:health)).to eq(health)
+  describe "GET #edit" do
+    it "assigns the requested health as @insurance_card" do
+      post :create, { health: valid_attributes}, session: valid_session
+      insurance_card = assigns(:insurance_card)
+      get :edit, {id: insurance_card.to_param}, session: valid_session
+      expect(assigns(:insurance_card)).to eq(insurance_card)
     end
   end
 

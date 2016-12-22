@@ -61,7 +61,7 @@ RSpec.describe ContactsController, type: :controller do
         expect(assigns(:contact)).to be_persisted
         expect(assigns(:contact).user).to eq user
       end
-      
+
 
       it "redirects to the created contact" do
         post :create, {contact: valid_attributes}, session: valid_session
@@ -84,15 +84,13 @@ RSpec.describe ContactsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { { firstname: Faker::Name.first_name } }
 
       it "updates the requested contact" do
         contact = Contact.create! valid_attributes
         put :update, {id: contact.to_param, contact: new_attributes}, session: valid_session
         contact.reload
-        skip("Add assertions for updated state")
+        expect(contact.firstname).to eq(new_attributes[:firstname])
       end
 
       it "assigns the requested contact as @contact" do

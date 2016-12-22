@@ -55,7 +55,7 @@ module ApplicationHelper
       ['Wyoming', 'WY']
     ]
   end
-
+  
   def initialize_new_contact_form
     return if content_for?(:new_contact_form)
     @contact = Contact.new

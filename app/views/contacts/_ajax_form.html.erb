@@ -31,7 +31,8 @@
         <ul>
         </ul>
       </div>
-      <%= render :partial => '/contacts/form_content', locals: {f: f} %>
+      <% errors = @contact.errors.any? %>
+      <%= render :partial => '/contacts/form_content', locals: { f: f, errors: errors } %>
     <% end %>
   </div>
   <footer class="modal-footer">
@@ -79,6 +80,7 @@ var handleSelectOnChange = function(selectInput) {
 
 var closeContactFormModal = function() {
   $(".modal, .modal-overlay").fadeOut(500, function() {
+    cleanErrorMessages();
     removePhoto();
     $("#contact-form").trigger("reset");
     $("#error_explanation ul").empty();
@@ -104,6 +106,16 @@ var addContactAndCloseModal = function(json) {
   closeContactFormModal();
 }
 
+var addErrorMessage = function(selector, error_message) {
+  $(selector).addClass('input-error');
+  $('<span class="error-label"> - ' + error_message + '</span>').insertBefore($(selector));
+}
+
+var cleanErrorMessages = function() {
+  $('#contact_emailaddress').removeClass('input-error');
+  $('#contact_firstname').removeClass('input-error');
+  $('.error-label').remove();
+}
 
 $(function(){
 
@@ -120,9 +132,15 @@ $(function(){
       if (!!contactErrors['id']) {
         return addContactAndCloseModal(contactErrors)
       }
+      wizNav(1);
+      cleanErrorMessages()
       for (var key in contactErrors) {
-        var errorEl = '<li>' + key + ' ' + contactErrors[key][0] + '</li>';
-        $("#error_explanation ul").append(errorEl);
+        if (key === "emailaddress") {
+          addErrorMessage('#contact_emailaddress', contactErrors[key][0])
+        }
+        if (key === "firstname") {
+          addErrorMessage('#contact_firstname', contactErrors[key][0])
+        }
       }
     });
 

@@ -8,7 +8,15 @@
 
   <label>Type</label>
   <div class="chosen-styled-select">
-    <%= collection_select "", :primary_contact, ["Type1", "Type2", "Type3", "Type4", "Type5"].prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
+    <% investment_types = [
+                            "Private Company Stock",
+                            "Private Company Debt",
+                            "Royalty",
+                            "IOU",
+                            "Other Investments",
+                            "Other Loans"
+                          ] %>
+    <%= collection_select "", :primary_contact, investment_types.prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
       'data-placeholder': 'Choose Type...', multiple: false} %>
   </div>
   

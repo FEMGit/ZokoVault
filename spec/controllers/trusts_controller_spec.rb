@@ -71,12 +71,16 @@ RSpec.describe TrustsController, type: :controller do
         expect { post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(Trust, :count).by(1)
       end
-
+      
       context "with attributes" do
         let(:vault_entry) { assigns(:new_vault_entries) }
 
         before do
           post :create, vault_entry_0: valid_attributes.merge(:id => ""), session: valid_session
+        end
+        
+        it "shows correct flash message on create" do
+          expect(flash[:success]).to be_present
         end
 
         it "assigns a newly created vault_entry as @vault_entry" do
@@ -129,6 +133,12 @@ RSpec.describe TrustsController, type: :controller do
       let(:new_attributes) do
         skip("Add a hash of attributes valid for your model")
       end
+      
+      it "shows correct flash message on update" do
+        vault_entry = Trust.create! valid_attributes
+        put :update, { id: vault_entry.to_param, trust: valid_attributes }, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "updates the requested vault_entry" do
         vault_entry = Trust.create! valid_attributes
@@ -176,6 +186,12 @@ RSpec.describe TrustsController, type: :controller do
       vault_entry = Trust.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
       expect(response).to redirect_to(vault_entries_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      vault_entry = Trust.create! valid_attributes
+      delete :destroy, { id: vault_entry.to_param }, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

@@ -62,6 +62,10 @@ RSpec.describe ContactsController, type: :controller do
         expect(assigns(:contact).user).to eq user
       end
 
+      it "shows correct flash message on create" do
+        post :create, {contact: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "redirects to the created contact" do
         post :create, {contact: valid_attributes}, session: valid_session
@@ -91,6 +95,12 @@ RSpec.describe ContactsController, type: :controller do
         put :update, {id: contact.to_param, contact: new_attributes}, session: valid_session
         contact.reload
         expect(contact.firstname).to eq(new_attributes[:firstname])
+      end
+      
+      it "shows correct flash message on update" do
+        contact = Contact.create! valid_attributes
+        put :update, {id: contact.to_param, contact: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
       end
 
       it "assigns the requested contact as @contact" do
@@ -133,6 +143,12 @@ RSpec.describe ContactsController, type: :controller do
       contact = Contact.create! valid_attributes
       delete :destroy, {id: contact.to_param}, session: valid_session
       expect(response).to redirect_to(contacts_url)
+    end
+    
+    it "shows correct flash message on update" do
+      contact = Contact.create! valid_attributes
+      delete :destroy, {id: contact.to_param}, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

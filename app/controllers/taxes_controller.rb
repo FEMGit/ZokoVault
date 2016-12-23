@@ -41,7 +41,7 @@ class TaxesController < AuthenticatedController
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     respond_to do |format|
       if @tax_year.save
-        format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully created.' }
+        format.html { redirect_to session[:ret_url] || taxes_path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }
       else
         format.html { render :new }
@@ -54,10 +54,11 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1.json
   def update
     @tax_year = @tax
-    TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
+    message = success_message
+    TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
     respond_to do |format|
       if @tax_year.update(tax_params)
-        format.html { redirect_to session[:ret_url] || taxes_path, notice: 'Tax was successfully updated.' }
+        format.html { redirect_to session[:ret_url] || taxes_path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else
         format.html { render :edit }
@@ -100,6 +101,11 @@ class TaxesController < AuthenticatedController
   # Never trust parameters from the scary internet, only allow the white list through.
   def tax_params
     params.require(:tax_year_info).permit(:id, :year)
+  end
+  
+  def success_message
+    return 'Tax was successfully created.' unless @tax.taxes.any?
+    'Tax was successfully updated.'
   end
 
   def set_category

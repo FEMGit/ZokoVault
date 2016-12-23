@@ -105,6 +105,11 @@ RSpec.describe HealthsController, type: :controller do
           post :create, { health: valid_attributes}, session: valid_session
         }.to change(Health, :count).by(1)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, { health: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns a newly created health as @insurance_card" do
         post :create, { health: valid_attributes}, session: valid_session
@@ -154,6 +159,12 @@ RSpec.describe HealthsController, type: :controller do
         health.reload
         skip("Add assertions for updated state")
       end
+      
+      it "shows correct flash message on update" do
+        health = Health.create! valid_attributes
+        put :update, params: {id: health.to_param, health: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested health as @health" do
         health = Health.create! valid_attributes
@@ -195,6 +206,12 @@ RSpec.describe HealthsController, type: :controller do
       health = Health.create! valid_attributes
       delete :destroy, params: {id: health.to_param}, session: valid_session
       expect(response).to redirect_to(healths_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      health = Health.create! valid_attributes
+      delete :destroy, params: {id: health.to_param}, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 end

@@ -56,9 +56,9 @@ class DocumentsController < AuthenticatedController
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
         if return_url?
-          format.html { redirect_to session[:ret_url], notice: 'Document was successfully updated.' }
+          format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else
-          format.html { redirect_to documents_path, notice: 'Document was successfully updated.' }
+          format.html { redirect_to documents_path, flash: { success: 'Document was successfully updated.' } }
         end
         format.json { render :show, status: :ok, location: @document }
       else
@@ -165,9 +165,9 @@ class DocumentsController < AuthenticatedController
       format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
     end
     if return_url?
-      format.html { redirect_to session[:ret_url], notice: 'Document was successfully created.' }
+      format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully created.' } }
     else
-      format.html { redirect_to documents_path, notice: 'Document was successfully created.' }
+      format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
     format.json { render :show, status: :created, location: @document }
   end

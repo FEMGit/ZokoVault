@@ -49,7 +49,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
-        format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully created.' }
+        format.html { redirect_to insurance_path, flash: { success: 'Insurance was successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         format.html { render :new }
@@ -66,7 +66,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
-        format.html { redirect_to property_path(@insurance_card), notice: 'PropertyAndCasualty was successfully updated.' }
+        format.html { redirect_to property_path(@insurance_card), flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else
         format.html { render :edit }
@@ -81,7 +81,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     authorize @property_and_casualty
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to :back || properties_url, notice: 'PropertyAndCasualty was successfully destroyed.' }
+      format.html { redirect_to :back || properties_url, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -92,7 +92,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
 
     @property_and_casualty.destroy
     respond_to do |format|
-      format.html { redirect_to insurance_path, notice: 'PropertyAndCasualty was successfully destroyed.' }
+      format.html { redirect_to insurance_path, notice: 'Insurance was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

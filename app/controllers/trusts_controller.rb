@@ -56,7 +56,7 @@ class TrustsController < AuthenticatedController
       if trusts.present?
         begin
           update_trusts(new_trusts, old_trusts)
-          format.html { redirect_to estate_planning_path, notice: 'Trust was successfully created.' }
+          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_trusts) } }
           format.json { render :show, status: :created, location: @trust }
         rescue
           @vault_entry = Trust.new
@@ -77,7 +77,7 @@ class TrustsController < AuthenticatedController
   def update
     respond_to do |format|
       if @trust.update(trust_params)
-        format.html { redirect_to @trust, notice: 'Trust was successfully updated.' }
+        format.html { redirect_to @trust, flash: { success: 'Trust was successfully updated.' } }
         format.json { render :show, status: :ok, location: @trust }
       else
         format.html { render :edit }
@@ -126,6 +126,11 @@ class TrustsController < AuthenticatedController
       permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: [], share_with_contact_ids: []]
     end
     trusts.permit(permitted_params)
+  end
+  
+  def success_message(old_trusts)
+    return 'Trust was successfully created.' unless old_trusts.any?
+    'Trust was successfully updated.'
   end
 
   def update_trusts(new_trusts, old_trusts)

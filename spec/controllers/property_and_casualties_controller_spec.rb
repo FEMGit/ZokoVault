@@ -92,6 +92,11 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
           post :create, { property_and_casualty: valid_attributes }, session: valid_session
         }.to change(PropertyAndCasualty, :count).by(1)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, { property_and_casualty: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns a newly created property_and_casualty as @property_and_casualty" do
         post :create, { property_and_casualty: valid_attributes}, session: valid_session
@@ -141,6 +146,12 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
         property_and_casualty.reload
         skip("Add assertions for updated state")
       end
+      
+      it "shows correct flash message on update" do
+        property_and_casualty = PropertyAndCasualty.create! valid_attributes
+        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: valid_attributes}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested property_and_casualty as @property_and_casualty" do
         property_and_casualty = PropertyAndCasualty.create! valid_attributes
@@ -182,6 +193,12 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
       property_and_casualty = PropertyAndCasualty.create! valid_attributes
       delete :destroy, params: {id: property_and_casualty.to_param}, session: valid_session
       expect(response).to redirect_to(property_and_casualties_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      property_and_casualty = PropertyAndCasualty.create! valid_attributes
+      delete :destroy, params: {id: property_and_casualty.to_param}, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 end

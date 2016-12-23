@@ -47,7 +47,7 @@ class PowerOfAttorneysController < AuthenticatedController
       if !new_attorneys.empty? || !old_attorneys.empty?
         begin
           update_power_of_attorneys(new_attorneys, old_attorneys)
-          format.html { redirect_to estate_planning_path, notice: 'Power of Attorney was successfully created.' }
+          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_attorneys) } }
           format.json { render :show, status: :created, location: @power_of_attorney }
         rescue
           format.html { render :new }
@@ -65,7 +65,7 @@ class PowerOfAttorneysController < AuthenticatedController
   def update
     respond_to do |format|
       if @power_of_attorney.update(power_of_attorney_params)
-        format.html { redirect_to @power_of_attorney, notice: 'Power of attorney was successfully updated.' }
+        format.html { redirect_to @power_of_attorney, flash: { success: 'Power of attorney was successfully updated.' } }
         format.json { render :show, status: :ok, location: @power_of_attorney }
       else
         format.html { render :edit }
@@ -124,20 +124,19 @@ class PowerOfAttorneysController < AuthenticatedController
     end
     attorneys.permit(permitted_params)
   end
-
+  
+  def success_message(old_attorneys)
+    return 'Power of Attorney was successfully created.' unless old_attorneys.any?
+    'Power of Attorney was successfully updated.'
+  end
+  
   def update_power_of_attorneys(new_attorneys, old_attorneys)
     new_attorneys.each do |new_attorney_params|
-      @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: resource_owner.id)).build 
-
-      authorize @new_vault_entries
-
+      @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
       raise "error saving new power of attorney" unless @new_vault_entries.save
     end
     old_attorneys.each do |old_attorney|
-      @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
-
-      authorize @old_vault_entries
-
+      @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
       raise "error saving new power of attorney" unless @old_vault_entries.save
     end
   end

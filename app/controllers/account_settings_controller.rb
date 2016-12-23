@@ -11,7 +11,7 @@ class AccountSettingsController < AuthenticatedController
         errors = update_password
         if (errors.nil? && password_change_params[:password].present?) || password_change_params[:password].empty?
           bypass_sign_in(@user)
-          format.html { redirect_to account_settings_path, notice: 'Account Settings were successfully updated.' }
+          format.html { redirect_to account_settings_path, flash: { success: 'Account Settings were successfully updated.' } }
           format.json { render :index, status: :updated, location: @user_profile }
         else
           @user_profile.errors.messages.merge!(errors.messages)

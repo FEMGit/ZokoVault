@@ -71,6 +71,11 @@ RSpec.describe WillsController, type: :controller do
         expect { post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(Will, :count).by(1)
       end
+      
+      it "shows correct flash message on create" do
+        post :create, {vault_entry_0: valid_attributes.merge(:id => "")}, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       context "with attributes" do
         let(:vault_entry) { assigns(:new_vault_entries) }
@@ -146,6 +151,12 @@ RSpec.describe WillsController, type: :controller do
         vault_entry.reload
         skip("Add assertions for updated state")
       end
+      
+      it "shows correct flash message on update" do
+        vault_entry = Will.create! valid_attributes
+        put :update, { id: vault_entry.to_param, will: valid_attributes }, session: valid_session
+        expect(flash[:success]).to be_present
+      end
 
       it "assigns the requested vault_entry as @vault_entry" do
         vault_entry = Will.create! valid_attributes
@@ -186,6 +197,12 @@ RSpec.describe WillsController, type: :controller do
       vault_entry = Will.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
       expect(response).to redirect_to(vault_entries_url)
+    end
+    
+    it "shows correct flash message on destroy" do
+      vault_entry = Will.create! valid_attributes
+      delete :destroy, { id: vault_entry.to_param }, session: valid_session
+      expect(flash[:notice]).to be_present
     end
   end
 

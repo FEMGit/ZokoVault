@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   resources :vendor_accounts
   resources :vendors
   resources :contacts
-  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations' }
+  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords',
+                                    unlocks: 'unlocks' }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

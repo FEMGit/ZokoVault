@@ -55,7 +55,34 @@
   
   <label>Account Type</label>
   <div class="chosen-styled-select">
-    <%= collection_select "", :primary_contact, ["Type1", "Type2", "Type3", "Type4", "Type5"].prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
+    <% account_types = [
+            "Checking",
+            "Savings",
+            "Brokerage",
+            "Stock",
+            "Bond",
+            "Derivative",
+            "Government Security",
+            "Mutual Fund",
+            "IRA",
+            "Roth IRA",
+            "401K",
+            "403B",
+            "529",
+            "REIT",
+            "Venture Capital",
+            "Private Equity",
+            "Hedge Fund",
+            "Other Alternatives",
+            "Credit Card",
+            "Mortgage",
+            "Auto Loan",
+            "Line of Credit",
+            "Business Loan",
+            "Student Loan",
+            "Undrawn Commitment"
+            ] %>
+    <%= collection_select "", :primary_contact, account_types.prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
       'data-placeholder': 'Choose Type...', multiple: false} %>
   </div>
 

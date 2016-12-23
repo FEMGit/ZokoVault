@@ -1,7 +1,6 @@
 <p id="notice"><%= notice %></p>
 
 <div class="contact-element-title">
-  <h1 class="contact-user-name"><%=@contact.firstname%> <%=@contact.lastname%></h1>
   <%= link_to edit_contact_path(@contact), class: "edit-link" do %>
     <span class="circle-button">
     <svg class="icon circle-icon">
@@ -9,6 +8,14 @@
     </svg>
     </span>Edit Contact
   <% end %>
+  <h1>
+    <% if @contact && @contact.photourl.present? %>
+      <% avatar = true %>
+      <%= render :partial => "layouts/user_profile_avatar", locals: { user: @contact, :avatar_size => 'medium' } %>
+    <% end %>
+    <span <% if avatar %> class="avatar-name" <% end %>><%=@contact.firstname%> <%=@contact.lastname%></span>
+  </h1>
 </div>
+
 <%= render 'header_details_info' %>
 <%= render 'documents_details' %>

@@ -8,7 +8,20 @@
 
   <label>Property Type</label>
   <div class="chosen-styled-select">
-    <%= collection_select "", :primary_contact, ["Type1", "Type2", "Type3", "Type4", "Type5"].prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
+    <% property_types = [
+                          "House",
+                          "Land",
+                          "Commercial",
+                          "Vehicle",
+                          "Jewelry",
+                          "Artwork",
+                          "Furniture",
+                          "Antiquity",
+                          "Heirloom",
+                          "Valuable",
+                          "Other Property",
+                         ] %>
+    <%= collection_select "", :primary_contact, property_types.prepend(""), :to_s, :to_s, {}, {class: 'chosen-select', 
       'data-placeholder': 'Choose Type...', multiple: false} %>
   </div>
   

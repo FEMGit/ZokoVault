@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe SharesController, type: :controller do
   let!(:user) { create :user }
   let(:shared_user) { create :user }
-  let(:contact) { create :contact, emailaddress: shared_user.email, user: shared_user }
+  let(:contact) do
+    shared_user.email = Faker::Internet.free_email
+    create(:contact, emailaddress: shared_user.email, user: shared_user)
+  end
   let!(:document) { create :document }
 
   let(:valid_attributes) do
@@ -29,7 +32,7 @@ RSpec.describe SharesController, type: :controller do
       sign_in shared_user
     end
 
-    it "assigns all shares with me as @shares_by_contact" do
+    it "assigns all shares with me as @shares_by_user" do
       share = Share.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:shares_by_user)).to eq(user => [share])

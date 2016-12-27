@@ -1,15 +1,15 @@
-<h2>Resend confirmation instructions</h2>
+<section class="card login-card" >
+  <h2>Resend confirmation instructions</h2>
 
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
 
-  <%= f.label :email %>
-  <% if resource.errors && resource.errors.messages[:email].present? %>
-    <span class="error-label"> - <%= resource.errors.messages[:email].first %></span>
+    <%= f.label :email %>
+    <% if resource.errors && resource.errors.messages[:email].present? %>
+      <span class="error-label"> - <%= resource.errors.messages[:email].first %></span>
+    <% end %>
+    <%= f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: ("input-error" if resource.errors && resource.errors.messages[:email].present?) %>
+    <%= f.button "Resend confirmation instructions", class: "big-button primary-button" %>
   <% end %>
-  <%= f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: ("input-error" if resource.errors && resource.errors.messages[:email].present?) %>
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+  <br>
+  <%= render "users/shared/links" %>
+</section>

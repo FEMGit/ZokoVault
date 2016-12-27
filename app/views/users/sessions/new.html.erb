@@ -19,10 +19,7 @@
       </div>
     <% end -%>
 
-    <div class="actions">
-      <button type="submit" name="commit" value="Log in" class="big-button primary-button">Log in</button>
-
-    </div>
+    <%= f.button "Log in", class: "big-button primary-button" %>
   <% end %>
   <br>
   <%= render "users/shared/links" %>

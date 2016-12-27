@@ -9,8 +9,19 @@
   $tooltip-arrow-width: 8px;
   $tooltip-shadow: 0 2px 2px silver;
   $tooltip-distance-from-item: 3em;
-  $tooltip-distance-from-item-bottom: -20em;
   $tooltip-arrow-distance-from-box: -1.3em;
+  $tooltip-arrow-distance-from-box-bottom: -1.6em;
+  
+  @mixin tooltip-box {
+    position: absolute;
+    left: 5px;
+    border: $tooltip-arrow-width solid transparent;
+    color: white;
+    font-size: 1.4em;
+    margin-left: -$tooltip-arrow-width;
+    text-align: center;
+    text-shadow: 0 2px .5px $color-primary-shaded;
+  }
 
   display: inline-block;
   position: relative;
@@ -23,7 +34,12 @@
   }
 
   .tooltip {
-    @include position(absolute, null 0 $tooltip-distance-from-item 0);
+    &.bottom {
+      @include position(absolute, $tooltip-distance-from-item 0 null 0);
+    }
+    &.top {
+      @include position(absolute, null 0 $tooltip-distance-from-item 0);
+    }
     background-color: white;
     background: #fff;
     border: $color-primary-shaded 1px solid;
@@ -39,35 +55,31 @@
     text-align: left;
     transition: all 0.2s ease-in-out;
     visibility: hidden;
-    z-index: 10;
+    z-index: 100;
 
     p {
       color: $base-font-color;
       line-height: $base-line-height;
       margin: 0;
+      @include word-break;
     }
     
     &.wide {
       min-width: $tooltip-min-width-wide;
     }
-    &.bottom {
-      @include position(absolute, null 0 $tooltip-distance-from-item-bottom 0);
-    }
 
     &::after {
-      position: absolute;
-      left: 5px;
-       border: $tooltip-arrow-width solid transparent;
-       bottom: $tooltip-arrow-distance-from-box;
-       color: white;
-       content: "▼";
-       font-size: 1.4em;
-       margin-left: -$tooltip-arrow-width;
-       text-align: center;
-       text-shadow: 0 2px .5px $color-primary-shaded;
+      @include tooltip-box;
+      content: "▼";
+      bottom: $tooltip-arrow-distance-from-box;
     }
     &.bottom::after {
       content: "";
+    }
+    &.bottom::before {
+      @include tooltip-box;
+      content: "▲";
+      top: $tooltip-arrow-distance-from-box-bottom;
     }
   }
 }

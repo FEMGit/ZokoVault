@@ -118,7 +118,7 @@ class HealthsController < AuthenticatedController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def health_params
-    params.require(:health).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+    params.require(:health).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id,
                                    share_with_ids: [])
   end
 
@@ -126,7 +126,7 @@ class HealthsController < AuthenticatedController
     policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :policy_holder_id,
+      permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :policy_holder_id, :group_id,
                                       :broker_or_primary_contact_id, :notes, insured_member_ids: []]
     end
     policies.permit(permitted_params)

@@ -1,26 +1,27 @@
-<h2>Change your password</h2>
+<section class="card login-card" >
+  <h2>Change your password</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <% if resource.errors.any? %>
-    <% errors = true %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <% if resource.errors.any? %>
+      <% errors = true %>
+    <% end %>
+    <%= f.hidden_field :reset_password_token %>
+
+    <%= f.label :password, "New password" %>
+    <%= render partial: 'layouts/password_requirements', locals: {bottom: 'bottom'} %>
+    
+    <% if errors && resource.errors.messages[:password].present? %>
+      <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
+    <% end %>
+    <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+
+    <%= f.label :password_confirmation, "Confirm new password" %>
+    <% if errors && resource.errors.messages[:password_confirmation].present? %>
+      <span class="error-label"> - <%= resource.errors.messages[:password_confirmation].first %></span>
+    <% end %>
+    <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password_confirmation].present?) } %>
+    <%= f.button "Change my password", class: "big-button primary-button" %>
   <% end %>
-  <%= f.hidden_field :reset_password_token %>
-
-  <%= f.label :password, "New password" %>
-  <%= render partial: 'layouts/password_requirements', locals: {bottom: 'bottom'} %>
-  <% if errors && resource.errors.messages[:password].present? %>
-    <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
-  <% end %>
-  <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
-
-  <%= f.label :password_confirmation, "Confirm new password" %>
-  <% if errors && resource.errors.messages[:password_confirmation].present? %>
-    <span class="error-label"> - <%= resource.errors.messages[:password_confirmation].first %></span>
-  <% end %>
-  <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password_confirmation].present?) } %>
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+  <br>
+  <%= render "users/shared/links" %>
+</section>

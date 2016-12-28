@@ -20,18 +20,15 @@ require 'rails_helper'
 
 RSpec.describe RelationshipsController, type: :controller do
 
+  let(:valid_attributes) do
+    { name: Faker::Name.name, relationship: "personal"}
+  end
+
+  let(:invalid_attributes) do
+    skip("No current validations on the model associated with this controller")
+  end
+
   before { sign_in create(:user) }
-
-  # This should return the minimal set of attributes required to create a valid
-  # Relationship. As you add validations to Relationship, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -40,31 +37,31 @@ RSpec.describe RelationshipsController, type: :controller do
 
   describe "GET #index" do
     it "assigns all relationships as @relationships" do
-      relationship = Relationship.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      relationship = create(:relationship)
+      get :index, {}, valid_session
       expect(assigns(:relationships)).to eq([relationship])
     end
   end
 
   describe "GET #show" do
     it "assigns the requested relationship as @relationship" do
-      relationship = Relationship.create! valid_attributes
-      get :show, params: {id: relationship.to_param}, session: valid_session
+      relationship = create(:relationship)
+      get :show, {id: relationship.to_param}, valid_session
       expect(assigns(:relationship)).to eq(relationship)
     end
   end
 
   describe "GET #new" do
     it "assigns a new relationship as @relationship" do
-      get :new, params: {}, session: valid_session
+      get :new, {}, valid_session
       expect(assigns(:relationship)).to be_a_new(Relationship)
     end
   end
 
   describe "GET #edit" do
     it "assigns the requested relationship as @relationship" do
-      relationship = Relationship.create! valid_attributes
-      get :edit, params: {id: relationship.to_param}, session: valid_session
+      relationship = create(:relationship)
+      get :edit, {id: relationship.to_param}, valid_session
       expect(assigns(:relationship)).to eq(relationship)
     end
   end
@@ -73,71 +70,73 @@ RSpec.describe RelationshipsController, type: :controller do
     context "with valid params" do
       it "creates a new Relationship" do
         expect {
-          post :create, params: {relationship: valid_attributes}, session: valid_session
+          post :create, {relationship: valid_attributes}, valid_session
         }.to change(Relationship, :count).by(1)
       end
 
       it "assigns a newly created relationship as @relationship" do
-        post :create, params: {relationship: valid_attributes}, session: valid_session
+        post :create, {relationship: valid_attributes}, valid_session
         expect(assigns(:relationship)).to be_a(Relationship)
         expect(assigns(:relationship)).to be_persisted
       end
 
       it "redirects to the created relationship" do
-        post :create, params: {relationship: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Relationship.last)
+        post :create, {relationship: valid_attributes}, valid_session
+        expect(response).to redirect_to(assigns(:relationship))
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved relationship as @relationship" do
-        post :create, params: {relationship: invalid_attributes}, session: valid_session
+        post :create, {relationship: invalid_attributes}, valid_session
         expect(assigns(:relationship)).to be_a_new(Relationship)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {relationship: invalid_attributes}, session: valid_session
+        post :create, {relationship: invalid_attributes}, valid_session
         expect(response).to render_template("new")
       end
     end
   end
 
   describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+    let(:new_name) { Faker::Name.name }
+    let(:new_valid_attributes) { valid_attributes.merge({ name: new_name }) }
+    let(:new_invalid_attributes) do
+      skip("No current validations on the model associated with this controller")
+    end
 
+    context "with valid params" do
       it "updates the requested relationship" do
-        relationship = Relationship.create! valid_attributes
-        put :update, params: {id: relationship.to_param, relationship: new_attributes}, session: valid_session
+        relationship = create(:relationship)
+        put :update, {id: relationship.to_param, relationship: new_valid_attributes}, valid_session
         relationship.reload
-        skip("Add assertions for updated state")
+        expect(relationship.name).to eq(new_name)
       end
 
       it "assigns the requested relationship as @relationship" do
-        relationship = Relationship.create! valid_attributes
-        put :update, params: {id: relationship.to_param, relationship: valid_attributes}, session: valid_session
+        relationship = create(:relationship)
+        put :update, {id: relationship.to_param, relationship: new_valid_attributes}, valid_session
         expect(assigns(:relationship)).to eq(relationship)
       end
 
       it "redirects to the relationship" do
-        relationship = Relationship.create! valid_attributes
-        put :update, params: {id: relationship.to_param, relationship: valid_attributes}, session: valid_session
+        relationship = create(:relationship)
+        put :update, {id: relationship.to_param, relationship: new_valid_attributes}, valid_session
         expect(response).to redirect_to(relationship)
       end
     end
 
     context "with invalid params" do
       it "assigns the relationship as @relationship" do
-        relationship = Relationship.create! valid_attributes
-        put :update, params: {id: relationship.to_param, relationship: invalid_attributes}, session: valid_session
+        relationship = create(:relationship)
+        put :update, {id: relationship.to_param, relationship: new_invalid_attributes}, valid_session
         expect(assigns(:relationship)).to eq(relationship)
       end
 
       it "re-renders the 'edit' template" do
-        relationship = Relationship.create! valid_attributes
-        put :update, params: {id: relationship.to_param, relationship: invalid_attributes}, session: valid_session
+        relationship = create(:relationship)
+        put :update, {id: relationship.to_param, relationship: new_invalid_attributes}, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,15 +144,15 @@ RSpec.describe RelationshipsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested relationship" do
-      relationship = Relationship.create! valid_attributes
+      relationship = create(:relationship)
       expect {
-        delete :destroy, params: {id: relationship.to_param}, session: valid_session
+        delete :destroy, {id: relationship.to_param}, valid_session
       }.to change(Relationship, :count).by(-1)
     end
 
     it "redirects to the relationships list" do
-      relationship = Relationship.create! valid_attributes
-      delete :destroy, params: {id: relationship.to_param}, session: valid_session
+      relationship = create(:relationship)
+      delete :destroy, {id: relationship.to_param}, valid_session
       expect(response).to redirect_to(relationships_url)
     end
   end

@@ -24,19 +24,20 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
 
   let(:valid_session) { {} }
 
-  xdescribe "GET #index" do
-    it "assigns all vault_entries as @vault_entries" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      get :index, {}, session: valid_session
-      expect(assigns(:vault_entries)).to eq([vault_entry])
+  describe "GET #index" do
+    it "assigns all power_of_attorneys as @power_of_attorneys" do
+      power_of_attorney = create(:power_of_attorney, user_id: user.id)
+      get :index, {}, valid_session
+      expect(assigns(:power_of_attorneys)).to eq([power_of_attorney])
     end
   end
 
   xdescribe "GET #show" do
-    it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      get :show, { id: vault_entry.to_param }, session: valid_session
-      expect(assigns(:vault_entry)).to eq(vault_entry)
+    # No view with this action, raises ActionView::MissingTemplate error
+    it "assigns the requested power_of_attorney as @power_of_attorney" do
+      power_of_attorney = create(:power_of_attorney, user_id: user.id)
+      get :show, { id: power_of_attorney.to_param }, valid_session
+      expect(assigns(:power_of_attorney)).to eq(power_of_attorney)
     end
   end
 
@@ -47,11 +48,11 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     end
   end
 
-  xdescribe "GET #edit" do
-    it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      get :edit, { id: vault_entry.to_param }, session: valid_session
-      expect(assigns(:vault_entry)).to eq(vault_entry)
+  describe "GET #edit" do
+    it "assigns the requested power_of_attorney as @power_of_attorney" do
+      power_of_attorney = create(:power_of_attorney, user_id: user.id)
+      get :edit, { id: power_of_attorney.to_param }, valid_session
+      expect(assigns(:power_of_attorney)).to eq(power_of_attorney)
     end
   end
 
@@ -76,10 +77,6 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
           post :create, {vault_entry_0: valid_attributes.merge(:id => "")}, session: valid_session
         end
 
-        it "shows correct flash message on create" do
-          expect(flash[:success]).to be_present
-        end
-        
         it "assigns a newly created vault_entry as @vault_entry" do
           expect(vault_entry).to be_a(PowerOfAttorney)
           expect(vault_entry).to be_persisted
@@ -133,12 +130,6 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
         vault_entry.reload
         skip("Add assertions for updated state")
       end
-      
-      it "shows correct flash message on update" do
-        vault_entry = PowerOfAttorney.create! valid_attributes
-        put :update, { id: vault_entry.to_param, power_of_attorney: valid_attributes }, session: valid_session
-        expect(flash[:success]).to be_present
-      end
 
       it "assigns the requested vault_entry as @vault_entry" do
         vault_entry = PowerOfAttorney.create! valid_attributes
@@ -168,23 +159,22 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     end
   end
 
-  xdescribe "DELETE #destroy" do
-    it "destroys the requested vault_entry" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      expect { delete :destroy, { id: vault_entry.to_param }, session: valid_session }
-        .to change(PowerOfAttorney, :count).by(-1)
+  describe "DELETE #destroy" do
+    before :each do
+      request.env["HTTP_REFERER"] = "show"
+    end
+
+    it "destroys the requested power_of_attorney" do
+      power_of_attorney = create(:power_of_attorney, user_id: user.id)
+      expect {
+        delete :destroy, { id: power_of_attorney.to_param }, valid_session
+      }.to change(PowerOfAttorney, :count).by(-1)
     end
 
     it "redirects to the vault_entries list" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      delete :destroy, { id: vault_entry.to_param }, session: valid_session
-      expect(response).to redirect_to(vault_entries_url)
-    end
-    
-    it "shows correct flash message on destroy" do
-      vault_entry = PowerOfAttorney.create! valid_attributes
-      delete :destroy, { id: vault_entry.to_param }, session: valid_session
-      expect(flash[:notice]).to be_present
+      power_of_attorney = create(:power_of_attorney, user_id: user.id)
+      delete :destroy, { id: power_of_attorney.to_param }, valid_session
+      expect(response).to redirect_to("show")
     end
   end
 

@@ -2,11 +2,9 @@ require 'rails_helper'
 
 RSpec.describe SharesController, type: :controller do
   let!(:user) { create :user }
+
   let(:shared_user) { create :user }
-  let(:contact) do
-    shared_user.email = Faker::Internet.free_email
-    create(:contact, emailaddress: shared_user.email, user: shared_user)
-  end
+  let(:contact) { create(:contact, emailaddress: shared_user.email, user: user) }
   let!(:document) { create :document }
 
   let(:valid_attributes) do
@@ -21,7 +19,6 @@ RSpec.describe SharesController, type: :controller do
   let(:invalid_attributes) { { contact: contact } }
 
   let(:valid_session) { {} }
-
 
   before do
     sign_in user
@@ -101,7 +98,14 @@ RSpec.describe SharesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url } }
+      let(:new_attributes) { { shareable_type: "Other" } }
+
+      it "updates the requested share" do
+        share = Share.create! valid_attributes
+        put :update, {id: share.to_param, share: new_attributes}, valid_session
+        share.reload
+        expect(share.shareable_type).to eq("Other")
+      end
 
       it "assigns the requested share as @share" do
         share = Share.create! valid_attributes
@@ -147,4 +151,3 @@ RSpec.describe SharesController, type: :controller do
   end
 
 end
-

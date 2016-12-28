@@ -19,9 +19,6 @@
     "LANG": {
       "required": true
     },
-    "MAILER_URL": {
-      "required": true
-    },
     "OTP_SECRET_ENCRYPTION_KEY": {
       "required": true
     },
@@ -59,6 +56,12 @@
       "required": true
     },
     "TWILIO_PHONE_NUMBER": {
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "HEROKU_PARENT_APP_NAME": {
       "required": true
     }
   },

@@ -1,6 +1,8 @@
 class FinancialInformationController < AuthenticatedController
   helper_method :cash_sum, :investments_sum, :properties_sum,
                 :credit_cards_sum, :loans_sum, :net_worth
+
+  before_action :set_contacts, only: [:add_alternative]
   
   def index
     session[:ret_url] = financial_information_path
@@ -23,6 +25,8 @@ class FinancialInformationController < AuthenticatedController
   def properties_sum
     FinancialProperty.properties(current_user).sum(:value)
   end
+
+  def add_alternative; end
   
   def credit_cards_sum
     FinancialAccountInformation.credit_cards(current_user).sum(:value)
@@ -42,5 +46,9 @@ class FinancialInformationController < AuthenticatedController
     type = params[:type]
     render :json => FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans].include?(type) ||
                     FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
+  end
+  
+  def set_contacts
+    @contacts = Contact.for_user(current_user)
   end
 end

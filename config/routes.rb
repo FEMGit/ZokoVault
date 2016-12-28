@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   post 'mailing_list', to: 'interested_users#create'
   
   # Taxes
-  get 'taxes/:id/:year', to: 'taxes#show'
+  get 'taxes/:tax', to: 'taxes#show', as: :show_tax
   get 'taxes/new/:year', to: 'taxes#create'
 
   get 'files' => 'welcome#files'

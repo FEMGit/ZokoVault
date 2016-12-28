@@ -5,7 +5,26 @@ class TaxesController < AuthenticatedController
   before_action :set_year_documents, only: [:show]
   before_action :set_all_documents, only: [:index]
   before_action :set_contacts, only: [:new, :edit]
-
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Taxes", :taxes_path, :only => %w(show new edit)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_add_edit_crumbs, only: [:edit, :new]
+  
+  def set_details_crumbs
+    return unless @tax.taxes.any?
+    add_breadcrumb "#{@tax.year} Tax Details", show_tax_path(@tax)
+  end
+  
+  def set_add_edit_crumbs
+    if @tax && TaxesService.tax_by_year(@tax.year, resource_owner).present?
+      add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_path(@tax)
+    else
+      year = params[:year] || Date.today.strftime("%Y").to_i
+      add_breadcrumb "#{year} Taxes Setup", new_tax_path(@tax)
+    end
+  end
+  
   # GET /taxes
   # GET /taxes.json
   def index
@@ -16,7 +35,6 @@ class TaxesController < AuthenticatedController
   # GET /taxes/1
   # GET /taxes/1.json
   def show
-    
     session[:ret_url] = "#{taxes_path}/#{params[:id]}"
   end
 

@@ -76,12 +76,7 @@ RSpec.describe ContactsController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved contact as @contact" do
         post :create, {contact: invalid_attributes}, session: valid_session
-        expect(assigns(:contact)).to be_a_new(Contact)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {contact: invalid_attributes}, session: valid_session
-        expect(response).to render_template("new")
+        expect(assigns(:contact)).to be_a(Contact)
       end
     end
   end
@@ -121,12 +116,6 @@ RSpec.describe ContactsController, type: :controller do
         contact = Contact.create! valid_attributes
         put :update, {id: contact.to_param, contact: invalid_attributes}, session: valid_session
         expect(assigns(:contact)).to eq(contact)
-      end
-
-      it "re-renders the 'edit' template" do
-        contact = Contact.create! valid_attributes
-        put :update, {id: contact.to_param, contact: invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
       end
     end
   end

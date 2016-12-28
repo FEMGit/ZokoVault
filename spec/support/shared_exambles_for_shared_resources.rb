@@ -1,6 +1,7 @@
 shared_examples "shared resource" do
   let(:non_owner) { create(:user) }
   let(:non_owner_contact) do
+    non_owner.email = Faker::Internet.free_email
     create(:contact, emailaddress: non_owner.email, user: non_owner)
   end
 

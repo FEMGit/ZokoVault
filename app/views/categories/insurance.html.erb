@@ -11,7 +11,7 @@
     <div class="flex-column">
        <div class="card <%= group['value'] %> column-card section-header">
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => group['label'], :category => @category} %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_count(current_user, group['label'], @category) } %>
           <h3 class="mb-20"><%= group["label"] %></h3>
 
         <%= link_to 'Add Insurance', new_link_paths[group['value']], class: "small-button outline-button " %>
@@ -23,6 +23,7 @@
           <div class="card <%= group['value'] %> column-card">
 
             <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_specific_count(current_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
             <% vendor.policy && vendor.policy.each do |policy| %>
@@ -70,6 +71,7 @@
           <div class="card <%= group['value'] %> column-card">
 
             <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_specific_count(current_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
             <% vendor.policy && vendor.policy.each do |policy| %>
@@ -118,6 +120,7 @@
           <div class="card <%= group['value'] %> column-card">
 
             <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_specific_count(current_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
               <% vendor.policy && vendor.policy.each do |policy| %>

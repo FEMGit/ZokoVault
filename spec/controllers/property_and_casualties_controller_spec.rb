@@ -58,10 +58,11 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
     end
   end
 
-  xdescribe "GET #show" do
+  describe "GET #show" do
     it "assigns the requested property_and_casualty as @property_and_casualty" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
-      get :show, params: {id: property_and_casualty.to_param}, session: valid_session
+      post :create, { property_and_casualty: valid_attributes}, valid_session
+      property_and_casualty = assigns(:insurance_card)
+      get :show, {id: property_and_casualty.to_param}, valid_session
       expect(assigns(:property_and_casualty)).to eq(property_and_casualty)
     end
   end
@@ -75,10 +76,11 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
     end
   end
 
-  xdescribe "GET #edit" do
+  describe "GET #edit" do
     it "assigns the requested property_and_casualty as @property_and_casualty" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
-      get :edit, params: {id: property_and_casualty.to_param}, session: valid_session
+      post :create, { property_and_casualty: valid_attributes}, valid_session
+      property_and_casualty = assigns(:insurance_card)
+      get :edit, {id: property_and_casualty.to_param}, valid_session
       expect(assigns(:property_and_casualty)).to eq(property_and_casualty)
     end
   end
@@ -91,11 +93,6 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
         expect {
           post :create, { property_and_casualty: valid_attributes }, session: valid_session
         }.to change(PropertyAndCasualty, :count).by(1)
-      end
-      
-      it "shows correct flash message on create" do
-        post :create, { property_and_casualty: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
       end
 
       it "assigns a newly created property_and_casualty as @property_and_casualty" do
@@ -134,71 +131,83 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
     end
   end
 
-  xdescribe "PUT #update" do
+  describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_name) { Faker::Company.name }
+      let(:new_valid_attributes) { valid_attributes.merge({ name: new_name }) }
 
       it "updates the requested property_and_casualty" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: new_attributes}, session: valid_session
+        post :create, { property_and_casualty: valid_attributes}, valid_session
+        property_and_casualty = assigns(:insurance_card)
+        put :update, {
+          id: property_and_casualty.to_param, property_and_casualty: new_valid_attributes
+        }, valid_session
         property_and_casualty.reload
-        skip("Add assertions for updated state")
-      end
-      
-      it "shows correct flash message on update" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
+        expect(property_and_casualty.name).to eq(new_name)
       end
 
       it "assigns the requested property_and_casualty as @property_and_casualty" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: valid_attributes}, session: valid_session
+        post :create, { property_and_casualty: valid_attributes}, valid_session
+        property_and_casualty = assigns(:insurance_card)
+        put :update, {
+          id: property_and_casualty.to_param, property_and_casualty: new_valid_attributes
+        }, valid_session
         expect(assigns(:property_and_casualty)).to eq(property_and_casualty)
       end
 
       it "redirects to the property_and_casualty" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(property_and_casualty)
+        post :create, { property_and_casualty: valid_attributes}, valid_session
+        property_and_casualty = assigns(:insurance_card)
+        put :update, {
+          id: property_and_casualty.to_param, property_and_casualty: new_valid_attributes
+        }, valid_session
+        expect(response).to redirect_to(:property)
       end
     end
 
     context "with invalid params" do
+      let(:new_invalid_attributes) { valid_attributes.merge({ name: "" }) }
+
       it "assigns the property_and_casualty as @property_and_casualty" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: invalid_attributes}, session: valid_session
+        post :create, { property_and_casualty: valid_attributes}, valid_session
+        property_and_casualty = assigns(:insurance_card)
+        put :update, {
+          id: property_and_casualty.to_param, property_and_casualty: new_invalid_attributes
+        }, valid_session
         expect(assigns(:property_and_casualty)).to eq(property_and_casualty)
       end
 
       it "re-renders the 'edit' template" do
-        property_and_casualty = PropertyAndCasualty.create! valid_attributes
-        put :update, params: {id: property_and_casualty.to_param, property_and_casualty: invalid_attributes}, session: valid_session
+        post :create, { property_and_casualty: valid_attributes}, valid_session
+        property_and_casualty = assigns(:insurance_card)
+        put :update, {
+          id: property_and_casualty.to_param, property_and_casualty: new_invalid_attributes
+        }, valid_session
         expect(response).to render_template("edit")
       end
     end
   end
 
-  xdescribe "DELETE #destroy" do
-    it "destroys the requested property_and_casualty" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
+  describe "DELETE #destroy" do
+    before :each do
+      request.env["HTTP_REFERER"] = "show"
+    end
+
+    it "destroys the requested property_and_casualty_policy" do
+      post :create, { property_and_casualty: valid_attributes}, valid_session
+      property_and_casualty = assigns(:insurance_card)
+      policy = property_and_casualty.policy.first
       expect {
-        delete :destroy, params: {id: property_and_casualty.to_param}, session: valid_session
-      }.to change(PropertyAndCasualty, :count).by(-1)
+        delete :destroy, {id: policy.to_param}, valid_session
+      }.to change(PropertyAndCasualtyPolicy, :count).by(-1)
     end
 
     it "redirects to the property_and_casualties list" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
-      delete :destroy, params: {id: property_and_casualty.to_param}, session: valid_session
-      expect(response).to redirect_to(property_and_casualties_url)
-    end
-    
-    it "shows correct flash message on destroy" do
-      property_and_casualty = PropertyAndCasualty.create! valid_attributes
-      delete :destroy, params: {id: property_and_casualty.to_param}, session: valid_session
-      expect(flash[:notice]).to be_present
+      post :create, { property_and_casualty: valid_attributes}, valid_session
+      property_and_casualty = assigns(:insurance_card)
+      policy = property_and_casualty.policy.first
+      delete :destroy, {id: policy.to_param}, valid_session
+      expect(response).to redirect_to("show")
     end
   end
 end

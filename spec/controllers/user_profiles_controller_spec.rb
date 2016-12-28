@@ -11,7 +11,7 @@ RSpec.describe UserProfilesController, type: :controller do
   end
 
   let(:invalid_attributes) do
-    skip("Add a hash of attributes invalid for your model")
+    valid_attributes.merge({date_of_birth: ""})
   end
 
   before { sign_in user }
@@ -50,11 +50,6 @@ RSpec.describe UserProfilesController, type: :controller do
         expect { post :create, {user_profile: valid_attributes}, session: valid_session }
           .to change(UserProfile, :count).by(1)
       end
-      
-      it "shows correct flash message on create" do
-        post :create, {user_profile: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
-      end
 
       it "assigns a newly created user_profile as @user_profile" do
         post :create, {user_profile: valid_attributes}, session: valid_session
@@ -82,42 +77,32 @@ RSpec.describe UserProfilesController, type: :controller do
   end
 
   describe "PUT #update" do
-    context "with valid params" do
-      let(:user_profile) do
-        UserProfile.create! valid_attributes.merge(user: user)
-      end
+    let(:user_profile) do
+      UserProfile.create! valid_attributes.merge(user: user)
+    end
 
-      let(:new_attributes) do
-        skip("Add a hash of attributes valid for your model")
-      end
+    context "with valid params" do
+      let(:new_state) { Faker::Address.state }
+      let(:new_attributes) { valid_attributes.merge(state: new_state) }
 
       it "updates the requested user_profile" do
         put :update, {id: user_profile.to_param, user_profile: new_attributes}, session: valid_session
         user_profile.reload
-        skip("Add assertions for updated state")
-      end
-      
-      it "shows correct flash message on update" do
-        put :update, {id: user_profile.to_param, user_profile: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
+        expect(user_profile.state).to eq(new_state)
       end
 
       it "assigns the requested user_profile as @user_profile" do
-        put :update, {id: user_profile.to_param, user_profile: valid_attributes}, session: valid_session
+        put :update, {id: user_profile.to_param, user_profile: new_attributes}, session: valid_session
         expect(assigns(:user_profile)).to eq(user_profile)
       end
 
       it "redirects to the user_profile" do
-        put :update, {id: user_profile.to_param, user_profile: valid_attributes}, session: valid_session
+        put :update, {id: user_profile.to_param, user_profile: new_attributes}, session: valid_session
         expect(response).to redirect_to(user_profile_path)
       end
     end
 
     context "with invalid params" do
-      let(:user_profile) do
-        UserProfile.create! valid_attributes.merge(user: user)
-      end
-
       it "assigns the user_profile as @user_profile" do
         put :update, {id: user_profile.to_param, user_profile: invalid_attributes}, session: valid_session
         expect(assigns(:user_profile)).to eq(user_profile)
@@ -130,7 +115,7 @@ RSpec.describe UserProfilesController, type: :controller do
     end
   end
 
-  xdescribe "DELETE #destroy" do
+  describe "DELETE #destroy" do
     it "destroys the requested user_profile" do
       user_profile = UserProfile.create! valid_attributes
       expect { delete :destroy, {id: user_profile.to_param}, session: valid_session }
@@ -141,12 +126,6 @@ RSpec.describe UserProfilesController, type: :controller do
       user_profile = UserProfile.create! valid_attributes
       delete :destroy, {id: user_profile.to_param}, session: valid_session
       expect(response).to redirect_to(user_profile_url)
-    end
-    
-    it "shows correct flash message on destroy" do
-      user_profile = UserProfile.create! valid_attributes
-      delete :destroy, {id: user_profile.to_param}, session: valid_session
-      expect(flash[:notice]).to be_present
     end
   end
 end

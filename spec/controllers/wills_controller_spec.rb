@@ -27,19 +27,17 @@ RSpec.describe WillsController, type: :controller do
 
   let(:valid_session) { {} }
 
-  xdescribe "GET #index" do
-    it "assigns all vault_entries as @vault_entries" do
-      vault_entry = Will.create! valid_attributes
+  describe "GET #index" do
+    it "assigns all wills as @wills" do
+      will = Will.create! valid_attributes
       get :index, {}, session: valid_session
-      expect(assigns(:vault_entries)).to eq([vault_entry])
+      expect(assigns(:wills)).to eq([will])
     end
   end
 
-  xdescribe "GET #show" do
-    it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = Will.create! valid_attributes
-      get :show, { id: vault_entry.to_param }, session: valid_session
-      expect(assigns(:vault_entry)).to eq(vault_entry)
+  describe "GET #show" do
+    it "assigns the requested will as @will" do
+      skip("No template for this controller action")
     end
   end
 
@@ -50,11 +48,9 @@ RSpec.describe WillsController, type: :controller do
     end
   end
 
-  xdescribe "GET #edit" do
-    it "assigns the requested vault_entry as @vault_entry" do
-      vault_entry = Will.create! valid_attributes
-      get :edit, { id: vault_entry.to_param }, session: valid_session
-      expect(assigns(:vault_entry)).to eq(vault_entry)
+  describe "GET #edit" do
+    it "assigns the requested will as @will" do
+      skip("No template for this controller action")
     end
   end
 
@@ -67,14 +63,9 @@ RSpec.describe WillsController, type: :controller do
     end
 
     context "with valid params" do
-      it "creates a new Will" do 
+      it "creates a new Will" do
         expect { post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session }
           .to change(Will, :count).by(1)
-      end
-      
-      it "shows correct flash message on create" do
-        post :create, {vault_entry_0: valid_attributes.merge(:id => "")}, session: valid_session
-        expect(flash[:success]).to be_present
       end
 
       context "with attributes" do
@@ -102,7 +93,7 @@ RSpec.describe WillsController, type: :controller do
         it "assigns agents" do
           expect(vault_entry.agents.first).to eq contacts[0]
         end
-        
+
         it "assigns document" do
           expect(vault_entry.document).to eq document
         end
@@ -151,12 +142,6 @@ RSpec.describe WillsController, type: :controller do
         vault_entry.reload
         skip("Add assertions for updated state")
       end
-      
-      it "shows correct flash message on update" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: valid_attributes }, session: valid_session
-        expect(flash[:success]).to be_present
-      end
 
       it "assigns the requested vault_entry as @vault_entry" do
         vault_entry = Will.create! valid_attributes
@@ -186,7 +171,11 @@ RSpec.describe WillsController, type: :controller do
     end
   end
 
-  xdescribe "DELETE #destroy" do
+  describe "DELETE #destroy" do
+    before :each do
+        request.env["HTTP_REFERER"] = "/wills"
+    end
+
     it "destroys the requested vault_entry" do
       vault_entry = Will.create! valid_attributes
       expect { delete :destroy, { id: vault_entry.to_param }, session: valid_session }
@@ -196,13 +185,7 @@ RSpec.describe WillsController, type: :controller do
     it "redirects to the vault_entries list" do
       vault_entry = Will.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
-      expect(response).to redirect_to(vault_entries_url)
-    end
-    
-    it "shows correct flash message on destroy" do
-      vault_entry = Will.create! valid_attributes
-      delete :destroy, { id: vault_entry.to_param }, session: valid_session
-      expect(flash[:notice]).to be_present
+      expect(response).to redirect_to(wills_path)
     end
   end
 

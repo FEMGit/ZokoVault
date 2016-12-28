@@ -57,11 +57,12 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
     end
   end
 
-  xdescribe "GET #show" do
-    it "assigns the requested life as @life" do
-      life = LifeAndDisability.create! valid_attributes
-      get :show, params: {id: life.to_param}, session: valid_session
-      expect(assigns(:life)).to eq(life)
+  describe "GET #show" do
+    it "assigns the requested life_and_disability as @insurance_card" do
+      post :create, { life_and_disability: valid_attributes }, session: valid_session
+      life = assigns(:insurance_card)
+      get :show, {id: life.to_param}, valid_session
+      expect(assigns(:insurance_card)).to eq(life)
     end
   end
 
@@ -74,11 +75,12 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
     end
   end
 
-  xdescribe "GET #edit" do
-    it "assigns the requested life as @life" do
-      life = LifeAndDisability.create! valid_attributes
-      get :edit, params: {id: life.to_param}, session: valid_session
-      expect(assigns(:life)).to eq(life)
+  describe "GET #edit" do
+    it "assigns the requested life as @life_and_disability" do
+      post :create, { life_and_disability: valid_attributes }, session: valid_session
+      life = assigns(:insurance_card)
+      get :edit, { id: life.to_param }, valid_session
+      expect(assigns(:insurance_card)).to eq(life)
     end
   end
 
@@ -90,11 +92,6 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
         expect {
           post :create, { life_and_disability: valid_attributes}, session: valid_session
         }.to change(LifeAndDisability, :count).by(1)
-      end
-      
-      it "shows correct flash message on create" do
-        post :create, { life_and_disability: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
       end
 
       it "assigns a newly created life as @life_and_disability" do
@@ -133,71 +130,82 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
     end
   end
 
-  xdescribe "PUT #update" do
+  describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-      
-      it "updates the requested life" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: new_attributes}, session: valid_session
-        life.reload
-        skip("Add assertions for updated state")
+      let(:new_name) { Faker::Company.name }
+      let(:new_policy_attributes) do
+        policy_attributes.merge({ coverage_amount: Faker::Commerce.price })
       end
-      
-      it "shows correct flash message on update" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: valid_attributes}, session: valid_session
-        expect(flash[:success]).to be_present
+      let(:new_attributes) {
+        valid_attributes.merge({
+          name: new_name,
+          policy_attributes: new_policy_attributes })
+      }
+
+      it "updates the requested life" do
+        post :create, { life_and_disability: valid_attributes}, valid_session
+        life = assigns(:insurance_card)
+        put :update, {id: life.to_param, life_and_disability: new_attributes}, valid_session
+        life = assigns(:insurance_card)
+
+        new_attributes.except(:policy_attributes).each do |attribute, value|
+          expect(life.send(attribute)).to eq(value)
+        end
       end
 
-      it "assigns the requested life as @life" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: valid_attributes}, session: valid_session
-        expect(assigns(:life)).to eq(life)
+      it "assigns the requested life as @insurance_card" do
+        post :create, { life_and_disability: valid_attributes}, valid_session
+        life = assigns(:insurance_card)
+        put :update, {id: life.to_param, life_and_disability: valid_attributes}, valid_session
+        expect(assigns(:insurance_card)).to eq(life)
       end
 
       it "redirects to the life" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(life)
+        post :create, { life_and_disability: valid_attributes}, valid_session
+        life = assigns(:insurance_card)
+        put :update, {id: life.to_param, life_and_disability: valid_attributes}, valid_session
+        expect(response).to redirect_to(life_path)
       end
     end
 
     context "with invalid params" do
-      it "assigns the life as @life" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: invalid_attributes}, session: valid_session
-        expect(assigns(:life)).to eq(life)
+      let(:invalid_name) { "" }
+      let(:invalid_attributes) { valid_attributes.merge({ name: invalid_name }) }
+
+      it "assigns the requested life as @insurance_card" do
+        post :create, { life_and_disability: valid_attributes}, valid_session
+        life = assigns(:insurance_card)
+        put :update, {id: life.to_param, life_and_disability: invalid_attributes}, valid_session
+        expect(assigns(:insurance_card)).to eq(life)
       end
 
       it "re-renders the 'edit' template" do
-        life = LifeAndDisability.create! valid_attributes
-        put :update, params: {id: life.to_param, life: invalid_attributes}, session: valid_session
+        post :create, { life_and_disability: valid_attributes}, valid_session
+        life = assigns(:insurance_card)
+        put :update, {id: life.to_param, life_and_disability: invalid_attributes}, valid_session
         expect(response).to render_template("edit")
       end
     end
   end
 
-  xdescribe "DELETE #destroy" do
-    it "destroys the requested life" do
-      life = LifeAndDisability.create! valid_attributes
+  describe "DELETE #destroy" do
+    before :each do
+      request.env["HTTP_REFERER"] = "show"
+    end
+
+    it "destroys the requested life_and_disability_policy" do
+      post :create, { life_and_disability: valid_attributes}, valid_session
+      policy = assigns(:insurance_card).policy.first
       expect {
-        delete :destroy, params: {id: life.to_param}, session: valid_session
-      }.to change(Life, :count).by(-1)
+        delete :destroy, {id: policy.to_param}, valid_session
+      }.to change(LifeAndDisabilityPolicy, :count).by(-1)
     end
 
     it "redirects to the lives list" do
-      life = LifeAndDisability.create! valid_attributes
-      delete :destroy, params: {id: life.to_param}, session: valid_session
-      expect(response).to redirect_to(lives_url)
-    end
-    
-    it "shows correct flash message on destroy" do
-      life = LifeAndDisability.create! valid_attributes
-      delete :destroy, params: {id: life.to_param}, session: valid_session
-      expect(flash[:notice]).to be_present
+      post :create, { life_and_disability: valid_attributes}, valid_session
+      policy = assigns(:insurance_card).policy.first
+      delete :destroy, {id: policy.to_param}, valid_session
+      expect(response).to redirect_to("show")
     end
   end
 

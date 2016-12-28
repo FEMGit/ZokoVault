@@ -106,15 +106,14 @@ RSpec.describe VendorsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_name) { Faker::Name.name }
+      let(:new_attributes) { valid_attributes.merge({ name: new_name }) }
 
       it "updates the requested vendor" do
         vendor = Vendor.create! valid_attributes
         put :update, {id: vendor.to_param, vendor: new_attributes}, session: valid_session
         vendor.reload
-        skip("Add assertions for updated state")
+        expect(vendor.name).to eq(new_name)
       end
 
       it "assigns the requested vendor as @vendor" do

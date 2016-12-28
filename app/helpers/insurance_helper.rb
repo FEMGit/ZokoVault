@@ -15,7 +15,7 @@ module InsuranceHelper
   
   def health_policy_present?(policy)
     policy.policy_number.present? || policy.insured_members.present? ||
-      policy.broker_or_primary_contact.present? || policy.notes.present?
+      policy.broker_or_primary_contact.present? || policy.notes.present? || policy.group_id.present?
   end
   
   def property_policy_present?(policy)

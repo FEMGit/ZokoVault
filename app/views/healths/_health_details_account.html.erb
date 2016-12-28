@@ -12,6 +12,16 @@
       <label>Policy Number</label>
       <p><%= policy.policy_number %></p>
     <% end %>
+    
+    <% if policy.group_id.present? %>
+      <label>Group ID</label>
+      <p><%= policy.group_id %></p>
+    <% end %>
+    
+    <% if policy.group_number.present? %>
+      <label>Group Number</label>
+      <p><%= policy.group_number %></p>
+    <% end %>
 
     <% if policy.insured_members.present? %>
       <label>Insured Members</label>

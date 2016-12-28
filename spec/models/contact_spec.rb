@@ -9,7 +9,6 @@ RSpec.describe Contact, type: :model do
     end
 
     it "returns the user associated with the contact email address" do
-
       expect(contact.canonical_user).to eq(user)
     end
   end

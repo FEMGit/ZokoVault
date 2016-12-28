@@ -1,0 +1,89 @@
+<h1>Financial Info - Add Other Investment or Debt</h1>
+
+<%= form_for @financial_investment, url: url_for(action: yield(:action), controller: :financial_investment) do |f| %>
+<div class="card mb-30">
+  <% if @financial_investment.errors.any? %>
+    <% errors = true %>
+  <% end %>
+  
+  <h3 class="card-label">Property</h3>
+  
+  <%= f.label :name, 'Investment or Debt Name' %><span class="required">Required</span>
+  <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @financial_investment.errors.messages[:name] } %>
+  <%= f.text_field :name, { class: ("input-error" if @financial_investment.errors.messages[:name].present?) } %>
+  
+  <%= f.label :investment_type, 'Type' %>
+  <div class="styled-select">
+    <%= f.select :investment_type, FinancialInvestment::investment_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_investment_investment_type'), 
+  $('#financial_investment_value'))" %>
+  </div>
+  
+  <%= f.label :owner_id, 'Owner' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :owner_id, @contacts, multiple: false) %>
+  </div>
+  
+  <%= f.label :value, 'Value' %>
+  <%= f.text_field :value, maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} },
+  :value => f.object && number_to_currency(f.object.value, precision: 0, unit: "$") %>
+  
+  <%= f.label :web_address, 'Web Address' %>
+  <%= f.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %>
+  
+  <%= f.label :phone_number, 'Phone Number' %>
+  <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
+  
+  <%= f.label :address, 'Address' %>
+  <%= f.text_field :address %>
+    
+  <%= f.label :city %>
+  <%= f.text_field :city %>
+  
+  <span class="state-input">
+    <label>State</label>
+    <div class="styled-select">
+      <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
+    </div>
+  </span>
+  <span class="zip-input">
+    <%= f.label :zip, 'Zip Code' %>
+    <%= zip_code_form(f, :zip) %>
+  </span>
+  
+  <%= f.label :primary_contact_id, 'Primary Contact' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
+  </div>
+  
+  <%= f.label :notes, 'Notes' %>
+  <%= f.text_area :notes %>
+  
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
+    </div>
+  </section>
+  
+  <% if params[:id] %>
+    <%= link_to 'Delete this Investment', delete_investment_url(params[:id]), method: :delete,
+      data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },
+      class: 'button small-button secondary-button', id: 'delete-insurance' %>
+  <% end %>
+</div>
+
+<%= f.submit 'Save', class: "button primary-button big-button" %>
+<%= link_to 'Cancel', :back || financial_information_path, class: "button secondary-button big-button"%>
+
+<% end %>
+
+<script>
+  updateValues($('#financial_investment_investment_type'), 
+    $('#financial_investment_value'));
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

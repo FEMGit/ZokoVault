@@ -104,6 +104,76 @@ ActiveRecord::Schema.define(version: 20161227085952) do
     t.datetime "updated_at",         null: false
   end
 
+  create_table "financial_account_informations", force: :cascade do |t|
+    t.integer  "account_type"
+    t.integer  "owner_id"
+    t.decimal  "value"
+    t.string   "number"
+    t.integer  "primary_contact_broker_id"
+    t.string   "notes"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "user_id"
+    t.integer  "account_provider_id"
+  end
+
+  add_index "financial_account_informations", ["user_id"], name: "index_financial_account_informations_on_user_id", using: :btree
+
+  create_table "financial_account_providers", force: :cascade do |t|
+    t.string   "name"
+    t.string   "web_address"
+    t.string   "street_address"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zip"
+    t.string   "phone_number"
+    t.string   "fax_number"
+    t.integer  "primary_contact_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "user_id"
+  end
+
+  add_index "financial_account_providers", ["user_id"], name: "index_financial_account_providers_on_user_id", using: :btree
+
+  create_table "financial_investments", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "investment_type"
+    t.integer  "owner_id"
+    t.decimal  "value"
+    t.string   "web_address"
+    t.string   "phone_number"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zip"
+    t.integer  "primary_contact_id"
+    t.string   "notes"
+    t.integer  "user_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "financial_investments", ["user_id"], name: "index_financial_investments_on_user_id", using: :btree
+
+  create_table "financial_properties", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "property_type"
+    t.integer  "owner_id"
+    t.decimal  "value"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zip"
+    t.integer  "primary_contact_id"
+    t.string   "notes"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "user_id"
+  end
+
+  add_index "financial_properties", ["user_id"], name: "index_financial_properties_on_user_id", using: :btree
+
   create_table "folders", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "parent_id"
@@ -317,7 +387,6 @@ ActiveRecord::Schema.define(version: 20161227085952) do
     t.string   "notes"
     t.string   "two_factor_phone_number"
     t.boolean  "phone_authentication_skip"
-    t.integer  "full_primary_share_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -430,6 +499,7 @@ ActiveRecord::Schema.define(version: 20161227085952) do
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "final_wish_infos", "users"
+  add_foreign_key "financial_investments", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"

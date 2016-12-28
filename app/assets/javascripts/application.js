@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require highcharts
+//= require highcharts/modules/exporting
 //= require maskedinput
 //= require dataTables/jquery.dataTables
 //= require turbolinks

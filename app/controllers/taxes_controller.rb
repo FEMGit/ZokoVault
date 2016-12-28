@@ -16,6 +16,7 @@ class TaxesController < AuthenticatedController
   # GET /taxes/1
   # GET /taxes/1.json
   def show
+    
     session[:ret_url] = "#{taxes_path}/#{params[:id]}"
   end
 

@@ -1,0 +1,132 @@
+<h1>Financial Info - Add Account</h1>
+
+<%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_account) do |f| %>
+<div class="card mb-30">
+  <h3 class="card-label">Account Provider Details</h3>
+  
+  <%= f.label :name, 'Provider Name' %>
+  <%= render partial: 'layouts/error_message', locals: { errors: @financial_provider.errors, error: @financial_provider.errors.messages[:name] } %>
+  <%= f.text_field :name, { class: ("input-error" if @financial_provider.errors.messages[:name].present?) } %>
+
+  <%= f.label :web_address, 'Web Address' %>
+  <%= f.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %>
+  
+  <%= f.label :street_address, 'Street Address' %>
+  <%= f.text_field :street_address %>
+    
+  <%= f.label :city %>
+  <%= f.text_field :city %>
+  
+  <span class="state-input">
+    <label>State</label>
+    <div class="styled-select">
+      <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
+    </div>
+  </span>
+  <span class="zip-input">
+    <%= f.label :zip, 'Zip Code' %>
+    <%= zip_code_form(f, :zip) %>
+  </span>
+  
+  <%= f.label :phone_number, 'Phone Number' %>
+  <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
+  
+  <%= f.label :fax_number %>
+  <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
+  
+  <%= f.label :primary_contact_id, 'Primary Contact' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
+  </div>
+  
+  
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
+    </div>
+  </section>
+  
+  <% if params[:id] %>
+    <%= link_to 'Delete this Provider', delete_provider_url(params[:id]), method: :delete,
+      data: { confirm: "Deleting this provider will permanently remove it from ZokuVault." },
+      class: 'button small-button secondary-button', id: 'delete-insurance' %>
+  <% end %>
+</div>
+
+  <% @financial_provider.accounts.each_with_index do |data, index| %>
+
+    <div class="card cg-3 mb-30 add-another">
+
+      <%= f.fields_for "account_#{index}", data do |ff| %>
+        <%= render 'account_details_form', ff: ff, index: index, data: data %>
+      <% end %>
+
+      <% if data.id %>
+        <span class="mt-30 mb-30">
+          <%= link_to 'Delete this account', delete_account_url(data.id), method: :delete,
+              data: { confirm: "Deleting this account will permanently remove it from ZokuVault." },
+              class: 'button small-button secondary-button', id: 'delete-account' %>
+        </span>
+      <% end %>
+
+    </div>
+  <% end %>
+  
+  <% if @financial_provider.accounts.empty? %>
+    <% index = 0 %>
+    <div class="card cg-3 mb-30 add-another">
+      <%= f.fields_for "account_#{index}" do |ff| %>
+        <%= render 'account_details_form', ff: ff, index: index %>
+      <% end %>
+    </div>
+  <% end %>
+
+<div class="add-new-button" href="" onclick="javascript:cloneForm(0)">
+  <svg class="icon add-icon">
+    <use xlink:href="#icon-add-1"></use>
+  </svg>
+  Add another Account<br>
+</div>
+
+<%= f.submit 'Save', class: "button primary-button big-button" %>
+<%= link_to 'Cancel', :back || financial_information_path, class: "button secondary-button big-button"%>
+
+<% end %>
+<script>
+  $(document).ready(function(){
+    clearFormFields = function(form){
+      form.find(':text').val("");
+      form.find('textarea').val("");
+      form.find(':checked').prop('checked', false);
+    }
+
+    cloneForm = function() {
+      var $form = $('div[class^="card cg-3 mb-30"]:last');
+      old_id_number = parseInt($form.find("input[type=hidden]").attr("id").split('_').last());
+      new_id_number = old_id_number + 1;
+      var $newForm = $form.clone();
+      clearForm($newForm, old_id_number, new_id_number);
+      clearFormFields($newForm);
+      $('.chosen-container',$newForm).remove();
+      $newForm.find("#delete-account").remove()
+      $newForm.insertAfter('.card.mb-30:last');
+      $('.chosen-select').chosen({allow_single_deselect: true});
+      $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+      $(document).trigger('refresh_autonumeric')
+    }
+
+    var accountCount = <%= @financial_provider.accounts.count %>
+    for(var i = 0; i < accountCount; i++ ) {
+      updateValues($('#financial_account_provider_account_' + i + '_account_type'), 
+        $('#account_value_' + i));
+    }
+  });
+
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

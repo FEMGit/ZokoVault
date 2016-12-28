@@ -8,8 +8,7 @@ class Contact < ActiveRecord::Base
   has_many :shares, dependent: :destroy
   belongs_to :user_profile
 
-  validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress],
-    allow_blank: true, message: "Email Address already taken"
+  validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
   
   RELATIONSHIP_TYPES = {
     personal: [

@@ -6,6 +6,7 @@ module CategoryDropdownOptions
     "Wills - Trusts - Legal",
     "Insurance",
     "Taxes",
-    "Final Wishes"
+    "Final Wishes",
+    "Financial Information"
   ]
 end

@@ -18,21 +18,20 @@ var saveFileUrl = function(option) {
       $('#text-avatar' + option).hide();
       $('.remove-button' + option).show();
       filepicker.convert(
-        pickedBlob, {
+        pickedBlob,
+        {
           width: 60,
           height: 60
         },
-        function(convertedBlob) {
+        function(convertedBlob){
           setViewParameters(convertedBlob.key, option)
           filepicker.store(
             convertedBlob,
             {
               location: "S3",
               storeContainer: "zoku-stage"
-            },
-          )
-        }
-      )
+            });
+        });
     });
 };
 

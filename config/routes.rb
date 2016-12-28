@@ -119,6 +119,9 @@ Rails.application.routes.draw do
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
+  
+  # Financial alternative
+  get 'financial_information/add_alternative', to: 'financial_information#add_alternative', as: :add_alternative
 
   # Financial Account
   get 'financial_information/account/new', to: 'financial_account#new', as: :add_account

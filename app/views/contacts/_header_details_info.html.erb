@@ -1,34 +1,44 @@
 <div class="contact-header-info">
   <%= link_to content_tag(:a), edit_contact_path(@contact), class: "whole-card-link" %>
   
-    <label>Email</label>
-    <p><%= mail_to @contact.emailaddress, @contact.emailaddress, class: "no-underline-link" %></p>
+    <% if @contact.emailaddress.present? %>
+      <label>Email</label>
+      <p><%= mail_to @contact.emailaddress, @contact.emailaddress, class: "no-underline-link" %></p>
+    <% end %>
 
-    <label>Phone</label>
-    <p><%= @contact.phone %></p>
+    <% if @contact.phone.present? %>
+      <label>Phone</label>
+      <p><%= @contact.phone %></p>
+    <% end %>
 
     <% if @contact.personal_relationship? %>
-      <label>Address</label>
-      <p>
-        <%= @contact.address %><br>
-        <%= @contact.city%>,
-        <%= @contact.state%>
-        <%= @contact.zipcode%>
-      </p>
+      <% if show_street_contact?(@contact) %>
+        <label>Address</label>
+        <p>
+          <%= @contact.address %><br>
+          <%= @contact.city%>,
+          <%= @contact.state%>
+          <%= @contact.zipcode%>
+        </p>
+      <% end %>
     <% end %>
 
     <% if @contact.professional_relationship? || @contact.medical_relationship?  %>
-      <label>Business Address</label>
-      <p>
-        <%= @contact.business_street_address_1 %><br>
-        <%= @contact.city%>,
-        <%= @contact.state%>
-        <%= @contact.zipcode%>
-      </p>
+      <% if show_street_contact_business?(@contact) %>
+        <label>Business Address</label>
+        <p>
+          <%= @contact.business_street_address_1 %><br>
+          <%= @contact.city%>,
+          <%= @contact.state%>
+          <%= @contact.zipcode%>
+        </p>
+      <% end %>
     <% end %>
   
-    <label>Contact Type</label>
-    <p><%= @contact.contact_type %></p>
+    <% if @contact.contact_type.present? %>
+      <label>Contact Type</label>
+      <p><%= @contact.contact_type %></p>
+    <% end %>
 
     <% if @contact.relationship.present? %>
       <label>Relationship</label>
@@ -62,13 +72,19 @@
         <p><%= @contact.businessphone %></p>
       <% end %>
 
-      <label>Business Phone</label>
-      <p><%= @contact.businessphone %></p>
+      <% if @contact.businessphone.present? %>
+        <label>Business Phone</label>
+        <p><%= @contact.businessphone %></p>
+      <% end %>
 
-      <label>Business Fax</label>
-      <p><%= @contact.businessfax %></p>
+      <% if @contact.businessfax.present? %>
+        <label>Business Fax</label>
+        <p><%= @contact.businessfax %></p>
+      <% end %>
     <% end %>
 
-    <label>Notes</label>
-    <p><%= @contact.notes %></p>
+    <% if @contact.notes.present? %>
+      <label>Notes</label>
+      <p><%= @contact.notes %></p>
+    <% end %>
 </div>

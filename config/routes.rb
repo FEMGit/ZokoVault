@@ -123,6 +123,7 @@ Rails.application.routes.draw do
   
   # Financial alternative
   get 'financial_information/add_alternative', to: 'financial_information#add_alternative', as: :add_alternative
+  get 'financial_information/alternative_details' => 'financial_information#alternative_details', as: 'alternative_details'
 
   # Financial Account
   get 'financial_information/account/new', to: 'financial_account#new', as: :add_account

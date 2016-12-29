@@ -1,4 +1,4 @@
-class WillPolicy < BasicPolicy
+class WillPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

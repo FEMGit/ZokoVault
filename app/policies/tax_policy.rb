@@ -1,4 +1,4 @@
-class TaxPolicy < BasicPolicy
+class TaxPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

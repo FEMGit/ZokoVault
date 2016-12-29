@@ -6,6 +6,7 @@ class PowerOfAttorney < ActiveRecord::Base
   has_many :vault_entry_contacts, as: :contactable, dependent: :destroy
   has_many :shares, as: :shareable, dependent: :destroy
 
+  belongs_to :category
   belongs_to :document
   belongs_to :user
 
@@ -18,4 +19,6 @@ class PowerOfAttorney < ActiveRecord::Base
   has_many :share_with_contacts, 
     through: :shares,
     source: :contact
+
+  before_save { self.category = Category.fetch("wills - trusts - legal") }
 end

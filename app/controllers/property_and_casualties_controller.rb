@@ -29,7 +29,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   def show
     @insurance_card = @property_and_casualty
     @group_label = "Property & Casualty"
-    @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
+    @group_documents = DocumentService.new(:category => @insurance_card.category.try(:name)).get_insurance_documents(resource_owner, @group_label, params[:id])
     authorize @property_and_casualty
   end
 

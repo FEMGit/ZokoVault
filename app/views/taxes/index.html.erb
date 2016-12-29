@@ -17,6 +17,30 @@
 <h3>Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.TaxCategory.downcase) %>'>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+</a>
+<h3>Shared With</h3>
+
+<div class="card mb-30 my_profile_info">
+  <h3 class="card-label">Category Shared With</h3>
+
+  <label>SHARED WITH</label>
+
+  <% if @contacts_with_access.blank? %>
+    <p>No shared access</p>
+  <% else %>
+    <% @contacts_with_access.each do |contact| %>
+      <p><%= contact.initials %> </p>
+    <% end %>
+  <% end %>
+</div>
+
 <%= javascript_include_tag 'flex_boxes' %>
 <script>
 var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;

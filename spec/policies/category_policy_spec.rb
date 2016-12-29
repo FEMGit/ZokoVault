@@ -1,8 +1,17 @@
 describe CategoryPolicy do
   subject { described_class }
 
-  let(:owner) { create(:user) }
-  let(:resource) { create(:category, user: owner) }
+  let(:admin) { create(:user, email: "admin@zokuvault.com") }
+  let(:nonadmin) { create(:user, email: "nonadmin@nokuvault.com") }
+  let(:category) { create(:category) }
 
-  it_behaves_like "shared resource"
+  permissions :index?, :destroy?, :new?, :create?, :update?, :edit?, :update?, :show? do
+    it "permits access if user is admin" do
+      expect(subject).to permit(admin, category)
+    end
+
+    it "denies access if user not admin" do
+      expect(subject).not_to permit(nonadmin, category)
+    end
+  end
 end

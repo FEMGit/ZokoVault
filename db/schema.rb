@@ -11,11 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161230064506) do
+ActiveRecord::Schema.define(version: 20170101202122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "contacts", force: :cascade do |t|
     t.string   "firstname"
@@ -106,7 +113,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.string   "group"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "category_id"
   end
+
+  add_index "final_wishes", ["category_id"], name: "index_final_wishes_on_category_id", using: :btree
 
   create_table "financial_account_informations", force: :cascade do |t|
     t.integer  "account_type"
@@ -289,7 +299,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.string   "notes"
+    t.integer  "category_id"
   end
+
+  add_index "power_of_attorneys", ["category_id"], name: "index_power_of_attorneys_on_category_id", using: :btree
 
   create_table "property_and_casualty_policies", force: :cascade do |t|
     t.integer  "policy_type"
@@ -340,7 +353,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.integer  "tax_year_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "category_id"
   end
+
+  add_index "taxes", ["category_id"], name: "index_taxes_on_category_id", using: :btree
 
   create_table "trusts", force: :cascade do |t|
     t.integer  "document_id"
@@ -350,7 +366,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "notes"
+    t.integer  "category_id"
   end
+
+  add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string  "name"
@@ -486,7 +505,6 @@ ActiveRecord::Schema.define(version: 20161230064506) do
   add_index "vendor_accounts", ["vendor_id"], name: "index_vendor_accounts_on_vendor_id", using: :btree
 
   create_table "vendors", force: :cascade do |t|
-    t.string   "category"
     t.string   "group"
     t.string   "name"
     t.string   "webaddress"
@@ -502,8 +520,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.string   "state"
     t.string   "zip"
     t.string   "type"
+    t.integer  "category_id"
   end
 
+  add_index "vendors", ["category_id"], name: "index_vendors_on_category_id", using: :btree
   add_index "vendors", ["contact_id"], name: "index_vendors_on_contact_id", using: :btree
   add_index "vendors", ["user_id"], name: "index_vendors_on_user_id", using: :btree
 
@@ -515,7 +535,10 @@ ActiveRecord::Schema.define(version: 20161230064506) do
     t.datetime "updated_at",  null: false
     t.string   "notes"
     t.string   "title"
+    t.integer  "category_id"
   end
+
+  add_index "wills", ["category_id"], name: "index_wills_on_category_id", using: :btree
 
   create_table "words", force: :cascade do |t|
     t.string "word", null: false

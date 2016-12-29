@@ -26,6 +26,9 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes
   # GET /final_wishes.json
   def index
+    @category = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+
     @final_wishes = FinalWishInfo.for_user(resource_owner)
     session[:ret_url] = final_wishes_path
   end

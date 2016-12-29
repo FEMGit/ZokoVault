@@ -1,24 +1,60 @@
 class CategoriesController < AuthenticatedController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
+
   def index
-    @categories = policy_scope(Category).each { |c| authorize c }
+    @categories = policy_scope(Category).all.each { |c| authorize c }
   end
 
   def shared_view_dashboard; end
 
   def insurance
     #TODO: fix bug in padding out groups if missing
-    @category = Rails.application.config.x.InsuranceCategory 
+    @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
-    @groups = Rails.configuration.x.categories[@category]["groups"]
-    @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
-    @insurance_documents = Document.for_user(current_user).where(category: @category)
+    @groups = Rails.configuration.x.categories[@category.name]["groups"]
+    @insurance_vendors = Vendor.for_user(current_user).where(category: @category.name)
+    @insurance_documents = Document.for_user(current_user).where(category: @category.name)
     session[:ret_url] = "/insurance"
   end
 
+  def redirect_path(category)
+    case category.name
+    when 'Insurance'
+      insurance_url
+    when 'Taxes'
+      taxes_url
+    when 'Final Wishes'
+      final_wishes_url
+    else
+      estate_planning_url
+    end
+  end
+
+  def share
+    sc = ShareableCategory.new(
+      current_user,
+      params[:id],
+      shareable_category_params[:share_with_contact_ids]).execute
+
+    redirect_to redirect_path(sc.category)
+  end
+
+  def share_category
+    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    @category = Category.fetch(params[:id])
+   
+    @shareable_category = ShareableCategory.new(current_user,
+                                                @category.id, 
+                                                [])
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+  end
+
   def estate_planning
-    @category = Rails.application.config.x.WtlCategory
+    @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+
     @power_of_attorneys = PowerOfAttorney.for_user(current_user)
     @trusts = Trust.for_user(current_user)
     @wills = Will.for_user(current_user)
@@ -47,7 +83,7 @@ class CategoriesController < AuthenticatedController
   def show; end
 
   def new
-    @category = Category.new(user: current_user)
+    @category = Category.new
 
     authorize @category
   end
@@ -55,7 +91,7 @@ class CategoriesController < AuthenticatedController
   def edit; end
 
   def create
-    @category = Category.new(category_params.merge(user: current_user))
+    @category = Category.new(category_params)
 
     authorize @category
 
@@ -97,11 +133,14 @@ class CategoriesController < AuthenticatedController
   private
 
   def set_category
-    @category = Category.for_user(current_user).find(params[:id])
+    @category = Category.find(params[:id])
   end
 
+  def shareable_category_params
+    params.require(:shareable_category).permit! #(:id, :share_with_contact_ids)
+  end
   def category_params
-    params.require(:category).permit(:name, :description, :managed, :category, :group)
+    params.require(:category).permit(:name, :description)
   end
 
   def get_not_assigned_documents(vault_documents)

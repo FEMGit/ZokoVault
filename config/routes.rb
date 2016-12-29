@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
+  get 'share_estate_planning' => 'categories#share_estate_planning'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
   get 'shared' => 'categories#shared'
@@ -74,7 +75,12 @@ Rails.application.routes.draw do
   get 'power_of_attorneys/:power_of_attorney', to: 'power_of_attorneys#show', as: :details_attorney
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
-  resources :categories
+  resources :categories do
+    member do
+      post :share
+      get :share_category
+    end
+  end
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -83,8 +89,6 @@ Rails.application.routes.draw do
   resources :shares
   get 'shares' => 'shares#index'
   get 'shares/new/:document' => 'shares#new'
-
-  get '/folders/new/(:parent_id)', to: 'folders#new', as: :new_folder
 
   resources :documents
   get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
@@ -166,10 +170,12 @@ Rails.application.routes.draw do
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
   get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
+  get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
+  get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
+  get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
+
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
-
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
-
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
 
   

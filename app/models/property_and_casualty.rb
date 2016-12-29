@@ -10,10 +10,12 @@ class PropertyAndCasualty < Vendor
     PropertyAndCasualtyPunditPolicy
   end
 
+  before_save { self.category = Category.fetch("insurance") }
+
   private
 
   def initialize_category_and_group
-    self.category = "Insurance"
     self.group = "property"
   end
+
 end

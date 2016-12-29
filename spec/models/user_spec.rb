@@ -3,6 +3,17 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject { build(:user, user_profile: UserProfile.new) }
 
+
+  describe "#admin?" do
+    it "is true" do
+      expect(create(:user, email: "foo@zokuvault.com")).to be_admin
+    end
+
+    it "is false" do
+      expect(create(:user, email: "foo@bar.com")).to_not be_admin
+    end
+  end
+
   describe "#mfa_verify?" do
     context "signed in from previous ip" do
       before do

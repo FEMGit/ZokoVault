@@ -5,4 +5,5 @@ describe TrustPolicy do
   let(:resource) { create(:trust, user: owner) }
 
   it_behaves_like "shared resource"
+  it_behaves_like "shared category" 
 end

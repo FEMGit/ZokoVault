@@ -13,10 +13,40 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <% shared_view_estate_planning = 'active' if current_page?(shared_view_estate_planning_path) %>
-  <%= link_to shared_view_estate_planning_path, class: "main-nav #{shared_view_estate_planning}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-document-3"></use>
-    </svg>Wills Trusts &amp; Legal
+  <! -- Wills, Trust & Legal -->
+  <% if @shared_category_names.include? 'Wills - Trusts - Legal' %>
+    <% shared_view_estate_planning = 'active' if current_page?(shared_view_estate_planning_path) %>
+    <%= link_to shared_view_estate_planning_path, class: "main-nav #{shared_view_estate_planning}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Wills Trusts &amp; Legal
+    <% end %>
+  <% end %>
+  <! -- Taxes -->
+  <% if @shared_category_names.include? 'Taxes' %>
+    <% shared_view_taxes = 'active' if current_page?(shared_view_taxes_path) %>
+    <%= link_to shared_view_taxes_path, class: "main-nav #{shared_view_taxes}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Taxes
+    <% end %>
+  <% end %>
+  <! -- Insurance -->
+  <% if @shared_category_names.include? 'Insurance' %>
+    <% shared_view_insurance = 'active' if current_page?(shared_view_insurance_path) %>
+    <%= link_to shared_view_insurance_path, class: "main-nav #{shared_view_insurance}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Insurance
+    <% end %>
+  <% end %>
+  <! -- final_wishes -->
+  <% if @shared_category_names.include? 'Final Wishes' %>
+    <% shared_view_final_wishes = 'active' if current_page?(shared_view_final_wishes_path) %>
+    <%= link_to shared_view_final_wishes_path, class: "main-nav #{shared_view_final_wishes}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Final Wishes
+    <% end %>
   <% end %>
 </nav>

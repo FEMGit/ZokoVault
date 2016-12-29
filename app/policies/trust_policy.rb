@@ -1,4 +1,4 @@
-class TrustPolicy < BasicPolicy
+class TrustPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

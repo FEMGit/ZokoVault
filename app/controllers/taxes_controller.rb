@@ -28,6 +28,9 @@ class TaxesController < AuthenticatedController
   # GET /taxes
   # GET /taxes.json
   def index
+    @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+
     @taxes = TaxYearInfo.for_user(resource_owner)
     session[:ret_url] = taxes_path
   end

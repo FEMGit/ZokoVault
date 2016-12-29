@@ -1,14 +1,16 @@
 <h1>Dashboard</h1>
 <table class="shared-view-dashboard">
-  <tr>
-    <td>
-      <svg class="icon dashboard-icon">
-        <use xlink:href="#icon-document-3"></use>
-      </svg>
-      <h5 class="category-title">Wills - Trusts - Legal</h5>
-      <%= link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category' %>
-    </td>
-  </tr>
+  <% @category_shareables.each do |category| %>
+    <tr>
+      <td>
+        <svg class="icon dashboard-icon">
+          <use xlink:href="#icon-document-3"></use>
+        </svg>
+        <h5 class="category-title"><%= category.name %></h5>
+        <%= link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category' %>
+      </td>
+    </tr>
+  <% end %>
   <% @other_shareables.each do |shareable| %>
     <tr>
       <td>

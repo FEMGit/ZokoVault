@@ -4,8 +4,7 @@
   <div class="flex-column">
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
-
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills.name, @category) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills.name, @category.name) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -77,7 +76,7 @@
       <% if @trusts.any? %>
         <%= link_to content_tag(:a), trusts_path, class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category.name) } %>
           <h3>Trusts</h3>
           <section class="mb-20">
             <% @trusts.each do |trust| %>
@@ -123,7 +122,7 @@
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category.name) } %>
           <h3>Powers of Attorney</h3>
 
           <ul class="data-list mb-20">
@@ -164,7 +163,7 @@
   </div>
 </section>
 
-<a class="add-link fr" href="<%= new_document_path(:category => @category, :return => "estate_planning") %>">
+<a class="add-link fr" href="<%= new_document_path(:category => @category.name, :return => "estate_planning") %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
@@ -174,6 +173,30 @@
 <h3>Wills - Trusts - Legal Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
+
+<a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.WtlCategory.downcase) %>'>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit
+</a>
+<h3>Shared With</h3>
+
+<div class="card mb-30 my_profile_info">
+  <h3 class="card-label">Category Shared With</h3>
+
+    <label>SHARED WITH</label>
+
+    <% if @contacts_with_access.blank? %>
+      <p>No shared access</p>
+    <% else %>
+      <% @contacts_with_access.each do |contact| %>
+        <p><%= contact.initials %> </p>
+      <% end %>
+  <% end %>
+</div>
+
 <%= javascript_include_tag 'flex_boxes' %>
 <script>
 var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;

@@ -76,7 +76,7 @@
 <%= render yield(:partial_path) %>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @insurance_card.category, :group => @group_label, :vendor_id => @insurance_card.id) %>">
+  <a class="add-link fr" href="<%= new_document_path(:category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id) %>">
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>

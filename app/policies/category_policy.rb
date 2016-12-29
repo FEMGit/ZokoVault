@@ -19,7 +19,21 @@ class CategoryPolicy < BasicPolicy
     end
 
     def resolve
-      scope.where(user: user)
+      scope
     end
+  end
+
+  protected
+
+  def user_owned?
+    user.admin?
+  end
+
+  def owned_or_shared?
+    user_owned? || shared_with_user?
+  end
+
+  def shared_with_user?
+    false
   end
 end

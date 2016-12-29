@@ -64,10 +64,12 @@ ActiveRecord::Schema.define(version: 20161227085952) do
     t.string   "category"
     t.string   "group"
     t.integer  "vault_entry_id"
+    t.integer  "vendor_id"
   end
 
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
   add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
+  add_index "documents", ["vendor_id"], name: "index_documents_on_vendor_id", using: :btree
 
   create_table "employers", force: :cascade do |t|
     t.integer  "user_profile_id"

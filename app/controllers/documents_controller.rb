@@ -1,6 +1,7 @@
 class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :prepare_document_params, only: [:create, :update]
 
   @after_new_user_created = ""
 
@@ -14,11 +15,12 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @document = Document.new(base_params.slice(:category, :group).merge(user: current_user))
+    @document = Document.new(base_params.slice(:category, :group, :vendor_id).merge(user: current_user))
 
     authorize @document
 
     @cards = card_values(@document.category)
+    @card_names = card_names(@document.category)
   end
 
   def edit
@@ -26,6 +28,7 @@ class DocumentsController < AuthenticatedController
 
     session[:ret_url] = get_return_url_path
     @shares = @document.shares
+    @card_names = card_names(@document.category)
   end
 
   def create
@@ -62,8 +65,7 @@ class DocumentsController < AuthenticatedController
         end
         format.json { render :show, status: :ok, location: @document }
       else
-        format.html { render :edit }
-        format.json { render json: @document.errors, status: :unprocessable_entity }
+        handle_document_not_updated(format)
       end
     end
   end
@@ -81,7 +83,11 @@ class DocumentsController < AuthenticatedController
   end
   
   def get_drop_down_options
-    render :json => card_values(params[:category]).flatten
+    render :json => card_values(base_params[:category]).flatten
+  end
+  
+  def get_card_names
+    render :json => card_names(base_params[:category]).flatten
   end
 
   private
@@ -89,6 +95,11 @@ class DocumentsController < AuthenticatedController
   def card_values(category)
     service = DocumentService.new(:category => category)
     service.get_card_values(resource_owner)
+  end
+  
+  def card_names(category)
+    service = DocumentService.new(:category => category)
+    service.get_card_names(resource_owner)
   end
 
   def resource_owner
@@ -107,7 +118,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def base_params
-    params.permit(:group, :category)
+    params.permit(:group, :category, :vendor_id)
   end
   
   def document_share_params
@@ -119,7 +130,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids, :vendor_id,
                                      shares_attributes: [:user_id, :contact_id])
   end
 
@@ -157,6 +168,13 @@ class DocumentsController < AuthenticatedController
   def set_document_update_date_to_now(document)
     document.updated_at = Time.now.utc
   end
+  
+  def prepare_document_params
+    if document_params[:vendor_id].present?
+      insurance_service = InsuranceService.new(current_user)
+      params[:document][:group] = insurance_service.group_by_vendor(document_params[:vendor_id])
+    end
+  end
 
   def handle_document_saved(format)
     #TODO: dynamic route builder for categories
@@ -174,7 +192,15 @@ class DocumentsController < AuthenticatedController
 
   def handle_document_not_saved(format)
     @cards = card_values(@document.category)
+    @card_names = card_names(@document.category)
     format.html { render :new }
+    format.json { render json: @document.errors, status: :unprocessable_entity }
+  end
+  
+  def handle_document_not_updated(format)
+    @cards = card_values(@document.category)
+    @card_names = card_names(@document.category)
+    format.html { render :edit }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end
 end

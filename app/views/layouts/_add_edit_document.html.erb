@@ -38,12 +38,22 @@
     </div>
 
     <label>Subcategory</label>
-    <div class="chosen-styled-select">
-      <%= f.collection_select :group, 
-        @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
-        { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select..." }
-      %>
-    </div>
+      <div class="chosen-styled-select" id="category_groups" <% if @card_names.present? %> style="display: none;" <% end %> >
+        <%= f.collection_select :group, 
+          @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select..." }
+        %>
+      </div>
+    
+    <% if @card_names.present? %>
+      <div class="chosen-styled-select" id="insurance_provider_names">
+        <%= f.collection_select :vendor_id, 
+          @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_vendor",
+            selected: params[:id] }
+        %>
+      </div>
+    <% end %>
 
     <label>Notes</label>
     <%= f.text_area :description %>
@@ -104,7 +114,33 @@
         card_values.append("<option value='" + group.id + "'>" + group.name + "</option>");
       });
       card_values.trigger('chosen:updated');
+      updateCardNames()
     });
   })
+  
+  //get ajax request to update card names drop down if its insurance category
+  var updateCardNames = function(){
+    var category = $("#document_category.chosen-select :selected").text().replace('...', '');
+    var url = '/documents/get_card_names/' + category
+    $.get(url, function(data) {
+      card_names = $('#document_vendor');
+      card_names.empty();
+      data.forEach(function(group){
+        card_names.append("<option value='" + group.id + "'>" + group.name + "</option>");
+      });
+      card_names.trigger('chosen:updated');
+    }).done(function(data) {
+      if (data.length > 0) {
+        $("#category_groups").hide();
+        $("#insurance_provider_names").show();
+        $("#document_category").prop("selected", false);
+      } else {
+        $("#category_groups").show();
+        $("#insurance_provider_names").hide();
+      }
+    });
+  }
+  
+  $("#document_group.chosen-select").chosen().change(updateCardNames)
 </script>
 <%= yield :new_contact_form %>

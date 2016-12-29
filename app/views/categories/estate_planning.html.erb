@@ -5,7 +5,7 @@
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
       
-        <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @wills.name, :category => @category} %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills.name, @category) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -78,7 +78,7 @@
       <% if @trusts.any? %>
         <%= link_to content_tag(:a), trusts_path, class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => @trusts.name, :category => @category} %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category) } %>
           <h3>Trusts</h3>
           <section class="mb-20">
             <% @trusts.each do |trust| %>
@@ -125,7 +125,7 @@
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:user => current_user, :group => 'Legal', :category => @category} %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category) } %>
           <h3>Powers of Attorney</h3>
 
           <ul class="data-list mb-20">

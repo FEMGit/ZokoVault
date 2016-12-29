@@ -10,6 +10,12 @@ module DocumentsHelper
   def document_return_path(document)
     session[:ret_url] || document_path(document)
   end
+  
+  def document_name_tag(document)
+    return unless document.vendor_id.present? &&
+                  document.vendor_id > 0
+    Vendor.find(document.vendor_id).name
+  end
 
   def document_group(document)
     if document.category == @@contact_category
@@ -38,6 +44,10 @@ module DocumentsHelper
 
   def document_count(user, group, category)
     Document.for_user(user).where(category: category, group: group).count
+  end
+  
+  def document_card_specific_count(user, category, group, id)
+    DocumentService.new(:category => category).get_insurance_documents(user, group, id).count
   end
 
   def previewed?(document)

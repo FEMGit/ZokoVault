@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 
   resources :documents
   get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
+  get 'documents/get_card_names/:category', to: 'documents#get_card_names'
   
   resources :account_settings
   put 'account_settings/update', to: 'account_settings#update'

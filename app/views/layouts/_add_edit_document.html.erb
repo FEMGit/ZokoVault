@@ -45,15 +45,13 @@
         %>
       </div>
     
-    <% if @card_names.present? %>
-      <div class="chosen-styled-select" id="insurance_provider_names">
+      <div class="chosen-styled-select" id="insurance_provider_names"  <% if @card_names.empty? %> style="display: none;" <% end %> >
         <%= f.collection_select :vendor_id, 
           @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
           { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_vendor",
             selected: params[:id] }
         %>
       </div>
-    <% end %>
 
     <label>Notes</label>
     <%= f.text_area :description %>

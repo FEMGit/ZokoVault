@@ -6,7 +6,7 @@ class Vendor < ActiveRecord::Base
 
   has_many :shares, as: :shareable, dependent: :destroy
   has_many :share_with_contacts, through: :shares, source: :contact
-  has_many :documents, class_name: "Document", foreign_key: :vendor_id
+  has_many :documents, class_name: "Document", foreign_key: :vendor_id, dependent: :nullify
 
   has_many :vendor_accounts, dependent: :destroy
 

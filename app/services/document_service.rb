@@ -55,7 +55,7 @@ class DocumentService
     get_all_groups
     return [get_empty_card_values] unless category_exist?
     vendors = Vendor.for_user(user).where(:category => @category).order(:group => 'desc')
-    return [] unless vendors.present?
+    return [] unless vendors.present? || @category == Rails.configuration.x.InsuranceCategory
     vendors.collect { |x| [id: x.id, name: x.name] }.prepend(get_empty_card_values)
   end
 

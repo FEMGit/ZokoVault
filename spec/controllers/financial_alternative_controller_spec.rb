@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FinancialAccountController, type: :controller do
+RSpec.describe FinancialAlternativeController, type: :controller do
 
   let(:contacts) { Array.new(3) { create(:contact, user_id: user.id) } }
   
@@ -22,12 +22,16 @@ RSpec.describe FinancialAccountController, type: :controller do
     }
   end
   
-  let(:account_0) do 
+  let(:alternative_0) do 
     {
-      account_type: "Bond",
+      alternative_type: "Venture Capital",
+      name: "Investment Name",
       owner_id: contacts.first.id,
-      value: "99.99",
-      primary_contact_broker_id: contacts.first.id,
+      commitment: "99.99",
+      total_calls: "99.99",
+      total_distributions: "99.99",
+      current_value: "99.99",
+      primary_contact_id: contacts.first.id,
       notes: "Notes",
       user_id: user.id
     }
@@ -42,25 +46,25 @@ RSpec.describe FinancialAccountController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #show" do
-    it "assigns the requested financial account provider as @financial_provider" do
-      financial_account = FinancialAccountInformation.create! account_0
+    it "assigns the requested financial alternative provider as @financial_provider" do
+      financial_alternative = FinancialAlternative.create! alternative_0
       financial_provider = FinancialProvider.create! valid_attributes
-      financial_provider.accounts << financial_account
+      financial_provider.alternatives << financial_alternative
       get :show, { id: financial_provider.to_param }, session: valid_session
       expect(assigns(:financial_provider)).to eq(financial_provider)
-      expect(assigns(:financial_provider).accounts.first).to eq(financial_account)
+      expect(assigns(:financial_provider).alternatives.first).to eq(financial_alternative)
     end
   end
   
   describe "GET #new" do
-    it "assigns a new financial account provider as @financial_provider" do
+    it "assigns a new financial alternative provider as @financial_provider" do
       get :new, {}, session: valid_session
       expect(assigns(:financial_provider)).to be_a_new(FinancialProvider)
     end
   end
 
   describe "GET #edit" do
-    it "assigns the requested financial account provider as @financial_provider" do
+    it "assigns the requested financial alternative provider as @financial_provider" do
       financial_provider = FinancialProvider.create! valid_attributes
       get :edit, { id: financial_provider.to_param }, session: valid_session
       expect(assigns(:financial_provider)).to eq(financial_provider)
@@ -70,12 +74,12 @@ RSpec.describe FinancialAccountController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new financial provider" do 
-        expect { post :create, { financial_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session }
+        expect { post :create, { financial_provider: valid_attributes.merge(alternative_0: alternative_0) }, session: valid_session }
           .to change(FinancialProvider, :count).by(1)
       end
       
       it "shows correct flash message on create" do
-        post :create, { financial_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session
+        post :create, { financial_provider: valid_attributes.merge(alternative_0: alternative_0) }, session: valid_session
         expect(flash[:success]).to be_present
       end
     end
@@ -84,7 +88,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       let(:financial_provider) { assigns(:financial_provider) }
 
       before do
-        post :create, {financial_provider: valid_attributes.merge(account_0: account_0)}, session: valid_session
+        post :create, {financial_provider: valid_attributes.merge(alternative_0: alternative_0)}, session: valid_session
       end
 
       it "assigns a newly created financial provider as @financial_provider" do
@@ -92,9 +96,9 @@ RSpec.describe FinancialAccountController, type: :controller do
         expect(financial_provider).to be_persisted
       end
       
-      it "assigns a newly created financial account as a part of @financial_provider.accounts" do
-        expect(financial_provider.accounts.first).to be_a(FinancialAccountInformation)
-        expect(financial_provider.accounts.first).to be_persisted
+      it "assigns a newly created financial alternative as a part of @financial_provider.alternatives" do
+        expect(financial_provider.alternatives.first).to be_a(FinancialAlternative)
+        expect(financial_provider.alternatives.first).to be_persisted
       end
 
       it "assigns name" do
@@ -165,12 +169,16 @@ RSpec.describe FinancialAccountController, type: :controller do
         }
       end
   
-      let(:new_account_attributes) do 
+      let(:new_alternative_attributes) do 
         {
-          account_type: "Savings",
+          alternative_type: "Seed",
+          name: "Investment Name New",
           owner_id: contacts.second.id,
-          value: "100",
-          primary_contact_broker_id: contacts.second.id,
+          commitment: "199.99",
+          total_calls: "199.99",
+          total_distributions: "199.99",
+          current_value: "199.99",
+          primary_contact_id: contacts.second.id,
           notes: "Notes New"
         }
       end
@@ -179,7 +187,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       
       before do
         financial_provider = FinancialProvider.create! valid_attributes
-        put :update, { id: financial_provider.to_param, financial_provider: new_provider_attributes.merge(account_0: new_account_attributes) }, session: valid_session
+        put :update, { id: financial_provider.to_param, financial_provider: new_provider_attributes.merge(alternative_0: new_alternative_attributes) }, session: valid_session
       end
 
       it "shows correct flash message on update" do
@@ -190,28 +198,40 @@ RSpec.describe FinancialAccountController, type: :controller do
         expect(assigns(:financial_provider)).to eq(financial_provider)
       end
       
-      it "assigns the requested financial account type" do
-        expect(assigns(:financial_provider).accounts.first.account_type).to eq "Savings"
+      it "assigns the requested financial alternative type" do
+        expect(assigns(:financial_provider).alternatives.first.alternative_type).to eq "Seed"
       end
       
-      it "assigns the requested financial account owner" do
-        expect(assigns(:financial_provider).accounts.first.owner).to eq contacts.second
+      it "assigns the requested financial alternative owner" do
+        expect(assigns(:financial_provider).alternatives.first.owner).to eq contacts.second
       end
       
-      it "assigns the requested financial account value" do
-        expect(assigns(:financial_provider).accounts.first.value.to_i).to eq 100
+      it "assigns the requested financial alternative commitment" do
+        expect(assigns(:financial_provider).alternatives.first.commitment.to_f).to eq 199.99
       end
       
-      it "assigns the requested financial account primary contact" do
-        expect(assigns(:financial_provider).accounts.first.primary_contact_broker).to eq contacts.second
+      it "assigns the requested financial alternative total calls" do
+        expect(assigns(:financial_provider).alternatives.first.total_calls.to_f).to eq 199.99
       end
       
-      it "assigns the requested financial account notes" do
-        expect(assigns(:financial_provider).accounts.first.notes).to eq "Notes New"
+      it "assigns the requested financial alternative total distributions" do
+        expect(assigns(:financial_provider).alternatives.first.total_distributions.to_f).to eq 199.99
+      end
+      
+      it "assigns the requested financial alternative current value" do
+        expect(assigns(:financial_provider).alternatives.first.current_value.to_f).to eq 199.99
+      end
+      
+      it "assigns the requested financial alternative primary contact" do
+        expect(assigns(:financial_provider).alternatives.first.primary_contact).to eq contacts.second
+      end
+      
+      it "assigns the requested financial alternative notes" do
+        expect(assigns(:financial_provider).alternatives.first.notes).to eq "Notes New"
       end
 
       it "redirects to the financial_provider" do
-        expect(response).to redirect_to(show_account_url(financial_provider))
+        expect(response).to redirect_to(show_alternative_url(financial_provider))
       end
     end
   end
@@ -228,28 +248,28 @@ RSpec.describe FinancialAccountController, type: :controller do
       expect(response).to redirect_to financial_information_path
     end
     
-    it "destroys the requested financial account and redirect to previous page" do
-      financial_account = FinancialAccountInformation.create! account_0
+    it "destroys the requested financial alternative and redirect to previous page" do
+      financial_alternative = FinancialAlternative.create! alternative_0
       financial_provider = FinancialProvider.create! valid_attributes
-      financial_provider.accounts << financial_account
-      expect { delete :destroy, { id: financial_account.to_param }, session: valid_session }
-        .to change(financial_provider.accounts, :count).by(-1)
+      financial_provider.alternatives << financial_alternative
+      expect { delete :destroy, { id: financial_alternative.to_param }, session: valid_session }
+        .to change(financial_provider.alternatives, :count).by(-1)
       expect(response).to redirect_to "previous_page"
     end
     
     it "shows correct flash message on destroy provider" do
-      financial_account = FinancialAccountInformation.create! account_0
+      financial_alternative = FinancialAlternative.create! alternative_0
       financial_provider = FinancialProvider.create! valid_attributes
-      financial_provider.accounts << financial_account
+      financial_provider.alternatives << financial_alternative
       delete :destroy_provider, { id: financial_provider.to_param }, session: valid_session
       expect(flash[:notice]).to be_present
     end
     
-    it "shows correct flash message on destroy account" do
-      financial_account = FinancialAccountInformation.create! account_0
+    it "shows correct flash message on destroy alternative" do
+      financial_alternative = FinancialAlternative.create! alternative_0
       financial_provider = FinancialProvider.create! valid_attributes
-      financial_provider.accounts << financial_account
-      delete :destroy, { id: financial_account.to_param }, session: valid_session
+      financial_provider.alternatives << financial_alternative
+      delete :destroy, { id: financial_alternative.to_param }, session: valid_session
       expect(flash[:notice]).to be_present
     end
   end

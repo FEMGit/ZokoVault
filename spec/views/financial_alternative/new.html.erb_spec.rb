@@ -1,17 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe "financial_account/new", type: :view do
+RSpec.describe "financial_alternative/new", type: :view do
   before(:each) do
-    financial_account = FinancialAccountInformation.new
+    financial_alternative = FinancialAlternative.new
     financial_provider = FinancialProvider.new
-    financial_provider.accounts << financial_account
+    financial_provider.alternatives << financial_alternative
     assign(:financial_provider, financial_provider)
     
     render
   end
 
   it "renders new financial provider form" do
-    assert_select "form[action=?][method=?]", create_account_path, "post" do
+    assert_select "form[action=?][method=?]", create_alternative_path, "post" do
 
       assert_select "input#financial_provider_name[name=?]", "financial_provider[name]"
       
@@ -35,26 +35,29 @@ RSpec.describe "financial_account/new", type: :view do
     end
   end
   
-  it "renders new financial account form" do
-    assert_select "form[action=?][method=?]", create_account_path, "post" do
+  it "renders new financial alternative form" do
+    assert_select "form[action=?][method=?]", create_alternative_path, "post" do
 
-      assert_select "select#financial_provider_account_0_account_type[name=?]",
-                    "financial_provider[account_0][account_type]"
+      assert_select "select#financial_provider_alternative_0_alternative_type[name=?]",
+                    "financial_provider[alternative_0][alternative_type]"
       
-      assert_select "select#account_owner_0[name=?]",
-                    "financial_provider[account_0][owner_id]"
+      assert_select "select#alternative_owner_0[name=?]",
+                    "financial_provider[alternative_0][owner_id]"
       
-      assert_select "input#account_value_0[name=?]",
-                    "financial_provider[account_0][value]"
+      assert_select "input#alternative_commitment_0[name=?]",
+                    "financial_provider[alternative_0][commitment]"
       
-      assert_select "input#account_number_0[name=?]",
-                    "financial_provider[account_0][number]"
+      assert_select "input#alternative_total_calls_0[name=?]",
+                    "financial_provider[alternative_0][total_calls]"
       
-      assert_select "select#account_broker_0[name=?]",
-                    "financial_provider[account_0][primary_contact_broker_id]"
+      assert_select "input#alternative_distributions_0[name=?]",
+                    "financial_provider[alternative_0][total_distributions]"
       
-      assert_select "textarea#account_notes_0[name=?]",
-                    "financial_provider[account_0][notes]"
+      assert_select "input#alternative_current_value_0[name=?]",
+                    "financial_provider[alternative_0][current_value]"
+      
+      assert_select "textarea#alternative_notes_0[name=?]",
+                    "financial_provider[alternative_0][notes]"
     end
   end
 end

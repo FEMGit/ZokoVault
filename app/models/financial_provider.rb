@@ -1,4 +1,4 @@
-class FinancialAccountProvider < ActiveRecord::Base
+class FinancialProvider < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
   belongs_to :user
   belongs_to :primary_contact, class_name: "Contact"
@@ -7,7 +7,13 @@ class FinancialAccountProvider < ActiveRecord::Base
   has_many :share_with_contacts, through: :shares, source: :contact
   has_many :accounts, 
            class_name: "FinancialAccountInformation",
-           foreign_key: :account_provider_id
+           foreign_key: :account_provider_id,
+           dependent: :destroy
+  
+  has_many :alternatives, 
+           class_name: "FinancialAlternative",
+           foreign_key: :manager_id,
+           dependent: :destroy
   
   validates :name, presence: { :message => "Required" }
 end

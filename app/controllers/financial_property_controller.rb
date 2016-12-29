@@ -4,17 +4,22 @@ class FinancialPropertyController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   def new
-    @financial_property = FinancialProperty.new
+    @financial_property = FinancialProperty.new(user: resource_owner)
+    authorize @financial_property
   end
   
   def show
+    authorize @financial_property
     session[:ret_url] = "#{financial_information_path}/property/#{params[:id]}"
   end
   
-  def edit; end
+  def edit
+    authorize @financial_property
+  end
   
   def create
-    @financial_property = FinancialProperty.new(property_params.merge(user_id: current_user.id))
+    @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
+    authorize @financial_property
     respond_to do |format|
       if @financial_property.save
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully created.' } }
@@ -28,8 +33,9 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def update
+    authorize @financial_property
     respond_to do |format|
-      if @financial_property.update(property_params.merge(user_id: current_user.id))
+      if @financial_property.update(property_params.merge(user_id: resource_owner.id))
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
@@ -40,6 +46,7 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def destroy
+    authorize @financial_property
     @financial_property.destroy
     respond_to do |format|
       format.html { redirect_to financial_information_path, notice: 'Property was successfully destroyed.' }
@@ -49,12 +56,16 @@ class FinancialPropertyController < AuthenticatedController
 
   private
   
+  def resource_owner 
+    @financial_property.present? ?  @financial_property.user : current_user
+  end
+  
   def set_financial_property
-    @financial_property = FinancialProperty.for_user(current_user).find(params[:id])
+    @financial_property = FinancialProperty.for_user(resource_owner).find(params[:id])
   end
   
   def set_documents
-    @documents = Document.for_user(current_user).where(category: @category, group: @group)
+    @documents = Document.for_user(resource_owner).where(category: @category, group: @group)
   end
   
   def initialize_category_and_group
@@ -68,7 +79,7 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def set_contacts
-    contact_service = ContactService.new(:user => current_user)
+    contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "financial_account/show", type: :view do
+RSpec.describe "financial_alternative/show", type: :view do
   let(:contacts) { Array.new(3) { create(:contact, user_id: user.id) } }
-  let(:primary_contact_broker) { create(:contact, user_id: user.id) }
+  let(:primary_contact) { create(:contact, user_id: user.id) }
   
   let(:user) { create :user }
   
@@ -22,21 +22,25 @@ RSpec.describe "financial_account/show", type: :view do
     }
   end
   
-  let(:account_0) do 
+  let(:alternative_0) do 
     {
-      account_type: "Bond",
-      owner_id: contacts.second.id,
-      value: "15000",
-      primary_contact_broker_id: primary_contact_broker.id,
+      alternative_type: "Venture Capital",
+      name: "Investment Name",
+      owner_id: contacts.first.id,
+      commitment: "100",
+      total_calls: "101",
+      total_distributions: "102",
+      current_value: "103",
+      primary_contact_id: primary_contact.id,
       notes: "Notes",
       user_id: user.id
     }
   end
   
   before(:each) do
-    financial_account = FinancialAccountInformation.create! account_0
+    financial_alternative = FinancialAlternative.create! alternative_0
     financial_provider = FinancialProvider.create! valid_attributes
-    financial_provider.accounts << financial_account
+    financial_provider.alternatives << financial_alternative
     assign(:financial_provider, financial_provider)
     
     render
@@ -67,15 +71,19 @@ RSpec.describe "financial_account/show", type: :view do
     end
   end
   
-  it "displays financial account correctly" do
-    expect(rendered).to match(/Bond/)
-    expect(rendered).to match(/\$15,000/)
+  it "displays financial alternative correctly" do
+    expect(rendered).to match(/Venture Capital/)
     expect(rendered).to match(/Notes/)
+    expect(rendered).to match(/Investment Name/)
+    expect(rendered).to match(/\$100/)
+    expect(rendered).to match(/\$101/)
+    expect(rendered).to match(/\$102/)
+    expect(rendered).to match(/\$103/)
   end
   
-  it "displays financial account primary contact correctly" do
-    expect(rendered).to match(/#{primary_contact_broker.name}/)
-    expect(rendered).to match(/#{primary_contact_broker.emailaddress}/)
-    expect(rendered).to match(/#{primary_contact_broker.phone}/)
+  it "displays financial alternative primary contact correctly" do
+    expect(rendered).to match(/#{primary_contact.name}/)
+    expect(rendered).to match(/#{primary_contact.emailaddress}/)
+    expect(rendered).to match(/#{primary_contact.phone}/)
   end
 end

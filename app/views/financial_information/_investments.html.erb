@@ -1,0 +1,35 @@
+<% investments.each do |investment| %>
+  <div class="card cg-3 flex-column mb-20 cp">
+    <%= link_to content_tag(:a), show_investment_url(investment.id), class: "whole-card-link" %>
+    <h3><%= investment.name %></h3>
+
+    <% if investment.primary_contact.present? %>
+      <label>Primary Contact</label>
+      <ul class="data-list">
+        <li class="contact-pair">
+          <%= investment.primary_contact.name %><br>
+          <%= mail_to investment.primary_contact.emailaddress, investment.primary_contact.emailaddress %><br>
+          <%= investment.primary_contact.phone %><br>
+        </li>
+      </ul>
+    <% end %>
+
+    <ul class="data-list mb-20">
+      <li class="data-pair">
+        <label><%= investment.investment_type %></label>
+        <%= render partial: "value_show", locals: { value: investment.value, type: investment.investment_type } %>
+      </li>
+    </ul>
+
+    <% if investment.share_with_contacts.present? %>
+      <label>Shared With</label>
+      <section class="shared-list">
+        <% investment.share_with_contacts.each do |share| %>
+          <% if share.present? %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+          <% end %>
+         <% end %>
+       </section>
+     <% end %>
+  </div>
+<% end %>

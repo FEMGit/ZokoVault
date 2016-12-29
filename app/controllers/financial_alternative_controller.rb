@@ -1,4 +1,4 @@
-class FinancialAccountController < AuthenticatedController
+class FinancialAlternativeController < AuthenticatedController
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider]
@@ -6,14 +6,14 @@ class FinancialAccountController < AuthenticatedController
   
   def new
     @financial_provider = FinancialProvider.new(user: resource_owner)
-    @financial_account = FinancialAccountInformation.new
-    @financial_provider.accounts << @financial_account
+    @financial_alternative = FinancialAlternative.new
+    @financial_provider.alternatives << @financial_alternative
     authorize @financial_provider
   end
   
   def show
     authorize @financial_provider
-    session[:ret_url] = "#{financial_information_path}/account/#{params[:id]}"
+    session[:ret_url] = show_alternative_path(@financial_provider)
   end
   
   def edit
@@ -21,12 +21,12 @@ class FinancialAccountController < AuthenticatedController
   end
   
   def create
-    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: current_user.id))
+    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id))
     authorize @financial_provider
-    FinancialInformationService.fill_accounts(account_params, @financial_provider, current_user.id)
+    FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.save
-        format.html { redirect_to show_account_url(@financial_provider), flash: { success: 'Account was successfully created.' } }
+        format.html { redirect_to show_alternative_url(@financial_provider), flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
       else
         format.html { render :new }
@@ -37,10 +37,10 @@ class FinancialAccountController < AuthenticatedController
   
   def update
     authorize @financial_provider
-    FinancialInformationService.fill_accounts(account_params, @financial_provider, current_user.id)
+    FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.update(provider_params)
-        format.html { redirect_to show_account_url(@financial_provider), flash: { success: 'Account was successfully updated.' } }
+        format.html { redirect_to show_alternative_path(@financial_provider), flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
       else
         format.html { render :edit }
@@ -50,11 +50,11 @@ class FinancialAccountController < AuthenticatedController
   end
   
   def destroy
-    financial_provider = FinancialProvider.find_by(id: @account.account_provider_id)
+    financial_provider = FinancialProvider.find_by(id: @account.manager_id)
     authorize financial_provider
     @account.destroy
     respond_to do |format|
-      format.html { redirect_to :back || financial_information_path, notice: 'Account was successfully destroyed.' }
+      format.html { redirect_to :back || financial_information_path, notice: 'Alternative investment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -64,7 +64,7 @@ class FinancialAccountController < AuthenticatedController
     authorize @financial_provider
     @financial_provider.destroy
     respond_to do |format|
-      format.html { redirect_to financial_information_path, notice: 'Provider was successfully destroyed.' }
+      format.html { redirect_to financial_information_path, notice: 'Manager was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -77,19 +77,19 @@ class FinancialAccountController < AuthenticatedController
   
   def initialize_category_and_group
     @category = Rails.application.config.x.FinancialInformationCategory
-    @group = "Account"
+    @group = "Alternative Investment"
   end
   
   def set_account
-    @account = FinancialAccountInformation.for_user(current_user).find(params[:id])
+    @account = FinancialAlternative.for_user(resource_owner).find(params[:id])
   end
   
   def set_provider
-    @financial_provider = FinancialProvider.for_user(current_user).find(params[:id])
+    @financial_provider = FinancialProvider.for_user(resource_owner).find(params[:id])
   end
   
   def set_documents
-    @documents = Document.for_user(current_user).where(category: @category, group: @group)
+    @documents = Document.for_user(resource_owner).where(category: @category, group: @group)
   end
 
   
@@ -98,17 +98,18 @@ class FinancialAccountController < AuthenticatedController
                                                share_with_contact_ids: [])
   end
   
-  def account_params
-    accounts = params[:financial_provider].select { |k, _v| k.starts_with?("account_") }
+  def alternative_params
+    alternatives = params[:financial_provider].select { |k, _v| k.starts_with?("alternative_") }
     permitted_params = {}
-    accounts.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :account_type, :owner_id, :value, :number, :primary_contact_broker_id, :notes]
+    alternatives.keys.each do |alternative|
+      permitted_params[alternative] = [:id, :alternative_type, :owner_id, :commitment, :total_calls, :total_distributions,
+                                       :notes, :current_value, :primary_contact_id, :name]
     end
-    accounts.permit(permitted_params)
+    alternatives.permit(permitted_params)
   end
   
   def set_contacts
-    contact_service = ContactService.new(:user => current_user)
+    contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end

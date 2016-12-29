@@ -1,10 +1,10 @@
-<h1>Financial Info - Add Account</h1>
+<h1>Alternative - Add Investment</h1>
 
-<%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_account) do |f| %>
+<%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_alternative) do |f| %>
 <div class="card mb-30">
-  <h3 class="card-label">Account Provider Details</h3>
+  <h3 class="card-label">Manager Details</h3>
   
-  <%= f.label :name, 'Provider Name' %>
+  <%= f.label :name, 'Investment Manager Name' %>
   <%= render partial: 'layouts/error_message', locals: { errors: @financial_provider.errors, error: @financial_provider.errors.messages[:name] } %>
   <%= f.text_field :name, { class: ("input-error" if @financial_provider.errors.messages[:name].present?) } %>
 
@@ -39,7 +39,6 @@
     <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
   </div>
   
-  
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
       <svg class="icon" viewBox="0 0 20 20">
@@ -53,36 +52,36 @@
   </section>
   
   <% if params[:id] %>
-    <%= link_to 'Delete this Provider', delete_provider_account_url(params[:id]), method: :delete,
-      data: { confirm: "Deleting this provider will permanently remove it from ZokuVault." },
-      class: 'button small-button secondary-button', id: 'delete-insurance' %>
+    <%= link_to 'Delete this Manager', delete_provider_alternative_url(params[:id]), method: :delete,
+      data: { confirm: "Deleting this manager will permanently remove it from ZokuVault." },
+      class: 'button small-button secondary-button', id: 'delete-provider' %>
   <% end %>
 </div>
 
-  <% @financial_provider.accounts.each_with_index do |data, index| %>
+  <% @financial_provider.alternatives.each_with_index do |data, index| %>
 
     <div class="card cg-3 mb-30 add-another">
 
-      <%= f.fields_for "account_#{index}", data do |ff| %>
-        <%= render 'account_details_form', ff: ff, index: index, data: data %>
+      <%= f.fields_for "alternative_#{index}", data do |ff| %>
+        <%= render 'alternative_details_form', ff: ff, index: index, data: data %>
       <% end %>
 
       <% if data.id %>
         <span class="mt-30 mb-30">
-          <%= link_to 'Delete this account', delete_account_url(data.id), method: :delete,
-              data: { confirm: "Deleting this account will permanently remove it from ZokuVault." },
-              class: 'button small-button secondary-button', id: 'delete-account' %>
+          <%= link_to 'Delete this investment', delete_alternative_url(data.id), method: :delete,
+              data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },
+              class: 'button small-button secondary-button', id: 'delete-investment' %>
         </span>
       <% end %>
 
     </div>
   <% end %>
   
-  <% if @financial_provider.accounts.empty? %>
+  <% if @financial_provider.alternatives.empty? %>
     <% index = 0 %>
     <div class="card cg-3 mb-30 add-another">
-      <%= f.fields_for "account_#{index}" do |ff| %>
-        <%= render 'account_details_form', ff: ff, index: index %>
+      <%= f.fields_for "alternative_#{index}" do |ff| %>
+        <%= render 'alternative_details_form', ff: ff, index: index %>
       <% end %>
     </div>
   <% end %>
@@ -91,7 +90,7 @@
   <svg class="icon add-icon">
     <use xlink:href="#icon-add-1"></use>
   </svg>
-  Add another Account<br>
+  Add another Investment<br>
 </div>
 
 <%= f.submit 'Save', class: "button primary-button big-button" %>
@@ -114,7 +113,7 @@
       clearForm($newForm, old_id_number, new_id_number);
       clearFormFields($newForm);
       $('.chosen-container',$newForm).remove();
-      $newForm.find("#delete-account").remove()
+      $newForm.find("#delete-investment").remove()
       $newForm.insertAfter('.card.mb-30:last');
       $('.chosen-select').chosen({allow_single_deselect: true});
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view

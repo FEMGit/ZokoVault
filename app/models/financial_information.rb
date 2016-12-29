@@ -51,6 +51,14 @@ class FinancialInformation
     ],
     credit_cards: [
       "Credit Card"
+    ],
+    alternatives: [
+      "Venture Capital",
+      "Private Equity",
+      "Hedge Fund",
+      "Seed",
+      "Angel",
+      "Other Alternatives"
     ]
   }.freeze
   
@@ -66,4 +74,6 @@ class FinancialInformation
   
   INVESTMENT_LOANS = net_worth_groups(FinancialInvestment.investment_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans])
   INVESTMENTS = net_worth_groups(FinancialInvestment.investment_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:investments])
+  
+  ALTERNATIVES = net_worth_groups(FinancialAlternative.alternative_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:alternatives])
 end

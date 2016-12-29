@@ -122,8 +122,14 @@ Rails.application.routes.draw do
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
   
   # Financial alternative
-  get 'financial_information/add_alternative', to: 'financial_information#add_alternative', as: :add_alternative
-  get 'financial_information/alternative_details' => 'financial_information#alternative_details', as: 'alternative_details'
+  get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
+  get 'financial_information/alternative/show/:id', to: 'financial_alternative#show', as: :show_alternative
+  get 'financial_information/alternative/:id/edit', to: 'financial_alternative#edit', as: :edit_alternative
+  get 'financial_information/alternative/:id', to: 'financial_alternative#show', as: :account_alternative
+  post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
+  put 'financial_information/alternative/add_alternative', to: 'financial_alternative#update'
+  delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :delete_provider_alternative
+  delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy', as: :delete_alternative
 
   # Financial Account
   get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
@@ -132,7 +138,7 @@ Rails.application.routes.draw do
   get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
   put 'financial_information/account/add_account', to: 'financial_account#update'
-  delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider
+  delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
   
   # Financial Property
@@ -140,7 +146,6 @@ Rails.application.routes.draw do
   get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
   get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
   get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
-  put 'financial_information/property/add_property', to: 'financial_property#update'
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
   
@@ -149,13 +154,14 @@ Rails.application.routes.draw do
   get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
   get 'financial_information/investment/:id/edit', to: 'financial_investment#edit', as: :edit_investment
   get 'financial_information/investment/:id', to: 'financial_investment#show', as: :investment_details
-  put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
+  put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
   
   resources :financial_account
   resources :financial_property
   resources :financial_investment
+  resources :financial_alternative
   
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard

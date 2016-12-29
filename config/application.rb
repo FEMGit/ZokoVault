@@ -127,6 +127,9 @@ module ZokuVault
           },
           { "value" => "investment",
             "label" => "Investment or Debt"
+          },
+          { "value" => "alternative",
+            "label" => "Alternative Investment"
           }
         ]
       },

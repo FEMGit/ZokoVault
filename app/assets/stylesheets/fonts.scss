@@ -67,3 +67,17 @@ ol li {
 .negative-value{
   color: $color-alert;
 }
+
+.bread-crumbs {
+  font-size: 12px;
+  margin-bottom: 15px;
+  color: $color-gray-dark-tinted;
+  & > a {
+    color: $color-gray-dark-tinted;
+    text-decoration: none;
+    &:hover {
+      color: $color-link-blue;
+      text-decoration: underline;
+    }
+  }
+}

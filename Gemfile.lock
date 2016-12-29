@@ -61,6 +61,7 @@ GEM
     bourbon (4.2.7)
       sass (~> 3.4)
       thor (~> 0.19)
+    breadcrumbs_on_rails (3.0.1)
     builder (3.2.2)
     byebug (9.0.6)
     capybara (2.11.0)
@@ -455,6 +456,7 @@ DEPENDENCIES
   autonumeric-rails
   aws-sdk (~> 2)
   bourbon
+  breadcrumbs_on_rails
   byebug
   capybara
   carrierwave (= 0.10.0)

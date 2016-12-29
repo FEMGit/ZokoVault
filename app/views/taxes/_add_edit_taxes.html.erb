@@ -1,5 +1,8 @@
-<h1><%= @tax_year.year %> Taxes Setup</h1>
+<div class="bread-crumbs">
+  <%= render_breadcrumbs :separator => ' > ' %>
+</div>
 
+<h1><%= @tax_year.year %> Taxes Setup</h1>
 <%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
   <%= f.hidden_field :year %>

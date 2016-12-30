@@ -4,12 +4,14 @@
       <th>Name</th>
       <th>Modified</th>
       <th>Tags</th>
-      <th>Shared With</th>
+      <th class="fixed-cell-small">Shared With</th>
+      <th class="fixed-cell-small">Notes</th>
       <th class="nosort">Actions</th>
     </tr>
   </thead>
   <tbody>
     <% if documents && documents.empty? %>
+      <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
@@ -27,6 +29,9 @@
         </td>
         <td>
           <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
+        </td>
+        <td>
+          <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description} %>
         </td>
         <td>
           <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>

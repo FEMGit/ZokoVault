@@ -12,6 +12,7 @@ table {
     vertical-align: middle;
     border-bottom: 1px solid $color-gray-light;
     padding: 5px;
+    z-index: 10;
   }
   tr:last-child td {
     border-bottom: 0;
@@ -27,6 +28,9 @@ th {
   color: $color-gray-med-shaded;
   background:$color-off-white;
   line-height: 14px;
+  &.fixed-cell-small {
+    @include fixed-cell-size($table-cell-small)
+  }
 }
 
 $right-table-padding: 20px;

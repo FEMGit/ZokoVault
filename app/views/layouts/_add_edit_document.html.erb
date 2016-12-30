@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <%= form_for @document, html: { id: "doc-form" } do |f| %>
   <h3 class="document-title"> <%= yield(:title) %> </h3>
   <% if @document.persisted? %>

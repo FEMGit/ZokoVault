@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <h1>Alternative - Add Investment</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_alternative) do |f| %>

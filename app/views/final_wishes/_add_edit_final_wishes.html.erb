@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <h1><%= @final_wish_info.group %> Setup</h1>
 
 <%= form_for(@final_wish_info, url: "#{yield(:url_path)}") do |f| %>

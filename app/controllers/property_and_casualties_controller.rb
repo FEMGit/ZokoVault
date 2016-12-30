@@ -2,6 +2,20 @@ class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  add_breadcrumb "Property & Casualty - Setup", :new_property_path, :only => %w(new)
+  before_action :set_edit_crumbs, only: [:edit]
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Property & Casualty - Setup", edit_property_path(@property_and_casualty)
+  end
 
   # GET /properties
   # GET /properties.json

@@ -4,6 +4,20 @@ class FinancialInvestmentController < AuthenticatedController
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   
+  # Breadcrumbs navigation
+  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit)
+  add_breadcrumb "Financial Info - Add Other Investment or Debt", :add_investment_path, :only => %w(new)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_edit_crumbs, only: [:edit]
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@financial_investment.name}", show_investment_path(@financial_investment)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Financial Info - Add Other Investment or Debt", edit_investment_path(@financial_investment)
+  end
+  
   def new
     @financial_investment = FinancialInvestment.new(user: resource_owner)
     authorize @financial_investment
@@ -76,7 +90,6 @@ class FinancialInvestmentController < AuthenticatedController
   def set_documents
     @documents = Document.for_user(current_user).where(category: @category, financial_information_id: @investment_provider.id)
   end
-
   
   def initialize_category_and_group
     @category = Rails.application.config.x.FinancialInformationCategory

@@ -2,6 +2,9 @@ class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_document_params, only: [:create, :update]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Documents", :documents_path, :only => %w(new edit)
 
   @after_new_user_created = ""
 

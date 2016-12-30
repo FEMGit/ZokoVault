@@ -3,7 +3,12 @@ class TrustsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
-
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
+  add_breadcrumb "Trusts", :trusts_path, :only => %w(edit index new)
+  add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new)
+  
   # GET /trusts
   # GET /trusts.json
   def index

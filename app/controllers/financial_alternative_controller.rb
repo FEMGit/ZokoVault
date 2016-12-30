@@ -4,6 +4,20 @@ class FinancialAlternativeController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   before_action :set_account, only: [:destroy]
   
+  # Breadcrumbs navigation
+  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit)
+  add_breadcrumb "Alternative - Add Investment", :add_alternative_path, :only => %w(new)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_edit_crumbs, only: [:edit]
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@financial_provider.name}", show_alternative_path(@financial_provider)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Alternative - Add Investment", edit_alternative_path(@financial_provider)
+  end
+  
   def new
     @financial_provider = FinancialProvider.new(user: resource_owner)
     @financial_alternative = FinancialAlternative.new

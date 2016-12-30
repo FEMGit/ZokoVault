@@ -1,6 +1,9 @@
 class ContactsController < AuthenticatedController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
   before_action :my_profile_contact?, only: [:show, :edit]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Contacts & Permissions", :contacts_path, :only => %w(show)
 
   # GET /contacts
   # GET /contacts.json

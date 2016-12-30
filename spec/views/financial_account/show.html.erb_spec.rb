@@ -35,7 +35,7 @@ RSpec.describe "financial_account/show", type: :view do
   
   before(:each) do
     financial_account = FinancialAccountInformation.create! account_0
-    financial_provider = FinancialAccountProvider.create! valid_attributes
+    financial_provider = FinancialProvider.create! valid_attributes
     financial_provider.accounts << financial_account
     assign(:financial_provider, financial_provider)
     

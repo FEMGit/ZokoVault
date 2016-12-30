@@ -2,6 +2,9 @@ class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_document_params, only: [:create, :update]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Documents", :documents_path, :only => %w(new edit)
 
   @after_new_user_created = ""
 
@@ -15,7 +18,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @document = Document.new(base_params.slice(:category, :group, :vendor_id).merge(user: current_user))
+    @document = Document.new(base_params.slice(:category, :group, :vendor_id, :financial_information_id).merge(user: current_user))
 
     authorize @document
 
@@ -118,7 +121,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def base_params
-    params.permit(:group, :category, :vendor_id)
+    params.permit(:group, :category, :vendor_id, :financial_information_id)
   end
   
   def document_share_params
@@ -130,7 +133,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids, :vendor_id,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids, :vendor_id, :financial_information_id,
                                      shares_attributes: [:user_id, :contact_id])
   end
 

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :financial_account_provider, class: 'FinancialAccountProvider' do
+  factory :financial_provider, class: 'FinancialProvider' do
     name "MyString"
     web_address "MyString"
     street_address "MyString"

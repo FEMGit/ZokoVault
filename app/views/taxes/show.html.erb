@@ -1,6 +1,4 @@
-<div class="bread-crumbs">
-  <%= render_breadcrumbs :separator => ' > '%>
-</div>
+<%= render :partial => "layouts/bread_crumbs" %>
 
 <%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
   <span class="circle-button">

@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <%= link_to edit_investment_url(@financial_investment.id), class: "edit-link" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -84,7 +86,7 @@
 </div>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group, :financial_information_id => @investment_provider.id) %>">
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>

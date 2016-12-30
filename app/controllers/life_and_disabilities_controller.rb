@@ -2,6 +2,20 @@ class LifeAndDisabilitiesController < AuthenticatedController
   before_action :set_life, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  add_breadcrumb "Life & Disability - Setup", :new_life_path, :only => %w(new)
+  before_action :set_edit_crumbs, only: [:edit]
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Life & Disability - Setup", edit_life_path(@life_and_disability)
+  end
 
   # GET /lives
   # GET /lives.json

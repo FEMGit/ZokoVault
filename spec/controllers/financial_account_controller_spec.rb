@@ -44,7 +44,7 @@ RSpec.describe FinancialAccountController, type: :controller do
   describe "GET #show" do
     it "assigns the requested financial account provider as @financial_provider" do
       financial_account = FinancialAccountInformation.create! account_0
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.accounts << financial_account
       get :show, { id: financial_provider.to_param }, session: valid_session
       expect(assigns(:financial_provider)).to eq(financial_provider)
@@ -55,13 +55,13 @@ RSpec.describe FinancialAccountController, type: :controller do
   describe "GET #new" do
     it "assigns a new financial account provider as @financial_provider" do
       get :new, {}, session: valid_session
-      expect(assigns(:financial_provider)).to be_a_new(FinancialAccountProvider)
+      expect(assigns(:financial_provider)).to be_a_new(FinancialProvider)
     end
   end
 
   describe "GET #edit" do
     it "assigns the requested financial account provider as @financial_provider" do
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       get :edit, { id: financial_provider.to_param }, session: valid_session
       expect(assigns(:financial_provider)).to eq(financial_provider)
     end
@@ -70,12 +70,12 @@ RSpec.describe FinancialAccountController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new financial provider" do 
-        expect { post :create, { financial_account_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session }
-          .to change(FinancialAccountProvider, :count).by(1)
+        expect { post :create, { financial_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session }
+          .to change(FinancialProvider, :count).by(1)
       end
       
       it "shows correct flash message on create" do
-        post :create, { financial_account_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session
+        post :create, { financial_provider: valid_attributes.merge(account_0: account_0) }, session: valid_session
         expect(flash[:success]).to be_present
       end
     end
@@ -84,11 +84,11 @@ RSpec.describe FinancialAccountController, type: :controller do
       let(:financial_provider) { assigns(:financial_provider) }
 
       before do
-        post :create, {financial_account_provider: valid_attributes.merge(account_0: account_0)}, session: valid_session
+        post :create, {financial_provider: valid_attributes.merge(account_0: account_0)}, session: valid_session
       end
 
       it "assigns a newly created financial provider as @financial_provider" do
-        expect(financial_provider).to be_a(FinancialAccountProvider)
+        expect(financial_provider).to be_a(FinancialProvider)
         expect(financial_provider).to be_persisted
       end
       
@@ -136,12 +136,12 @@ RSpec.describe FinancialAccountController, type: :controller do
     
     context "with invalid params" do
       it "assigns a newly created but unsaved financial provider as @financial_provider" do
-        post :create, { financial_account_provider: invalid_attributes }, session: valid_session
-        expect(assigns(:financial_provider)).to be_a(FinancialAccountProvider)
+        post :create, { financial_provider: invalid_attributes }, session: valid_session
+        expect(assigns(:financial_provider)).to be_a(FinancialProvider)
       end
 
       it "re-renders the 'new' template" do
-        post :create, { financial_account_provider: invalid_attributes }, session: valid_session
+        post :create, { financial_provider: invalid_attributes }, session: valid_session
         expect(response).to render_template :new
       end
     end
@@ -178,8 +178,8 @@ RSpec.describe FinancialAccountController, type: :controller do
       let(:financial_provider) { assigns(:financial_provider) }
       
       before do
-        financial_provider = FinancialAccountProvider.create! valid_attributes
-        put :update, { id: financial_provider.to_param, financial_account_provider: new_provider_attributes.merge(account_0: new_account_attributes) }, session: valid_session
+        financial_provider = FinancialProvider.create! valid_attributes
+        put :update, { id: financial_provider.to_param, financial_provider: new_provider_attributes.merge(account_0: new_account_attributes) }, session: valid_session
       end
 
       it "shows correct flash message on update" do
@@ -222,15 +222,15 @@ RSpec.describe FinancialAccountController, type: :controller do
     end
     
     it "destroys the requested financial provider and redirect to main financial information page" do
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       expect { delete :destroy_provider, { id: financial_provider.to_param }, session: valid_session }
-        .to change(FinancialAccountProvider, :count).by(-1)
+        .to change(FinancialProvider, :count).by(-1)
       expect(response).to redirect_to financial_information_path
     end
     
     it "destroys the requested financial account and redirect to previous page" do
       financial_account = FinancialAccountInformation.create! account_0
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.accounts << financial_account
       expect { delete :destroy, { id: financial_account.to_param }, session: valid_session }
         .to change(financial_provider.accounts, :count).by(-1)
@@ -239,7 +239,7 @@ RSpec.describe FinancialAccountController, type: :controller do
     
     it "shows correct flash message on destroy provider" do
       financial_account = FinancialAccountInformation.create! account_0
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.accounts << financial_account
       delete :destroy_provider, { id: financial_provider.to_param }, session: valid_session
       expect(flash[:notice]).to be_present
@@ -247,7 +247,7 @@ RSpec.describe FinancialAccountController, type: :controller do
     
     it "shows correct flash message on destroy account" do
       financial_account = FinancialAccountInformation.create! account_0
-      financial_provider = FinancialAccountProvider.create! valid_attributes
+      financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.accounts << financial_account
       delete :destroy, { id: financial_account.to_param }, session: valid_session
       expect(flash[:notice]).to be_present

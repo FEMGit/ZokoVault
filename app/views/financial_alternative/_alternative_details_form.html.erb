@@ -1,0 +1,77 @@
+<%= ff.hidden_field :id, id: "alternative_id_#{index}" %>
+  <h3 class="card-label">Investment Information</h3>
+  
+  <%= ff.label :alternative_type, 'Type' %>
+  <div class="styled-select">
+    <%= ff.select :alternative_type, FinancialAlternative::alternative_types.keys , id: "alternative_type_#{index}"%>
+  </div>
+  
+  <%= ff.label :name, 'Investment Name' %>
+  <%= ff.text_field :name, id: "alternative_name_#{index}" %>
+
+  <%= ff.label :owner_id, 'Account Owner' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(ff, :owner_id, @contacts, id: "alternative_owner_#{index}", multiple: false) %>
+  </div>
+  
+  <%= ff.label :commitment, 'Commitment' %>
+  <%= ff.text_field :commitment, id: "alternative_commitment_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  :value => ff.object && number_to_currency(ff.object.commitment, precision: 0, unit: "$") %>
+  
+  <%= ff.label :total_calls, 'Total Calls' %>
+  <%= ff.text_field :total_calls, id: "alternative_total_calls_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  :value => ff.object && number_to_currency(ff.object.total_calls, precision: 0, unit: "$") %>
+  
+  <%= ff.label :total_distributions, 'Total Distributions' %>
+  <%= ff.text_field :total_distributions, id: "alternative_distributions_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  :value => ff.object && number_to_currency(ff.object.total_distributions, precision: 0, unit: "$") %>
+  
+  <%= ff.label :current_value, 'Current Value' %>
+  <%= ff.text_field :current_value, id: "alternative_current_value_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  :value => ff.object && number_to_currency(ff.object.current_value, precision: 0, unit: "$") %>
+
+  <%= ff.label :primary_contact_id, 'Primary Contact' %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(ff, :primary_contact_id, @contacts, id: "alternative_primary_#{index}", multiple: false) %>
+  </div>
+
+  <%= ff.label :notes %>
+  <%= ff.text_area :notes, id: "alternative_notes_#{index}" %>
+
+<script>
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
+      value: ""
+    });
+    $form.find("#" + new_id + " option").prop("selected", false);
+    $form.find("#" + new_id).css('color', 'black')
+  };
+  clearForm = function($newForm, old_id, new_id) {
+    new_element_name = "financial_provider[alternative_" + new_id + "]";
+    id_prefix = "financial_provider_alternative_"
+    changeIdAndName($newForm, "alternative_id_" + old_id,
+      "alternative_id_" + new_id, new_element_name + "[id]")
+    changeIdAndName($newForm, id_prefix + old_id + "_alternative_type",
+      id_prefix + new_id + "_alternative_type", new_element_name + "[alternative_type]")
+    changeIdAndName($newForm, "alternative_owner_" + old_id,
+      "alternative_owner_" + new_id, new_element_name + "[owner_id]")
+    changeIdAndName($newForm, "alternative_name_" + old_id,
+      "alternative_name_" + new_id, new_element_name + "[name]")
+    changeIdAndName($newForm, "alternative_commitment_" + old_id,
+      "alternative_commitment_" + new_id, new_element_name + "[commitment]")
+    changeIdAndName($newForm, "alternative_total_calls_" + old_id,
+      "alternative_total_calls_" + new_id, new_element_name + "[total_calls]")
+    changeIdAndName($newForm, "alternative_distributions_" + old_id,
+      "alternative_distributions_" + new_id, new_element_name + "[total_distributions]")
+    changeIdAndName($newForm, "alternative_current_value_" + old_id,
+      "alternative_current_value_" + new_id, new_element_name + "[current_value]")
+
+    changeIdAndName($newForm, "alternative_primary_" + old_id,
+      "alternative_primary_" + new_id, new_element_name + "[primary_contact_id]")
+    changeIdAndName($newForm, "alternative_notes_" + old_id,
+      "alternative_notes_" + new_id, new_element_name + "[notes]")
+    $newForm.find("#delete-investment").remove();
+  }
+</script>

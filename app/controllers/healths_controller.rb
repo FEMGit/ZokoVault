@@ -2,6 +2,20 @@ class HealthsController < AuthenticatedController
   before_action :set_health, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  add_breadcrumb "Health - Setup", :new_health_path, :only => %w(new)
+  before_action :set_edit_crumbs, only: [:edit]
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@health.name}", health_path(@health)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Health - Setup", edit_health_path(@health)
+  end
 
   # GET /healths
   # GET /healths.json

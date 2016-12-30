@@ -1,6 +1,4 @@
-<div class="bread-crumbs">
-  <%= render_breadcrumbs :separator => ' > ' %>
-</div>
+<%= render :partial => "layouts/bread_crumbs" %>
 
 <h1><%= @tax_year.year %> Taxes Setup</h1>
 <%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>

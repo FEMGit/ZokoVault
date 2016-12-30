@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161227085952) do
+ActiveRecord::Schema.define(version: 20161230064506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,17 +56,19 @@ ActiveRecord::Schema.define(version: 20161227085952) do
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "folder_id"
-    t.string   "name",           null: false
+    t.string   "name",                     null: false
     t.text     "description"
-    t.string   "url",            null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.string   "url",                      null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.string   "category"
     t.string   "group"
     t.integer  "vault_entry_id"
     t.integer  "vendor_id"
+    t.integer  "financial_information_id"
   end
 
+  add_index "documents", ["financial_information_id"], name: "index_documents_on_financial_information_id", using: :btree
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
   add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
   add_index "documents", ["vendor_id"], name: "index_documents_on_vendor_id", using: :btree
@@ -121,22 +123,23 @@ ActiveRecord::Schema.define(version: 20161227085952) do
 
   add_index "financial_account_informations", ["user_id"], name: "index_financial_account_informations_on_user_id", using: :btree
 
-  create_table "financial_account_providers", force: :cascade do |t|
+  create_table "financial_alternatives", force: :cascade do |t|
+    t.integer  "alternative_type"
     t.string   "name"
-    t.string   "web_address"
-    t.string   "street_address"
-    t.string   "city"
-    t.string   "state"
-    t.integer  "zip"
-    t.string   "phone_number"
-    t.string   "fax_number"
+    t.integer  "owner_id"
+    t.decimal  "commitment"
+    t.decimal  "total_calls"
+    t.decimal  "total_distributions"
+    t.decimal  "current_value"
     t.integer  "primary_contact_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.string   "notes"
+    t.integer  "manager_id"
     t.integer  "user_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
-  add_index "financial_account_providers", ["user_id"], name: "index_financial_account_providers_on_user_id", using: :btree
+  add_index "financial_alternatives", ["user_id"], name: "index_financial_alternatives_on_user_id", using: :btree
 
   create_table "financial_investments", force: :cascade do |t|
     t.string   "name"
@@ -154,6 +157,7 @@ ActiveRecord::Schema.define(version: 20161227085952) do
     t.integer  "user_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "empty_provider_id"
   end
 
   add_index "financial_investments", ["user_id"], name: "index_financial_investments_on_user_id", using: :btree
@@ -172,9 +176,28 @@ ActiveRecord::Schema.define(version: 20161227085952) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
+    t.integer  "empty_provider_id"
   end
 
   add_index "financial_properties", ["user_id"], name: "index_financial_properties_on_user_id", using: :btree
+
+  create_table "financial_providers", force: :cascade do |t|
+    t.string   "name"
+    t.string   "web_address"
+    t.string   "street_address"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zip"
+    t.string   "phone_number"
+    t.string   "fax_number"
+    t.integer  "primary_contact_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "user_id"
+    t.string   "type"
+  end
+
+  add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
 
   create_table "folders", force: :cascade do |t|
     t.integer  "user_id"
@@ -299,6 +322,23 @@ ActiveRecord::Schema.define(version: 20161227085952) do
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "table_financial_alternatives", force: :cascade do |t|
+    t.integer  "alternative_type"
+    t.string   "name"
+    t.integer  "owner_id"
+    t.decimal  "commitment"
+    t.decimal  "total_calls"
+    t.decimal  "total_distributions"
+    t.decimal  "current_value"
+    t.integer  "primary_contact_id"
+    t.string   "notes"
+    t.integer  "user_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "table_financial_alternatives", ["user_id"], name: "index_table_financial_alternatives_on_user_id", using: :btree
 
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
@@ -501,8 +541,10 @@ ActiveRecord::Schema.define(version: 20161227085952) do
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "final_wish_infos", "users"
+  add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "shares", "users"
+  add_foreign_key "table_financial_alternatives", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"

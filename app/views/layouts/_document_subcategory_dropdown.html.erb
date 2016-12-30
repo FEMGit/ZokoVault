@@ -1,0 +1,23 @@
+<label>Subcategory</label>
+<div class="chosen-styled-select" id="category_groups" <% if @card_names.present? %> style="display: none;" <% end %> >
+  <%= f.collection_select :group, 
+    @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select..." }
+  %>
+</div>
+
+<div class="chosen-styled-select" id="subcategory_names_financial"  <% if @card_names.empty? || !category?(@card_names, Rails.configuration.x.FinancialInformationCategory) %> style="display: none;" <% end %> >
+  <%= f.collection_select :financial_information_id, 
+    @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_subcategory_financial",
+      selected: params[:id] }
+  %>
+</div>
+
+<div class="chosen-styled-select" id="subcategory_names_insurance"  <% if @card_names.empty? || !category?(@card_names, Rails.configuration.x.InsuranceCategory) %> style="display: none;" <% end %> >
+  <%= f.collection_select :vendor_id, 
+    @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_subcategory_insurance",
+      selected: params[:id] }
+  %>
+</div>

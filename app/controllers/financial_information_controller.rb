@@ -1,6 +1,7 @@
 class FinancialInformationController < AuthenticatedController
   helper_method :cash_sum, :investments_sum, :properties_sum,
-                :credit_cards_sum, :loans_sum, :net_worth
+                :credit_cards_sum, :loans_sum, :net_worth, :alternatives_sum,
+                :uncalled_commitments_sum
 
   before_action :set_contacts, only: [:add_alternative]
   
@@ -8,9 +9,24 @@ class FinancialInformationController < AuthenticatedController
     session[:ret_url] = financial_information_path
     @category = Rails.application.config.x.FinancialInformationCategory
     @documents = Document.for_user(current_user).where(category: @category)
-    @account_providers = FinancialAccountProvider.for_user(current_user)
+    
+    account_provider_ids = FinancialAccountInformation.for_user(current_user).map(&:account_provider_id)
+    @account_providers = FinancialProvider.for_user(current_user).find(account_provider_ids)
+    
+    alternative_manager_ids = FinancialAlternative.for_user(current_user).map(&:manager_id)
+    @alternative_managers = FinancialProvider.for_user(current_user).find(alternative_manager_ids)
+    
     @investments = FinancialInvestment.for_user(current_user)
     @properties = FinancialProperty.for_user(current_user)
+  end
+  
+  def alternatives_sum
+    FinancialAlternative.alternatives(current_user).sum(:current_value)
+  end
+  
+  def uncalled_commitments_sum
+    FinancialAlternative.alternatives(current_user).sum(:total_calls) -
+      FinancialAlternative.alternatives(current_user).sum(:commitment)
   end
   
   def cash_sum
@@ -38,7 +54,8 @@ class FinancialInformationController < AuthenticatedController
   end
   
   def net_worth
-    cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum
+    cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum + alternatives_sum +
+      uncalled_commitments_sum
   end
   
   def value_negative

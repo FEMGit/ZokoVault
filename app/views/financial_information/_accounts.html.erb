@@ -1,0 +1,42 @@
+<% account_providers.each do |provider| %>
+  <div class="card cg-3 flex-column mb-20 cp cp">
+    <%= link_to content_tag(:a), show_account_url(provider.id), class: "whole-card-link" %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(current_user, @category, provider.id) } %>
+    <h3><%= provider.name %></h3>
+    <p>
+      <%= link_to provider.web_address, provider.web_address %><br>
+      <%= provider.phone_number %>
+    </p>
+      
+    <% if provider.primary_contact.present? %>
+      <label>Primary Contact</label>
+      <ul class="data-list">
+        <li class="contact-pair">
+          <%= provider.primary_contact.name %><br>
+          <%= mail_to provider.primary_contact.emailaddress, provider.primary_contact.emailaddress %><br>
+          <%= provider.primary_contact.phone %><br>
+        </li>
+      </ul>
+    <% end %>
+
+    <ul class="data-list mb-20">
+      <% provider.accounts.each do |account| %>
+        <li class="data-pair">
+          <label><%= account.account_type %></label>
+          <%= render partial: "value_show", locals: { value: account.value, type: account.account_type } %>
+        </li>
+      <% end %>
+    </ul>
+
+    <% if provider.share_with_contacts.present? %>
+      <label>Shared With</label>
+      <section class="shared-list">
+        <% provider.share_with_contacts.each do |share| %>
+          <% if share.present? %>
+            <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
+          <% end %>
+         <% end %>
+       </section>
+     <% end %>
+  </div>
+<% end %>

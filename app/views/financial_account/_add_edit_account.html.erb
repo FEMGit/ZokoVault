@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <h1>Financial Info - Add Account</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_account) do |f| %>
@@ -53,7 +55,7 @@
   </section>
   
   <% if params[:id] %>
-    <%= link_to 'Delete this Provider', delete_provider_url(params[:id]), method: :delete,
+    <%= link_to 'Delete this Provider', delete_provider_account_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this provider will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>
   <% end %>

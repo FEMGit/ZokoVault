@@ -3,6 +3,11 @@ class WillsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
+  add_breadcrumb "Wills", :wills_path, :only => %w(edit index new)
+  add_breadcrumb "Wills - Setup", :new_will_path, :only => %w(new)
 
   # GET /wills
   # GET /wills.json

@@ -3,7 +3,26 @@ class FinalWishesController < AuthenticatedController
   before_action :set_final_wish, only: [:destroy]
   before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit, :new]
   before_action :set_contacts, only: [:new, :edit]
-
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Final Wishes", :final_wishes_path, :only => %w(show new edit)
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_edit_crumbs, only: [:edit]
+  before_action :set_new_crumbs, only: [:new]
+  
+  def set_details_crumbs
+    return unless @final_wish.final_wishes.any?
+    add_breadcrumb "#{@final_wish.group}", final_wish_path(@final_wish)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "#{@final_wish.group} Setup", edit_final_wish_path(@final_wish)
+  end
+  
+  def set_new_crumbs
+    add_breadcrumb "#{params[:group]} Setup", new_final_wish_path
+  end
+  
   # GET /final_wishes
   # GET /final_wishes.json
   def index

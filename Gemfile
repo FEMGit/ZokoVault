@@ -5,6 +5,7 @@ ruby "2.3.3"
 gem 'rails', '4.2.7.1'
 # Use sqlite3 as the database for Active Record
 gem 'pg'
+gem "rails_12factor"
 # Authentication
 gem 'devise'
 # Authorization

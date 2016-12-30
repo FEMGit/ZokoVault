@@ -1,21 +1,25 @@
 .pie-chart{
   width: 35%;
-  height: 250px;
+  height: 300px;
   display: inline-block;
-
 
   @include media($teneighty) {
     width: 29.4%;
+    height: 220px;
+    margin-top: 50px;
   }
   @include media($eightfifty) {
+    height: 180px;
+    margin-top: 50px;
     width: 27.6%;
   }
   @include media($tablet) {
+    height: 300px;
     width: 100%;
   }
 }
 .pie-legend{
-  height:250px;
+  height: 330px;
   width: 25%;
   min-width: 200px;
   display: inline-block;

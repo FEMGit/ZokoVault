@@ -1,3 +1,5 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
 <div>
   <% if yield(:no_editable_resources).blank? %>
     <a class="edit-link" href='<%= yield(:edit_wtl_path) %>'>

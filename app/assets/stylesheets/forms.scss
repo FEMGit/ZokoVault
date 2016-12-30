@@ -380,3 +380,14 @@ label:hover input[type="checkbox"]:checked + span {
   margin-bottom: 10px;
   color: #666;
 }
+
+///iOS hacks
+@supports (-webkit-text-size-adjust:none) and (not (-ms-ime-align:auto))
+and (not (-moz-appearance:none)){
+
+  body select.styled-select {
+    border: 1px solid $color-gray-med-tinted;
+    background:  $color-off-white-shaded !important;
+  }
+
+}

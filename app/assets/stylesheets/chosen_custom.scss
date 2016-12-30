@@ -1,3 +1,6 @@
+$chosen-sprite: url('chosen-sprite.svg') !default;
+$chosen-sprite-retina: url('chosen-sprite@2x.svg') !default;
+
 $arrow-dropdown-margin-right: 30px;
 
 .chosen-styled-select{
@@ -6,16 +9,6 @@ $arrow-dropdown-margin-right: 30px;
 
 .chosen-container-multi .chosen-choices li.search-field input[type=text]{
   font-family: "Open Sans", serif;
-}
-
-.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-  background: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
-}
-
-.chosen-container-single .chosen-single abbr:hover,
-.chosen-container-single.chosen-disabled .chosen-single abbr:hover,
-.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
-  background: asset-data-url('chosen-sprite.png') -42px -10px no-repeat !important;
 }
 
 .chosen-container-single {
@@ -40,10 +33,15 @@ $arrow-dropdown-margin-right: 30px;
     abbr {
       top: 10px !important;
       right: 35px !important;
-      background: asset-data-url('chosen-sprite.png') -42px 1px no-repeat !important;
+      background: asset-data-url('chosen-sprite.svg') -42px 1px no-repeat !important;
       font-size: 1px;
     }
   }
+}
+
+.chosen-container-single.chosen-container-active .chosen-single,
+.chosen-container-active .chosen-choices{
+  border-radius: 5px 5px 0 0 !important;
 }
 
 .chosen-choices {
@@ -64,10 +62,93 @@ $arrow-dropdown-margin-right: 30px;
    font-family: "Open Sans", serif;
    font-size: 16px;
 }
+.chosen-container-single .chosen-drop{
+  border-top: 1px solid $color-gray-med-tinted !important;
+}
 
 //SET WIDTH
 .chosen-container-multi,
 .chosen-container-multi .chosen-choices,
 .chosen-container .chosen-drop{
   @include form-width;
+}
+
+//CHOSEN SPRITE
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  background: asset-data-url('chosen-sprite.svg') -42px 1px no-repeat !important;
+}
+.chosen-container-single .chosen-single abbr:hover,
+.chosen-container-single.chosen-disabled .chosen-single abbr:hover,
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+  background: asset-data-url('chosen-sprite.svg') -42px -10px no-repeat !important;
+}
+
+//Search-results
+.chosen-container .chosen-drop .chosen-results li.highlighted{
+  background-color: $color-primary-shaded;
+  background-image: linear-gradient($color-primary-shaded, $color-primary-shaded);
+}
+
+//Search in single select
+.chosen-container-single .chosen-search input[type="text"] {
+  background: transparent asset-data-url('SVG/search.svg')no-repeat 4px 7px !important;
+  padding-left: 20px;
+}
+
+//Multi-select selected contacts
+.chosen-container-multi .chosen-choices li.search-choice{
+  border: 1px solid $color-gray-light-shaded;
+  background-color:  $color-off-white-shaded;
+  background-image: linear-gradient( $color-off-white-shaded,  $color-off-white-shaded);
+  width: 85%;
+  display: inline-block;
+  float: none;
+  line-height: 16px;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close{
+  top: 6px;
+}
+
+//Search in multi select
+.chosen-container-multi .chosen-choices li{
+  float:right;
+}
+.chosen-container-multi .chosen-choices li.search-field:first-child{
+  float:left;
+}
+.chosen-container-multi.chosen-container-active .chosen-choices li{
+  display: block;
+  float: none;
+}
+.chosen-container-multi .chosen-choices li.search-field input:focus{
+  background: transparent asset-data-url('SVG/search.svg')no-repeat 0 7px !important;
+  padding-left: 16px;
+}
+
+//CREATE NEW
+.chosen-container .chosen-results{
+  max-height: 150px;
+  padding: 0;
+}
+.chosen-container .chosen-results li.create-new{
+  border-bottom: 1px solid $color-gray-light;
+  background:  $color-off-white-shaded-more;
+  padding: 8px 6px 7px 25px;
+
+  &::before{
+  content:"";
+  background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 5px;
+  }
+
+  &:hover{
+    color: white;
+    background: $color-gray-dark-tinted;
+    opacity: .8;
+  }
+
+
 }

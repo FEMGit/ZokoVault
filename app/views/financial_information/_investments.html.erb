@@ -1,6 +1,7 @@
 <% investments.each do |investment| %>
   <div class="card cg-3 flex-column mb-20 cp">
     <%= link_to content_tag(:a), show_investment_url(investment.id), class: "whole-card-link" %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(current_user, @category, investment_provider_id(current_user, investment)) } %>
     <h3><%= investment.name %></h3>
 
     <% if investment.primary_contact.present? %>

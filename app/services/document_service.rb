@@ -18,6 +18,10 @@ class DocumentService
     Document.for_user(user).find(document_ids)
   end
   
+  def get_financial_documents(user, id)
+    Document.for_user(user).where(:category => @category, :financial_information_id => id)
+  end
+  
   def get_all_groups
     @all_groups = Rails.configuration.x.categories.collect{|category| {:label => category[1]["label"], :groups => category[1]["groups"]}}
   end
@@ -54,16 +58,28 @@ class DocumentService
   def get_card_names(user)
     get_all_groups
     return [get_empty_card_values] unless category_exist?
-    vendors = Vendor.for_user(user).where(:category => @category).order(:group => 'desc')
-    return [] unless vendors.present? || @category == Rails.configuration.x.InsuranceCategory
-    vendors.collect { |x| [id: x.id, name: x.name] }.prepend(get_empty_card_values)
+    card_names(user)
   end
-
+  
   def self.get_share_with_documents(user, contact_id)
     Document.for_user(user).select{ |doc| doc.contact_ids.include?(contact_id) }
   end
   
   def self.get_contact_documents(user, category, contact_id)
     Document.where(user: user, category: category, group: contact_id)
+  end
+  
+  private
+  
+  def card_names(user)
+    if @category == Rails.configuration.x.InsuranceCategory
+      vendors = Vendor.for_user(user).where(:category => @category).order(:group => 'desc')
+      vendors.collect { |x| [id: x.id, name: x.name] }.prepend([id: Rails.configuration.x.InsuranceCategory, name: "Select..."])
+    elsif @category == Rails.configuration.x.FinancialInformationCategory
+      providers = FinancialProvider.for_user(user).order(:name => 'desc')
+      providers.collect { |x| [id: x.id, name: x.name] }.prepend([id: Rails.configuration.x.FinancialInformationCategory, name: "Select..."])
+    else
+      []
+    end
   end
 end

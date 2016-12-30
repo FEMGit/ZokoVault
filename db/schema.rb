@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161229041140) do
+ActiveRecord::Schema.define(version: 20161230064506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,17 +56,19 @@ ActiveRecord::Schema.define(version: 20161229041140) do
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "folder_id"
-    t.string   "name",           null: false
+    t.string   "name",                     null: false
     t.text     "description"
-    t.string   "url",            null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.string   "url",                      null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.string   "category"
     t.string   "group"
     t.integer  "vault_entry_id"
     t.integer  "vendor_id"
+    t.integer  "financial_information_id"
   end
 
+  add_index "documents", ["financial_information_id"], name: "index_documents_on_financial_information_id", using: :btree
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
   add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
   add_index "documents", ["vendor_id"], name: "index_documents_on_vendor_id", using: :btree
@@ -155,6 +157,7 @@ ActiveRecord::Schema.define(version: 20161229041140) do
     t.integer  "user_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "empty_provider_id"
   end
 
   add_index "financial_investments", ["user_id"], name: "index_financial_investments_on_user_id", using: :btree
@@ -173,6 +176,7 @@ ActiveRecord::Schema.define(version: 20161229041140) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
+    t.integer  "empty_provider_id"
   end
 
   add_index "financial_properties", ["user_id"], name: "index_financial_properties_on_user_id", using: :btree

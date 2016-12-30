@@ -15,5 +15,17 @@ class FinancialProvider < ActiveRecord::Base
            foreign_key: :manager_id,
            dependent: :destroy
   
+  has_many :properties, 
+           class_name: "FinancialProperty",
+           foreign_key: :empty_provider_id,
+           dependent: :destroy
+  
+  has_many :investments, 
+           class_name: "FinancialInvestment",
+           foreign_key: :empty_provider_id,
+           dependent: :destroy
+  
+  has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
+  
   validates :name, presence: { :message => "Required" }
 end

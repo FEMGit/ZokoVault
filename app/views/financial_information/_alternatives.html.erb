@@ -1,6 +1,7 @@
 <% alternative_managers.each do |manager| %>
   <div class="card cg-3 flex-column mb-20 cp cp">
     <%= link_to content_tag(:a), show_alternative_url(manager.id), class: "whole-card-link" %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(current_user, @category, manager.id) } %>
     <h3><%= manager.name %></h3>
     <p>
       <%= link_to manager.web_address, manager.web_address %><br>

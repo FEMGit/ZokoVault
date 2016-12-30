@@ -1,7 +1,7 @@
 class FinancialAlternativeController < AuthenticatedController
+  before_action :set_provider, only: [:show, :edit, :update, :destroy_provider, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
-  before_action :set_provider, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_account, only: [:destroy]
   
   def new
@@ -89,7 +89,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def set_documents
-    @documents = Document.for_user(resource_owner).where(category: @category, group: @group)
+    @documents = Document.for_user(current_user).where(category: @category, financial_information_id: @financial_provider.id)
   end
 
   

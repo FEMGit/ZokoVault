@@ -36,23 +36,9 @@
         { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false }
       %>
     </div>
-
-    <label>Subcategory</label>
-      <div class="chosen-styled-select" id="category_groups" <% if @card_names.present? %> style="display: none;" <% end %> >
-        <%= f.collection_select :group, 
-          @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
-          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select..." }
-        %>
-      </div>
     
-      <div class="chosen-styled-select" id="insurance_provider_names"  <% if @card_names.empty? %> style="display: none;" <% end %> >
-        <%= f.collection_select :vendor_id, 
-          @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
-          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_vendor",
-            selected: params[:id] }
-        %>
-      </div>
-
+    <%= render partial: 'layouts/document_subcategory_dropdown', locals: { f: f } %>
+    
     <label>Notes</label>
     <%= f.text_area :description %>
 
@@ -121,7 +107,7 @@
     var category = $("#document_category.chosen-select :selected").text().replace('...', '');
     var url = '/documents/get_card_names/' + category
     $.get(url, function(data) {
-      card_names = $('#document_vendor');
+      card_names = $('#document_subcategory' + idPostFixShow(data));
       card_names.empty();
       data.forEach(function(group){
         card_names.append("<option value='" + group.id + "'>" + group.name + "</option>");
@@ -130,13 +116,37 @@
     }).done(function(data) {
       if (data.length > 0) {
         $("#category_groups").hide();
-        $("#insurance_provider_names").show();
+        $("#subcategory_names" + idPostFixShow(data)).show();
+        $("#subcategory_names" + idPostFixHide(data)).hide();
+        
         $("#document_category").prop("selected", false);
+        $("#document_subcategory" + idPostFixHide(data)).prop("selected", false);
       } else {
         $("#category_groups").show();
-        $("#insurance_provider_names").hide();
+        $("#subcategory_names" + idPostFixShow(data)).hide();
+        
+        $("#subcategory_names" + idPostFixHide(data)).show();
+        $("#document_subcategory" + idPostFixShow(data)).prop("selected", false);
       }
     });
+  }
+  
+  var idPostFixShow = function(data) {
+    if (data[0].id === "<%= Rails.configuration.x.InsuranceCategory %>") {
+      return "_insurance"
+    }
+    if (data[0].id === "<%= Rails.configuration.x.FinancialInformationCategory %>") {
+      return "_financial"
+    }
+  }
+  
+  var idPostFixHide = function(data) {
+    if (data[0].id === "<%= Rails.configuration.x.InsuranceCategory %>") {
+      return "_financial"
+    }
+    if (data[0].id === "<%= Rails.configuration.x.FinancialInformationCategory %>") {
+      return "_insurance"
+    }
   }
   
   $("#document_group.chosen-select").chosen().change(updateCardNames)

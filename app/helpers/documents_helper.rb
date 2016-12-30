@@ -6,15 +6,21 @@ module DocumentsHelper
   def add_new_document?(title)
     title == @@add_new_document_title
   end
+  
+  def category?(card_names, category)
+    card_names.flatten.first[:id] == category
+  end
 
   def document_return_path(document)
     session[:ret_url] || document_path(document)
   end
   
   def document_name_tag(document)
-    return unless document.vendor_id.present? &&
-                  document.vendor_id > 0
-    Vendor.find(document.vendor_id).name
+    if document.vendor_id.present? && document.vendor_id > 0
+      Vendor.find(document.vendor_id).name
+    elsif document.financial_information_id.present? && document.financial_information_id > 0
+      FinancialProvider.find(document.financial_information_id).name
+    end
   end
 
   def document_group(document)
@@ -46,8 +52,14 @@ module DocumentsHelper
     Document.for_user(user).where(category: category, group: group).count
   end
   
-  def document_card_specific_count(user, category, group, id)
+  def document_card_insurance_count(user, category, group, id)
     DocumentService.new(:category => category).get_insurance_documents(user, group, id).count
+  end
+  
+  def document_card_financial_count(user, category, id)
+    documents = DocumentService.new(:category => category).get_financial_documents(user, id)
+    return 0 unless documents
+    documents.count
   end
 
   def previewed?(document)

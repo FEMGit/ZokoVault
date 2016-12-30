@@ -1,6 +1,7 @@
 class FinancialPropertyController < AuthenticatedController
-  before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_financial_property, only: [:show, :edit, :update, :destroy]
+  before_action :set_financial_property_provider, only: [:show, :update, :destroy, :set_documents]
+  before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   
   def new
@@ -18,16 +19,18 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def create
+    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name])
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
+    @financial_provider.properties << @financial_property
     authorize @financial_property
     respond_to do |format|
-      if @financial_property.save
+      if @financial_provider.save
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
         set_contacts
         format.html { render :new }
-        format.json { render json: @financial_property.errors, status: :unprocessable_entity }
+        format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -36,6 +39,7 @@ class FinancialPropertyController < AuthenticatedController
     authorize @financial_property
     respond_to do |format|
       if @financial_property.update(property_params.merge(user_id: resource_owner.id))
+        @property_provider.update(name: property_params[:name])
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
@@ -48,6 +52,7 @@ class FinancialPropertyController < AuthenticatedController
   def destroy
     authorize @financial_property
     @financial_property.destroy
+    @property_provider.destroy
     respond_to do |format|
       format.html { redirect_to financial_information_path, notice: 'Property was successfully destroyed.' }
       format.json { head :no_content }
@@ -60,12 +65,16 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property.present? ?  @financial_property.user : current_user
   end
   
+  def set_financial_property_provider
+    @property_provider = FinancialProvider.for_user(resource_owner).find(@financial_property.empty_provider_id)
+  end
+  
   def set_financial_property
     @financial_property = FinancialProperty.for_user(resource_owner).find(params[:id])
   end
   
   def set_documents
-    @documents = Document.for_user(resource_owner).where(category: @category, group: @group)
+    @documents = Document.for_user(current_user).where(category: @category, financial_information_id: @property_provider.id)
   end
   
   def initialize_category_and_group

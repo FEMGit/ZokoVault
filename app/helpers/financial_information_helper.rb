@@ -40,4 +40,12 @@ module FinancialInformationHelper
     FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans].include?(type) ||
       FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
   end
+  
+  def property_provider_id(user, property)
+    FinancialProvider.for_user(user).find(property.empty_provider_id)
+  end
+  
+  def investment_provider_id(user, investment)
+    FinancialProvider.for_user(user).find(investment.empty_provider_id)
+  end
 end

@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="30px" height="32px" viewBox="0 0 30 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="30px" height="400px" viewBox="0 0 30 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch -->
-    <title>selectDropDown</title>
+    <title>select-drop-down</title>
     <desc>Created with Sketch.</desc>
-    <defs>
-        <rect id="path-1" x="0" y="0" width="30" height="32"></rect>
-        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="30" height="32" fill="white">
-            <use xlink:href="#path-1"></use>
-        </mask>
-    </defs>
+    <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Contacts" transform="translate(-535.000000, -392.000000)">
-            <g id="selectDropDown" transform="translate(535.000000, 392.000000)">
-                <use id="Rectangle-59" stroke="#CACACA" mask="url(#mask-2)" stroke-width="2" fill="#F4F4F4" xlink:href="#path-1"></use>
-                <path d="M18,13.4365506 L18,20.5641437 C18,20.9601211 17.4998354,21.1121125 17.2227442,20.9121239 L12.2451062,17.3663263 C11.968015,17.1643378 11.8999926,16.8353566 12.1760835,16.6333681 L17.2567554,13.0885704 C17.5338466,12.886582 18,13.0415731 18,13.4365506 L18,13.4365506 Z" id="Shape" fill="#255984" transform="translate(15.000000, 17.000000) rotate(270.000000) translate(-15.000000, -17.000000) "></path>
-            </g>
+        <g id="select-drop-down">
+            <rect id="Rectangle-59" fill="#F4F4F4" x="0" y="0" width="30" height="400"></rect>
+            <path d="M19,196.436551 L19,203.564144 C19,203.960121 18.4998354,204.112112 18.2227442,203.912124 L13.2451062,200.366326 C12.968015,200.164338 12.8999926,199.835357 13.1760835,199.633368 L18.2567554,196.08857 C18.5338466,195.886582 19,196.041573 19,196.436551 L19,196.436551 Z" id="Shape" fill="#255984" transform="translate(16.000000, 200.000000) rotate(270.000000) translate(-16.000000, -200.000000) "></path>
+            <path d="M0.5,-2.5 L0.5,400" id="Line" stroke="#CACACA" stroke-linecap="square"></path>
         </g>
     </g>
 </svg>

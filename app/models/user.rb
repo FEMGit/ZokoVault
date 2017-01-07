@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable,
          :password_archivable
+
+  scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
 
   validates_format_of :email,
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
@@ -20,6 +21,10 @@ class User < ActiveRecord::Base
   
   delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
            :name, :phone_number, :date_of_birth, :signed_terms_of_service?, to: :user_profile
+
+  def category_shares
+    @category_shares ||= shares.categories
+  end
 
   def mfa_verify?
     case mfa_frequency
@@ -68,5 +73,20 @@ class User < ActiveRecord::Base
     email_nick = email.split("@").first
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
     [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.downcase.include?(x.downcase) }
+  end
+
+  before_create { set_as_admin }
+
+  private
+  
+  # XXX: We do not have "roles" established. I am using a weak association to
+  # establish an admin. If the user has a zokuvault.com email address. Please
+  # note that this is not secure at all. It is very dangerous. Proper roles
+  # should be established quickly.
+
+  ADMIN_REGEX = /@zokuvault.com$/
+  def set_as_admin
+    self.admin ||= (email =~ ADMIN_REGEX).present?
+    true
   end
 end

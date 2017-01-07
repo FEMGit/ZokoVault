@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe CategoriesController, type: :controller do
-  let!(:user) { create :user }
+  let!(:user) { create :user, email: "foo@zokuvault.com" }
 
-  let(:valid_attributes) { { name: Faker::App.name, system: true, user: user} }
+  let(:valid_attributes) { attributes_for(:category) }
   let(:invalid_attributes) { { description: Faker::App.name } }
 
   let(:valid_session) { {} }
@@ -16,7 +16,7 @@ RSpec.describe CategoriesController, type: :controller do
     it "assigns all categories as @categories" do
       category = Category.create! valid_attributes
       get :index, {}, valid_session
-      expect(assigns(:categories)).to eq([category])
+      expect(assigns(:categories).size).to eq(Category.count)
     end
   end
 
@@ -58,7 +58,6 @@ RSpec.describe CategoriesController, type: :controller do
         post :create, {category: valid_attributes}, valid_session
         expect(assigns(:category)).to be_a(Category)
         expect(assigns(:category)).to be_persisted
-        expect(assigns(:category).user).to eq(user)
       end
 
       it "redirects to the created category" do

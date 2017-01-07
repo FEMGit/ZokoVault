@@ -1,4 +1,4 @@
-class LifeAndDisabilityPunditPolicy < BasicPolicy
+class LifeAndDisabilityPunditPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

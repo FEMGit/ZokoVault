@@ -10,10 +10,11 @@ class Health < Vendor
     HealthPunditPolicy
   end
 
+  before_save { self.category = Category.fetch("insurance") }
+
   private
 
   def initialize_category_and_group
-    self.category = "Insurance"
     self.group = "health"
   end
 end

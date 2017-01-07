@@ -3,6 +3,6 @@ FactoryGirl.define do
     document_id 1
     executor_id 1
     name "MyString"
-    user_id 1
+    user { build(:user) }
   end
 end

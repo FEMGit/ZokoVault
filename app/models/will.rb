@@ -1,6 +1,7 @@
 class Will < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
 
+  belongs_to :category
   belongs_to :user
   belongs_to :document
   belongs_to :executor, class_name: "Contact"
@@ -30,9 +31,8 @@ class Will < ActiveRecord::Base
     source: :contact
 
   attr_accessor :has_will
-  # validates :shares, presence: true
   validates :user, presence: true
   validates :title, presence: { :message => "Required" }
-  # validates :vault_entry_contacts, presence: true
-  # validates :vault_entry_beneficiaries, presence: true
+
+  before_save { self.category = Category.fetch("wills - trusts - legal") }
 end

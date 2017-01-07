@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :category do
-    name { Faker::Business.name }
+    name { Faker::App.name }
+    description { Faker::App.name }
   end
 end

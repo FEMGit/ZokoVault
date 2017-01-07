@@ -24,7 +24,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
   let(:valid_attributes) do
     {
-      category: 'Insurance',
+      category: Category.fetch('insurance'),
       group: 'property',
       name: Faker::Company.name,
       webaddress: Faker::Internet.url,

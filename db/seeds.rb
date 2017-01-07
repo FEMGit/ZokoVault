@@ -1,5 +1,5 @@
+load "seeds/categories.rb"
 # Create users
-
 emails = %w[ted.price@gmail.com admin@zokuvault.com user@zokuvault.com user@example.com ]
 
 users = emails.map do |email|
@@ -38,7 +38,7 @@ groups = %w[life property health]
 user_contacts.each do |user, contacts|
   contacts.each do |contact|
     Vendor.create!(
-      category: 'insurance',
+      category: categories['Insurance'],
       group: groups.sample,
       name: Faker::Name.name,
       webaddress: Faker::Internet.url,
@@ -48,3 +48,4 @@ user_contacts.each do |user, contacts|
     )
   end
 end
+

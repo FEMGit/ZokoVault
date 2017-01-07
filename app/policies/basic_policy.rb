@@ -66,7 +66,13 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def shared_with_user?
-    owner_shared_account_with_user? || owner_shared_record_with_user?
+    owner_shared_account_with_user? || 
+      owner_shared_category_with_user? ||
+      owner_shared_record_with_user?
+  end
+
+  def owner_shared_category_with_user?
+    false
   end
 
   def owner_shared_account_with_user?

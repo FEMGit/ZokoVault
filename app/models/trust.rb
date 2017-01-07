@@ -1,8 +1,9 @@
 class Trust < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
 
-  belongs_to :user
+  belongs_to :category
   belongs_to :document
+  belongs_to :user
 
   has_many :vault_entry_contacts, as: :contactable, dependent: :destroy
   has_many :shares, as: :shareable, dependent: :destroy
@@ -33,11 +34,8 @@ class Trust < ActiveRecord::Base
     source: :contact
 
   attr_accessor :has_trust
-  # validates :agents, presence: true
-  # validates :trustees, presence: true
-  # validates :successor_trustees, presence: true
-  # validates :shares, presence: true
   validates :user, presence: true
   validates :name, presence: { :message => "Required" }
   
+  before_save { self.category = Category.fetch("wills - trusts - legal") }
 end

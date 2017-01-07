@@ -1,4 +1,4 @@
-class PropertyAndCasualtyPunditPolicy < BasicPolicy
+class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

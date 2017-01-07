@@ -5,6 +5,10 @@ RSpec.configure do |config|
   unless defined? TWILIO_PHONE_NUMBER # XXX: remove this
     TWILIO_PHONE_NUMBER = "+15005550006"
   end
+
+  config.before(:suite) do
+    load "#{Rails.root}/db/seeds/categories.rb"
+  end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

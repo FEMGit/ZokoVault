@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe LifeAndDisability, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:category_name) { "Insurance" }
+  let!(:resource) { build(:life_and_disability) }
+
+  it_behaves_like "category resource"
 end

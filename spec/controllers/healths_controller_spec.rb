@@ -23,7 +23,7 @@ RSpec.describe HealthsController, type: :controller do
 
   let(:valid_attributes) do
     {
-      category: 'Insurance',
+      category: Category.fetch('insurance'),
       group: 'health',
       name: Faker::Company.name,
       webaddress: Faker::Internet.url,

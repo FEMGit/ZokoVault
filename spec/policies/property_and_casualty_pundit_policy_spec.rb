@@ -5,4 +5,5 @@ describe PropertyAndCasualtyPunditPolicy do
   let(:resource) { create(:property_and_casualty, user: owner) }
 
   it_behaves_like "shared resource"
+  it_behaves_like "shared category" 
 end

@@ -4,7 +4,7 @@ FactoryGirl.define do
     policy_number "MyString"
     group_number "MyString"
     policy_holder_id 1
-    brokery_or_primary_contact_id 1
+    broker_or_primary_contact_id 1
     notes "MyString"
     vendor_id 1
   end

@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Trust, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:category_name) { "Wills - Trusts - Legal" }
+  let!(:resource) { build(:trust) }
+
+  it_behaves_like "category resource"
 end

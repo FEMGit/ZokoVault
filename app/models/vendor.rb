@@ -1,6 +1,7 @@
 class Vendor < ActiveRecord::Base
   scope :for_user, ->(user) {where(user: user)}
 
+  belongs_to :category
   belongs_to :contact
   belongs_to :user
 

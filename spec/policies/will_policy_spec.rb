@@ -5,4 +5,5 @@ describe WillPolicy do
   let(:resource) { create(:will, user: owner) }
 
   it_behaves_like "shared resource"
+  it_behaves_like "shared category" 
 end

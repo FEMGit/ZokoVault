@@ -5,4 +5,5 @@ describe TaxPolicy do
   let(:resource) { create(:tax, user: owner) }
 
   it_behaves_like "shared resource"
+  it_behaves_like "shared category" 
 end

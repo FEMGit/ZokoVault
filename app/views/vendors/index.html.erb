@@ -19,7 +19,7 @@
   <tbody>
     <% @vendors.for_user(current_user).each do |vendor| %>
       <tr>
-        <td><%= vendor.category %></td>
+        <td><%= vendor.category.try(:name) %></td>
         <td><%= vendor.group %></td>
         <td><%= vendor.name %></td>
         <td><%= vendor.webaddress %></td>

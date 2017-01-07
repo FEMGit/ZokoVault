@@ -4,7 +4,7 @@ FactoryGirl.define do
     insured_property "MyString"
     policy_holder_id 1
     coverage_amount "9.99"
-    brokery_or_primary_contact_id 1
+    broker_or_primary_contact_id 1
     notes "MyString"
     vendor_id 1
     notes "MyString"

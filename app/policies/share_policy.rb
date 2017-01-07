@@ -15,6 +15,9 @@ class SharePolicy < BasicPolicy
   # Shared view policies
   def dashboard?; index?; end
   def estate_planning?; index?; end
+  def final_wishes?; index?; end
+  def taxes?; index?; end
+  def insurance?; index?; end
   def power_of_attorneys?; index?; end
   def trusts?; index?; end
   def wills?; index?; end
@@ -52,11 +55,9 @@ class SharePolicy < BasicPolicy
 
   def owner_shared_account_with_user?
     false
-    # Share.exists?(shareable: record.user, contact: Contact.for_user(user))
   end
 
   def owner_shared_record_with_user?
     record.contact.try(:emailaddress) == user.email
-    # Share.exists?(shareable: record, contact: Contact.where(emailaddress: user.email))
   end
 end

@@ -33,6 +33,6 @@
   <% if year_exist?(@taxes, year) %>
     <%= link_to 'View Details', link_to_details(year), class: "small-button outline-button mt-20" %>
   <% else %>
-    <p>No shared items.</p>
+    <%= link_to 'Add Details', link_to_add_details(year), class: "small-button outline-button mt-20" %>
   <% end %>
 </div>

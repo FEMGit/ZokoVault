@@ -21,6 +21,7 @@ class SharePolicy < BasicPolicy
   def power_of_attorneys?; index?; end
   def trusts?; index?; end
   def wills?; index?; end
+  def documents?; index?; end
 
   def scope
     Pundit.policy_scope!(user, record.class)

@@ -12,16 +12,22 @@ class SharedViewController < AuthenticatedController
   
   def insurance
     @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
+    @contacts_with_access = shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
-    
+
     if @shared_category_names.include? 'Insurance'
-      @insurance_vendors = Vendor.for_user(@shared_user).where(category: @category.name)
-      @insurance_documents = Document.for_user(@shared_user).where(category: @category.name)
+      @insurance_vendors = Vendor.for_user(shared_user).where(category: @category.name)
+      @insurance_documents = Document.for_user(shared_user).where(category: @category.name)
+    else
+      @insurance_vendors = @other_shareables.map { |shareable| shareable.is_a?Vendor }
+      @insurance_documents = @document_shareables.map { |shareable| shareable.category.eql?'Vendor' }
     end
   end
 
   def taxes
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
+
     @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     @taxes = 
@@ -30,7 +36,7 @@ class SharedViewController < AuthenticatedController
       else
         @other_shareables.map { |shareable| shareable.is_a?TaxYearInfo }
       end
-    @documents = Document.for_user(@shared_user).where(category: @category.name)
+    @documents = @document_shareables.select { |x| x.category == @category.name}
   end
 
   # GET /final_wishes
@@ -45,7 +51,7 @@ class SharedViewController < AuthenticatedController
       else
         @other_shareables.map { |shareable| shareable.is_a?FinalWishInfo }
       end
-    @documents = Document.for_user(@shared_user).where(category: @category.name)
+    @documents = @document_shareables.select { |x| x.category == @category.name}
   end
 
   def estate_planning
@@ -89,10 +95,43 @@ class SharedViewController < AuthenticatedController
     @group_documents = shareables.select { |resource| resource.is_a?(Document) && resource.group == "PowerOfAttorney" }
   end
 
+
+  def documents
+    @document = Document.for_user(@shared_user).find(params[:id])
+    authorize @document
+    @cards = card_values(@document.category)
+  end
+
+  def card_values(category)
+    service = DocumentService.new(:category => category)
+    service.get_card_values(shared_user)
+  end
+
+
+  def financial_information
+    raise "You cannot view this page" unless @shared_category_names.include? 'Final Information'
+
+    @category = Rails.application.config.x.FinancialInformationCategory
+    @documents = Document.for_user(shared_user).where(category: @category)
+
+    account_provider_ids = FinancialAccountInformation.for_user(shared_user).map(&:account_provider_id)
+    @account_providers = FinancialProvider.for_user(shared_user).find(account_provider_ids)
+
+    alternative_manager_ids = FinancialAlternative.for_user(shared_user).map(&:manager_id)
+    @alternative_managers = FinancialProvider.for_user(shared_user).find(alternative_manager_ids)
+
+    @investments = FinancialInvestment.for_user(shared_user)
+    @properties = FinancialProperty.for_user(shared_user)
+  end
+
   private
 
   def set_shared_user 
     @shared_user = User.find(params[:shared_user_id])
+  end
+
+  def shared_user
+    @shared_user
   end
 
   def set_shares

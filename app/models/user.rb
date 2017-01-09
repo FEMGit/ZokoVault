@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :user_profile, update_only: true
   
   delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
-           :name, :phone_number, :date_of_birth, :signed_terms_of_service?, to: :user_profile
+           :name, :phone_number, :date_of_birth, :signed_terms_of_service?, to: :user_profile, allow_nil: true
 
   def category_shares
     @category_shares ||= shares.categories

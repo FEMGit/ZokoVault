@@ -7,7 +7,7 @@
           <use xlink:href="#icon-document-3"></use>
         </svg>
         <h5 class="category-title"><%= category.name %></h5>
-        <%= shared_category_path(category.name, @shared_user) %>
+        <%= link_to 'View Category', shared_category_view_path(category, @shared_user), class: 'view-category' %>
       </td>
     </tr>
   <% end %>
@@ -19,24 +19,4 @@
     </tr>
   <% end %>
 </table>
-
-
-<h3>Documents</h3>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Modified</th>
-    <th>Tags</th>
-  </tr>
-  <% @document_shareables.each do |shareable| %>
-    <tr>
-      <td>
-        <a><%= link_to shareable.name, shareable %></a>
-      </td>
-      <td><%= shareable.updated_at.strftime("%m/%d/%Y") %>
-      <td>
-        <%= render :partial => "layouts/document_tags", :locals => {:document => shareable } %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @document_shareables, :shareable => true} %>

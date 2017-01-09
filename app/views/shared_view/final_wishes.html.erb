@@ -59,7 +59,7 @@
 </a>
 <h3>Final Wish Documents</h3>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents, :shareable => true} %>
 <a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.FinalWishesCategory.downcase) %>'>
   <span class="circle-button">
     <svg class="icon circle-icon">

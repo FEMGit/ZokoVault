@@ -1,5 +1,9 @@
 <% if previewed?(document) %>
-  <a><%= link_to document.name, document_path(document) %></a>
+  <% if shareable %>
+    <%= link_to document.name, shared_view_documents_path(id: document.id) %>
+  <% else %>
+    <%= link_to document.name, document_path(document) %>
+  <% end %>
 <% else %>
-  <a><%= link_to document.name, download_file(document.url) %></a>
+  <%= link_to document.name, download_file(document.url) %>
 <% end %>

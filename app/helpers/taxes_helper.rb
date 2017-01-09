@@ -9,6 +9,7 @@ module TaxesHelper
   end
 
   def link_to_add_details(year)
+    return unless @taxes.any?
     tax_year = @taxes.where(:year => year).first
     if tax_year
       "#{taxes_path}/#{tax_year.id}/edit"

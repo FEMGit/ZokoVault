@@ -14,7 +14,7 @@ class CategoriesController < AuthenticatedController
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
-    @insurance_vendors = Vendor.for_user(current_user).where(category: @category.name)
+    @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
     @insurance_documents = Document.for_user(current_user).where(category: @category.name)
     session[:ret_url] = "/insurance"
   end

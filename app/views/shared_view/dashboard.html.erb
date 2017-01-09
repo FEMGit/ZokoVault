@@ -7,7 +7,7 @@
           <use xlink:href="#icon-document-3"></use>
         </svg>
         <h5 class="category-title"><%= category.name %></h5>
-        <%= link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category' %>
+        <%= shared_category_path(category.name, @shared_user) %>
       </td>
     </tr>
   <% end %>

@@ -117,6 +117,7 @@ class ContactsController < AuthenticatedController
       UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
       format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, flash: { success: 'Contact was successfully created.' } }
       format.json { render :show, status: :created, location: @contact }
-      format.js { render json: @contact.slice(:id, :firstname, :lastname), status: :ok }
+      contact_dropdown_position = Contact.for_user(current_user).sort_by { |s| s.lastname }.map(&:id).find_index(@contact.id)
+      format.js { render json: @contact.slice(:id, :firstname, :lastname).merge(:position => contact_dropdown_position), status: :ok }
     end
 end

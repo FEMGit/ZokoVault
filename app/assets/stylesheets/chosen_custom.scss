@@ -134,7 +134,14 @@ $arrow-dropdown-margin-right: 30px;
   border-bottom: 1px solid $color-gray-light;
   background:  $color-off-white-shaded-more;
   padding: 8px 6px 7px 25px;
-
+  
+  &.highlighted {
+    border-bottom: 1px solid $color-gray-light;
+    background: $color-off-white-shaded-more;
+    background-color: $color-off-white-shaded-more;
+    color: $color-gray-dark;
+  }
+  
   &::before{
   content:"";
   background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;
@@ -149,6 +156,4 @@ $arrow-dropdown-margin-right: 30px;
     background: $color-gray-dark-tinted;
     opacity: .8;
   }
-
-
 }

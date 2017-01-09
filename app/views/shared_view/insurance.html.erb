@@ -1,0 +1,192 @@
+<h1>Insurance</h1>
+
+<section class="flex-boxes">
+  <% new_link_paths = {
+  "life" => new_life_path,
+  "property" => new_property_path,
+  "health" => new_health_path,
+  } %>
+
+  <% @groups.each do |group| %>
+    <div class="flex-column">
+       <div class="card <%= group['value'] %> column-card section-header">
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_count(current_user, group['label'], @category.name) } %>
+          <h3 class="mb-20"><%= group["label"] %></h3>
+          <p>No shared items.</p>
+
+        <span class="clear"></span>
+      </div>
+
+      <% if group['value']=="life" %>
+        <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
+        
+          <div class="card <%= group['value'] %> column-card">
+          
+            <%= link_to content_tag(:a), life_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <h3><%= vendor.name %></h3>
+
+            <% vendor.policy && vendor.policy.each do |policy| %>
+              <label><%= policy.policy_type %></label>
+              <ul class="data-list">
+                <li class="data-pair">
+                  <span class="pair-name">
+                    <%= policy.policy_holder && policy.policy_holder.name %>
+                  </span>
+                  <span class="data-right">
+                    <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
+                  </span>
+                </li>
+              </ul>
+            <% end %>
+
+            <% if provider_main_page_present?(vendor) %>
+              <label>Provider Details</label>
+              <ul class="data-list">
+                <li class="contact-pair">
+                  <%if vendor.webaddress.present? %>
+                    <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                  <% end %>
+                  <%= vendor.phone %>
+                </li>
+              </ul>
+            <% end %>
+
+            <% if vendor.share_with_contacts.present? %>
+              <label>Shared With</label>
+              <section class="shared-list">
+                <% vendor.shares.each do |share| %>
+                  <% if share.contact.present? %>
+                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                  <% end %>
+                <% end %>
+              </section>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if group['value']=="property" %>
+        <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
+          <div class="card <%= group['value'] %> column-card">
+
+            <%= link_to content_tag(:a), property_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <h3><%= vendor.name %></h3>
+
+            <% vendor.policy && vendor.policy.each do |policy| %>
+              <label><%= policy.policy_type %></label>
+              <ul class="data-list">
+                <li class="data-pair">
+                  <span class="pair-name">
+                    <%= policy.insured_property %>
+                  </span>
+                  <span class="data-right">
+                    <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
+                  </span>
+                </li>
+              </ul>
+            <% end %>
+
+            <% if provider_main_page_present?(vendor) %>
+              <label>Provider Details</label>
+              <ul class="data-list">
+                <li class="contact-pair">
+                  <% if vendor.webaddress.present? %>
+                    <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                  <% end %>
+                  <%= vendor.phone %>
+                </li>
+              </ul>
+            <% end %>
+
+            <% if vendor.share_with_contacts.present? %>
+              <label>Shared With</label>
+              <section class="shared-list">
+                <% vendor.shares && vendor.shares.each do |share| %>
+                  <% if share.contact.present? %>
+                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                  <% end %>
+                <% end %>
+              </section>
+            <% end %>
+
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if group['value']=="health" %>
+        <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
+          <div class="card <%= group['value'] %> column-card">
+
+            <%= link_to content_tag(:a), health_path(vendor), class: "whole-card-link" %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <h3><%= vendor.name %></h3>
+
+              <% vendor.policy && vendor.policy.each do |policy| %>
+                <label><%= policy_type_abbreviate(policy.policy_type) %></label>
+                <ul class="data-list">
+                  <li class="data-pair ">
+                    <span class="pair-name"><%= policy.policy_holder && policy.policy_holder.name %></span>
+                    <span class="data-right">
+                      <%= policy.policy_number %>
+                    </span>
+                  </li>
+                </ul>
+              <% end %>
+
+              <% if provider_main_page_present?(vendor) %>
+                <label>Provider Details</label>
+                <ul class="data-list">
+                  <li class="contact-pair">
+                    <% if vendor.webaddress.present? %>
+                      <%= link_to vendor.webaddress, vendor.webaddress %><br>
+                    <% end %>
+                    <%= vendor.phone %>
+                  </li>
+                </ul>
+              <% end %>
+
+              <% if vendor.share_with_contacts.present? %>
+                <label>Shared With</label>
+                <section class="shared-list">
+                  <% vendor.shares && vendor.shares.each do |share| %>
+                    <% if share.contact.present? %>
+                      <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+                    <% end %>
+                  <% end %>
+                </section>
+              <% end %>
+
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</section>
+
+<a class="add-link fr" href="<%= new_document_path(:category => @category.name) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h3>Insurance Documents</h3>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @insurance_documents} %>
+
+<%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

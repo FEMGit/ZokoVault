@@ -9,13 +9,28 @@ class SharedViewController < AuthenticatedController
 
   def dashboard
   end
-
+  
   def insurance
-    nil
+    @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
+    @groups = Rails.configuration.x.categories[@category.name]["groups"]
+    
+    if @shared_category_names.include? 'Insurance'
+      @insurance_vendors = Vendor.for_user(@shared_user).where(category: @category.name)
+      @insurance_documents = Document.for_user(@shared_user).where(category: @category.name)
+    end
   end
 
   def taxes
-    nil
+    @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
+    @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+
+    @taxes = 
+      if @shared_category_names.include? 'Tax'
+        TaxYearInfo.for_user(@shared_user)
+      else
+        @other_shareables.map { |shareable| shareable.is_a?TaxYearInfo }
+      end
+    @documents = Document.for_user(@shared_user).where(category: @category.name)
   end
 
   # GET /final_wishes
@@ -30,6 +45,7 @@ class SharedViewController < AuthenticatedController
       else
         @other_shareables.map { |shareable| shareable.is_a?FinalWishInfo }
       end
+    @documents = Document.for_user(@shared_user).where(category: @category.name)
   end
 
   def estate_planning
@@ -50,7 +66,6 @@ class SharedViewController < AuthenticatedController
         end
       end
     end
-
     @category = Rails.application.config.x.WtlCategory
     @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
     @wtl_documents |= @vault_entries.map(&:document).compact

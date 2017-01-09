@@ -1,0 +1,34 @@
+<h1>Taxes</h1>
+<section class="flex-boxes">
+  <% 2016.downto(2010) do |year| %>
+    <div class="flex-column">
+      <%= render :partial => 'tax_card', :locals => {:year => year} %>
+    </div>
+  <% end %>
+</section>
+
+<a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+<h3>Tax Documents</h3>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

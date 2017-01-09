@@ -12,7 +12,7 @@ class DocumentService
   
   def get_insurance_documents(user, group, id)
     get_all_groups
-    vendor_group_value = @all_groups.detect{|x| x[:label] == @category}[:groups].select{ |x| x['label'] == group }.first["value"]
+    vendor_group_value = @all_groups.detect{|x| x[:label] == @category.name}[:groups].select{ |x| x['label'] == group }.first["value"]
     document_ids = Vendor.for_user(user).where(:category => @category, :group => vendor_group_value, :id => id)
                                         .collect(&:document_ids).flatten
     Document.for_user(user).find(document_ids)

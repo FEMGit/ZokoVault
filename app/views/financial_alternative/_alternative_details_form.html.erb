@@ -15,19 +15,19 @@
   </div>
   
   <%= ff.label :commitment, 'Commitment' %>
-  <%= ff.text_field :commitment, id: "alternative_commitment_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
-  :value => ff.object && number_to_currency(ff.object.commitment, precision: 0, unit: "$") %>
+  <%= ff.text_field :commitment, id: "alternative_commitment_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "-$"} }, 
+  :value => ff.object && number_to_currency(ff.object.commitment, precision: 0, unit: "$"), style: "color: red;" %>
   
   <%= ff.label :total_calls, 'Total Calls' %>
-  <%= ff.text_field :total_calls, id: "alternative_total_calls_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  <%= ff.text_field :total_calls, id: "alternative_total_calls_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} }, 
   :value => ff.object && number_to_currency(ff.object.total_calls, precision: 0, unit: "$") %>
   
   <%= ff.label :total_distributions, 'Total Distributions' %>
-  <%= ff.text_field :total_distributions, id: "alternative_distributions_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  <%= ff.text_field :total_distributions, id: "alternative_distributions_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} }, 
   :value => ff.object && number_to_currency(ff.object.total_distributions, precision: 0, unit: "$") %>
   
   <%= ff.label :current_value, 'Current Value' %>
-  <%= ff.text_field :current_value, id: "alternative_current_value_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  <%= ff.text_field :current_value, id: "alternative_current_value_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} }, 
   :value => ff.object && number_to_currency(ff.object.current_value, precision: 0, unit: "$") %>
 
   <%= ff.label :primary_contact_id, 'Primary Contact' %>

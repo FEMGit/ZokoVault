@@ -13,7 +13,7 @@ class FinancialPropertyController < AuthenticatedController
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
-  def sed_add_crumbs
+  def set_add_crumbs
     add_breadcrumb "Financial Info - Add Property", add_property_path(@shared_user)
   end
   

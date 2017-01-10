@@ -14,19 +14,21 @@
 
   <tbody>
     <% @shares_by_user.each do |user, shares| %>
-      <tr>
-        <td>
-          <span class="user-circle"><%= user.try(:initials) %></span>
-          <%= user.try(:name) %>
-        </td>
-        <td>
-          <%= user.try(:email) %>
-        </td>
-        <% shareables = shares.map(&:shareable) %>
-        <td><%= shareables.count { |res| res.is_a? Document } %></td>
-        <td><%= shareables.count { |res| res.class.in? [Will, Trust, PowerOfAttorney, Category]} %></td>
-        <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id) %></td>
-      </tr>
+      <% if user.present? %>
+        <tr>
+          <td>
+            <span class="user-circle"><%= user.try(:initials) %></span>
+            <%= user.try(:name) %>
+          </td>
+          <td>
+            <%= user.try(:email) %>
+          </td>
+          <% shareables = shares.map(&:shareable) %>
+          <td><%= shareables.count { |res| res.is_a? Document } %></td>
+          <td><%= shareables.count { |res| res.class.in? [Will, Trust, PowerOfAttorney, Category]} %></td>
+          <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id) %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

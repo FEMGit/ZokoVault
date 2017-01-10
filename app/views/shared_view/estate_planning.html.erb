@@ -5,7 +5,7 @@
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
       
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills.name, @category) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills, @category) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -66,9 +66,9 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= link_to content_tag(:a), shared_views_trusts_path(@shared_user), class: "whole-card-link" %>
+        <%= link_to content_tag(:a), shared_view_trusts_path(@shared_user), class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts, @category) } %>
           <h3>Trusts</h3>
 
           <section class="mb-20">
@@ -150,7 +150,7 @@
 
 <h3>Wills - Trusts - Legal Documents</h3>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents, :shareable => true} %>
 <%= javascript_include_tag 'flex_boxes' %>
 <script>
 var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;

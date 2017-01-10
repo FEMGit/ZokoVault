@@ -13,6 +13,15 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
+  <! -- Financial Information %>
+  <% if @shared_category_names.include? 'Financial Information' %>
+    <% shared_view_financial_information = 'active' if current_page?(shared_view_financial_information_path) %>
+    <%= link_to shared_view_financial_information_path, class: "main-nav #{shared_view_financial_information}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Wills Trusts &amp; Legal
+    <% end %>
+  <% end %>
   <! -- Wills, Trust & Legal -->
   <% if @shared_category_names.include? 'Wills - Trusts - Legal' %>
     <% shared_view_estate_planning = 'active' if current_page?(shared_view_estate_planning_path) %>

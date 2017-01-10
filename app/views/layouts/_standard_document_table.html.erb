@@ -21,7 +21,8 @@
     <% documents && documents.each do |document| %>
       <tr>
         <td>
-          <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
+          <% shareable ||= false %>
+          <%= render :partial => "layouts/document_links", :locals => {:document => document, :shareable => shareable} %>
         </td>
         <td><%= date_format(document.updated_at) %></td>
         <td>

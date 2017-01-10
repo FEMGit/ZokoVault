@@ -77,4 +77,21 @@ module ApplicationHelper
     form.collection_select(name, select_options,
                            :first, :second, {}, local_options)
   end
+
+  def shared_category_view_path(category,user)
+    case category.name
+    when 'Wills - Trusts - Legal'
+      shared_view_estate_planning_path(user)
+    when 'Insurance'
+      shared_view_insurance_path(user)
+    when 'Taxes'
+      shared_view_taxes_path(user)
+    when 'Final Wishes'
+      shared_view_final_wishes_path(user)
+    when 'Financial Information'
+      shared_view_financial_information_path(user)
+    else
+     shared_view_dashboard_path(user) 
+    end
+  end
 end

@@ -64,6 +64,17 @@ class CategoriesController < AuthenticatedController
     session[:ret_url] = "/estate_planning"
   end
 
+
+  def destroy_share_category
+    category = Category.fetch(params[:id])
+    contact = Contact.find(params[:contact_id])
+
+    shares = current_user.shares.for_category_and_contact(category, contact)
+    shares.each { |share| share.destroy }
+  
+    redirect_to share_category_category_path
+  end
+
   def details_account
     @category = params[:category]
     group_for_new_account = params[:group]

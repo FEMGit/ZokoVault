@@ -21,7 +21,14 @@ Sharing your entire category with another contact will enable them to see all th
           <p>No shared access</p>
         <% else %>
           <% @contacts_with_access.each do |contact| %>
-            <p><%= contact.name %> </p>
+            <p>
+              <%= contact.name %> 
+              <%= link_to "share_category/#{contact.id}", method: :delete do %>
+                <svg class="icon delete-icon">
+                  <use xlink:href="#icon-x-3"></use>
+                </svg>
+              <% end %>
+            </p>
           <% end %>
         <% end %>
     </div>

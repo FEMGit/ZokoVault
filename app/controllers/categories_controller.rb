@@ -44,11 +44,11 @@ class CategoriesController < AuthenticatedController
   def share_category
     @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
     @category = Category.fetch(params[:id])
-   
+
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @shareable_category = ShareableCategory.new(current_user,
                                                 @category.id, 
-                                                [])
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+                                                @contacts_with_access.map(&:id))
   end
 
   def estate_planning
@@ -150,6 +150,7 @@ class CategoriesController < AuthenticatedController
   def shareable_category_params
     params.require(:shareable_category).permit! #(:id, :share_with_contact_ids)
   end
+  
   def category_params
     params.require(:category).permit(:name, :description)
   end

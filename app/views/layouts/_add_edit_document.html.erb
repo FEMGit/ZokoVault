@@ -104,17 +104,19 @@
     });
   })
   
-  //get ajax request to update card names drop down if its insurance category
+  //get ajax request to update card names drop down if its insurance or financial category
   var updateCardNames = function(){
     var category = $("#document_category.chosen-select :selected").text().replace('...', '');
     var url = '/documents/get_card_names/' + category
     $.get(url, function(data) {
-      card_names = $('#document_subcategory' + idPostFixShow(data));
-      card_names.empty();
-      data.forEach(function(group){
-        card_names.append("<option value='" + group.id + "'>" + group.name + "</option>");
-      });
-      card_names.trigger('chosen:updated');
+      if(data.length > 0) {
+        card_names = $('#document_subcategory' + idPostFixShow(data));
+        card_names.empty();
+        data.forEach(function(group){
+          card_names.append("<option value='" + group.id + "'>" + group.name + "</option>");
+        });
+        card_names.trigger('chosen:updated');
+      }
     }).done(function(data) {
       if (data.length > 0) {
         $("#category_groups").hide();
@@ -125,10 +127,11 @@
         $("#document_subcategory" + idPostFixHide(data)).prop("selected", false);
       } else {
         $("#category_groups").show();
-        $("#subcategory_names" + idPostFixShow(data)).hide();
+        $("#subcategory_names_insurance").hide();
         
-        $("#subcategory_names" + idPostFixHide(data)).show();
-        $("#document_subcategory" + idPostFixShow(data)).prop("selected", false);
+        $("#subcategory_names_financial").hide();
+        $("#document_subcategory_financial").prop("selected", false);
+        $("#document_subcategory_insurance").prop("selected", false);
       }
     });
   }

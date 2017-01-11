@@ -19,6 +19,7 @@ module ZokuVault
     config.x.TaxCategory = "Taxes"
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
+    config.x.ProfileCategory = "My Profile"
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'
@@ -135,6 +136,11 @@ module ZokuVault
       },
       config.x.ContactCategory => {
         "label" => "Contact",
+        "groups" => [
+        ]
+      },
+      config.x.ProfileCategory => {
+        "label" => "My Profile",
         "groups" => [
         ]
       }

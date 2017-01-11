@@ -67,7 +67,7 @@ var displayContactFormModal = function() {
 }
 
 var handleSelectOnChange = function(selectInput) {
-  var selectedOption = $('option:selected:last', selectInput);
+  var selectedOption = $('option:selected:first', selectInput);
   if (selectedOption.val() === 'create_new_contact') {
     currentSelectedInput = $(selectInput);
     // remove 'create_new_contact from select box
@@ -91,10 +91,11 @@ var closeContactFormModal = function() {
 var addContactAndCloseModal = function(json) {
 
   $('.add-new-contactable').each(function(i, obj) {
-    $(this).append($('<option>', {
+    position_to_insert_after = json['position'];
+    ($('<option>', {
       value: json['id'],
       text: json['firstname'] + ' ' + json['lastname']
-    }));
+    })).insertAfter($(this).children('option')[position_to_insert_after]);
 
     // XXX: This is a hack to select the new value
     if (!!currentSelectedInput) {

@@ -57,7 +57,7 @@ class DocumentService
   
   def get_card_names(user)
     get_all_groups
-    return [get_empty_card_values] unless category_exist?
+    return [] unless category_exist?
     card_names(user)
   end
   

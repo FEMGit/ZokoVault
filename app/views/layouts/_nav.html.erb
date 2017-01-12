@@ -77,7 +77,7 @@
     </svg>Shared With Me
   <% end %>
   <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') %>
-  <%= link_to my_profile_path, class: "main-nav mobile-show #{my_profile_current}" do %>
+  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile

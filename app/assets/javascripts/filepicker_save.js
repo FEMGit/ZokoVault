@@ -10,7 +10,7 @@ var saveFileUrl = function(option) {
       cropForce: true,
       cropMin: [60, 60]
     },
-    function(pickedBlob) {
+    function(pickedBlob){
       setPreview(pickedBlob.url, option)
       $('#new-avatar' + option).show();
       $('#choose-avatar-section' + option).hide();

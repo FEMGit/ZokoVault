@@ -26,15 +26,28 @@
     <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
 
     <% if user_signed_in? %>
-      <a class="" href="/my_profile">
+      <a class="user-menu-link" id="user-menu-toggle" href="javascript:void(0)">
         <span class="user-avatar fr">
           <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
         </span>
       </a>
 
+      <div class="user-menu">
+        <%= link_to my_profile_path, class: "user-nav" do %>
+          <svg class="icon nav-icon">
+            <use xlink:href="#icon-contacts-2"></use>
+          </svg>My Profile
+        <% end %>
+        <%= link_to account_settings_path, class: "user-nav" do %>
+          <svg class="icon nav-icon">
+            <use xlink:href="#icon-settings-1"></use>
+          </svg>Account Settings
+        <% end %>
+        <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"user-nav") %>
+      </div>
+
       <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
       <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
-      <%#= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"logout-link") %>
     <% end %>
   </section>
 </header>
@@ -54,6 +67,10 @@ $(function(){
     if ($(window).width() < 660) {
        $('.primary-nav, .slide-nav').css('display', '');
     }
+  });
+  //user menu
+  $('#user-menu-toggle').click(function() {
+     $('.user-menu').animate({height:'toggle'},150);
   });
 });
 </script>

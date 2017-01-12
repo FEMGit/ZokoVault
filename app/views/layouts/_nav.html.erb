@@ -13,18 +13,6 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') %>
-  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-contacts-2"></use>
-    </svg>My Profile
-  <% end %>
-  <% contacts_current = 'active' if current_page?(contacts_url) || controller?('contacts') %>
-  <%= link_to contacts_path, class: "main-nav #{contacts_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-share-3"></use>
-    </svg>Contacts &amp; Permissions
-  <% end %>
   <% financial_information_current = 'active' if current_page?(financial_information_url) || controller?('financial_account') ||
       controller?('financial_property') || controller?('financial_investment') %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
@@ -70,24 +58,36 @@
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Web Accounts
   <% end %> -->
-  <% shared_current = 'active' if current_page?(shares_path) %>
-  <%= link_to shares_path, class: "main-nav #{shared_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-Safe"></use>
-    </svg>Shared With Me
-  <% end %>
   <% documents_current = 'active' if current_page?(documents_url) || controller?('documents') %>
   <%= link_to documents_path, class: "main-nav #{documents_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-folder-1"></use>
     </svg>Documents
   <% end %>
+  <% contacts_current = 'active' if current_page?(contacts_url) || controller?('contacts') %>
+  <%= link_to contacts_path, class: "main-nav #{contacts_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-share-3"></use>
+    </svg>Contacts &amp; Permissions
+  <% end %>
+  <% shared_current = 'active' if current_page?(shares_path) %>
+  <%= link_to shares_path, class: "main-nav #{shared_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>Shared With Me
+  <% end %>
+  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') %>
+  <%= link_to my_profile_path, class: "main-nav mobile-show #{my_profile_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-contacts-2"></use>
+    </svg>My Profile
+  <% end %>
   <% account_settings_current = 'active' if current_page?(account_settings_url) %>
-  <%= link_to account_settings_path, class: "main-nav #{account_settings_current}" do %>
+  <%= link_to account_settings_path, class: "main-nav mobile-show #{account_settings_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-settings-1"></use>
     </svg>Account Settings
   <% end %>
-  <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav") %>
+  <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav mobile-show") %>
 
 </nav>

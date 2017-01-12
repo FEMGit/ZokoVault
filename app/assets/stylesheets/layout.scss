@@ -31,21 +31,60 @@ header{
   float: right;
   width: 200px;
 }
-
-.logout-link{
-  float: right;
-  color: $color-link-blue;
-  margin-top: 10px;
-}
-
 .user-avatar {
   padding-top: 8px;
-  color: #969696;
+  padding-right: 5px;
+  color: $color-primary-shaded;
 
   @include media($mobile) {
     display:none;
   }
 
+  &:after{
+    content: "▼";
+    position: relative;
+    right: 0;
+    top: -7px;
+    font-size: 10px;
+  }
+}
+.user-menu{
+  display:none;
+  position: absolute;
+  top: 55px;
+  right: 10px;
+  padding: 10px;
+  border: 1px solid $color-primary-shaded;
+  background:white;
+  border-radius: 8px;
+  box-shadow: 0 25px 40px -20px $color-gray-med-tinted;
+
+  &::before {
+    position: absolute;
+    right: 5px;
+    border: 8px solid transparent;
+    color: white;
+    font-size: .8em;
+    margin-left: -8px;
+    text-align: center;
+    text-shadow: 0 -3px .01px $color-primary-shaded;
+    content: "▲";
+    top: -19px;
+  }
+}
+a.user-nav,
+a.user-nav:visited{
+  display:block;
+  width:100%;
+  cursor: pointer;
+  text-decoration: none;
+  color: $color-primary-shaded;
+  padding: 4px;
+
+  &:hover{
+    text-decoration:none;
+    color: $color-primary;
+  }
 }
 
 .login-link{
@@ -204,7 +243,15 @@ a:visited.main-nav{
       display:block;
     }
   }
+
+  &.mobile-show{
+    display:none;
+    @include media($mobile) {
+      display:block;
+    }
+  }
 }
+
 
 .nav-icon{
   margin-right:10px;
@@ -253,12 +300,12 @@ main.app-nav{
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){
     @include bottom-scroll-margin
   }
-  
+
   //SCROLL TO BOTTOM FOR FIREFOX
   @-moz-document url-prefix() {
     @include bottom-scroll-margin
   }
-  
+
   //SCROLL TO BOTTOM FOR EDGE
   @supports (-ms-accelerator:true) {
     @include bottom-scroll-margin

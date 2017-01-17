@@ -72,12 +72,6 @@ class SharedViewController < SharedViewControllerBase
     @wtl_documents |= @vault_entries.map(&:document).compact
   end
 
-  def wills
-    shareables = @shares.map(&:shareable)
-    @wills = shareables.select { |resource| resource.is_a? Will }
-    @group_documents = shareables.select { |resource| resource.is_a?(Document) && resource.group == "Will" }
-  end
-
   def trusts
     shareables = @shares.map(&:shareable)
     @trusts = shareables.select { |resource| resource.is_a? Trust }

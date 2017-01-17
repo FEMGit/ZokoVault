@@ -16,7 +16,11 @@
 <%= render yield(:card_details_partial_path) %>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+  <% if yield(:shareable).present? %>
+    <a class="add-link fr" href="#">
+  <% else %>
+    <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+  <% end %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>

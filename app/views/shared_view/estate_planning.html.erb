@@ -10,7 +10,7 @@
 
         <% @wills.each_with_index do |will, index| %>
           <div <% if index != 0 %> class="data-border" <% end %>></div>
-          <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
+          <%= link_to content_tag(:a), shared_wills_path(@shared_user), class: "whole-card-link" %>
 
             <label><%= will.title %></label>
             <ul class="data-list mb-20">

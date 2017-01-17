@@ -180,7 +180,9 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
-
+  
+  # Shared wtl wills
+  get 'shared_view/:shared_user_id/estate_planning/wills' => 'shared_wills#index', as: :shared_wills
   
   # Information pages
   get "/about", to: "pages#about", as: :about

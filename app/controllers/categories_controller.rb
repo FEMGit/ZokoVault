@@ -156,7 +156,7 @@ class CategoriesController < AuthenticatedController
   end
 
   def get_not_assigned_documents(vault_documents)
-    Document.for_user(current_user).where(category: @category)
+    Document.for_user(current_user).where(category: @category.name)
             .where.not(id: vault_documents.compact.map(&:id))
   end
 end

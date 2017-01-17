@@ -125,7 +125,7 @@ class SharedViewController < AuthenticatedController
     @shares.map(&:shareable).each do |shareable| 
       case shareable
       when Document
-        @document_shareables << shareable
+        @document_shareables |= [shareable]
       when Category
         @category_shareables << shareable
       else

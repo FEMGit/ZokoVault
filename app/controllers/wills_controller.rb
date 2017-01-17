@@ -132,6 +132,10 @@ class WillsController < AuthenticatedController
   def shared_user_params
     params.permit(:shared_user_id)
   end
+  
+  def will_shared_with_uinq_param
+    will_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
+  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def will_params
@@ -171,6 +175,7 @@ class WillsController < AuthenticatedController
         WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
       end
     end
+    ShareInheritanceService.update_document_shares(Will, (@old_params + @new_params).map(&:id), resource_owner.id, will_shared_with_uinq_param, 'Will')
     raise "error saving new will" if @errors.any?
   end
   

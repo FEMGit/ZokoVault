@@ -110,4 +110,11 @@ class DocumentService
   def collect_card_names(collection, category)
     collection.collect { |x| [id: x.id, name: x.name] }.prepend([id: category, name: "Select..."])
   end
+  
+  def self.update_shares(document, resource_owner)
+    return unless document.group.present?
+    model = ModelService.model_by_name(document.group)
+    return unless model.present?
+    document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+  end
 end

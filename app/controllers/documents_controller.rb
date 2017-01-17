@@ -49,6 +49,7 @@ class DocumentsController < AuthenticatedController
 
     respond_to do |format|
       if @document.save && @document.update(document_share_params)
+        DocumentService.update_shares(@document, resource_owner)
         handle_document_saved(format)
       else
         handle_document_not_saved(format)
@@ -62,6 +63,7 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
+        DocumentService.update_shares(@document, resource_owner)
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else

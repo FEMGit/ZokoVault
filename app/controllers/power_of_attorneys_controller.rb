@@ -137,12 +137,22 @@ class PowerOfAttorneysController < AuthenticatedController
   
   def update_power_of_attorneys(new_attorneys, old_attorneys)
     new_attorneys.each do |new_attorney_params|
-      @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: current_user.id)).build 
+      @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: resource_owner.id)).build 
       raise "error saving new power of attorney" unless @new_vault_entries.save
+      WtlService.update_shares(@new_vault_entries.id, new_attorney_params[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
     old_attorneys.each do |old_attorney|
-      @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: current_user.id)).build
+      @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
+      authorize_save(@old_vault_entries)
       raise "error saving new power of attorney" unless @old_vault_entries.save
+      WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
+    end
+  end
+  
+  def authorize_save(resource)
+    authorize_ids = power_of_attorney_params.values.map { |x| x[:id].to_i }
+    if authorize_ids.include? resource.id
+      authorize resource
     end
   end
 end

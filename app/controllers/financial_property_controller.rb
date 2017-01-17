@@ -39,6 +39,7 @@ class FinancialPropertyController < AuthenticatedController
     authorize @financial_property
     respond_to do |format|
       if @financial_provider.save
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_property.share_with_contact_ids)
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
@@ -54,6 +55,7 @@ class FinancialPropertyController < AuthenticatedController
     respond_to do |format|
       if @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @property_provider.update(name: property_params[:name])
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_property.share_with_contact_ids)
         format.html { redirect_to show_property_url(@financial_property), flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else

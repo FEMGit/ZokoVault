@@ -1,4 +1,5 @@
 class PowerOfAttorney < ActiveRecord::Base
+  include WtlBuildShares
   scope :for_user, ->(user) { where(user: user) }
 
   POWERS = %w(Digital Financial Healthcare General Limited Durable Springing)

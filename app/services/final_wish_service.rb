@@ -21,4 +21,13 @@ class FinalWishService
   def self.get_wish_group_value_by_name(groups, name)
     groups.detect { |group| group["label"] == name }
   end
+  
+  def self.update_shares(final_wish_info, share_with_contact_ids, user_id)
+    final_wish_info.final_wishes.each do |final_wish|
+      final_wish.shares.clear
+      share_with_contact_ids.each do |contact_id|
+        final_wish.shares << Share.create(contact_id: contact_id, user_id: user_id)
+      end
+    end
+  end
 end

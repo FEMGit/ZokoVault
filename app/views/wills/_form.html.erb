@@ -1,5 +1,6 @@
 <div class="card wills mb-30">
   <%= f.hidden_field :id, id: "will_id_#{index}" %>
+  <%= f.hidden_field :user_id %>
   <% if data.id.present? && @errors %>
     <% error_list = @errors.detect {|x| x[:id].to_i == data.id } %>
   <% else %>
@@ -49,7 +50,7 @@
     </div>
   </section>
 
-  <% if data.id %>
+  <% if data.id && policy(data).destroy? %>
     <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,
         data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
         class: 'button small-button secondary-button', id: 'delete-will'  %>
@@ -58,61 +59,40 @@
 </div>
 
 <script>
-  clearForm = function($newWtlForm, old_id, new_id){
-    new_vault_entry_id = "vault_entry_" + new_id;
-    $newWtlForm.find("[id^='will_id_']").attr({
-      id: "will_id_" + new_id,
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
       value: ""
     });
+    $form.find("#" + new_id + " option").prop("selected", false);
+  };
+  
+  clearForm = function($newWtlForm, old_id, new_id){
+    new_vault_entry_id = "vault_entry_" + new_id;
+    
+    changeIdAndName($newWtlForm, "will_id_" + old_id,
+      "will_id_" + new_id, new_vault_entry_id + "[id]");
+    changeIdAndName($newWtlForm, "will_executor_id_" + old_id,
+      "will_executor_id_" + new_id, new_vault_entry_id + "[executor_id]")
+    changeIdAndName($newWtlForm, "will_primary_id_" + old_id,
+      "will_primary_id_" + new_id, new_vault_entry_id + "[primary_beneficiary_ids][]")
+    changeIdAndName($newWtlForm, "will_secondary_id_" + old_id,
+      "will_secondary_id_" + new_id, new_vault_entry_id + "[secondary_beneficiary_ids][]")
+    changeIdAndName($newWtlForm, "will_agent_id_" + old_id,
+      "will_agent_id_" + new_id, new_vault_entry_id + "[agent_ids]")
+    changeIdAndName($newWtlForm, "will_share_id_" + old_id,
+      "will_share_id_" + new_id, new_vault_entry_id + "[share_with_contact_ids][]")
+    changeIdAndName($newWtlForm, "will_notes_id_" + old_id,
+      "will_notes_id_" + new_id, new_vault_entry_id + "[notes]")
+    changeIdAndName($newWtlForm, "will_title_id_" + old_id,
+      "will_title_id_" + new_id, new_vault_entry_id + "[title]")
+    changeIdAndName($newWtlForm, "vault_entry_" + old_id + "_shared_user_id",
+      "vault_entry_" + new_id + "_shared_user_id", new_vault_entry_id + "[shared_user_id]")
+    changeIdAndName($newWtlForm, "vault_entry_" + old_id + "_name",
+      "vault_entry_" + new_id + "_name", new_vault_entry_id + "[name]")
+      
     $newWtlForm.find(".error-label").hide();
-    $newWtlForm.find("[id^='will_id_']").attr("name", new_vault_entry_id + "[id]");
-    $newWtlForm.find("[id^='vault_entry_']").attr({
-      name: new_vault_entry_id + "[name]",
-      id: new_vault_entry_id + "_name",
-      class: ""
-    });
-
-    $newWtlForm.find("#will_executor_id_" + old_id).attr({
-      name: new_vault_entry_id +"[executor_id]",
-      id: "will_executor_id_" + new_id
-    });
-    $newWtlForm.find("#will_executor_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#will_primary_id_" + old_id).attr({
-      name: new_vault_entry_id +"[primary_beneficiary_ids][]",
-      id: "will_primary_id_" + new_id
-    });
-    $newWtlForm.find("#will_primary_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#will_secondary_id_" + old_id).attr({
-      name: new_vault_entry_id +"[secondary_beneficiary_ids][]",
-      id: "will_secondary_id_" + new_id
-    });
-    $newWtlForm.find("#will_secondary_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#will_agent_id_" + old_id).attr({
-      name: new_vault_entry_id +"[agent_ids]",
-      id: "will_agent_id_" + new_id
-    });
-    $newWtlForm.find("#will_agent_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#will_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_with_contact_ids][]",
-      id: "will_share_id_" + new_id
-    });
-    
-    $newWtlForm.find("#will_notes_id_" + old_id).attr({
-      name: new_vault_entry_id +"[notes]",
-      id: "will_notes_id_" + new_id
-    });
-    
-    $newWtlForm.find("#will_title_id_" + old_id).attr({
-      name: new_vault_entry_id +"[title]",
-      id: "will_title_id_" + new_id
-    });
-    
-    $newWtlForm.find("#will_share_id_" + new_id + " option").prop("selected", false);
     $newWtlForm.find("#delete-will").remove();
   }
-
 </script>

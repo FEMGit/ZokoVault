@@ -36,5 +36,4 @@ class Will < ActiveRecord::Base
   validates :title, presence: { :message => "Required" }
 
   before_save { self.category = Category.fetch("wills - trusts - legal") }
-  attr_accessor :shared_user_id
 end

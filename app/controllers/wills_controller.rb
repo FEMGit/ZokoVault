@@ -20,10 +20,6 @@ class WillsController < AuthenticatedController
     session[:ret_url] = @shared_user.present? ? shared_wills_path : wills_path
   end
 
-  # GET /wills/1
-  # GET /wills/1.json
-  def show; end
-
   # GET /wills/new
   def new
     @vault_entry = WillBuilder.new(type: 'will').build
@@ -38,9 +34,6 @@ class WillsController < AuthenticatedController
     @vault_entries << @vault_entry
     @vault_entries.each { |x| authorize x }
   end
-
-  # GET /wills/1/edit
-  def edit; end
 
   def set_document_params
     @group = "Will"
@@ -58,32 +51,20 @@ class WillsController < AuthenticatedController
       if new_wills.any? || old_wills.any?
         begin
           update_wills(new_wills, old_wills)
-          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_wills) } }
+          format.html { redirect_to success_path, flash: { success: success_message(old_wills) } }
           format.json { render :show, status: :created, location: @will }
         rescue
           @vault_entry = Will.new
           @old_params.each { |will| @vault_entries << will }
           @new_params.each { |will| @vault_entries << will }
-          format.html { render :new }
+          error_path(:new)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @errors, status: :unprocessable_entity }
         end
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /wills/1
-  # PATCH/PUT /wills/1.json
-  def update
-    respond_to do |format|
-      if @will.update(will_params)
-        format.html { redirect_to @will, flash: { success: 'Will was successfully updated.' } }
-        format.json { render :show, status: :ok, location: @will }
-      else
-        format.html { render :edit }
-        format.json { render json: @will.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -108,9 +89,29 @@ class WillsController < AuthenticatedController
   end
 
   private
+  
+  def wills
+    return Will.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? Will } unless @category_shared
+    Will.for_user(@shared_user)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path
+    ReturnPathService.success_path(resource_owner, current_user,estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id))
+  end
 
   def resource_owner 
-    @will.present? ?  @will.user : current_user
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @will.present? ? @will.user : current_user
+    end
   end
 
   def current_wtl
@@ -126,6 +127,10 @@ class WillsController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_will
     @will = Will.find(params[:id])
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -148,7 +153,7 @@ class WillsController < AuthenticatedController
     @new_params = []
     @old_params = []
     old_wills.each do |old_will|
-      @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+      @old_vault_entries = WillBuilder.new(old_will.merge(user_id: resource_owner.id)).build
       authorize_save(@old_vault_entries)
       @old_params << @old_vault_entries
       unless @old_vault_entries.save
@@ -157,7 +162,7 @@ class WillsController < AuthenticatedController
       WtlService.update_shares(@old_vault_entries.id, old_will[:share_with_contact_ids], resource_owner.id, Will)
     end
     new_wills.each do |new_will_params|
-      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
+      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: resource_owner.id)).build
       if !@new_vault_entries.save
         @new_params << Will.new(new_will_params)
         @errors << { id: "", error: @new_vault_entries.errors }

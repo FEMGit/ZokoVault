@@ -18,11 +18,15 @@ class SharedViewService
     @shared_category_names_full
   end
   
-  def self.shared_group_names(owner, non_owner, category)
+  def self.shares(owner, non_owner)
+    owner.shares.where(contact: Contact.where(emailaddress: non_owner.email))
+  end
+  
+  def self.shared_group_names(owner, non_owner, category = nil)
     all_shares = shares(owner, non_owner).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
     groups = []
     all_shares.each do |shareable|
-      unless shareable.category == Category.fetch(category.downcase)
+      unless category && shareable.category == Category.fetch(category.downcase)
         next
       end
       case shareable
@@ -45,11 +49,5 @@ class SharedViewService
       end
     end
     groups.uniq
-  end
-
-  private
-  
-  def self.shares(owner, non_owner)
-    owner.shares.where(contact: Contact.where(emailaddress: non_owner.email))
   end
 end

@@ -24,7 +24,7 @@
             <%= user.try(:email) %>
           </td>
           <% shareables = shares.map(&:shareable) %>
-          <td><%= shareables.count { |res| res.is_a? Document } %></td>
+          <td><%= shared_document_count(shareables, user) %></td>
           <td><%= shared_category_count(shares, user) %></td>
           <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id) %></td>
         </tr>

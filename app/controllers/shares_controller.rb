@@ -1,5 +1,6 @@
 class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
+    helper_method :shared_category_count
 
     def index
       @shares_by_user = policy_scope(Share)
@@ -55,6 +56,10 @@ class SharesController < AuthenticatedController
     end
 
     private
+    
+    def shared_category_count(shares, user)
+      SharedViewService.shared_categories_full(shares).count
+    end
 
     def set_share
       @share = Share.for_user(current_user).find(params[:id])

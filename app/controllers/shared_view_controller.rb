@@ -59,17 +59,19 @@ class SharedViewController < SharedViewControllerBase
         @trusts << shareable
       when Will
         @wills << shareable
+        @wtl_documents |= Document.for_user(shared_user).where(:group => Will.name)
       when PowerOfAttorney
         @power_of_attorneys << shareable
       when Document
         if groups_whitelist.include?shareable.group
-          @wtl_documents << shareable
+          @wtl_documents |= [shareable]
         end
       end
+      @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
+      @wtl_documents.flatten!
     end
     @category = Rails.application.config.x.WtlCategory
-    @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
-    @wtl_documents |= @vault_entries.map(&:document).compact
+    session[:ret_url] = shared_view_estate_planning_path
   end
 
   def trusts

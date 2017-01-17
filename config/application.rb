@@ -20,6 +20,8 @@ module ZokuVault
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
+    config.x.ShareCategories = [config.x.WtlCategory, config.x.InsuranceCategory, config.x.TaxCategory,
+                                config.x.FinalWishesCategory, config.x.FinancialInformationCategory]
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'

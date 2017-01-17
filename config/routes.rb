@@ -92,8 +92,10 @@ Rails.application.routes.draw do
   get 'shares/new/:document' => 'shares#new'
 
   resources :documents
-  get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
-  get 'documents/get_card_names/:category', to: 'documents#get_card_names'
+  get 'documents/get_drop_down_options/:category(/:shared_user_id)', to: 'documents#get_drop_down_options'
+  get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
+  get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
+  get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   
   resources :account_settings
   put 'account_settings/update', to: 'account_settings#update'

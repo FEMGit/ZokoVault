@@ -32,11 +32,10 @@
           <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
         </td>
         <td>
-          <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description} %>
+          <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description, :shareable => shareable} %>
         </td>
         <td>
-          <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
+          <%= render :partial => "layouts/document_actions", :locals => {:document => document, :shareable => shareable} %>
         </td>
       </tr>
     <% end %>

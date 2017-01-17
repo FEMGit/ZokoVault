@@ -2,11 +2,18 @@ class DocumentsController < AuthenticatedController
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_document_params, only: [:create, :update]
+  before_action :set_shared_view_settings, :set_dropdown_options, only: [:new, :edit]
+  layout :set_layout, only: [:new, :edit]
   
   # Breadcrumbs navigation
   add_breadcrumb "Documents", :documents_path, :only => %w(new edit)
-
-  @after_new_user_created = ""
+  
+  def set_layout
+    unless resource_owner == current_user
+      return "shared_view"
+    end
+    "application"
+  end
 
   def index
     @documents = policy_scope(Document).each { |d| authorize d }
@@ -18,10 +25,10 @@ class DocumentsController < AuthenticatedController
   end
 
   def new
-    @document = Document.new(base_params.slice(:category, :group, :vendor_id, :financial_information_id).merge(user: current_user))
+    @document = Document.new(base_params.slice(:category, :group, :vendor_id, :financial_information_id).merge(user: resource_owner))
 
     authorize @document
-
+    
     @cards = card_values(@document.category)
     @card_names = card_names(@document.category)
   end
@@ -35,7 +42,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def create
-    options = document_params.merge(user: current_user)
+    options = document_params.merge(user: resource_owner)
     @document = Document.new(options)
 
     authorize @document
@@ -53,12 +60,6 @@ class DocumentsController < AuthenticatedController
     authorize @document
 
     respond_to do |format|
-      if is_new_contact_creating
-        save_return_url_path(params[:id])
-
-        format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
-      end
-
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
         if return_url?
@@ -94,19 +95,37 @@ class DocumentsController < AuthenticatedController
   end
 
   private
+  
+  def set_dropdown_options
+    @category_dropdown_options = (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES
+  end
+  
+  def set_shared_view_settings
+    return unless resource_owner != current_user
+    @shared_user = resource_owner
+    @shared_category_names_full = ResourceOwnerService.shared_category_names(resource_owner, current_user)
+  end
 
   def card_values(category)
     service = DocumentService.new(:category => category)
-    service.get_card_values(resource_owner)
+    service.get_card_values(resource_owner, current_user)
   end
   
   def card_names(category)
     service = DocumentService.new(:category => category)
-    service.get_card_names(resource_owner)
+    service.get_card_names(resource_owner, current_user)
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
   end
 
   def resource_owner
-    @document.present? ? @document.user : current_user
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @document.present? ? @document.user : current_user
+    end
   end
 
   def set_contacts
@@ -142,16 +161,6 @@ class DocumentsController < AuthenticatedController
 
     %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
   end
-  
-  def is_new_contact_creating
-    params_to_test = params[:document][:contact_ids]
-    is_new = params_to_test && params_to_test.any? {|value| value == 'create_new_contact'}
-    #remove 'create new contact' field from parameters
-    if is_new
-      params[:document][:contact_ids].delete_if{|value| value == 'create_new_contact'}
-    end
-    is_new
-  end
 
   def save_return_url_path(document_id_to_change)
     @after_new_user_created = session[:ret_url]
@@ -174,17 +183,13 @@ class DocumentsController < AuthenticatedController
   
   def prepare_document_params
     if document_params[:vendor_id].present?
-      insurance_service = InsuranceService.new(current_user)
+      insurance_service = InsuranceService.new(resource_owner)
       params[:document][:group] = insurance_service.group_by_vendor(document_params[:vendor_id])
     end
   end
 
   def handle_document_saved(format)
     #TODO: dynamic route builder for categories
-    if is_new_contact_creating
-      save_return_url_path(@document.id)
-      format.html { redirect_to new_contact_path :redirect => @after_new_user_created }
-    end
     if return_url?
       format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully created.' } }
     else
@@ -196,14 +201,14 @@ class DocumentsController < AuthenticatedController
   def handle_document_not_saved(format)
     @cards = card_values(@document.category)
     @card_names = card_names(@document.category)
-    format.html { render :new }
+    format.html { render :new, :layout => set_layout  }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end
   
   def handle_document_not_updated(format)
     @cards = card_values(@document.category)
     @card_names = card_names(@document.category)
-    format.html { render :edit }
+    format.html { render :edit, :layout => set_layout }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end
 end

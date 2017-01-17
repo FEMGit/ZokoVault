@@ -1,22 +1,17 @@
 <h1>Dashboard</h1>
 <table class="shared-view-dashboard">
-  <% @category_shareables.each do |category| %>
-    <tr>
-      <td>
-        <svg class="icon dashboard-icon">
-          <use xlink:href="#icon-document-3"></use>
-        </svg>
-        <h5 class="category-title"><%= category.name %></h5>
-        <%= link_to 'View Category', shared_category_view_path(category, @shared_user), class: 'view-category' %>
-      </td>
-    </tr>
-  <% end %>
-  <% @other_shareables.each do |shareable| %>
-    <tr>
-      <td>
-        <span><%= shareable.class %></span>
-      </td>
-    </tr>
+  <% ['Wills - Trusts - Legal', 'Insurance', 'Taxes', 'Final Wishes'].each do |category| %>
+    <% if show_navigation_link?(category) %>
+      <tr>
+        <td>
+          <svg class="icon dashboard-icon">
+            <use xlink:href="#icon-document-3"></use>
+          </svg>
+          <h5 class="category-title"><%= category %></h5>
+          <%= link_to 'View Category', shared_category_view_path(Category.fetch(category.downcase), @shared_user), class: 'view-category' %>
+        </td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @document_shareables, :shareable => true} %>

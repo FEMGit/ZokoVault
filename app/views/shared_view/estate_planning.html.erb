@@ -10,7 +10,7 @@
 
         <% @wills.each_with_index do |will, index| %>
           <div <% if index != 0 %> class="data-border" <% end %>></div>
-          <%= link_to content_tag(:a), shared_view_wills_path(@shared_user), class: "whole-card-link" %>
+          <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
 
             <label><%= will.title %></label>
             <ul class="data-list mb-20">
@@ -66,7 +66,7 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= link_to content_tag(:a), shared_view_trusts_path(@shared_user), class: "whole-card-link" %>
+        <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
 
           <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts, @category) } %>
           <h3>Trusts</h3>
@@ -109,7 +109,7 @@
   <div class="flex-column">
     <div class="card cg-3 column-card">
       <% if @power_of_attorneys.any? %>
-        <%= link_to content_tag(:a), shared_view_power_of_attorneys_path(@shared_user), class: "whole-card-link" %>
+        <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
 
           <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category) } %>
           <h3>Powers of Attorney</h3>

@@ -40,6 +40,7 @@ class FinancialAccountController < AuthenticatedController
     FinancialInformationService.fill_accounts(account_params, @financial_provider, current_user.id)
     respond_to do |format|
       if @financial_provider.save
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
         format.html { redirect_to show_account_url(@financial_provider), flash: { success: 'Account was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
       else
@@ -54,6 +55,7 @@ class FinancialAccountController < AuthenticatedController
     FinancialInformationService.fill_accounts(account_params, @financial_provider, current_user.id)
     respond_to do |format|
       if @financial_provider.update(provider_params)
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
         format.html { redirect_to show_account_url(@financial_provider), flash: { success: 'Account was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
       else

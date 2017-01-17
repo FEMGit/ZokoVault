@@ -18,4 +18,8 @@ class FinancialInformationService
       end
     end
   end
+  
+  def self.update_shares(financial_provider, user, share_with_contact_ids)
+    #TODO: implement when document share inheritance is needed
+  end
 end

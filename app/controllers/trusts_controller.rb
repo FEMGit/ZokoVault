@@ -144,22 +144,30 @@ class TrustsController < AuthenticatedController
     @old_params = []
     old_trusts.each do |old_trust|
       @old_vault_entries = TrustBuilder.new(old_trust.merge(user_id: resource_owner.id)).build
-      authorize @old_vault_entries
+      authorize_save(@old_vault_entries)
       @old_params << @old_vault_entries
       unless @old_vault_entries.save
         @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
       end
+      WtlService.update_shares(@old_vault_entries.id, old_trust[:share_with_contact_ids], resource_owner.id, Trust)
     end
     new_trusts.each do |new_trust_params|
       @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: resource_owner.id)).build
-      authorize @new_vault_entries
       if !@new_vault_entries.save
         @new_params << Trust.new(new_trust_params)
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries
       end
+      WtlService.update_shares(@new_vault_entries.id, new_trust_params[:share_with_contact_ids], resource_owner.id, Trust)
     end
     raise "error saving new trust" if @errors.any?
+  end
+  
+  def authorize_save(resource)
+    authorize_ids = trust_params.values.map { |x| x[:id].to_i }
+    if authorize_ids.include? resource.id
+      authorize resource
+    end
   end
 end

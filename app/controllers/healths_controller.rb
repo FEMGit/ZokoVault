@@ -52,10 +52,11 @@ class HealthsController < AuthenticatedController
   # POST /healths.json
   def create
     @insurance_card = Health.new(health_params.merge(user_id: resource_owner.id))
+    authorize @insurance_card
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
         format.html { redirect_to insurance_path, flash: { success: 'Insurance was successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
@@ -69,10 +70,11 @@ class HealthsController < AuthenticatedController
   # PATCH/PUT /healths/1.json
   def update
     @insurance_card = @health
+    authorize @insurance_card
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(health_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
         format.html { redirect_to @health, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @health }
       else

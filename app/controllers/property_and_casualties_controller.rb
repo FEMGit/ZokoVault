@@ -58,10 +58,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties.json
   def create
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id))
+    authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
         format.html { redirect_to insurance_path, flash: { success: 'Insurance was successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
@@ -75,10 +76,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # PATCH/PUT /properties/1.json
   def update
     @insurance_card = @property_and_casualty
+    authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
         format.html { redirect_to property_path(@insurance_card), flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else

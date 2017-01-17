@@ -81,6 +81,7 @@ class FinalWishesController < AuthenticatedController
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, current_user.id)
     respond_to do |format|
       if @final_wish_info.update(final_wish_params)
+        FinalWishService.update_shares(@final_wish_info, @final_wish_info.final_wishes.map(&:share_with_contact_ids), @final_wish_info.user_id)
         format.html { redirect_to session[:ret_url] || final_wishes_path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @final_wish_info }
       else

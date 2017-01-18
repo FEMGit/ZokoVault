@@ -7,7 +7,7 @@
       <div class="card cg-<%= group["value"] %> mb-30">
         <%#= link_to content_tag(:a), final_wish_details(group_title), class: "whole-card-link" %>
         <% if final_wish_exists?(@final_wishes, group_title) %>
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, group_title, @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, group_title, @category.name) } %>
         <% end %>
 
         <h3><%= group_title %></h3>

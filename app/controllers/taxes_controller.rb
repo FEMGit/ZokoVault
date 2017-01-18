@@ -80,6 +80,7 @@ class TaxesController < AuthenticatedController
     TaxesService.fill_taxes(tax_form_params, @tax_year, current_user.id)
     respond_to do |format|
       if @tax_year.update(tax_params)
+        TaxesService.update_shares(@tax_year, @tax_year.user_id)
         format.html { redirect_to session[:ret_url] || taxes_path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else

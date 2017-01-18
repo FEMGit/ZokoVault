@@ -40,6 +40,7 @@ class FinancialAlternativeController < AuthenticatedController
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.save
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
         format.html { redirect_to show_alternative_url(@financial_provider), flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
       else
@@ -54,6 +55,7 @@ class FinancialAlternativeController < AuthenticatedController
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.update(provider_params)
+        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
         format.html { redirect_to show_alternative_path(@financial_provider), flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
       else

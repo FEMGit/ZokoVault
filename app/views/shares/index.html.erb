@@ -25,7 +25,7 @@
           </td>
           <% shareables = shares.map(&:shareable) %>
           <td><%= shareables.count { |res| res.is_a? Document } %></td>
-          <td><%= shareables.count { |res| res.class.in? [Will, Trust, PowerOfAttorney, Category]} %></td>
+          <td><%= shared_category_count(shares, user) %></td>
           <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id) %></td>
         </tr>
       <% end %>

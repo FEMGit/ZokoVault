@@ -12,4 +12,14 @@ class TaxesService
   def self.tax_by_year(year, user)
     TaxYearInfo.for_user(user).where(:year => year).first
   end
+  
+  def self.update_shares(tax_year_info, user_id)
+    tax_year_info.taxes.each do |tax|
+      share_with_contact_ids = tax.share_with_contact_ids
+      tax.shares.clear
+      share_with_contact_ids.each do |contact_id|
+        tax.shares << Share.create(contact_id: contact_id, user_id: user_id)
+      end
+    end
+  end
 end

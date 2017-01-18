@@ -29,7 +29,10 @@ class PolicyService
     end
   end
   
-  def self.update_shares(object_id, shares)
-    Vendor.find(object_id).share_with_contact_ids = shares
+  def self.update_shares(object_id, share_contact_ids, user_id)
+    Vendor.find(object_id).shares.clear
+    share_contact_ids.each do |x|
+      Vendor.find(object_id).shares << Share.create(contact_id: x, user_id: user_id)
+    end
   end
 end

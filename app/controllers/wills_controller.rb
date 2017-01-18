@@ -144,10 +144,12 @@ class WillsController < AuthenticatedController
     @old_params = []
     old_wills.each do |old_will|
       @old_vault_entries = WillBuilder.new(old_will.merge(user_id: current_user.id)).build
+      authorize_save(@old_vault_entries)
       @old_params << @old_vault_entries
       unless @old_vault_entries.save
         @errors << { id: old_will[:id], error: @old_vault_entries.errors }
       end
+      WtlService.update_shares(@old_vault_entries.id, old_will[:share_with_contact_ids], resource_owner.id, Will)
     end
     new_wills.each do |new_will_params|
       @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: current_user.id)).build
@@ -156,8 +158,16 @@ class WillsController < AuthenticatedController
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries
+        WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
       end
     end
     raise "error saving new will" if @errors.any?
+  end
+  
+  def authorize_save(resource)
+    authorize_ids = will_params.values.map { |x| x[:id].to_i }
+    if authorize_ids.include? resource.id
+      authorize resource
+    end
   end
 end

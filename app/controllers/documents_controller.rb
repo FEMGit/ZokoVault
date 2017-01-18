@@ -99,7 +99,12 @@ class DocumentsController < AuthenticatedController
   private
   
   def set_dropdown_options
-    @category_dropdown_options = (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES
+    @category_dropdown_options = 
+    if base_params[:category].present?
+      [base_params[:category]]
+    else
+     (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES
+    end
   end
   
   def set_shared_view_settings

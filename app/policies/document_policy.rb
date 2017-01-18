@@ -11,29 +11,17 @@ class DocumentPolicy < BasicPolicy
   end
   
   def create?
-    owned_or_shared? || owner_shared_subcategory_with_user?
+    owned_or_shared?
   end
 
   def documents? 
     edit?
   end
   
-  def owner_shared_subcategory_with_user?
-    shares = policy_share
-    return false unless shares
-    SharedViewService.shared_categories_full(shares).include? record.category
-  end
-  
   def owner_shared_category_with_user?
     shares = policy_share
     return false unless shares
-    shared_category_names = shares.map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
-    return true if shared_category_names.include? record.category
-    unless shared_category_names.include? record.category
-      Rails.configuration.x.ShareCategories.each do |category|
-        return true if SharedViewService.shared_group_names(shared_user, user, category).include? record.group
-      end
-    end
+    return true if SharedViewService.shared_categories_full(shares).include? record.category
     false
   end
 

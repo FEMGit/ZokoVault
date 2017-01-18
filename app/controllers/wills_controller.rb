@@ -1,18 +1,23 @@
 class WillsController < AuthenticatedController
-  before_action :set_will, :set_document_params, only: [:show, :edit, :update, :destroy]
+  include SharedViewModule
+  before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
+  before_action :set_will, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
+  layout :set_layout, only: [:new, :edit, :index]
   
   # Breadcrumbs navigation
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
   add_breadcrumb "Wills", :wills_path, :only => %w(edit index new)
   add_breadcrumb "Wills - Setup", :new_will_path, :only => %w(new)
-
+  
   # GET /wills
   # GET /wills.json
   def index
-    @wills = policy_scope(Will).each { |w| authorize w }
+    @wills = wills
+    @wills.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_wills_path : wills_path
   end
 
   # GET /wills/1
@@ -26,12 +31,12 @@ class WillsController < AuthenticatedController
     @vault_entry.vault_entry_contacts.build
     @vault_entry.vault_entry_beneficiaries.build
 
-    authorize @vault_entry
-
-    @wills = @vault_entries = Will.for_user(resource_owner)
+    @vault_entries = wills
+    @vault_entries.each { |x| authorize x }
     return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
+    @vault_entries.each { |x| authorize x }
   end
 
   # GET /wills/1/edit

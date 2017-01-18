@@ -15,7 +15,7 @@
 
 <%= render yield(:card_details_partial_path) %>
 <div>
-  <%= link_to new_documents_path(:shared_user_id => yield(:shared_user_id) || "", :category => @category, :group => @group), class: "add-link fr" do %>
+  <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>

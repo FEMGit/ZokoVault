@@ -1,4 +1,4 @@
-<% if yield(:shareable).present? %>
+<% if @shared_user.present? %>
   <%= link_to 'Edit', edit_documents_path(id: document.id, shared_user_id: @shared_user.id), class: "outline-button small-button" %>
 <% else %>
   <%= link_to 'Edit', edit_documents_path(document), class: "outline-button small-button" %>

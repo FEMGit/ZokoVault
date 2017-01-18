@@ -7,7 +7,7 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def index?
-    owned_or_shared?
+    user_owned?
   end
 
   def show?
@@ -15,7 +15,7 @@ class BasicPolicy < ApplicationPolicy
   end
 
   def create?
-    owned_or_shared?
+    user_owned?
   end
 
   def new?

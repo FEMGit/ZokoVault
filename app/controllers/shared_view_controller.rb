@@ -1,5 +1,8 @@
-class SharedViewController < SharedViewControllerBase
-  include DocumentsHelper 
+class SharedViewController < AuthenticatedController
+  include DocumentsHelper
+  include SharedViewModule
+  
+  before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
   before_action :set_shareables
   
   def dashboard

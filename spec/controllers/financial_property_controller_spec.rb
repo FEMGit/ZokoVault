@@ -1,3 +1,4 @@
+
 require 'rails_helper'
 
 RSpec.describe FinancialPropertyController, type: :controller do
@@ -22,34 +23,47 @@ RSpec.describe FinancialPropertyController, type: :controller do
     }
   end
   
+  let(:provider_attributes) do 
+    {
+      name: "Property Name",
+      user_id: user.id
+    }
+  end
+  
   let(:invalid_attributes) do
     { id: "", user_id: user.id }
   end
 
-  before { sign_in user }
+  before { 
+    sign_in user 
+    }
 
   let(:valid_session) { {} }
   
-  describe "GET #show" do
-    it "assigns the requested financial property @financial_property" do
-      financial_property = FinancialProperty.create! valid_attributes
-      get :show, { id: financial_property.to_param }, session: valid_session
-      expect(assigns(:financial_property)).to eq(financial_property)
+  describe "GET requests" do
+    describe "GET #show" do
+      it "assigns the requested financial property @financial_property" do
+        financial_property = FinancialProperty.create! valid_attributes
+        financial_provider = FinancialProvider.create! provider_attributes
+        financial_provider.properties << financial_property
+        get :show, { id: financial_property.to_param }, session: valid_session
+        expect(assigns(:financial_property)).to eq(financial_property)
+      end
     end
-  end
-  
-  describe "GET #new" do
-    it "assigns a new financial property as @financial_property" do
-      get :new, {}, session: valid_session
-      expect(assigns(:financial_property)).to be_a_new(FinancialProperty)
-    end
-  end
 
-  describe "GET #edit" do
-    it "assigns the requested financial property as @financial_property" do
-      financial_property = FinancialProperty.create! valid_attributes
-      get :edit, { id: financial_property.to_param }, session: valid_session
-      expect(assigns(:financial_property)).to eq(financial_property)
+    describe "GET #new" do
+      it "assigns a new financial property as @financial_property" do
+        get :new, {}, session: valid_session
+        expect(assigns(:financial_property)).to be_a_new(FinancialProperty)
+      end
+    end
+
+    describe "GET #edit" do
+      it "assigns the requested financial property as @financial_property" do
+        financial_property = FinancialProperty.create! valid_attributes
+        get :edit, { id: financial_property.to_param }, session: valid_session
+        expect(assigns(:financial_property)).to eq(financial_property)
+      end
     end
   end
   
@@ -157,10 +171,19 @@ RSpec.describe FinancialPropertyController, type: :controller do
         }
       end
       
+      let(:new_provider_attributes) do
+        {
+          user_id: user.id,
+          name: "Property Name New",
+        }
+      end
+      
       let(:financial_property) { assigns(:financial_property) }
       
       before do
+        financial_provider = FinancialProvider.create! new_provider_attributes
         financial_property = FinancialProperty.create! valid_attributes
+        financial_provider.properties << financial_property
         put :update, { id: financial_property.to_param, financial_property: new_valid_attributes }, session: valid_session
       end
 
@@ -220,7 +243,10 @@ RSpec.describe FinancialPropertyController, type: :controller do
   
   describe "DELETE #destroy" do
     it "destroys the requested financial property and redirect to main financial information page" do
+      
       financial_property = FinancialProperty.create! valid_attributes
+      financial_provider = FinancialProvider.create! provider_attributes
+      financial_provider.properties << financial_property
       expect { delete :destroy, { id: financial_property.to_param }, session: valid_session }
         .to change(FinancialProperty, :count).by(-1)
       expect(response).to redirect_to financial_information_path
@@ -228,6 +254,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
 
     it "shows correct flash message on destroy provider" do
       financial_property = FinancialProperty.create! valid_attributes
+      financial_provider = FinancialProvider.create! provider_attributes
+      financial_provider.properties << financial_property
       delete :destroy, { id: financial_property.to_param }, session: valid_session
       expect(flash[:notice]).to be_present
     end

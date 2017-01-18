@@ -112,7 +112,7 @@ RSpec.describe TaxesController, type: :controller do
         expect(assigns(:tax)).to eq(tax)
       end
 
-      it "redirects to the taxes index" do
+      it "redirects to the taxes page" do
         tax = create(:tax_year_info, user_id: user.id)
         put :update, { id: tax.to_param,  tax_year_info: new_valid_attributes }, valid_session
         expect(response).to redirect_to(taxes_path)

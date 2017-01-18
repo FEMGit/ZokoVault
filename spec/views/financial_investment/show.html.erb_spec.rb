@@ -1,3 +1,4 @@
+
 require 'rails_helper'
 
 RSpec.describe "financial_investment/show", type: :view do
@@ -24,9 +25,20 @@ RSpec.describe "financial_investment/show", type: :view do
     }
   end
   
+
+  let(:provider_attributes) do 
+    {
+      name: "Investment Name",
+      user_id: user.id
+    }
+  end
+  
   before(:each) do
     financial_investment = FinancialInvestment.create! valid_attributes
+    financial_provider = FinancialProvider.create! provider_attributes
+    financial_provider.investments << financial_investment
     assign(:financial_investment, financial_investment)
+    assign(:investment_provider, financial_provider)
     
     render
   end

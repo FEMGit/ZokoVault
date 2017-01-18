@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "final_wishes/index", type: :view do
   before(:each) do
+    assign(:category, Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase),)
     assign(:final_wishes, [
       FinalWish.create!(
         :document_id => 2,

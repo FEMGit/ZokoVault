@@ -25,6 +25,13 @@ RSpec.describe FinancialInvestmentController, type: :controller do
     }
   end
   
+  let(:provider_attributes) do 
+    {
+      name: "Investment Name",
+      user_id: user.id
+    }
+  end
+  
   let(:invalid_attributes) do
     { id: "", user_id: user.id }
   end
@@ -36,6 +43,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
   describe "GET #show" do
     it "assigns the requested financial investment @financial_investment" do
       financial_investment = FinancialInvestment.create! valid_attributes
+      financial_provider = FinancialProvider.create! provider_attributes
+      financial_provider.investments << financial_investment
       get :show, { id: financial_investment.to_param }, session: valid_session
       expect(assigns(:financial_investment)).to eq(financial_investment)
     end
@@ -168,10 +177,19 @@ RSpec.describe FinancialInvestmentController, type: :controller do
         }
       end
       
+      let(:new_provider_attributes) do
+        {
+          name: "Investment Name New",
+          user_id: user.id
+        }
+      end
+      
       let(:financial_investment) { assigns(:financial_investment) }
       
       before do
         financial_investment = FinancialInvestment.create! valid_attributes
+        financial_provider = FinancialProvider.create! new_provider_attributes
+        financial_provider.investments << financial_investment
         put :update, { id: financial_investment.to_param, financial_investment: new_valid_attributes }, session: valid_session
       end
 
@@ -240,6 +258,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the requested financial investment and redirect to main financial information page" do
       financial_investment = FinancialInvestment.create! valid_attributes
+        financial_provider = FinancialProvider.create! provider_attributes
+        financial_provider.investments << financial_investment
       expect { delete :destroy, { id: financial_investment.to_param }, session: valid_session }
         .to change(FinancialInvestment, :count).by(-1)
       expect(response).to redirect_to financial_information_path
@@ -247,6 +267,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
 
     it "shows correct flash message on destroy provider" do
       financial_investment = FinancialInvestment.create! valid_attributes
+        financial_provider = FinancialProvider.create! provider_attributes
+        financial_provider.investments << financial_investment
       delete :destroy, { id: financial_investment.to_param }, session: valid_session
       expect(flash[:notice]).to be_present
     end

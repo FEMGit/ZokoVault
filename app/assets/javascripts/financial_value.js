@@ -1,5 +1,4 @@
   var financialValueSignUpdate = function(typeDropDownSelector, valueFieldSelector) {
-    console.log(valueFieldSelector)
     $(typeDropDownSelector).change(updateValues(typeDropDownSelector, valueFieldSelector));
   }
 

@@ -84,6 +84,14 @@ class DocumentService
     Document.where(user: user, category: category, group: contact_id)
   end
   
+  def self.empty_value
+    "Select..."
+  end
+  
+  def self.update_group?(group, category)
+    ![Rails.configuration.x.InsuranceCategory, Rails.configuration.x.FinancialInformationCategory].include? category
+  end
+  
   private
   
   def card_names(user, current_user = nil)

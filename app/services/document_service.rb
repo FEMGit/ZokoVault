@@ -107,7 +107,7 @@ class DocumentService
   end
   
   def user_cards(model, user, current_user)
-    return model.for_user(user) unless current_user != user
+    return model.for_user(user).where(:category => Category.fetch(@category.downcase)) unless current_user != user
     model.for_user(user).select{ |x| user_contacts(x, current_user).present?}
   end
   

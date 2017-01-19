@@ -1,6 +1,9 @@
 class FinancialInformationController < AuthenticatedController
   include FinancialInformationHelper
   
+  add_breadcrumb "Financial Information", :financial_information_path, only: [:index]
+  include BreadcrumbsCacheModule
+  
   def index
     session[:ret_url] = financial_information_path
     @category = Rails.application.config.x.FinancialInformationCategory

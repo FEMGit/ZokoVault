@@ -8,6 +8,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   add_breadcrumb "Property & Casualty - Setup", :new_property_path, :only => %w(new)
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty)

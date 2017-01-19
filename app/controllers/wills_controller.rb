@@ -10,7 +10,8 @@ class WillsController < AuthenticatedController
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
   add_breadcrumb "Wills", :wills_path, :only => %w(edit index new)
   add_breadcrumb "Wills - Setup", :new_will_path, :only => %w(new)
-  
+  include BreadcrumbsCacheModule
+
   # GET /wills
   # GET /wills.json
   def index

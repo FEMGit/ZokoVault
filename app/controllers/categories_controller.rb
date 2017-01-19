@@ -1,6 +1,11 @@
 class CategoriesController < AuthenticatedController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
+  include BreadcrumbsCacheModule
 
   def index
     @categories = policy_scope(Category).all.each { |c| authorize c }

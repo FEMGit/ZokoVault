@@ -1,4 +1,5 @@
 class DocumentsController < AuthenticatedController
+  include SharedViewModule
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_document_params, only: [:create, :update]
@@ -6,14 +7,23 @@ class DocumentsController < AuthenticatedController
   layout :set_layout, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Documents", :documents_path, :only => %w(new edit)
+  before_action :set_previous_crumbs, only: [:new, :edit]
+  add_breadcrumb "Documents", :documents_path, only: [:index]
+  add_breadcrumb "Add Document", :new_document_path, :only => %w(new)
+  before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
-  def set_layout
-    unless resource_owner == current_user
-      return "shared_view"
-    end
-    "application"
+  def set_previous_crumbs
+    return unless request.referrer.present?
+    previous_path = Rails.application.routes.recognize_path(request.referrer)
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop
   end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Edit Document", edit_document_path(@document)
+  end
+
+  @after_new_user_created = ""
 
   def index
     @documents = policy_scope(Document).each { |d| authorize d }

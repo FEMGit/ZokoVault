@@ -9,6 +9,7 @@ class PowerOfAttorneysController < AuthenticatedController
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
   add_breadcrumb "Legal - Power of Attorney", :power_of_attorneys_path, :only => %w(edit index new)
   add_breadcrumb "Legal - Power of Attorney - Setup", :new_power_of_attorney_path, :only => %w(new)
+  include BreadcrumbsCacheModule
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json

@@ -8,6 +8,7 @@ class HealthsController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   add_breadcrumb "Health - Setup", :new_health_path, :only => %w(new)
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@health.name}", health_path(@health)

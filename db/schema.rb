@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118023621) do
+ActiveRecord::Schema.define(version: 20170119062159) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -206,8 +206,10 @@ ActiveRecord::Schema.define(version: 20170118023621) do
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
     t.string   "type"
+    t.integer  "category_id"
   end
 
+  add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
 
   create_table "health_policies", force: :cascade do |t|

@@ -21,8 +21,7 @@
     <% documents && documents.each do |document| %>
       <tr>
         <td>
-          <% shareable ||= false %>
-          <%= render :partial => "layouts/document_links", :locals => {:document => document, :shareable => shareable} %>
+          <%= render :partial => "layouts/document_links", :locals => {:document => document } %>
         </td>
         <td><%= date_format(document.updated_at) %></td>
         <td>
@@ -32,11 +31,10 @@
           <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document.shares} %>
         </td>
         <td>
-          <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description} %>
+          <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description } %>
         </td>
         <td>
-          <%= link_to 'Edit', edit_document_path(document), class: "outline-button small-button" %>
-          <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>
+          <%= render :partial => "layouts/document_actions", :locals => {:document => document } %>
         </td>
       </tr>
     <% end %>

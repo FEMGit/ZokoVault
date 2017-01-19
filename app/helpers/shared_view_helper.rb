@@ -11,4 +11,8 @@ module SharedViewHelper
       link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category'
     end
   end
+  
+  def show_navigation_link?(category)
+    @shared_category_names_full.include? category
+  end
 end

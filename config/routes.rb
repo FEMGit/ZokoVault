@@ -92,8 +92,10 @@ Rails.application.routes.draw do
   get 'shares/new/:document' => 'shares#new'
 
   resources :documents
-  get 'documents/get_drop_down_options/:category', to: 'documents#get_drop_down_options'
-  get 'documents/get_card_names/:category', to: 'documents#get_card_names'
+  get 'documents/get_drop_down_options/:category(/:shared_user_id)', to: 'documents#get_drop_down_options'
+  get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
+  get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
+  get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   
   resources :account_settings
   put 'account_settings/update', to: 'account_settings#update'
@@ -180,7 +182,10 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
-
+  
+  # Shared wtl wills
+  get 'shared_view/:shared_user_id/estate_planning/wills' => 'wills#index', as: :shared_wills
+  get 'shared_view/:shared_user_id/estate_planning/wills/new' => 'wills#new', as: :shared_new_wills
   
   # Information pages
   get "/about", to: "pages#about", as: :about

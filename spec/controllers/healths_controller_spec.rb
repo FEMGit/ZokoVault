@@ -69,7 +69,7 @@ RSpec.describe HealthsController, type: :controller do
     end
 
     it "assigns a group documents as @group_documents" do
-      document = create(:document, user_id: user.id, category: "Insurance", group: "Health")
+      document = create(:document, user_id: user.id, category: "Insurance", group: "Health", vendor_id: @insurance_card.id)
       get :show, {id: @insurance_card.to_param}, session: valid_session
       expect(assigns(:group_documents)).to eq([document])
     end

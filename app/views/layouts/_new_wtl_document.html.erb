@@ -2,6 +2,7 @@
 
 <h1><%= yield(:title) + ' - Setup' %></h1>
   <%= form_for @vault_entry do |f| %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   <div id="wtl-forms">
     <div id="wtl-form-1">
       <% @vault_entries.each_with_index do |data, index| %>
@@ -22,7 +23,6 @@
 <%= f.submit "Save", class: "button primary-button big-button" %>
 <%= link_to 'Cancel', :back || estate_planning_path, {class: "button secondary-button big-button"}%>
 <% end %>
-
 
 <script>
   clearFormFields = function(form){

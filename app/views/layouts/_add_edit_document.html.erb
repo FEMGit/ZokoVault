@@ -1,6 +1,7 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
 <%= form_for @document, html: { id: "doc-form" } do |f| %>
+  <%= hidden_field_tag :shared_user_id, @shared_user.present? ? @shared_user.id : "" %>
   <h3 class="document-title"> <%= yield(:title) %> </h3>
   <% if @document.persisted? %>
     <span class='document-change-data'>
@@ -34,7 +35,7 @@
     <label>Category</label>
     <div class="chosen-styled-select">
       <%= f.collection_select :category, 
-        CategoryDropdownOptions::CATEGORIES, :to_s, :to_s, {}, 
+        @category_dropdown_options, :to_s, :to_s, {}, 
         { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false }
       %>
     </div>
@@ -92,7 +93,8 @@
   
   //get ajax request to update card drop down info based on chosen category
   $("#document_category.chosen-select").chosen().change(function(e, params){
-    var url = '/documents/get_drop_down_options/' + params.selected.replace('...', '');
+    shared_user_id = $("#shared_user_id").val();
+    var url = '/documents/get_drop_down_options/' + params.selected.replace('...', '') + '/' + shared_user_id;
     $.get(url, function(data) {
       card_values = $('#document_group');
       card_values.empty();
@@ -106,8 +108,9 @@
   
   //get ajax request to update card names drop down if its insurance or financial category
   var updateCardNames = function(){
+    shared_user_id = $("#shared_user_id").val();
     var category = $("#document_category.chosen-select :selected").text().replace('...', '');
-    var url = '/documents/get_card_names/' + category
+    var url = '/documents/get_card_names/' + category + '/' + shared_user_id
     $.get(url, function(data) {
       if(data.length > 0) {
         card_names = $('#document_subcategory' + idPostFixShow(data));

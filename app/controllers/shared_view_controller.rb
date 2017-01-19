@@ -1,12 +1,10 @@
 class SharedViewController < AuthenticatedController
-  include DocumentsHelper 
-
-  layout "shared_view"
-
-  before_action :set_shared_user, :set_shares
+  include DocumentsHelper
+  include SharedViewModule
+  
+  before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
   before_action :set_shareables
-  before_action :set_shared_categories_names
-
+  
   def dashboard
   end
   
@@ -64,23 +62,19 @@ class SharedViewController < AuthenticatedController
         @trusts << shareable
       when Will
         @wills << shareable
+        @wtl_documents |= Document.for_user(shared_user).where(:group => Will.name)
       when PowerOfAttorney
         @power_of_attorneys << shareable
       when Document
         if groups_whitelist.include?shareable.group
-          @wtl_documents << shareable
+          @wtl_documents |= [shareable]
         end
       end
+      @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
+      @wtl_documents.flatten!
     end
     @category = Rails.application.config.x.WtlCategory
-    @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
-    @wtl_documents |= @vault_entries.map(&:document).compact
-  end
-
-  def wills
-    shareables = @shares.map(&:shareable)
-    @wills = shareables.select { |resource| resource.is_a? Will }
-    @group_documents = shareables.select { |resource| resource.is_a?(Document) && resource.group == "Will" }
+    session[:ret_url] = shared_view_estate_planning_path
   end
 
   def trusts
@@ -94,7 +88,6 @@ class SharedViewController < AuthenticatedController
     @power_of_attorneys = shareables.select { |resource| resource.is_a? PowerOfAttorney }
     @group_documents = shareables.select { |resource| resource.is_a?(Document) && resource.group == "PowerOfAttorney" }
   end
-
 
   def documents
     @document = Document.for_user(@shared_user).find(params[:id])
@@ -126,31 +119,13 @@ class SharedViewController < AuthenticatedController
 
   private
 
-  def set_shared_user 
-    @shared_user = User.find(params[:shared_user_id])
-  end
-
-  def shared_user
-    @shared_user
-  end
-
-  def set_shares
-    @shares = policy_scope(Share)
-      .where(user: @shared_user)
-      .each { |s| authorize s }
-  end
-
-  def set_shared_categories_names
-    @shared_category_names = @shares.map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
-  end
-
   def set_shareables
     @document_shareables, @category_shareables, @other_shareables = Array.new(3) { [] }
 
     @shares.map(&:shareable).each do |shareable| 
       case shareable
       when Document
-        @document_shareables << shareable
+        @document_shareables |= [shareable]
       when Category
         @category_shareables << shareable
       else

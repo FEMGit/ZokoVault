@@ -31,7 +31,7 @@ class DocumentService
   end
   
   def group_exist?(group)
-    @all_groups.detect { |x| x[:label] == @category && x[:groups] }[:groups].any? { |gr| gr["label"] == group}
+    @all_groups.detect { |x| x[:label] == @category.name && x[:groups] }[:groups].any? { |gr| gr["label"] == group}
   end
 
   def get_empty_card_values
@@ -42,7 +42,7 @@ class DocumentService
     @category == "Contact"
   end
   
-  def get_card_values(user)
+  def get_card_values(user, current_user = nil)
     get_all_groups
     return [get_empty_card_values] unless category_exist?
 
@@ -50,15 +50,30 @@ class DocumentService
       if contact_category?
         Contact.for_user(user).collect{|x| [id: x.id, name: x.name]}
       else
-        @all_groups.detect{|x| x[:label] == @category}[:groups].collect{|x| [id: x["label"], name: x["label"]]}
+        if user == current_user
+          @all_groups.detect{|x| x[:label] == @category}[:groups].collect{ |x| [id: x["label"], name: x["label"]] }
+        else
+          shared_user_values(user, current_user)
+        end
       end
     card_values.prepend(get_empty_card_values)
   end
   
-  def get_card_names(user)
+  def shared_user_values(user, current_user)
+    shares = SharedViewService.shares(user, current_user).map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
+    if shares.include? @category
+      @all_groups.detect{|x| x[:label] == @category}[:groups].collect{|x| [id: x["label"], name: x["label"]]}
+    else
+      groups = SharedViewService.shared_group_names(user, current_user, @category)
+      return [get_empty_card_values] unless groups.present?
+      groups.collect{|x| [id: x, name: x]}
+    end
+  end
+  
+  def get_card_names(user, current_user = nil)
     get_all_groups
     return [] unless category_exist?
-    card_names(user)
+    card_names(user, current_user)
   end
   
   def self.get_share_with_documents(user, contact_id)
@@ -71,15 +86,35 @@ class DocumentService
   
   private
   
-  def card_names(user)
+  def card_names(user, current_user = nil)
     if @category == Rails.configuration.x.InsuranceCategory
-      vendors = Vendor.for_user(user).where(:category => @category).order(:group => 'desc')
-      vendors.collect { |x| [id: x.id, name: x.name] }.prepend([id: Rails.configuration.x.InsuranceCategory, name: "Select..."])
+      vendors = user_cards(Vendor, user, current_user).order(:group => 'desc')
+      collect_card_names(vendors, Rails.configuration.x.InsuranceCategory)
     elsif @category == Rails.configuration.x.FinancialInformationCategory
-      providers = FinancialProvider.for_user(user).order(:name => 'desc')
-      providers.collect { |x| [id: x.id, name: x.name] }.prepend([id: Rails.configuration.x.FinancialInformationCategory, name: "Select..."])
+      providers = user_cards(FinancialProvider, user, current_user).order(:name => 'desc')
+      collect_card_names(providers, Rails.configuration.x.FinancialInformationCategory)
     else
       []
     end
+  end
+  
+  def user_cards(model, user, current_user)
+    return model.for_user(user) unless current_user != user
+    model.for_user(user).select{ |x| user_contacts(x, current_user).present?}
+  end
+  
+  def user_contacts(user, current_user)
+    Contact.find(user.share_with_contact_ids) & Contact.where(emailaddress: current_user.email)
+  end
+
+  def collect_card_names(collection, category)
+    collection.collect { |x| [id: x.id, name: x.name] }.prepend([id: category, name: "Select..."])
+  end
+  
+  def self.update_shares(document, resource_owner)
+    return unless document.group.present?
+    model = ModelService.model_by_name(document.group)
+    return unless model.present?
+    document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
   end
 end

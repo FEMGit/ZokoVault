@@ -1,4 +1,11 @@
 class CategorySharePolicy < BasicPolicy
+  def index?
+    owned_or_shared?
+  end
+  
+  def create?
+    owned_or_shared?
+  end
 
   protected 
 

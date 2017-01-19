@@ -20,6 +20,8 @@ module ZokuVault
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
+    config.x.ShareCategories = [config.x.WtlCategory, config.x.InsuranceCategory, config.x.TaxCategory,
+                                config.x.FinalWishesCategory, config.x.FinancialInformationCategory]
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'
@@ -144,7 +146,11 @@ module ZokuVault
         "groups" => [
         ]
       }
-    }    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
+    }
+    
+    
+    
+    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
 

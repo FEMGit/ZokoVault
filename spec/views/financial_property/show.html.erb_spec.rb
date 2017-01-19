@@ -22,9 +22,19 @@ RSpec.describe "financial_property/show", type: :view do
     }
   end
   
+  let(:provider_attributes) do 
+    {
+      name: "Property Name",
+      user_id: user.id
+    }
+  end
+  
   before(:each) do
     financial_property = FinancialProperty.create! valid_attributes
+    financial_provider = FinancialProvider.create! provider_attributes
+    financial_provider.properties << financial_property
     assign(:financial_property, financial_property)
+    assign(:property_provider, financial_provider)
     
     render
   end

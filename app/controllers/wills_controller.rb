@@ -2,7 +2,8 @@ class WillsController < AuthenticatedController
   include SharedViewModule
   before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
   before_action :set_will, :set_document_params, only: [:destroy]
-  before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_contacts, only: [:new, :create]
+  before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   layout :set_layout, only: [:new, :edit, :index]
@@ -133,8 +134,8 @@ class WillsController < AuthenticatedController
     params.permit(:shared_user_id)
   end
   
-  def will_shared_with_uinq_param
-    will_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
+  def will_shared_with_uniq_param
+    will_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?).map(&:to_i)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -175,7 +176,7 @@ class WillsController < AuthenticatedController
         WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
       end
     end
-    ShareInheritanceService.update_document_shares(Will, (@old_params + @new_params).map(&:id), resource_owner.id, will_shared_with_uinq_param, 'Will')
+    update_document_share
     raise "error saving new will" if @errors.any?
   end
   
@@ -184,5 +185,15 @@ class WillsController < AuthenticatedController
     if authorize_ids.include? resource.id
       authorize resource
     end
+  end
+  
+  def update_document_share
+    ShareInheritanceService.update_document_shares(Will, (@old_params + @new_params).map(&:id), resource_owner.id, @previous_shared_with, will_shared_with_uniq_param, 'Will')
+  end
+  
+  def set_previous_shared_with
+    old_wills = WtlService.get_old_records(will_params)
+    old_will_ids = old_wills.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)
+    @previous_shared_with = Will.find(old_will_ids).map(&:share_with_contact_ids).flatten.uniq
   end
 end

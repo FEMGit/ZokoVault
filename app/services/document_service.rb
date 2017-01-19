@@ -119,10 +119,25 @@ class DocumentService
     collection.collect { |x| [id: x.id, name: x.name] }.prepend([id: category, name: "Select..."])
   end
   
-  def self.update_shares(document, resource_owner)
-    return unless document.group.present?
-    model = ModelService.model_by_name(document.group)
-    return unless model.present?
-    document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+  def self.update_shares(document, resource_owner, previous_group = nil)
+    if document.group.present?
+      model = ModelService.model_by_name(document.group)
+      unless model.present?
+        document.contact_ids = []
+        return
+      end
+      share_contact_ids_to_remove = share_ids_to_remove(previous_group, resource_owner)
+      document.contact_ids = document.contact_ids.reject { |contact_id| share_contact_ids_to_remove.include? contact_id }
+      document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+    else
+      document.contact_ids = []
+    end
+  end
+  
+  def self.share_ids_to_remove(previous_group, resource_owner)
+    return [] unless previous_group.present?
+    previous_model = ModelService.model_by_name(previous_group)
+    return [] unless previous_model.present?
+    previous_model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
   end
 end

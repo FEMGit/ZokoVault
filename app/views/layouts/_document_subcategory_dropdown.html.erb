@@ -2,7 +2,7 @@
 <div class="chosen-styled-select" id="category_groups" <% if @card_names.present? %> style="display: none;" <% end %> >
   <%= f.collection_select :group, 
     @cards.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
-    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select..." }
+    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_category_groups" }
   %>
 </div>
 

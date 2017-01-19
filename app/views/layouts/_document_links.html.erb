@@ -1,3 +1,4 @@
+<% shareable ||= false %>
 <% if previewed?(document) %>
   <% if @shared_user.present? %>
     <%= link_to document.name, shared_view_documents_path(id: document.id) %>

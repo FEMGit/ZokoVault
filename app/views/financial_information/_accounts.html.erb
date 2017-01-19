@@ -1,7 +1,7 @@
 <% account_providers.each do |provider| %>
   <div class="card cg-3 flex-column mb-20 cp cp">
     <%= link_to content_tag(:a), show_account_url(provider.id), class: "whole-card-link" %>
-    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(current_user, @category, provider.id) } %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, provider.id) } %>
     <h3><%= provider.name %></h3>
     <p>
       <%= link_to provider.web_address, provider.web_address %><br>
@@ -23,7 +23,7 @@
       <% provider.accounts.each do |account| %>
         <li class="data-pair">
           <label><%= account.account_type %></label>
-          <%= render partial: "value_show", locals: { value: account.value, type: account.account_type } %>
+          <%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %>
         </li>
       <% end %>
     </ul>

@@ -1,5 +1,6 @@
 class SharedViewController < AuthenticatedController
   include DocumentsHelper
+  include FinancialInformationHelper
   include SharedViewModule
   
   before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
@@ -102,8 +103,6 @@ class SharedViewController < AuthenticatedController
 
 
   def financial_information
-    raise "You cannot view this page" unless @shared_category_names.include? 'Final Information'
-
     @category = Rails.application.config.x.FinancialInformationCategory
     @documents = Document.for_user(shared_user).where(category: @category)
 

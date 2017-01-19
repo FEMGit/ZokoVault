@@ -41,11 +41,53 @@ module FinancialInformationHelper
       FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
   end
   
+  # Sum count section
+  
   def property_provider_id(user, property)
     FinancialProvider.for_user(user).find(property.empty_provider_id)
   end
   
   def investment_provider_id(user, investment)
     FinancialProvider.for_user(user).find(investment.empty_provider_id)
+  end
+  
+  def alternatives_sum
+    FinancialAlternative.alternatives(resource_owner).sum(:current_value)
+  end
+  
+  def uncalled_commitments_sum
+    FinancialAlternative.alternatives(resource_owner).sum(:total_calls) -
+      FinancialAlternative.alternatives(resource_owner).sum(:commitment)
+  end
+  
+  def cash_sum
+    FinancialAccountInformation.cash(resource_owner).sum(:value)
+  end
+  
+  def investments_sum
+    FinancialAccountInformation.investments(resource_owner).sum(:value) +
+      FinancialInvestment.investments(resource_owner).sum(:value)
+  end
+  
+  def properties_sum
+    FinancialProperty.properties(resource_owner).sum(:value)
+  end
+  
+  def credit_cards_sum
+    FinancialAccountInformation.credit_cards(resource_owner).sum(:value)
+  end
+  
+  def loans_sum
+    FinancialAccountInformation.loans(resource_owner).sum(:value) + 
+      FinancialInvestment.loans(resource_owner).sum(:value)
+  end
+  
+  def net_worth
+    cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum + alternatives_sum +
+      uncalled_commitments_sum
+  end
+  
+  def resource_owner
+    @shared_user.present? ? @shared_user : current_user
   end
 end

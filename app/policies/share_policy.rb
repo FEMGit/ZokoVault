@@ -18,6 +18,7 @@ class SharePolicy < BasicPolicy
   # Shared view policies
   def dashboard?; index?; end
   def estate_planning?; index?; end
+  def financial_information?; index?; end
   def final_wishes?; index?; end
   def taxes?; index?; end
   def insurance?; index?; end

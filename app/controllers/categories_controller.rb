@@ -27,6 +27,8 @@ class CategoriesController < AuthenticatedController
       taxes_url
     when 'Final Wishes'
       final_wishes_url
+    when 'Financial Information'
+      financial_information_url
     else
       estate_planning_url
     end

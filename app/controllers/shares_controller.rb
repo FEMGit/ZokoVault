@@ -1,6 +1,7 @@
 class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
     helper_method :shared_category_count
+    helper_method :shared_document_count
 
     def index
       @shares_by_user = policy_scope(Share)
@@ -59,6 +60,21 @@ class SharesController < AuthenticatedController
     
     def shared_category_count(shares, user)
       SharedViewService.shared_categories_full(shares).count
+    end
+
+    def shared_document_count(shareables, user)
+      direct_document_share = shareables.select { |res| res.is_a? Document }
+      group_docs = Document.for_user(user).select { |x| shared_groups(user).include? x.group }
+      category_docs = Document.for_user(user).select { |x| shared_categories(user).include? x.category }
+      (group_docs.map(&:id) + direct_document_share.map(&:id) + category_docs.map(&:id)).uniq.count
+    end
+    
+    def shared_groups(user)
+      SharedViewService.shared_group_names(user, current_user)
+    end
+    
+    def shared_categories(user)
+      SharedViewService.shares(user, current_user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
     end
 
     def set_share

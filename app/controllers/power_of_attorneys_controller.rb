@@ -1,4 +1,5 @@
 class PowerOfAttorneysController < AuthenticatedController
+  include SharedViewModule
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
@@ -14,6 +15,10 @@ class PowerOfAttorneysController < AuthenticatedController
   def index
     @power_of_attorneys = policy_scope(PowerOfAttorney)
                           .each { |p| authorize p }
+    
+    @power_of_attorneys = wills
+    @power_of_attorneys.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_attorneys_path_path : power_of_attorneys_path
   end
 
   # GET /power_of_attorneys/1

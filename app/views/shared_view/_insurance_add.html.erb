@@ -1,9 +1,9 @@
 <% new_link_paths = {
   "life" => new_life_path,
   "property" => shared_new_property_path,
-  "health" => new_health_path,
+  "health" => shared_new_health_path,
   } %>
-  
+
 <% if group['value'] == 'life' && @insurance_vendors.select { |v| v["group"]=="life" }.any? %>
   <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_count(@shared_user, group['label'], @category.name) } %>
   <h3 class="mb-20"><%= group["label"] %></h3>

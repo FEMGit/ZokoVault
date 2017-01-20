@@ -14,14 +14,14 @@ class SharedViewController < AuthenticatedController
     @contacts_with_access = shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
-
-    if @shared_category_names.include? 'Insurance'
-      @insurance_vendors = Vendor.for_user(shared_user).where(category: @category.name)
+    if @shared_category_names.include? Rails.application.config.x.InsuranceCategory
+      @insurance_vendors = Vendor.for_user(shared_user).where(category: @category)
       @insurance_documents = Document.for_user(shared_user).where(category: @category.name)
     else
-      @insurance_vendors = @other_shareables.map { |shareable| shareable.is_a?Vendor }
-      @insurance_documents = @document_shareables.map { |shareable| shareable.category.eql?'Vendor' }
+      @insurance_vendors = @other_shareables.select { |shareable| shareable.is_a?Vendor }
+      @insurance_documents = @document_shareables.select { |shareable| @insurance_vendors.map(&:id).include? shareable.vendor_id }
     end
+    session[:ret_url] = shared_view_insurance_path
   end
 
   def taxes

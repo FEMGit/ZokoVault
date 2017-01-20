@@ -3,6 +3,7 @@
 <h1><%= "#{yield(:title).gsub("&amp;", "&")} - Setup" %></h1>
 <%= form_for(@insurance_card, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   <div class="card <%= @insurance_card.group %> mb-30">
 
     <h3 class="card-label">Provider Details</h3>
@@ -58,7 +59,7 @@
       </div>
     </section>
 
-    <% if params[:id] %>
+    <% if params[:id] && policy(@insurance_card).destroy? %>
       <%= link_to 'Delete this Provider', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete,
         data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
         class: 'button small-button secondary-button', id: 'delete-insurance' %>
@@ -74,7 +75,7 @@
         <%= render yield(:partial_path), ff: ff, index: index, data: data %>
       <% end %>
 
-      <% if data.id %>
+      <% if data.id && policy(@insurance_card).destroy? %>
         <span class="mt-30 mb-30">
           <%= link_to 'Delete this policy', "#{yield(:delete_path)}#{data.id}", method: :delete,
               data: { confirm: "Deleting this '#{@insurance_card.group} policy' will permanently remove it from ZokuVault." },

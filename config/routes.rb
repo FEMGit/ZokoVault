@@ -198,6 +198,12 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys' => 'power_of_attorneys#index', as: :shared_power_of_attorneys
   get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys/new' => 'power_of_attorneys#new', as: :shared_new_power_of_attorneys
   
+  # Shared insurance properties
+  get 'shared_view/:shared_user_id/insurance/property' => 'property_and_casualties#index', as: :shared_properties
+  get 'shared_view/:shared_user_id/insurance/property/:id' => 'property_and_casualties#show', as: :shared_property
+  get 'shared_view/:shared_user_id/insurance/properties/new' => 'property_and_casualties#new', as: :shared_new_property
+  get 'shared_view/:shared_user_id/insurance/property/:id/edit' => 'property_and_casualties#edit', as: :shared_edit_property
+  
   # Information pages
   get "/about", to: "pages#about", as: :about
   get "/careers", to: "pages#careers", as: :careers

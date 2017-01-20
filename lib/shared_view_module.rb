@@ -1,7 +1,7 @@
 module SharedViewModule
   def self.included(base)
     base.before_filter :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
-    base.layout :set_layout, only: [:new, :edit, :index]
+    base.layout :set_layout, only: [:new, :edit, :index, :show]
   end
   
   def set_layout

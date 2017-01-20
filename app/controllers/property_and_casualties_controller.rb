@@ -1,4 +1,5 @@
 class PropertyAndCasualtiesController < AuthenticatedController
+  include SharedViewModule
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
@@ -21,8 +22,9 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # GET /properties
   # GET /properties.json
   def index
-    @property_and_casualties = policy_scope(PropertyAndCasualty)
-                               .each { |p| authorize p }
+    @property_and_casualties = property_and_casualties
+    @property_and_casualties.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_properties_path : properties_path
   end
 
   # GET /properties/1
@@ -43,7 +45,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   def initialize_insurance_card
-    @insurance_card = PropertyAndCasualty.new(user: resource_owner)
+    @insurance_card = PropertyAndCasualty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase))
     @insurance_card.policy.build
   end
 
@@ -58,16 +60,18 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
-    @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id))
+    @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
-        format.html { redirect_to insurance_path, flash: { success: 'Insurance was successfully created.' } }
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner.id)
+        @path = success_path(insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
       end
     end
@@ -77,15 +81,18 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # PATCH/PUT /properties/1.json
   def update
     @insurance_card = @property_and_casualty
+    @previous_share_with_ids = @insurance_card.share_with_contact_ids
     authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
-        format.html { redirect_to property_path(@insurance_card), flash: { success: 'Insurance was successfully updated.' } }
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner.id)
+        @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else
-        format.html { render :edit }
+        error_path(:edit)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
       end
     end
@@ -114,13 +121,37 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   private
+  
+  def property_and_casualties
+    return PropertyAndCasualty.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? PropertyAndCasualty } unless @category_shared
+    PropertyAndCasualty.for_user(@shared_user)
+  end
 
   def provider_by_policy
     @property_and_casualty = PropertyAndCasualty.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
   end
   
-  def resource_owner
-    @property_and_casualty.present? ? @property_and_casualty.user : current_user
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path(common_path, shared_view_path)
+    ReturnPathService.success_path(resource_owner, current_user, insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+
+  def resource_owner 
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @property_and_casualty.present? ? @property_and_casualty.user : current_user
+    end
   end
 
   def set_policy

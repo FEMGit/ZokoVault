@@ -76,13 +76,13 @@
 <%= render yield(:partial_path) %>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id) %>">
+  <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
       </svg>
     </span>Add Document
-  </a>
+  <% end %>
   <h3 class="mt-20"><%= params[:name] %> Documents</h3>
 </div>
 

@@ -209,6 +209,12 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/insurance/property/:id' => 'property_and_casualties#show', as: :shared_property
   get 'shared_view/:shared_user_id/insurance/properties/new' => 'property_and_casualties#new', as: :shared_new_property
   get 'shared_view/:shared_user_id/insurance/property/:id/edit' => 'property_and_casualties#edit', as: :shared_edit_property
+
+  # Shared insurance lives
+  get 'shared_view/:shared_user_id/insurance/life' => 'life_and_disabilities#index', as: :shared_lives
+  get 'shared_view/:shared_user_id/insurance/life/:id' => 'life_and_disabilities#show', as: :shared_life
+  get 'shared_view/:shared_user_id/insurance/lives/new' => 'life_and_disabilities#new', as: :shared_new_life
+  get 'shared_view/:shared_user_id/insurance/life/:id/edit' => 'life_and_disabilities#edit', as: :shared_edit_life
   
   # Shared taxes
   get 'shared_view/:shared_user_id/taxes/:id' => 'taxes#show', as: :shared_taxes

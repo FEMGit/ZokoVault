@@ -12,7 +12,7 @@
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
+            <%= link_to content_tag(:a), shared_life_path(@shared_user, vendor.id), class: "whole-card-link" %>
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 

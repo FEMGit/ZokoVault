@@ -26,11 +26,14 @@
     <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
 
     <% if user_signed_in? %>
+
       <a class="user-menu-link" id="user-menu-toggle" href="javascript:void(0)">
         <span class="user-avatar fr">
           <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
         </span>
       </a>
+
+      <%=link_to( image_tag("SVG/search.svg", height: 40, width: 40, :alt=>"Search"), search_url, class: "fr", style: "margin-right: 40px") %>
 
       <div class="user-menu">
         <%= link_to my_profile_path, class: "user-nav" do %>

@@ -77,6 +77,9 @@ gem 'rubocop', require: false
 # Guard, watch for file changes, run respective specs
 gem 'guard-rspec', require: false
 
+# Pagination
+gem 'kaminari'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

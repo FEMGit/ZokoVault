@@ -186,6 +186,9 @@ Rails.application.routes.draw do
   # Shared wtl wills
   get 'shared_view/:shared_user_id/estate_planning/wills' => 'wills#index', as: :shared_wills
   get 'shared_view/:shared_user_id/estate_planning/wills/new' => 'wills#new', as: :shared_new_wills
+
+  # Search
+  get "/search", to: "search#index", as: :search
   
   # Information pages
   get "/about", to: "pages#about", as: :about

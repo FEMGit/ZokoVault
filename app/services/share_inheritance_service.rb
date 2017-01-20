@@ -12,7 +12,7 @@ class ShareInheritanceService
           Document.where(user_id: user_id, group: group, category: record.category.name)
         end
       documents.each do |document|
-        share_contact_ids.each do |share_contact_id|
+        share_contact_ids.map(&:to_i).each do |share_contact_id|
           next if document.shares.map(&:contact_id).include? share_contact_id
           document.shares << Share.create(contact_id: share_contact_id, user_id: user_id)
         end

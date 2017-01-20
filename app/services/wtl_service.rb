@@ -15,7 +15,7 @@ class WtlService
   def self.update_shares(object_id, share_contact_ids, user_id, model)
     return unless share_contact_ids.present?
     model.find(object_id).shares.clear
-    share_contact_ids.each do |x|
+    share_contact_ids.uniq.each do |x|
       model.find(object_id).shares << Share.create(contact_id: x, user_id: user_id)
     end
   end

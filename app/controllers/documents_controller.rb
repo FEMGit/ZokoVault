@@ -59,11 +59,12 @@ class DocumentsController < AuthenticatedController
 
   def update
     authorize @document
+    previous_group = @document.group
 
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
-        DocumentService.update_shares(@document, resource_owner)
+        DocumentService.update_shares(@document, resource_owner, previous_group)
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else
@@ -155,11 +156,11 @@ class DocumentsController < AuthenticatedController
     share = share_service.fill_document_share
     #cleare document shares before updating current document
     share_service.clear_shares(@document)
-    document_params.merge(:shares_attributes => share, :user_id => resource_owner.id)
+    document_params.merge(:shares_attributes => share, :user_id => resource_owner.id, :group => base_params[:group])
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :group, :contact_ids, :vendor_id, :financial_information_id,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id,
                                      shares_attributes: [:user_id, :contact_id])
   end
 
@@ -189,9 +190,11 @@ class DocumentsController < AuthenticatedController
   end
   
   def prepare_document_params
-    if document_params[:vendor_id].present?
-      insurance_service = InsuranceService.new(resource_owner)
-      params[:document][:group] = insurance_service.group_by_vendor(document_params[:vendor_id])
+    if DocumentService.update_group?(base_params[:group], document_params[:category])
+      params[:document][:vendor_id] = nil
+      params[:document][:financial_information_id] = nil
+    else
+      params[:group] = DocumentService.empty_value
     end
   end
 

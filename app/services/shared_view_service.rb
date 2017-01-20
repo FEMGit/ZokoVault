@@ -11,7 +11,7 @@ class SharedViewService
         @shared_category_names_full |= ['Taxes']
       when FinalWish
         @shared_category_names_full |= ['Final Wishes']
-      when FinancialInformation
+      when FinancialProvider
         @shared_category_names_full |= ['Financial Information']
       end
     end

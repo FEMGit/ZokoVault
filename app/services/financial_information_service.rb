@@ -20,6 +20,10 @@ class FinancialInformationService
   end
   
   def self.update_shares(financial_provider, user, share_with_contact_ids)
-    #TODO: implement when document share inheritance is needed
+    return unless share_with_contact_ids.present?
+    financial_provider.shares.clear
+    share_with_contact_ids.each do |share_with_contact_id|
+      financial_provider.shares << Share.create(contact_id: share_with_contact_id, user_id: user.id)
+    end
   end
 end

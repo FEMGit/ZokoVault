@@ -1,7 +1,7 @@
 <% investments.each do |investment| %>
   <div class="card cg-3 flex-column mb-20 cp">
     <%= link_to content_tag(:a), show_investment_url(investment.id), class: "whole-card-link" %>
-    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(current_user, @category, investment_provider_id(current_user, investment)) } %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, investment_provider_id(resource_owner, investment)) } %>
     <h3><%= investment.name %></h3>
 
     <% if investment.primary_contact.present? %>
@@ -18,7 +18,7 @@
     <ul class="data-list mb-20">
       <li class="data-pair">
         <label><%= investment.investment_type %></label>
-        <%= render partial: "value_show", locals: { value: investment.value, type: investment.investment_type } %>
+        <%= render partial: "financial_information/value_show", locals: { value: investment.value, type: investment.investment_type } %>
       </li>
     </ul>
 

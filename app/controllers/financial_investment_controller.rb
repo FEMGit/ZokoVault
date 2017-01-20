@@ -55,7 +55,7 @@ class FinancialInvestmentController < AuthenticatedController
     respond_to do |format|
       if @financial_investment.update(property_params.merge(user_id: resource_owner.id))
         @investment_provider.update(name: property_params[:name])
-        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_investment.share_with_contact_ids)
+        FinancialInformationService.update_shares(@investment_provider, current_user, @financial_investment.share_with_contact_ids)
         format.html { redirect_to show_investment_url(@financial_investment), flash: { success: 'Investment was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else

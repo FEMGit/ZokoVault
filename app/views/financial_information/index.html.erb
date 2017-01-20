@@ -52,19 +52,19 @@
         <li class="data-pair">
           <h4>Credit Cards</h4>
           <h4 class="data-right">
-            <%= render :partial => 'negative_value', locals: {value: credit_cards_sum} %>
+            <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
           </h4>
         </li>
         <li class="data-pair">
           <h4>Loans</h4>
           <h4 class="data-right">
-            <%= render :partial => 'negative_value', locals: {value: loans_sum} %>
+            <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
           </h4>
         </li>
         <li class="data-pair">
           <h4>Commitments</h4>
           <h4 class="data-right">
-            <%= render :partial => 'value', locals: {value: uncalled_commitments_sum} %>
+            <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
           </h4>
         </li>
 
@@ -106,13 +106,13 @@
 </div>
 
 <section class="flex-boxes ">
-  <%= render :partial => 'accounts', locals: {account_providers: @account_providers} %>
+  <%= render :partial => 'financial_information/accounts', locals: {account_providers: @account_providers} %>
   
-  <%= render :partial => 'investments', locals: {investments: @investments} %>
+  <%= render :partial => 'financial_information/investments', locals: {investments: @investments} %>
   
-  <%= render :partial => 'properties', locals: {properties: @properties} %>
+  <%= render :partial => 'financial_information/properties', locals: {properties: @properties} %>
   
-  <%= render :partial => 'alternatives', locals: {alternative_managers: @alternative_managers} %>
+  <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: @alternative_managers} %>
   
 </section>
 
@@ -128,6 +128,31 @@
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+<% if !@shared_user.present? %>
+  <a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.FinancialInformationCategory.downcase) %>'>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  </a>
+  <h3>Shared With</h3>
+
+  <div class="card mb-30 my_profile_info">
+    <h3 class="card-label">Category Shared With</h3>
+
+      <label>SHARED WITH</label>
+
+      <% if @contacts_with_access.blank? %>
+        <p>No shared access</p>
+      <% else %>
+        <% @contacts_with_access.each do |contact| %>
+          <p><%= contact.initials %> </p>
+        <% end %>
+    <% end %>
+  </div>
+<% end %>
 
 <script>
 $(function () {

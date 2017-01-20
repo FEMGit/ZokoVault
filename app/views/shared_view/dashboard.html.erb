@@ -1,6 +1,6 @@
 <h1>Dashboard</h1>
 <table class="shared-view-dashboard">
-  <% ['Wills - Trusts - Legal', 'Insurance', 'Taxes', 'Final Wishes'].each do |category| %>
+  <% Rails.application.config.x.ShareCategories.each do |category| %>
     <% if show_navigation_link?(category) %>
       <tr>
         <td>

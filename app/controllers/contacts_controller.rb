@@ -8,8 +8,8 @@ class ContactsController < AuthenticatedController
   # GET /contacts
   # GET /contacts.json
   def index
-    my_profile_contact = current_user.user_profile.contact
-    @contacts = Contact.for_user(current_user)
+    my_profile_contact = resource_owner.user_profile.contact
+    @contacts = Contact.for_user(resource_owner)
                        .reject { |c| c == my_profile_contact }
                        .each { |c| authorize c }
     session[:ret_url] = "/contacts"
@@ -20,15 +20,15 @@ class ContactsController < AuthenticatedController
   def show
     authorize @contact
 
-    @share_documents = DocumentService.get_share_with_documents(current_user, @contact.id)
-    @contact_documents = DocumentService.get_contact_documents(current_user, @category, @contact.id)
+    @share_documents = DocumentService.get_share_with_documents(resource_owner, @contact.id)
+    @contact_documents = DocumentService.get_contact_documents(resource_owner, @category, @contact.id)
     session[:ret_url] = "/contacts/#{@contact.id}"
   end
 
   # GET /contacts/new
   def new
     set_redirect_new_user_creating
-    @contact = Contact.new(user: current_user)
+    @contact = Contact.new(user: resource_owner)
     
     authorize @contact
   end
@@ -39,7 +39,7 @@ class ContactsController < AuthenticatedController
   # POST /contacts
   # POST /contacts.json
   def create
-    @contact = Contact.new(contact_params.merge(user: current_user))
+    @contact = Contact.new(contact_params.merge(user: resource_owner))
 
     authorize @contact
 
@@ -85,13 +85,25 @@ class ContactsController < AuthenticatedController
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
       @category = "Contact"
-      @contact = Contact.for_user(current_user).find(params[:id])
+      @contact = Contact.for_user(resource_owner).find(params[:id])
     end
   
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
       params.require(:contact).permit(:firstname, :lastname, :emailaddress, :phone, :contact_type, :relationship, :beneficiarytype, :ssn, :birthdate, :address, :zipcode, :city,
                                       :state, :notes, :avatarcolor, :photourl, :businessname, :businesswebaddress, :business_street_address_1, :business_street_address_2, :businessphone, :businessfax, :redirect)
+    end
+  
+    def shared_user_params
+      params.permit(:shared_user_id)
+    end
+  
+    def resource_owner
+      if shared_user_params[:shared_user_id].present?
+        User.find_by(id: params[:shared_user_id])
+      else
+        @contact.present? ? @contact.user : current_user
+      end
     end
   
     def set_redirect_new_user_creating
@@ -104,7 +116,7 @@ class ContactsController < AuthenticatedController
     end
   
     def my_profile_contact?
-      redirect_to contacts_path if @contact == current_user.user_profile.contact
+      redirect_to contacts_path if @contact == resource_owner.user_profile.contact
     end
 
     def handle_contact_not_saved(format)
@@ -114,10 +126,10 @@ class ContactsController < AuthenticatedController
     end
 
     def handle_contact_saved(format)
-      UpdateDocumentService.new(:user => current_user, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
+      UpdateDocumentService.new(:user => resource_owner, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
       format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, flash: { success: 'Contact was successfully created.' } }
       format.json { render :show, status: :created, location: @contact }
-      contact_dropdown_position = Contact.for_user(current_user).sort_by { |s| s.lastname }.map(&:id).find_index(@contact.id)
+      contact_dropdown_position = Contact.for_user(resource_owner).sort_by { |s| s.lastname }.map(&:id).find_index(@contact.id)
       format.js { render json: @contact.slice(:id, :firstname, :lastname).merge(:position => contact_dropdown_position), status: :ok }
     end
 end

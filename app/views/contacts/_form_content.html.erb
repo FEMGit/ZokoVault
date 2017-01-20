@@ -1,3 +1,5 @@
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+
 <div id="detail-form">
   <%= f.label :firstname, 'First Name' %>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:firstname] } %>

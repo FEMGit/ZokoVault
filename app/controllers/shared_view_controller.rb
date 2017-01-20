@@ -60,6 +60,7 @@ class SharedViewController < AuthenticatedController
       case shareable
       when Trust
         @trusts << shareable
+        @wtl_documents |= Document.for_user(shared_user).where(:group => Trust.name)
       when Will
         @wills << shareable
         @wtl_documents |= Document.for_user(shared_user).where(:group => Will.name)

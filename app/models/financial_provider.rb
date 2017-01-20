@@ -1,6 +1,7 @@
 class FinancialProvider < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
   belongs_to :user
+  belongs_to :category
   belongs_to :primary_contact, class_name: "Contact"
   has_many :shares, as: :shareable, dependent: :destroy
   

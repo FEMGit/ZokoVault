@@ -1,4 +1,5 @@
 class TrustsController < AuthenticatedController
+  include SharedViewModule
   before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
@@ -12,7 +13,9 @@ class TrustsController < AuthenticatedController
   # GET /trusts
   # GET /trusts.json
   def index
-    @trusts = policy_scope(Trust).each { |t| authorize t }
+    @trusts = trusts
+    @trusts.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_trusts_path : trusts_path
   end
 
   # GET /trusts/1
@@ -25,20 +28,12 @@ class TrustsController < AuthenticatedController
     @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
 
-    authorize @vault_entry
-
-    @vault_entries = Trust.for_user(resource_owner)
+    @vault_entries = trusts
+    @vault_entries.each { |x| authorize x }
     return if @vault_entries.present?
 
     @vault_entries << @vault_entry
-  end
-
-  def create_empty_form
-    @vault_entry = TrustBuilder.new(type: 'trust').build
-    @vault_entry.vault_entry_contacts.build
-    @vault_entries = Trust.for_user(resource_owner)
-    @vault_entries << @vault_entry
-    render :json => @vault_entries
+    @vault_entries.each { |x| authorize x }
   end
 
   # GET /trusts/1/edit
@@ -61,32 +56,20 @@ class TrustsController < AuthenticatedController
       if trusts.present?
         begin
           update_trusts(new_trusts, old_trusts)
-          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_trusts) } }
+          format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
           format.json { render :show, status: :created, location: @trust }
         rescue
           @vault_entry = Trust.new
           @old_params.try(:each) { |trust| @vault_entries << trust }
           @new_params.try(:each) { |trust| @vault_entries << trust }
-          format.html { render :new }
+          error_path(:new)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @errors, status: :unprocessable_entity }
         end
       else
-        format.html { render :new }
+        error_path(:new)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /trusts/1
-  # PATCH/PUT /trusts/1.json
-  def update
-    respond_to do |format|
-      if @trust.update(trust_params)
-        format.html { redirect_to @trust, flash: { success: 'Trust was successfully updated.' } }
-        format.json { render :show, status: :ok, location: @trust }
-      else
-        format.html { render :edit }
-        format.json { render json: @trust.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -106,9 +89,29 @@ class TrustsController < AuthenticatedController
   end
 
   private
+  
+  def trusts
+    return Trust.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? Trust } unless @category_shared
+    Trust.for_user(@shared_user)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path
+    ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id))
+  end
 
   def resource_owner 
-    @trust.present? ? @trust.user : current_user
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @trust.present? ? @trust.user : current_user
+    end
   end
 
   def set_contacts
@@ -121,6 +124,14 @@ class TrustsController < AuthenticatedController
   def set_trust
     @group_documents = Document.for_user(resource_owner).where(:group => @group)
     @trust = Trust.find(params[:id])
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+  
+  def trust_shared_with_uinq_param
+    trust_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -161,6 +172,7 @@ class TrustsController < AuthenticatedController
       end
       WtlService.update_shares(@new_vault_entries.id, new_trust_params[:share_with_contact_ids], resource_owner.id, Trust)
     end
+    ShareInheritanceService.update_document_shares(Trust, (@old_params + @new_params).map(&:id), resource_owner.id, trust_shared_with_uinq_param, 'Trust')
     raise "error saving new trust" if @errors.any?
   end
   

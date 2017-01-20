@@ -5,7 +5,7 @@
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
       
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills, @category) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(@shared_user, 'Will', @category) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -66,9 +66,9 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
+        <%= link_to content_tag(:a), shared_trusts_path(@shared_user), class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts, @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(@shared_user, 'Trust', @category) } %>
           <h3>Trusts</h3>
 
           <section class="mb-20">
@@ -111,7 +111,7 @@
       <% if @power_of_attorneys.any? %>
         <%= link_to content_tag(:a), "#", class: "whole-card-link" %>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(@shared_user, 'Legal', @category) } %>
           <h3>Powers of Attorney</h3>
 
           <ul class="data-list mb-20">

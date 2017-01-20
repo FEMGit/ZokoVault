@@ -1,12 +1,10 @@
 class WillsController < AuthenticatedController
   include SharedViewModule
-  before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
   before_action :set_will, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create]
   before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
-  layout :set_layout, only: [:new, :edit, :index]
   
   # Breadcrumbs navigation
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)

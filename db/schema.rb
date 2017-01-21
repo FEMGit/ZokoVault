@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118023621) do
+ActiveRecord::Schema.define(version: 20170114034117) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -97,13 +98,11 @@ ActiveRecord::Schema.define(version: 20170118023621) do
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.integer  "category_id"
   end
 
-  add_index "final_wish_infos", ["category_id"], name: "index_final_wish_infos_on_category_id", using: :btree
   add_index "final_wish_infos", ["user_id"], name: "index_final_wish_infos_on_user_id", using: :btree
 
   create_table "final_wishes", force: :cascade do |t|
@@ -111,7 +110,7 @@ ActiveRecord::Schema.define(version: 20170118023621) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.integer  "final_wish_info_id"
+    t.string   "group"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -323,32 +322,13 @@ ActiveRecord::Schema.define(version: 20170118023621) do
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
 
-  create_table "table_financial_alternatives", force: :cascade do |t|
-    t.integer  "alternative_type"
-    t.string   "name"
-    t.integer  "owner_id"
-    t.decimal  "commitment"
-    t.decimal  "total_calls"
-    t.decimal  "total_distributions"
-    t.decimal  "current_value"
-    t.integer  "primary_contact_id"
-    t.string   "notes"
-    t.integer  "user_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-  end
-
-  add_index "table_financial_alternatives", ["user_id"], name: "index_table_financial_alternatives_on_user_id", using: :btree
-
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.integer  "category_id"
   end
 
-  add_index "tax_year_infos", ["category_id"], name: "index_tax_year_infos_on_category_id", using: :btree
   add_index "tax_year_infos", ["user_id"], name: "index_tax_year_infos_on_user_id", using: :btree
 
   create_table "taxes", force: :cascade do |t|
@@ -556,7 +536,6 @@ ActiveRecord::Schema.define(version: 20170118023621) do
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "shares", "users"
-  add_foreign_key "table_financial_alternatives", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"

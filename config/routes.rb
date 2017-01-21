@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root 'welcome#index', as: :authenticated_root
   end
-  
+
   #root "index"
   #root "public#index"
 
@@ -32,11 +32,11 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
-  
+
   # Mailer
   post 'contact_us', to: 'messages#create'
   post 'mailing_list', to: 'interested_users#create'
-  
+
   # Taxes
   get 'taxes/:tax', to: 'taxes#show', as: :show_tax
   get 'taxes/new/:year', to: 'taxes#create'
@@ -79,7 +79,7 @@ Rails.application.routes.draw do
     member do
       post :share
       get :share_category
-      delete 'share_category/:contact_id', to: 'categories#destroy_share_category' 
+      delete 'share_category/:contact_id', to: 'categories#destroy_share_category'
     end
   end
 
@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
   get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
-  
+
   resources :account_settings
   put 'account_settings/update', to: 'account_settings#update'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
@@ -119,15 +119,15 @@ Rails.application.routes.draw do
 
   resource :mfa, only: [:show, :create, :resend_code]
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
-  
+
   # Usage metrics path
   get 'usage_metrics/details/:id', to: 'usage_metrics#details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
-  
+
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
-  
+
   # Financial alternative
   get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
   get 'financial_information/alternative/show/:id', to: 'financial_alternative#show', as: :show_alternative
@@ -147,7 +147,7 @@ Rails.application.routes.draw do
   put 'financial_information/account/add_account', to: 'financial_account#update'
   delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
-  
+
   # Financial Property
   get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
   get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
@@ -155,7 +155,7 @@ Rails.application.routes.draw do
   get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
-  
+
   # Financial Investment
   get 'financial_information/investment/new', to: 'financial_investment#new', as: :add_investment
   get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
@@ -164,12 +164,12 @@ Rails.application.routes.draw do
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
   put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
-  
+
   resources :financial_account
   resources :financial_property
   resources :financial_investment
   resources :financial_alternative
-  
+
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
   get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
@@ -182,22 +182,23 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
-  
+
   # Shared wtl wills
   get 'shared_view/:shared_user_id/estate_planning/wills' => 'wills#index', as: :shared_wills
   get 'shared_view/:shared_user_id/estate_planning/wills/new' => 'wills#new', as: :shared_new_wills
 
   # Search
   get "/search", to: "search#index", as: :search
-  
+
   # Shared wtl trusts
   get 'shared_view/:shared_user_id/estate_planning/trusts' => 'trusts#index', as: :shared_trusts
   get 'shared_view/:shared_user_id/estate_planning/trusts/new' => 'trusts#new', as: :shared_new_trusts
-  
+
   # Information pages
   get "/about", to: "pages#about", as: :about
   get "/careers", to: "pages#careers", as: :careers
   get "/contact_us", to: "pages#contact_us", as: :contact_page
+  get "/corporate", to: "pages#corporate", as: :corporate
   get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
   get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
   get "/resources", to: "pages#resources", as: :resources

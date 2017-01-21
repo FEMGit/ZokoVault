@@ -67,6 +67,7 @@ class SharedViewController < AuthenticatedController
         @wtl_documents |= Document.for_user(shared_user).where(:group => Will.name)
       when PowerOfAttorney
         @power_of_attorneys << shareable
+        @wtl_documents |= Document.for_user(shared_user).where(:group => 'Legal')
       when Document
         if groups_whitelist.include?shareable.group
           @wtl_documents |= [shareable]

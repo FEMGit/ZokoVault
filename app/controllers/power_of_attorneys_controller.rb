@@ -1,4 +1,5 @@
 class PowerOfAttorneysController < AuthenticatedController
+  include SharedViewModule
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_ret_url
@@ -12,8 +13,9 @@ class PowerOfAttorneysController < AuthenticatedController
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json
   def index
-    @power_of_attorneys = policy_scope(PowerOfAttorney)
-                          .each { |p| authorize p }
+    @power_of_attorneys = attorneys
+    @power_of_attorneys.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_power_of_attorneys_path : power_of_attorneys_path
   end
 
   # GET /power_of_attorneys/1
@@ -26,12 +28,13 @@ class PowerOfAttorneysController < AuthenticatedController
     @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
 
-    authorize @vault_entry
 
-    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(resource_owner)
-    return if @vault_entries.present?
+    @vault_entries = attorneys
+    @vault_entries.each { |x| authorize x }
+    return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
+    @vault_entries.each { |x| authorize x }
   end
 
   # GET /power_of_attorneys/1/edit
@@ -52,29 +55,17 @@ class PowerOfAttorneysController < AuthenticatedController
       if !new_attorneys.empty? || !old_attorneys.empty?
         begin
           update_power_of_attorneys(new_attorneys, old_attorneys)
-          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_attorneys) } }
+          format.html { redirect_to success_path, flash: { success: success_message(old_attorneys) } }
           format.json { render :show, status: :created, location: @power_of_attorney }
         rescue
-          format.html { render :new }
+          error_path(:new)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
         end
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /power_of_attorneys/1
-  # PATCH/PUT /power_of_attorneys/1.json
-  def update
-    respond_to do |format|
-      if @power_of_attorney.update(power_of_attorney_params)
-        format.html { redirect_to @power_of_attorney, flash: { success: 'Power of attorney was successfully updated.' } }
-        format.json { render :show, status: :ok, location: @power_of_attorney }
-      else
-        format.html { render :edit }
-        format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -100,9 +91,29 @@ class PowerOfAttorneysController < AuthenticatedController
   def details; end
 
   private
+  
+  def attorneys
+    return PowerOfAttorney.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless @category_shared
+    PowerOfAttorney.for_user(@shared_user)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path
+    ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id))
+  end
 
-  def resource_owner
-    @power_of_attorney.present? ? @power_of_attorney.user : current_user
+  def resource_owner 
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @power_of_attorney.present? ? @power_of_attorney.user : current_user
+    end
   end
 
   def set_contacts
@@ -118,6 +129,14 @@ class PowerOfAttorneysController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_power_of_attorney
     @power_of_attorney = PowerOfAttorney.find(params[:id])
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+  
+  def attorneys_shared_with_uniq_param
+    power_of_attorney_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -136,17 +155,21 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def update_power_of_attorneys(new_attorneys, old_attorneys)
+    @new_params, @old_params = [], []
     new_attorneys.each do |new_attorney_params|
       @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: resource_owner.id)).build 
       raise "error saving new power of attorney" unless @new_vault_entries.save
+      @new_params << @new_vault_entries
       WtlService.update_shares(@new_vault_entries.id, new_attorney_params[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
     old_attorneys.each do |old_attorney|
       @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
       authorize_save(@old_vault_entries)
       raise "error saving new power of attorney" unless @old_vault_entries.save
+      @old_params << @old_vault_entries
       WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
+    ShareInheritanceService.update_document_shares(PowerOfAttorney, (@old_params + @new_params).map(&:id), resource_owner.id, attorneys_shared_with_uniq_param, 'Legal')
   end
   
   def authorize_save(resource)

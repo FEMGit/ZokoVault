@@ -84,22 +84,22 @@
   </section>
 
   <section class="fin-options" style="display:none;">
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path %>">Add Account</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= @shared_user.nil? ? add_account_path : ""  %>">Add Account</a>
     <h3>Add Institutional Account</h3>
     <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
     <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path %>">Add Property</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= @shared_user.nil? ? add_property_path : "" %>">Add Property</a>
     <h3>Add Property</h3>
     <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
     <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path %>">Add Other</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= @shared_user.nil? ? add_investment_path : ""  %>">Add Other</a>
     <h3>Add Other Investment or Debt</h3>
     <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
     <div class="sum-line"></div>
     
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path %>">Add Alternative</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= @shared_user.nil? ? add_alternative_path : ""  %>">Add Alternative</a>
     <h3>Add Alternative</h3>
     <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
   </section>

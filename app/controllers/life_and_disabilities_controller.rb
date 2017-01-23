@@ -8,6 +8,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   add_breadcrumb "Life & Disability - Setup", :new_life_path, :only => %w(new)
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability)

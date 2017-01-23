@@ -7,9 +7,10 @@ class TaxesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Taxes", :taxes_path, :only => %w(show new edit)
+  add_breadcrumb "Taxes", :taxes_path
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_add_edit_crumbs, only: [:edit, :new]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     return unless @tax.taxes.any?

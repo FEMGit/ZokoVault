@@ -9,6 +9,7 @@ class FinancialAlternativeController < AuthenticatedController
   add_breadcrumb "Alternative - Add Investment", :add_alternative_path, :only => %w(new)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@financial_provider.name}", show_alternative_path(@financial_provider)

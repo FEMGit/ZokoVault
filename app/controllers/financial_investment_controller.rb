@@ -9,6 +9,7 @@ class FinancialInvestmentController < AuthenticatedController
   add_breadcrumb "Financial Info - Add Other Investment or Debt", :add_investment_path, :only => %w(new)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@financial_investment.name}", show_investment_path(@financial_investment)

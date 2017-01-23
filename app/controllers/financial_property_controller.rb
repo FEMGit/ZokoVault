@@ -9,6 +9,7 @@ class FinancialPropertyController < AuthenticatedController
   add_breadcrumb "Financial Info - Add Property", :add_property_path, :only => %w(new)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@financial_property.name}", show_property_path(@financial_property)

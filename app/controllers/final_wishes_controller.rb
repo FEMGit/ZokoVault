@@ -5,10 +5,11 @@ class FinalWishesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Final Wishes", :final_wishes_path, :only => %w(show new edit)
+  add_breadcrumb "Final Wishes", :final_wishes_path
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   before_action :set_new_crumbs, only: [:new]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     return unless @final_wish.final_wishes.any?

@@ -9,6 +9,7 @@ class FinancialAccountController < AuthenticatedController
   add_breadcrumb "Financial Info - Add Account", :add_account_path, :only => %w(new)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
   
   def set_details_crumbs
     add_breadcrumb "#{@financial_provider.name}", show_account_path(@financial_provider)

@@ -1,6 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
+<%= link_to "#{@tax.id}/edit", class: "edit-link" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
@@ -9,7 +9,7 @@
 <% end %>
 <h1><%= @tax.year %> Tax Details</h1>
 
-<% @tax.taxes.each do |tax| %>
+<% @taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">
     <% if !tax_present?(tax) %>
       <label>There is no information about Tax</label>
@@ -47,13 +47,13 @@
   </div>
 <% end %>
 
-<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @tax.year) %>">
+<%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @tax.year), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>
   </span>Add Document
-</a>
+<% end %>
 <h3><%= @tax && @tax.year %> Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

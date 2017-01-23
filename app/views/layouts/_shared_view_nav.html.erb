@@ -13,7 +13,7 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <! -- Financial Information %>
+  <! -- Financial Information -- >
   <% if show_navigation_link?('Financial Information') %>
     <% shared_view_financial_information = 'active' if current_page?(shared_view_financial_information_path) %>
     <%= link_to shared_view_financial_information_path, class: "main-nav #{shared_view_financial_information}" do %>

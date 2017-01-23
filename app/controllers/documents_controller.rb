@@ -69,12 +69,12 @@ class DocumentsController < AuthenticatedController
 
   def update
     authorize @document
-    previous_group = @document.group
+    previous_document = @document
 
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
-        DocumentService.update_shares(@document, resource_owner, previous_group)
+        DocumentService.update_shares(@document, resource_owner, previous_document)
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else

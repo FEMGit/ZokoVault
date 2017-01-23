@@ -15,6 +15,9 @@ class User < ActiveRecord::Base
   
   has_many :vendors, dependent: :nullify
   has_many :shares, dependent: :destroy
+  
+  has_many :user_activities, dependent: :destroy
+  has_many :user_death_traps, dependent: :destroy
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true

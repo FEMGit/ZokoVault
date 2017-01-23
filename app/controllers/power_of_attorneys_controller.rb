@@ -2,6 +2,7 @@ class PowerOfAttorneysController < AuthenticatedController
   include SharedViewModule
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   
@@ -169,7 +170,7 @@ class PowerOfAttorneysController < AuthenticatedController
       @old_params << @old_vault_entries
       WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
-    ShareInheritanceService.update_document_shares(PowerOfAttorney, (@old_params + @new_params).map(&:id), resource_owner.id, attorneys_shared_with_uniq_param, 'Legal')
+    ShareInheritanceService.update_document_shares(PowerOfAttorney, (@old_params + @new_params).map(&:id), resource_owner.id, @previous_shared_with, attorneys_shared_with_uniq_param, 'Legal')
   end
   
   def authorize_save(resource)
@@ -177,5 +178,11 @@ class PowerOfAttorneysController < AuthenticatedController
     if authorize_ids.include? resource.id
       authorize resource
     end
+  end
+  
+  def set_previous_shared_with
+    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
+    old_attorney_ids = old_attorneys.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)
+    @previous_shared_with = PowerOfAttorney.find(old_attorney_ids).map(&:share_with_contact_ids).flatten.uniq
   end
 end

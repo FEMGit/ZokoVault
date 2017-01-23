@@ -18,6 +18,12 @@ class User < ActiveRecord::Base
   
   has_many :user_activities, dependent: :destroy
   has_many :user_death_traps, dependent: :destroy
+  has_many :tax_year_infos, dependent: :destroy
+  has_many :final_wish_infos, dependent: :destroy
+  has_many :financial_investments, dependent: :destroy
+  has_many :financial_alternatives, dependent: :destroy
+  has_many :financial_properties, dependent: :destroy
+  has_many :financial_account_informations, dependent: :destroy
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true

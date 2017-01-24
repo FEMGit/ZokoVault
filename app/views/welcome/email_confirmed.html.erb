@@ -4,11 +4,11 @@
 </button>
 <div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
   <div class="confirmation-wrapper">
-    <h3 class="confirmation-title">Thank You</h3>
-    <p>Thank you for successfully activating your ZokuVault account. Please reenter your user name and password to continue the signup process.</p>
+    <h2>Thank You</h2>
+    <p>Thank you for successfully activating your ZokuVault account. Please login to continue.</p>
   </div>
   <footer class="modal-footer confirmation-footer">
-    <%= link_to 'Close', '/', class: "js-modal-close button secondary-button big-button"%>
+    <%= link_to 'Login', new_user_session_path, class: "login-link" %>
   </footer>
 </div>
 

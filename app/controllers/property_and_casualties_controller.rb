@@ -139,7 +139,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
   
   def success_path(common_path, shared_view_path)
-    ReturnPathService.success_path(resource_owner, current_user, insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
+    ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
   
   def shared_user_params

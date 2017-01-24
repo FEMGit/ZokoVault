@@ -13,4 +13,6 @@ class FinancialAlternative < ActiveRecord::Base
   belongs_to :user
   belongs_to :primary_contact, class_name: "Contact"
   belongs_to :owner, class_name: "Contact"
+  
+  before_save { self.category = Category.fetch("financial information") }
 end

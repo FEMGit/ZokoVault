@@ -1,6 +1,6 @@
 <% properties.each do |property| %>
   <div class="card cg-3 flex-column mb-20 cp cp">
-    <%= link_to content_tag(:a), @shared_user.nil? ? show_property_url(property.id) : "", class: "whole-card-link" %>
+    <%= link_to content_tag(:a), show_property_url(id: property.id, shared_user_id: @shared_user), class: "whole-card-link" %>
     <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, property_provider_id(resource_owner, property)) } %>
     <h3><%= property.name %></h3>
 

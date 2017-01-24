@@ -106,16 +106,37 @@ class SharedViewController < AuthenticatedController
 
   def financial_information
     @category = Rails.application.config.x.FinancialInformationCategory
-    @documents = Document.for_user(shared_user).where(category: @category)
+    if @shared_category_names.include? Rails.application.config.x.InsuranceCategory
+      @documents = Document.for_user(shared_user).where(category: @category)
 
-    account_provider_ids = FinancialAccountInformation.for_user(shared_user).map(&:account_provider_id)
-    @account_providers = FinancialProvider.for_user(shared_user).find(account_provider_ids)
+      account_provider_ids = FinancialAccountInformation.for_user(shared_user).map(&:account_provider_id)
+      @account_providers = FinancialProvider.for_user(shared_user).find(account_provider_ids)
 
-    alternative_manager_ids = FinancialAlternative.for_user(shared_user).map(&:manager_id)
-    @alternative_managers = FinancialProvider.for_user(shared_user).find(alternative_manager_ids)
+      alternative_manager_ids = FinancialAlternative.for_user(shared_user).map(&:manager_id)
+      @alternative_managers = FinancialProvider.for_user(shared_user).find(alternative_manager_ids)
 
-    @investments = FinancialInvestment.for_user(shared_user)
-    @properties = FinancialProperty.for_user(shared_user)
+      @investments = FinancialInvestment.for_user(shared_user)
+      @properties = FinancialProperty.for_user(shared_user)
+    else
+      provider_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProvider }.map(&:id)
+      
+      account_provider_ids = FinancialAccountInformation.for_user(shared_user).where(account_provider_id: provider_ids).map(&:account_provider_id)
+      @account_providers = FinancialProvider.where(id: account_provider_ids)
+      
+      alternative_manager_ids = FinancialAlternative.for_user(shared_user).where(manager_id: provider_ids).map(&:manager_id)
+      @alternative_managers = FinancialProvider.where(id: alternative_manager_ids)
+      
+      investment_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialInvestment }.map(&:id)
+      property_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProperty }.map(&:id)
+
+      
+      @investments = FinancialInvestment.for_user(shared_user).where(id: investment_ids) +
+                     FinancialInvestment.for_user(shared_user).where(empty_provider_id: provider_ids)
+      @properties = FinancialProperty.for_user(shared_user).where(id: property_ids) + 
+                    FinancialProperty.for_user(shared_user).where(empty_provider_id: provider_ids)
+      
+      @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
+    end
   end
 
   private

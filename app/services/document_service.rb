@@ -120,9 +120,11 @@ class DocumentService
   end
   
   def self.update_shares(document, resource_owner, previous_document = nil)
-    if document.vendor_id.present?
+    if document.vendor_id.present? && document.vendor_id > 0
       model = Vendor.find_by(id: document.vendor_id).class
       share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
+    elsif document.financial_information_id.present? && document.financial_information_id > 0
+      FinancialProvider.find_by(id: document.financial_information_id).class
     elsif document.group.present?
       model = ModelService.model_by_name(document.group)
       share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
@@ -151,8 +153,10 @@ class DocumentService
     return [] unless previous_document.present? && (previous_document.group.present? ||
       previous_document.vendor_id.present?)
     previous_model = 
-      if previous_document.vendor_id.present?
+      if previous_document.vendor_id.present? && previous_document.vendor_id > 0
         Vendor.find_by(id: previous_document.vendor_id).class
+      elsif previous_document.financial_information_id.present? && previous_document.financial_information_id > 0
+        FinancialProvider.find_by(id: previous_document.financial_information_id).class
       elsif previous_document.group.present?
         ModelService.model_by_name(previous_document.group)
       end

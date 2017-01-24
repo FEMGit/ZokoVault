@@ -197,6 +197,12 @@ Rails.application.routes.draw do
   # Shared wtl power of attorneys
   get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys' => 'power_of_attorneys#index', as: :shared_power_of_attorneys
   get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys/new' => 'power_of_attorneys#new', as: :shared_new_power_of_attorneys
+
+  # Shared insurance healths
+  get 'shared_view/:shared_user_id/insurance/health' => 'healths#index', as: :shared_healths
+  get 'shared_view/:shared_user_id/insurance/health/:id' => 'healths#show', as: :shared_health
+  get 'shared_view/:shared_user_id/insurance/healths/new' => 'healths#new', as: :shared_new_health
+  get 'shared_view/:shared_user_id/insurance/health/:id/edit' => 'healths#edit', as: :shared_edit_health
   
   # Shared insurance properties
   get 'shared_view/:shared_user_id/insurance/property' => 'property_and_casualties#index', as: :shared_properties

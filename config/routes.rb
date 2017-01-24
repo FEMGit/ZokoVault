@@ -139,10 +139,10 @@ Rails.application.routes.draw do
   delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy', as: :delete_alternative
 
   # Financial Account
-  get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
+  get 'financial_information/account/new(/:shared_user_id)', to: 'financial_account#new', as: :add_account
   get 'financial_information/account/show/:id(/:shared_user_id)', to: 'financial_account#show', as: :show_account
-  get 'financial_information/account/:id/edit', to: 'financial_account#edit', as: :edit_account
-  get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
+  get 'financial_information/account/:id/edit(/:shared_user_id)', to: 'financial_account#edit', as: :edit_account
+  get 'financial_information/account/:id(/:shared_user_id)', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
   put 'financial_information/account/add_account', to: 'financial_account#update'
   delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account

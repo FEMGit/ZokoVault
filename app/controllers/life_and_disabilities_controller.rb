@@ -1,4 +1,5 @@
 class LifeAndDisabilitiesController < AuthenticatedController
+  include SharedViewModule
   before_action :set_life, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
@@ -21,8 +22,9 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # GET /lives
   # GET /lives.json
   def index
-    @life_and_disabilities = policy_scope(LifeAndDisability)
-                             .each { |l| authorize l }
+    @life_and_disabilities = life_and_disabilities
+    @life_and_disabilities.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_lives_path : lives_path
   end
 
   # GET /lives/1
@@ -37,7 +39,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   # GET /lives/new
   def new
-    @insurance_card = LifeAndDisability.new(user: resource_owner)
+    @insurance_card = LifeAndDisability.new(user: resource_owner, category: Category.fetch(Rails.configuration.x.InsuranceCategory.downcase))
     @insurance_card.policy.build
 
     authorize @insurance_card
@@ -54,16 +56,18 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # POST /lives
   # POST /lives.json
   def create
-    @insurance_card = LifeAndDisability.new(life_params.merge(user_id: resource_owner.id))
+    @insurance_card = LifeAndDisability.new(life_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.configuration.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner.id)
-        format.html { redirect_to insurance_path, flash: { success: 'Insurance successfully created.' } }
+        @path = success_path(insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
       end
     end
@@ -78,11 +82,13 @@ class LifeAndDisabilitiesController < AuthenticatedController
     PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(life_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, @previous_share_with_ids, resource_owner.id)
-        format.html { redirect_to life_path(@insurance_card), flash: { success: 'Insurance was successfully updated.' } }
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner.id)
+        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else
-        format.html { render :edit }
+        error_path(:edit)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
       end
     end
@@ -113,12 +119,36 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   private
   
-  def provider_by_policy
-    @life_and_disability = LifeAndDisability.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
+  def life_and_disabilities
+    return LifeAndDisability.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? LifeAndDisability } unless @category_shared
+    LifeAndDisability.for_user(@shared_user)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path(common_path, shared_view_path)
+    ReturnPathService.success_path(resource_owner, current_user, insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
   end
 
   def resource_owner
-    @life_and_disability.present? ? @life_and_disability.user : current_user
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @life_and_disability.present? ? @life_and_disability.user : current_user
+    end
+  end
+  
+  def provider_by_policy
+    @life_and_disability = LifeAndDisability.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
   end
 
   def set_life

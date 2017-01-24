@@ -129,10 +129,10 @@ Rails.application.routes.draw do
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
   
   # Financial alternative
-  get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
+  get 'financial_information/alternative/new(/:shared_user_id)', to: 'financial_alternative#new', as: :add_alternative
   get 'financial_information/alternative/show/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :show_alternative
-  get 'financial_information/alternative/:id/edit', to: 'financial_alternative#edit', as: :edit_alternative
-  get 'financial_information/alternative/:id', to: 'financial_alternative#show', as: :account_alternative
+  get 'financial_information/alternative/:id/edit(/:shared_user_id)', to: 'financial_alternative#edit', as: :edit_alternative
+  get 'financial_information/alternative/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :account_alternative
   post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
   put 'financial_information/alternative/add_alternative', to: 'financial_alternative#update'
   delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :delete_provider_alternative

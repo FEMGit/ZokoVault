@@ -15,4 +15,8 @@ module SharedViewHelper
   def show_navigation_link?(category)
     @shared_category_names_full.include? category
   end
+  
+  def show_add_link?(owner, non_owner, category, subcategory)
+    SharedViewService.shared_group_names(owner, non_owner, category).include? subcategory
+  end
 end

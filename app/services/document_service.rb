@@ -130,13 +130,21 @@ class DocumentService
       document.contact_ids = []
     end
 
-    unless !model.present?
+    unless model.present?
       document.contact_ids = []
       return
     end
 
     document.contact_ids = document.contact_ids.reject { |contact_id| share_contact_ids_to_remove.include? contact_id }
-    document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+    
+    # Tax specific situation
+    if model == Tax
+      tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => document.group).first
+      return unless tax_year_info.present?
+      document.contact_ids |= tax_year_info.taxes.map(&:share_with_contact_ids).flatten
+    else
+      document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+    end
   end
   
   def self.share_ids_to_remove(previous_document, resource_owner)
@@ -149,6 +157,14 @@ class DocumentService
         ModelService.model_by_name(previous_document.group)
       end
     return [] unless previous_model.present?
-    previous_model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+    
+    # Tax specific situation
+    if previous_model == Tax
+      tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => previous_document.group).first
+      return [] unless tax_year_info.present?
+      tax_year_info.taxes.map(&:share_with_contact_ids).flatten
+    else
+      previous_model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+    end
   end
 end

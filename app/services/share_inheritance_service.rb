@@ -17,7 +17,7 @@ class ShareInheritanceService
           document.shares << Share.create(contact_id: share_contact_id, user_id: user_id)
         end
       end
-      delete_share_ids(documents, previous_share_contact_ids - share_contact_ids)
+      delete_share_ids(documents, previous_share_contact_ids - share_contact_ids.map(&:to_i))
     end
   end
   

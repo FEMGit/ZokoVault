@@ -2,8 +2,6 @@ class SharedViewController < AuthenticatedController
   include DocumentsHelper
   include FinancialInformationHelper
   include SharedViewModule
-  
-  before_action :set_shared_user, :set_shares, :set_shared_categories_names, :set_category_shared
   before_action :set_shareables
   
   def dashboard
@@ -28,14 +26,15 @@ class SharedViewController < AuthenticatedController
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
 
     @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
-
-    @taxes = 
-      if @shared_category_names.include? 'Tax'
-        TaxYearInfo.for_user(@shared_user)
+      if @shared_category_names.include? 'Taxes'
+        @taxes = TaxYearInfo.for_user(@shared_user)
+        @documents = Document.for_user(shared_user).where(category: @category.name)
       else
-        @other_shareables.map { |shareable| shareable.is_a?TaxYearInfo }
+        tax_year_ids = @other_shareables.select { |shareable| shareable.is_a?Tax }.map(&:tax_year_id).uniq
+        @taxes = TaxYearInfo.for_user(@shared_user).where(id: tax_year_ids)
+        @documents = Document.for_user(shared_user).where(group: @taxes.map(&:year))
       end
-    @documents = @document_shareables.select { |x| x.category == @category.name}
+    session[:ret_url] = shared_view_taxes_path
   end
 
   # GET /final_wishes

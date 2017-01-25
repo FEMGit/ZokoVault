@@ -12,7 +12,8 @@ class CategorySharePolicy < BasicPolicy
   def owner_shared_category_with_user?
     shares = policy_share
     return false unless shares
-    return true if SharedViewService.shared_categories_full(shares).include? record.category.name
+    category_names = shares.map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
+    return true if category_names.include? record.category.name
     false
   end
   

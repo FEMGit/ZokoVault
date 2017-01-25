@@ -26,6 +26,5 @@ class FinancialProperty < ActiveRecord::Base
   has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
   
   validates :name, presence: { :message => "Required"}
-  
   before_save { self.category = Category.fetch("financial information") }
 end

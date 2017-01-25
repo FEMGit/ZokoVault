@@ -3,6 +3,7 @@
 <h1>Financial Info - Add Property</h1>
 
 <%= form_for @financial_property, url: url_for(action: yield(:action), controller: :financial_property) do |f| %>
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
 <div class="card mb-30">
   <% if @financial_property.errors.any? %>
     <% errors = true %>
@@ -66,7 +67,7 @@
     </div>
   </section>
   
-  <% if params[:id] %>
+  <% if params[:id] && policy(@financial_property).destroy? %>
     <%= link_to 'Delete this Property', delete_property_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this property will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>

@@ -134,11 +134,26 @@ class DocumentService
       document.contact_ids = []
       return
     end
-
-    document.contact_ids = document.contact_ids.reject { |contact_id| share_contact_ids_to_remove.include? contact_id }
     
-    # Tax specific situation
-    if model == Tax
+    document.contact_ids = document.contact_ids.reject { |contact_id| share_contact_ids_to_remove.include? contact_id }
+    push_new_shares(model, document, resource_owner)
+  end
+  
+  def self.share_ids_to_remove(previous_document, resource_owner)
+    return [] unless previous_document.present? && (previous_document.group.present? ||
+      previous_document.vendor_id.present?)
+    
+    previous_model = previous_model(previous_document, resource_owner)
+    return [] unless previous_model.present?
+    previous_model_shares(previous_model, resource_owner, previous_document)
+  end
+  
+  def self.push_new_shares(model, document, resource_owner)
+    if model == FinalWish
+      final_wish_info = FinalWishInfo.for_user(resource_owner).where(:group => document.group).first
+      return unless final_wish_info.present?
+      document.contact_ids |= final_wish_info.final_wishes.map(&:share_with_contact_ids).flatten
+    elsif model == Tax
       tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => document.group).first
       return unless tax_year_info.present?
       document.contact_ids |= tax_year_info.taxes.map(&:share_with_contact_ids).flatten
@@ -147,19 +162,21 @@ class DocumentService
     end
   end
   
-  def self.share_ids_to_remove(previous_document, resource_owner)
-    return [] unless previous_document.present? && (previous_document.group.present? ||
-      previous_document.vendor_id.present?)
+  def self.previous_model(previous_document, resource_owner)
     previous_model = 
       if previous_document.vendor_id.present?
         Vendor.find_by(id: previous_document.vendor_id).class
       elsif previous_document.group.present?
         ModelService.model_by_name(previous_document.group)
       end
-    return [] unless previous_model.present?
-    
-    # Tax specific situation
-    if previous_model == Tax
+  end
+  
+  def self.previous_model_shares(model, resource_owner, document)
+    if model == FinalWish
+      final_wish_info = FinalWishInfo.for_user(resource_owner).where(:group => document.group).first
+      return [] unless final_wish_info.present?
+      final_wish_info.final_wishes.map(&:share_with_contact_ids).flatten
+    elsif previous_model == Tax
       tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => previous_document.group).first
       return [] unless tax_year_info.present?
       tax_year_info.taxes.map(&:share_with_contact_ids).flatten

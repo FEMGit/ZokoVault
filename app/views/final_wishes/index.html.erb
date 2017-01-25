@@ -7,7 +7,7 @@
       <div class="card cg-<%= group["value"] %> mb-30">
         <%#= link_to content_tag(:a), final_wish_details(group_title), class: "whole-card-link" %>
         <% if final_wish_exists?(@final_wishes, group_title) %>
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, group_title, @category.name) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(@shared_user || current_user, group_title, @category.name) } %>
         <% end %>
 
         <h3><%= group_title %></h3>
@@ -39,49 +39,55 @@
 
         <% end %>
 
-        <% if final_wish_exists?(@final_wishes, group_title) %>
-          <%= link_to 'View Details', final_wish_details(group_title), class: "small-button outline-button mt-20" %>
+        <% if @category_shared || show_add_link?(@shared_user, current_user, 'Final Wishes', group_title) %>
+          <% if final_wish_exists?(@final_wishes, group_title) %>
+            <%= link_to 'View Details', final_wish_details(group_title), class: "small-button outline-button mt-20" %>
+          <% else %>
+            <%= link_to 'Add Details', final_wish_add_details(group_title),  class: "small-button outline-button mt-20" %>
+          <% end %>
         <% else %>
-          <%= link_to 'Add Details', final_wish_add_details(group_title),  class: "small-button outline-button mt-20" %>
+          <p>No shared items</p>
         <% end %>
-        <%#= link_to 'Add Details', final_wish_add_details(group_title), class: "link-on-top add-details" %>
       </div>
     </div>
   <% end %>
 </section>
 
-<a class="add-link fr" href="<%= new_document_path(:category => @category.name) %>">
+<%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>
   </span>Add Document
-</a>
+<% end %>
 <h3>Final Wish Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
-<a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.FinalWishesCategory.downcase) %>'>
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-pencil-1"></use>
-    </svg>
-  </span>Edit
-</a>
-<h3>Shared With</h3>
 
-<div class="card mb-30 my_profile_info">
-  <h3 class="card-label">Category Shared With</h3>
+<% if @shared_user.nil? %>
+  <a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.FinalWishesCategory.downcase) %>'>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  </a>
+  <h3>Shared With</h3>
 
-  <label>SHARED WITH</label>
+  <div class="card mb-30 my_profile_info">
+    <h3 class="card-label">Category Shared With</h3>
 
-  <% if @contacts_with_access.blank? %>
-    <p>No shared access</p>
-  <% else %>
-    <% @contacts_with_access.each do |contact| %>
-      <p><%= contact.initials %> </p>
+    <label>SHARED WITH</label>
+
+    <% if @contacts_with_access.blank? %>
+      <p>No shared access</p>
+    <% else %>
+      <% @contacts_with_access.each do |contact| %>
+        <p><%= contact.initials %> </p>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+<% end %>
 
 <%= javascript_include_tag 'flex_boxes' %>
 <script>

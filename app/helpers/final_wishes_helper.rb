@@ -1,19 +1,19 @@
 module FinalWishesHelper
   def final_wish_details(group)
-    final_wish = @final_wishes.where(:group => group).first
-    if final_wish
-      "#{final_wishes_path}/#{final_wish.id}"
-    else
-      ""
-    end
+    final_wish = @final_wishes.detect { |fw| fw.group == group }
+    return unless final_wish
+    return final_wish_path(final_wish) unless @shared_user
+    shared_final_wishes_path(id: final_wish.id)
   end
 
   def final_wish_add_details(group)
-    final_wish = @final_wishes.where(:group => group).first
-    if final_wish
-      "#{final_wishes_path}/#{final_wish.id}/edit"
+    final_wish = @final_wishes.detect { |fw| fw.group == group }
+    if final_wish && final_wish.final_wishes.any?
+      return final_wish_path(final_wish) unless @shared_user
+      shared_final_wishes_path(id: final_wish.id)
     else
-      new_final_wish_path(:group => group)
+      return new_final_wish_path(:group => group) unless @shared_user
+      shared_new_final_wishes_path(:group => group)
     end
   end
   

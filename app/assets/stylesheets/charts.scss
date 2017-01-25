@@ -1,7 +1,12 @@
+.highcharts-container {
+    width:100% !important;
+    height:100% !important;
+}
 .pie-chart{
   width: 35%;
   height: 300px;
   display: inline-block;
+  position: relative;
 
   @include media($teneighty) {
     width: 29.4%;

@@ -1,41 +1,33 @@
 <h1>Edit - <%= @category.name %></h1>
 
-<div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
+<%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
+  <div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
 
-  <%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
-Sharing your entire category with another contact will enable them to see all the categories detials. This includes all of the accounts, details, settings, contacts, and documents associated with the category.
-    <div class="card mb-30 my_profile_info">
+Sharing your entire category with a Contact will enable them to view all category details. This will include all of the accounts, contacts, documents and data associated with the category.
+    <section class="shared-with">
       <h3 class="card-label shared-label">
         <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
-        </svg>
-        Category Shared With
+        </svg> Category Shared With
       </h3>
 
-        <label>Shared With</label>
-          <div class="chosen-styled-select">
-            <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts) %>
-          </div>
-
+      <label>Shared With</label>
+      <div>
+        <div class="chosen-styled-select">
+          <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts) %>
+        </div>
         <% if @contacts_with_access.blank? %>
           <p>No shared access</p>
-        <% else %>
-          <% @contacts_with_access.each do |contact| %>
-            <p>
-              <%= contact.name %> 
-              <%= link_to "share_category/#{contact.id}", method: :delete do %>
-                <svg class="icon delete-icon">
-                  <use xlink:href="#icon-x-3"></use>
-                </svg>
-              <% end %>
-            </p>
-          <% end %>
         <% end %>
-    </div>
-    <%= f.submit 'Save', class: "button primary-button big-button" %>
-    <%= link_to 'Cancel', :back || estate_planning_path, class: "button secondary-button big-button" %>
-    <% end %>
-</div>
+      </div>
+    </section>
+    
+  </div>
+
+  <%= f.submit 'Save', class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', :back || estate_planning_path, class: "button secondary-button big-button" %>
+<% end %>
+
 <script>
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

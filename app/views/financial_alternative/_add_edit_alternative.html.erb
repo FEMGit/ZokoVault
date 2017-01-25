@@ -3,6 +3,7 @@
 <h1>Alternative - Add Investment</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_alternative) do |f| %>
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
 <div class="card mb-30">
   <h3 class="card-label">Manager Details</h3>
   
@@ -53,7 +54,7 @@
     </div>
   </section>
   
-  <% if params[:id] %>
+  <% if params[:id] && policy(@financial_provider).destroy? %>
     <%= link_to 'Delete this Manager', delete_provider_alternative_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this manager will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-provider' %>
@@ -68,7 +69,7 @@
         <%= render 'alternative_details_form', ff: ff, index: index, data: data %>
       <% end %>
 
-      <% if data.id %>
+      <% if data.id && policy(@financial_provider).destroy? %>
         <span class="mt-30 mb-30">
           <%= link_to 'Delete this investment', delete_alternative_url(data.id), method: :delete,
               data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },

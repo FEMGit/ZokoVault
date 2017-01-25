@@ -1,4 +1,5 @@
 class FinancialInvestmentController < AuthenticatedController
+  include SharedViewModule
   before_action :set_financial_investment, only: [:show, :edit, :update, :destroy]
   before_action :set_financial_investment_provider, only: [:show, :update, :destroy, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
@@ -40,7 +41,7 @@ class FinancialInvestmentController < AuthenticatedController
     authorize @financial_investment
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_investment.share_with_contact_ids)
+        FinancialInformationService.update_shares(@financial_provider, resource_owner, @financial_investment.share_with_contact_ids)
         format.html { redirect_to show_investment_url(@financial_investment), flash: { success: 'Investment was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else
@@ -56,7 +57,7 @@ class FinancialInvestmentController < AuthenticatedController
     respond_to do |format|
       if @financial_investment.update(property_params.merge(user_id: resource_owner.id))
         @investment_provider.update(name: property_params[:name])
-        FinancialInformationService.update_shares(@investment_provider, current_user, @financial_investment.share_with_contact_ids)
+        FinancialInformationService.update_shares(@investment_provider, resource_owner, @financial_investment.share_with_contact_ids)
         format.html { redirect_to show_investment_url(@financial_investment), flash: { success: 'Investment was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else
@@ -78,8 +79,16 @@ class FinancialInvestmentController < AuthenticatedController
 
   private
   
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+  
   def resource_owner 
-    @financial_investment.present? ?  @financial_investment.user : current_user
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @investment_provider.present? ? @investment_provider.user : current_user
+    end
   end
   
   def set_financial_investment_provider
@@ -91,7 +100,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def set_documents
-    @documents = Document.for_user(current_user).where(category: @category, financial_information_id: @investment_provider.id)
+    @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @investment_provider.id)
   end
   
   def initialize_category_and_group

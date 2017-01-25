@@ -130,7 +130,7 @@ Rails.application.routes.draw do
   
   # Financial alternative
   get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
-  get 'financial_information/alternative/show/:id', to: 'financial_alternative#show', as: :show_alternative
+  get 'financial_information/alternative/show/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :show_alternative
   get 'financial_information/alternative/:id/edit', to: 'financial_alternative#edit', as: :edit_alternative
   get 'financial_information/alternative/:id', to: 'financial_alternative#show', as: :account_alternative
   post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
@@ -140,7 +140,7 @@ Rails.application.routes.draw do
 
   # Financial Account
   get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
-  get 'financial_information/account/show/:id', to: 'financial_account#show', as: :show_account
+  get 'financial_information/account/show/:id(/:shared_user_id)', to: 'financial_account#show', as: :show_account
   get 'financial_information/account/:id/edit', to: 'financial_account#edit', as: :edit_account
   get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
@@ -150,7 +150,7 @@ Rails.application.routes.draw do
   
   # Financial Property
   get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
-  get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
+  get 'financial_information/property/show/:id(/:shared_user_id)', to: 'financial_property#show', as: :show_property
   get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
   get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
@@ -158,7 +158,7 @@ Rails.application.routes.draw do
   
   # Financial Investment
   get 'financial_information/investment/new', to: 'financial_investment#new', as: :add_investment
-  get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
+  get 'financial_information/investment/show/:id(/:shared_user_id)', to: 'financial_investment#show', as: :show_investment
   get 'financial_information/investment/:id/edit', to: 'financial_investment#edit', as: :edit_investment
   get 'financial_information/investment/:id', to: 'financial_investment#show', as: :investment_details
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment

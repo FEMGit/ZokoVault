@@ -95,7 +95,7 @@ class SharedViewController < AuthenticatedController
 
   def financial_information
     @category = Rails.application.config.x.FinancialInformationCategory
-    if @shared_category_names.include? Rails.application.config.x.InsuranceCategory
+    if @shared_category_names.include? Rails.application.config.x.FinancialInformationCategory
       @documents = Document.for_user(shared_user).where(category: @category)
 
       account_provider_ids = FinancialAccountInformation.for_user(shared_user).map(&:account_provider_id)
@@ -117,7 +117,6 @@ class SharedViewController < AuthenticatedController
       
       investment_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialInvestment }.map(&:id)
       property_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProperty }.map(&:id)
-
       
       @investments = FinancialInvestment.for_user(shared_user).where(id: investment_ids) +
                      FinancialInvestment.for_user(shared_user).where(empty_provider_id: provider_ids)

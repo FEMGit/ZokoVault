@@ -1,6 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<%= link_to edit_account_url(@financial_provider.id), class: "edit-link" do%>
+<%= link_to @shared_user.nil? ? edit_account_url(@financial_provider.id) : "", class: "edit-link" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
@@ -116,13 +116,13 @@
 <% end %>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group, :financial_information_id => @financial_provider.id) %>">
+  <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group, :financial_information_id => @financial_provider.id), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
       </svg>
     </span>Add Document
-  </a>
+  <% end %>
   <h3 class="mt-20">Account Documents</h3>
 </div>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119062159) do
+ActiveRecord::Schema.define(version: 20170124074414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,8 +170,10 @@ ActiveRecord::Schema.define(version: 20170119062159) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
+    t.integer  "category_id"
   end
 
+  add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
   add_index "financial_investments", ["user_id"], name: "index_financial_investments_on_user_id", using: :btree
 
   create_table "financial_properties", force: :cascade do |t|
@@ -189,8 +191,10 @@ ActiveRecord::Schema.define(version: 20170119062159) do
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
     t.integer  "empty_provider_id"
+    t.integer  "category_id"
   end
 
+  add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
   add_index "financial_properties", ["user_id"], name: "index_financial_properties_on_user_id", using: :btree
 
   create_table "financial_providers", force: :cascade do |t|

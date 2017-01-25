@@ -124,7 +124,8 @@ class DocumentService
       model = Vendor.find_by(id: document.vendor_id).class
       share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
     elsif document.financial_information_id.present? && document.financial_information_id > 0
-      FinancialProvider.find_by(id: document.financial_information_id).class
+      model = FinancialProvider.find_by(id: document.financial_information_id)
+      share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
     elsif document.group.present?
       model = ModelService.model_by_name(document.group)
       share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
@@ -145,7 +146,7 @@ class DocumentService
     return [] unless previous_document.present? && (previous_document.group.present? ||
       previous_document.vendor_id.present?)
     
-    previous_model = previous_model(previous_document, resource_owner)
+    previous_model = previous_model_init(previous_document, resource_owner)
     return [] unless previous_model.present?
     previous_model_shares(previous_model, resource_owner, previous_document)
   end
@@ -159,17 +160,20 @@ class DocumentService
       tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => document.group).first
       return unless tax_year_info.present?
       document.contact_ids |= tax_year_info.taxes.map(&:share_with_contact_ids).flatten
+    elsif model.is_a? FinancialProvider
+      financial_provider = FinancialProvider.find_by(id: document.financial_information_id)
+      document.contact_ids |= financial_provider.share_with_contact_ids
     else
       document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
     end
   end
   
-  def self.previous_model(previous_document, resource_owner)
+  def self.previous_model_init(previous_document, resource_owner)
     previous_model = 
       if previous_document.vendor_id.present? && previous_document.vendor_id > 0
-        Vendor.find_by(id: previous_document.vendor_id).class
+        Vendor.find_by(id: previous_document.vendor_id)
       elsif previous_document.financial_information_id.present? && previous_document.financial_information_id > 0
-        FinancialProvider.find_by(id: previous_document.financial_information_id).class
+        FinancialProvider.find_by(id: previous_document.financial_information_id)
       elsif previous_document.group.present?
         ModelService.model_by_name(previous_document.group)
       end
@@ -180,12 +184,15 @@ class DocumentService
       final_wish_info = FinalWishInfo.for_user(resource_owner).where(:group => document.group).first
       return [] unless final_wish_info.present?
       final_wish_info.final_wishes.map(&:share_with_contact_ids).flatten
-    elsif previous_model == Tax
+    elsif model == Tax
       tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => previous_document.group).first
       return [] unless tax_year_info.present?
       tax_year_info.taxes.map(&:share_with_contact_ids).flatten
+    elsif model.is_a? FinancialProvider
+      financial_provider = FinancialProvider.find_by(id: document.financial_information_id)
+      financial_provider.share_with_contact_ids
     else
-      previous_model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
+      model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
     end
   end
 end

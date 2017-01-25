@@ -58,7 +58,7 @@ class TrustsController < AuthenticatedController
       if trusts.present?
         begin
           update_trusts(new_trusts, old_trusts)
-          format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
+          format.html { redirect_to success_path(old_trusts), flash: { success: success_message(old_trusts) } }
           format.json { render :show, status: :created, location: @trust }
         rescue
           @vault_entry = Trust.new
@@ -104,8 +104,9 @@ class TrustsController < AuthenticatedController
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
   end
   
-  def success_path
-    ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id))
+  def success_path(old_trusts)
+    return ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_trusts.any?
+    ReturnPathService.success_path(resource_owner, current_user, trusts_path, shared_trusts_path(shared_user_id: resource_owner.id))
   end
 
   def resource_owner 

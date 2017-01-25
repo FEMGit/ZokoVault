@@ -115,16 +115,15 @@ class SharedViewController < AuthenticatedController
       alternative_manager_ids = FinancialAlternative.for_user(shared_user).where(manager_id: provider_ids).map(&:manager_id)
       @alternative_managers = FinancialProvider.where(id: alternative_manager_ids)
       
-      investment_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialInvestment }.map(&:id)
-      property_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProperty }.map(&:id)
+      @properties = FinancialProperty.for_user(shared_user).where(empty_provider_id: provider_ids)
       
+      investment_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialInvestment }.map(&:id)
       @investments = FinancialInvestment.for_user(shared_user).where(id: investment_ids) +
                      FinancialInvestment.for_user(shared_user).where(empty_provider_id: provider_ids)
-      @properties = FinancialProperty.for_user(shared_user).where(id: property_ids) + 
-                    FinancialProperty.for_user(shared_user).where(empty_provider_id: provider_ids)
       
       @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
     end
+    session[:ret_url] = shared_view_financial_information_path
   end
 
   private

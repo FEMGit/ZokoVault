@@ -149,10 +149,10 @@ Rails.application.routes.draw do
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
   
   # Financial Property
-  get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
+  get 'financial_information/property/new(/:shared_user_id)', to: 'financial_property#new', as: :add_property
   get 'financial_information/property/show/:id(/:shared_user_id)', to: 'financial_property#show', as: :show_property
-  get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
-  get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
+  get 'financial_information/property/:id/edit(/:shared_user_id)', to: 'financial_property#edit', as: :edit_financial_property
+  get 'financial_information/property/:id(/:shared_user_id)', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
   

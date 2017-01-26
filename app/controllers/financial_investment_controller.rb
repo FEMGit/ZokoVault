@@ -27,7 +27,8 @@ class FinancialInvestmentController < AuthenticatedController
   
   def show
     authorize @financial_investment
-    session[:ret_url] = "#{financial_information_path}/investment/#{params[:id]}"
+    authorize @investment_provider
+    session[:ret_url] = show_investment_url(@financial_investment, @shared_user)
   end
   
   def edit
@@ -41,12 +42,14 @@ class FinancialInvestmentController < AuthenticatedController
     authorize @financial_investment
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, resource_owner, @financial_investment.share_with_contact_ids)
-        format.html { redirect_to show_investment_url(@financial_investment), flash: { success: 'Investment was successfully created.' } }
+        FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner)
+        @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else
         set_contacts
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_investment.errors, status: :unprocessable_entity }
       end
     end
@@ -54,14 +57,17 @@ class FinancialInvestmentController < AuthenticatedController
   
   def update
     authorize @financial_investment
+    @previous_share_with_ids = @financial_investment.share_with_contact_ids
     respond_to do |format|
       if @financial_investment.update(property_params.merge(user_id: resource_owner.id))
         @investment_provider.update(name: property_params[:name])
-        FinancialInformationService.update_shares(@investment_provider, resource_owner, @financial_investment.share_with_contact_ids)
-        format.html { redirect_to show_investment_url(@financial_investment), flash: { success: 'Investment was successfully updated.' } }
+        FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids, @previous_share_with_ids, resource_owner)
+        @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Investment was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else
-        format.html { render :new }
+        error_path(:edit)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_investment.errors, status: :unprocessable_entity }
       end
     end
@@ -89,6 +95,16 @@ class FinancialInvestmentController < AuthenticatedController
     else
       @investment_provider.present? ? @investment_provider.user : current_user
     end
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path(common_path, shared_view_path)
+    ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
   
   def set_financial_investment_provider

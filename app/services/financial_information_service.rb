@@ -20,7 +20,7 @@ class FinancialInformationService
   end
   
   def self.update_shares(financial_provider, share_with_contact_ids, previous_share_contact_ids, user)
-    return unless share_with_contact_ids.present?
+    return if share_with_contact_ids.nil?
     financial_provider.shares.clear
     share_with_contact_ids.each do |share_with_contact_id|
       financial_provider.shares << Share.create(contact_id: share_with_contact_id, user_id: user.id)

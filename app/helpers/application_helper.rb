@@ -71,7 +71,8 @@ module ApplicationHelper
       'data-placeholder': 'Choose Contacts...',
       class: 'chosen-select add-new-contactable',
       multiple: true,
-      onchange: "handleSelectOnChange(this);"
+      onchange: "handleSelectOnChange(this);",
+      disabled: disabled?(name)
     }.merge(html_options)
 
     form.collection_select(name, select_options,
@@ -93,5 +94,13 @@ module ApplicationHelper
     else
      shared_view_dashboard_path(user) 
     end
+  end
+  
+  def disabled?(name)
+    @shared_user.present? && (shared_with_property_names.include? name.to_s)
+  end
+  
+  def shared_with_property_names
+    %w(share_with_contact_ids contact_ids share_with_ids)
   end
 end

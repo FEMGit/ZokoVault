@@ -54,7 +54,6 @@ class ContactsController < AuthenticatedController
       if @contact.save
         handle_contact_saved(format)
       else
-        byebug
         handle_contact_not_saved(format)
       end
       session[:ret_after_new_user] = session[:ret_url]

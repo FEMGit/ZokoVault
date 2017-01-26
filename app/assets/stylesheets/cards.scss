@@ -38,6 +38,10 @@ $cards-margin: 12px;
     margin-top: 10px;
     border-bottom: 1px solid  $color-off-white-shaded-more;
   }
+  
+  &.category-shared {
+    padding: 0;
+  }
 }
 
 //COLOR STRIPES FOR CARDS
@@ -184,6 +188,10 @@ $cards-margin: 12px;
   &.edit-shared{
     margin: 10px -15px 10px -15px;
     border-bottom: 1px solid $color-primary;
+  }
+  &.category-shared {
+    margin: 0;
+    border: 1px solid $color-primary;
   }
   .card-label{
     color: $color-primary;

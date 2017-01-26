@@ -6,10 +6,14 @@ class TrustsController < AuthenticatedController
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   
-  # Breadcrumbs navigation
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
-  add_breadcrumb "Trusts", :trusts_path, :only => %w(edit index new)
-  add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new)
+  # General Breadcrumbs
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index), if: :general_view?
+  add_breadcrumb "Trusts", :trusts_path, :only => %w(edit index new), if: :general_view?
+  add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new), if: :general_view?
+  # Shared BreadCrumbs
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
+  add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Trusts - Setup", :shared_new_trusts_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   
   # GET /trusts

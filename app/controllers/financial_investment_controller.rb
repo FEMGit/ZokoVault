@@ -6,18 +6,23 @@ class FinancialInvestmentController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit)
-  add_breadcrumb "Financial Info - Add Other Investment or Debt", :add_investment_path, :only => %w(new)
+  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
+  add_breadcrumb "Financial Information", :shared_view_financial_information_path, :only => %w(show new edit), if: :shared_view?
+  before_action :set_add_crumbs, only: [:new]
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
+  def set_add_crumbs
+    add_breadcrumb "Financial Info - Add Other Investment or Debt", add_investment_path(@shared_user)
+  end
+  
   def set_details_crumbs
-    add_breadcrumb "#{@financial_investment.name}", show_investment_path(@financial_investment)
+    add_breadcrumb "#{@financial_investment.name}", show_investment_path(@financial_investment, @shared_user)
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Financial Info - Add Other Investment or Debt", edit_investment_path(@financial_investment)
+    add_breadcrumb "Financial Info - Add Other Investment or Debt", edit_investment_path(@financial_investment, @shared_user)
   end
   
   def new

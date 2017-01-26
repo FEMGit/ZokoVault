@@ -6,18 +6,23 @@ class FinancialAccountController < AuthenticatedController
   before_action :set_account, only: [:destroy]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit)
-  add_breadcrumb "Financial Info - Add Account", :add_account_path, :only => %w(new)
+  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
+  add_breadcrumb "Financial Information", :shared_view_financial_information_path, :only => %w(show new edit), if: :shared_view?
+  before_action :set_add_crumbs, only: [:new]
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
+  def add_crumbs
+    add_breadcrumb "Financial Info - Add Account", add_account_path(@shared_user)
+  end
+  
   def set_details_crumbs
-    add_breadcrumb "#{@financial_provider.name}", show_account_path(@financial_provider)
+    add_breadcrumb "#{@financial_provider.name}", show_account_path(@financial_provider, @shared_user)
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Financial Info - Add Account", edit_account_path(@financial_provider)
+    add_breadcrumb "Financial Info - Add Account", edit_account_path(@financial_provider, @shared_user)
   end
   
   def new

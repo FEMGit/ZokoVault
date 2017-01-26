@@ -1,7 +1,9 @@
 class FinancialInformationController < AuthenticatedController
+  include SharedViewModule
   include FinancialInformationHelper
   
-  add_breadcrumb "Financial Information", :financial_information_path, only: [:index]
+  add_breadcrumb "Financial Information", :financial_information_path, only: [:index], if: :general_view?
+  add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:index], if: :shared_view?
   include BreadcrumbsCacheModule
   
   def index

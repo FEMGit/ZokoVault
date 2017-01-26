@@ -2,6 +2,14 @@ class SharedViewController < AuthenticatedController
   include DocumentsHelper
   include FinancialInformationHelper
   include SharedViewModule
+  
+  add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
+  add_breadcrumb "Taxes", :shared_view_taxes_path, only: [:taxes]
+  add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
+  add_breadcrumb "Wills - Trusts - Legal", :shared_view_estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:financial_information]
+  
+  include BreadcrumbsCacheModule
   before_action :set_shareables
   
   def dashboard

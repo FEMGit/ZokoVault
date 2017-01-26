@@ -5,18 +5,22 @@ class LifeAndDisabilitiesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
+  add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Life & Disability - Setup", :new_life_path, :only => %w(new)
+  add_breadcrumb "Life & Disability - Setup", :new_life_path, :only => %w(new), if: :general_view?
+  add_breadcrumb "Life & Disability - Setup", :shared_new_life_path, :only => %w(new), if: :shared_view?
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
   def set_details_crumbs
-    add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability)
+    add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability) if general_view?
+    add_breadcrumb "#{@life_and_disability.name}", shared_life_path(@shared_user, @life_and_disability) if shared_view?
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Life & Disability - Setup", edit_life_path(@life_and_disability)
+    add_breadcrumb "Life & Disability - Setup", edit_life_path(@life_and_disability) if general_view?
+    add_breadcrumb "Life & Disability - Setup", shared_edit_life_path(@shared_user, @life_and_disability) if shared_view?
   end
 
   # GET /lives

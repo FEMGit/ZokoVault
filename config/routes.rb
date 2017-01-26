@@ -129,38 +129,38 @@ Rails.application.routes.draw do
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
   
   # Financial alternative
-  get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
-  get 'financial_information/alternative/show/:id', to: 'financial_alternative#show', as: :show_alternative
-  get 'financial_information/alternative/:id/edit', to: 'financial_alternative#edit', as: :edit_alternative
-  get 'financial_information/alternative/:id', to: 'financial_alternative#show', as: :account_alternative
+  get 'financial_information/alternative/new(/:shared_user_id)', to: 'financial_alternative#new', as: :add_alternative
+  get 'financial_information/alternative/show/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :show_alternative
+  get 'financial_information/alternative/:id/edit(/:shared_user_id)', to: 'financial_alternative#edit', as: :edit_alternative
+  get 'financial_information/alternative/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :account_alternative
   post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
   put 'financial_information/alternative/add_alternative', to: 'financial_alternative#update'
   delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :delete_provider_alternative
   delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy', as: :delete_alternative
 
   # Financial Account
-  get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
-  get 'financial_information/account/show/:id', to: 'financial_account#show', as: :show_account
-  get 'financial_information/account/:id/edit', to: 'financial_account#edit', as: :edit_account
-  get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
+  get 'financial_information/account/new(/:shared_user_id)', to: 'financial_account#new', as: :add_account
+  get 'financial_information/account/show/:id(/:shared_user_id)', to: 'financial_account#show', as: :show_account
+  get 'financial_information/account/:id/edit(/:shared_user_id)', to: 'financial_account#edit', as: :edit_account
+  get 'financial_information/account/:id(/:shared_user_id)', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
   put 'financial_information/account/add_account', to: 'financial_account#update'
   delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
   
   # Financial Property
-  get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
-  get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
-  get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
-  get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
+  get 'financial_information/property/new(/:shared_user_id)', to: 'financial_property#new', as: :add_property
+  get 'financial_information/property/show/:id(/:shared_user_id)', to: 'financial_property#show', as: :show_property
+  get 'financial_information/property/:id/edit(/:shared_user_id)', to: 'financial_property#edit', as: :edit_financial_property
+  get 'financial_information/property/:id(/:shared_user_id)', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
   
   # Financial Investment
-  get 'financial_information/investment/new', to: 'financial_investment#new', as: :add_investment
-  get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
-  get 'financial_information/investment/:id/edit', to: 'financial_investment#edit', as: :edit_investment
-  get 'financial_information/investment/:id', to: 'financial_investment#show', as: :investment_details
+  get 'financial_information/investment/new(/:shared_user_id)', to: 'financial_investment#new', as: :add_investment
+  get 'financial_information/investment/show/:id(/:shared_user_id)', to: 'financial_investment#show', as: :show_investment
+  get 'financial_information/investment/:id/edit(/:shared_user_id)', to: 'financial_investment#edit', as: :edit_investment
+  get 'financial_information/investment/:id(/:shared_user_id)', to: 'financial_investment#show', as: :investment_details
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
   put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
@@ -220,6 +220,11 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/taxes/:id' => 'taxes#show', as: :shared_taxes
   get 'shared_view/:shared_user_id/taxes/:id/edit' => 'taxes#edit', as: :shared_taxes_edit
   get 'shared_view/:shared_user_id/taxes/new/:year' => 'taxes#new', as: :shared_new_taxes
+  
+  # Shared final wishes
+  get 'shared_view/:shared_user_id/final_wishes/:id' => 'final_wishes#show', as: :shared_final_wishes
+  get 'shared_view/:shared_user_id/final_wishes/:id/edit' => 'final_wishes#edit', as: :shared_final_wishes_edit
+  get 'shared_view/:shared_user_id/final_wishes/new/:group' => 'final_wishes#new', as: :shared_new_final_wishes
   
   # Information pages
   get "/about", to: "pages#about", as: :about

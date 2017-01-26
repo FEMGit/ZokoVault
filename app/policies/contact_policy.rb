@@ -11,7 +11,7 @@ class ContactPolicy < BasicPolicy
   end
   
   def create?
-    owner_shared_category_with_user?
+    user_owned? || owner_shared_category_with_user?
   end
 
   def scope

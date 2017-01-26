@@ -57,7 +57,7 @@ class PowerOfAttorneysController < AuthenticatedController
       if !new_attorneys.empty? || !old_attorneys.empty?
         begin
           update_power_of_attorneys(new_attorneys, old_attorneys)
-          format.html { redirect_to success_path, flash: { success: success_message(old_attorneys) } }
+          format.html { redirect_to success_path(old_attorneys), flash: { success: success_message(old_attorneys) } }
           format.json { render :show, status: :created, location: @power_of_attorney }
         rescue
           error_path(:new)
@@ -106,8 +106,9 @@ class PowerOfAttorneysController < AuthenticatedController
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
   end
   
-  def success_path
-    ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id))
+  def success_path(old_attorneys)
+    return ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_attorneys.any?
+    ReturnPathService.success_path(resource_owner, current_user, power_of_attorneys_path, shared_power_of_attorneys_path(shared_user_id: resource_owner.id))
   end
 
   def resource_owner 

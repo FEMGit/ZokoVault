@@ -3,6 +3,7 @@
 <h1>Financial Info - Add Account</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_account) do |f| %>
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
 <div class="card mb-30">
   <h3 class="card-label">Account Provider Details</h3>
   
@@ -54,7 +55,7 @@
     </div>
   </section>
   
-  <% if params[:id] %>
+  <% if params[:id] && policy(@financial_provider).destroy? %>
     <%= link_to 'Delete this Provider', delete_provider_account_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this provider will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>
@@ -69,7 +70,7 @@
         <%= render 'account_details_form', ff: ff, index: index, data: data %>
       <% end %>
 
-      <% if data.id %>
+      <% if data.id && policy(@financial_provider).destroy? %>
         <span class="mt-30 mb-30">
           <%= link_to 'Delete this account', delete_account_url(data.id), method: :delete,
               data: { confirm: "Deleting this account will permanently remove it from ZokuVault." },

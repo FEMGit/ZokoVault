@@ -19,11 +19,13 @@ class FinancialInformationService
     end
   end
   
-  def self.update_shares(financial_provider, user, share_with_contact_ids)
-    return unless share_with_contact_ids.present?
+  def self.update_shares(financial_provider, share_with_contact_ids, previous_share_contact_ids, user)
+    return if share_with_contact_ids.nil?
     financial_provider.shares.clear
     share_with_contact_ids.each do |share_with_contact_id|
       financial_provider.shares << Share.create(contact_id: share_with_contact_id, user_id: user.id)
     end
+    return unless previous_share_contact_ids.present?
+    ShareInheritanceService.update_document_shares(FinancialProvider, [financial_provider.id], user.id, previous_share_contact_ids, share_with_contact_ids, nil, financial_provider.id, nil)
   end
 end

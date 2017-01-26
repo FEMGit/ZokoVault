@@ -47,9 +47,9 @@ class ContactsController < AuthenticatedController
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params.merge(user: resource_owner))
-
+    
     authorize @contact
-
+    
     respond_to do |format|
       if @contact.save
         handle_contact_saved(format)

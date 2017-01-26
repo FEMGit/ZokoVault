@@ -3,9 +3,22 @@ class CategoriesController < AuthenticatedController
   layout "shared_view", only: [:shared_view_dashboard]
   
   # Breadcrumbs navigation
+  before_action :set_previous_crumbs, only: [:share_category]
+  before_action :set_share_category_crumbs, only: [:share_category]
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
+  
+  def set_previous_crumbs
+    return unless request.referrer.present?
+    previous_path = Rails.application.routes.recognize_path(request.referrer)
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop
+  end
+  
+  def set_share_category_crumbs
+    @category = Category.fetch(params[:id])
+    add_breadcrumb "Category Shared With", share_category_category_path(@category.name.downcase)
+  end
 
   def index
     @categories = policy_scope(Category).all.each { |c| authorize c }

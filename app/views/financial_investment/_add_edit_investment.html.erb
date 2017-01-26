@@ -3,6 +3,7 @@
 <h1>Financial Info - Add Other Investment or Debt</h1>
 
 <%= form_for @financial_investment, url: url_for(action: yield(:action), controller: :financial_investment) do |f| %>
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
 <div class="card mb-30">
   <% if @financial_investment.errors.any? %>
     <% errors = true %>
@@ -72,7 +73,7 @@
     </div>
   </section>
   
-  <% if params[:id] %>
+  <% if params[:id] && policy(@financial_investment).destroy? %>
     <%= link_to 'Delete this Investment', delete_investment_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>

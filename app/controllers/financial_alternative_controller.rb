@@ -1,4 +1,5 @@
 class FinancialAlternativeController < AuthenticatedController
+  include SharedViewModule
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
@@ -28,7 +29,7 @@ class FinancialAlternativeController < AuthenticatedController
   
   def show
     authorize @financial_provider
-    session[:ret_url] = show_alternative_path(@financial_provider)
+    session[:ret_url] = show_alternative_path(@financial_provider, @shared_user)
   end
   
   def edit
@@ -41,11 +42,13 @@ class FinancialAlternativeController < AuthenticatedController
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
-        format.html { redirect_to show_alternative_url(@financial_provider), flash: { success: 'Alternative was successfully created.' } }
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
+        @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
@@ -54,13 +57,16 @@ class FinancialAlternativeController < AuthenticatedController
   def update
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
+    @previous_share_with_ids = @financial_provider.share_with_contact_ids
     respond_to do |format|
       if @financial_provider.update(provider_params)
-        FinancialInformationService.update_shares(@financial_provider, current_user, @financial_provider.share_with_contact_ids)
-        format.html { redirect_to show_alternative_path(@financial_provider), flash: { success: 'Alternative was successfully updated.' } }
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with_ids, resource_owner)
+        @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
+        format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
       else
-        format.html { render :edit }
+        error_path(:edit)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
@@ -88,8 +94,26 @@ class FinancialAlternativeController < AuthenticatedController
   
   private
   
-  def resource_owner
-    @financial_provider.present? ? @financial_provider.user : current_user
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path(common_path, shared_view_path)
+    ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
+  end
+
+  def resource_owner 
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @financial_provider.present? ? @financial_provider.user : current_user
+    end
   end
   
   def initialize_category_and_group
@@ -106,7 +130,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def set_documents
-    @documents = Document.for_user(current_user).where(category: @category, financial_information_id: @financial_provider.id)
+    @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @financial_provider.id)
   end
 
   

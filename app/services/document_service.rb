@@ -130,11 +130,10 @@ class DocumentService
       model = ModelService.model_by_name(document.group)
       share_contact_ids_to_remove = share_ids_to_remove(previous_document, resource_owner)
     else
-      document.contact_ids = []
+      share_contact_ids_to_remove = []
     end
 
     unless model.present?
-      document.contact_ids = []
       return
     end
     
@@ -185,7 +184,7 @@ class DocumentService
       return [] unless final_wish_info.present?
       final_wish_info.final_wishes.map(&:share_with_contact_ids).flatten
     elsif model == Tax
-      tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => previous_document.group).first
+      tax_year_info = TaxYearInfo.for_user(resource_owner).where(:year => document.group).first
       return [] unless tax_year_info.present?
       tax_year_info.taxes.map(&:share_with_contact_ids).flatten
     elsif model.is_a? FinancialProvider

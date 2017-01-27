@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20170125043917) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.integer  "final_wish_info_id"
+    t.string   "group"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -334,23 +334,6 @@ ActiveRecord::Schema.define(version: 20170125043917) do
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
 
-  create_table "table_financial_alternatives", force: :cascade do |t|
-    t.integer  "alternative_type"
-    t.string   "name"
-    t.integer  "owner_id"
-    t.decimal  "commitment"
-    t.decimal  "total_calls"
-    t.decimal  "total_distributions"
-    t.decimal  "current_value"
-    t.integer  "primary_contact_id"
-    t.string   "notes"
-    t.integer  "user_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-  end
-
-  add_index "table_financial_alternatives", ["user_id"], name: "index_table_financial_alternatives_on_user_id", using: :btree
-
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
     t.datetime "created_at",  null: false
@@ -567,7 +550,6 @@ ActiveRecord::Schema.define(version: 20170125043917) do
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "shares", "users"
-  add_foreign_key "table_financial_alternatives", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"

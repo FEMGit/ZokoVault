@@ -19,6 +19,7 @@ class SharedViewService
   end
   
   def self.shares(owner, non_owner)
+    return [] if non_owner.blank?
     owner.shares.where(contact: Contact.where(emailaddress: non_owner.email))
   end
   

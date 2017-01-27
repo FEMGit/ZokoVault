@@ -4,6 +4,14 @@ module SharedViewModule
     base.layout :set_layout, only: [:new, :edit, :index, :show]
   end
   
+  def shared_view?
+    @shared_user.present?
+  end
+  
+  def general_view?
+    !@shared_user.present?
+  end
+  
   def set_layout
     unless resource_owner == current_user
       return "shared_view"

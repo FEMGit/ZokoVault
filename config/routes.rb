@@ -64,7 +64,6 @@ Rails.application.routes.draw do
 
   resources :wills
   get 'wills/:will', to: 'wills#show', as: :details_will
-  get 'wills/new/get_wills_details', to: 'wills#get_wills_details'
 
   resources :trusts
   get 'trusts/:trust', to: 'trusts#show', as: :details_trust

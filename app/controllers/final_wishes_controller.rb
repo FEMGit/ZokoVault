@@ -6,7 +6,8 @@ class FinalWishesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Final Wishes", :final_wishes_path
+  add_breadcrumb "Final Wishes", :final_wishes_path, if: :general_view?
+  add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   before_action :set_new_crumbs, only: [:new]
@@ -14,15 +15,18 @@ class FinalWishesController < AuthenticatedController
   
   def set_details_crumbs
     return unless @final_wish.final_wishes.any?
-    add_breadcrumb "#{@final_wish.group}", final_wish_path(@final_wish)
+    add_breadcrumb "#{@final_wish.group}", final_wish_path(@final_wish) if general_view?
+    add_breadcrumb "#{@final_wish.group}", shared_final_wishes_path(@shared_user, @final_wish) if shared_view?
   end
   
   def set_edit_crumbs
-    add_breadcrumb "#{@final_wish.group} Setup", edit_final_wish_path(@final_wish)
+    add_breadcrumb "#{@final_wish.group} Setup", edit_final_wish_path(@final_wish) if general_view?
+    add_breadcrumb "#{@final_wish.group} Setup", shared_final_wishes_edit_path(@shared_user, @final_wish) if shared_view?
   end
   
   def set_new_crumbs
-    add_breadcrumb "#{params[:group]} Setup", new_final_wish_path
+    add_breadcrumb "#{params[:group]} Setup", new_final_wish_path if general_view?
+    add_breadcrumb "#{params[:group]} Setup", shared_new_final_wishes_path if shared_view?
   end
   
   # GET /final_wishes

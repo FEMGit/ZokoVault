@@ -5,18 +5,22 @@ class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
+  add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Property & Casualty - Setup", :new_property_path, :only => %w(new)
+  add_breadcrumb "Property & Casualty - Setup", :new_property_path, :only => %w(new), if: :general_view?
+  add_breadcrumb "Property & Casualty - Setup", :shared_new_property_path, :only => %w(new), if: :shared_view?
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
   def set_details_crumbs
-    add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty)
+    add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty) if general_view?
+    add_breadcrumb "#{@property_and_casualty.name}", shared_property_path(@shared_user, @property_and_casualty) if shared_view?
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Property & Casualty - Setup", edit_property_path(@property_and_casualty)
+    add_breadcrumb "Property & Casualty - Setup", edit_property_path(@property_and_casualty) if general_view?
+    add_breadcrumb "Property & Casualty - Setup", shared_edit_property_path(@shared_user, @property_and_casualty) if shared_view?
   end
 
   # GET /properties

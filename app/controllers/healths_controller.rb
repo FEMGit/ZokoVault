@@ -5,18 +5,22 @@ class HealthsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index)
+  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
+  add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Health - Setup", :new_health_path, :only => %w(new)
+  add_breadcrumb "Health - Setup", :new_health_path, :only => %w(new), if: :general_view?
+  add_breadcrumb "Health - Setup", :shared_new_health_path, :only => %w(new), if: :shared_view?
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   
   def set_details_crumbs
-    add_breadcrumb "#{@health.name}", health_path(@health)
+    add_breadcrumb "#{@health.name}", health_path(@health) if general_view?
+    add_breadcrumb "#{@health.name}", shared_health_path(@shared_user, @health) if shared_view?
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Health - Setup", edit_health_path(@health)
+    add_breadcrumb "Health - Setup", edit_health_path(@health) if general_view?
+    add_breadcrumb "Health - Setup", shared_edit_health_path(@shared_user, @health) if shared_view?
   end
 
   # GET /healths

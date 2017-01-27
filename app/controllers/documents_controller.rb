@@ -9,18 +9,21 @@ class DocumentsController < AuthenticatedController
   # Breadcrumbs navigation
   before_action :set_previous_crumbs, only: [:new, :edit]
   add_breadcrumb "Documents", :documents_path, only: [:index]
-  add_breadcrumb "Add Document", :new_document_path, :only => %w(new)
+  before_action :set_add_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
-  
+
   def set_previous_crumbs
     return unless request.referrer.present?
-    previous_path = Rails.application.routes.recognize_path(request.referrer)
     @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop
   end
   
+  def set_add_crumbs
+    add_breadcrumb "Add Document", new_documents_path(@shared_user)
+  end
+  
   def set_edit_crumbs
-    add_breadcrumb "Edit Document", edit_document_path(@document)
+    add_breadcrumb "Edit Document", edit_documents_path(@document, @shared_user)
   end
 
   @after_new_user_created = ""

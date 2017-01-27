@@ -8,22 +8,26 @@ class TaxesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Taxes", :taxes_path
+  add_breadcrumb "Taxes", :taxes_path, if: :general_view?
+  add_breadcrumb "Taxes", :shared_view_taxes_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_add_edit_crumbs, only: [:edit, :new]
   include BreadcrumbsCacheModule
   
   def set_details_crumbs
     return unless @tax.taxes.any?
-    add_breadcrumb "#{@tax.year} Tax Details", show_tax_path(@tax)
+    add_breadcrumb "#{@tax.year} Tax Details", show_tax_path(@tax) if general_view?
+    add_breadcrumb "#{@tax.year} Tax Details", shared_taxes_path(@shared_user, @tax) if shared_view?
   end
   
   def set_add_edit_crumbs
     if @tax && TaxesService.tax_by_year(@tax.year, resource_owner).present?
-      add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_path(@tax)
+      add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_path(@tax) if general_view?
+      add_breadcrumb "#{@tax.year} Taxes Setup", shared_taxes_edit_path(@shared_user, @tax) if shared_view?
     else
       year = params[:year] || Date.today.strftime("%Y").to_i
-      add_breadcrumb "#{year} Taxes Setup", new_tax_path(@tax)
+      add_breadcrumb "#{year} Taxes Setup", new_tax_path(@tax) if general_view?
+      add_breadcrumb "#{year} Taxes Setup", shared_new_taxes_path(@shared_user, @tax) if shared_view?
     end
   end
   

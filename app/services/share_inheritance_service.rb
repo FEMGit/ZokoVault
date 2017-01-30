@@ -32,5 +32,6 @@ class ShareInheritanceService
       end
     Share.where(user_id: resource_owner.id, shareable_type: 'Document',
                 contact_id: share_contact_ids_to_delete, shareable_id: document_ids_to_update).delete_all
+    end
   end
 end

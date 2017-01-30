@@ -4,6 +4,7 @@
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_alternative) do |f| %>
 <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+<%= f.hidden_field :category_id, :value => @financial_provider.category_id %>
 <div class="card mb-30">
   <h3 class="card-label">Manager Details</h3>
   

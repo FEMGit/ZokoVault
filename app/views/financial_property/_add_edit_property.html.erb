@@ -4,6 +4,7 @@
 
 <%= form_for @financial_property, url: url_for(action: yield(:action), controller: :financial_property) do |f| %>
 <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+<%= f.hidden_field :category_id, :value => @financial_property.category_id %>
 <div class="card mb-30">
   <% if @financial_property.errors.any? %>
     <% errors = true %>

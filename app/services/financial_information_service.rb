@@ -19,11 +19,15 @@ class FinancialInformationService
     end
   end
   
-  def self.update_shares(financial_provider, share_with_contact_ids, user)
+  def self.update_shares(financial_provider, share_with_contact_ids, previous_share_contact_ids, user, financial_subcategory = nil)
     return if share_with_contact_ids.nil?
+    financial_subcategory.shares.clear if financial_subcategory.present?
     financial_provider.shares.clear
     share_with_contact_ids.each do |share_with_contact_id|
       financial_provider.shares << Share.create(contact_id: share_with_contact_id, user_id: user.id)
     end
+    return if previous_share_contact_ids.nil?
+    ShareInheritanceService.update_document_shares(user, share_with_contact_ids, previous_share_contact_ids,
+                                                   Rails.application.config.x.FinancialInformationCategory, nil, financial_provider.id)
   end
 end

@@ -28,14 +28,10 @@
       <% end %>
     </ul>
 
-    <% if manager.share_with_contacts.present? %>
+    <% if category_subcategory_shares(manager, resource_owner).present? %>
       <label>Shared With</label>
       <section class="shared-list">
-        <% manager.share_with_contacts.each do |share| %>
-          <% if share.present? %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-          <% end %>
-         <% end %>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(manager, resource_owner) } %>
        </section>
      <% end %>
   </div>

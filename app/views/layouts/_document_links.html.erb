@@ -6,5 +6,5 @@
     <%= link_to document.name, document_path(document) %>
   <% end %>
 <% else %>
-  <%= link_to document.name, download_file(document.url) %>
+  <%= link_to document.name, download_file(document.try(:url)) %>
 <% end %>

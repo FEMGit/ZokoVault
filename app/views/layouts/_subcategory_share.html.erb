@@ -1,0 +1,5 @@
+<% shares.each do |share| %>
+  <% if share.present? %>
+    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
+  <% end %>
+<% end %>

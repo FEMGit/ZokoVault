@@ -69,7 +69,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner.id)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
         @path = success_path(insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -85,12 +85,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # PATCH/PUT /properties/1.json
   def update
     @insurance_card = @property_and_casualty
-    @previous_share_with_ids = @insurance_card.share_with_contact_ids
     authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(property_and_casualty_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner.id)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), resource_owner.id)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }

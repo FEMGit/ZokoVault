@@ -22,7 +22,7 @@ class FinalWishService
     groups.detect { |group| group["label"] == name }
   end
   
-  def self.update_shares(final_wish_info, previous_shared_with, user_id)
+  def self.update_shares(final_wish_info, user_id)
     final_wish_info.final_wishes.each do |final_wish|
       share_with_contact_ids = final_wish.share_with_contact_ids
       final_wish.shares.clear
@@ -30,8 +30,5 @@ class FinalWishService
         final_wish.shares << Share.create(contact_id: contact_id, user_id: user_id)
       end
     end
-    share_ids_formatted = final_wish_info.final_wishes.map(&:share_with_contact_ids).uniq.flatten.map(&:to_s)
-    ShareInheritanceService.update_document_shares(FinalWish, final_wish_info.final_wishes.map(&:id),
-                                                   user_id, previous_shared_with, share_ids_formatted , final_wish_info.group)
   end
 end

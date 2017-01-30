@@ -1,5 +1,6 @@
 class TrustsController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]
@@ -36,6 +37,7 @@ class TrustsController < AuthenticatedController
 
     @vault_entries = trusts
     @vault_entries.each { |x| authorize x }
+    set_viewable_contacts
     return if @vault_entries.present?
 
     @vault_entries << @vault_entry
@@ -54,8 +56,8 @@ class TrustsController < AuthenticatedController
   # POST /trusts
   # POST /trusts.json
   def create
-    new_trusts = WtlService.get_new_records(trust_params)
-    old_trusts = WtlService.get_old_records(trust_params)
+    new_trusts = WtlService.get_new_records(update_share_params)
+    old_trusts = WtlService.get_old_records(update_share_params)
     @vault_entries = []
     trusts = new_trusts + old_trusts
     respond_to do |format|
@@ -96,6 +98,12 @@ class TrustsController < AuthenticatedController
 
   private
   
+  def set_viewable_contacts
+    @vault_entries.each do |trust|
+      trust.share_with_contact_ids |= category_subcategory_shares(trust, resource_owner).map(&:contact_id)
+    end
+  end
+  
   def trusts
     return Trust.for_user(resource_owner) unless @shared_user
     return @shares.map(&:shareable).select { |resource| resource.is_a? Trust } unless @category_shared
@@ -131,6 +139,13 @@ class TrustsController < AuthenticatedController
   def set_trust
     @group_documents = Document.for_user(resource_owner).where(:group => @group)
     @trust = Trust.find(params[:id])
+  end
+  
+  def update_share_params
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    trust_params.each do |k, v|
+      v["share_with_contact_ids"] -= viewable_shares
+    end
   end
   
   def shared_user_params
@@ -179,7 +194,7 @@ class TrustsController < AuthenticatedController
       end
       WtlService.update_shares(@new_vault_entries.id, new_trust_params[:share_with_contact_ids], resource_owner.id, Trust)
     end
-    ShareInheritanceService.update_document_shares(Trust, (@old_params + @new_params).map(&:id), resource_owner.id, @previous_shared_with, trust_shared_with_uinq_param, 'Trust')
+    WtlService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with, Trust, 'Trust')
     raise "error saving new trust" if @errors.any?
   end
   

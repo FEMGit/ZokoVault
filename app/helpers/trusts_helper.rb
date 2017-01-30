@@ -9,6 +9,6 @@ module TrustsHelper
   
   def trust_present?(trust)
     trust.trustees.present? || trust.successor_trustees.present? || trust.agents.present? || trust.notes.present? ||
-      trust.shares.present?
+      category_subcategory_shares(trust, trust.user).present?
   end
 end

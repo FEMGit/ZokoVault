@@ -92,13 +92,12 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1.json
   def update
     @tax_year = @tax
-    @previous_share_with_ids = @tax.taxes.map(&:share_with_contact_ids).flatten
     message = success_message
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     authorize_save
     respond_to do |format|
       if @tax_year.update(tax_params)
-        TaxesService.update_shares(@tax_year, @previous_share_with_ids, @tax_year.user_id)
+        TaxesService.update_shares(@tax_year, @tax_year.user_id)
         success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, tax: @tax_year))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }

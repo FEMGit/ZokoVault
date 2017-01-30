@@ -1,5 +1,6 @@
 class PowerOfAttorneysController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]
@@ -37,6 +38,7 @@ class PowerOfAttorneysController < AuthenticatedController
 
     @vault_entries = attorneys
     @vault_entries.each { |x| authorize x }
+    set_viewable_contacts
     return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
@@ -55,8 +57,8 @@ class PowerOfAttorneysController < AuthenticatedController
   # POST /power_of_attorneys
   # POST /power_of_attorneys.json
   def create
-    new_attorneys = WtlService.get_new_records(power_of_attorney_params)
-    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
+    new_attorneys = WtlService.get_new_records(update_share_params)
+    old_attorneys = WtlService.get_old_records(update_share_params)
     respond_to do |format|
       if !new_attorneys.empty? || !old_attorneys.empty?
         begin
@@ -98,6 +100,12 @@ class PowerOfAttorneysController < AuthenticatedController
 
   private
   
+  def set_viewable_contacts
+    @vault_entries.each do |attorney|
+      attorney.share_with_contact_ids |= category_subcategory_shares(attorney, resource_owner).map(&:contact_id)
+    end
+  end
+  
   def attorneys
     return PowerOfAttorney.for_user(resource_owner) unless @shared_user
     return @shares.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless @category_shared
@@ -138,6 +146,13 @@ class PowerOfAttorneysController < AuthenticatedController
     @power_of_attorney = PowerOfAttorney.find(params[:id])
   end
   
+  def update_share_params
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    power_of_attorney_params.each do |k, v|
+      v["share_with_contact_ids"] -= viewable_shares
+    end
+  end
+  
   def shared_user_params
     params.permit(:shared_user_id)
   end
@@ -176,7 +191,7 @@ class PowerOfAttorneysController < AuthenticatedController
       @old_params << @old_vault_entries
       WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
-    ShareInheritanceService.update_document_shares(PowerOfAttorney, (@old_params + @new_params).map(&:id), resource_owner.id, @previous_shared_with, attorneys_shared_with_uniq_param, 'Legal')
+    WtlService.update_document_shares(resource_owner, attorneys_shared_with_uniq_param, @previous_shared_with, PowerOfAttorney, 'Legal')
   end
   
   def authorize_save(resource)

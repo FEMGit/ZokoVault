@@ -3,8 +3,7 @@
   
   <%= ff.label :account_type, 'Account Type' %>
   <div class="styled-select">
-    <%= ff.select :account_type, FinancialAccountInformation::account_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_account_provider_account_#{index}_account_type'), 
-      $('#account_value_#{index}'))" %>
+    <%= ff.select :account_type, FinancialAccountInformation::account_types.keys %>
   </div>
 
   <%= ff.label :owner_id, 'Account Owner' %>
@@ -13,7 +12,7 @@
   </div>
   
   <%= ff.label :value, 'Account Value' %>
-  <%= ff.text_field :value, id: "account_value_#{index}", maxLength: 9, :data => {autonumeric: {vMax: '999999999', mDec: 0, aSign: "$"} }, 
+  <%= ff.text_field :value, id: "account_value_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} }, 
   :value => ff.object && number_to_currency(ff.object.value, precision: 0, unit: "$") %>
 
   <%= ff.label :number, 'Account Number' %>
@@ -54,6 +53,6 @@
       "account_broker_" + new_id, new_element_name + "[primary_contact_broker_id]")
     changeIdAndName($newForm, "account_notes_" + old_id,
       "account_notes_" + new_id, new_element_name + "[notes]")
-    $newForm.find("#delete-tax").remove();
+    $newForm.find("#delete-account").remove();
   }
 </script>

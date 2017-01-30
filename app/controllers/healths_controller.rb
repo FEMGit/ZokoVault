@@ -1,8 +1,10 @@
 class HealthsController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_health, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :prepare_health_share_params, only: [:create, :update]
   
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
@@ -46,6 +48,7 @@ class HealthsController < AuthenticatedController
     @insurance_card.policy.build
 
     authorize @insurance_card
+    set_viewable_contacts
   end
 
   # GET /healths/1/edit
@@ -54,6 +57,7 @@ class HealthsController < AuthenticatedController
 
     @insurance_card = @health
     @insurance_card.share_with_ids = @health.share_ids.collect { |x| Share.find(x).contact_id.to_s }
+    set_viewable_contacts
   end
 
   # POST /healths
@@ -64,7 +68,7 @@ class HealthsController < AuthenticatedController
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.save
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, resource_owner.id)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         @path = success_path(insurance_path, shared_view_insurance_path(shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -81,10 +85,11 @@ class HealthsController < AuthenticatedController
   def update
     @insurance_card = @health
     authorize @insurance_card
+    @previous_share_with_ids = @insurance_card.share_with_contact_ids
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
       if @insurance_card.update(health_params)
-        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), resource_owner.id)
+        PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @health }
@@ -120,6 +125,10 @@ class HealthsController < AuthenticatedController
   end
 
   private
+  
+  def set_viewable_contacts
+    @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)
+  end
   
   def healths
     return Health.for_user(resource_owner) unless @shared_user
@@ -165,6 +174,13 @@ class HealthsController < AuthenticatedController
     contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
+  end
+  
+  def prepare_health_share_params
+    return unless health_params[:share_with_ids].present?
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.InsuranceCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    params[:health][:share_with_ids] -= viewable_shares
+    params[:health][:share_with_ids].reject!(&:blank?)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

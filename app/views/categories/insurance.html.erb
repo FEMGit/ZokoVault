@@ -51,14 +51,10 @@
               </ul>
             <% end %>
 
-            <% if vendor.share_with_contacts.present? %>
+            <% if category_subcategory_shares(vendor, resource_owner).present? %>
               <label>Shared With</label>
               <section class="shared-list">
-                <% vendor.shares.each do |share| %>
-                  <% if share.contact.present? %>
-                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-                  <% end %>
-                <% end %>
+                <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
               </section>
             <% end %>
           </div>
@@ -99,17 +95,12 @@
               </ul>
             <% end %>
 
-            <% if vendor.share_with_contacts.present? %>
+            <% if category_subcategory_shares(vendor, resource_owner).present? %>
               <label>Shared With</label>
               <section class="shared-list">
-                <% vendor.shares && vendor.shares.each do |share| %>
-                  <% if share.contact.present? %>
-                    <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-                  <% end %>
-                <% end %>
+                <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
               </section>
             <% end %>
-
           </div>
         <% end %>
       <% end %>
@@ -146,14 +137,10 @@
                 </ul>
               <% end %>
 
-              <% if vendor.share_with_contacts.present? %>
+              <% if category_subcategory_shares(vendor, resource_owner).present? %>
                 <label>Shared With</label>
                 <section class="shared-list">
-                  <% vendor.shares && vendor.shares.each do |share| %>
-                    <% if share.contact.present? %>
-                      <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-                    <% end %>
-                  <% end %>
+                  <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
                 </section>
               <% end %>
 

@@ -29,10 +29,13 @@ class PolicyService
     end
   end
   
-  def self.update_shares(object_id, share_contact_ids, user_id)
+  def self.update_shares(object_id, share_contact_ids, previous_share_contact_ids, user)
     Vendor.find(object_id).shares.clear
     share_contact_ids.each do |x|
-      Vendor.find(object_id).shares << Share.create(contact_id: x, user_id: user_id)
+      Vendor.find(object_id).shares << Share.create(contact_id: x, user_id: user.id)
     end
+    return if previous_share_contact_ids.nil?
+    ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_contact_ids,
+                                                   Rails.application.config.x.InsuranceCategory, nil, nil, object_id)
   end
 end

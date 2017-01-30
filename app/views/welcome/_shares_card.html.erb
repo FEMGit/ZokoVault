@@ -1,0 +1,18 @@
+<%= link_to shares_path, class: "undo-link-style" do %>
+  <div class="card mb-30">
+    <h3>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>Shared With You 
+    </h3>
+    <span style="float:right">
+      <%= @shared_users&.count.to_i %> users are sharing details with you.
+      <%= link_to 'View', shares_path %>
+    </span>
+    <% @new_shares.each do |resource| %>
+      New share - <%= resource.user.name %> shared new details since your last login. 
+      <%= link_to 'View', shared_view_dashboard_path(resource.user_id) %>
+    <br/>
+  <% end %>
+  </div>
+<% end %>

@@ -151,7 +151,7 @@ class SharedViewController < AuthenticatedController
     direct_document_share = shareables.select { |res| res.is_a? Document }
     group_docs = Document.for_user(shared_user).select { |x| shared_groups(shared_user).include? x.group }
     category_docs = Document.for_user(shared_user).select { |x| shared_categories(shared_user).include? x.category }
-    @document_shareables |= (group_docs + direct_document_share + category_docs.map(&:id)).uniq
+    @document_shareables |= (group_docs + direct_document_share + category_docs).uniq
   end
     
   def shared_groups(user)

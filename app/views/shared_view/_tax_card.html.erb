@@ -19,12 +19,10 @@
       </ul>
     <% end %>
 
-    <% if tax_year_info && get_shares_contact_uniq(tax_year_info.taxes).present? %>
+    <% if category_subcategory_shares(tax_year_info.taxes, @shared_user).present? %>
       <label>Shared With</label>
       <section class="shared-list mb-20">
-        <% get_shares_contact_uniq(tax_year_info.taxes).each do |contact| %>
-          <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-        <% end %>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(tax_year_info.taxes, @shared_user) } %>
       </section>
     <% end %>
   <% end %>

@@ -1,11 +1,13 @@
 class TaxesController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_tax_year, only: [:show, :edit, :update]
   before_action :set_tax, only: [:destroy]
   before_action :set_category, only: [:index, :show]
   before_action :set_year_documents, only: [:show]
   before_action :set_all_documents, only: [:index]
   before_action :set_contacts, only: [:new, :edit]
+  before_action :prepare_share_params, only: [:create, :update]
   
   # Breadcrumbs navigation
   add_breadcrumb "Taxes", :taxes_path, if: :general_view?
@@ -27,7 +29,7 @@ class TaxesController < AuthenticatedController
     else
       year = params[:year] || Date.today.strftime("%Y").to_i
       add_breadcrumb "#{year} Taxes Setup", new_tax_path(@tax) if general_view?
-      add_breadcrumb "#{year} Taxes Setup", shared_new_taxes_path(@shared_user, @tax) if shared_view?
+      add_breadcrumb "#{year} Taxes Setup", shared_new_taxes_path(@shared_user, year) if shared_view?
     end
   end
   
@@ -55,11 +57,14 @@ class TaxesController < AuthenticatedController
     year = params[:year] || Date.today.strftime("%Y").to_i
     tax = TaxesService.tax_by_year(year, resource_owner)
     redirect_to edit_tax_path(tax) if tax
-    @tax_year = TaxYearInfo.new(category: Category.fetch(Rails.application.config.x.TaxCategory.downcase))
+    @tax_year = TaxYearInfo.new(user: resource_owner,
+                                category: Category.fetch(Rails.application.config.x.TaxCategory.downcase))
     @tax_year[:year] = year
-    @tax_year.taxes << Tax.new
+    @tax_year.taxes << Tax.new(user: resource_owner,
+                              category: Category.fetch(Rails.application.config.x.TaxCategory.downcase))
     @taxes = @tax_year.taxes
     @taxes.each { |t| authorize t }
+    set_viewable_contacts
   end
 
   # GET /taxes/1/edit
@@ -67,6 +72,7 @@ class TaxesController < AuthenticatedController
     @tax_year = @tax
     @taxes = taxes
     @taxes.each { |t| authorize t }
+    set_viewable_contacts
   end
 
   # POST /taxes
@@ -92,12 +98,13 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1.json
   def update
     @tax_year = @tax
+    @previous_share_with = @tax_year.taxes.map(&:share_with_contact_ids)
     message = success_message
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     authorize_save
     respond_to do |format|
       if @tax_year.update(tax_params)
-        TaxesService.update_shares(@tax_year, @tax_year.user_id)
+        TaxesService.update_shares(@tax_year, @previous_share_with, resource_owner)
         success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, tax: @tax_year))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
@@ -122,15 +129,30 @@ class TaxesController < AuthenticatedController
 
   private
   
+  def set_viewable_contacts
+    @taxes.each do |tax|
+      tax.share_with_contact_ids |= category_subcategory_shares(tax, resource_owner).map(&:contact_id)
+    end
+  end
+  
+  def prepare_share_params
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.TaxCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    tax_form_params.each do |k, v|
+      if v["share_with_contact_ids"].present?
+        v["share_with_contact_ids"] -= viewable_shares
+      end
+    end
+  end
+  
   def authorize_save
     authorize_ids = tax_form_params.values.map { |x| x[:id].to_i }
     @tax_year.taxes.where(:id => authorize_ids).each { |t| authorize t }
   end
   
   def taxes
-    return @tax.taxes unless @shared_user
+    return @tax.taxes if @shared_user.nil? || (@shared_category_names.include? 'Taxes')
     contact_ids = Contact.where(emailaddress: current_user.email).map(&:id)
-    shared_taxes_ids = Tax.for_user(resource_owner).select { |t| t.share_with_contact_ids.any? { |c_id| contact_ids.include? c_id } }.map(&:id)
+    shared_taxes_ids = Share.where(user: resource_owner, shareable_type: 'Tax', contact_id: contact_ids).map(&:shareable_id)
     @tax.taxes.select { |t| shared_taxes_ids.include? t.id }
   end
   

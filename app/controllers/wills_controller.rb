@@ -1,8 +1,10 @@
 class WillsController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_will, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create]
   before_action :set_previous_shared_with, only: [:create]
+  before_action :update_share_params, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   
@@ -33,6 +35,7 @@ class WillsController < AuthenticatedController
 
     @vault_entries = wills
     @vault_entries.each { |x| authorize x }
+    set_viewable_contacts
     return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
@@ -48,8 +51,8 @@ class WillsController < AuthenticatedController
   # POST /wills
   # POST /wills.json
   def create
-    new_wills = WtlService.get_new_records(will_params)
-    old_wills = WtlService.get_old_records(will_params)
+    new_wills = WtlService.get_new_records(update_share_params)
+    old_wills = WtlService.get_old_records(update_share_params)
     @vault_entries = []
     respond_to do |format|
       if new_wills.any? || old_wills.any?
@@ -94,6 +97,12 @@ class WillsController < AuthenticatedController
 
   private
   
+  def set_viewable_contacts
+    @vault_entries.each do |will|
+      will.share_with_contact_ids |= category_subcategory_shares(will, resource_owner).map(&:contact_id)
+    end
+  end
+  
   def wills
     return Will.for_user(resource_owner) unless @shared_user
     return @shares.map(&:shareable).select { |resource| resource.is_a? Will } unless @category_shared
@@ -107,7 +116,7 @@ class WillsController < AuthenticatedController
   end
   
   def success_path(old_wills)
-    return ReturnPathService.success_path(resource_owner, current_user,estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_wills.any?
+    return ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_wills.any?
     ReturnPathService.success_path(resource_owner, current_user, wills_path, shared_wills_path(shared_user_id: resource_owner.id))
   end
 
@@ -132,6 +141,13 @@ class WillsController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_will
     @will = Will.find(params[:id])
+  end
+  
+  def update_share_params
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    will_params.each do |k, v|
+      v["share_with_contact_ids"] -= viewable_shares
+    end
   end
   
   def shared_user_params
@@ -180,7 +196,7 @@ class WillsController < AuthenticatedController
         WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
       end
     end
-    update_document_share
+    WtlService.update_document_shares(resource_owner, will_shared_with_uniq_param, @previous_shared_with, Will, 'Will')
     raise "error saving new will" if @errors.any?
   end
   
@@ -191,13 +207,9 @@ class WillsController < AuthenticatedController
     end
   end
   
-  def update_document_share
-    ShareInheritanceService.update_document_shares(Will, (@old_params + @new_params).map(&:id), resource_owner.id, @previous_shared_with, will_shared_with_uniq_param, 'Will')
-  end
-  
   def set_previous_shared_with
     old_wills = WtlService.get_old_records(will_params)
     old_will_ids = old_wills.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)
-    @previous_shared_with = Will.find(old_will_ids).map(&:share_with_contact_ids).flatten.uniq
+    @previous_shared_with = Will.find(old_will_ids).map(&:share_with_contact_ids).flatten.uniq.map(&:to_i)
   end
 end

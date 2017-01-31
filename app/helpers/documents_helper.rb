@@ -2,6 +2,46 @@ module DocumentsHelper
   @@add_new_document_title = "Add Document"
   @@empty_document_group = ["Select...", "0"]
   @@contact_category = "Contact"
+  
+  def document_shares(document)
+    owner = document.user
+    document_shares = (document.shares.flatten + subcategory_shares(document) + category_shares(document)).uniq(&:contact_id)
+    document_shares.reject { |d_sh| d_sh.contact_id.zero? }
+  end
+  
+  def subcategory_shares(document)
+    owner = document.user
+    shares = 
+      if document.vendor_id.present? && document.vendor_id.positive?
+        Vendor.find(document.vendor_id).share_with_contacts
+        owner.shares.select { |sh| (sh.shareable.is_a? Vendor) && sh.shareable_id == document.vendor_id }
+      elsif document.financial_information_id.present? && document.financial_information_id.positive?
+        FinancialProvider.find(document.financial_information_id).share_with_contacts
+        owner.shares.select { |sh| (sh.shareable.is_a? FinancialProvider) && sh.shareable_id == document.financial_information_id }
+      elsif document.group.present?
+        model = ModelService.model_by_name(document.group)
+        if model == Tax
+          tax_year_id = TaxYearInfo.find_by(:year => document.group).id
+          tax_ids = Tax.for_user(owner).select { |x| x.tax_year_id == tax_year_id }.map(&:id).flatten
+          owner.shares.select { |sh| (sh.shareable.is_a? Tax) && (tax_ids.include? sh.shareable_id) }
+        elsif model == FinalWish
+          final_wish_info_id = FinalWishInfo.find_by(:group => document.group).id
+          final_wish_ids = FinalWish.for_user(owner).select { |x| x.final_wish_info_id == final_wish_info_id }.map(&:id).flatten
+          owner.shares.select { |sh| (sh.shareable.is_a? FinalWish) && (final_wish_ids.include? sh.shareable_id) }
+        else
+          return [] unless model.present?
+          owner.shares.select { |sh| sh.shareable.is_a? model }
+        end
+      else
+        []
+      end
+  end
+  
+  def category_shares(document)
+    return [] unless document.category.present?
+    category = Category.fetch(document.category.downcase)
+    document.user.shares.select { |sh| sh.shareable == category }
+  end
 
   def add_new_document?(title)
     title == @@add_new_document_title
@@ -64,6 +104,7 @@ module DocumentsHelper
   end
 
   def previewed?(document)
+    return false unless document.try(:url).present?
     s3_object = S3Service.get_object_by_key(document.url)
     Document.previewed?(s3_object.content_type)
   end

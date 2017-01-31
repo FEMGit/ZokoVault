@@ -13,7 +13,7 @@ class TaxesService
     TaxYearInfo.for_user(user).where(:year => year).first
   end
   
-  def self.update_shares(tax_year_info, previous_shared_with, user_id)
+  def self.update_shares(tax_year_info, user_id)
     tax_year_info.taxes.each do |tax|
       share_with_contact_ids = tax.share_with_contact_ids
       tax.shares.clear
@@ -21,7 +21,5 @@ class TaxesService
         tax.shares << Share.create(contact_id: contact_id, user_id: user_id)
       end
     end
-    share_ids_formatted = tax_year_info.taxes.map(&:share_with_contact_ids).uniq.flatten.map(&:to_s)
-    ShareInheritanceService.update_document_shares(Tax, tax_year_info.taxes.map(&:id), user_id, previous_shared_with, share_ids_formatted , tax_year_info.year.to_s)
   end
 end

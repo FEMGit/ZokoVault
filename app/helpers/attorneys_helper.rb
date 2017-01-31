@@ -4,6 +4,6 @@ module AttorneysHelper
   end
   
   def attorney_present?(attorney)
-    attorney.agents.present? || attorney.powers.present? || attorney.notes.present? || attorney.shares.present?
+    attorney.agents.present? || attorney.powers.present? || attorney.notes.present? || category_subcategory_shares(attorney, attorney.user).present?
   end
 end

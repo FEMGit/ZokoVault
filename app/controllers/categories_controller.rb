@@ -53,6 +53,8 @@ class CategoriesController < AuthenticatedController
   end
 
   def share
+    remove_document_shares
+    remove_subcategory_shares
     sc = ShareableCategory.new(
       current_user,
       params[:id],
@@ -60,7 +62,7 @@ class CategoriesController < AuthenticatedController
 
     redirect_to redirect_path(sc.category)
   end
-
+  
   def share_category
     @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
     @category = Category.fetch(params[:id])
@@ -162,6 +164,14 @@ class CategoriesController < AuthenticatedController
   end
 
   private
+  
+  def remove_document_shares
+    ShareInheritanceService.remove_document_shares(current_user, params[:id].to_i, shareable_category_params)
+  end
+  
+  def remove_subcategory_shares
+    ShareInheritanceService.remove_subcategory_shares(current_user, params[:id].to_i, shareable_category_params)
+  end
 
   def set_category
     @category = Category.find(params[:id])

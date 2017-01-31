@@ -48,11 +48,7 @@
 
           <label>Shared With</label>
           <section class="shared-list">
-            <% will.share_with_contacts.each do |share| %>
-              <% if share.present? %>
-                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-              <% end %>
-            <% end %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@wills, @shared_user) } %>
           </section>
         <% end %>
       
@@ -92,11 +88,7 @@
 
           <label>Shared With</label>
           <section class="shared-list">
-            <% get_shares_uniq(@trusts) && get_shares_uniq(@trusts).each do |share| %>
-              <% if share.present? %>
-                <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-              <% end %>
-            <% end %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, @shared_user) } %>
           </section>
       <% else %>
         <h3>Trusts</h3>
@@ -133,11 +125,7 @@
 
         <label>Shared With</label>
         <section class="shared-list">
-          <% get_shares_uniq(@power_of_attorneys) && get_shares_uniq(@power_of_attorneys).each do |share| %>
-            <% if share.present? %>
-              <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-            <% end %>
-          <% end %>
+          <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, @shared_user) } %>
         </section>
 
       <% else %>

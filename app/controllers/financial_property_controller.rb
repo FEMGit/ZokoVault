@@ -46,7 +46,7 @@ class FinancialPropertyController < AuthenticatedController
     authorize @financial_property
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, resource_owner)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
@@ -61,11 +61,10 @@ class FinancialPropertyController < AuthenticatedController
   
   def update
     authorize @financial_property
-    @previous_share_with_ids = @financial_property.share_with_contact_ids
     respond_to do |format|
       if @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @property_provider.update(name: property_params[:name])
-        FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids, @previous_share_with_ids, resource_owner)
+        FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids, resource_owner)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }

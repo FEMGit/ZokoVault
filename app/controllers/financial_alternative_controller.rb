@@ -47,7 +47,7 @@ class FinancialAlternativeController < AuthenticatedController
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, resource_owner)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
@@ -62,10 +62,9 @@ class FinancialAlternativeController < AuthenticatedController
   def update
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
-    @previous_share_with_ids = @financial_provider.share_with_contact_ids
     respond_to do |format|
       if @financial_provider.update(provider_params)
-        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with_ids, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, resource_owner)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }

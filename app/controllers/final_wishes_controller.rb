@@ -93,13 +93,12 @@ class FinalWishesController < AuthenticatedController
   # PATCH/PUT /final_wishes/1.json
   def update
     @final_wish_info = @final_wish
-    @previous_share_with_ids = @final_wish.final_wishes.map(&:share_with_contact_ids).flatten
     message = success_message
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     authorize_save
     respond_to do |format|
       if @final_wish_info.update(final_wish_params)
-        FinalWishService.update_shares(@final_wish_info, @previous_share_with_ids, @final_wish_info.user_id)
+        FinalWishService.update_shares(@final_wish_info, @final_wish_info.user_id)
         success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @final_wish_info }

@@ -20,4 +20,17 @@ module SharedViewHelper
     return true if owner.nil?
     SharedViewService.shared_group_names(owner, non_owner, category).include? subcategory
   end
+  
+  def full_category_shares(category, owner)
+    owner.shares.select { |sh| sh.shareable == category }
+  end
+  
+  def category_subcategory_shares(object, owner)
+    obj_shares = object.try(:shares) || object.map(&:shares).flatten.uniq
+    category = object.try(:category) || object.first.try(:category)
+    return unless category.present?
+    category_shares = owner.shares.select { |sh| sh.shareable == category }
+    return obj_shares unless category_shares.present?
+    (obj_shares + category_shares).uniq(&:contact_id)
+  end
 end

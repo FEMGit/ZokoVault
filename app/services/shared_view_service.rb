@@ -44,6 +44,10 @@ class SharedViewService
         final_wish_info = FinalWishInfo.find_by(id: shareable.final_wish_info_id)
         next unless final_wish_info.present?
         groups << final_wish_info.group
+      when Vendor
+        groups << shareable.id
+      when FinancialProvider
+        groups << shareable.id
       else
         next
       end

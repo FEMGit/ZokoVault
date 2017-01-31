@@ -17,20 +17,25 @@ class ShareInheritanceService
       Share.where(user_id: owner.id, shareable_type: 'Will', contact_id: contact_ids_to_remove).delete_all
       Share.where(user_id: owner.id, shareable_type: 'Trust', contact_id: contact_ids_to_remove).delete_all
       Share.where(user_id: owner.id, shareable_type: 'PowerOfAttorney', contact_id: contact_ids_to_remove).delete_all
+    elsif category.name == Rails.application.config.x.InsuranceCategory
+      Share.where(user_id: owner.id, shareable_type: 'Vendor', contact_id: contact_ids_to_remove).delete_all
     elsif category.name == Rails.application.config.x.FinancialInformationCategory
       Share.where(user_id: owner.id, shareable_type: 'FinancialProvider', contact_id: contact_ids_to_remove).delete_all
     end
   end
   
-  def self.update_document_shares(resource_owner, share_with_ids, previous_shared_with_ids, category_name, document_group_for_model = nil, financial_information_id = nil)
+  def self.update_document_shares(resource_owner, share_with_ids, previous_shared_with_ids, category_name, document_group_for_model = nil, financial_information_id = nil, vendor_id = nil)
     share_contact_ids_to_delete = previous_shared_with_ids - share_with_ids
     document_ids_to_update =
       if document_group_for_model.present?
         Document.for_user(resource_owner).where(category: category_name, group: document_group_for_model).map(&:id)
       elsif financial_information_id.present?
         Document.for_user(resource_owner).where(category: category_name, financial_information_id: financial_information_id).map(&:id)
+      elsif vendor_id.present?
+        Document.for_user(resource_owner).where(category: category_name, vendor_id: vendor_id).map(&:id)
       end
     Share.where(user_id: resource_owner.id, shareable_type: 'Document',
                 contact_id: share_contact_ids_to_delete, shareable_id: document_ids_to_update).delete_all
+    end
   end
 end

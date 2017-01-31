@@ -37,6 +37,7 @@
   }
 }
 
+//Marketing settings
 .flex-marketing{
   flex: 20%;
   margin: 0 2% 2% 0;
@@ -50,6 +51,48 @@
     margin: 0 0 2%;
   }
 }
+
+//Dashboard settings
+.board-name{
+  flex:40%;
+  @include media($teneighty) {
+      flex:100%;
+  }
+}
+.board-text{
+  flex:40%;
+  padding-top: 12px;
+  @include media($teneighty) {
+    border-top: 1px solid $color-gray-light;
+    flex:85%;
+    padding-bottom: 12px;
+  }
+}
+.board-link{
+  flex: 10%;
+  text-align:right;
+  padding-top: 10px;
+  @include media($teneighty) {
+    border-top: 1px solid $color-gray-light;
+    flex:15%;
+    padding-bottom: 12px;
+  }
+}
+.board-sub-title{
+  display:block;
+  padding-top:12px;
+  @include media($teneighty) {
+    display: none;
+  }
+}
+.board-border{
+  border-top: 1px solid $color-gray-light;
+  @include media($teneighty) {
+    border-top: 0px solid $color-gray-light;
+  }
+}
+
+
 //
 // .flex-card{
 //   flex: 31%;

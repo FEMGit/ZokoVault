@@ -29,7 +29,7 @@
       <p><%= final_wish.notes %></p>
     <% end %>
 
-    <% if final_wish.share_with_contacts.present? %>
+    <% if category_subcategory_shares(final_wish, resource_owner).present? %>
       <div class="shared-with">
         <h3 class="card-label shared-label">
           <svg class="icon" viewBox="0 0 20 20">
@@ -39,9 +39,7 @@
         </h3>
 
         <label>Shared With</label><br>
-          <% final_wish.share_with_contacts.each do |contact| %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-          <% end %>
+          <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(final_wish, resource_owner) } %>
       </div>
     <% end %>
   </div>

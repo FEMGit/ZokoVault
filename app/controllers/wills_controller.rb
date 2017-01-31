@@ -196,7 +196,8 @@ class WillsController < AuthenticatedController
         WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
       end
     end
-    WtlService.update_document_shares(resource_owner, will_shared_with_uniq_param, @previous_shared_with, Will, 'Will')
+    ShareInheritanceService.update_document_shares(resource_owner, will_shared_with_uniq_param,
+                                                   @previous_shared_with, Rails.application.config.x.WtlCategory, 'Will')
     raise "error saving new will" if @errors.any?
   end
   

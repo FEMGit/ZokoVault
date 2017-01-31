@@ -1,9 +1,11 @@
 class FinancialAlternativeController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   before_action :set_account, only: [:destroy]
+  before_action :prepare_share_params, only: [:create, :update]
   
   # Breadcrumbs navigation
   add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
@@ -26,10 +28,12 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def new
-    @financial_provider = FinancialProvider.new(user: resource_owner)
+    @financial_provider = FinancialProvider.new(user: resource_owner,
+                                                category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase))
     @financial_alternative = FinancialAlternative.new
     @financial_provider.alternatives << @financial_alternative
     authorize @financial_provider
+    set_viewable_contacts
   end
   
   def show
@@ -39,6 +43,7 @@ class FinancialAlternativeController < AuthenticatedController
   
   def edit
     authorize @financial_provider
+    set_viewable_contacts
   end
   
   def create
@@ -47,7 +52,7 @@ class FinancialAlternativeController < AuthenticatedController
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
@@ -61,10 +66,11 @@ class FinancialAlternativeController < AuthenticatedController
   
   def update
     authorize @financial_provider
+    @previous_share_with = @financial_provider.share_with_contact_ids
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
       if @financial_provider.update(provider_params)
-        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
@@ -97,6 +103,17 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   private
+  
+  def set_viewable_contacts
+    @financial_provider.share_with_contact_ids |= category_subcategory_shares(@financial_provider, resource_owner).map(&:contact_id)
+  end
+  
+  def prepare_share_params
+    return unless provider_params[:share_with_contact_ids].present?
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    params[:financial_provider][:share_with_contact_ids] -= viewable_shares
+    params[:financial_provider][:share_with_contact_ids].reject!(&:blank?)
+  end
   
   def shared_user_params
     params.permit(:shared_user_id)
@@ -139,7 +156,7 @@ class FinancialAlternativeController < AuthenticatedController
 
   
   def provider_params
-    params.require(:financial_provider).permit(:id, :name, :web_address, :street_address, :city, :state, :zip, :phone_number, :fax_number, :primary_contact_id, 
+    params.require(:financial_provider).permit(:id, :name, :web_address, :street_address, :city, :state, :zip, :phone_number, :fax_number, :primary_contact_id, :category_id,
                                                share_with_contact_ids: [])
   end
   

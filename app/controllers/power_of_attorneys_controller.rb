@@ -191,7 +191,8 @@ class PowerOfAttorneysController < AuthenticatedController
       @old_params << @old_vault_entries
       WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
-    WtlService.update_document_shares(resource_owner, attorneys_shared_with_uniq_param, @previous_shared_with, PowerOfAttorney, 'Legal')
+    ShareInheritanceService.update_document_shares(resource_owner, attorneys_shared_with_uniq_param,
+                                                   @previous_shared_with, Rails.application.config.x.WtlCategory, 'Legal')
   end
   
   def authorize_save(resource)

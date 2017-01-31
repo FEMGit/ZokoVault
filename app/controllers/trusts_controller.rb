@@ -194,7 +194,8 @@ class TrustsController < AuthenticatedController
       end
       WtlService.update_shares(@new_vault_entries.id, new_trust_params[:share_with_contact_ids], resource_owner.id, Trust)
     end
-    WtlService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with, Trust, 'Trust')
+    ShareInheritanceService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with,
+                                                   Rails.application.config.x.WtlCategory, 'Trust')
     raise "error saving new trust" if @errors.any?
   end
   

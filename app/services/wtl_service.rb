@@ -19,12 +19,4 @@ class WtlService
       model.find(object_id).shares << Share.create(contact_id: x, user_id: user_id)
     end
   end
-  
-  def self.update_document_shares(resource_owner, share_with_ids, previous_shared_with_ids, model, document_group_for_model)
-    current_category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)
-    share_contact_ids_to_delete = previous_shared_with_ids - share_with_ids
-    document_ids_to_update = Document.for_user(resource_owner).where(category: current_category.name, group: document_group_for_model).map(&:id)
-    Share.where(user_id: resource_owner.id, shareable_type: 'Document',
-                contact_id: share_contact_ids_to_delete, shareable_id: document_ids_to_update).delete_all
-  end
 end

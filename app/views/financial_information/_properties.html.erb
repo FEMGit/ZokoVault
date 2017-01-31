@@ -22,15 +22,12 @@
       </li>
     </ul>
 
-    <% if property.share_with_contacts.present? %>
+    <% provider = financial_provider(property) %>
+    <% if category_subcategory_shares(provider, resource_owner).present? %>
       <label>Shared With</label>
       <section class="shared-list">
-        <% property.share_with_contacts.each do |share| %>
-          <% if share.present? %>
-            <%= render partial: "layouts/avatar_circle", locals: { :contact => share } %>
-          <% end %>
-         <% end %>
-       </section>
-     <% end %>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(provider, resource_owner) } %>
+      </section>
+    <% end %>
   </div>
 <% end %>

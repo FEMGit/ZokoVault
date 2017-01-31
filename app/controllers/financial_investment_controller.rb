@@ -1,9 +1,11 @@
 class FinancialInvestmentController < AuthenticatedController
   include SharedViewModule
+  include SharedViewHelper
   before_action :set_financial_investment, only: [:show, :edit, :update, :destroy]
-  before_action :set_financial_investment_provider, only: [:show, :update, :destroy, :set_documents]
+  before_action :set_financial_investment_provider, only: [:show, :edit, :update, :destroy, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
+  before_action :prepare_share_params, only: [:create, :update]
   
   # Breadcrumbs navigation
   add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
@@ -26,8 +28,10 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def new
-    @financial_investment = FinancialInvestment.new(user: resource_owner)
+    @financial_investment = FinancialInvestment.new(user: resource_owner,
+                                                category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase))
     authorize @financial_investment
+    set_viewable_contacts
   end
   
   def show
@@ -38,6 +42,8 @@ class FinancialInvestmentController < AuthenticatedController
   
   def edit
     authorize @financial_investment
+    @financial_investment.share_with_contact_ids = @investment_provider.share_with_contact_ids
+    set_viewable_contacts
   end
   
   def create
@@ -47,7 +53,7 @@ class FinancialInvestmentController < AuthenticatedController
     authorize @financial_investment
     respond_to do |format|
       if @financial_provider.save
-        FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, resource_owner)
+        FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner, @financial_investment)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_investment }
@@ -62,10 +68,12 @@ class FinancialInvestmentController < AuthenticatedController
   
   def update
     authorize @financial_investment
+    @previous_share_with = @investment_provider.share_with_contact_ids
     respond_to do |format|
       if @financial_investment.update(property_params.merge(user_id: resource_owner.id))
         @investment_provider.update(name: property_params[:name])
-        FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids, resource_owner)
+        FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids,
+                                                  @previous_share_with, resource_owner, @financial_investment)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Investment was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_investment }
@@ -88,6 +96,17 @@ class FinancialInvestmentController < AuthenticatedController
   end
 
   private
+  
+  def set_viewable_contacts
+    @financial_investment.share_with_contact_ids |= category_subcategory_shares(@financial_investment, resource_owner).map(&:contact_id)
+  end
+  
+  def prepare_share_params
+    return unless property_params[:share_with_contact_ids].present?
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    params[:financial_investment][:share_with_contact_ids] -= viewable_shares
+    params[:financial_investment][:share_with_contact_ids].reject!(&:blank?)
+  end
   
   def shared_user_params
     params.permit(:shared_user_id)
@@ -129,7 +148,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
 
   def property_params
-    params.require(:financial_investment).permit(:id, :name, :web_address, :investment_type, :notes, :value, :owner_id, :city, :state, :zip, :address, :phone_number, :primary_contact_id,
+    params.require(:financial_investment).permit(:id, :name, :web_address, :investment_type, :notes, :value, :owner_id, :city, :state, :zip, :address, :phone_number, :primary_contact_id, :category_id,
                                                  share_with_contact_ids: [])
   end
   

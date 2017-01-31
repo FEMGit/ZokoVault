@@ -31,6 +31,6 @@ module SharedViewHelper
     return unless category.present?
     category_shares = owner.shares.select { |sh| sh.shareable == category }
     return obj_shares unless category_shares.present?
-    (obj_shares + category_shares).uniq(&:contact_id)
+    (obj_shares + category_shares).uniq(&:contact_id).reject { |sh| sh.contact_id.zero? }
   end
 end

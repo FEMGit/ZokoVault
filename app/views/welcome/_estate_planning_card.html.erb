@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-document-3"></use>
+        </svg>Wills Trusts &amp; Legal
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= estate_planning_document_count %> documents uploaded.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(estate_planning_document_count > 0), estate_planning_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-book-6"></use>
+        </svg>Taxes
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= tax_year_count %> years of tax history.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(tax_year_count > 0), taxes_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

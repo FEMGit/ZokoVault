@@ -106,8 +106,12 @@ class TrustsController < AuthenticatedController
   
   def trusts
     return Trust.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? Trust } unless @category_shared
+    return @shares.map(&:shareable).select { |resource| resource.is_a? Trust } unless category_shared?
     Trust.for_user(@shared_user)
+  end
+  
+  def category_shared?
+     @shared_category_names.include? Rails.application.config.x.WtlCategory
   end
   
   def error_path(action)

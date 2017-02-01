@@ -146,7 +146,9 @@ class WillsController < AuthenticatedController
   def update_share_params
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     will_params.each do |k, v|
-      v["share_with_contact_ids"] -= viewable_shares
+      if v["share_with_contact_ids"].present?
+        v["share_with_contact_ids"] -= viewable_shares
+      end
     end
   end
   

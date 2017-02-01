@@ -28,7 +28,7 @@ module SharedViewHelper
   
   def category_subcategory_shares(object, owner)
     obj_shares = object.try(:shares) || object.map(&:shares).flatten.uniq
-    category = object.try(:category) || object.first.try(:category)
+    category = object.try(:category) || object.try(:first).try(:category)
     return unless category.present?
     category_shares = owner.shares.select { |sh| sh.shareable == category }
     return obj_shares unless category_shares.present?

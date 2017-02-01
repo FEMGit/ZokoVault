@@ -98,7 +98,9 @@ class FinancialInvestmentController < AuthenticatedController
   private
   
   def set_viewable_contacts
-    @financial_investment.share_with_contact_ids |= category_subcategory_shares(@financial_investment, resource_owner).map(&:contact_id)
+    contacts = category_subcategory_shares(@financial_investment, resource_owner)
+    return unless contacts.present?
+    @financial_investment.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
   
   def prepare_share_params

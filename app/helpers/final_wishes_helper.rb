@@ -31,6 +31,6 @@ module FinalWishesHelper
   end
   
   def final_wish_present?(final_wish)
-    final_wish.primary_contact.present? || final_wish.notes.present? || final_wish.share_with_contacts.present?
+    final_wish.primary_contact.present? || final_wish.notes.present? || category_subcategory_shares(final_wish, final_wish.user)
   end
 end

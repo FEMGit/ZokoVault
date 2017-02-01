@@ -104,7 +104,7 @@ module DocumentsHelper
   end
 
   def previewed?(document)
-    return false unless document.try(:url).present?
+    return false if document.try(:url).nil?
     s3_object = S3Service.get_object_by_key(document.url)
     Document.previewed?(s3_object.content_type)
   end

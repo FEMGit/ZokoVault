@@ -6,7 +6,6 @@ class DocumentsController < AuthenticatedController
   before_action :set_viewable_contacts, only: [:update, :edit]
   before_action :prepare_document_params, only: [:create, :update]
   before_action :set_shared_view_settings, :set_dropdown_options, only: [:new, :edit]
-  layout :set_layout, only: [:new, :edit]
   
   # Breadcrumbs navigation
   before_action :set_previous_crumbs, only: [:new, :edit]

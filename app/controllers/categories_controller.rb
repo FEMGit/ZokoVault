@@ -91,6 +91,7 @@ class CategoriesController < AuthenticatedController
     contact = Contact.find(params[:contact_id])
 
     shares = current_user.shares.for_category_and_contact(category, contact)
+    return unless shares.present?
     shares.each { |share| share.destroy }
   
     redirect_to share_category_category_path

@@ -18,7 +18,8 @@ module SharedViewHelper
   
   def show_add_link?(owner, non_owner, category, subcategory)
     return true if owner.nil?
-    SharedViewService.shared_group_names(owner, non_owner, category).include? subcategory
+    groups = SharedViewService.shared_group_names(owner, non_owner)
+    groups.include? subcategory
   end
   
   def full_category_shares(category, owner)

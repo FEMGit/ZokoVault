@@ -36,6 +36,7 @@ class SharedViewController < AuthenticatedController
 
     @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
       if @shared_category_names.include? 'Taxes'
+        @category_shared = true
         @taxes = TaxYearInfo.for_user(@shared_user)
         @documents = Document.for_user(shared_user).where(category: @category.name)
       else

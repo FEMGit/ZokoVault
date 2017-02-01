@@ -37,6 +37,6 @@ module TaxesHelper
   end
   
   def tax_present?(tax)
-    tax.tax_preparer.present? || tax.notes.present? || tax.share_with_contacts.present?
+    tax.tax_preparer.present? || tax.notes.present? || category_subcategory_shares(tax, tax.user).present?
   end
 end

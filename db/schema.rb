@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170114034117) do
+ActiveRecord::Schema.define(version: 20170131021620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,11 +98,13 @@ ActiveRecord::Schema.define(version: 20170114034117) do
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.integer  "category_id"
   end
 
+  add_index "final_wish_infos", ["category_id"], name: "index_final_wish_infos_on_category_id", using: :btree
   add_index "final_wish_infos", ["user_id"], name: "index_final_wish_infos_on_user_id", using: :btree
 
   create_table "final_wishes", force: :cascade do |t|
@@ -129,8 +131,10 @@ ActiveRecord::Schema.define(version: 20170114034117) do
     t.datetime "updated_at",                null: false
     t.integer  "user_id"
     t.integer  "account_provider_id"
+    t.integer  "category_id"
   end
 
+  add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
   add_index "financial_account_informations", ["user_id"], name: "index_financial_account_informations_on_user_id", using: :btree
 
   create_table "financial_alternatives", force: :cascade do |t|
@@ -147,8 +151,10 @@ ActiveRecord::Schema.define(version: 20170114034117) do
     t.integer  "user_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.integer  "category_id"
   end
 
+  add_index "financial_alternatives", ["category_id"], name: "index_financial_alternatives_on_category_id", using: :btree
   add_index "financial_alternatives", ["user_id"], name: "index_financial_alternatives_on_user_id", using: :btree
 
   create_table "financial_investments", force: :cascade do |t|
@@ -168,8 +174,10 @@ ActiveRecord::Schema.define(version: 20170114034117) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
+    t.integer  "category_id"
   end
 
+  add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
   add_index "financial_investments", ["user_id"], name: "index_financial_investments_on_user_id", using: :btree
 
   create_table "financial_properties", force: :cascade do |t|
@@ -187,8 +195,10 @@ ActiveRecord::Schema.define(version: 20170114034117) do
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
     t.integer  "empty_provider_id"
+    t.integer  "category_id"
   end
 
+  add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
   add_index "financial_properties", ["user_id"], name: "index_financial_properties_on_user_id", using: :btree
 
   create_table "financial_providers", force: :cascade do |t|
@@ -205,8 +215,10 @@ ActiveRecord::Schema.define(version: 20170114034117) do
     t.datetime "updated_at",         null: false
     t.integer  "user_id"
     t.string   "type"
+    t.integer  "category_id"
   end
 
+  add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
 
   create_table "health_policies", force: :cascade do |t|
@@ -324,11 +336,13 @@ ActiveRecord::Schema.define(version: 20170114034117) do
 
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.integer  "category_id"
   end
 
+  add_index "tax_year_infos", ["category_id"], name: "index_tax_year_infos_on_category_id", using: :btree
   add_index "tax_year_infos", ["user_id"], name: "index_tax_year_infos_on_user_id", using: :btree
 
   create_table "taxes", force: :cascade do |t|

@@ -7,7 +7,7 @@ class HealthPunditPolicy < CategorySharePolicy
   end
 
   def index?
-    user_owned?
+    owned_or_shared?
   end
   
   def destroy_provider?

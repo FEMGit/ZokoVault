@@ -1,19 +1,33 @@
 class DocumentsController < AuthenticatedController
+  include SharedViewModule
+  include DocumentsHelper
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_viewable_contacts, only: [:update, :edit]
   before_action :prepare_document_params, only: [:create, :update]
   before_action :set_shared_view_settings, :set_dropdown_options, only: [:new, :edit]
-  layout :set_layout, only: [:new, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Documents", :documents_path, :only => %w(new edit)
-  
-  def set_layout
-    unless resource_owner == current_user
-      return "shared_view"
-    end
-    "application"
+  before_action :set_previous_crumbs, only: [:new, :edit]
+  add_breadcrumb "Documents", :documents_path, only: [:index]
+  before_action :set_add_crumbs, only: [:new]
+  before_action :set_edit_crumbs, only: [:edit]
+  include BreadcrumbsCacheModule
+
+  def set_previous_crumbs
+    return unless request.referrer.present?
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(@shared_user || current_user)
   end
+  
+  def set_add_crumbs
+    add_breadcrumb "Add Document", new_documents_path(@shared_user)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Edit Document", edit_documents_path(@document, @shared_user)
+  end
+
+  @after_new_user_created = ""
 
   def index
     @documents = policy_scope(Document).each { |d| authorize d }
@@ -44,12 +58,12 @@ class DocumentsController < AuthenticatedController
   def create
     options = document_params.merge(user: resource_owner)
     @document = Document.new(options)
+    set_viewable_contacts
 
     authorize @document
 
     respond_to do |format|
       if @document.save && @document.update(document_share_params)
-        DocumentService.update_shares(@document, resource_owner)
         handle_document_saved(format)
       else
         handle_document_not_saved(format)
@@ -59,12 +73,9 @@ class DocumentsController < AuthenticatedController
 
   def update
     authorize @document
-    previous_group = @document.group
-
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if @document.update(document_share_params)
-        DocumentService.update_shares(@document, resource_owner, previous_group)
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else
@@ -141,6 +152,10 @@ class DocumentsController < AuthenticatedController
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
+  
+  def set_viewable_contacts
+    @document.contact_ids |= document_shares(@document).map(&:contact_id)
+  end
 
   def set_document
     @document = Document.find(params[:id])
@@ -156,6 +171,10 @@ class DocumentsController < AuthenticatedController
     share = share_service.fill_document_share
     #cleare document shares before updating current document
     share_service.clear_shares(@document)
+    
+    viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
+    share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
+    
     document_params.merge(:shares_attributes => share, :user_id => resource_owner.id, :group => base_params[:group])
   end
 

@@ -4,6 +4,7 @@
 <%= form_for(@tax_year, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
   <%= f.hidden_field :year %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   <% if @tax_year.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@tax_year.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
@@ -15,14 +16,14 @@
     </div>
   <% end %>
 
-  <% @tax_year.taxes.each_with_index do |data, index| %>
+  <% @taxes.each_with_index do |data, index| %>
     <%= f.fields_for "tax_#{index}", data do |ff| %>
       <div class="body-content">
         <%= render 'form', ff: ff, index: index, data: data %>
       </div>
     <% end %>
   <% end %>
-  <% if @tax_year.taxes.empty? %>
+  <% if @taxes.empty? %>
     <% index = 0 %>
     <%= f.fields_for "tax_#{index}" do |ff| %>
       <div class="body-content">

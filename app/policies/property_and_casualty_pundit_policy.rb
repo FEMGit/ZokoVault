@@ -5,6 +5,14 @@ class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
     @user = user
     @record = record
   end
+  
+  def index?
+    owned_or_shared?
+  end
+  
+  def new?
+    owned_or_shared?
+  end
 
   def scope
     Pundit.policy_scope!(user, record.class)

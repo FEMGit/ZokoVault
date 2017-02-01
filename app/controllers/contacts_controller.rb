@@ -3,7 +3,14 @@ class ContactsController < AuthenticatedController
   before_action :my_profile_contact?, only: [:show, :edit]
   
   # Breadcrumbs navigation
-  add_breadcrumb "Contacts & Permissions", :contacts_path, :only => %w(show)
+  add_breadcrumb "Contacts & Permissions", :contacts_path
+  before_action :set_details_crumbs, only: [:show]
+  include BreadcrumbsCacheModule
+  
+  def set_details_crumbs
+    return unless @contact.present?
+    add_breadcrumb @contact.name.to_s, contact_path(@contact)
+  end
 
   # GET /contacts
   # GET /contacts.json
@@ -40,9 +47,9 @@ class ContactsController < AuthenticatedController
   # POST /contacts.json
   def create
     @contact = Contact.new(contact_params.merge(user: resource_owner))
-
+    
     authorize @contact
-
+    
     respond_to do |format|
       if @contact.save
         handle_contact_saved(format)

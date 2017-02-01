@@ -3,7 +3,8 @@ class UserProfilesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   
   # Breadcrumbs navigation
-  add_breadcrumb "My Profile", :user_profile_path, :only => %w(new edit)
+  add_breadcrumb "My Profile", :user_profile_path
+  include BreadcrumbsCacheModule
   
   # GET /user_profiles
   # GET /user_profiles.json

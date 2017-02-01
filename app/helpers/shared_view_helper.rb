@@ -15,4 +15,23 @@ module SharedViewHelper
   def show_navigation_link?(category)
     @shared_category_names_full.include? category
   end
+  
+  def show_add_link?(owner, non_owner, category, subcategory)
+    return true if owner.nil?
+    groups = SharedViewService.shared_group_names(owner, non_owner)
+    groups.include? subcategory
+  end
+  
+  def full_category_shares(category, owner)
+    owner.shares.select { |sh| sh.shareable == category }
+  end
+  
+  def category_subcategory_shares(object, owner)
+    obj_shares = object.try(:shares) || object.map(&:shares).flatten.uniq
+    category = object.try(:category) || object.first.try(:category)
+    return unless category.present?
+    category_shares = owner.shares.select { |sh| sh.shareable == category }
+    return obj_shares unless category_shares.present?
+    (obj_shares + category_shares).uniq(&:contact_id).reject { |sh| sh.contact_id.zero? }
+  end
 end

@@ -1,7 +1,7 @@
 module InsuranceHelper
   def provider_present?(provider)
     provider.webaddress.present? || show_street?(provider) || provider.phone.present? || provider.fax.present? ||
-      provider.contact.present? || provider.share_with_contacts.present?
+      provider.contact.present? || category_subcategory_shares(provider, provider.user).present?
   end
   
   def provider_main_page_present?(provider)

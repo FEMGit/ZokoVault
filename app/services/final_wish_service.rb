@@ -22,12 +22,18 @@ class FinalWishService
     groups.detect { |group| group["label"] == name }
   end
   
-  def self.update_shares(final_wish_info, share_with_contact_ids, user_id)
+  def self.update_shares(final_wish_info, previous_share_with_contact_ids, user)
     final_wish_info.final_wishes.each do |final_wish|
+      share_with_contact_ids = final_wish.share_with_contact_ids
       final_wish.shares.clear
       share_with_contact_ids.each do |contact_id|
-        final_wish.shares << Share.create(contact_id: contact_id, user_id: user_id)
+        final_wish.shares << Share.create(contact_id: contact_id, user_id: user.id)
       end
     end
+    
+    share_contact_ids = final_wish_info.final_wishes.map(&:share_with_contact_ids).uniq
+    return unless previous_share_with_contact_ids.present?
+    ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_with_contact_ids,
+                                                   Rails.application.config.x.FinalWishesCategory, final_wish_info.group)
   end
 end

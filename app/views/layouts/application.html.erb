@@ -15,6 +15,8 @@
 
     ga('create', 'UA-88207856-1', 'auto');
     ga('send', 'pageview');
+
+    (function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'https://cdn.walkme.com/users/216ce658c6ee4c19b0a81448c957ce9c/test/walkme_216ce658c6ee4c19b0a81448c957ce9c_https.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();
   </script>
 </head>
 
@@ -48,17 +50,4 @@
   </body>
 </html>
 
-<script>
-  if (!Modernizr.inputtypes.date) {
-     $('#html-5-date').hide();
-     $('#html-5-date').prop('disabled', true);
-     $('#datepicker-date').show();
-     $('#datepicker-date').prop('disabled', false);
-     $('#datepicker-date').mask('99/99/9999', {placeholder: 'mm/dd/yyyy'});
-  } else {
-    $('#html-5-date').show();
-    $('#html-5-date').prop('disabled', false);
-    $('#datepicker-date').hide();
-    $('#datepicker-date').prop('disabled', true);
-  }
-</script>
+<%= javascript_include_tag 'date_picker_check' %>

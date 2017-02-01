@@ -1,4 +1,8 @@
 module FinancialInformationHelper
+  def financial_provider(empty_provider_object)
+    FinancialProvider.find_by(id: empty_provider_object.empty_provider_id)
+  end
+  
   def show_financial_provider_address?(provider)
     provider.street_address.present? && provider.city.present? &&
       provider.state.present?
@@ -11,7 +15,7 @@ module FinancialInformationHelper
   
   def financial_provider_present?(provider)
     provider.web_address.present? || provider.phone_number.present? || provider.fax_number.present? ||
-      provider.primary_contact.present? || provider.share_with_contacts.present? || show_financial_provider_address?(provider)
+      provider.primary_contact.present? || category_subcategory_shares(provider, provider.user).present? || show_financial_provider_address?(provider)
   end
   
   def financial_account_present?(account)
@@ -20,8 +24,9 @@ module FinancialInformationHelper
   end
   
   def financial_property_present?(property)
+    provider = financial_provider(property)
     property.owner.present? || property.value.present? || show_financial_property_address?(property) ||
-      property.primary_contact.present? || property.notes.present? || property.share_with_contacts.present?
+      property.primary_contact.present? || property.notes.present? || category_subcategory_shares(provider, provider.user).present?
   end
   
   def financial_alternative_present?(alternative)
@@ -31,9 +36,10 @@ module FinancialInformationHelper
   end
   
   def financial_investment_present?(investment)
+    provider = financial_provider(investment)
     investment.owner.present? || investment.value.present? || show_financial_property_address?(investment) ||
       investment.web_address.present? || investment.phone_number.present? || investment.primary_contact.present? ||
-      investment.notes.present? || investment.share_with_contacts.present?
+      investment.notes.present? || category_subcategory_shares(provider, provider.user).present?
   end
   
   def value_negative?(type)

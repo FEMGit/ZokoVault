@@ -64,7 +64,6 @@ Rails.application.routes.draw do
 
   resources :wills
   get 'wills/:will', to: 'wills#show', as: :details_will
-  get 'wills/new/get_wills_details', to: 'wills#get_wills_details'
 
   resources :trusts
   get 'trusts/:trust', to: 'trusts#show', as: :details_trust
@@ -129,38 +128,38 @@ Rails.application.routes.draw do
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
 
   # Financial alternative
-  get 'financial_information/alternative/new', to: 'financial_alternative#new', as: :add_alternative
-  get 'financial_information/alternative/show/:id', to: 'financial_alternative#show', as: :show_alternative
-  get 'financial_information/alternative/:id/edit', to: 'financial_alternative#edit', as: :edit_alternative
-  get 'financial_information/alternative/:id', to: 'financial_alternative#show', as: :account_alternative
+  get 'financial_information/alternative/new(/:shared_user_id)', to: 'financial_alternative#new', as: :add_alternative
+  get 'financial_information/alternative/show/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :show_alternative
+  get 'financial_information/alternative/:id/edit(/:shared_user_id)', to: 'financial_alternative#edit', as: :edit_alternative
+  get 'financial_information/alternative/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :account_alternative
   post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
   put 'financial_information/alternative/add_alternative', to: 'financial_alternative#update'
   delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :delete_provider_alternative
   delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy', as: :delete_alternative
 
   # Financial Account
-  get 'financial_information/account/new', to: 'financial_account#new', as: :add_account
-  get 'financial_information/account/show/:id', to: 'financial_account#show', as: :show_account
-  get 'financial_information/account/:id/edit', to: 'financial_account#edit', as: :edit_account
-  get 'financial_information/account/:id', to: 'financial_account#show', as: :account_details
+  get 'financial_information/account/new(/:shared_user_id)', to: 'financial_account#new', as: :add_account
+  get 'financial_information/account/show/:id(/:shared_user_id)', to: 'financial_account#show', as: :show_account
+  get 'financial_information/account/:id/edit(/:shared_user_id)', to: 'financial_account#edit', as: :edit_account
+  get 'financial_information/account/:id(/:shared_user_id)', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
   put 'financial_information/account/add_account', to: 'financial_account#update'
   delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
 
   # Financial Property
-  get 'financial_information/property/new', to: 'financial_property#new', as: :add_property
-  get 'financial_information/property/show/:id', to: 'financial_property#show', as: :show_property
-  get 'financial_information/property/:id/edit', to: 'financial_property#edit', as: :edit_financial_property
-  get 'financial_information/property/:id', to: 'financial_property#show', as: :property_details
+  get 'financial_information/property/new(/:shared_user_id)', to: 'financial_property#new', as: :add_property
+  get 'financial_information/property/show/:id(/:shared_user_id)', to: 'financial_property#show', as: :show_property
+  get 'financial_information/property/:id/edit(/:shared_user_id)', to: 'financial_property#edit', as: :edit_financial_property
+  get 'financial_information/property/:id(/:shared_user_id)', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
 
   # Financial Investment
-  get 'financial_information/investment/new', to: 'financial_investment#new', as: :add_investment
-  get 'financial_information/investment/show/:id', to: 'financial_investment#show', as: :show_investment
-  get 'financial_information/investment/:id/edit', to: 'financial_investment#edit', as: :edit_investment
-  get 'financial_information/investment/:id', to: 'financial_investment#show', as: :investment_details
+  get 'financial_information/investment/new(/:shared_user_id)', to: 'financial_investment#new', as: :add_investment
+  get 'financial_information/investment/show/:id(/:shared_user_id)', to: 'financial_investment#show', as: :show_investment
+  get 'financial_information/investment/:id/edit(/:shared_user_id)', to: 'financial_investment#edit', as: :edit_investment
+  get 'financial_information/investment/:id(/:shared_user_id)', to: 'financial_investment#show', as: :investment_details
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
   put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
@@ -178,10 +177,12 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
   get 'shared_view/:shared_user_id/financial_information' => 'shared_view#financial_information', as: :shared_view_financial_information
 
-  get 'shared_view/:shared_user_id/documents/:id' => 'shared_view#documents', as: :shared_view_documents
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
+
+  # Documents
+  get 'shared_view/:shared_user_id/documents/:id' => 'documents#show', as: :shared_documents
 
   # Shared wtl wills
   get 'shared_view/:shared_user_id/estate_planning/wills' => 'wills#index', as: :shared_wills
@@ -193,6 +194,38 @@ Rails.application.routes.draw do
   # Shared wtl trusts
   get 'shared_view/:shared_user_id/estate_planning/trusts' => 'trusts#index', as: :shared_trusts
   get 'shared_view/:shared_user_id/estate_planning/trusts/new' => 'trusts#new', as: :shared_new_trusts
+
+  # Shared wtl power of attorneys
+  get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys' => 'power_of_attorneys#index', as: :shared_power_of_attorneys
+  get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys/new' => 'power_of_attorneys#new', as: :shared_new_power_of_attorneys
+
+  # Shared insurance healths
+  get 'shared_view/:shared_user_id/insurance/health' => 'healths#index', as: :shared_healths
+  get 'shared_view/:shared_user_id/insurance/health/:id' => 'healths#show', as: :shared_health
+  get 'shared_view/:shared_user_id/insurance/healths/new' => 'healths#new', as: :shared_new_health
+  get 'shared_view/:shared_user_id/insurance/health/:id/edit' => 'healths#edit', as: :shared_edit_health
+
+  # Shared insurance properties
+  get 'shared_view/:shared_user_id/insurance/property' => 'property_and_casualties#index', as: :shared_properties
+  get 'shared_view/:shared_user_id/insurance/property/:id' => 'property_and_casualties#show', as: :shared_property
+  get 'shared_view/:shared_user_id/insurance/properties/new' => 'property_and_casualties#new', as: :shared_new_property
+  get 'shared_view/:shared_user_id/insurance/property/:id/edit' => 'property_and_casualties#edit', as: :shared_edit_property
+
+  # Shared insurance lives
+  get 'shared_view/:shared_user_id/insurance/life' => 'life_and_disabilities#index', as: :shared_lives
+  get 'shared_view/:shared_user_id/insurance/life/:id' => 'life_and_disabilities#show', as: :shared_life
+  get 'shared_view/:shared_user_id/insurance/lives/new' => 'life_and_disabilities#new', as: :shared_new_life
+  get 'shared_view/:shared_user_id/insurance/life/:id/edit' => 'life_and_disabilities#edit', as: :shared_edit_life
+
+  # Shared taxes
+  get 'shared_view/:shared_user_id/taxes/:id' => 'taxes#show', as: :shared_taxes
+  get 'shared_view/:shared_user_id/taxes/:id/edit' => 'taxes#edit', as: :shared_taxes_edit
+  get 'shared_view/:shared_user_id/taxes/new/:year' => 'taxes#new', as: :shared_new_taxes
+
+  # Shared final wishes
+  get 'shared_view/:shared_user_id/final_wishes/:id' => 'final_wishes#show', as: :shared_final_wishes
+  get 'shared_view/:shared_user_id/final_wishes/:id/edit' => 'final_wishes#edit', as: :shared_final_wishes_edit
+  get 'shared_view/:shared_user_id/final_wishes/new/:group' => 'final_wishes#new', as: :shared_new_final_wishes
 
   # Information pages
   get "/about", to: "pages#about", as: :about

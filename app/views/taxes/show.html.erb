@@ -1,6 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<%= link_to "#{taxes_path}/#{@tax.id}/edit", class: "edit-link" do%>
+<%= link_to "#{@tax.id}/edit", class: "edit-link" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
@@ -9,7 +9,7 @@
 <% end %>
 <h1><%= @tax.year %> Tax Details</h1>
 
-<% @tax.taxes.each do |tax| %>
+<% @taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">
     <% if !tax_present?(tax) %>
       <label>There is no information about Tax</label>
@@ -29,7 +29,7 @@
       <p><%= tax.notes %></p>
     <% end %>
 
-    <% if tax.share_with_contacts.present? %>
+    <% if category_subcategory_shares(tax, resource_owner).present? %>
       <section class="shared-with">
         <h3 class="card-label shared-label">
           <svg class="icon" viewBox="0 0 20 20">
@@ -39,21 +39,19 @@
         </h3>
 
         <label>Shared With</label><br>
-        <% tax.share_with_contacts && tax.share_with_contacts.each do |contact| %>
-          <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-        <% end %>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(tax, resource_owner) } %>
       </section>
     <% end %>
   </div>
 <% end %>
 
-<a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @tax.year) %>">
+<%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @tax.year), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>
   </span>Add Document
-</a>
+<% end %>
 <h3><%= @tax && @tax.year %> Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

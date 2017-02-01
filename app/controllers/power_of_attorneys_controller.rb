@@ -1,19 +1,28 @@
 class PowerOfAttorneysController < AuthenticatedController
+  include SharedViewModule
+  include SharedViewHelper
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   
-  # Breadcrumbs navigation
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index)
-  add_breadcrumb "Legal - Power of Attorney", :power_of_attorneys_path, :only => %w(edit index new)
-  add_breadcrumb "Legal - Power of Attorney - Setup", :new_power_of_attorney_path, :only => %w(new)
+  # General Breadcrumbs
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index), if: :general_view?
+  add_breadcrumb "Legal - Power of Attorney", :power_of_attorneys_path, :only => %w(edit index new), if: :general_view?
+  add_breadcrumb "Legal - Power of Attorney - Setup", :new_power_of_attorney_path, :only => %w(new), if: :general_view?
+  # Shared BreadCrumbs
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
+  add_breadcrumb "Legal - Power of Attorney", :shared_power_of_attorneys_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Legal - Power of Attorney - Setup", :shared_new_power_of_attorneys_path, :only => %w(new), if: :shared_view?
+  include BreadcrumbsCacheModule
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json
   def index
-    @power_of_attorneys = policy_scope(PowerOfAttorney)
-                          .each { |p| authorize p }
+    @power_of_attorneys = attorneys
+    @power_of_attorneys.each { |x| authorize x }
+    session[:ret_url] = @shared_user.present? ? shared_power_of_attorneys_path : power_of_attorneys_path
   end
 
   # GET /power_of_attorneys/1
@@ -26,12 +35,14 @@ class PowerOfAttorneysController < AuthenticatedController
     @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
 
-    authorize @vault_entry
 
-    @power_of_attorneys = @vault_entries = PowerOfAttorney.for_user(resource_owner)
-    return if @vault_entries.present?
+    @vault_entries = attorneys
+    @vault_entries.each { |x| authorize x }
+    set_viewable_contacts
+    return unless @vault_entries.empty?
 
     @vault_entries << @vault_entry
+    @vault_entries.each { |x| authorize x }
   end
 
   # GET /power_of_attorneys/1/edit
@@ -46,35 +57,23 @@ class PowerOfAttorneysController < AuthenticatedController
   # POST /power_of_attorneys
   # POST /power_of_attorneys.json
   def create
-    new_attorneys = WtlService.get_new_records(power_of_attorney_params)
-    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
+    new_attorneys = WtlService.get_new_records(update_share_params)
+    old_attorneys = WtlService.get_old_records(update_share_params)
     respond_to do |format|
       if !new_attorneys.empty? || !old_attorneys.empty?
         begin
           update_power_of_attorneys(new_attorneys, old_attorneys)
-          format.html { redirect_to estate_planning_path, flash: { success: success_message(old_attorneys) } }
+          format.html { redirect_to success_path(old_attorneys), flash: { success: success_message(old_attorneys) } }
           format.json { render :show, status: :created, location: @power_of_attorney }
         rescue
-          format.html { render :new }
+          error_path(:new)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
         end
       else
-        format.html { render :new }
+        error_path(:new)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @new_vault_entries.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /power_of_attorneys/1
-  # PATCH/PUT /power_of_attorneys/1.json
-  def update
-    respond_to do |format|
-      if @power_of_attorney.update(power_of_attorney_params)
-        format.html { redirect_to @power_of_attorney, flash: { success: 'Power of attorney was successfully updated.' } }
-        format.json { render :show, status: :ok, location: @power_of_attorney }
-      else
-        format.html { render :edit }
-        format.json { render json: @power_of_attorney.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -100,9 +99,36 @@ class PowerOfAttorneysController < AuthenticatedController
   def details; end
 
   private
+  
+  def set_viewable_contacts
+    @vault_entries.each do |attorney|
+      attorney.share_with_contact_ids |= category_subcategory_shares(attorney, resource_owner).map(&:contact_id)
+    end
+  end
+  
+  def attorneys
+    return PowerOfAttorney.for_user(resource_owner) unless @shared_user
+    return @shares.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless @category_shared
+    PowerOfAttorney.for_user(@shared_user)
+  end
+  
+  def error_path(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+  end
+  
+  def success_path(old_attorneys)
+    return ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_attorneys.any?
+    ReturnPathService.success_path(resource_owner, current_user, power_of_attorneys_path, shared_power_of_attorneys_path(shared_user_id: resource_owner.id))
+  end
 
-  def resource_owner
-    @power_of_attorney.present? ? @power_of_attorney.user : current_user
+  def resource_owner 
+    if shared_user_params[:shared_user_id].present?
+      User.find_by(id: params[:shared_user_id])
+    else
+      @power_of_attorney.present? ? @power_of_attorney.user : current_user
+    end
   end
 
   def set_contacts
@@ -118,6 +144,21 @@ class PowerOfAttorneysController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_power_of_attorney
     @power_of_attorney = PowerOfAttorney.find(params[:id])
+  end
+  
+  def update_share_params
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    power_of_attorney_params.each do |k, v|
+      v["share_with_contact_ids"] -= viewable_shares
+    end
+  end
+  
+  def shared_user_params
+    params.permit(:shared_user_id)
+  end
+  
+  def attorneys_shared_with_uniq_param
+    power_of_attorney_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -136,17 +177,22 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def update_power_of_attorneys(new_attorneys, old_attorneys)
+    @new_params, @old_params = [], []
     new_attorneys.each do |new_attorney_params|
       @new_vault_entries = PowerOfAttorneyBuilder.new(new_attorney_params.merge(user_id: resource_owner.id)).build 
       raise "error saving new power of attorney" unless @new_vault_entries.save
+      @new_params << @new_vault_entries
       WtlService.update_shares(@new_vault_entries.id, new_attorney_params[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
     old_attorneys.each do |old_attorney|
       @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
       authorize_save(@old_vault_entries)
       raise "error saving new power of attorney" unless @old_vault_entries.save
+      @old_params << @old_vault_entries
       WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
+    ShareInheritanceService.update_document_shares(resource_owner, attorneys_shared_with_uniq_param,
+                                                   @previous_shared_with, Rails.application.config.x.WtlCategory, 'Legal')
   end
   
   def authorize_save(resource)
@@ -154,5 +200,11 @@ class PowerOfAttorneysController < AuthenticatedController
     if authorize_ids.include? resource.id
       authorize resource
     end
+  end
+  
+  def set_previous_shared_with
+    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
+    old_attorney_ids = old_attorneys.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)
+    @previous_shared_with = PowerOfAttorney.find(old_attorney_ids).map(&:share_with_contact_ids).flatten.uniq
   end
 end

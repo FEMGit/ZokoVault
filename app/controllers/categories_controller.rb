@@ -1,6 +1,23 @@
 class CategoriesController < AuthenticatedController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
+  
+  # Breadcrumbs navigation
+  before_action :set_previous_crumbs, only: [:share_category]
+  before_action :set_share_category_crumbs, only: [:share_category]
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
+  include BreadcrumbsCacheModule
+  
+  def set_previous_crumbs
+    return unless request.referrer.present?
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(@shared_user || current_user)
+  end
+  
+  def set_share_category_crumbs
+    @category = Category.fetch(params[:id])
+    add_breadcrumb "Category Shared With", share_category_category_path(@category.name.downcase)
+  end
 
   def index
     @categories = policy_scope(Category).all.each { |c| authorize c }
@@ -35,6 +52,8 @@ class CategoriesController < AuthenticatedController
   end
 
   def share
+    remove_document_shares
+    remove_subcategory_shares
     sc = ShareableCategory.new(
       current_user,
       params[:id],
@@ -42,7 +61,7 @@ class CategoriesController < AuthenticatedController
 
     redirect_to redirect_path(sc.category)
   end
-
+  
   def share_category
     @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
     @category = Category.fetch(params[:id])
@@ -144,6 +163,14 @@ class CategoriesController < AuthenticatedController
   end
 
   private
+  
+  def remove_document_shares
+    ShareInheritanceService.remove_document_shares(current_user, params[:id].to_i, shareable_category_params)
+  end
+  
+  def remove_subcategory_shares
+    ShareInheritanceService.remove_subcategory_shares(current_user, params[:id].to_i, shareable_category_params)
+  end
 
   def set_category
     @category = Category.find(params[:id])

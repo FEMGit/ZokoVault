@@ -29,6 +29,7 @@ class FinancialAccountInformation < ActiveRecord::Base
   scope :loans, ->(user) { where(user: user, account_type: FinancialInformation::ACCOUNT_LOANS) }
   
   belongs_to :user
+  belongs_to :category
   belongs_to :primary_contact_broker, class_name: "Contact"
   belongs_to :owner, class_name: "Contact"
 end

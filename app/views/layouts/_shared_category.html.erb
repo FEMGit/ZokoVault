@@ -1,0 +1,33 @@
+<% if !@shared_user.present? %>
+  <a class="edit-link" href='<%= share_category_category_path(category) %>'>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-pencil-1"></use>
+      </svg>
+    </span>Edit
+  </a>
+  <h3>Shared With</h3>
+
+  <div class="card category-shared">
+    <section class="shared-with category-shared">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Category Shared With
+      </h3>
+
+      <label>SHARED WITH</label>
+      <div>
+        <% if @contacts_with_access.blank? %>
+          <p>No shared access</p>
+        <% else %>
+          <% @contacts_with_access.each do |contact| %>
+            <% if contact.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  </div>
+<% end %>

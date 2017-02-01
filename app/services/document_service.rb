@@ -96,10 +96,10 @@ class DocumentService
   
   def card_names(user, current_user = nil)
     if @category == Rails.configuration.x.InsuranceCategory
-      vendors = user_cards(Vendor, user, current_user).order(:group => 'desc')
+      vendors = user_cards(Vendor, user, current_user)
       collect_card_names(vendors, Rails.configuration.x.InsuranceCategory)
     elsif @category == Rails.configuration.x.FinancialInformationCategory
-      providers = user_cards(FinancialProvider, user, current_user).order(:name => 'desc')
+      providers = user_cards(FinancialProvider, user, current_user)
       collect_card_names(providers, Rails.configuration.x.FinancialInformationCategory)
     else
       []
@@ -107,7 +107,11 @@ class DocumentService
   end
   
   def user_cards(model, user, current_user)
-    return model.for_user(user) unless current_user != user
+    return model.for_user(user).where(:category => Category.fetch(@category.downcase)) if current_user == user
+    
+    share_categories = user.shares.map(&:shareable).select { |sh| sh.is_a? Category }.map(&:name)
+    return model.for_user(user) if (share_categories.include? @category)
+    
     model.for_user(user).select{ |x| user_contacts(x, current_user).present?}
   end
   
@@ -117,27 +121,5 @@ class DocumentService
 
   def collect_card_names(collection, category)
     collection.collect { |x| [id: x.id, name: x.name] }.prepend([id: category, name: "Select..."])
-  end
-  
-  def self.update_shares(document, resource_owner, previous_group = nil)
-    if document.group.present?
-      model = ModelService.model_by_name(document.group)
-      unless model.present?
-        document.contact_ids = []
-        return
-      end
-      share_contact_ids_to_remove = share_ids_to_remove(previous_group, resource_owner)
-      document.contact_ids = document.contact_ids.reject { |contact_id| share_contact_ids_to_remove.include? contact_id }
-      document.contact_ids |= model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
-    else
-      document.contact_ids = []
-    end
-  end
-  
-  def self.share_ids_to_remove(previous_group, resource_owner)
-    return [] unless previous_group.present?
-    previous_model = ModelService.model_by_name(previous_group)
-    return [] unless previous_model.present?
-    previous_model.for_user(resource_owner).map(&:share_with_contact_ids).flatten
   end
 end

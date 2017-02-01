@@ -1,4 +1,4 @@
-class FinancialProviderPolicy < BasicPolicy
+class FinancialProviderPolicy < CategorySharePolicy
   attr_reader :user, :record
 
   def initialize(user, record)

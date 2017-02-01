@@ -1,9 +1,5 @@
 shared_examples "shared category" do
   let(:non_owner) { create(:user) }
-  let(:non_owner_contact) do
-    non_owner.email = Faker::Internet.free_email
-    create(:contact, emailaddress: non_owner.email, user: non_owner)
-  end
 
   permissions :index?, :destroy?, :new?, :create? do
     context "category is not shared" do
@@ -30,12 +26,15 @@ shared_examples "shared category" do
 
     context "category is shared with non-owner" do
       before do
+        non_owner_contact = Contact.find_by(emailaddress: non_owner.email)
         expect(resource.category).to be
         owner.shares.create(contact: non_owner_contact, shareable: resource.category)
       end
 
       it "permits access if user has shared resource with contact" do
-        expect(subject).to permit(non_owner, resource)
+        # user owner as a first parameter - cause we check
+        # if current user has access for resource with owner = owner
+        expect(subject).to permit(owner, resource)
       end
     end
   end

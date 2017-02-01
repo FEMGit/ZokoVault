@@ -1,6 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<%= link_to edit_financial_property_url(@financial_property.id), class: "edit-link" do%>
+<%= link_to edit_financial_property_url(@financial_property, @shared_user), class: "edit-link" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
@@ -64,7 +64,8 @@
   
   <span class="clear"></span>
   
-  <% if @financial_property.share_with_contacts.present? %>
+  <% provider = financial_provider(@financial_property) %>
+  <% if category_subcategory_shares(provider, resource_owner).present? %>
     <section class="shared-with">
       <h3 class="card-label shared-label">
         <svg class="icon" viewBox="0 0 20 20">
@@ -74,21 +75,19 @@
       </h3>
 
       <label>Shared With</label><br>
-      <% @financial_property.share_with_contacts && @financial_property.share_with_contacts.each do |contact| %>
-        <%= render partial: "layouts/avatar_circle", locals: { :contact => contact } %>
-      <% end %>
+      <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(provider, resource_owner) } %>
     </section>
   <% end %>
 </div>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group, :financial_information_id => @property_provider.id) %>">
+  <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group, :financial_information_id => @property_provider.id), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
       </svg>
     </span>Add Document
-  </a>
+  <% end %>
   <h3 class="mt-20">Property Documents</h3>
 </div>
 

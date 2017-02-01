@@ -84,22 +84,22 @@
   </section>
 
   <section class="fin-options" style="display:none;">
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path %>">Add Account</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path(@shared_user) %>">Add Account</a>
     <h3>Add Institutional Account</h3>
     <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
     <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path %>">Add Property</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
     <h3>Add Property</h3>
     <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
     <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path %>">Add Other</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
     <h3>Add Other Investment or Debt</h3>
     <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
     <div class="sum-line"></div>
     
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path %>">Add Alternative</a>
+    <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path(@shared_user) %>">Add Alternative</a>
     <h3>Add Alternative</h3>
     <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
   </section>
@@ -107,166 +107,28 @@
 
 <section class="flex-boxes ">
   <%= render :partial => 'financial_information/accounts', locals: {account_providers: @account_providers} %>
-  
+
   <%= render :partial => 'financial_information/investments', locals: {investments: @investments} %>
-  
+
   <%= render :partial => 'financial_information/properties', locals: {properties: @properties} %>
-  
+
   <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: @alternative_managers} %>
-  
+
 </section>
 
 <div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @group) %>">
+  <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>
       </svg>
     </span>Add Document
-  </a>
+  <% end %>
   <h3 class="mt-20">Financial Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
-<% if !@shared_user.present? %>
-  <a class="edit-link" href='<%= share_category_category_path(Rails.application.config.x.FinancialInformationCategory.downcase) %>'>
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  </a>
-  <h3>Shared With</h3>
+<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.FinancialInformationCategory.downcase } %>
 
-  <div class="card mb-30 my_profile_info">
-    <h3 class="card-label">Category Shared With</h3>
-
-      <label>SHARED WITH</label>
-
-      <% if @contacts_with_access.blank? %>
-        <p>No shared access</p>
-      <% else %>
-        <% @contacts_with_access.each do |contact| %>
-          <p><%= contact.initials %> </p>
-        <% end %>
-    <% end %>
-  </div>
-<% end %>
-
-<script>
-$(function () {
-
-  //Top Toggle
-  $( "#toggle" ).click(function() {
-    $( ".fin-options, .fin-overview" ).toggle();
-  });
-
-  //Masonry
-  $('.flex-boxes').masonry({
-    columnWidth: '.flex-column',
-    gutter: 20,
-    percentPosition: true,
-    itemSelector: '.flex-column'
-  });
-
-  //Highcharts
-    Highcharts.chart('asset', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie',
-            style: {
-              fontFamily: "Open Sans"
-            }
-        },
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        },
-        title: {
-            text: 'Assets',
-            verticalAlign: 'bottom'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
-            }
-        },
-        series: [{
-            name: 'Brands',
-            colorByPoint: true,
-            data: [{
-                name: 'Investments',
-                y: <%= investments_sum %>
-            }, {
-                name: 'Property',
-                y: <%= properties_sum %>
-            }, {
-                name: 'Cash',
-                y: <%= cash_sum %>
-            }, {
-                name: 'Alternatives',
-                y: <%= alternatives_sum %>
-            }]
-        }]
-    });
-    Highcharts.chart('debt', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie',
-            style: {
-              fontFamily: "Open Sans"
-            }
-        },
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        },
-        title: {
-            text: 'Liabilities',
-            verticalAlign: 'bottom'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
-            }
-        },
-        series: [{
-            name: 'Brands',
-            colorByPoint: true,
-            data: [{
-                name: 'Loans',
-                y: <%= loans_sum %>
-            }, {
-                name: 'Credit Cards',
-                y: <%= credit_cards_sum %>
-            }, {
-                name: 'Alternatives',
-                y: <%= uncalled_commitments_sum.abs %>
-            }]
-        }]
-    });
-});
-</script>
+<%= render :partial => 'financial_information/financial_javascript' %>

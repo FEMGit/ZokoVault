@@ -1,21 +1,25 @@
 module TaxesHelper
   def link_to_details(year)
-    tax_year = @taxes.where(:year => year).first
-    if tax_year
-      "#{taxes_path}/#{tax_year.id}"
-    else
-      ""
-    end
+    tax_year = @taxes.detect { |tax| tax.year == year }
+    return unless tax_year
+    return tax_path(tax_year) unless @shared_user
+    shared_taxes_path(id: tax_year.id)
   end
 
   def link_to_add_details(year)
-    return unless @taxes.any?
-    tax_year = @taxes.where(:year => year).first
-    if tax_year
-      "#{taxes_path}/#{tax_year.id}/edit"
+    tax_year = @taxes.detect { |tax| tax.year == year }
+    if tax_year && tax_year.taxes.any?
+      return tax_path(tax_year) unless @shared_user
+      shared_taxes_path(id: tax_year.id)
     else
-      new_tax_path(:year => year)
+      return new_tax_path(:year => year) unless @shared_user
+      shared_new_taxes_path(:year => year)
     end
+  end
+  
+  def tax_edit_path(tax)
+    return edit_tax_path(tax) unless @shared_user
+    shared_edit_taxes_path(id: tax.id)
   end
 
   def tax_by_year(year)
@@ -33,6 +37,6 @@ module TaxesHelper
   end
   
   def tax_present?(tax)
-    tax.tax_preparer.present? || tax.notes.present? || tax.share_with_contacts.present?
+    tax.tax_preparer.present? || tax.notes.present? || category_subcategory_shares(tax, tax.user).present?
   end
 end

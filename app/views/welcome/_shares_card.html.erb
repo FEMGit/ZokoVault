@@ -1,0 +1,31 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>Shared With You
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= @shared_users&.count.to_i %> users are sharing details with you.
+    </div>
+    <div class="board-link">
+      <%= link_to 'View', shares_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+
+  <% @new_shares.each do |resource| %>
+    <section class="flex-boxes board-border">
+      <div class="board-name board-sub-title">
+        New Share
+      </div>
+      <div class="board-text">
+        <%= resource.user.name %> shared new details since your last login.
+      </div>
+      <div class="board-link">
+        <%= link_to 'View', shared_view_dashboard_path(resource.user_id), :class=>"outline-button small-button"  %>
+      </div>
+    </section>
+<% end %>
+</div>

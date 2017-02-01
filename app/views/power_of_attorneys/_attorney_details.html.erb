@@ -28,7 +28,7 @@
     <% end %>
     <span class="clear"></span>
 
-    <% if attorney.shares.present? %>
+    <% if category_subcategory_shares(attorney, resource_owner).present? %>
       <section class="shared-with">
         <h3 class="card-label shared-label">
           <svg class="icon" viewBox="0 0 20 20">
@@ -38,11 +38,7 @@
 
         <label>Shared With</label>
         <div>
-          <% attorney.shares.each do |share| %>
-            <% if share.contact.present? %>
-              <%= render partial: "layouts/avatar_circle", locals: { :contact => share.contact } %>
-            <% end %>
-          <% end %>
+          <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(attorney, resource_owner) } %>
         </div>
       </section>
     <% end %>

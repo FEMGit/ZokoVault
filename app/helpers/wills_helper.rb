@@ -21,6 +21,6 @@ module WillsHelper
   
   def will_present?(will)
     will.primary_beneficiaries.present? || will.secondary_beneficiaries.present? || will.executor.present? ||
-      will.agents.present? || will.notes.present? || will.shares.present?
+      will.agents.present? || will.notes.present? || category_subcategory_shares(will, will.user).present?
   end
 end

@@ -1,0 +1,127 @@
+<script type="text/javascript">
+$(function () {
+
+  //Top Toggle
+  $( "#toggle" ).click(function() {
+    $( ".fin-options, .fin-overview" ).toggle();
+  });
+
+  //Timeout function fixes safari load order dependancy issues
+  setTimeout(function() {
+
+  //Masonry
+  $('.flex-boxes').masonry({
+    columnWidth: '.flex-column',
+    gutter: 20,
+    percentPosition: true,
+    itemSelector: '.flex-column'
+  });
+
+  //Highcharts
+  Highcharts.chart('asset', {
+      chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie',
+          style: {
+            fontFamily: "Open Sans"
+          }
+      },
+      credits: {
+        enabled: false
+      },
+      navigation: {
+          buttonOptions: {
+              enabled: false
+          }
+      },
+      title: {
+          text: 'Assets',
+          verticalAlign: 'bottom'
+      },
+      tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+          pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: false
+              },
+              colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+          }
+      },
+      series: [{
+          name: 'Brands',
+          colorByPoint: true,
+          data: [{
+              name: 'Investments',
+              y: <%= investments_sum %>
+          }, {
+              name: 'Property',
+              y: <%= properties_sum %>
+          }, {
+              name: 'Cash',
+              y: <%= cash_sum %>
+          }, {
+              name: 'Alternatives',
+              y: <%= alternatives_sum %>
+          }]
+      }]
+  });
+  Highcharts.chart('debt', {
+      chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false,
+          type: 'pie',
+          style: {
+            fontFamily: "Open Sans"
+          }
+      },
+      credits: {
+        enabled: false
+      },
+      navigation: {
+          buttonOptions: {
+              enabled: false
+          }
+      },
+      title: {
+          text: 'Liabilities',
+          verticalAlign: 'bottom'
+      },
+      tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+          pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: false
+              },
+              colors: ['#6CA1D6','#255A85', '#B2B2B2', '#DADADA', '#717171']
+          }
+      },
+      series: [{
+          name: 'Brands',
+          colorByPoint: true,
+          data: [{
+              name: 'Loans',
+              y: <%= loans_sum %>
+          }, {
+              name: 'Credit Cards',
+              y: <%= credit_cards_sum %>
+          }, {
+              name: 'Alternatives',
+              y: <%= uncalled_commitments_sum.abs %>
+          }]
+      }]
+    });
+        
+  }, 50);
+});
+</script>

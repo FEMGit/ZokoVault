@@ -19,6 +19,7 @@ class SharedViewService
   end
   
   def self.shares(owner, non_owner)
+    return [] if non_owner.blank?
     owner.shares.where(contact: Contact.where(emailaddress: non_owner.email))
   end
   
@@ -26,24 +27,28 @@ class SharedViewService
     all_shares = shares(owner, non_owner).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
     groups = []
     all_shares.each do |shareable|
-      unless category && shareable.category == Category.fetch(category.downcase)
+      if category && shareable.category == Category.fetch(category.downcase)
         next
       end
       case shareable
       when Will
-        groups << 'Will'
+        groups |= ['Will']
       when Trust
-        groups << 'Trust'
+        groups |= ['Trust']
       when PowerOfAttorney
-        groups << 'Legal'
+        groups |= ['Legal']
       when Tax
         tax_year = TaxYearInfo.find_by(id: shareable.tax_year_id)
         next unless tax_year.present?
-        groups << tax_year.year.to_s
+        groups |= [tax_year.year.to_s]
       when FinalWish
         final_wish_info = FinalWishInfo.find_by(id: shareable.final_wish_info_id)
         next unless final_wish_info.present?
-        groups << final_wish_info.group
+        groups |= [final_wish_info.group]
+      when Vendor
+        groups |= [shareable.id]
+      when FinancialProvider
+        groups |= [shareable.id]
       else
         next
       end

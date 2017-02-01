@@ -3,6 +3,8 @@
 <h1>Financial Info - Add Account</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_account) do |f| %>
+<%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+<%= f.hidden_field :category_id, :value => @financial_provider.category_id %>
 <div class="card mb-30">
   <h3 class="card-label">Account Provider Details</h3>
   
@@ -54,7 +56,7 @@
     </div>
   </section>
   
-  <% if params[:id] %>
+  <% if params[:id] && policy(@financial_provider).destroy? %>
     <%= link_to 'Delete this Provider', delete_provider_account_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this provider will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>
@@ -69,7 +71,7 @@
         <%= render 'account_details_form', ff: ff, index: index, data: data %>
       <% end %>
 
-      <% if data.id %>
+      <% if data.id && policy(@financial_provider).destroy? %>
         <span class="mt-30 mb-30">
           <%= link_to 'Delete this account', delete_account_url(data.id), method: :delete,
               data: { confirm: "Deleting this account will permanently remove it from ZokuVault." },
@@ -101,6 +103,15 @@
 
 <% end %>
 <script>
+  document.addEventListener('click', function(e) {
+    element = e.target
+    if(element.id.indexOf('_account_type') > -1) {
+      id_number = element.id.match(/\d+/)
+      financialValueSignUpdate($("#" + element.id), 
+        $('#account_value_' + id_number))
+    }
+  });
+  
   $(document).ready(function(){
     clearFormFields = function(form){
       form.find(':text').val("");
@@ -112,7 +123,11 @@
       var $form = $('div[class^="card cg-3 mb-30"]:last');
       old_id_number = parseInt($form.find("input[type=hidden]").attr("id").split('_').last());
       new_id_number = old_id_number + 1;
-      var $newForm = $form.clone();
+      
+      var formEvents = $form.data("events");
+      var $newForm = $form.data("events", null).clone();
+      
+      
       clearForm($newForm, old_id_number, new_id_number);
       clearFormFields($newForm);
       $('.chosen-container',$newForm).remove();
@@ -125,7 +140,7 @@
 
     var accountCount = <%= @financial_provider.accounts.count %>
     for(var i = 0; i < accountCount; i++ ) {
-      updateValues($('#financial_account_provider_account_' + i + '_account_type'), 
+      updateValues($('#financial_provider_account_' + i + '_account_type'), 
         $('#account_value_' + i));
     }
   });

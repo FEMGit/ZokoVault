@@ -7,6 +7,7 @@ class FinancialInvestment < ActiveRecord::Base
   
   scope :for_user, ->(user) { where(user: user) }
   belongs_to :user
+  belongs_to :category
   
   belongs_to :primary_contact, class_name: "Contact"
   belongs_to :owner, class_name: "Contact"
@@ -16,4 +17,6 @@ class FinancialInvestment < ActiveRecord::Base
   has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
   
   validates :name, presence: { :message => "Required"}
+  
+  before_save { self.category = Category.fetch("financial information") }
 end

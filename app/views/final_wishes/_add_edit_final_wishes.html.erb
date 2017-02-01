@@ -5,6 +5,7 @@
 <%= form_for(@final_wish_info, url: "#{yield(:url_path)}") do |f| %>
   <%= f.hidden_field :id %>
   <%= f.hidden_field :group %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   <% if @final_wish_info.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@final_wish_info.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
@@ -16,14 +17,14 @@
     </div>
   <% end %>
 
-  <% @final_wish_info.final_wishes.each_with_index do |data, index| %>
+  <% @final_wishes.each_with_index do |data, index| %>
     <%= f.fields_for "final_wish_#{index}", data do |ff| %>
       <div class="body-content">
         <%= render 'form', ff: ff, index: index, data: data %>
       </div>
     <% end %>
   <% end %>
-  <% if @final_wish_info.final_wishes.empty? %>
+  <% if @final_wishes.empty? %>
     <% index = 0 %>
     <%= f.fields_for "final_wish_#{index}" do |ff| %>
       <div class="body-content">

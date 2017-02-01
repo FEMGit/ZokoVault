@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 
   def self.fetch(name)
-    identity_map.fetch(name)
+    identity_map.fetch(name, nil)
   end
 
   def self.identity_map(bust_cache = false)

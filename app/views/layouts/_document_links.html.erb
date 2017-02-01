@@ -1,10 +1,9 @@
-<% shareable ||= false %>
 <% if previewed?(document) %>
   <% if @shared_user.present? %>
-    <%= link_to document.name, shared_view_documents_path(id: document.id) %>
+    <%= link_to document.name, shared_documents_path(@shared_user, document) %>
   <% else %>
     <%= link_to document.name, document_path(document) %>
   <% end %>
 <% else %>
-  <%= link_to document.name, download_file(document.url) %>
+  <%= link_to document.name, download_file(document.try(:url)) %>
 <% end %>

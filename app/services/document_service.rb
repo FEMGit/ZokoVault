@@ -108,7 +108,6 @@ class DocumentService
   
   def user_cards(model, user, current_user)
     return model.for_user(user).where(:category => Category.fetch(@category.downcase)) if current_user == user
-    
     share_categories = user.shares.map(&:shareable).select { |sh| sh.is_a? Category }.map(&:name)
     return model.for_user(user) if (share_categories.include? @category)
     

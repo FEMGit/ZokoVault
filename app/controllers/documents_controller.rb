@@ -17,7 +17,7 @@ class DocumentsController < AuthenticatedController
 
   def set_previous_crumbs
     return unless request.referrer.present?
-    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(@shared_user || current_user)
   end
   
   def set_add_crumbs

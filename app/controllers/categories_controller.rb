@@ -11,8 +11,7 @@ class CategoriesController < AuthenticatedController
   
   def set_previous_crumbs
     return unless request.referrer.present?
-    previous_path = Rails.application.routes.recognize_path(request.referrer)
-    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop
+    @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(@shared_user || current_user)
   end
   
   def set_share_category_crumbs

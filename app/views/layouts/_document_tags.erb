@@ -2,9 +2,9 @@
   <span class="doc-tag"><%= empty_group_category %></span>
 <% else %>
   <span class="doc-tag"><%= document_category(document) %></span>
-  <% if document_name_tag(document) %>
+  <% if document_name_tag(document).present? %>
     <span class="doc-tag secondary-tag"><%= document_name_tag(document) %></span>
-  <% elsif document_group(document) %>
+  <% elsif document_group(document).present? %>
     <span class="doc-tag secondary-tag"><%= document_group(document) %></span>
   <% end %>
 <% end %>

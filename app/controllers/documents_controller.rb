@@ -176,11 +176,11 @@ class DocumentsController < AuthenticatedController
     viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
     share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
     
-    document_params.merge(:shares_attributes => share, :user_id => resource_owner.id, :group => base_params[:group])
+    document_params.merge(:shares_attributes => share, :user_id => resource_owner.id)
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id, :group,
                                      shares_attributes: [:user_id, :contact_id])
   end
 

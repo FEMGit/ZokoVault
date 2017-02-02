@@ -11,7 +11,13 @@
 
   <% @paginated_results.each do |resource| %>
     <p>
-      <%= link_to resource.attributes.inspect, resource %>
+      <% if subcategory_view_path(resource).present? %>
+        <%= link_to resource.attributes.inspect, subcategory_view_path(resource) %>
+      <% elsif resource.try(:attributes) %>
+        <%= link_to resource.attributes.inspect, resource %>
+      <% else %>
+        <%= link_to resource[:name], resource[:path] %>
+      <% end %>
     </p>
   <% end %>
 <% end %>

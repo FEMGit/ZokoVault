@@ -231,6 +231,7 @@ class DocumentsController < AuthenticatedController
   def handle_document_not_saved(format)
     @cards = card_values(@document.category)
     @card_names = card_names(@document.category)
+    set_dropdown_options
     format.html { render :new, :layout => set_layout }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end

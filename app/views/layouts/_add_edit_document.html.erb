@@ -53,6 +53,7 @@
         </svg> Shared With
       </h3>
       <label>Shared With</label><br>
+      <% f.hidden_field :contact_ids, :value => f.object.contact_ids %>
       <div class="chosen-styled-select">
         <%= contact_select_with_create_new(f, :contact_ids, @contacts_shareable) %>
       </div>

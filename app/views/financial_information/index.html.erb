@@ -1,109 +1,113 @@
-<a class="edit-link" id="toggle">
-  <span class="fin-overview">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Add Financial Information
-  </span>
-  <span class="fin-options" style="display:none;">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-left-1"></use>
-      </svg>
-    </span>Back to Overview
-  </span>
+<% if category_shared?(resource_owner, @category) %>
+  <a class="edit-link" id="toggle">
+    <span class="fin-overview">
+      <span class="circle-button">
+        <svg class="icon circle-icon">
+          <use xlink:href="#icon-pencil-1"></use>
+        </svg>
+      </span>Add Financial Information
+    </span>
+    <span class="fin-options" style="display:none;">
+      <span class="circle-button">
+        <svg class="icon circle-icon">
+          <use xlink:href="#icon-left-1"></use>
+        </svg>
+      </span>Back to Overview
+    </span>
+  </a>
+<% end %>
 
-</a>
 <h1>Financial Information</h1>
 
-<div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
+<% if category_shared?(resource_owner, @category) %>
+  <div class="card cg-3 mb-30 fin-toggle" data-toggle="true" >
 
-  <section class="fin-overview">
-    <div id="asset" class="pie-chart"></div>
-    <div id="debt" class="pie-chart"></div>
-    <div class="pie-legend">
+    <section class="fin-overview">
+      <div id="asset" class="pie-chart"></div>
+      <div id="debt" class="pie-chart"></div>
+      <div class="pie-legend">
 
-      <ul class="data-summary">
-        <li class="data-pair">
-          <h4>Cash</h4>
-          <h4 class="data-right">
-            <%= number_to_currency(cash_sum, unit: "$", precision: 0) %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Investments</h4>
-          <h4 class="data-right">
-            <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Property</h4>
-          <h4 class="data-right">
-            <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Alternatives</h4>
-          <h4 class="data-right">
-            <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Credit Cards</h4>
-          <h4 class="data-right">
-            <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Loans</h4>
-          <h4 class="data-right">
-            <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
-          </h4>
-        </li>
-        <li class="data-pair">
-          <h4>Commitments</h4>
-          <h4 class="data-right">
-            <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
-          </h4>
-        </li>
+        <ul class="data-summary">
+          <li class="data-pair">
+            <h4>Cash</h4>
+            <h4 class="data-right">
+              <%= number_to_currency(cash_sum, unit: "$", precision: 0) %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Investments</h4>
+            <h4 class="data-right">
+              <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Property</h4>
+            <h4 class="data-right">
+              <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Alternatives</h4>
+            <h4 class="data-right">
+              <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Credit Cards</h4>
+            <h4 class="data-right">
+              <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Loans</h4>
+            <h4 class="data-right">
+              <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
+            </h4>
+          </li>
+          <li class="data-pair">
+            <h4>Commitments</h4>
+            <h4 class="data-right">
+              <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
+            </h4>
+          </li>
 
-        <div class="sum-line"></div>
+          <div class="sum-line"></div>
 
-        <li class="data-pair">
-          <h4>Net Worth</h4>
-          <h4 class="data-right">
-            <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
-              <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
-            </span>
-          </h4>
-        </li>
-    </ul>
-    </div>
-    <span class="clear"></span>
-  </section>
+          <li class="data-pair">
+            <h4>Net Worth</h4>
+            <h4 class="data-right">
+              <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
+                <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
+              </span>
+            </h4>
+          </li>
+      </ul>
+      </div>
+      <span class="clear"></span>
+    </section>
 
-  <section class="fin-options" style="display:none;">
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path(@shared_user) %>">Add Account</a>
-    <h3>Add Institutional Account</h3>
-    <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
-    <div class="sum-line"></div>
+    <section class="fin-options" style="display:none;">
+      <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path(@shared_user) %>">Add Account</a>
+      <h3>Add Institutional Account</h3>
+      <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
+      <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
-    <h3>Add Property</h3>
-    <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
-    <div class="sum-line"></div>
+      <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
+      <h3>Add Property</h3>
+      <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
+      <div class="sum-line"></div>
 
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
-    <h3>Add Other Investment or Debt</h3>
-    <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
-    <div class="sum-line"></div>
-    
-    <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path(@shared_user) %>">Add Alternative</a>
-    <h3>Add Alternative</h3>
-    <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
-  </section>
-</div>
+      <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
+      <h3>Add Other Investment or Debt</h3>
+      <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
+      <div class="sum-line"></div>
+
+      <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path(@shared_user) %>">Add Alternative</a>
+      <h3>Add Alternative</h3>
+      <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
+    </section>
+  </div>
+<% end %>
 
 <section class="flex-boxes ">
   <%= render :partial => 'financial_information/accounts', locals: {account_providers: @account_providers} %>

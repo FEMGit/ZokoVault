@@ -12,6 +12,11 @@ module SharedViewHelper
     end
   end
   
+  def category_shared?(owner, category)
+    return true if owner == current_user
+    @shared_category_names.include? category
+  end
+  
   def show_navigation_link?(category)
     @shared_category_names_full.include? category
   end

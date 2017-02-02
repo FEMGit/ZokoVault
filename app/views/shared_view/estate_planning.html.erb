@@ -136,7 +136,7 @@
   </div>
 </section>
 
-<%= link_to new_documents_path(:shared_user_id => @shared_user.id, :category => @category, :group => nil), class: "add-link fr" do %>
+<%= link_to new_documents_path(:shared_user_id => @shared_user.id, :category => @category.name, :group => nil), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>

@@ -1,0 +1,21 @@
+<% if category.name.eql? Rails.application.config.x.InsuranceCategory %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-umbrella-1"></use>
+  </svg>
+<% elsif category.name.eql? Rails.application.config.x.WtlCategory %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-document-3"></use>
+  </svg>
+<% elsif category.name.eql? Rails.application.config.x.FinancialInformationCategory %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-activity-monitor-1"></use>
+  </svg>
+<% elsif category.name.eql? Rails.application.config.x.TaxCategory %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-book-6"></use>
+  </svg>
+<% elsif category.name.eql? Rails.application.config.x.FinalWishesCategory %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-bookmark-2"></use>
+  </svg>
+<% end %>

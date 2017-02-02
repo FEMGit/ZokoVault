@@ -1,0 +1,7 @@
+<% if share.is_a? Document %>
+  <%= render partial: "layouts/document_links", locals: { :document => share } %>
+<% elsif share.is_a? Category %>
+  <%= render partial: "layouts/category_links", locals: { :category => share } %>
+<% else %>
+  <%= render partial: "layouts/subcategory_links", locals: { :subcategory => share } %>
+<% end %>

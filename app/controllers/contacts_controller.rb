@@ -1,6 +1,7 @@
 class ContactsController < AuthenticatedController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
   before_action :my_profile_contact?, only: [:show, :edit]
+  before_action :set_contact_shares, only: [:show]
   
   # Breadcrumbs navigation
   add_breadcrumb "Contacts & Permissions", :contacts_path
@@ -27,8 +28,6 @@ class ContactsController < AuthenticatedController
   def show
     authorize @contact
 
-    @share_documents = DocumentService.get_share_with_documents(resource_owner, @contact.id)
-    @contact_documents = DocumentService.get_contact_documents(resource_owner, @category, @contact.id)
     session[:ret_url] = "/contacts/#{@contact.id}"
   end
 
@@ -89,6 +88,16 @@ class ContactsController < AuthenticatedController
   end
 
   private
+    
+    def set_contact_shares
+      user_for_contact = User.find_by(email: Contact.find_by(id: @contact.id).emailaddress)
+      share_documents = ShareService.shared_documents(resource_owner, user_for_contact)
+      share_categories = ShareService.shared_categories(resource_owner, user_for_contact).map! { |x| Category.fetch(x.downcase) }
+      share_cards = ShareService.shared_cards(resource_owner, user_for_contact)
+      @shares = share_documents + share_categories + share_cards
+      @contact_documents = DocumentService.contact_documents(resource_owner, @category, @contact.id)
+    end
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
       @category = "Contact"

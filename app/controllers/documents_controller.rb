@@ -45,6 +45,7 @@ class DocumentsController < AuthenticatedController
     
     @cards = card_values(@document.category)
     @card_names = card_names(@document.category)
+    set_viewable_contacts
   end
 
   def edit

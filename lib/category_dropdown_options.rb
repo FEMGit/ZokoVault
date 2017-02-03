@@ -1,12 +1,12 @@
 module CategoryDropdownOptions
   CATEGORIES = [
     "Select...",
-    "My Profile",
-    "Contact",
+    "Financial Information",
     "Wills - Trusts - Legal",
     "Insurance",
     "Taxes",
     "Final Wishes",
-    "Financial Information"
+    "Contact",
+    "My Profile"
   ]
 end

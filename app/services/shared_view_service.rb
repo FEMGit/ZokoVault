@@ -27,7 +27,7 @@ class SharedViewService
     all_shares = shares(owner, non_owner).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
     groups = []
     all_shares.each do |shareable|
-      if category && shareable.category == Category.fetch(category.downcase)
+      if category && shareable.category != Category.fetch(category.downcase)
         next
       end
       case shareable

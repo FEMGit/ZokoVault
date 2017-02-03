@@ -1,0 +1,4 @@
+<% if subcategory.present? %>
+  <%= render partial: "layouts/category_icons", locals: { :category => subcategory.category } %>
+  <%= link_to subcategory_name(subcategory), subcategory_view_path(subcategory) %>
+<% end %>

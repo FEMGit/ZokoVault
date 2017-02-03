@@ -1,0 +1,25 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-activity-monitor-1"></use>
+        </svg>Financial Information
+      </h3>
+    </div>
+    <div class="board-text">
+      <% if financial_information_any? %>
+        Net Worth:
+        <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
+          <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
+        </span>
+      <% else %>
+        <span>0 account values uploaded.</span>
+      <% end %>
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(financial_information_any?), financial_information_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

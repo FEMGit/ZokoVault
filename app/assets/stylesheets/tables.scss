@@ -5,7 +5,7 @@ table {
   border-radius: 5px;
   padding: 0;
   margin-bottom: 20px;
-  
+
   td {
     height: 40px;
     display: table-cell;
@@ -30,29 +30,5 @@ th {
   line-height: 14px;
   &.fixed-cell-small {
     @include fixed-cell-size($table-cell-small)
-  }
-}
-
-$right-table-padding: 20px;
-table.shared-view-dashboard {
-  padding: 0 $right-table-padding 5px 20px;
-  position: relative;
-  .view-category {
-    text-decoration: none;
-    position: absolute;
-    right: 0;
-    padding-right: $right-table-padding;
-  }
-  .category-title {
-    display: inline-block;
-    color: black;
-    margin-bottom: 0;
-    font-weight: 500;
-  }
-  .icon.dashboard-icon {
-    color: $color-primary-shaded;
-    margin-right: 3px;
-    vertical-align: middle;
-    margin-top: -3px;
   }
 }

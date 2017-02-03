@@ -11,17 +11,23 @@ class UserResourceGatherer < Struct.new(:user)
   def initialize(user)
     @user = user
   end
+  
+  def categories
+    CategoryLinks::LINKS
+  end
 
   def my_resources
     return @my_resources if @my_resources
+
     @my_resources =
+      categories |
       gather_wtl(user) |
       gather_insurance(user, Category.fetch('insurance')) |
       Contact.for_user(user) |
       gather_taxes(user, Category.fetch('taxes')) |
       gather_final_wishes(user, Category.fetch('final wishes')) |
-      gather_financial_information(user)
-
+      gather_financial_information(user, Category.fetch('financial information'))
+    
     @my_resources.flatten!
     @my_resources
   end
@@ -75,22 +81,26 @@ class UserResourceGatherer < Struct.new(:user)
   end
 
   def gather_insurance(user, category)
-    Vendor.for_user(user).where(category: category.name) |
+    Vendor.for_user(user).where(category: category) |
     Document.for_user(user).where(category: category.name)
   end
 
   def gather_taxes(user, category)
     TaxYearInfo.for_user(user) |
-    Document.for_user(user).where(category: category.name)
+      Tax.for_user(user) |
+      Document.for_user(user).where(category: category.name)
   end
 
   def gather_final_wishes(user, category)
     FinalWishInfo.for_user(user) |
-    Document.for_user(user).where(category: category.name)
+      FinalWish.for_user(user) |
+      Document.for_user(user).where(category: category.name)
   end
 
-  def gather_financial_information(user)
+  def gather_financial_information(user, category)
     FinancialInvestment.for_user(user) |
-    FinancialProperty.for_user(user)
+      FinancialProperty.for_user(user) |
+      FinancialProvider.for_user(user) |
+      Document.for_user(user).where(category: category.name)
   end
 end

@@ -96,6 +96,37 @@ module ApplicationHelper
     end
   end
   
+  def subcategory_view_path(subcategory)
+    case subcategory
+      when Will
+        return wills_path
+      when Trust
+        return trusts_path
+      when PowerOfAttorney
+        return power_of_attorneys_path
+      when PropertyAndCasualty
+        return property_path(subcategory)
+      when LifeAndDisability
+        return life_path(subcategory)
+      when Health
+        return health_path(subcategory)
+      when Tax
+        tax_year = TaxYearInfo.find(subcategory.tax_year_id)
+        return tax_path(tax_year)
+      when TaxYearInfo
+        return tax_path(subcategory)
+      when FinalWish
+        final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
+        return final_wish_path(final_wish_info)
+      when FinalWishInfo
+        return final_wish_path(subcategory)
+      when FinancialProvider
+        path_to_resource(subcategory)
+      else
+        ""
+      end
+  end
+  
   def disabled?(name)
     @shared_user.present? && (shared_with_property_names.include? name.to_s)
   end

@@ -1,4 +1,18 @@
 module FinancialInformationHelper
+  def path_to_resource(financial_provider)
+    if FinancialAccountInformation.find_by(account_provider_id: financial_provider.id)
+      show_account_path(financial_provider)
+    elsif FinancialAlternative.find_by(manager_id: financial_provider.id)
+      show_alternative_path(financial_provider)
+    elsif FinancialInvestment.find_by(empty_provider_id: financial_provider.id)
+      investment = FinancialInvestment.find_by(empty_provider_id: financial_provider.id)
+      show_investment_path(investment)
+    elsif FinancialProperty.find_by(empty_provider_id: financial_provider.id)
+      property = FinancialProperty.find_by(empty_provider_id: financial_provider.id)
+      show_property_path(property)
+    end
+  end
+  
   def financial_provider(empty_provider_object)
     FinancialProvider.find_by(id: empty_provider_object.empty_provider_id)
   end

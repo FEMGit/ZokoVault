@@ -1,0 +1,15 @@
+<% if resource.is_a? Contact %>
+  <%= render partial: "layouts/avatar_circle", locals: { :contact => resource } %>
+<% elsif resource.is_a? Category %>
+  <%= render partial: "layouts/category_icons", locals: { :category => resource } %>
+<% elsif resource.is_a? Document %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-document-3"></use>
+  </svg>
+<% else %>
+  <% if resource.try(:category) %>
+    <%= render partial: "layouts/category_icons", locals: { :category => resource.category } %>
+  <% elsif resource[:name].present? %>
+    <%= render partial: "layouts/category_icons", locals: { :category => Category.fetch(resource[:name].downcase) } %>
+  <% end %>
+<% end %>

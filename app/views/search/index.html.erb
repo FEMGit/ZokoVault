@@ -1,23 +1,42 @@
-<%= form_tag search_path, method: :get do -%>
-  <%= text_field_tag :q, params[:q] %>
-  <%= submit_tag 'search' %>
-<% end %>
-
-
-<% if params[:q].present? %>
-  <%= results_summary %><br />
-
-  Results pages: <%= paginate @paginated_results %>
-
-  <% @paginated_results.each do |resource| %>
-    <p>
-      <% if subcategory_view_path(resource).present? %>
-        <%= link_to resource.attributes.inspect, subcategory_view_path(resource) %>
-      <% elsif resource.try(:attributes) %>
-        <%= link_to resource.attributes.inspect, resource %>
-      <% else %>
-        <%= link_to resource[:name], resource[:path] %>
-      <% end %>
-    </p>
+<div class="card">
+<section class="search-top">
+  <%= form_tag search_path, method: :get do -%>
+    <%= text_field_tag :q, params[:q], :class=>"search-input fl", :type=>"search", :placeholder=>"Search..." %>
+    <%= submit_tag 'Search', :class=>"button big-button primary-button" %>
   <% end %>
-<% end %>
+</section>
+
+<section class="search-results">
+
+
+  <% if params[:q].present? %>
+
+    <% if results_any? %>
+      <div class="results-summary">
+        <b><%= results_summary %></b><br>
+        <span class="search-results-label">Results pages:</span> <%= paginate @paginated_results %><br>
+      </div>
+
+      <% @paginated_results.each do |resource| %>
+        <p>
+          <% resource_link = resource_link(resource) %>
+          <div class="result-icon">
+            <%= render partial: "layouts/resource_icons", locals: { :resource => resource } %>
+          </div>
+          <h5><%= link_to entity_name(resource), resource_link, class: 'no-underline-link' %></h5>
+          <p>
+            <%= entity_info(resource) %><br>
+            <%= link_to absolute_path(resource_link), resource_link, class: 'no-underline-link' %>
+          </p>
+        </p>
+      <% end %>
+    <% else %>
+      <p>Your search - <b><%= params[:q] %></b> - did not match any resources on ZokuVault
+    <% end %>
+  <% end %>
+</section>
+</div>
+
+<script>
+  $('body').text().highlight('345');
+</script>

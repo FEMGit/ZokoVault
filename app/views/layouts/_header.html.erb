@@ -33,8 +33,6 @@
         </span>
       </a>
 
-      <%=link_to( image_tag("SVG/search.svg", height: 40, width: 40, :alt=>"Search"), search_url, class: "fr", style: "margin-right: 40px") %>
-
       <div class="user-menu">
         <%= link_to my_profile_path, class: "user-nav" do %>
           <svg class="icon nav-icon">
@@ -50,7 +48,8 @@
       </div>
 
       <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
-      <%#= search_field_tag 'search', 'Search', :class=>"header-search" %>
+
+      <%=link_to( image_tag("SVG/search.svg", :alt=>"Search", :class=>"search-icon"), search_url, class: "fr header-search") %>
     <% end %>
   </section>
 </header>

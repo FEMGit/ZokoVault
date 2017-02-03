@@ -3,7 +3,7 @@ class SearchController < AuthenticatedController
 
   def index
     @per_page_records = PER_PAGE_RECORDS
-
+    
     @search_results = 
       if params[:q].present?
         matched_resources = ResourceSearcher.new(

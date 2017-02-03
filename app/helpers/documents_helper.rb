@@ -11,6 +11,8 @@ module DocumentsHelper
   
   def subcategory_shares(document)
     owner = document.user
+    return [] if owner.nil?
+    shares = 
       if document.vendor_id.present? && document.vendor_id.positive?
         Vendor.find(document.vendor_id).share_with_contacts
         owner.shares.select { |sh| (sh.shareable.is_a? Vendor) && sh.shareable_id == document.vendor_id }

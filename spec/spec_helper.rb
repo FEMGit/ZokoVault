@@ -1,5 +1,7 @@
 require "pundit/rspec"
 require "factory_girl_rails"
+include Pundit
+
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 RSpec.configure do |config|
   unless defined? TWILIO_PHONE_NUMBER # XXX: remove this

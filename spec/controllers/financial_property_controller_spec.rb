@@ -61,6 +61,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
     describe "GET #edit" do
       it "assigns the requested financial property as @financial_property" do
         financial_property = FinancialProperty.create! valid_attributes
+        financial_provider = FinancialProvider.create! provider_attributes
+        financial_provider.properties << financial_property
         get :edit, { id: financial_property.to_param }, session: valid_session
         expect(assigns(:financial_property)).to eq(financial_property)
       end

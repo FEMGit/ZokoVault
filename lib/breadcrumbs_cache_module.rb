@@ -18,6 +18,7 @@ module BreadcrumbsCacheModule
   def cache_breadcrumbs_pop(user, shared_user = nil)
     @shared_user = shared_user
     breadcrumbs = Rails.cache.read(cache_key)
+    return if breadcrumbs.nil?
     breadcrumbs = breadcrumbs.reject { |x| x.options[:user] != user }
     Rails.cache.delete(cache_key)
     breadcrumbs

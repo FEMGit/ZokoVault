@@ -3,6 +3,7 @@ class SharedViewController < AuthenticatedController
   include FinancialInformationHelper
   include SharedViewModule
   
+  add_breadcrumb "Dashboard", :shared_view_dashboard_path, only: [:dashboard]
   add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
   add_breadcrumb "Taxes", :shared_view_taxes_path, only: [:taxes]
   add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
@@ -13,6 +14,7 @@ class SharedViewController < AuthenticatedController
   before_action :set_shareables
   
   def dashboard
+    session[:ret_url] = shared_view_dashboard_path
   end
   
   def insurance

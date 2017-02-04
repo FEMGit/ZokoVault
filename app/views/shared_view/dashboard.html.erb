@@ -9,7 +9,7 @@
               <use xlink:href="#icon-document-3"></use>
             </svg>
             <h5 class="category-title"><%= category %></h5>
-            <%= link_to 'View Category', shared_category_view_path(Category.fetch(category.downcase), @shared_user), class: 'view-category' %>
+            <%= link_to 'View Category', category_view_path(Category.fetch(category.downcase), @shared_user), class: 'view-category' %>
           </td>
         </tr>
       <% end %>

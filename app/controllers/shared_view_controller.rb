@@ -3,6 +3,7 @@ class SharedViewController < AuthenticatedController
   include FinancialInformationHelper
   include SharedViewModule
   
+  add_breadcrumb "Dashboard", :shared_view_dashboard_path, only: [:dashboard]
   add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
   add_breadcrumb "Taxes", :shared_view_taxes_path, only: [:taxes]
   add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
@@ -13,6 +14,7 @@ class SharedViewController < AuthenticatedController
   before_action :set_shareables
   
   def dashboard
+    session[:ret_url] = shared_view_dashboard_path
   end
   
   def insurance
@@ -158,19 +160,7 @@ class SharedViewController < AuthenticatedController
     end
     
     shareables = @shares.map(&:shareable)
-    direct_document_share = shareables.select { |res| res.is_a? Document }
-    group_docs = Document.for_user(shared_user).select { |x| shared_groups(shared_user).include? x.group }
-    vendor_docs = Document.for_user(shared_user).select { |x| shared_groups(shared_user).include? x.vendor_id }
-    financial_docs = Document.for_user(shared_user).select { |x| shared_groups(shared_user).include? x.financial_information_id }
-    category_docs = Document.for_user(shared_user).select { |x| shared_categories(shared_user).include? x.category }
-    @document_shareables |= (group_docs + direct_document_share + category_docs + vendor_docs + financial_docs).uniq
-  end
-    
-  def shared_groups(user)
-    SharedViewService.shared_group_names(user, current_user)
-  end
-  
-  def shared_categories(user)
-    SharedViewService.shares(user, current_user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+    shared_documents = ShareService.shared_documents(shared_user, current_user)
+    @document_shareables |= shared_documents
   end
 end

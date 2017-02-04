@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-umbrella-1"></use>
+        </svg>Insurance
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= insurance_vendors_count %> insurance vendors.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(insurance_vendors_count > 0), insurance_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

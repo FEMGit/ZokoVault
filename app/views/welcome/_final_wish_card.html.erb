@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-bookmark-2"></use>
+        </svg>Final Wishes
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= final_wishes_count %> final wish details completed.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(final_wishes_count > 0), final_wishes_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

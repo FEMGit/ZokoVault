@@ -11,7 +11,6 @@ module DocumentsHelper
   
   def subcategory_shares(document)
     owner = document.user
-    shares = 
       if document.vendor_id.present? && document.vendor_id.positive?
         Vendor.find(document.vendor_id).share_with_contacts
         owner.shares.select { |sh| (sh.shareable.is_a? Vendor) && sh.shareable_id == document.vendor_id }
@@ -38,8 +37,9 @@ module DocumentsHelper
   end
   
   def category_shares(document)
-    return [] unless document.category.present?
+    return [] if document.category.nil? || document.category.blank? || (document.category.eql? DocumentService.empty_value)
     category = Category.fetch(document.category.downcase)
+    return [] unless category.present?
     document.user.shares.select { |sh| sh.shareable == category }
   end
 
@@ -74,6 +74,7 @@ module DocumentsHelper
   end
 
   def document_category(document)
+    return unless document.is_a? Document
     asset_group(document.category)
   end
 
@@ -81,12 +82,15 @@ module DocumentsHelper
     'Document'
   end
 
-  def asset_type(document)
-    if document.category == @@contact_category
-      @@contact_category
-    else
-      asset_group(document.group) || asset_group(document.category) || empty_group_category
-    end
+  def asset_type(resource)
+    case resource
+      when Document
+        return 'Document'
+      when Category
+        return 'Category'
+      else
+        "Card"
+      end
   end
 
   def document_count(user, group, category)

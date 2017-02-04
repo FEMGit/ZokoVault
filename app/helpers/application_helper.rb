@@ -79,21 +79,91 @@ module ApplicationHelper
                            :first, :second, {}, local_options)
   end
 
-  def shared_category_view_path(category,user)
+  def category_view_path(category, user = nil)
     case category.name
     when 'Wills - Trusts - Legal'
-      shared_view_estate_planning_path(user)
+      return shared_view_estate_planning_path(user) if @shared_user.present?
+      estate_planning_path
     when 'Insurance'
-      shared_view_insurance_path(user)
+      return shared_view_insurance_path(user) if @shared_user.present?
+      insurance_path
     when 'Taxes'
-      shared_view_taxes_path(user)
+      return shared_view_taxes_path(user) if @shared_user.present?
+      taxes_path
     when 'Final Wishes'
-      shared_view_final_wishes_path(user)
+      return shared_view_final_wishes_path(user) if @shared_user.present?
+      final_wishes_path
     when 'Financial Information'
-      shared_view_financial_information_path(user)
+      return shared_view_financial_information_path(user) if @shared_user.present?
+      financial_information_path
     else
-     shared_view_dashboard_path(user) 
+     return shared_view_dashboard_path(user) if @shared_user.present?
     end
+  end
+  
+  def subcategory_name(subcategory)
+    title = 
+      if subcategory.is_a? Tax
+        tax_year = TaxYearInfo.find(subcategory.tax_year_id)
+        tax_year.year.to_s
+      elsif subcategory.is_a? TaxYearInfo
+        subcategory.year.to_s
+      elsif subcategory.is_a? FinalWishInfo
+        subcategory.group
+      elsif subcategory.is_a? FinalWish
+        final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
+        final_wish_info.group
+      else
+        subcategory.try(:title) || subcategory.try(:name) || subcategory.class.name.titleize
+      end
+    return title unless subcategory.present?
+    "#{subcategory.category.name} - #{title}"
+  end
+  
+  def subcategory_view_path(subcategory)
+    case subcategory
+      when Will
+        return wills_path
+      when Trust
+        return trusts_path
+      when PowerOfAttorney
+        return power_of_attorneys_path
+      when PropertyAndCasualty
+        return property_path(subcategory)
+      when LifeAndDisability
+        return life_path(subcategory)
+      when Health
+        return health_path(subcategory)
+      when Tax
+        tax_year = TaxYearInfo.find(subcategory.tax_year_id)
+        return tax_path(tax_year)
+      when TaxYearInfo
+        return tax_path(subcategory)
+      when FinalWish
+        final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
+        return final_wish_path(final_wish_info)
+      when FinalWishInfo
+        return final_wish_path(subcategory)
+      when FinancialProvider
+        path_to_resource(subcategory)
+      else
+        ""
+      end
+  end
+  
+  def subcategory_name(subcategory)
+    title = 
+      if subcategory.is_a? Tax
+        tax_year = TaxYearInfo.find(subcategory.tax_year_id)
+        tax_year.year.to_s
+      elsif subcategory.is_a? FinalWish
+        final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
+        final_wish_info.group
+      else
+        subcategory.try(:title) || subcategory.try(:name) || subcategory.class.name.titleize
+      end
+    return title unless subcategory.present?
+    "#{subcategory.category.name} - #{title}"
   end
   
   def disabled?(name)

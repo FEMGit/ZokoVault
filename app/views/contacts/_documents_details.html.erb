@@ -19,26 +19,26 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Asset Type</th>
+      <th>Share Type</th>
       <th>Tags</th>
     </tr>
   </thead>
   <tbody>
-    <% if @share_documents && @share_documents.empty? %>
+    <% if @shares && @shares.empty? %>
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
     <% end %>
-    <% @share_documents && @share_documents.each do |document| %>
+    <% @shares && @shares.each do |share| %>
       <tr>
         <td class="document-name-big">
-          <%= render :partial => "layouts/document_links", :locals => {:document => document} %>
+          <%= render :partial => "layouts/resource_links", :locals => {:share => share} %>
         </td>
         <td>
-          <%= asset_type(document) %>
+          <%= asset_type(share) %>
         </td>
         <td class="contact-tag-right">
-          <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
+          <%= render :partial => "layouts/document_tags", :locals => {:document => share} %>
         </td>
       </tr>
     <% end %>

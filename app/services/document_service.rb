@@ -76,11 +76,7 @@ class DocumentService
     card_names(user, current_user)
   end
   
-  def self.get_share_with_documents(user, contact_id)
-    Document.for_user(user).select{ |doc| doc.contact_ids.include?(contact_id) }
-  end
-  
-  def self.get_contact_documents(user, category, contact_id)
+  def self.contact_documents(user, category, contact_id)
     Document.where(user: user, category: category, group: contact_id)
   end
   

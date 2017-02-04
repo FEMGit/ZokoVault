@@ -37,7 +37,7 @@ module DocumentsHelper
   end
   
   def category_shares(document)
-    return [] if document.category.nil? || (document.category.eql? DocumentService.empty_value)
+    return [] if document.category.nil? || document.category.blank? || (document.category.eql? DocumentService.empty_value)
     category = Category.fetch(document.category.downcase)
     return [] unless category.present?
     document.user.shares.select { |sh| sh.shareable == category }

@@ -224,7 +224,7 @@ body.logged-out{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
               transparent asset-data-url('marketing/hero-05.jpg') center top;
   background-size: cover;
-  height: 700px;
+  height: 600px;
   text-align:center;
 
   @include media($mobile) {
@@ -236,8 +236,8 @@ body.logged-out{
 
   article{
     margin: 0 auto;
-    max-width: 500px;
-    padding-top: 400px;
+    max-width: 600px;
+    padding-top: 350px;
 
     @include media($mobile) {
       padding-top: 20px;
@@ -300,7 +300,32 @@ h1.hero-text-dark{
 
   }
 }
+.corporate-1a{
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
+              transparent asset-data-url('marketing/corporate-1.jpg') center center;
+  background-size: cover;
+  height: 500px;
+  text-align: center;
 
+  @include media($mobile) {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
+                transparent asset-data-url('marketing/corporate-1.jpg') center center;
+    background-size: cover;
+    height: auto;
+  }
+
+  article{
+    margin: 0 auto;
+    padding-top: 200px;
+    max-width: 500px;
+
+    @include media($mobile) {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+  }
+}
 
 //SECURITY
 .security-1{
@@ -557,6 +582,10 @@ h1.hero-text-dark{
       display:none;
     }
   }
+}
+.content-wrapper{
+  max-width: 1065px;
+  margin: 0 auto;
 }
 
 //careers

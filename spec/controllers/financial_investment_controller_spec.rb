@@ -60,6 +60,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested financial investment as @financial_investment" do
       financial_investment = FinancialInvestment.create! valid_attributes
+      financial_provider = FinancialProvider.create! provider_attributes
+      financial_provider.investments << financial_investment
       get :edit, { id: financial_investment.to_param }, session: valid_session
       expect(assigns(:financial_investment)).to eq(financial_investment)
     end

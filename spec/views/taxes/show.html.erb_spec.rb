@@ -6,6 +6,7 @@ RSpec.describe "taxes/show", type: :view do
                           :user_id => "",
                           :year => 2
     ))
+    @taxes = []
   end
 
   it "renders attributes in <p>" do

@@ -25,7 +25,8 @@ RSpec.describe "financial_property/show", type: :view do
   let(:provider_attributes) do 
     {
       name: "Property Name",
-      user_id: user.id
+      user_id: user.id,
+      share_with_contact_ids: contacts.map(&:id)
     }
   end
   
@@ -58,9 +59,9 @@ RSpec.describe "financial_property/show", type: :view do
   
   it "displays financial property shared with correctly" do
     contacts.each do |contact|
-      expect(rendered).to match(/#{contact.name}/)
-      expect(rendered).to match(/#{contact.emailaddress}/)
-      expect(rendered).to match(/#{contact.phone}/)
+     expect(rendered).to match(/#{contact.initials}/)
+     expect(rendered).to match(/#{contact.emailaddress}/)
+     expect(rendered).to match(/#{contact.phone}/)
     end
   end
 end

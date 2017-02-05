@@ -59,14 +59,6 @@ RSpec.describe "financial_account/show", type: :view do
     expect(rendered).to match(/#{contacts.first.phone}/)
   end
   
-  it "displays financial provider shared with correctly" do
-    contacts.each do |contact|
-      expect(rendered).to match(/#{contact.name}/)
-      expect(rendered).to match(/#{contact.emailaddress}/)
-      expect(rendered).to match(/#{contact.phone}/)
-    end
-  end
-  
   it "displays financial account correctly" do
     expect(rendered).to match(/Bond/)
     expect(rendered).to match(/\$15,000/)
@@ -77,5 +69,13 @@ RSpec.describe "financial_account/show", type: :view do
     expect(rendered).to match(/#{primary_contact_broker.name}/)
     expect(rendered).to match(/#{primary_contact_broker.emailaddress}/)
     expect(rendered).to match(/#{primary_contact_broker.phone}/)
+  end
+  
+  it "displays financial account shared with correctly" do
+    contacts.each do |contact|
+     expect(rendered).to match(/#{contact.initials}/)
+     expect(rendered).to match(/#{contact.emailaddress}/)
+     expect(rendered).to match(/#{contact.phone}/)
+    end
   end
 end

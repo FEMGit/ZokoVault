@@ -28,15 +28,16 @@ module SharedViewHelper
   end
   
   def full_category_shares(category, owner)
+    return [] if owner.nil?
     owner.shares.select { |sh| sh.shareable == category }
   end
   
   def category_subcategory_shares(object, owner)
     obj_shares = object.try(:shares) || object.map(&:shares).flatten.uniq
     category = object.try(:category) || object.try(:first).try(:category)
-    return unless category.present?
+    return obj_shares if category.nil? || owner.nil?
     category_shares = owner.shares.select { |sh| sh.shareable == category }
-    return obj_shares unless category_shares.present?
+    return obj_shares if category_shares.nil?
     (obj_shares + category_shares).uniq(&:contact_id).reject { |sh| sh.contact_id.zero? }
   end
 end

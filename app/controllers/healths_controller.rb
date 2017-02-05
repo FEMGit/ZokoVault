@@ -154,7 +154,7 @@ class HealthsController < AuthenticatedController
     params.permit(:shared_user_id)
   end
 
-  def resource_owner 
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else

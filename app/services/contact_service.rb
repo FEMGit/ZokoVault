@@ -11,7 +11,7 @@ class ContactService
   end
   
   def self.filter_contacts(contact_ids)
-    contact_ids.select { |c_id| Contact.exists? id:c_id }
+    Contact.pluck(:id).select { |x| contact_ids.include? x }
   end
 
   private

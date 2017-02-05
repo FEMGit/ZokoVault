@@ -224,7 +224,7 @@ body.logged-out{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
               transparent asset-data-url('marketing/hero-05.jpg') center top;
   background-size: cover;
-  height: 600px;
+  height: 500px;
   text-align:center;
 
   @include media($mobile) {

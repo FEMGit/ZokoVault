@@ -47,12 +47,18 @@ class UserResourceGatherer < Struct.new(:user)
     @shared_resources.flatten!
     @shared_resources
   end
+  
+  def shares
+    return @shares if @shares
+    @shared_resources =
+      Share.includes(:user, :shareable)
+      .where(contact: Contact.where(emailaddress: user.email))
+      .flatten
+  end
 
   def all_resources
     my_resources | shared_resources
   end
-
-  private
 
   def category_resources(share)
     user, category = share.user, share.shareable
@@ -68,10 +74,12 @@ class UserResourceGatherer < Struct.new(:user)
       gather_taxes(user, category)
     when Category.fetch('final wishes')
       gather_final_wishes(user, category)
-    # when Category.fetch('financial information')
-    #   gather_financial_information(user)
+    when Category.fetch('financial information')
+      gather_financial_information(user, category)
     end
   end
+  
+  private
 
   def gather_wtl(user)
     Will.for_user(user) |

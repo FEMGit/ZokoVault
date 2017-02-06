@@ -40,30 +40,44 @@
               <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
             </h4>
           </li>
-          <li class="data-pair">
-            <h4>Property</h4>
-            <h4 class="data-right">
-              <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
-            </h4>
-          </li>
-          <li class="data-pair">
-            <h4>Alternatives</h4>
-            <h4 class="data-right">
-              <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
-            </h4>
-          </li>
-          <li class="data-pair">
-            <h4>Credit Cards</h4>
-            <h4 class="data-right">
-              <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
-            </h4>
-          </li>
+          <% if @properties.any? %>
+            <li class="data-pair">
+              <h4>Property</h4>
+              <h4 class="data-right">
+                <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
+              </h4>
+            </li>
+          <% end %>
+          <% if @alternative_managers.any? %>
+            <li class="data-pair">
+              <h4>Alternatives</h4>
+              <h4 class="data-right">
+                <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
+              </h4>
+            </li>
+          <% end %>
+          <% if credit_card_show? %>
+            <li class="data-pair">
+              <h4>Credit Cards</h4>
+              <h4 class="data-right">
+                <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
+              </h4>
+            </li>
+          <% end %>
           <li class="data-pair">
             <h4>Loans</h4>
             <h4 class="data-right">
               <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
             </h4>
           </li>
+          <% if @alternative_managers.any? %>
+            <li class="data-pair">
+              <h4>Commitments</h4>
+              <h4 class="data-right">
+                <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
+              </h4>
+            </li>
+          <% end %>
 
           <div class="sum-line"></div>
 

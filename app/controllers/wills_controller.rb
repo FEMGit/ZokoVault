@@ -58,7 +58,7 @@ class WillsController < AuthenticatedController
       if new_wills.any? || old_wills.any?
         begin
           update_wills(new_wills, old_wills)
-          format.html { redirect_to success_path(old_wills), flash: { success: success_message(old_wills) } }
+          format.html { redirect_to success_path, flash: { success: success_message(old_wills) } }
           format.json { render :show, status: :created, location: @will }
         rescue
           @vault_entry = Will.new
@@ -119,8 +119,7 @@ class WillsController < AuthenticatedController
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
   end
   
-  def success_path(old_wills)
-    return ReturnPathService.success_path(resource_owner, current_user, estate_planning_path, shared_view_estate_planning_path(shared_user_id: resource_owner.id)) unless old_wills.any?
+  def success_path
     ReturnPathService.success_path(resource_owner, current_user, wills_path, shared_wills_path(shared_user_id: resource_owner.id))
   end
 

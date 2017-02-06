@@ -83,7 +83,7 @@ class TaxesController < AuthenticatedController
     authorize_save
     respond_to do |format|
       if @tax_year.save
-        success_path(taxes_path, shared_view_taxes_path(shared_user_id: resource_owner.id))
+        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }
       else
@@ -105,7 +105,7 @@ class TaxesController < AuthenticatedController
     respond_to do |format|
       if @tax_year.update(tax_params)
         TaxesService.update_shares(@tax_year, @previous_share_with, resource_owner)
-        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, tax: @tax_year))
+        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else

@@ -113,7 +113,8 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
 
       it "redirects to the created life" do
         post :create, { life_and_disability: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(insurance_path)
+        life = assigns(:insurance_card)
+        expect(response).to redirect_to(life_path(life))
       end
     end
 

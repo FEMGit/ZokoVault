@@ -60,7 +60,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     context "with invalid params" do
       it "redirects to new" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to redirect_to estate_planning_path
+        expect(response).to redirect_to power_of_attorneys_path
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
 
       it "redirects to the created vault_entry" do
         post :create, { vault_entry_0: valid_attributes.merge(:id => "") }, session: valid_session
-        expect(response).to redirect_to(estate_planning_path)
+        expect(response).to redirect_to(power_of_attorneys_path)
       end
     end
 
@@ -113,7 +113,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
 
       it "re-renders the 'new' template" do
         post :create, { vault_entry_0: invalid_attributes }, session: valid_session
-        expect(response).to redirect_to(estate_planning_path)
+        expect(response).to redirect_to(power_of_attorneys_path)
       end
     end
   end

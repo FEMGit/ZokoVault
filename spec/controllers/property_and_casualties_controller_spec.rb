@@ -114,7 +114,8 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
 
       it "redirects to the created property_and_casualty" do
         post :create, { property_and_casualty: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(insurance_path)
+        property = assigns(:insurance_card)
+        expect(response).to redirect_to(property_path(property))
       end
     end
 

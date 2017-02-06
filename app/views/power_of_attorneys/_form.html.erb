@@ -47,40 +47,33 @@
 </div>
 
 <script>
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
+      value: ""
+    });
+    $form.find("#" + new_id + " option").prop("selected", false);
+  };
+  
   clearForm = function($newWtlForm, old_id, new_id){
     new_vault_entry_id = "vault_entry_" + new_id;
 
-    $newWtlForm.find("[id^='attorney_id_']").attr({
-      id: "attorney_id_" + new_id,
-      value: ""
-    });
-    $newWtlForm.find("[id^='attorney_id_']").attr("name", new_vault_entry_id + "[id]");
-    $newWtlForm.find("[id^='vault_entry_']").attr({
-      name: new_vault_entry_id + "[name]",
-      id: new_vault_entry_id + "_name"
-    });
-
+    changeIdAndName($newWtlForm, "attorney_id_" + old_id,
+      "attorney_id_" + new_id, new_vault_entry_id + "[id]");
+    changeIdAndName($newWtlForm, "attorney_agent_id_" + old_id,
+      "attorney_agent_id_" + new_id, new_vault_entry_id + "[agent_ids]");
+    changeIdAndName($newWtlForm, "attorney_notes_id_" + old_id,
+      "attorney_notes_id_" + new_id, new_vault_entry_id + "[notes]");
+    changeIdAndName($newWtlForm, "attorney_share_id_" + old_id,
+      "attorney_share_id_" + new_id, new_vault_entry_id + "[share_with_contact_ids][]");
+    
     $newWtlForm.find(".check-list li").each(function() {
       var checkBox = $(this).find("input[type=checkbox]");
       checkBox.attr("name", "vault_entry_" + new_id + "[powers][" + checkBox.attr('value') + "]")
       checkBox.attr("id", "vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
     });
 
-    $newWtlForm.find("#attorney_agent_id_" + old_id).attr({
-      name: new_vault_entry_id +"[agent_ids]",
-      id: "attorney_agent_id_" + new_id
-    });
-    $newWtlForm.find("#attorney_agent_id_" + new_id + " option").prop("selected", false);
-	
-    $newWtlForm.find("#attorney_notes_id_" + old_id).attr({
-      name: new_vault_entry_id +"[notes]",
-      id: "attorney_notes_id_" + new_id
-    });
-
-    $newWtlForm.find("#attorney_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_with_contact_ids][]",
-      id: "attorney_share_id_" + new_id
-    });
     $newWtlForm.find("#delete-legal").remove();
   }
 </script>

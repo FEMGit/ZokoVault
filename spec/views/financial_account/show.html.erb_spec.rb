@@ -25,6 +25,7 @@ RSpec.describe "financial_account/show", type: :view do
   let(:account_0) do 
     {
       account_type: "Bond",
+      name: "Account Name",
       owner_id: contacts.second.id,
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
@@ -61,6 +62,7 @@ RSpec.describe "financial_account/show", type: :view do
   
   it "displays financial account correctly" do
     expect(rendered).to match(/Bond/)
+    expect(rendered).to match(/Account Name/)
     expect(rendered).to match(/\$15,000/)
     expect(rendered).to match(/Notes/)
   end

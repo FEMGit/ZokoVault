@@ -22,7 +22,12 @@
     <ul class="data-list mb-20">
       <% provider.accounts.each do |account| %>
         <li class="data-pair">
-          <label><%= account.account_type %></label>
+          <label>
+            <%= account.account_type %>
+            <% if account.name.present? %>
+              - <%= account.name %>
+            <% end %>
+          </label>
           <%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %>
         </li>
       <% end %>

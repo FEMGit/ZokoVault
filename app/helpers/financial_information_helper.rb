@@ -34,7 +34,7 @@ module FinancialInformationHelper
   
   def financial_account_present?(account)
     account.owner.present? || account.value.present? || account.number.present? ||
-      account.primary_contact_broker.present? || account.notes.present?
+      account.primary_contact_broker.present? || account.notes.present? || account.name.present?
   end
   
   def financial_property_present?(property)

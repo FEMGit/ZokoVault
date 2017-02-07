@@ -95,6 +95,7 @@ Rails.application.routes.draw do
   get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
   get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
+  post 'documents/download/:id(/:shared_user_id)', to: 'documents#download', as: :download_document
 
   resources :account_settings
   put 'account_settings/update', to: 'account_settings#update'

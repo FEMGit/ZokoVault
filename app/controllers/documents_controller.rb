@@ -114,6 +114,13 @@ class DocumentsController < AuthenticatedController
     render :json => card_names(base_params[:category]).flatten
   end
 
+  def download
+    return nil if download_params[:id].nil? || download_params[:id].blank?
+    document_key = Document.for_user(resource_owner).find_by(id: download_params[:id]).try(:url)
+    data = open(download_file(document_key))
+    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
+  end
+
   private
   
   def set_dropdown_options
@@ -167,6 +174,10 @@ class DocumentsController < AuthenticatedController
   def set_document
     @document = Document.find(params[:id])
     @cards = card_values(@document.category)
+  end
+  
+  def download_params
+    params.permit(:id)
   end
 
   def base_params

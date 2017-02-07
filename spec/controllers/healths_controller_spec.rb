@@ -130,7 +130,8 @@ RSpec.describe HealthsController, type: :controller do
 
       it "redirects to the created health" do
         post :create, { health: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(insurance_path)
+        health = assigns(:insurance_card)
+        expect(response).to redirect_to(health_path(health))
       end
     end
 

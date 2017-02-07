@@ -82,7 +82,7 @@ class FinalWishesController < AuthenticatedController
     authorize_save
     respond_to do |format|
       if @final_wish_info.save
-        success_path(final_wishes_path, shared_view_final_wishes_path(shared_user_id: resource_owner.id))
+        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: 'Final Wish was successfully created.' } }
         format.json { render :show, status: :created, location: @final_wish_info }
       else

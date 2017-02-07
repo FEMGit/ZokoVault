@@ -72,7 +72,8 @@ RSpec.describe TaxesController, type: :controller do
 
       it "redirects to the created tax" do
         post :create, { tax_year_info: valid_attributes }, valid_session
-        expect(response).to redirect_to(Tax.last)
+        tax = assigns(:tax_year)
+        expect(response).to redirect_to(tax_path(tax))
       end
     end
 

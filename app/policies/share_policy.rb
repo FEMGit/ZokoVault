@@ -13,6 +13,15 @@ class SharePolicy < BasicPolicy
   def create?
     owned_or_shared?
   end
+  
+  # Document add/edit update dropdowns access
+  def get_drop_down_options?
+    owned_or_shared?
+  end
+  
+  def get_card_names?
+    owned_or_shared?
+  end
 
   # XXX: Move to SharedViewPolicy
   # Shared view policies

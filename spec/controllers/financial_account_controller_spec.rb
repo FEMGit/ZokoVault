@@ -25,6 +25,7 @@ RSpec.describe FinancialAccountController, type: :controller do
   let(:account_0) do 
     {
       account_type: "Bond",
+      name: "Account Name",
       owner_id: contacts.first.id,
       value: "99.99",
       primary_contact_broker_id: contacts.first.id,
@@ -132,6 +133,31 @@ RSpec.describe FinancialAccountController, type: :controller do
       it "assigns share with contacts" do
         expect(financial_provider.share_with_contacts).to eq contacts
       end
+
+      # Financial Account assignments
+      it "assigns the financial account type" do
+        expect(financial_provider.accounts.first.account_type).to eq "Bond"
+      end
+      
+      it "assigns the financial account name" do
+        expect(financial_provider.accounts.first.name).to eq "Account Name"
+      end
+      
+      it "assigns the financial account owner" do
+        expect(financial_provider.accounts.first.owner).to eq contacts.first
+      end
+      
+      it "assigns the financial account value" do
+        expect(financial_provider.accounts.first.value.to_f).to eq 99.99
+      end
+      
+      it "assigns the financial account primary contact" do
+        expect(financial_provider.accounts.first.primary_contact_broker).to eq contacts.first
+      end
+      
+      it "assigns the financial account notes" do
+        expect(financial_provider.accounts.first.notes).to eq "Notes"
+      end
     end
     
     context "with invalid params" do
@@ -168,6 +194,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       let(:new_account_attributes) do 
         {
           account_type: "Savings",
+          name: "New Account Name",
           owner_id: contacts.second.id,
           value: "100",
           primary_contact_broker_id: contacts.second.id,
@@ -192,6 +219,10 @@ RSpec.describe FinancialAccountController, type: :controller do
       
       it "assigns the requested financial account type" do
         expect(assigns(:financial_provider).accounts.first.account_type).to eq "Savings"
+      end
+      
+      it "assigns the requested financial account name" do
+        expect(assigns(:financial_provider).accounts.first.name).to eq "New Account Name"
       end
       
       it "assigns the requested financial account owner" do

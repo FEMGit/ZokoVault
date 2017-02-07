@@ -26,6 +26,7 @@ RSpec.describe "financial_account/edit", type: :view do
   let(:account_0) do 
     {
       account_type: "Bond",
+      name: "Account Name",
       owner_id: contacts.second.id,
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
@@ -74,6 +75,9 @@ RSpec.describe "financial_account/edit", type: :view do
 
       assert_select "select#financial_provider_account_0_account_type[name=?]",
                     "financial_provider[account_0][account_type]"
+      
+      assert_select "input#account_name_0[name=?]",
+                    "financial_provider[account_0][name]"
       
       assert_select "select#account_owner_0[name=?]",
                     "financial_provider[account_0][owner_id]"

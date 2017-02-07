@@ -165,7 +165,7 @@ class FinancialAccountController < AuthenticatedController
     accounts = params[:financial_provider].select { |k, _v| k.starts_with?("account_") }
     permitted_params = {}
     accounts.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :account_type, :owner_id, :value, :number, :primary_contact_broker_id, :notes]
+      permitted_params[policy_key] = [:id, :account_type, :name, :owner_id, :value, :number, :primary_contact_broker_id, :notes]
     end
     accounts.permit(permitted_params)
   end

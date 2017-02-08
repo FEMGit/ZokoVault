@@ -61,6 +61,10 @@ module FinancialInformationHelper
       FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
   end
   
+  def commitments_show?
+    FinancialAlternative.for_user(current_user).any?
+  end
+  
   # Sum count section
   
   def property_provider_id(user, property)
@@ -103,8 +107,7 @@ module FinancialInformationHelper
   end
   
   def net_worth
-    cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum + alternatives_sum +
-      uncalled_commitments_sum
+    cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum + alternatives_sum
   end
   
   def resource_owner

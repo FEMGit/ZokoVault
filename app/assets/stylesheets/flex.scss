@@ -59,6 +59,7 @@
       flex:100%;
   }
 }
+
 .board-text{
   flex:40%;
   padding-top: 12px;
@@ -92,6 +93,39 @@
   }
 }
 
+//Shared view Dashboard
+.shared-boxes{
+  border-top: 1px solid $color-gray-light;
+  padding: 5px 0;
+  margin-top: 5px;
+  &:first-child{
+    border-top: 0px solid $color-gray-light;
+    padding-top: 0;
+    margin-top: 0;
+  }
+  &:last-child{
+    padding-bottom: 0;
+  }
+}
+.shared-name{
+  flex: 90%;
+  h4{
+    margin-bottom: 0;
+  }
+  @include media($teneighty) {
+      flex:85%;
+  }
+}
+.shared-link{
+  flex: 10%;
+  text-align:right;
+  padding-top: 5px;
+  @include media($teneighty) {
+    border-top: 1px solid $color-gray-light;
+    flex:15%;
+    padding-bottom: 12px;
+  }
+}
 
 //
 // .flex-card{

@@ -1,25 +1,28 @@
 <h1>Dashboard</h1>
-<table class="shared-view-dashboard">
+<div class="card mb-30">
   <% if @shared_category_names_full.any? %>
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>
-        <tr>
-          <td>
-            <svg class="icon dashboard-icon">
-              <use xlink:href="#icon-document-3"></use>
-            </svg>
-            <h5 class="category-title"><%= category %></h5>
-            <%= link_to 'View Category', category_view_path(Category.fetch(category.downcase), @shared_user), class: 'view-category' %>
-          </td>
-        </tr>
+        <% category_instance = Category.fetch(category.downcase) %>
+        <section class="flex-boxes shared-boxes">
+          <div class="shared-name">
+            <h4>
+              <%= render partial: 'layouts/category_icons', locals: { category: category_instance } %> <%= category %>
+            </h4>
+          </div>
+          <div class="shared-link">
+            <%= link_to 'View Category', category_view_path(category_instance, @shared_user), class: 'outline-button small-button' %>
+          </div>
+        </section>
       <% end %>
     <% end %>
   <% else %>
-    <tr>
-      <td>
-        <h5 class="category-title">No shared categories</h5>
-      </td>
-    </tr>
+    <section class="flex-boxes shared-boxes">
+      <div class="shared-name">
+        <h4>No shared categories.</h4>
+      </div>
+    </section>
   <% end %>
-</table>
+</div>
+
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @document_shareables, :shareable => true} %>

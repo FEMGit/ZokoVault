@@ -5,6 +5,9 @@
   <div class="styled-select">
     <%= ff.select :account_type, FinancialAccountInformation::account_types.keys %>
   </div>
+  
+  <%= ff.label :name, 'Account Name' %>
+  <%= ff.text_field :name, id: "account_name_#{index}" %>
 
   <%= ff.label :owner_id, 'Account Owner' %>
   <div class="chosen-styled-select">
@@ -51,6 +54,8 @@
       "account_number_" + new_id, new_element_name + "[number]")
     changeIdAndName($newForm, "account_broker_" + old_id,
       "account_broker_" + new_id, new_element_name + "[primary_contact_broker_id]")
+    changeIdAndName($newForm, "account_name_" + old_id,
+      "account_name_" + new_id, new_element_name + "[name]")
     changeIdAndName($newForm, "account_notes_" + old_id,
       "account_notes_" + new_id, new_element_name + "[notes]")
     $newForm.find("#delete-account").remove();

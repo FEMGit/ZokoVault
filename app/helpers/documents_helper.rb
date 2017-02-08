@@ -22,7 +22,8 @@ module DocumentsHelper
       elsif document.group.present?
         model = ModelService.model_by_name(document.group)
         if model == Tax
-          tax_year_id = TaxYearInfo.find_by(:year => document.group).id
+          tax_year_id = TaxYearInfo.find_by(:year => document.group).try(:id)
+          return [] if tax_year_id.nil?
           tax_ids = Tax.for_user(owner).select { |x| x.tax_year_id == tax_year_id }.map(&:id).flatten
           owner.shares.select { |sh| (sh.shareable.is_a? Tax) && (tax_ids.include? sh.shareable_id) }
         elsif model == FinalWish

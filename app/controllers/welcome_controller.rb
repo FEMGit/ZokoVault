@@ -4,10 +4,21 @@ class WelcomeController < AuthenticatedController
                 :tax_year_count, :final_wishes_count, :button_text
 
   def index; 
-    @shared_resources = 
-      UserResourceGatherer.new(current_user).shared_resources.compact
-    @shared_users = @shared_resources.map(&:user).uniq
-    @new_shares = @shared_resources.select { |resource| resource.created_at > current_user.last_sign_in_at}
+    user_resource_gatherer = UserResourceGatherer.new(current_user)
+    @shares = user_resource_gatherer.shares
+    @new_shares = @shares.select { |share| share.created_at > current_user.last_sign_in_at}
+    
+    @shared_resources = @new_shares.map! do |share|
+      if Category === share.shareable
+        user_resource_gatherer.category_resources(share)
+      else
+        share.shareable
+      end
+    end
+    @shared_resources.compact.flatten!
+    @shared_users = @shares.select(&:user).compact.uniq
+    
+    current_user.update_attribute(:last_sign_in_at, Time.now)
   end
   
   def financial_information_any?

@@ -77,6 +77,11 @@
       <label>There is no information about Account</label>
     <% end %>
 
+    <% if account.name.present? %>
+      <label>Account Name</label>
+      <p><%= account.name %></p>
+    <% end %>
+
     <% if account.owner.present? %>
       <label>Account Owner</label>
       <p>

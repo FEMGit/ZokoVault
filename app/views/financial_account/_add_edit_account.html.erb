@@ -103,7 +103,7 @@
 
 <% end %>
 <script>
-  document.addEventListener('click', function(e) {
+  document.addEventListener('change', function(e) {
     element = e.target
     if(element.id.indexOf('_account_type') > -1) {
       id_number = element.id.match(/\d+/)

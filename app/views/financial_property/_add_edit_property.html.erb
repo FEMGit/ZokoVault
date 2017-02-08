@@ -10,7 +10,7 @@
     <% errors = true %>
   <% end %>
   
-  <h3 class="card-label">Property</h3>
+  <h3 class="card-label">Property Details</h3>
   
   <%= f.label :name, 'Property Name' %><span class="required">Required</span>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @financial_property.errors.messages[:name] } %>

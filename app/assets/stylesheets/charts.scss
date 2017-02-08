@@ -24,7 +24,7 @@
   }
 }
 .pie-legend{
-  height: 330px;
+  height: 360px;
   width: 25%;
   min-width: 200px;
   display: inline-block;
@@ -46,7 +46,12 @@
   height: 1px;
   background: $color-gray-light;
   margin: 10px 0 20px;
+  &.no-margin {
+    margin: 0;
+  }
 }
+
+
 .highcharts-credits{
   display:none;
 }

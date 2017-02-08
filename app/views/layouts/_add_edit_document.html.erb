@@ -67,7 +67,7 @@
       Save</button>
   <%= link_to "Cancel", document_return_path(@document),
     {class: "js-modal-close button secondary-button big-button"} %>
-  <% if !add_new_document?(yield(:title)) %>
+  <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
     <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
       class: "button outline-button big-button fr"%>
   <% end %>

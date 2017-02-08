@@ -1,7 +1,7 @@
 class WelcomeController < AuthenticatedController
   skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed]
   helper_method :financial_information_any?, :estate_planning_document_count, :insurance_vendors_count,
-                :tax_year_count, :final_wishes_count, :button_text
+                :tax_year_count, :final_wishes_count, :contacts_count, :button_text
 
   def index; 
     user_resource_gatherer = UserResourceGatherer.new(current_user)
@@ -27,6 +27,10 @@ class WelcomeController < AuthenticatedController
   
   def estate_planning_document_count
     Document.for_user(current_user).where(:category => Rails.application.config.x.WtlCategory).count
+  end
+  
+  def contacts_count
+    Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email }.count
   end
   
   def insurance_vendors_count

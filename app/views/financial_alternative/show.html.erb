@@ -111,8 +111,8 @@
     
     <% if alternative.commitment.present? %>
       <label>Commitment</label>
-      <p><%= render partial: "financial_information/value_show",
-        locals: { value: alternative.commitment, type: alternative.alternative_type } %></p>
+      <p><%= render partial: "financial_information/value",
+        locals: { value: -alternative.commitment, type: alternative.alternative_type } %></p>
     <% end %>
 
     <% if alternative.primary_contact.present? %>

@@ -123,12 +123,6 @@
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
       $(document).trigger('refresh_autonumeric')
     }
-
-    var accountCount = <%= @financial_provider.accounts.count %>
-    for(var i = 0; i < accountCount; i++ ) {
-      updateValues($('#financial_account_provider_account_' + i + '_account_type'), 
-        $('#account_value_' + i));
-    }
   });
 
   $('.chosen-select').chosen({allow_single_deselect: true});

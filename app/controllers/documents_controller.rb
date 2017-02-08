@@ -240,17 +240,20 @@ class DocumentsController < AuthenticatedController
   end
 
   def handle_document_not_saved(format)
-    @cards = card_values(@document.category)
-    @card_names = card_names(@document.category)
-    set_dropdown_options
+    error_documents_initialize
     format.html { render :new, :layout => set_layout }
     format.json { render json: @document.errors, status: :unprocessable_entity }
   end
   
   def handle_document_not_updated(format)
-    @cards = card_values(@document.category)
-    @card_names = card_names(@document.category)
+    error_documents_initialize
     format.html { render :edit, :layout => set_layout }
     format.json { render json: @document.errors, status: :unprocessable_entity }
+  end
+  
+  def error_documents_initialize
+    @cards = card_values(@document.category)
+    @card_names = card_names(@document.category)
+    set_dropdown_options
   end
 end

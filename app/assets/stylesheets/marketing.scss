@@ -290,8 +290,8 @@ h1.hero-text-dark{
 
   article{
     margin: 0 auto;
-    padding-top: 270px;
-    max-width: 550px;
+    padding-top: 250px;
+    max-width: 600px;
 
     @include media($mobile) {
       padding-top: 20px;

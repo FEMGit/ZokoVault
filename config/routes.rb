@@ -231,7 +231,7 @@ Rails.application.routes.draw do
   get "/about", to: "pages#about", as: :about
   get "/careers", to: "pages#careers", as: :careers
   get "/contact_us", to: "pages#contact_us", as: :contact_page
-  get "/corporate", to: "pages#corporate", as: :corporate
+  get "/enterprise", to: "pages#enterprise", as: :enterprise
   get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
   get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
   get "/resources", to: "pages#resources", as: :resources

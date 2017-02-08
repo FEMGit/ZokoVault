@@ -3,3 +3,27 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-agent: *
 # Disallow: /
+
+# Deny access to all logged in pages
+User-agent: *
+Disallow: /financial_information
+Disallow: /financial_information/
+Disallow: /estate_planning
+Disallow: /estate_planning/
+Disallow: /insurance
+Disallow: /insurance/
+Disallow: /taxes
+Disallow: /taxes/
+Disallow: /final_wishes
+Disallow: /final_wishes/
+Disallow: /documents
+Disallow: /documents/
+Disallow: /contacts
+Disallow: /contacts/
+Disallow: /shares
+Disallow: /shares/
+Disallow: /shared_view/
+Disallow: /my_profile
+Disallow: /my_profile/
+Disallow: /account_settings
+Disallow: /account_settings/

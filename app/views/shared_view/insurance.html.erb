@@ -16,7 +16,7 @@
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
-            <% vendor.policy && vendor.policy.each do |policy| %>
+            <% vendor.try(:policy) && vendor.policy.each do |policy| %>
               <label><%= policy.policy_type %></label>
               <ul class="data-list">
                 <li class="data-pair">
@@ -60,7 +60,7 @@
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
-            <% vendor.policy && vendor.policy.each do |policy| %>
+            <% vendor.try(:policy) && vendor.policy.each do |policy| %>
               <label><%= policy.policy_type %></label>
               <ul class="data-list">
                 <li class="data-pair">
@@ -105,7 +105,7 @@
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
-              <% vendor.policy && vendor.policy.each do |policy| %>
+              <% vendor.try(:policy) && vendor.policy.each do |policy| %>
                 <label><%= policy_type_abbreviate(policy.policy_type) %></label>
                 <ul class="data-list">
                   <li class="data-pair ">

@@ -52,10 +52,12 @@
               </ul>
             <% end %>
 
-          <label>Shared With</label>
-          <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@wills, current_user) } %>
-          </section>
+         <% if category_subcategory_shares(@wills, current_user).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@wills, current_user) } %>
+            </section>
+          <% end %>
         <% end %>
 
       <% else %>
@@ -91,10 +93,12 @@
             <% end %>
           </ul>
 
-          <label>Shared With</label>
-          <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, current_user) } %>
-          </section>
+          <% if category_subcategory_shares(@trusts, current_user).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, current_user) } %>
+            </section>
+          <% end %>
       <% else %>
 
         <h3>Trusts</h3>
@@ -132,10 +136,12 @@
             <% end %>
           </ul>
 
-          <label>Shared With</label>
-          <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, current_user) } %>
-          </section>
+          <% if category_subcategory_shares(@power_of_attorneys, current_user).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, current_user) } %>
+            </section>
+          <% end %>
 
       <% else %>
         <h3>Power of Attorney</h3>

@@ -16,7 +16,7 @@
   
   <%= ff.label :commitment, 'Commitment' %>
   <%= ff.text_field :commitment, id: "alternative_commitment_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "-$"} }, 
-  :value => ff.object && number_to_currency(ff.object.commitment, precision: 0, unit: "$"), style: "color: red;" %>
+  :value => ff.object && number_to_currency(ff.object.commitment, precision: 0, unit: "-$"), style: "color: red;" %>
   
   <%= ff.label :total_calls, 'Total Calls' %>
   <%= ff.text_field :total_calls, id: "alternative_total_calls_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} }, 
@@ -46,7 +46,6 @@
       value: ""
     });
     $form.find("#" + new_id + " option").prop("selected", false);
-    $form.find("#" + new_id).css('color', 'black')
   };
   clearForm = function($newForm, old_id, new_id) {
     new_element_name = "financial_provider[alternative_" + new_id + "]";

@@ -55,7 +55,6 @@ class DocumentsController < AuthenticatedController
 
   def edit
     authorize @document
-
     session[:ret_url] = get_return_url_path
     @shares = @document.shares
     @card_names = card_names(@document.category)
@@ -161,7 +160,12 @@ class DocumentsController < AuthenticatedController
   
   def set_viewable_contacts
     share_contact_ids = document_shares(@document).map(&:contact_id).select { |c| Contact.exists? id: c }
-    @document.contact_ids |= share_contact_ids
+    shares = []
+    uniq_share_ids = share_contact_ids.reject { |x| @document.contact_ids.any? { |y| y == x } }
+    uniq_share_ids.each do |share_contact_id|
+      shares << Share.new(user: resource_owner, contact_id: share_contact_id)
+    end
+    @document.shares |= shares
   end
 
   def set_document

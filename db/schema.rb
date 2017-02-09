@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20170206041349) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -221,20 +221,6 @@ ActiveRecord::Schema.define(version: 20170206041349) do
 
   add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
-
-  create_table "folders", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "parent_id"
-    t.string   "type"
-    t.string   "name",                        null: false
-    t.text     "description"
-    t.boolean  "system",      default: false, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-  end
-
-  add_index "folders", ["parent_id"], name: "index_folders_on_parent_id", using: :btree
-  add_index "folders", ["user_id"], name: "index_folders_on_user_id", using: :btree
 
   create_table "health_policies", force: :cascade do |t|
     t.integer  "policy_type"
@@ -479,8 +465,6 @@ ActiveRecord::Schema.define(version: 20170206041349) do
     t.datetime "updated_at",                             null: false
     t.boolean  "setup_complete",         default: false
     t.boolean  "admin"
-    t.boolean  "banned",                 default: false
-    t.boolean  "archived",               default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

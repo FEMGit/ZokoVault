@@ -14,7 +14,6 @@ class Share < ActiveRecord::Base
   after_create do
     previously_invited = ShareInvitationSent.exists?(user_id: user.id,
                                                   contact_email: contact.emailaddress)
-
     unless previously_invited
       invitation_args =
         if (shared_with_user = User.find_by(email: contact.emailaddress))

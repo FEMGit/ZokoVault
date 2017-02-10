@@ -27,7 +27,7 @@ class ResourceSearcher
 
   def search(term)
     resources.select do |resource|
-      resource.to_h.values.map(&:to_s).grep(/#{term}/im).present?
+      resource.to_h.values.map(&:to_s).any? { |x| x.downcase.include? (term.downcase) }
     end
   end
 end

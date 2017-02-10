@@ -242,8 +242,9 @@ Rails.application.routes.draw do
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
 
-  # Catch all routes so we can handle no route error
-  match "*path", to: "application#catch_404", via: :all
+  # Catch 500 and 404 errors
+  match "/500", :to => "errors#internal_server_error", :via => :all
+  match "/404", to: "errors#not_found_error", via: :all
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

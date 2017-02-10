@@ -1,6 +1,6 @@
-var saveFileUrl = function(option) {
+var saveFileUrl = function(option, file_picker_api_key) {
   option = option || ""
-  filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
+  filepicker.setKey(file_picker_api_key);
     filepicker.pick({
       container: 'modal',
       customSourceContainer: 'zoku-stage',

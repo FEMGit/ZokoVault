@@ -20,7 +20,7 @@
         <span class="error-label"> - You should select file before saving a document</span>
       <% end %>
       <div id="file-pick-section">
-        <input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3" data-fp-button-text="Select File"
+        <input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3" data-fp-button-text="Select File"
          data-fp-maxSize="104857600" data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" data-buttonText="Select file" id="select-file"/>
       </div>
     <% end %>

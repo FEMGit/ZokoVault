@@ -3,14 +3,14 @@
 <div id="detail-form">
   <%= f.label :firstname, 'First Name' %>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:firstname] } %>
-  <%= f.text_field :firstname, { class: ("input-error" if @contact.errors.messages[:firstname].present?) } %>
+  <%= f.text_field :firstname, { class: ("input-error" if @contact.errors.messages[:firstname].present?), :maxlength => get_max_length(:name) } %>
 
   <%= f.label :lastname, 'Last Name' %>
-  <%= f.text_field :lastname %>
+  <%= f.text_field :lastname, :maxlength => get_max_length(:name) %>
 
   <%= f.label :emailaddress, 'Email Address' %>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:emailaddress] } %>
-  <%= f.email_field :emailaddress, { class: ("input-error" if @contact.errors.messages[:emailaddress].present?) } %>
+  <%= f.email_field :emailaddress, { class: ("input-error" if @contact.errors.messages[:emailaddress].present?), :maxlength => get_max_length(:email) } %>
 
   <%= f.label :phone %>
   <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
@@ -31,7 +31,7 @@
     </div>
 
     <%= f.label :beneficiarytype, 'Beneficiary Type' %>
-    <%= f.text_field :beneficiarytype %>
+    <%= f.text_field :beneficiarytype, :maxlength => get_max_length(:default) %>
 
     <%= f.label :birthdate %>
     <p>
@@ -39,7 +39,7 @@
     </p>
 
     <%= f.label :address, 'Street Address' %>
-    <%= f.text_field :address %>
+    <%= f.text_field :address, :maxlength => get_max_length(:address) %>
   </div>
 
   <div id="professional_relationship">
@@ -60,10 +60,10 @@
     </div>
 
     <%= f.label :businessname, 'Business Name' %>
-    <%= f.text_field :businessname %>
+    <%= f.text_field :businessname, :maxlength => get_max_length(:name) %>
 
     <%= f.label :businesswebaddress, 'Business Web Address' %>
-    <%= f.text_field :businesswebaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %>
+    <%= f.text_field :businesswebaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:address) %>
 
     <%= f.label :businessphone, 'Business Phone' %>
     <%= f.text_field :businessphone, class: "form-control", :data => {:mask => '999-999-9999'}  %>
@@ -72,11 +72,11 @@
     <%= f.text_field :businessfax, class: "form-control", :data => {:mask => '999-999-9999'}  %>
 
     <%= f.label :business_street_address, 'Street Address' %>
-    <%= f.text_field :business_street_address_1 %>
+    <%= f.text_field :business_street_address_1, :maxlength => get_max_length(:address) %>
   </div>
 
   <%= f.label :city %><br>
-  <%= f.text_field :city %>
+  <%= f.text_field :city, :maxlength => get_max_length(:address) %>
 
   <span class="state-input">
     <%= f.label :state %>
@@ -90,7 +90,7 @@
   </span>
 
   <%= f.label :notes %><br>
-  <%= f.text_area :notes %>
+  <%= f.text_area :notes, :maxlength => get_max_length(:notes) %>
 </div>
 
 <div id="avatar-form">

@@ -10,6 +10,20 @@ class Contact < ActiveRecord::Base
 
   validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
   
+  validates_length_of :firstname, :maximum => ApplicationController.helpers.get_max_length(:name)
+  validates_length_of :lastname, :maximum => ApplicationController.helpers.get_max_length(:name)
+  validates_length_of :emailaddress, :maximum => ApplicationController.helpers.get_max_length(:email)
+  validates_length_of :beneficiarytype, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:address)
+  validates_length_of :zipcode, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
+  
+  validates_length_of :businessname, :maximum => ApplicationController.helpers.get_max_length(:name)
+  validates_length_of :businesswebaddress, :maximum => ApplicationController.helpers.get_max_length(:address)
+  validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:address)
+  validates_length_of :business_street_address_1, :maximum => ApplicationController.helpers.get_max_length(:address)
+  validates_length_of :business_street_address_2, :maximum => ApplicationController.helpers.get_max_length(:address)
+
   RELATIONSHIP_TYPES = {
     personal: [
       'Son',
@@ -41,7 +55,6 @@ class Contact < ActiveRecord::Base
     'Advisor' => RELATIONSHIP_TYPES[:professional],
     'Medical Professional' => RELATIONSHIP_TYPES[:professional]
   }
-
 
   def canonical_user
     User.find_by(email: emailaddress)

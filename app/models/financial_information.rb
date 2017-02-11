@@ -66,6 +66,10 @@ class FinancialInformation
     specific_group.select { |k, _v| net_worth_groups.include? k }.values
   end
   
+  def self.credit_card_types
+    FINANCIAL_INFORMATION_TYPES[:credit_cards]
+  end
+  
   ACCOUNT_CASH = net_worth_groups(FinancialAccountInformation.account_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:cash])
   ACCOUNT_INVESTMENTS = net_worth_groups(FinancialAccountInformation.account_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:investments])
   ACCOUNT_LOANS = net_worth_groups(FinancialAccountInformation.account_types, FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans])

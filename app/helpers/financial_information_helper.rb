@@ -1,4 +1,8 @@
 module FinancialInformationHelper
+  def uniq_account_types
+    FinancialAccountInformation.for_user(resource_owner).flat_map(&:account_type).uniq
+  end
+  
   def path_to_resource(financial_provider)
     if FinancialAccountInformation.find_by(account_provider_id: financial_provider.id)
       show_account_path(financial_provider)
@@ -63,6 +67,10 @@ module FinancialInformationHelper
   
   def commitments_show?
     FinancialAlternative.for_user(current_user).any?
+  end
+
+  def credit_card_show?
+    (uniq_account_types - FinancialInformation.credit_card_types).length < uniq_account_types.length
   end
   
   # Sum count section

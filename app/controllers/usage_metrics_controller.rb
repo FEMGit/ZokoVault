@@ -36,9 +36,9 @@ class UsageMetricsController < AuthenticatedController
   private
   
   def delete_system_models(models)
+    return if models.blank?
     models.delete(UserDeathTrap)
     models.delete(UserActivity)
-    models.delete(Folder)
     models.delete(Category)
     models.delete(Upload)
   end

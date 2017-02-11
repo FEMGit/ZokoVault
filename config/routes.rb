@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   # Mailer
   post 'contact_us', to: 'messages#create'
   post 'mailing_list', to: 'interested_users#create'
+  get '/users/sign_up', as: :sign_up
 
   # Taxes
   get 'taxes/:tax', to: 'taxes#show', as: :show_tax

@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20170206041349) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -322,6 +322,16 @@ ActiveRecord::Schema.define(version: 20170206041349) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "share_invitation_sents", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "contact_email"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "share_invitation_sents", ["contact_email"], name: "index_share_invitation_sents_on_contact_email", using: :btree
+  add_index "share_invitation_sents", ["user_id"], name: "index_share_invitation_sents_on_user_id", using: :btree
 
   create_table "shares", force: :cascade do |t|
     t.integer  "contact_id"

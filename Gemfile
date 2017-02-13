@@ -18,6 +18,15 @@ gem 'devise_security_extension'
 
 gem 'acts_as_tree'
 
+# Web server
+gem 'puma'
+
+# Delayed job need for Puma web server
+gem 'delayed_job_active_record'
+
+# Abort long requests
+gem 'rack-timeout'
+
 # Scheduler
 gem 'rufus-scheduler'
 

@@ -70,14 +70,6 @@
               <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
             </h4>
           </li>
-          <% if @alternative_managers.any? %>
-            <li class="data-pair">
-              <h4>Commitments</h4>
-              <h4 class="data-right">
-                <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
-              </h4>
-            </li>
-          <% end %>
 
           <div class="sum-line"></div>
 

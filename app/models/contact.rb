@@ -33,7 +33,8 @@ class Contact < ActiveRecord::Base
       'Advisor',
       'Other'
     ],
-    medical_professional: %w(Doctor Nurse Administrator Caregiver Other)
+    medical_professional: %w(Doctor Nurse Administrator Caregiver Other),
+    account_owner: ['Account Owner']
   }
 
   CONTACT_TYPES = {
@@ -70,4 +71,8 @@ class Contact < ActiveRecord::Base
       [firstname,lastname].compact.join(' ')
     end
   end
+  
+  validates :relationship, inclusion: { in: RELATIONSHIP_TYPES.values.flatten, allow_blank: true }
+  validates :contact_type, inclusion: { in: CONTACT_TYPES.keys.flatten, allow_blank: true }
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

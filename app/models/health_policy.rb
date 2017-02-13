@@ -7,4 +7,6 @@ class HealthPolicy < ActiveRecord::Base
   has_and_belongs_to_many :insured_members, class_name: "Contact",
     join_table: "health_policies_insured_members",
     association_foreign_key: :insured_member_id
+  
+  validates :policy_type, inclusion: { in: HealthPolicy::policy_types }
 end

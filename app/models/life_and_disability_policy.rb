@@ -14,5 +14,7 @@ class LifeAndDisabilityPolicy < ActiveRecord::Base
   has_and_belongs_to_many :secondary_beneficiaries, class_name: "Contact",
     join_table: :life_and_disability_policies_secondary_beneficiaries,
     association_foreign_key: :secondary_beneficiary_id
+  
+  validates :policy_type, inclusion: { in: LifeAndDisabilityPolicy::policy_types }
 end
 

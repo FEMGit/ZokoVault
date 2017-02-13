@@ -30,6 +30,7 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+  config.action_mailer.default_url_options = { host: (ENV['MAILER_URL'].present? && ENV['MAILER_URL']) || (ENV['HEROKU_APP_NAME'].present? && "#{ENV['HEROKU_APP_NAME']}.herokuapp.com") || 'localhost:3000' }
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random

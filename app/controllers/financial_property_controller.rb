@@ -50,8 +50,9 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider.properties << @financial_property
     authorize @financial_property
+    validate_params
     respond_to do |format|
-      if @financial_provider.save
+      if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
@@ -69,7 +70,7 @@ class FinancialPropertyController < AuthenticatedController
     authorize @financial_property
     @previous_share_with = @property_provider.share_with_contact_ids
     respond_to do |format|
-      if @financial_property.update(property_params.merge(user_id: resource_owner.id))
+      if validate_params && @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @property_provider.update(name: property_params[:name])
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
@@ -95,6 +96,11 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    return false unless (FinancialProperty::property_types.include? property_params[:property_type])
+    true
+  end
   
   def set_viewable_contacts
     contacts = category_subcategory_shares(@financial_property, resource_owner)

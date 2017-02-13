@@ -10,13 +10,13 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports and disable caching.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default_url_options = { host: (ENV['MAILER_URL'].present? && ENV['MAILER_URL']) || (ENV['HEROKU_APP_NAME'].present? && "#{ENV['HEROKU_APP_NAME']}.herokuapp.com") || 'localhost:3000' }
-  config.action_mailer.delivery_method = :letter_opener
+  #config.action_mailer.delivery_method = :letter_opener
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

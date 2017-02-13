@@ -10,7 +10,7 @@ class ShareService
   def fill_document_share
     # remove empty values if is't inside
     doc_shares = {}
-    if @contact_ids
+    if @contact_ids.present?
       @contact_ids.reject!(&:empty?)
       @contact_ids.each_with_index do |contact_id, index| 
         doc_shares[index] = { "user_id" => @user_id, "contact_id" => contact_id }

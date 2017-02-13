@@ -113,6 +113,6 @@ class UsageMetricsController < AuthenticatedController
   end
   
   def death_traps
-    @user_errors = UserDeathTrap.all
+    @user_errors = UserDeathTrap.last(1000)
   end
 end

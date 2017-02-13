@@ -160,12 +160,7 @@ class DocumentsController < AuthenticatedController
   
   def set_viewable_contacts
     share_contact_ids = document_shares(@document).map(&:contact_id).select { |c| Contact.exists? id: c }
-    shares = []
-    uniq_share_ids = share_contact_ids.reject { |x| @document.contact_ids.any? { |y| y == x } }
-    uniq_share_ids.each do |share_contact_id|
-      shares << Share.new(user: resource_owner, contact_id: share_contact_id)
-    end
-    @document.shares |= shares
+    @document.contact_ids |= share_contact_ids
   end
 
   def set_document

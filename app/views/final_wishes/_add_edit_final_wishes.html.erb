@@ -17,14 +17,14 @@
     </div>
   <% end %>
 
-  <% @final_wishes.each_with_index do |data, index| %>
+  <% @final_wishes.present? && @final_wishes.each_with_index do |data, index| %>
     <%= f.fields_for "final_wish_#{index}", data do |ff| %>
       <div class="body-content">
         <%= render 'form', ff: ff, index: index, data: data %>
       </div>
     <% end %>
   <% end %>
-  <% if @final_wishes.empty? %>
+  <% if @final_wishes.try(:empty?) %>
     <% index = 0 %>
     <%= f.fields_for "final_wish_#{index}" do |ff| %>
       <div class="body-content">

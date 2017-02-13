@@ -10,6 +10,10 @@ class SharePolicy < BasicPolicy
     owned_or_shared?
   end
   
+  def download?
+    owned_or_shared?
+  end
+  
   def create?
     owned_or_shared?
   end

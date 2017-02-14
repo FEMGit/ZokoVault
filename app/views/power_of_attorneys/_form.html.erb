@@ -1,6 +1,7 @@
 <div class="card trusts mb-30">
 
   <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
+  <%= render partial: 'layouts/hidden_for_disabled', locals: { name: :share_with_contact_ids, shares: data.share_with_contact_ids, f: f } %>
   <h3 class="card-label">Legal Details</h3>
 
   <label>Power of Attorney</label>

@@ -166,7 +166,8 @@ class TrustsController < AuthenticatedController
     trusts = params.select { |k, _v| k.starts_with?("vault_entry_") }
     permitted_params = {}
     trusts.keys.each do |trust|
-      permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: [], share_with_contact_ids: []]
+      permitted_params[trust] = [:id, :name, :agent_ids, :notes, :document_id, trustee_ids: [], successor_trustee_ids: [], share_ids: [],
+                                 share_with_contact_ids: []]
     end
     trusts.permit(permitted_params)
   end

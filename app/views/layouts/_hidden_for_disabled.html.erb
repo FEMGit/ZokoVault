@@ -1,0 +1,5 @@
+<% if disabled?(name) %>
+  <% shares.each do |share| %>
+    <%= f.hidden_field name, multiple: true, value: share %>
+  <% end %>
+<% end %>

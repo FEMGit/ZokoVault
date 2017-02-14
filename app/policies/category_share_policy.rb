@@ -13,7 +13,7 @@ class CategorySharePolicy < BasicPolicy
     shares = policy_share
     return false unless shares
     category_names = shares.map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
-    return true if category_names.include? record.category.name
+    return true if record.category.present? && (category_names.include? record.category.name)
     false
   end
   

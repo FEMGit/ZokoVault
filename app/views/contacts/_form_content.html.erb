@@ -96,7 +96,7 @@
 <div id="avatar-form">
   <div id="choose-avatar-section" <% if !f.object.photourl.blank? && !@contact.new_record? %> style="display: none;" <% end %> >
     <p>Upload Photo</p>
-    <a onclick="saveFileUrl()" class="no-underline-link">Choose file ...</a>
+    <a onclick="saveFileUrl('', '<%= file_picker_api_key %>')" class="no-underline-link">Choose file ...</a>
   </div>
   <div id="preview-avatar-section">
     <p>

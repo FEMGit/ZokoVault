@@ -1,7 +1,7 @@
 
 <script type="text/javascript" src="//api.filestackapi.com/filestack.js"></script>
 <script>
-  /*filepicker.setKey("AU8hye5meSjiQ6l5oOxKFz");
+  /*filepicker.setKey("<%= file_picker_api_key %>");
   filepicker.pickAndStore(
     {
       location:"S3"
@@ -27,7 +27,7 @@
 
 <h1>New Upload</h1>
 
-<input type="filepicker" data-fp-apikey="AU8hye5meSjiQ6l5oOxKFz" data-fp-store-location="S3"
+<input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3"
   data-fp-store-container="zoku-stage" onchange="fileToPage(event)"/>
 
 <div id="file-info"></div>

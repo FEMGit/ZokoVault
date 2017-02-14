@@ -1,6 +1,6 @@
 load File.join(File.dirname(__FILE__),"seeds/categories.rb")
 # Create users
-emails = %w(ted.price@gmail.com josh@zokuvault.com dylan@zokuvault.com admin@zokuvault.com)
+emails = %w(admin@zokuvault.com)
 
 users = emails.map do |email|
   user = User.find_or_initialize_by(email: email)
@@ -54,5 +54,3 @@ categories.each do |category|
     end
   end
 end
-
-

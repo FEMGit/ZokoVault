@@ -7,7 +7,7 @@
   </div>
   
   <%= ff.label :name, 'Investment Name' %>
-  <%= ff.text_field :name, id: "alternative_name_#{index}" %>
+  <%= ff.text_field :name, id: "alternative_name_#{index}", :maxlength => get_max_length(:default) %>
 
   <%= ff.label :owner_id, 'Account Owner' %>
   <div class="chosen-styled-select">
@@ -36,7 +36,7 @@
   </div>
 
   <%= ff.label :notes %>
-  <%= ff.text_area :notes, id: "alternative_notes_#{index}" %>
+  <%= ff.text_area :notes, id: "alternative_notes_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){

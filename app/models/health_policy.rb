@@ -9,4 +9,9 @@ class HealthPolicy < ActiveRecord::Base
     association_foreign_key: :insured_member_id
   
   validates :policy_type, inclusion: { in: HealthPolicy::policy_types }
+
+  validates_length_of :policy_number, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :group_number, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :group_id, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

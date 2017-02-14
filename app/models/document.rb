@@ -26,5 +26,10 @@ class Document < ActiveRecord::Base
     DOCUMENT_PREVIEW_FILES.any? { |x| extension.include?(x) }
   end
     
+
   validates :category, inclusion: { in: white_list_categories, allow_blank: true }
+
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :group, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :description, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

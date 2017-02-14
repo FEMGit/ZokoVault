@@ -39,4 +39,7 @@ class Trust < ActiveRecord::Base
   validates :name, presence: { :message => "Required" }
   
   before_save { self.category = Category.fetch("wills - trusts - legal") }
+  
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

@@ -7,7 +7,7 @@
   </div>
   
   <%= ff.label :name, 'Account Name' %>
-  <%= ff.text_field :name, id: "account_name_#{index}" %>
+  <%= ff.text_field :name, id: "account_name_#{index}", :maxlength => get_max_length(:default) %>
 
   <%= ff.label :owner_id, 'Account Owner' %>
   <div class="chosen-styled-select">
@@ -19,7 +19,7 @@
   :value => ff.object && number_to_currency(ff.object.value, precision: 0, unit: "$") %>
 
   <%= ff.label :number, 'Account Number' %>
-  <%= ff.text_field :number, id: "account_number_#{index}" %>
+  <%= ff.text_field :number, id: "account_number_#{index}", :maxlength => get_max_length(:default) %>
 
   <%= ff.label :primary_contact_broker_id, 'Primary Contact - Broker' %>
   <div class="chosen-styled-select">
@@ -27,7 +27,7 @@
   </div>
 
   <%= ff.label :notes %>
-  <%= ff.text_area :notes, id: "account_notes_#{index}" %>
+  <%= ff.text_area :notes, id: "account_notes_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){

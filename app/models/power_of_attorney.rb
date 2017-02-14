@@ -22,4 +22,6 @@ class PowerOfAttorney < ActiveRecord::Base
     source: :contact
 
   before_save { self.category = Category.fetch("wills - trusts - legal") }
+  
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

@@ -11,4 +11,6 @@ class FinalWish < ActiveRecord::Base
   has_many :share_with_contacts, through: :shares, source: :contact
 
   before_save { self.category = Category.fetch("final wishes") }
+  
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

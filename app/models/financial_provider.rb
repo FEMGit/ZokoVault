@@ -32,4 +32,10 @@ class FinancialProvider < ActiveRecord::Base
   before_save { self.category = Category.fetch("financial information") }
   
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
+
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :web_address, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
+  validates_length_of :street_address, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
 end

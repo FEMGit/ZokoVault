@@ -1,6 +1,7 @@
 class FinalWishesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_final_wish_info, only: [:show, :edit, :update]
   before_action :set_final_wish, only: [:destroy]
   before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit, :new]
@@ -126,7 +127,7 @@ class FinalWishesController < AuthenticatedController
     authorize @final_wish
     @final_wish.destroy
     respond_to do |format|
-      format.html { redirect_to :back || final_wishes_url, notice: 'Final Wish was successfully destroyed.' }
+      format.html { redirect_to back_path || final_wishes_url, notice: 'Final Wish was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -1,4 +1,5 @@
 class CategoriesController < AuthenticatedController
+  include BackPathHelper
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
   
@@ -10,7 +11,7 @@ class CategoriesController < AuthenticatedController
   include BreadcrumbsCacheModule
   
   def set_previous_crumbs
-    return unless request.referrer.present?
+    return unless back_path.present?
     @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(current_user, @shared_user)
   end
   

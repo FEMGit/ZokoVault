@@ -1,6 +1,7 @@
 class DocumentsController < AuthenticatedController
   include SharedViewModule
   include DocumentsHelper
+  include BackPathHelper
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_viewable_contacts, only: [:update, :edit]
@@ -16,7 +17,7 @@ class DocumentsController < AuthenticatedController
   include BreadcrumbsCacheModule
 
   def set_previous_crumbs
-    return unless request.referrer.present?
+    return unless back_path.present?
     @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(current_user, @shared_user)
   end
   

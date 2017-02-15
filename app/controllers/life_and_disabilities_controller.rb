@@ -1,6 +1,7 @@
 class LifeAndDisabilitiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_life, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
@@ -109,7 +110,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to :back || lives_url, notice: 'Insurance policy was successfully destroyed.' }
+      format.html { redirect_to back_path || lives_url, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

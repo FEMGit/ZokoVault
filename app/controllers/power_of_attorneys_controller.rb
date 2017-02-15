@@ -1,6 +1,7 @@
 class PowerOfAttorneysController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]
@@ -83,7 +84,7 @@ class PowerOfAttorneysController < AuthenticatedController
   def destroy
     @power_of_attorney.destroy
     respond_to do |format|
-      format.html { redirect_to :back || power_of_attorneys_url, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to back_path || power_of_attorneys_url, notice: 'Power of attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

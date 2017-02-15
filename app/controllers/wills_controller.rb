@@ -1,6 +1,7 @@
 class WillsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_will, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create]
   before_action :set_previous_shared_with, only: [:create]
@@ -82,7 +83,7 @@ class WillsController < AuthenticatedController
     authorize @will
     @will.destroy
     respond_to do |format|
-      format.html { redirect_to :back || wills_url, notice: 'Will was successfully destroyed.' }
+      format.html { redirect_to back_path || wills_url, notice: 'Will was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

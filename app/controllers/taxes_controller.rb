@@ -1,6 +1,7 @@
 class TaxesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_tax_year, only: [:show, :edit, :update]
   before_action :set_tax, only: [:destroy]
   before_action :set_category, only: [:index, :show]
@@ -128,7 +129,7 @@ class TaxesController < AuthenticatedController
     authorize @tax
     @tax.destroy
     respond_to do |format|
-      format.html { redirect_to :back || taxes_url, notice: 'Tax was successfully destroyed.' }
+      format.html { redirect_to back_path || taxes_url, notice: 'Tax was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

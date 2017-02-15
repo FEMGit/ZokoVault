@@ -158,6 +158,7 @@ Rails.application.routes.draw do
       get :setup
       get :my_profile
       post :send_code
+      post :apply_promo_code
       put :send_code
       post :verify_code
       put :verify_code
@@ -284,6 +285,15 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/final_wishes/:id' => 'final_wishes#show', as: :shared_final_wishes
   get 'shared_view/:shared_user_id/final_wishes/:id/edit' => 'final_wishes#edit', as: :shared_final_wishes_edit
   get 'shared_view/:shared_user_id/final_wishes/new/:group' => 'final_wishes#new', as: :shared_new_final_wishes
+  
+  # Stripe callbacks
+  scope :stripe do
+    # Key must match token on Stripe dashboard to authenticate callback
+    post "/subscription_created" => "stripe_callbacks#subscription_created"
+    post "/payment_success" => "stripe_callbacks#payment_success"
+    post "/payment_failure" => "stripe_callbacks#payment_failure"
+    post "/subscription_expired" => "stripe_callbacks#subscription_expired"
+  end
 
   # Information pages
   get "/about", to: "pages#about", as: :about

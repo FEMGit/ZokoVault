@@ -1,0 +1,40 @@
+<h2>Subscription Details</h2>
+
+<div>
+  <%= label_tag "user_subscription_attributes_plan_id", 'Expiration Date' %><br>
+  <div class='styled-select question-select'>
+    <%= select_tag "user[subscription_attributes][plan_id]", 
+      options_from_collection_for_select(Subscription.plans, 'id', 'name'),
+      onchange: "updateSubscription()"
+    %>
+  </div>
+
+  <% subscription = Subscription.plans.first %>
+  <span id='subscription-description'>
+    <%= subscription.try(:[], :description) %>
+  </span>
+
+  <span id='subscription-price'>
+    <%= subscription.try(:[], :price) || "$ 0.00" %>
+  </span>
+</div>
+
+<div>
+  Total
+  <span  id='subscription-total'></span>
+</div>
+
+<div id='promo-row'>
+  <div id='promo-name'></div>
+  <div id='promo-description'></div>
+  <div id='promo-price'></div>
+</div>
+
+<br/>
+
+<%= label_tag "user_subscription_attributes_promo_code", 'Promo Code' %><br>
+<%= text_field_tag "user[subscription_attributes][promo_code]", "", class: "form-control" %>
+<button class="button primary-button big-button" 
+        onClick="applyPromoCode(); return false" 
+        id="apply-promo-code-button">Apply</button>
+<div id='promo-code-text'></div>

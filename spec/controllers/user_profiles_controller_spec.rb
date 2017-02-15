@@ -1,6 +1,18 @@
 require 'rails_helper'
+require 'stripe_mock'
 
 RSpec.describe UserProfilesController, type: :controller do
+  let(:stripe_helper) { StripeMock.create_test_helper }
+  before { StripeMock.start }
+  after { StripeMock.stop }
+  
+  let!(:plan) do
+    stripe_helper.create_plan(
+      id: "test_plan",
+      amount: 100,
+      name: "test-monthly-zoku-plan"
+    )
+  end
 
   let(:user) { create :user }
   let(:valid_attributes) do
@@ -8,6 +20,11 @@ RSpec.describe UserProfilesController, type: :controller do
       .merge(employers_attributes: {"0" => attributes_for(:employer) })
       .merge(user_id: user.id)
       .merge(email: "Email@email.com")
+      .merge(subscription: {
+        plan_id: plan.id,
+        auto_resubscribe: false,
+        stripe_token: stripe_helper.generate_card_token
+      })
   end
 
   let(:invalid_attributes) do
@@ -23,7 +40,7 @@ RSpec.describe UserProfilesController, type: :controller do
 
   describe "GET #show" do
     it "assigns the requested user_profile as @user_profile" do
-      user_profile = UserProfile.create! valid_attributes.merge(user: user)
+      user_profile = create(:user_profile, user: user)
       get :show, {}, session: valid_session
       expect(assigns(:user_profile)).to eq(user_profile)
     end
@@ -38,7 +55,7 @@ RSpec.describe UserProfilesController, type: :controller do
 
   describe "GET #edit" do
     it "assigns the requested user_profile as @user_profile" do
-      user_profile = UserProfile.create! valid_attributes.merge(user: user)
+      user_profile = create(:user_profile, user: user)
       get :edit, session: valid_session
       expect(assigns(:user_profile)).to eq(user_profile)
     end
@@ -78,7 +95,7 @@ RSpec.describe UserProfilesController, type: :controller do
 
   describe "PUT #update" do
     let(:user_profile) do
-      UserProfile.create! valid_attributes.merge(user: user)
+      create(:user_profile, user: user)
     end
 
     context "with valid params" do
@@ -116,16 +133,15 @@ RSpec.describe UserProfilesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
+    before :each do @user_profile = create(:user_profile, user: user) end
     it "destroys the requested user_profile" do
-      user_profile = UserProfile.create! valid_attributes
-      expect { delete :destroy, {id: user_profile.to_param}, session: valid_session }
+      expect { delete :destroy, {id: @user_profile.to_param}, session: valid_session }
         .to change(UserProfile, :count).by(-1)
     end
 
     it "redirects to the user_profile list" do
-      user_profile = UserProfile.create! valid_attributes
-      delete :destroy, {id: user_profile.to_param}, session: valid_session
-      expect(response).to redirect_to(user_profile_url)
+      delete :destroy, {id: @user_profile.to_param}, session: valid_session
+      expect(response).to redirect_to(@user_profile_url)
     end
   end
 end

@@ -11,9 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 20170407160553) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -348,6 +346,30 @@ ActiveRecord::Schema.define(version: 20170407160553) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+  
+  add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
+  add_index "power_of_attorney_contacts", ["user_id"], name: "index_power_of_attorney_contacts_on_user_id", using: :btree
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "stripe_id"
+    t.string   "description"
+    t.integer  "amount"
+    t.string   "currency"
+    t.boolean  "captured"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "payments", ["user_id"], name: "index_payments_on_user_id", using: :btree
+
+  create_table "power_of_attorney_contacts", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
   add_index "power_of_attorney_contacts", ["user_id"], name: "index_power_of_attorney_contacts_on_user_id", using: :btree
@@ -407,6 +429,18 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name_on_card"
+    t.string   "last4"
+    t.string   "customer_id"
+    t.string   "stripe_token"
+    t.string   "plan_id"
+    t.string   "promo_code"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
 
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
@@ -527,11 +561,11 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "email",                  default: "",       null: false
+    t.string   "encrypted_password",     default: "",       null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,        null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -540,13 +574,18 @@ ActiveRecord::Schema.define(version: 20170407160553) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",        default: 0,     null: false
+    t.integer  "failed_attempts",        default: 0,        null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.boolean  "setup_complete",         default: false
     t.boolean  "admin"
+    t.string   "stripe_id"
+    t.string   "subscription_status",    default: "unpaid"
+    t.string   "subscription_type"
+    t.datetime "paid_through"
+    t.boolean  "auto_resubscribe",       default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -646,6 +685,9 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
+  add_foreign_key "power_of_attorney_contacts", "categories"
+  add_foreign_key "power_of_attorney_contacts", "users"
+  add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"

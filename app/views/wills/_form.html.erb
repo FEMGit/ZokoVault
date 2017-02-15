@@ -1,6 +1,7 @@
 <div class="card wills mb-30">
   <%= f.hidden_field :id, id: "will_id_#{index}" %>
   <%= f.hidden_field :user_id %>
+  <%= render partial: 'layouts/hidden_for_disabled', locals: { name: :share_with_contact_ids, shares: data.share_with_contact_ids, f: f } %>
   <% if data.id.present? && @errors %>
     <% error_list = @errors.detect {|x| x[:id].to_i == data.id } %>
   <% else %>

@@ -1,4 +1,8 @@
 class Document < ActiveRecord::Base
+  white_list_categories = [Rails.application.config.x.FinancialInformationCategory, Rails.application.config.x.WtlCategory,
+                                Rails.application.config.x.InsuranceCategory, Rails.application.config.x.TaxCategory,
+                                Rails.application.config.x.FinalWishesCategory, Rails.application.config.x.ContactCategory, "Select..."]
+    
   belongs_to :user
   belongs_to :folder
   
@@ -21,4 +25,6 @@ class Document < ActiveRecord::Base
   def self.previewed?(extension)
     DOCUMENT_PREVIEW_FILES.any? { |x| extension.include?(x) }
   end
+    
+  validates :category, inclusion: { in: white_list_categories, allow_blank: true }
 end

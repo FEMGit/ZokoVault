@@ -68,7 +68,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     authorize @insurance_card
     PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
-      if @insurance_card.save
+      if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), nil, resource_owner)
         @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
@@ -89,7 +89,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     @previous_share_with_ids = @insurance_card.share_with_contact_ids
     PolicyService.fill_life_policies(policy_params, @insurance_card)
     respond_to do |format|
-      if @insurance_card.update(life_params)
+      if validate_params && @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
@@ -126,6 +126,10 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    policy_params.values.select{ |x| LifeAndDisabilityPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0
+  end
   
   def set_viewable_contacts
     @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)

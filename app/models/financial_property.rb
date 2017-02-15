@@ -27,4 +27,7 @@ class FinancialProperty < ActiveRecord::Base
   
   validates :name, presence: { :message => "Required"}
   before_save { self.category = Category.fetch("financial information") }
+  
+  validates :property_type, inclusion: { in: FinancialProperty::property_types }
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

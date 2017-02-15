@@ -1,6 +1,7 @@
 class FinancialInformationService
   def self.fill_accounts(accounts, provider, current_user_id)
     accounts.values.each do |account|
+      next unless (FinancialAccountInformation::account_types.include? account[:account_type])
       if account[:id].present?
         provider.accounts.update(account[:id], account)
       else

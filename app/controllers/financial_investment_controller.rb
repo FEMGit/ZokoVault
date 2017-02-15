@@ -47,12 +47,12 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def create
-    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name])
-    @financial_investment = FinancialInvestment.new(property_params.merge(user_id: resource_owner.id))
+    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: investment_params[:name])
+    @financial_investment = FinancialInvestment.new(investment_params.merge(user_id: resource_owner.id))
     @financial_provider.investments << @financial_investment
     authorize @financial_investment
     respond_to do |format|
-      if @financial_provider.save
+      if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner, @financial_investment)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
@@ -70,8 +70,8 @@ class FinancialInvestmentController < AuthenticatedController
     authorize @financial_investment
     @previous_share_with = @investment_provider.share_with_contact_ids
     respond_to do |format|
-      if @financial_investment.update(property_params.merge(user_id: resource_owner.id))
-        @investment_provider.update(name: property_params[:name])
+      if validate_params && @financial_investment.update(investment_params.merge(user_id: resource_owner.id))
+        @investment_provider.update(name: investment_params[:name])
         FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_investment)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
@@ -97,6 +97,11 @@ class FinancialInvestmentController < AuthenticatedController
 
   private
   
+  def validate_params
+    return false unless (FinancialInvestment::investment_types.include? investment_params[:investment_type])
+    true
+  end
+  
   def set_viewable_contacts
     contacts = category_subcategory_shares(@financial_investment, resource_owner)
     return unless contacts.present?
@@ -104,7 +109,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def prepare_share_params
-    return unless property_params[:share_with_contact_ids].present?
+    return unless investment_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     params[:financial_investment][:share_with_contact_ids] -= viewable_shares
     params[:financial_investment][:share_with_contact_ids].reject!(&:blank?)
@@ -149,7 +154,7 @@ class FinancialInvestmentController < AuthenticatedController
     @group = "Investment or Debt"
   end
 
-  def property_params
+  def investment_params
     params.require(:financial_investment).permit(:id, :name, :web_address, :investment_type, :notes, :value, :owner_id, :city, :state, :zip, :address, :phone_number, :primary_contact_id, :category_id,
                                                  share_with_contact_ids: [])
   end

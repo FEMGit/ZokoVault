@@ -4,4 +4,6 @@ class PropertyAndCasualtyPolicy < ActiveRecord::Base
 
   belongs_to :policy_holder, class_name: "Contact"
   belongs_to :broker_or_primary_contact, class_name: "Contact"
+  
+  validates :policy_type, inclusion: { in: PropertyAndCasualtyPolicy::policy_types }
 end

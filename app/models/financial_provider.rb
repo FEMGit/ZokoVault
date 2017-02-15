@@ -30,4 +30,6 @@ class FinancialProvider < ActiveRecord::Base
   
   validates :name, presence: { :message => "Required" }
   before_save { self.category = Category.fetch("financial information") }
+  
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

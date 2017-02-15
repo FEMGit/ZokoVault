@@ -88,7 +88,7 @@ class ContactsController < AuthenticatedController
   end
 
   private
-    
+  
     def set_contact_shares
       user_for_contact = User.find_by(email: Contact.find_by(id: @contact.id).emailaddress)
       share_documents = ShareService.shared_documents(resource_owner, user_for_contact)

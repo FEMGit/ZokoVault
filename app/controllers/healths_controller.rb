@@ -67,7 +67,7 @@ class HealthsController < AuthenticatedController
     authorize @insurance_card
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
-      if @insurance_card.save
+      if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
@@ -88,7 +88,7 @@ class HealthsController < AuthenticatedController
     @previous_share_with_ids = @insurance_card.share_with_contact_ids
     PolicyService.fill_health_policies(policy_params, @insurance_card)
     respond_to do |format|
-      if @insurance_card.update(health_params)
+      if validate_params && @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
@@ -125,6 +125,10 @@ class HealthsController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    policy_params.values.select{ |x| HealthPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0
+  end
   
   def set_viewable_contacts
     @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)

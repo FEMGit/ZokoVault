@@ -36,4 +36,6 @@ class Vendor < ActiveRecord::Base
       shares.build(user_id: user_id, contact_id: contact_id)
     end
   end
+  
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

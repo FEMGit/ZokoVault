@@ -82,11 +82,14 @@ class TaxesController < AuthenticatedController
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     authorize_save
     respond_to do |format|
-      if @tax_year.save
+      if validate_params && @tax_year.save
         success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }
       else
+        @taxes = @tax_year.taxes
+        @taxes.each { |t| authorize t }
+        
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @tax_year.errors, status: :unprocessable_entity }
@@ -103,12 +106,15 @@ class TaxesController < AuthenticatedController
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     authorize_save
     respond_to do |format|
-      if @tax_year.update(tax_params)
+      if validate_params && @tax_year.update(tax_params)
         TaxesService.update_shares(@tax_year, @previous_share_with, resource_owner)
         success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else
+        @taxes = @tax_year.taxes
+        @taxes.each { |t| authorize t }
+        
         error_path(:edit)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @tax.errors, status: :unprocessable_entity }
@@ -128,6 +134,12 @@ class TaxesController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    tax_values = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.TaxCategory }.values
+    tax_values.map! {|x| x["groups"]}.flatten!.map! {|x| x["value"]}
+    tax_values.include? @tax_year.year.to_s
+  end
   
   def set_viewable_contacts
     @taxes.each do |tax|

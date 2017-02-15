@@ -19,4 +19,7 @@ class FinancialInvestment < ActiveRecord::Base
   validates :name, presence: { :message => "Required"}
   
   before_save { self.category = Category.fetch("financial information") }
+  
+  validates :investment_type, inclusion: { in: FinancialInvestment::investment_types }
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

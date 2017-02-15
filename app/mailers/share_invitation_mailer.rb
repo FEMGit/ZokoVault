@@ -4,7 +4,6 @@ class ShareInvitationMailer < ApplicationMailer
   def new_user(contact, resource_owner)
     @contact = contact
     @resource_owner = resource_owner
-    @sign_up_url = sign_up_url
     mail(to: @contact.emailaddress, subject: "#{resource_owner.name} sent you a share invitation on ZokuVault")
   end
 

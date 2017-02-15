@@ -68,7 +68,7 @@ class DocumentsController < AuthenticatedController
     authorize @document
 
     respond_to do |format|
-      if @document.save && @document.update(document_share_params)
+      if validate_params && @document.save && @document.update(document_share_params)
         handle_document_saved(format)
       else
         handle_document_not_saved(format)
@@ -80,7 +80,7 @@ class DocumentsController < AuthenticatedController
     authorize @document
     respond_to do |format|
       set_document_update_date_to_now(@document)
-      if @document.update(document_share_params)
+      if validate_params && @document.update(document_share_params)
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else
@@ -121,6 +121,14 @@ class DocumentsController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    category_name = document_params[:category]
+    card_values = card_values(category_name)
+    card_names = card_names(category_name)
+    permitted_names = (card_values.flatten + card_names.flatten).map { |x| x[:name] }
+    permitted_names.include? document_params[:group]
+  end
   
   def set_dropdown_options
     @category_dropdown_options = 

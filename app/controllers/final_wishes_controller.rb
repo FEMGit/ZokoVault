@@ -55,6 +55,11 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes/new
   def new
     @group = FinalWishService.get_wish_group_value_by_name(@groups, params[:group])
+    unless @group.present?
+      redirect_to shared_view_final_wishes_path if shared_view?
+      redirect_to final_wishes_path
+      return
+    end
     final_wish = FinalWishService.get_wish_info(@group["label"], resource_owner)
     redirect_to edit_final_wish_path(final_wish) if final_wish
     @final_wish_info = FinalWishInfo.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase))
@@ -81,7 +86,7 @@ class FinalWishesController < AuthenticatedController
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     authorize_save
     respond_to do |format|
-      if @final_wish_info.save
+      if validate_params && @final_wish_info.save
         success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: 'Final Wish was successfully created.' } }
         format.json { render :show, status: :created, location: @final_wish_info }
@@ -102,7 +107,7 @@ class FinalWishesController < AuthenticatedController
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     authorize_save
     respond_to do |format|
-      if @final_wish_info.update(final_wish_params)
+      if validate_params && @final_wish_info.update(final_wish_params)
         FinalWishService.update_shares(@final_wish_info, @previous_share_with, resource_owner)
         success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: message } }
@@ -127,6 +132,12 @@ class FinalWishesController < AuthenticatedController
   end
 
   private
+  
+  def validate_params
+    final_wish_groups = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.FinalWishesCategory }.values
+    final_wish_groups.map! {|x| x["groups"]}.flatten!.map! {|x| x["value"]}
+    final_wish_groups.include? @final_wish_info.group
+  end
 
   def set_viewable_contacts
     @final_wishes.each do |final_wish|

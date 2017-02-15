@@ -346,6 +346,8 @@ GEM
     pundit (1.1.0)
       activesupport (>= 3.0.0)
     rack (1.6.5)
+    rack-attack (5.0.1)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rack-timeout (0.4.2)
@@ -512,6 +514,7 @@ DEPENDENCIES
   pg
   puma
   pundit
+  rack-attack
   rack-timeout
   rails (= 4.2.7.1)
   rails_12factor
@@ -532,4 +535,4 @@ RUBY VERSION
    ruby 2.3.1
 
 BUNDLED WITH
-   1.13.7
+   1.14.4

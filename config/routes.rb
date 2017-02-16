@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   resources :vendors
   resources :contacts
   devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords',
-                                    unlocks: 'unlocks' }
+                                    unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -36,7 +37,6 @@ Rails.application.routes.draw do
   # Mailer
   post 'contact_us', to: 'messages#create'
   post 'mailing_list', to: 'interested_users#create'
-  get 'users/sign_up', as: :sign_up, only_path: true
 
   # Taxes
   get 'taxes/:tax', to: 'taxes#show', as: :show_tax

@@ -10,6 +10,7 @@
     <tr>
       <th>Name</th>
       <th>Documents/User</th>
+      <th>Shares/User</th>
       <th>Logins/Current Week</th>
       <th>Logins/Week AVG</th>
       <th>Session Length AVG</th>
@@ -26,6 +27,7 @@
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
+      <td style="display: none"></td>
     <% end %>
     <% @users && @users.each do |user| %>
       <tr>
@@ -34,6 +36,9 @@
         </td>
         <td>
           <%= documents_per_user(user) %>
+        </td>
+        <td>
+          <%= shares_per_user(user) %>
         </td>
         <td>
           <%= login_count_per_week(user) %>

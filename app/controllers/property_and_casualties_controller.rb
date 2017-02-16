@@ -1,6 +1,7 @@
 class PropertyAndCasualtiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
@@ -112,7 +113,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     authorize @property_and_casualty
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to :back || properties_url, notice: 'Insurance policy was successfully destroyed.' }
+      format.html { redirect_to back_path || properties_url, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

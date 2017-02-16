@@ -1,6 +1,7 @@
 class TrustsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]
@@ -87,7 +88,7 @@ class TrustsController < AuthenticatedController
   def destroy
     @trust.destroy
     respond_to do |format|
-      format.html { redirect_to :back || trusts_url, notice: 'Trust was successfully destroyed.' }
+      format.html { redirect_to back_path || trusts_url, notice: 'Trust was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

@@ -1,6 +1,7 @@
 class FinancialAlternativeController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include BackPathHelper
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
@@ -87,7 +88,7 @@ class FinancialAlternativeController < AuthenticatedController
     authorize financial_provider
     @account.destroy
     respond_to do |format|
-      format.html { redirect_to :back || financial_information_path, notice: 'Alternative investment was successfully destroyed.' }
+      format.html { redirect_to back_path || financial_information_path, notice: 'Alternative investment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

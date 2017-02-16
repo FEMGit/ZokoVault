@@ -27,3 +27,15 @@ Disallow: /my_profile
 Disallow: /my_profile/
 Disallow: /account_settings
 Disallow: /account_settings/
+Disallow: /usage_metrics
+Disallow: /usage_metrics/
+Disallow: /relationship
+Disallow: /relationship/
+Disallow: /vendors
+Disallow: /vendors/
+Disallow: /vendor_accounts
+Disallow: /vendor_accounts/
+Disallow: /contacts
+Disallow: /contacts/
+Disallow: /users
+Disallow: /users/

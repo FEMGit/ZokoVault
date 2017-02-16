@@ -6,7 +6,7 @@ class WelcomeController < AuthenticatedController
   def index; 
     user_resource_gatherer = UserResourceGatherer.new(current_user)
     @shares = user_resource_gatherer.shares
-    @new_shares = @shares.select { |share| share.created_at > current_user.last_sign_in_at}
+    @new_shares = @shares.select { |share| share.created_at > current_user.last_sign_in_at }
     
     @shared_resources = @new_shares.map! do |share|
       if Category === share.shareable
@@ -15,8 +15,10 @@ class WelcomeController < AuthenticatedController
         share.shareable
       end
     end
-    @shared_resources.compact.flatten!
+    @shared_resources = @shared_resources.compact.flatten
     @shared_users = @shares.map(&:user).compact.uniq
+
+    @new_shares = @new_shares.compact.flatten
     
     current_user.update_attribute(:last_sign_in_at, Time.now)
   end

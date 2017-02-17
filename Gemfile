@@ -27,6 +27,9 @@ gem 'delayed_job_active_record'
 # Abort long requests
 gem 'rack-timeout'
 
+# Block and throttle abusive requests
+gem 'rack-attack'
+
 # Scheduler
 gem 'rufus-scheduler'
 

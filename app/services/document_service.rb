@@ -10,6 +10,12 @@ class DocumentService
     Document.for_user(user).where(:category => @category, :group => group)
   end
   
+  def get_all_insurance_category_documents_count(user, group, vendor_ids)
+    user_group_vendors = Vendor.for_user(user).where(group: group)
+    return 0 unless user_group_vendors.present?
+    user_group_vendors.where(:id => vendor_ids).collect(&:document_ids).flatten.count
+  end
+  
   def get_insurance_documents(user, group, id)
     get_all_groups
     vendor_group_value = @all_groups.detect{|x| x[:label] == @category.name}[:groups].select{ |x| x['label'] == group }.first["value"]

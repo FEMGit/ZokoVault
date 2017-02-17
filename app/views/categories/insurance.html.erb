@@ -10,7 +10,7 @@
   <% @groups.each do |group| %>
     <div class="flex-column">
        <div class="card <%= group['value'] %> column-card section-header">
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_count(current_user, group['label'], @category.name) } %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => insurance_document_count(current_user, group['value'], @category.name) } %>
           <h3 class="mb-20"><%= group["label"] %></h3>
 
         <%= link_to 'Add Insurance', new_link_paths[group['value']], class: "small-button outline-button " %>

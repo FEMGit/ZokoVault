@@ -34,5 +34,11 @@ class FinancialAccountInformation < ActiveRecord::Base
   belongs_to :owner, class_name: "Contact"
   before_save { self.category = Category.fetch("financial information") }
   
+
   validates :account_type, inclusion: { in: FinancialAccountInformation::account_types }
+
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
+  validates_length_of :number, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :value, :maximum => ApplicationController.helpers.get_max_length(:default)
 end

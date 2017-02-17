@@ -8,13 +8,13 @@
   </div>
 
   <%= ff.label :policy_number, 'Policy Number' %>
-  <%= ff.text_field :policy_number, id: "health_policy_number_id_#{index}" %>
+  <%= ff.text_field :policy_number, id: "health_policy_number_id_#{index}", :maxlength => get_max_length(:default) %>
   
   <%= ff.label :group_id, 'Group ID' %>
-  <%= ff.text_field :group_id, id: "health_policy_group_id_#{index}" %>
+  <%= ff.text_field :group_id, id: "health_policy_group_id_#{index}", :maxlength => get_max_length(:default) %>
 
   <%= ff.label :group_number, 'Group Number' %>
-  <%= ff.text_field :group_number, id: "health_group_number_id_#{index}" %> 
+  <%= ff.text_field :group_number, id: "health_group_number_id_#{index}", :maxlength => get_max_length(:default) %> 
 
   <%= ff.label :policy_holder_id, 'Policy Holder' %>
   <div class="chosen-styled-select">
@@ -32,7 +32,7 @@
   </div>
 
   <%= ff.label :notes %>
-  <%= ff.text_area :notes, id: "health_notes_id_#{index}" %>
+  <%= ff.text_area :notes, id: "health_notes_id_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
   changeIdAndName = function($form, old_id, new_id, new_name){

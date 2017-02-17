@@ -6,7 +6,7 @@
   </div><br>
 
   <label>Notes</label>
-  <p><%= ff.text_area :notes, id: "final_wish_notes_id_#{index}" %></p><br>
+  <p><%= ff.text_area :notes, id: "final_wish_notes_id_#{index}", :maxlength => get_max_length(:notes) %></p><br>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">

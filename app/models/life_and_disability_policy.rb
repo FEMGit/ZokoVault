@@ -16,5 +16,9 @@ class LifeAndDisabilityPolicy < ActiveRecord::Base
     association_foreign_key: :secondary_beneficiary_id
   
   validates :policy_type, inclusion: { in: LifeAndDisabilityPolicy::policy_types }
+
+  validates_length_of :coverage_amount, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :policy_number, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end
 

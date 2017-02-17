@@ -15,4 +15,11 @@ class FinancialAlternative < ActiveRecord::Base
   belongs_to :primary_contact, class_name: "Contact"
   belongs_to :owner, class_name: "Contact"
   before_save { self.category = Category.fetch("financial information") }
+  
+  validates_length_of :commitment, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :total_calls, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :total_distributions, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :current_value, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

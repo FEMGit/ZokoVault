@@ -30,4 +30,11 @@ class FinancialProperty < ActiveRecord::Base
   
   validates :property_type, inclusion: { in: FinancialProperty::property_types }
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
+
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
+  validates_length_of :value, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
+  validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:default)
 end

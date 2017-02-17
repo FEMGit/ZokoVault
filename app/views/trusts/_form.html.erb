@@ -12,7 +12,7 @@
   <% if error_list && error_list[:error].messages[:name].any? %>
     <span class="error-label"> - <%= error_list[:error].messages[:name].first %></span>
   <% end %>
-  <%= f.text_field :name, value: data.name, class: ("input-error" if error_list && error_list[:error].messages[:name].present?) %>
+  <%= f.text_field :name, value: data.name, class: ("input-error" if error_list && error_list[:error].messages[:name].present?), :maxlength => get_max_length(:default) %>
 
   <label>Attorney, Accountant or Advisor(s)</label>
   <div class="chosen-styled-select">
@@ -30,7 +30,7 @@
   </div>
 
   <%= f.label :notes %>
-  <p><%= f.text_area :notes, id: "trust_notes_id_#{index}", value: data.notes %></p>
+  <p><%= f.text_area :notes, id: "trust_notes_id_#{index}", value: data.notes, :maxlength => get_max_length(:notes) %></p>
 
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">

@@ -7,4 +7,6 @@ class TaxYearInfo < ActiveRecord::Base
 
   accepts_nested_attributes_for :taxes
   before_save { self.category = Category.fetch("taxes") }
+  
+  validates_length_of :year, :maximum => ApplicationController.helpers.get_max_length(:year)
 end

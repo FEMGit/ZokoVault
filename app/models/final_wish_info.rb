@@ -7,4 +7,6 @@ class FinalWishInfo < ActiveRecord::Base
 
   accepts_nested_attributes_for :final_wishes
   before_save { self.category = Category.fetch("final wishes") }
+  
+  validates_length_of :group, :maximum => ApplicationController.helpers.get_max_length(:default)
 end

@@ -1,8 +1,7 @@
 module FormLimitations
-  TYPE_LIMITS = [ {type: :name, limit: 25},
-                  {type: :email, limit: 40},
-                  {type: :address, limit: 50},
-                  {type: :notes, limit: 500},
+  TYPE_LIMITS = [ {type: :notes, limit: 1000},
+                  {type: :web, limit: 40},
                   {type: :zipcode, limit: 5},
-                  {type: :default, limit: 25}]
+                  {type: :default, limit: 50},
+                  {type: :year, limit: 4}]
 end

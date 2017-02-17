@@ -36,4 +36,7 @@ class Will < ActiveRecord::Base
   validates :title, presence: { :message => "Required" }
 
   before_save { self.category = Category.fetch("wills - trusts - legal") }
+
+  validates_length_of :title, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

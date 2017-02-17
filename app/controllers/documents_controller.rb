@@ -127,7 +127,12 @@ class DocumentsController < AuthenticatedController
     category_name = document_params[:category]
     card_values = card_values(category_name)
     card_names = card_names(category_name)
-    permitted_names = (card_values.flatten + card_names.flatten).map { |x| x[:name] }
+    permitted_names = 
+      if category_name == Rails.application.config.x.ContactCategory
+        (card_values.flatten + card_names.flatten).map { |x| x[:id] }.map(&:to_s)
+      else
+        (card_values.flatten + card_names.flatten).map { |x| x[:name] }
+      end
     permitted_names.include? document_params[:group]
   end
   

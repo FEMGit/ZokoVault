@@ -17,6 +17,8 @@ class WelcomeController < AuthenticatedController
     end
     @shared_resources = @shared_resources.compact.flatten
     @shared_users = @shares.map(&:user).compact.uniq
+
+    @new_shares = @new_shares.compact.flatten
     
     @new_shares = @new_shares.compact.flatten
     

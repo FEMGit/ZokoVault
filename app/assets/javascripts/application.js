@@ -16,7 +16,6 @@
 //= require highcharts/modules/exporting
 //= require maskedinput
 //= require dataTables/jquery.dataTables
-//= require turbolinks
 //= require masonry.pkgd.min.js
 //= require_tree .
 Array.prototype.last = function() {

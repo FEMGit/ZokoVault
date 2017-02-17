@@ -16,7 +16,7 @@ class WtlService
     return unless share_contact_ids.present?
     model.find(object_id).shares.clear
     share_contact_ids.uniq.each do |x|
-      model.find(object_id).shares << Share.create(contact_id: x, user_id: user_id)
+      model.find(object_id).shares << Share.create(contact_id: x, user: User.find_by(id: user_id), shareable_id: object_id)
     end
   end
 end

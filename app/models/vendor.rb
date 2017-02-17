@@ -38,7 +38,7 @@ class Vendor < ActiveRecord::Base
 
   def build_shares
     shares.clear
-    share_with_ids.map(&:present?).each do |contact_id|
+    share_with_ids.select(&:present?).each do |contact_id|
       shares.build(user_id: user_id, contact_id: contact_id)
     end
   end

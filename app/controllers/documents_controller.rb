@@ -207,7 +207,7 @@ class DocumentsController < AuthenticatedController
 
       viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
       share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
-
+      
       document_params.merge(:shares_attributes => share, :user_id => resource_owner.id)
     else
       document_params.merge(:user_id => resource_owner.id)

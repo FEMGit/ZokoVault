@@ -4,7 +4,8 @@ class UsageMetricsController < AuthenticatedController
   before_action :set_user_death_drap, only: [:details]
   helper_method :documents_per_user, :login_count_per_week,
                 :login_count_per_week_avg, :session_length_avg,
-                :site_completed, :categories_left_to_complete
+                :site_completed, :categories_left_to_complete,
+                :shares_per_user
   
   def index; end
   
@@ -62,6 +63,10 @@ class UsageMetricsController < AuthenticatedController
   # Helper Methods
   def documents_per_user(user)
     Document.for_user(user).count
+  end
+  
+  def shares_per_user(user)
+    Share.for_user(user).map(&:contact_id).uniq.count
   end
   
   def login_count_per_week(user)

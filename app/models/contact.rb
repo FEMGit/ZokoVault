@@ -8,7 +8,11 @@ class Contact < ActiveRecord::Base
   has_many :shares, dependent: :destroy
   belongs_to :user_profile
 
+  validates :emailaddress, presence: { :message => "Required" }
   validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
+  validates_format_of :emailaddress,
+                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
+                      :message => "Email should contain @ and domain like '.com'"
   
   validates_length_of :firstname, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :lastname, :maximum => ApplicationController.helpers.get_max_length(:default)

@@ -96,6 +96,13 @@ module DocumentsHelper
         "Card"
       end
   end
+  
+  def insurance_document_count(user, group, category)
+    service = DocumentService.new(:category => category)
+    names = service.get_card_names(user, current_user)
+    vendor_ids = names.flatten.map { |x| x[:id].to_i }.reject(&:zero?)
+    DocumentService.new(:category => category).get_all_insurance_category_documents_count(user, group, vendor_ids)
+  end
 
   def document_count(user, group, category)
     Document.for_user(user).where(category: category, group: group).count

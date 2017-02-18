@@ -1,6 +1,6 @@
 <div class="card cg-<%=year%> column-card mb-30">
   <% if year_exist?(@taxes, year) %>
-    <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, year, @category) } %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, year.to_s, @category.name) } %>
   <% end %>
   <h3><%= year %> Taxes</h3>
 

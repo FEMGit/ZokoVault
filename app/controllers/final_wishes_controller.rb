@@ -136,7 +136,7 @@ class FinalWishesController < AuthenticatedController
   
   def validate_params
     final_wish_groups = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.FinalWishesCategory }.values
-    final_wish_groups.map! {|x| x["groups"]}.flatten!.map! {|x| x["value"]}
+    final_wish_groups.map! {|x| x["groups"]}.flatten!.map! {|x| x["label"]}
     final_wish_groups.include? @final_wish_info.group
   end
 

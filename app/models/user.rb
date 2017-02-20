@@ -85,6 +85,7 @@ class User < ActiveRecord::Base
   end
 
   before_create { set_as_admin }
+  after_destroy :invitation_sent_clear
 
   private
   
@@ -97,5 +98,9 @@ class User < ActiveRecord::Base
   def set_as_admin
     self.admin ||= (email =~ ADMIN_REGEX).present?
     true
+  end
+  
+  def invitation_sent_clear
+    ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
   end
 end

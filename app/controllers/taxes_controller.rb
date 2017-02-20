@@ -84,6 +84,7 @@ class TaxesController < AuthenticatedController
     authorize_save
     respond_to do |format|
       if validate_params && @tax_year.save
+        TaxesService.update_shares(@tax_year, nil, resource_owner)
         success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }

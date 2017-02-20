@@ -1,7 +1,7 @@
 class WelcomeController < AuthenticatedController
   skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed]
   helper_method :financial_information_any?, :estate_planning_document_count, :insurance_vendors_count,
-                :tax_year_count, :final_wishes_count, :contacts_count, :button_text
+                :tax_year_count, :final_wishes_count, :contacts_count, :button_text, :estate_planning_any?
 
   def index; 
     user_resource_gatherer = UserResourceGatherer.new(current_user)
@@ -20,13 +20,18 @@ class WelcomeController < AuthenticatedController
 
     @new_shares = @new_shares.compact.flatten
     
-    @new_shares = @new_shares.compact.flatten
-    
     current_user.update_attribute(:last_sign_in_at, Time.now)
   end
   
   def financial_information_any?
     FinancialProvider.for_user(current_user).any?
+  end
+  
+  def estate_planning_any?
+    (estate_planning_document_count > 0) ||
+      Will.for_user(current_user).any? ||
+      Trust.for_user(current_user).any? ||
+      PowerOfAttorney.for_user(current_user).any?
   end
   
   def estate_planning_document_count

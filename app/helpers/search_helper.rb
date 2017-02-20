@@ -19,6 +19,15 @@ module SearchHelper
   end
   
   def resource_link(resource)
+    if resource.is_a? Contact
+      profile_for_current_user = UserProfile.find_by(user_id: current_user.id)
+      if resource.user_profile_id.present? && (resource.user_profile_id.eql? profile_for_current_user.id)
+        return my_profile_path
+      else
+        return url_for(resource)
+      end
+    end
+    
     if subcategory_view_path(resource).present?
       subcategory_view_path(resource)
     elsif resource.try(:attributes)

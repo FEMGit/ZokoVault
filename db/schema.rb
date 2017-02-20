@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170213130654) do
+ActiveRecord::Schema.define(version: 20170220030831) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -341,8 +342,9 @@ ActiveRecord::Schema.define(version: 20170213130654) do
   create_table "share_invitation_sents", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "contact_email"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "user_invite_status"
   end
 
   add_index "share_invitation_sents", ["contact_email"], name: "index_share_invitation_sents_on_contact_email", using: :btree

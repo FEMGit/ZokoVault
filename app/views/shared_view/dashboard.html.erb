@@ -1,5 +1,5 @@
 <h1>Dashboard</h1>
-<div class="card mb-30">
+<div class="card mb-30 shared">
   <% if @shared_category_names_full.any? %>
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>

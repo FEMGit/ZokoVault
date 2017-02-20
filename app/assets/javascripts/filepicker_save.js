@@ -2,7 +2,6 @@ var saveFileUrl = function(option, file_picker_api_key) {
   option = option || ""
   filepicker.setKey(file_picker_api_key);
     filepicker.pick({
-      container: 'modal',
       customSourceContainer: 'zoku-stage',
       extensions: ['.png', '.jpg', '.PNG', '.JPG', '.jpeg', 'JPEG', '.tiff', '.TIFF', '.gif', '.GIF'],
       conversions: ['crop'],

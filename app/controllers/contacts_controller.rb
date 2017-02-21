@@ -90,10 +90,10 @@ class ContactsController < AuthenticatedController
   private
   
     def set_contact_shares
-      user_for_contact = User.find_by(email: Contact.find_by(id: @contact.id).emailaddress)
-      share_documents = ShareService.shared_documents(resource_owner, user_for_contact)
-      share_categories = ShareService.shared_categories(resource_owner, user_for_contact).map! { |x| Category.fetch(x.downcase) }
-      share_cards = ShareService.shared_cards(resource_owner, user_for_contact)
+      return [] unless @contact.present?
+      share_documents = ShareService.shared_documents_by_contact(resource_owner, @contact)
+      share_categories = ShareService.shared_categories(resource_owner, nil, @contact).map! { |x| Category.fetch(x.downcase) }
+      share_cards = ShareService.shared_cards(resource_owner, nil, @contact)
       @shares = share_documents + share_categories + share_cards
       @contact_documents = DocumentService.contact_documents(resource_owner, @category, @contact.id)
     end

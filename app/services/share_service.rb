@@ -26,13 +26,25 @@ class ShareService
     end
   end
   
+  def self.shared_documents_by_contact(resource_owner, contact)
+    shareables = SharedViewService.shares_by_contact(resource_owner, contact).map(&:shareable)
+    direct_document_share = shareables.select { |res| res.is_a? Document }
+    
+    shared_group_names = shared_groups(resource_owner, nil, contact)
+    shared_category_names = shared_categories(resource_owner, nil, contact)
+    all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
+  end
+  
   def self.shared_documents(resource_owner, user)
     shareables = SharedViewService.shares(resource_owner, user).map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
     
     shared_group_names = shared_groups(resource_owner, user)
     shared_category_names = shared_categories(resource_owner, user)
-    
+    all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
+  end
+  
+  def self.all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
     group_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.group }
     vendor_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.vendor_id }
     financial_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.financial_information_id }
@@ -40,16 +52,29 @@ class ShareService
     (group_docs + direct_document_share + category_docs + vendor_docs + financial_docs).uniq
   end
   
-  def self.shared_cards(owner, user)
-    shareables = SharedViewService.shares(owner, user).map(&:shareable)
+  def self.shared_cards(owner, user = nil, contact = nil)
+    shareables =
+      if contact.present?
+        SharedViewService.shares_by_contact(owner, contact).map(&:shareable)
+      elsif user.present?
+        SharedViewService.shares(owner, user).map(&:shareable)
+      end
     shareables.reject { |res| (res.is_a? Document) || (res.is_a? Category) }
   end
   
-  def self.shared_groups(owner, user)
-    SharedViewService.shared_group_names(owner, user)
+  def self.shared_groups(owner, user = nil, contact = nil)
+    if contact.present?
+      SharedViewService.shared_group_names(owner, nil, nil, contact)
+    elsif user.present?
+      SharedViewService.shared_group_names(owner, user)
+    end
   end
   
-  def self.shared_categories(owner, user)
-    SharedViewService.shares(owner, user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+  def self.shared_categories(owner, user = nil, contact = nil)
+    if contact.present?
+      SharedViewService.shares_by_contact(owner, contact).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+    elsif user.present?
+      SharedViewService.shares(owner, user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+    end
   end
 end

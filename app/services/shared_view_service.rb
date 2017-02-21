@@ -23,8 +23,18 @@ class SharedViewService
     owner.shares.where(contact: Contact.where(emailaddress: non_owner.email))
   end
   
-  def self.shared_group_names(owner, non_owner, category = nil)
-    all_shares = shares(owner, non_owner).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
+  def self.shares_by_contact(owner, contact)
+    return [] if contact.blank?
+    owner.shares.where(contact: contact)
+  end
+  
+  def self.shared_group_names(owner, non_owner = nil, category = nil, contact = nil)
+    all_shares = 
+      if contact.present?
+        shares_by_contact(owner, contact).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
+      else
+        shares(owner, non_owner).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
+      end
     groups = []
     all_shares.each do |shareable|
       if category && shareable.category != Category.fetch(category.downcase)

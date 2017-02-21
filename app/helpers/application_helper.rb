@@ -63,7 +63,7 @@ module ApplicationHelper
       else
         subcategory.try(:title) || subcategory.try(:name) || subcategory.class.name.titleize
       end
-    return title unless subcategory.present?
+    return title unless subcategory.present? && subcategory.try(:category)
     "#{subcategory.category.name} - #{title}"
   end
   
@@ -96,21 +96,6 @@ module ApplicationHelper
       else
         ""
       end
-  end
-  
-  def subcategory_name(subcategory)
-    title = 
-      if subcategory.is_a? Tax
-        tax_year = TaxYearInfo.find(subcategory.tax_year_id)
-        tax_year.year.to_s
-      elsif subcategory.is_a? FinalWish
-        final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
-        final_wish_info.group
-      else
-        subcategory.try(:title) || subcategory.try(:name) || subcategory.class.name.titleize
-      end
-    return title unless subcategory.present?
-    "#{subcategory.category.name} - #{title}"
   end
   
   def disabled?(name)

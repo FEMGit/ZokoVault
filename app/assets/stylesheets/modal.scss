@@ -82,6 +82,15 @@ a.modal-close:hover {
   width: 90%;
 }
 
+
+@include media($mobile) {
+  .modal-content {
+    .clear {
+      margin-bottom: -20px;
+    }
+  }
+}
+
 @media screen and (max-width: 525px) {
   .modal-no-js {
     .modal-step-title {
@@ -90,14 +99,12 @@ a.modal-close:hover {
     .modal-content {
       .field {
         input[type=text], input[type=date], .styled-select, textarea, select {
-          width: 70%;
           min-width: 200px;
         }
       }
       .styled-select {
         background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
         select {
-          width: 70%;
           min-width: 200px;
           text-overflow: ellipsis;
           padding-right: 40px;

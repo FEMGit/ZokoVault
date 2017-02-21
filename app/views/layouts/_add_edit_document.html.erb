@@ -37,7 +37,7 @@
     <div class="chosen-styled-select">
       <%= f.collection_select :category, 
         @category_dropdown_options, :to_s, :to_s, {}, 
-        { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false }
+        { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, :onchange => 'get_drop_down_options();' }
       %>
     </div>
     
@@ -93,14 +93,18 @@
     $('#upload-will-message').show();
   }
   
+  function get_drop_down_options() {
+    update_category($('#document_category.chosen-select :selected').text())
+  }
+  
   $("#document_category_groups.chosen-select").change(function(e, params){
     $("#group").val(params.selected)
   });
   
   //get ajax request to update card drop down info based on chosen category
-  $("#document_category.chosen-select").chosen().change(function(e, params){
+  var update_category = function(category_selected){
     shared_user_id = $("#shared_user_id").val();
-    var url = '/documents/get_drop_down_options/' + params.selected.replace('...', '') + '/' + shared_user_id;
+    var url = '/documents/get_drop_down_options/' + category_selected.replace('...', '') + '/' + shared_user_id;
     $.get(url, function(data) {
       card_values = $('#document_category_groups');
       card_values.empty();
@@ -110,7 +114,7 @@
       card_values.trigger('chosen:updated');
       updateCardNames()
     });
-  })
+  }
   
   //get ajax request to update card names drop down if its insurance or financial category
   var updateCardNames = function(){

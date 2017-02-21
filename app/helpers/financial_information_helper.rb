@@ -17,6 +17,13 @@ module FinancialInformationHelper
     end
   end
   
+  def financial_information_any?
+    FinancialAccountInformation.for_user(current_user).any? ||
+      FinancialInvestment.for_user(current_user).any? ||
+      FinancialAlternative.for_user(current_user).any? ||
+      FinancialProperty.for_user(current_user).any?
+  end
+  
   def financial_provider(empty_provider_object)
     FinancialProvider.find_by(id: empty_provider_object.empty_provider_id)
   end

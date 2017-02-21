@@ -29,6 +29,8 @@ $state-width: 210px;
 }
 .wizard-modal{
   padding: 0;
+  min-width:320px;
+  z-index: 2147483628;
 }
 
 .modal-header{

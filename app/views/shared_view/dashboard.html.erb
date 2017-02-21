@@ -1,10 +1,10 @@
 <h1>Dashboard</h1>
-<div class="card mb-30 shared">
+<div class="card mb-30">
   <% if @shared_category_names_full.any? %>
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>
         <% category_instance = Category.fetch(category.downcase) %>
-        <section class="flex-boxes shared-boxes">
+        <section class="flex-boxes shared-boxes  padding-right">
           <div class="shared-name">
             <h4>
               <%= render partial: 'layouts/category_icons', locals: { category: category_instance } %> <%= category %>

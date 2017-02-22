@@ -21,7 +21,8 @@ class Share < ActiveRecord::Base
   end
 
   after_create do
-    if user.present? && contact.try(:emailaddress)
+    if user.present? && contact.try(:emailaddress).present? &&
+        contact.emailaddress =~ MailService.mail_regexp
       previously_invited = ShareInvitationSent.exists?(user_id: user.id,
                                                     contact_email: contact.emailaddress)
       unless previously_invited

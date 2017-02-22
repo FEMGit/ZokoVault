@@ -34,7 +34,7 @@ class Share < ActiveRecord::Base
           end
 
         ShareInvitationMailer.send(*invitation_args).deliver_now
-        ShareInvitationSent.create(user_id: user.id, contact_email: contact.emailaddress)
+        ShareInvitationSent.create(user_id: user.id, contact_email: contact.emailaddress, user_invite_status: invitation_args.first.to_s)
       end
     end
   end

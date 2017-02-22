@@ -5,7 +5,7 @@ class UsageMetricsController < AuthenticatedController
   helper_method :documents_per_user, :login_count_per_week,
                 :login_count_per_week_avg, :session_length_avg,
                 :site_completed, :categories_left_to_complete,
-                :shares_per_user
+                :shares_per_user, :user_invitations_count, :user_invitations_emails
   
   def index; end
   
@@ -63,6 +63,19 @@ class UsageMetricsController < AuthenticatedController
   # Helper Methods
   def documents_per_user(user)
     Document.for_user(user).count
+  end
+  
+  def user_invitations_emails(user)
+    invited_user_emails = ShareInvitationSent.for_user(user).select { |inv| inv.user_invite_status == "new_user" }.map(&:contact_email)
+    emails = []
+    invited_user_emails.each do |invited_user_email|
+      emails << User.where("email ILIKE ?", invited_user_email).where(:sign_in_count => 0..Float::INFINITY).first.try(:email)
+    end
+    emails.compact
+  end
+  
+  def user_invitations_count(user)
+    user_invitations_emails(user).count
   end
   
   def shares_per_user(user)

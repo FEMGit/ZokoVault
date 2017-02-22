@@ -4,6 +4,16 @@
 <label>Documents/User</label>
 <p><%= documents_per_user(@user) %></p>
 
+<label>Invitations Worked - <%= user_invitations_count(@user) %> users:</label>
+<ul>
+  <% user_invitations_emails(@user).each do |email| %>
+    <li><%= email %></li>
+  <% end %>
+</ul>
+
+<label>Shares/User</label>
+<p><%= shares_per_user(@user) %></p>
+
 <label>Logins/Current Week</label>
 <p><%= login_count_per_week(@user) %></p>
 

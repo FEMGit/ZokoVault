@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Invitations Worked</th>
       <th>Documents/User</th>
       <th>Shares/User</th>
       <th>Logins/Current Week</th>
@@ -28,11 +29,15 @@
       <td style="display: none"></td>
       <td style="display: none"></td>
       <td style="display: none"></td>
+      <td style="display: none"></td>
     <% end %>
     <% @users && @users.each do |user| %>
       <tr>
         <td>
           <%= user.name %>
+        </td>
+        <td>
+          <%= user_invitations_count(user) %>
         </td>
         <td>
           <%= documents_per_user(user) %>

@@ -18,15 +18,24 @@
 
   &:first-child{
     padding-left: 10px;
-    width: 30%;
-  }
-  &:nth-child(2){
-    width: 40%;
-    padding-left: 20px;
   }
   &:last-child{
     background: transparent;
-    width: 30%;
+  }
+
+  &.contact-modal {
+    &:first-child{
+      padding-left: 10px;
+      width: 30%;
+    }
+    &:nth-child(2){
+      width: 40%;
+      padding-left: 10px;
+    }
+    &:last-child{
+      background: transparent;
+      width: 30%;
+    }
   }
 }
 //WIDTH HACK FOR FOUR STEP NAME

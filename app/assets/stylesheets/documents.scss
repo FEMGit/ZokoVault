@@ -3,6 +3,12 @@ $share-form-width: 390px;
 $document-button-margin-top: 13px;
 $date-time-changes-top-position: 15px;
 
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  width: auto\9;
+}
+
 .edit_document_footer_info{
   margin-top: 13px;
 }

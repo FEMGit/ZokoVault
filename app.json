@@ -10,6 +10,9 @@
     "FILEPICKER_API_KEY": {
       "required": true
     },
+    "FILEPICKER_SECRET": {
+      "required": true
+    },
     "AWS_USER_SECRET_ACCESS_KEY": {
       "required": true
     },

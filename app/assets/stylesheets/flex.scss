@@ -27,13 +27,22 @@
   width: 100.3%;
 
   @include media($twelvesixty) {
+    &.padding-right {
+      padding-right: 15px;
+    }
     width: 102%;
   }
   @include media($teneighty) {
     width: 101%;
+    &.padding-right {
+      padding-right: 10px;
+    }
   }
   @include media($eightfifty) {
     width: 100%;
+    &.padding-right {
+      padding-right: 0;
+    }
   }
 }
 
@@ -56,7 +65,7 @@
 .board-name{
   flex:40%;
   @include media($teneighty) {
-      flex:100%;
+    flex:100%;
   }
 }
 
@@ -65,7 +74,12 @@
   padding-top: 12px;
   @include media($teneighty) {
     border-top: 1px solid $color-gray-light;
-    flex:85%;
+    flex:70%;
+    padding-bottom: 12px;
+  }
+  @include media($mobile) {
+    border-top: 1px solid $color-gray-light;
+    flex:55%;
     padding-bottom: 12px;
   }
 }
@@ -75,7 +89,12 @@
   padding-top: 10px;
   @include media($teneighty) {
     border-top: 1px solid $color-gray-light;
-    flex:15%;
+    flex:30%;
+    padding-bottom: 12px;
+  }
+  @include media($mobile) {
+    border-top: 1px solid $color-gray-light;
+    flex:45%;
     padding-bottom: 12px;
   }
 }

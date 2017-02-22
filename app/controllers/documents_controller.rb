@@ -2,6 +2,7 @@ class DocumentsController < AuthenticatedController
   include SharedViewModule
   include DocumentsHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_viewable_contacts, only: [:update, :edit]

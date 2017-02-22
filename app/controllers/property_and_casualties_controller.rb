@@ -2,6 +2,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]

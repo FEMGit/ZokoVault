@@ -2,6 +2,7 @@ class FinancialAccountController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]

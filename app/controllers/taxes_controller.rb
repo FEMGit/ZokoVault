@@ -2,6 +2,7 @@ class TaxesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_tax_year, only: [:show, :edit, :update]
   before_action :set_tax, only: [:destroy]
   before_action :set_category, only: [:index, :show]

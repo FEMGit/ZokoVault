@@ -1,6 +1,7 @@
 class FinancialInvestmentController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include SanitizeModule
   before_action :set_financial_investment, only: [:show, :edit, :update, :destroy]
   before_action :set_financial_investment_provider, only: [:show, :edit, :update, :destroy, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]

@@ -6,6 +6,17 @@
   }
 }
 
+@mixin chosen-dropdown-default {
+  height: 32px !important;
+  border: 1px solid $color-gray-med-tinted !important;
+  border-radius: 5px !important;
+  padding: 0 !important;
+  background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
+  font-family: "Open Sans", serif;
+  font-size: 16px;
+  font-weight: normal;
+}
+
 @mixin avatar-circle($radius) {
   width: $radius;
   height: $radius;

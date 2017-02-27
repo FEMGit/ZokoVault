@@ -12,8 +12,16 @@ class LifeAndDisability < Vendor
   end
 
   before_save { self.category = Category.fetch("insurance") }
+  after_save :clear_beneficiaries
 
   private
+  
+  def clear_beneficiaries
+    self.policy.each do |policy|
+      policy.primary_beneficiaries.clear
+      policy.secondary_beneficiaries.clear
+    end
+  end
 
   def initialize_category_and_group
     self.group = "life"

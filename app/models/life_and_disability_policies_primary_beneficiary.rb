@@ -1,0 +1,2 @@
+class LifeAndDisabilityPoliciesPrimaryBeneficiary < ActiveRecord::Base
+end

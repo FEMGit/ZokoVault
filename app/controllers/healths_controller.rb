@@ -70,6 +70,7 @@ class HealthsController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
+        PolicyService.update_insured_members(@insurance_card, policy_insured_params)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -91,6 +92,7 @@ class HealthsController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
+        PolicyService.update_insured_members(@insurance_card, policy_insured_params)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @health }
@@ -199,7 +201,16 @@ class HealthsController < AuthenticatedController
     permitted_params = {}
     policies.keys.each do |policy_key|
       permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :policy_holder_id, :group_id,
-                                      :broker_or_primary_contact_id, :notes, insured_member_ids: []]
+                                      :broker_or_primary_contact_id, :notes]
+    end
+    policies.permit(permitted_params)
+  end
+  
+  def policy_insured_params
+    policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
+    permitted_params = {}
+    policies.keys.each do |policy_key|
+      permitted_params[policy_key] = [insured_member_ids: []]
     end
     policies.permit(permitted_params)
   end

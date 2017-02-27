@@ -26,6 +26,9 @@ class Document < ActiveRecord::Base
     DOCUMENT_PREVIEW_FILES.any? { |x| extension.include?(x) }
   end
     
+  def self.image?(extension)
+    %w(image).any? { |x| extension.include?(x) }
+  end
 
   validates :category, inclusion: { in: white_list_categories, allow_blank: true }
 

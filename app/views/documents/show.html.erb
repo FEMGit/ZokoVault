@@ -2,4 +2,8 @@
 
 <p id="notice"><%= notice %></p>
 
-<iframe id="show-file" src= <%= get_file_url(@document.url) %> class="show-document-iframe"></iframe>
+<% if @image %>
+  <img src=<%= get_file_url(@document.url) %> class="image-preview" >
+<% else %>
+  <iframe id="show-file" src= <%= get_file_url(@document.url) %> class="show-document-iframe"></iframe>
+<% end %>

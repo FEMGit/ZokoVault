@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170220030831) do
+ActiveRecord::Schema.define(version: 20170227040336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 20170220030831) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(version: 20170220030831) do
     t.integer  "policy_type"
     t.string   "insured_property"
     t.integer  "policy_holder_id"
-    t.decimal  "coverage_amount",              precision: 10, scale: 2
+    t.decimal  "coverage_amount",              precision: 11, scale: 2
     t.string   "policy_number"
     t.integer  "broker_or_primary_contact_id"
     t.string   "notes"

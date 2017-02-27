@@ -123,6 +123,14 @@
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
       $(document).trigger('refresh_autonumeric')
     }
+    
+    var alternativeCount = <%= @financial_provider.alternatives.count %>
+    for(var i = 0; i < alternativeCount; i++ ) {
+      setValue($('#alternative_commitment_' + i), $('#alternative_commitment_' + i).val(), true)
+      setValue($('#alternative_total_calls_' + i), $('#alternative_total_calls_' + i).val())
+      setValue($('#alternative_distributions_' + i), $('#alternative_distributions_' + i).val())
+      setValue($('#alternative_current_value_' + i), $('#alternative_current_value_' + i).val())
+    }
   });
 
   $('.chosen-select').chosen({allow_single_deselect: true});

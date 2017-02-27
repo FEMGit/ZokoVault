@@ -140,6 +140,7 @@
 
     var accountCount = <%= @financial_provider.accounts.count %>
     for(var i = 0; i < accountCount; i++ ) {
+      setValue($('#account_value_' + i), $('#account_value_' + i).val())
       updateValues($('#financial_provider_account_' + i + '_account_type'), 
         $('#account_value_' + i));
     }

@@ -81,8 +81,10 @@
 <% end %>
 
 <script>
-  updateValues($('#financial_property_property_type'), 
-    $('#financial_property_value'))
-
-  $('.chosen-select').chosen({allow_single_deselect: true});
+  $(document).ready(function(){
+    setValue($('#financial_property_value'), $('#financial_property_value').val())
+    updateValues($('#financial_property_property_type'), 
+      $('#financial_property_value'))
+    $('.chosen-select').chosen({allow_single_deselect: true});
+  });
 </script>

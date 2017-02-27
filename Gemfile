@@ -83,6 +83,10 @@ gem 'twilio-ruby', '~> 4.11.1'
 # public pages
 gem 'high_voltage', '~> 3.0'
 
+
+# Exception mailer
+gem 'exception_notification'
+
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

@@ -78,4 +78,11 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :email_prefix => "[PRODUCTION ERROR]",
+      :sender_address => %{"notifier" <support@zokuvault.com>},
+      :exception_recipients => %w{dylan.conley@zokuvault.com chris.orebaugh@zokuvault.com josh@zokuvault.com}
+    }
 end

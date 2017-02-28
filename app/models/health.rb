@@ -11,9 +11,16 @@ class Health < Vendor
   end
 
   before_save { self.category = Category.fetch("insurance") }
+  after_save :clear_insured_members
 
   private
-
+  
+  def clear_insured_members
+    self.policy.each do |policy|
+      policy.insured_members.clear
+    end
+  end
+  
   def initialize_category_and_group
     self.group = "health"
   end

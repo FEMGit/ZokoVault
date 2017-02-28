@@ -21,6 +21,15 @@ class PolicyService
     end
   end
   
+  def self.update_insured_members(insurance_card, policy_params)
+    insurance_card.policy.each_with_index do |policy, index|
+      key = policy_params.keys[index]
+      policy_params[key]["insured_member_ids"].select(&:present?).each do |contact_id|
+        HealthPoliciesInsuredMember.create(health_policy_id: policy.id, insured_member_id: contact_id)
+      end
+    end
+  end
+  
   def self.fill_property_and_casualty_policies(policies, property_and_casualty)
     policies.values.each do |policy|
       next unless (PropertyAndCasualtyPolicy::policy_types.include? policy[:policy_type])

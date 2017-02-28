@@ -117,7 +117,7 @@ class DocumentService
   end
   
   def user_contacts(user, current_user)
-    Contact.find(user.share_with_contact_ids) & Contact.where(emailaddress: current_user.email)
+    Contact.find(user.share_with_contact_ids) & Contact.where("emailaddress ILIKE ?", current_user.email)
   end
 
   def collect_card_names(collection, category)

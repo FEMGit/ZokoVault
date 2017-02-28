@@ -166,7 +166,7 @@ class TaxesController < AuthenticatedController
   
   def taxes
     return @tax.taxes if @shared_user.nil? || (@shared_category_names.include? 'Taxes')
-    contact_ids = Contact.where(emailaddress: current_user.email).map(&:id)
+    contact_ids = Contact.where("emailaddress ILIKE ?", current_user.email).map(&:id)
     shared_taxes_ids = Share.where(user: resource_owner, shareable_type: 'Tax', contact_id: contact_ids).map(&:shareable_id)
     @tax.taxes.select { |t| shared_taxes_ids.include? t.id }
   end

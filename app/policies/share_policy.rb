@@ -53,7 +53,7 @@ class SharePolicy < BasicPolicy
     end
 
     def resolve
-      scope.where(contact: Contact.where(emailaddress: user.email))
+      scope.where(contact: Contact.where("emailaddress ILIKE ?", user.email))
     end
   end
 
@@ -84,13 +84,13 @@ class SharePolicy < BasicPolicy
   end
 
   def owner_shared_record_with_user?
-    record.contact.try(:emailaddress) == user.email
+    record.contact.try(:emailaddress).try(:downcase) == user.email.downcase
   end
   
   private
   
   def policy_share
-    shared_contact = Contact.for_user(shared_user).where(emailaddress: user.email)
+    shared_contact = Contact.for_user(shared_user).where("emailaddress ILIKE ?", user.email)
     return false unless shared_contact.present?
 
     shared_user.shares.where(contact: shared_contact)

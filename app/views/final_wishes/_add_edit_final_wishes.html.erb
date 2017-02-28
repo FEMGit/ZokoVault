@@ -6,16 +6,6 @@
   <%= f.hidden_field :id %>
   <%= f.hidden_field :group %>
   <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
-  <% if @final_wish_info.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@final_wish_info.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
-      <ul>
-      <% @final_wish_info.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
 
   <% @final_wishes.present? && @final_wishes.each_with_index do |data, index| %>
     <%= f.fields_for "final_wish_#{index}", data do |ff| %>

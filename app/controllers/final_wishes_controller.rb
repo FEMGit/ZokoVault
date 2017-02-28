@@ -2,6 +2,7 @@ class FinalWishesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_final_wish_info, only: [:show, :edit, :update]
   before_action :set_final_wish, only: [:destroy]
   before_action :set_category_and_group, :set_all_documents, only: [:index, :show, :edit, :new]

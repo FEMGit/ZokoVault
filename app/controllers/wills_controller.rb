@@ -2,6 +2,7 @@ class WillsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_will, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create]
   before_action :set_previous_shared_with, only: [:create]

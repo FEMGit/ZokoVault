@@ -1,6 +1,7 @@
 class UserProfilesController < AuthenticatedController
   before_action :set_user_profile, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
+  include SanitizeModule
   
   # Breadcrumbs navigation
   add_breadcrumb "My Profile", :user_profile_path

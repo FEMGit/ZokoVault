@@ -2,6 +2,7 @@ class PowerOfAttorneysController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include SanitizeModule
   before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]

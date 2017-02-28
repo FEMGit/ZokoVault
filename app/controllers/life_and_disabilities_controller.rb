@@ -72,6 +72,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), nil, resource_owner)
+        PolicyService.update_contacts(@insurance_card, policy_contact_params)
         @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -93,6 +94,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
+        PolicyService.update_contacts(@insurance_card, policy_contact_params)
         @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
@@ -200,8 +202,16 @@ class LifeAndDisabilitiesController < AuthenticatedController
     policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes,
-                                      primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
+      permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes]
+    end
+    policies.permit(permitted_params)
+  end
+  
+  def policy_contact_params
+    policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
+    permitted_params = {}
+    policies.keys.each do |policy_key|
+      permitted_params[policy_key] = [primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
     end
     policies.permit(permitted_params)
   end

@@ -50,7 +50,6 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider.properties << @financial_property
     authorize @financial_property
-    validate_params
     respond_to do |format|
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)

@@ -61,7 +61,7 @@ class FinancialInvestmentController < AuthenticatedController
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
-        format.json { render json: @financial_investment.errors, status: :unprocessable_entity }
+        format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
   end

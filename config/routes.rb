@@ -242,6 +242,9 @@ Rails.application.routes.draw do
   get "/setup", to: "pages#setup", as: :setup
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
+  
+  get '/support/new_message', to: 'email_support#index', as: :email_support
+  post '/support/new_message', to: 'email_support#send_email'
 
   # Catch 500 and 404 errors
   match "/500", :to => "errors#internal_server_error", :via => :all

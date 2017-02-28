@@ -163,7 +163,7 @@ class FinalWishesController < AuthenticatedController
   
   def final_wishes
     return @final_wish.final_wishes if @shared_user.nil? || (@shared_category_names.include? 'Final Wishes')
-    contact_ids = Contact.where(emailaddress: current_user.email).map(&:id)
+    contact_ids = Contact.where("emailaddress ILIKE ?", current_user.email).map(&:id)
     shared_ids = FinalWish.for_user(resource_owner).select { |t| t.share_with_contact_ids.any? { |c_id| contact_ids.include? c_id } }.map(&:id)
     @final_wish.final_wishes.select { |t| shared_ids.include? t.id }
   end

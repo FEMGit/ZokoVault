@@ -3,6 +3,11 @@ $chosen-sprite-retina: url('chosen-sprite@2x.svg') !default;
 
 $arrow-dropdown-margin-right: 30px;
 
+.chosen-select {
+  @include chosen-dropdown-default;
+  @include form-width;
+}
+
 .chosen-styled-select{
   margin-bottom: 10px;
 }
@@ -13,14 +18,7 @@ $arrow-dropdown-margin-right: 30px;
 
 .chosen-container-single {
   .chosen-single {
-    height: 32px !important;
-    border: 1px solid $color-gray-med-tinted !important;
-    border-radius: 5px !important;
-    padding: 0 !important;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
-    font-family: "Open Sans", serif;
-    font-size: 16px;
-    font-weight: normal;
+    @include chosen-dropdown-default;
     @include form-width;
 
     span {

@@ -5,17 +5,7 @@
   <%= f.hidden_field :id %>
   <%= f.hidden_field :year %>
   <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
-  <% if @tax_year.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tax_year.errors.count, "error") %> prohibited this taxes efrom being saved:</h2>
-      <ul>
-      <% @tax_year.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  
   <% @taxes.each_with_index do |data, index| %>
     <%= f.fields_for "tax_#{index}", data do |ff| %>
       <div class="body-content">

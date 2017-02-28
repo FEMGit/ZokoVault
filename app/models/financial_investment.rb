@@ -20,6 +20,8 @@ class FinancialInvestment < ActiveRecord::Base
   
   before_save { self.category = Category.fetch("financial information") }
   
+  before_validation :build_shares
+  
   validates :investment_type, inclusion: { in: FinancialInvestment::investment_types }
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 
@@ -30,4 +32,19 @@ class FinancialInvestment < ActiveRecord::Base
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :web_address, :maximum => ApplicationController.helpers.get_max_length(:default)
+  
+  def share_with_contact_ids
+    @share_with_contact_ids || shares.map(&:contact_id)
+  end
+  
+  attr_writer :share_with_contact_ids
+  
+  private
+  
+  def build_shares
+    shares.clear
+    share_with_contact_ids.select(&:present?).each do |contact_id|
+      shares.build(user_id: user_id, contact_id: contact_id)
+    end
+  end
 end

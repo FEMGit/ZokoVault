@@ -28,14 +28,6 @@ class LifeAndDisabilitiesController < AuthenticatedController
     add_breadcrumb "Life & Disability - Setup", shared_edit_life_path(@shared_user, @life_and_disability) if shared_view?
   end
 
-  # GET /lives
-  # GET /lives.json
-  def index
-    @life_and_disabilities = life_and_disabilities
-    @life_and_disabilities.each { |x| authorize x }
-    session[:ret_url] = @shared_user.present? ? shared_lives_path : lives_path
-  end
-
   # GET /lives/1
   # GET /lives/1.json
   def show

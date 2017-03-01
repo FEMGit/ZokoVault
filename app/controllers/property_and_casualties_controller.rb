@@ -27,14 +27,6 @@ class PropertyAndCasualtiesController < AuthenticatedController
     add_breadcrumb "Property & Casualty - Setup", shared_edit_property_path(@shared_user, @property_and_casualty) if shared_view?
   end
 
-  # GET /properties
-  # GET /properties.json
-  def index
-    @property_and_casualties = property_and_casualties
-    @property_and_casualties.each { |x| authorize x }
-    session[:ret_url] = @shared_user.present? ? shared_properties_path : properties_path
-  end
-
   # GET /properties/1
   # GET /properties/1.json
   def show

@@ -141,12 +141,12 @@ $arrow-dropdown-margin-right: 30px;
   }
   
   &::before{
-  content:"";
-  background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  left: 5px;
+    content:"";
+    background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 5px;
   }
 
   &:hover{

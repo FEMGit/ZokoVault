@@ -48,7 +48,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def create
-    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: investment_params[:name])
+    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: investment_params[:name], provider_type: provider_type)
     @financial_investment = FinancialInvestment.new(investment_params.merge(user_id: resource_owner.id))
     @financial_provider.investments << @financial_investment
     authorize @financial_investment
@@ -97,6 +97,10 @@ class FinancialInvestmentController < AuthenticatedController
   end
 
   private
+  
+  def provider_type
+    FinancialProvider::provider_types["Investment"]
+  end
   
   def validate_params
     return false unless (FinancialInvestment::investment_types.include? investment_params[:investment_type])

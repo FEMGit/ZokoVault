@@ -1,5 +1,8 @@
 class FinancialProvider < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
+  scope :type, ->(type) { where(provider_type: type) }
+  enum provider_type: [ "Account", "Investment", "Alternative", "Property"]
+  
   belongs_to :user
   belongs_to :category
   belongs_to :primary_contact, class_name: "Contact"
@@ -34,6 +37,7 @@ class FinancialProvider < ActiveRecord::Base
   before_validation :build_shares
   
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
+  validates :provider_type, inclusion: { in: FinancialProvider::provider_types }
 
   validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :web_address, :maximum => ApplicationController.helpers.get_max_length(:default)

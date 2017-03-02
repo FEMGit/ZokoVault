@@ -118,22 +118,18 @@ class SharedViewController < AuthenticatedController
     if @shared_category_names.include? Rails.application.config.x.FinancialInformationCategory
       @documents = Document.for_user(shared_user).where(category: @category)
 
-      account_provider_ids = FinancialAccountInformation.for_user(shared_user).map(&:account_provider_id)
-      @account_providers = FinancialProvider.for_user(shared_user).find(account_provider_ids)
-
-      alternative_manager_ids = FinancialAlternative.for_user(shared_user).map(&:manager_id)
-      @alternative_managers = FinancialProvider.for_user(shared_user).find(alternative_manager_ids)
+      @account_providers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Account"])
+    
+      @alternative_managers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Alternative"])
 
       @investments = FinancialInvestment.for_user(shared_user)
       @properties = FinancialProperty.for_user(shared_user)
     else
       provider_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProvider }.map(&:id)
       
-      account_provider_ids = FinancialAccountInformation.for_user(shared_user).where(account_provider_id: provider_ids).map(&:account_provider_id)
-      @account_providers = FinancialProvider.where(id: account_provider_ids)
-      
-      alternative_manager_ids = FinancialAlternative.for_user(shared_user).where(manager_id: provider_ids).map(&:manager_id)
-      @alternative_managers = FinancialProvider.where(id: alternative_manager_ids)
+      @account_providers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Account"]).where(id: provider_ids)
+    
+      @alternative_managers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Alternative"]).where(id: provider_ids)
       
       @properties = FinancialProperty.for_user(shared_user).where(empty_provider_id: provider_ids)
       @investments = FinancialInvestment.for_user(shared_user).where(empty_provider_id: provider_ids)

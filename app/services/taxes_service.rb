@@ -14,17 +14,9 @@ class TaxesService
   end
   
   def self.update_shares(tax_year_info, previous_share_with_contact_ids, user)
-    tax_year_info.taxes.each do |tax|
-      share_with_contact_ids = tax.share_with_contact_ids
-      tax.shares.clear
-      share_with_contact_ids.each do |contact_id|
-        tax.shares << Share.create(contact_id: contact_id, user_id: user.id)
-      end
-    end
-
     share_contact_ids = tax_year_info.taxes.map(&:share_with_contact_ids).uniq
     return unless previous_share_with_contact_ids.present?
-    ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_with_contact_ids,
+    ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_with_contact_ids.flatten,
                                                    Rails.application.config.x.TaxCategory, tax_year_info.year.to_s)
   end
 end

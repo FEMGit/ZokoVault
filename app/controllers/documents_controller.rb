@@ -62,12 +62,12 @@ class DocumentsController < AuthenticatedController
     session[:ret_url] = get_return_url_path
     @shares = @document.shares
     @card_names = card_names(@document.category)
+    set_viewable_contacts
   end
 
   def create
     options = document_params.merge(user: resource_owner)
     @document = Document.new(options)
-    set_viewable_contacts
 
     authorize @document
 

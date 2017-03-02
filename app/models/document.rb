@@ -35,4 +35,22 @@ class Document < ActiveRecord::Base
   validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :group, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :description, :maximum => ApplicationController.helpers.get_max_length(:notes)
+    
+  before_validation :build_shares
+
+  def contact_ids
+    @contact_ids || shares.map(&:contact_id)
+  end
+
+  attr_writer :contact_ids
+    
+  private
+  
+  def build_shares
+    shares.clear
+    contact_ids.select(&:present?).each do |contact_id|
+      shares.build(user_id: user_id, contact_id: contact_id)
+    end
+  end
+      
 end

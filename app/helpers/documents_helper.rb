@@ -79,6 +79,7 @@ module DocumentsHelper
 
   def document_category(document)
     return unless document.is_a? Document
+    return unless category_shared_full?(document.user, document.category)
     asset_group(document.category)
   end
 

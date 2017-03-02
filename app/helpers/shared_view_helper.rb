@@ -17,6 +17,25 @@ module SharedViewHelper
     @shared_category_names.include? category
   end
   
+  def category_shared_full?(owner, category)
+    return true if owner == current_user
+    @shared_category_names_full.include? category
+  end
+  
+  def subcategory_shared?(owner, non_owner, document)
+    return true if owner == current_user
+    service = DocumentService.new(:category => document.category)
+    card_values = service.get_card_values(owner, non_owner).flatten(2).collect{ |x| x[:id] }
+    card_names = service.get_card_names(owner, non_owner).flatten(2).collect{ |x| x[:id] }
+
+    if (card_values.any? { |x| document.group == x } && document.vendor_id.blank? && document.financial_information_id.blank?) || 
+     (document.category == Rails.application.config.x.InsuranceCategory && card_names.any? { |x| document.vendor_id == x}) ||
+     (document.category == Rails.application.config.x.FinancialInformationCategory && card_names.any? { |x| document.financial_information_id == x})
+      return true
+    end
+    false
+  end
+  
   def show_navigation_link?(category)
     @shared_category_names_full.include? category
   end

@@ -1,5 +1,6 @@
 class ErrorsController < ApplicationController
   before_action :set_return_path, only: [:internal_server_error]
+  before_action :set_session_return_url
   
   def not_found_error
     @return_path = root_url
@@ -24,5 +25,9 @@ class ErrorsController < ApplicationController
       else 
         request.referer
       end
+  end
+  
+  def set_session_return_url
+    session[:ret_url] = @return_path
   end
 end

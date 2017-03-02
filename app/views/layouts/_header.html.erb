@@ -45,6 +45,11 @@
             <use xlink:href="#icon-settings-1"></use>
           </svg>Account Settings
         <% end %>
+        <%= link_to email_support_path, class: "user-nav" do %>
+          <svg class="icon nav-icon">
+            <use xlink:href="#icon-mail-2"></use>
+          </svg>ZokuVault Support
+        <% end %>
         <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"user-nav") %>
       </div>
 

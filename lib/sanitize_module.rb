@@ -1,6 +1,6 @@
 module SanitizeModule
   def self.included(base)
-    base.before_filter :sanitize_params, only: [:create, :update]
+    base.before_filter :sanitize_params, only: [:create, :update, :send_email]
   end
   
   def sanitize_params
@@ -8,6 +8,8 @@ module SanitizeModule
       if param.last.is_a? Hash
         param_key = param.first
         sanitize_recursive(params[param_key])
+      elsif (param.is_a? Array) && (param.count.eql? 2)
+        params[param.first] = ActionController::Base.helpers.sanitize(param.last)
       end
     end
   end

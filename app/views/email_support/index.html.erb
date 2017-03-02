@@ -1,0 +1,15 @@
+<h1>ZokuVault Support</h1>
+
+<%= form_tag email_support_path do %>
+  <div class="card cg-3 mb-30">
+    <h3 class="card-label">ZokuVault Support</h3>
+    
+    <p>We apologize for any issues or inconveniences you are experiencing. Please let us know how we can help.</p>
+
+    <label>Please detail below how we can help.</label>
+    <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big' %></p>
+  </div>
+
+  <%= submit_tag "Send", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', back_path(session[:ret_url]) || root_path, {class: "button secondary-button big-button"}%>
+<% end %>

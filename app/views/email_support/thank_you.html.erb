@@ -1,0 +1,62 @@
+<% current_user = User.last %>
+<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+  Wizard Modal
+</button>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+  <div class="confirmation-wrapper">
+    <h2>Thank You For Your Submission.</h2>
+    <p>The ZokuVault team thanks you for your submission and will be in touch with you shortly.</p>
+  </div>
+  <footer class="modal-footer confirmation-footer">
+    <%= link_to 'Close', back_path(session[:ret_url]) || root_path, class: "js-modal-close button secondary-button big-button", method: :get%>
+  </footer>
+</div>
+
+<script>
+$(function(){
+
+  //SOMEONE PLEASE FIX THIS GARBAGE
+  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+  $(document).ready(function(){
+    $('button[data-modal-id]').click();
+
+    wizNav(1);
+  });
+  $('button[data-modal-id]').click(function(e) {
+    e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.8);
+    $(".js-modalbox").fadeIn(500);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+  });
+
+  $(".js-modal-close, .modal-overlay").click(function() {
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+    });
+
+  });
+
+  //ESPECIALLY THIS GARBAGE
+  $(window).resize(function() {
+    $(".large-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".medium-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize(function() {
+    $(".small-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize();
+});
+</script>

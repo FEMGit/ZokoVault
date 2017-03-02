@@ -192,15 +192,19 @@ class WillsController < AuthenticatedController
         @errors << { id: old_will[:id], error: @old_vault_entries.errors }
       end
       WtlService.update_shares(@old_vault_entries.id, old_will[:share_with_contact_ids], resource_owner.id, Will)
+      WtlService.update_beneficiaries(@old_vault_entries, old_will[:primary_beneficiary_ids],
+                                        old_will[:secondary_beneficiary_ids], old_will[:agent_ids])
     end
     new_wills.each do |new_will_params|
-      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: resource_owner.id)).build
+      @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: resource_owner.id).except(:primary_beneficiary_ids, :secondary_beneficiary_ids, :agent_ids)).build
       if !@new_vault_entries.save
         @new_params << Will.new(new_will_params)
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries
         WtlService.update_shares(@new_vault_entries.id, new_will_params[:share_with_contact_ids], resource_owner.id, Will)
+        WtlService.update_beneficiaries(@new_vault_entries, new_will_params[:primary_beneficiary_ids],
+                                        new_will_params[:secondary_beneficiary_ids], new_will_params[:agent_ids])
       end
     end
     ShareInheritanceService.update_document_shares(resource_owner, will_shared_with_uniq_param,

@@ -24,5 +24,11 @@ class PowerOfAttorney < ActiveRecord::Base
   before_save { self.category = Category.fetch("wills - trusts - legal") }
   before_validation :build_shares
   
+  def share_with_contact_ids
+    @share_with_contact_ids || shares.map(&:contact_id)
+  end
+
+  attr_writer :share_with_contact_ids
+  
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

@@ -191,9 +191,13 @@ class TrustsController < AuthenticatedController
         @errors << { id: old_trust[:id], error: @old_vault_entries.errors }
       end
       WtlService.update_shares(@old_vault_entries.id, old_trust[:share_with_contact_ids], resource_owner.id, Trust)
+      WtlService.update_trustees(@old_vault_entries, old_trust[:trustee_ids],
+                                 old_trust[:successor_trustee_ids], old_trust[:agent_ids])
     end
     new_trusts.each do |new_trust_params|
-      @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: resource_owner.id)).build
+      @new_vault_entries = TrustBuilder.new(new_trust_params.merge(user_id: resource_owner.id).except(:trustee_ids,
+                                                                                                      :successor_trustee_ids,
+                                                                                                      :agent_ids)).build
       if !@new_vault_entries.save
         @new_params << Trust.new(new_trust_params)
         @errors << { id: "", error: @new_vault_entries.errors }
@@ -201,6 +205,8 @@ class TrustsController < AuthenticatedController
         @new_params << @new_vault_entries
       end
       WtlService.update_shares(@new_vault_entries.id, new_trust_params[:share_with_contact_ids], resource_owner.id, Trust)
+      WtlService.update_trustees(@new_vault_entries, new_trust_params[:trustee_ids],
+                                 new_trust_params[:successor_trustee_ids], new_trust_params[:agent_ids])
     end
     ShareInheritanceService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with,
                                                    Rails.application.config.x.WtlCategory, 'Trust')

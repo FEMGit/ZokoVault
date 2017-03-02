@@ -8,19 +8,19 @@
     <h3 class="card-label">Personal Information</h3>
 
     <%= f.label :first_name, 'First Name' %>
-    <p><%= f.text_field :first_name %></p>
+    <p><%= f.text_field :first_name, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :middle_name, 'Middle Name (optional)' %>
-    <p><%= f.text_field :middle_name %></p>
+    <p><%= f.text_field :middle_name, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :last_name, 'Last Name' %>
-    <p><%= f.text_field :last_name %></p>
+    <p><%= f.text_field :last_name, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :email, 'Email Address' %>
     <% if errors && @user_profile.errors.messages[:email] %>
       <span class="error-label"> - <%= @user_profile.errors.messages[:email].first %></span>
     <% end %>
-    <p><%= f.email_field :email, { class: ("input-error" if @user_profile.errors.messages[:email].present?) } %></p>
+    <p><%= f.email_field :email, { class: ("input-error" if @user_profile.errors.messages[:email].present?), :maxlength => get_max_length(:default) } %></p>
     
     <%= f.label :phone_number_mobile, 'Cell Phone Number' %>
     <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
@@ -38,10 +38,10 @@
 
 
     <%= f.label :street_address_1, 'Street Address' %>
-    <p><%= f.text_field :street_address_1 %></p>
+    <p><%= f.text_field :street_address_1, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :city %>
-    <p><%= f.text_field :city %></p>
+    <p><%= f.text_field :city, :maxlength => get_max_length(:default) %></p>
 
     <span class="state-input">
       <%= f.label :state %>
@@ -55,7 +55,7 @@
     </span>
 
     <%= f.label :notes %>
-    <p><%= f.text_area :notes  %></p>
+    <p><%= f.text_area :notes, :maxlength => get_max_length(:notes)  %></p>
   </div>
 
 <!--
@@ -82,16 +82,16 @@
       <h3 class="card-label">Employer Information</h3>
 
       <%= ff.label :name, 'Business Name' %>
-      <p><%= ff.text_field :name %></p>
+      <p><%= ff.text_field :name, :maxlength => get_max_length(:default) %></p>
 
       <%= ff.label :web_address, 'Business Web Address' %>
-      <p><%= ff.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)" %></p>
+      <p><%= ff.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) %></p>
 
       <%= ff.label :street_address_1, 'Street Address' %>
-      <p><%= ff.text_field :street_address_1 %></p>
+      <p><%= ff.text_field :street_address_1, :maxlength => get_max_length(:default) %></p>
 
       <%= ff.label :city %>
-      <p><%= ff.text_field :city %></p>
+      <p><%= ff.text_field :city, :maxlength => get_max_length(:default) %></p>
 
       <span class="state-input">
         <%= ff.label :state %>

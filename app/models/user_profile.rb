@@ -51,6 +51,16 @@ class UserProfile < ActiveRecord::Base
     allow_blank: true,
     message: "must be in format 222-555-1111"
   
+  validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
+  
+  validates_length_of :first_name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :middle_name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :last_name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
+  validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
+  
   after_save :create_or_update_contact_card
 
   def name

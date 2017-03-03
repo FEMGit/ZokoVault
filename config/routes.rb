@@ -133,7 +133,7 @@ Rails.application.routes.draw do
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
-
+  
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'

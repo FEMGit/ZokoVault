@@ -1,0 +1,20 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<div class="card mb-30">
+  <h3 class="card-label">Edit User Details</h3>
+  
+  <label>Name</label>
+  <p><%= @user.name %></p>
+  
+  <label>Email</label>
+  <p><%= @user.email %></p>
+
+  <label>User Type</label>
+  <div class="styled-select">
+    <%= select_tag :user_type, options_for_select(UsageMetric::USER_TYPES), :include_blank => "Select..." %>
+  </div>
+</div>
+
+<%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>
+<%= link_to 'Cancel', back_path || usage_metrics_path, class: "button secondary-button big-button"%>
+<%= link_to 'Delete', @user, method: :delete, data: { confirm: 'are you sure?' }, class: "button secondary-button big-button" %>

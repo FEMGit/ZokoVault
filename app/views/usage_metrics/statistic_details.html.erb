@@ -1,39 +1,137 @@
-<label>Name</label>
-<p><%= @user.name %></p>
+<%= render :partial => "layouts/bread_crumbs" %>
 
-<label>Documents/User</label>
-<p><%= documents_per_user(@user) %></p>
-
-<label>Invitations Worked - <%= user_invitations_count(@user) %> users:</label>
-<ul>
-  <% user_invitations_emails(@user).each do |email| %>
-    <li><%= email %></li>
+<div class="contact-element-title">
+  <a class="edit-link" href='<%= admin_edit_user_path %>'>
+    <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+    </span>Edit User
+  </a>
+  <h1>
+  <% if @user && @user.user_profile.photourl.present? %>
+    <% avatar = true %>
+    <%= render :partial => "layouts/user_profile_avatar", locals: { user: @user.user_profile, :avatar_size => 'medium' } %>
   <% end %>
-</ul>
+  <span <% if avatar %> class="avatar-name" <% end %> >User Details</span></h1>
+</div>
 
-<label>Shares/User</label>
-<p><%= shares_per_user(@user) %></p>
+<div class="card mb-30">
+  <h3 class="card-label">User Information</h3>
+  
+  <label>Name</label>
+  <p><%= @user.name %></p>
+  
+  <label>Email</label>
+  <p><%= @user.email %></p>
+  
+  <% if @user.phone_number.present? || @user.phone_number_mobile.present? || @user.two_factor_phone_number.present? %>
+    <label>Phone</label>
+    <% if @user.phone_number_mobile.present? %>
+      <span class="field-block"><%= @user.phone_number_mobile %><span class="phone-type">cell</span>
+    <% end %>
+    <% if @user.phone_number.present? %>
+      <span class="field-block"><%= @user.phone_number %><span class="phone-type">home</span>
+    <% end %>
+    <% if @user.two_factor_phone_number.present? %>
+      <span class="field-block"><%= @user.two_factor_phone_number %><span class="phone-type">authentication</span>
+    <% end %>
+    <br></p>
+  <% end %>
+  
+  <label>Payment Details Section</label>
+  <p>Payment Details Section</p>
+  
+  <label>Corporate Account Name</label>
+  <p>Corporate Account Name</p>
+  
+  <label>User Type</label>
+  <p>User Type</p>
 
-<label>Logins/Current Week</label>
-<p><%= login_count_per_week(@user) %></p>
+  <label>Documents/User</label>
+  <p><%= documents_per_user(@user) %></p>
 
-<label>Logins/Week AVG</label>
-<p><%= login_count_per_week_avg(@user) %></p>
-
-<label>Session Length AVG</label>
-<p><%= session_length_avg(@user) %></p>
-
-<label>Site Completed (%)</label>
-<p><%= site_completed(@user) %></p>
-
-<% left_to_complete = categories_left_to_complete(@user) %>
-<% if left_to_complete.any? %>
-  <label>Tables Without This User</label>
+  <label>Invitations Worked - <%= user_invitations_count(@user) %> users:</label>
   <ul>
-    <% left_to_complete.each do |category| %>
-      <li><%= category %></li>
+    <% user_invitations_emails(@user).each do |email| %>
+      <li><%= email %></li>
     <% end %>
   </ul>
-<% end %>
 
-<%= link_to 'Back', usage_metrics_path %>
+  <label>Shares/User</label>
+  <p><%= shares_per_user(@user) %></p>
+
+  <label>Logins/Current Week</label>
+  <p><%= login_count_per_week(@user) %></p>
+
+  <label>Logins/Week AVG</label>
+  <p><%= login_count_per_week_avg(@user) %></p>
+
+  <label>Session Length AVG</label>
+  <p><%= session_length_avg(@user) %></p>
+
+  <label>Site Completed (%)</label>
+  <p><%= site_completed(@user) %></p>
+
+  <% left_to_complete = categories_left_to_complete(@user) %>
+  <% if left_to_complete.any? %>
+    <label>Tables Without This User</label>
+    <ul>
+      <% left_to_complete.each do |category| %>
+        <li><%= category %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<table id="traffics-table">
+  <thead>
+    <tr>
+      <th>Page Name</th>
+      <th>Page URL</th>
+      <th>IP Address</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @user_traffic && @user_traffic.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
+    <% @user_traffic && @user_traffic.each do |traffic_info| %>
+      <tr>
+        <td>
+          <%= traffic_info.page_name %>
+        </td>
+        <td>
+          <%= traffic_info.page_url %>
+        </td>
+        <td>
+          <%= traffic_info.ip_address %>
+        </td>
+        <td>
+          <%= traffic_info.created_at %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back', usage_metrics_path, class: "button secondary-button big-button"%>
+
+<script>
+  $(document).ready(function(){
+      $('#traffics-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[3, 'desc']],
+        'aoColumnDefs': [{
+          'bSortable': false,
+          'aTargets': ['nosort']
+        }]
+      } );
+  });
+</script>

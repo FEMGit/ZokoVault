@@ -124,6 +124,9 @@ class SharedViewController < AuthenticatedController
 
       @investments = FinancialInvestment.for_user(shared_user)
       @properties = FinancialProperty.for_user(shared_user)
+      
+      @all_cards = (@account_providers + @alternative_managers +
+                 @investments + @properties).sort_by!(&:name)
     else
       provider_ids = @other_shareables.select { |shareable| shareable.is_a?FinancialProvider }.map(&:id)
       
@@ -133,6 +136,9 @@ class SharedViewController < AuthenticatedController
       
       @properties = FinancialProperty.for_user(shared_user).where(empty_provider_id: provider_ids)
       @investments = FinancialInvestment.for_user(shared_user).where(empty_provider_id: provider_ids)
+      
+      @all_cards = (@account_providers + @alternative_managers +
+                 @investments + @properties).sort_by!(&:name)
       
       @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
     end

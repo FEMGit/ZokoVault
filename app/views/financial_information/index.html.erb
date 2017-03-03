@@ -122,13 +122,20 @@
 <% end %>
 
 <section class="flex-boxes ">
-  <%= render :partial => 'financial_information/accounts', locals: {account_providers: @account_providers} %>
-
-  <%= render :partial => 'financial_information/investments', locals: {investments: @investments} %>
-
-  <%= render :partial => 'financial_information/properties', locals: {properties: @properties} %>
-
-  <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: @alternative_managers} %>
+  <% @all_cards.each do |financial_card| %>
+    <% case financial_card %>
+    <% when FinancialProvider %>
+      <% if financial_provider_account?(financial_card) %>
+        <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: Array.wrap(financial_card)} %>
+      <% elsif financial_provider_alternative?(financial_card) %>
+        <%= render :partial => 'financial_information/accounts', locals: {account_providers: Array.wrap(financial_card)} %>
+      <% end %>
+    <% when FinancialInvestment %>
+      <%= render :partial => 'financial_information/investments', locals: {investments: Array.wrap(financial_card)} %>
+    <% when FinancialProperty %>
+      <%= render :partial => 'financial_information/properties', locals: {properties: Array.wrap(financial_card)} %>
+    <% end %>
+  <% end %>
 
 </section>
 

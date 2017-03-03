@@ -17,12 +17,20 @@ module FinancialInformationHelper
     end
   end
   
+  def financial_provider_account?(provider)
+    provider.provider_type.eql? "Account"
+  end
+  
+  def financial_provider_alternative?(provider)
+    provider.provider_type.eql? "Alternative"
+  end
+  
   def financial_information_any?
-    FinancialAccountInformation.for_user(current_user).any? ||
-      FinancialInvestment.for_user(current_user).any? ||
-      FinancialAlternative.for_user(current_user).any? ||
-      FinancialProperty.for_user(current_user).any? ||
-      FinancialProvider.for_user(current_user).any?
+    FinancialAccountInformation.for_user(resource_owner).any? ||
+      FinancialInvestment.for_user(resource_owner).any? ||
+      FinancialAlternative.for_user(resource_owner).any? ||
+      FinancialProperty.for_user(resource_owner).any? ||
+      FinancialProvider.for_user(resource_owner).any?
   end
   
   def financial_provider(empty_provider_object)
@@ -74,7 +82,7 @@ module FinancialInformationHelper
   end
   
   def commitments_show?
-    FinancialAlternative.for_user(current_user).any?
+    FinancialAlternative.for_user(resource_owner).any?
   end
 
   def credit_card_show?

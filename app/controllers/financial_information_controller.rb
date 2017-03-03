@@ -17,6 +17,9 @@ class FinancialInformationController < AuthenticatedController
     
     @investments = FinancialInvestment.for_user(current_user)
     @properties = FinancialProperty.for_user(current_user)
+    
+    @all_cards = (@account_providers + @alternative_managers +
+                 @investments + @properties).sort_by!(&:name)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? Category.fetch(@category.downcase) }.map(&:contact) 
   end
   

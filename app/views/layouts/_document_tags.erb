@@ -3,10 +3,12 @@
     <span class="doc-tag"><%= empty_group_category %></span>
   <% else %>
     <span class="doc-tag"><%= document_category(document) %></span>
-    <% if document_name_tag(document) %>
-      <span class="doc-tag secondary-tag"><%= document_name_tag(document) %></span>
-    <% elsif document_group(document) %>
-      <span class="doc-tag secondary-tag"><%= document_group(document) %></span>
+    <% if subcategory_shared?(document.user, current_user, document) %>
+      <% if document_name_tag(document) %>
+        <span class="doc-tag secondary-tag"><%= document_name_tag(document) %></span>
+      <% elsif document_group(document) %>
+        <span class="doc-tag secondary-tag"><%= document_group(document) %></span>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

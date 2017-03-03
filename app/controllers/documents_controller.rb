@@ -61,7 +61,8 @@ class DocumentsController < AuthenticatedController
     authorize @document
     session[:ret_url] = get_return_url_path
     @shares = @document.shares
-    @card_names = card_names(@document.category)
+    @card_names = card_names(@document.category).uniq
+    @cards = card_values(@document.category).uniq
     set_viewable_contacts
   end
 

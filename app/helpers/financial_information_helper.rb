@@ -21,7 +21,8 @@ module FinancialInformationHelper
     FinancialAccountInformation.for_user(current_user).any? ||
       FinancialInvestment.for_user(current_user).any? ||
       FinancialAlternative.for_user(current_user).any? ||
-      FinancialProperty.for_user(current_user).any?
+      FinancialProperty.for_user(current_user).any? ||
+      FinancialProvider.for_user(current_user).any?
   end
   
   def financial_provider(empty_provider_object)

@@ -49,7 +49,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def create
-    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id))
+    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
@@ -71,7 +71,7 @@ class FinancialAlternativeController < AuthenticatedController
     @previous_share_with = @financial_provider.share_with_contact_ids
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
     respond_to do |format|
-      if @financial_provider.update(provider_params)
+      if @financial_provider.update(provider_params.merge(provider_type: provider_type))
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
@@ -105,6 +105,10 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   private
+  
+  def provider_type
+    FinancialProvider::provider_types["Alternative"]
+  end
   
   def set_viewable_contacts
     contacts = category_subcategory_shares(@financial_provider, resource_owner)

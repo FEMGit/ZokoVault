@@ -11,11 +11,9 @@ class FinancialInformationController < AuthenticatedController
     @category = Rails.application.config.x.FinancialInformationCategory
     @documents = Document.for_user(current_user).where(category: @category)
     
-    account_provider_ids = FinancialAccountInformation.for_user(current_user).map(&:account_provider_id)
-    @account_providers = FinancialProvider.for_user(current_user).find(account_provider_ids)
+    @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
     
-    alternative_manager_ids = FinancialAlternative.for_user(current_user).map(&:manager_id)
-    @alternative_managers = FinancialProvider.for_user(current_user).find(alternative_manager_ids)
+    @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
     
     @investments = FinancialInvestment.for_user(current_user)
     @properties = FinancialProperty.for_user(current_user)

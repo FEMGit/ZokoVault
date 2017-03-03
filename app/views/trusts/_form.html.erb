@@ -53,49 +53,37 @@
 </div>
 
 <script>
-  clearForm = function($newWtlForm, old_id, new_id){
-    new_vault_entry_id = "vault_entry_" + new_id;
-    $newWtlForm.find("[id^='trust_id_']").attr({
-      id: "trust_id_" + new_id,
+  changeIdAndName = function($form, old_id, new_id, new_name){
+    $form.find("#" + old_id).attr({
+      id: new_id,
+      name: new_name,
       value: ""
     });
-    $newWtlForm.find("[id^='trust_id_']").attr("name", new_vault_entry_id + "[id]");
-    $newWtlForm.find(".error-label").hide();
-    $newWtlForm.find("[id^='vault_entry_']").attr({
-      name: new_vault_entry_id + "[name]",
-      id: new_vault_entry_id + "_name",
-      class: ""
-    });
-
-    $newWtlForm.find("#trust_agent_id_" + old_id).attr({
-      name: new_vault_entry_id +"[agent_ids]",
-      id: "trust_agent_id_" + new_id
-    });
-    $newWtlForm.find("#trust_agent_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#trust_trustee_id_" + old_id).attr({
-      name: new_vault_entry_id +"[trustee_ids][]",
-      id: "trust_trustee_id_" + new_id
-    });
-    $newWtlForm.find("#trust_trustee_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#trust_successor_id_" + old_id).attr({
-      name: new_vault_entry_id +"[successor_trustee_ids][]",
-      id: "trust_successor_id_" + new_id
-    });
-    $newWtlForm.find("#trust_successor_id_" + new_id + " option").prop("selected", false);
-
-    $newWtlForm.find("#trust_share_id_" + old_id).attr({
-      name: new_vault_entry_id +"[share_with_contact_ids][]",
-      id: "trust_share_id_" + new_id
-    });
+    $form.find("#" + new_id + " option").prop("selected", false).trigger('chosen:updated');;
+    $form.find("#" + new_id + " option:first-child").prop("selected", true).trigger('chosen:updated');
+  };
+  
+  clearForm = function($newWtlForm, old_id, new_id){
+    new_vault_entry_id = "vault_entry_" + new_id;
     
-    $newWtlForm.find("#trust_notes_id_" + old_id).attr({
-      name: new_vault_entry_id +"[notes]",
-      id: "trust_notes_id_" + new_id
-    });
+    changeIdAndName($newWtlForm, "trust_id_" + old_id,
+      "trust_id_" + new_id, new_vault_entry_id + "[id]");
+    changeIdAndName($newWtlForm, "trust_agent_id_" + old_id,
+      "trust_agent_id_" + new_id, new_vault_entry_id + "[agent_ids]");
+    changeIdAndName($newWtlForm, "trust_trustee_id_" + old_id,
+      "trust_trustee_id_" + new_id, new_vault_entry_id + "[trustee_ids][]");
+    changeIdAndName($newWtlForm, "trust_successor_id_" + old_id,
+      "trust_successor_id_" + new_id, new_vault_entry_id + "[successor_trustee_ids][]");
+    changeIdAndName($newWtlForm, "trust_share_id_" + old_id,
+      "trust_share_id_" + new_id, new_vault_entry_id + "[share_with_contact_ids][]");
+    changeIdAndName($newWtlForm, "trust_notes_id_" + old_id,
+      "trust_notes_id_" + new_id, new_vault_entry_id + "[notes]");
     
-    $newWtlForm.find("#trust_share_id_" + new_id + " option").prop("selected", false);
+    changeIdAndName($newWtlForm, "vault_entry_" + old_id + "_shared_user_id",
+      "vault_entry_" + new_id + "_shared_user_id", new_vault_entry_id + "[shared_user_id]")
+    changeIdAndName($newWtlForm, "vault_entry_" + old_id + "_name",
+      "vault_entry_" + new_id + "_name", new_vault_entry_id + "[name]")
+    
     $newWtlForm.find("#delete-trust").remove();
   }
 </script>

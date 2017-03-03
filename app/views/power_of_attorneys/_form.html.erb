@@ -54,7 +54,8 @@
       name: new_name,
       value: ""
     });
-    $form.find("#" + new_id + " option").prop("selected", false);
+    $form.find("#" + new_id + " option").prop("selected", false).trigger('chosen:updated');;
+    $form.find("#" + new_id + " option:first-child").prop("selected", true).trigger('chosen:updated');
   };
   
   clearForm = function($newWtlForm, old_id, new_id){

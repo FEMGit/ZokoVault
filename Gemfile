@@ -8,7 +8,7 @@ gem 'pg'
 gem "rails_12factor"
 
 # Authentication
-gem 'devise'
+gem 'devise', '>= 4.2.0'
 
 # Authorization
 gem "pundit"
@@ -82,7 +82,6 @@ gem 'twilio-ruby', '~> 4.11.1'
 
 # public pages
 gem 'high_voltage', '~> 3.0'
-
 
 # Exception mailer
 gem 'exception_notification'

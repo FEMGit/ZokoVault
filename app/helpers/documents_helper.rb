@@ -22,12 +22,12 @@ module DocumentsHelper
       elsif document.group.present?
         model = ModelService.model_by_name(document.group)
         if model == Tax
-          tax_year_id = TaxYearInfo.find_by(:year => document.group).try(:id)
+          tax_year_id = TaxYearInfo.for_user(owner).find_by(:year => document.group).try(:id)
           return [] if tax_year_id.nil?
           tax_ids = Tax.for_user(owner).select { |x| x.tax_year_id == tax_year_id }.map(&:id).flatten
           owner.shares.select { |sh| (sh.shareable.is_a? Tax) && (tax_ids.include? sh.shareable_id) }
         elsif model == FinalWish
-          final_wish_info_id = FinalWishInfo.find_by(:group => document.group).try(:id)
+          final_wish_info_id = FinalWishInfo.for_user(owner).find_by(:group => document.group).try(:id)
           return [] if final_wish_info_id.nil?
           final_wish_ids = FinalWish.for_user(owner).select { |x| x.final_wish_info_id == final_wish_info_id }.map(&:id).flatten
           owner.shares.select { |sh| (sh.shareable.is_a? FinalWish) && (final_wish_ids.include? sh.shareable_id) }

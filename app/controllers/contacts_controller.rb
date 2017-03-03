@@ -87,6 +87,10 @@ class ContactsController < AuthenticatedController
       format.json { head :no_content }
     end
   end
+  
+  def relationship_values
+    render :json => Contact::CONTACT_TYPES[contact_type_params[:contact_type]]
+  end
 
   private
   
@@ -113,6 +117,10 @@ class ContactsController < AuthenticatedController
   
     def shared_user_params
       params.permit(:shared_user_id)
+    end
+  
+    def contact_type_params
+      params.permit(:contact_type)
     end
   
     def resource_owner

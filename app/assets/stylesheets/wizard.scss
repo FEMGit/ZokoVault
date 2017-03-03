@@ -14,6 +14,7 @@
 .inner-step{
   width: 100%;
   padding:20px 0 0 5px;
+  cursor: pointer;
   background: transparent asset-data-url('SVG/thin-chevron.svg') no-repeat center right;
 
   &:first-child{
@@ -25,16 +26,17 @@
 
   &.contact-modal {
     &:first-child{
-      padding-left: 10px;
-      width: 30%;
+      padding-left: 15px;
+      width: 35%;
     }
     &:nth-child(2){
-      width: 40%;
+      width: 35%;
       padding-left: 10px;
     }
     &:last-child{
       background: transparent;
       width: 30%;
+      padding-left: 10px;
     }
   }
 }

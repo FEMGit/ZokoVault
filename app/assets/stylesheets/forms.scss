@@ -195,6 +195,9 @@ a.button, input[type=submit].button{
     border: 1px solid $color-link-blue;
     text-decoration: none !important;
   }
+  &.margin-right {
+    margin-right: 10px;
+  }
 }
 
 .add-link{

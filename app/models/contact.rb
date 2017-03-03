@@ -57,7 +57,7 @@ class Contact < ActiveRecord::Base
   CONTACT_TYPES = {
     'Family & Beneficiaries' => RELATIONSHIP_TYPES[:personal],
     'Advisor' => RELATIONSHIP_TYPES[:professional],
-    'Medical Professional' => RELATIONSHIP_TYPES[:professional]
+    'Medical Professional' => RELATIONSHIP_TYPES[:medical_professional]
   }
   
   def email_is_valid?

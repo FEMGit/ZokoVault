@@ -67,6 +67,29 @@ var displayContactFormModal = function() {
   wizNav(1);
 }
 
+var new_contact_disable = function() {
+  var self = $(this)
+  if (self.hasClass('chosen-container-multi')) {
+
+    var id = self[0].id
+    var element = $('#' + id).find('.create-new')
+
+    if (!element.hasClass('inactive')) {
+      console.log('add inactive:' + element.hasClass('inactive'))
+      element.addClass('inactive');
+      setTimeout(function() {
+        element.removeClass('inactive');
+      }, 700);
+    }
+  }
+};
+
+$('.chosen-container.chosen-container-multi').find('.chosen-drop').on('mousedown', function(e){
+  e.stopPropagation();
+});
+
+$('.chosen-container.chosen-container-multi').on('mousedown', new_contact_disable)
+
 var handleSelectOnChange = function(selectInput) {
   var selectedOption = $('option:selected:first', selectInput);
   if (selectedOption.val() === 'create_new_contact') {

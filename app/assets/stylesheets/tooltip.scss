@@ -32,7 +32,7 @@
     opacity: 1;
     visibility: visible;
   }
-
+  
   .tooltip {
     &.bottom {
       @include position(absolute, $tooltip-distance-from-item 0 null 0);

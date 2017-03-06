@@ -39,14 +39,6 @@
   <%= ff.text_area :notes, id: "alternative_notes_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
-  changeIdAndName = function($form, old_id, new_id, new_name){
-    $form.find("#" + old_id).attr({
-      id: new_id,
-      name: new_name,
-      value: ""
-    });
-    $form.find("#" + new_id + " option").prop("selected", false);
-  };
   clearForm = function($newForm, old_id, new_id) {
     new_element_name = "financial_provider[alternative_" + new_id + "]";
     id_prefix = "financial_provider_alternative_"
@@ -71,6 +63,7 @@
       "alternative_primary_" + new_id, new_element_name + "[primary_contact_id]")
     changeIdAndName($newForm, "alternative_notes_" + old_id,
       "alternative_notes_" + new_id, new_element_name + "[notes]")
+
     $newForm.find("#delete-investment").remove();
   }
 </script>

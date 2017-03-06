@@ -31,15 +31,6 @@
   <%= ff.text_area :notes, id: "property_notes_id_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
-  changeIdAndName = function($form, old_id, new_id, new_name){
-    $form.find("#" + old_id).attr({
-      id: new_id,
-      name: new_name,
-      value: ""
-    });
-    $form.find("#" + new_id + " option").prop("selected", false).trigger('chosen:updated');;
-    $form.find("#" + new_id + " option:first-child").prop("selected", true).trigger('chosen:updated');
-  }
   clearForm = function($newWtlForm, old_id, new_id){
     var newPolicy = "[policy_" + new_id + "]"
     var newPolicyNameStart = "property_and_casualty" + newPolicy

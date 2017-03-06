@@ -60,16 +60,6 @@
 </div>
 
 <script>
-  changeIdAndName = function($form, old_id, new_id, new_name){
-    $form.find("#" + old_id).attr({
-      id: new_id,
-      name: new_name,
-      value: ""
-    });
-    $form.find("#" + new_id + " option").prop("selected", false).trigger('chosen:updated');;
-    $form.find("#" + new_id + " option:first-child").prop("selected", true).trigger('chosen:updated');
-  };
-  
   clearForm = function($newWtlForm, old_id, new_id){
     new_vault_entry_id = "vault_entry_" + new_id;
     
@@ -93,7 +83,14 @@
       "vault_entry_" + new_id + "_shared_user_id", new_vault_entry_id + "[shared_user_id]")
     changeIdAndName($newWtlForm, "vault_entry_" + old_id + "_name",
       "vault_entry_" + new_id + "_name", new_vault_entry_id + "[name]")
-      
+    
+    changeHiddenMultipleSelect($newWtlForm, "vault_entry_" + old_id + "[primary_beneficiary_ids][]",
+      "vault_entry_" + new_id + "[primary_beneficiary_ids][]")
+    changeHiddenMultipleSelect($newWtlForm, "vault_entry_" + old_id + "[secondary_beneficiary_ids][]",
+      "vault_entry_" + new_id + "[secondary_beneficiary_ids][]")
+    changeHiddenMultipleSelect($newWtlForm, "vault_entry_" + old_id + "[share_with_contact_ids][]",
+      "vault_entry_" + new_id + "[share_with_contact_ids][]")
+    
     $newWtlForm.find(".error-label").hide();
     $newWtlForm.find("#delete-will").remove();
   }

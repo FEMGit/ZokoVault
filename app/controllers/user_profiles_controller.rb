@@ -5,6 +5,7 @@ class UserProfilesController < AuthenticatedController
   
   # Breadcrumbs navigation
   add_breadcrumb "My Profile", :user_profile_path
+  add_breadcrumb "Edit My Profile", :edit_user_profile_path
   include BreadcrumbsCacheModule
   
   # GET /user_profiles

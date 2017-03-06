@@ -94,7 +94,9 @@ $cards-margin: 12px;
   border-left: 10px solid $color-card-7;
   @include card-type-details;
 }
+
 .cg-8,
+.cg-2017,
 .cg-obituary {
   border-left: 10px solid $color-card-8;
   @include card-type-details;

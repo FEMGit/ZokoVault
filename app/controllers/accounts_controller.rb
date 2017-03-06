@@ -52,7 +52,6 @@ class AccountsController < AuthenticatedController
         :two_factor_phone_number,
         :mfa_frequency,
         :phone_code,
-        :phone_authentication_skip,
         security_questions_attributes: [:question, :answer]
       ])
   end

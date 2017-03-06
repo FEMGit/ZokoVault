@@ -41,7 +41,7 @@ class AccountSettingsController < AuthenticatedController
     phone_code = account_settings_params[:phone_code]
     verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
     status = if verified
-               @user_profile.update_attributes(:two_factor_phone_number => new_phone, :phone_authentication_skip => false)
+               @user_profile.update_attributes(:two_factor_phone_number => new_phone)
                :ok
              else
                :unauthorized
@@ -79,7 +79,7 @@ class AccountSettingsController < AuthenticatedController
   end
   
   def account_settings_params
-    params.require(:user_profile).permit(:mfa_frequency, :photourl, :phone_code, :two_factor_phone_number, :phone_authentication_skip,
+    params.require(:user_profile).permit(:mfa_frequency, :photourl, :phone_code, :two_factor_phone_number,
                                          full_primary_shared_with_ids: [], primary_shared_with_ids: [])
   end
   

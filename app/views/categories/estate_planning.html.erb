@@ -52,10 +52,10 @@
               </ul>
             <% end %>
 
-         <% if category_subcategory_shares(@wills, current_user).present? %>
+         <% if category_subcategory_shares(will, current_user).present? %>
             <label>Shared With</label>
             <section class="shared-list">
-              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@wills, current_user) } %>
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(will, current_user) } %>
             </section>
           <% end %>
         <% end %>

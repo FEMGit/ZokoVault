@@ -83,7 +83,6 @@ Rails.application.configure do
     :email => {
       :email_prefix => "[PRODUCTION ERROR]",
       :sender_address => %{"notifier" <support@zokuvault.com>},
-      :exception_recipients => %w{dylan.conley@zokuvault.com chris.orebaugh@zokuvault.com josh@zokuvault.com},
-      :sections => %w{backtrace}
+      :exception_recipients => %w{dylan.conley@zokuvault.com chris.orebaugh@zokuvault.com josh@zokuvault.com}
     }
 end

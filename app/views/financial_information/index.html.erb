@@ -126,9 +126,9 @@
     <% case financial_card %>
     <% when FinancialProvider %>
       <% if financial_provider_account?(financial_card) %>
-        <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: Array.wrap(financial_card)} %>
-      <% elsif financial_provider_alternative?(financial_card) %>
         <%= render :partial => 'financial_information/accounts', locals: {account_providers: Array.wrap(financial_card)} %>
+      <% elsif financial_provider_alternative?(financial_card) %>
+        <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: Array.wrap(financial_card)} %>
       <% end %>
     <% when FinancialInvestment %>
       <%= render :partial => 'financial_information/investments', locals: {investments: Array.wrap(financial_card)} %>

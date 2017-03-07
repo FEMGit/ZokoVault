@@ -186,12 +186,13 @@ class WillsController < AuthenticatedController
     @old_params = []
     old_wills.each do |old_will|
       @old_vault_entries = WillBuilder.new(old_will.merge(user_id: resource_owner.id)).build
+      WtlService.update_shares(@old_vault_entries.id, old_will[:share_with_contact_ids], resource_owner.id, Will)
       authorize_save(@old_vault_entries)
       @old_params << @old_vault_entries
       unless @old_vault_entries.save
         @errors << { id: old_will[:id], error: @old_vault_entries.errors }
       end
-      WtlService.update_shares(@old_vault_entries.id, old_will[:share_with_contact_ids], resource_owner.id, Will)
+      
       WtlService.update_beneficiaries(@old_vault_entries, old_will[:primary_beneficiary_ids],
                                         old_will[:secondary_beneficiary_ids], old_will[:agent_ids])
     end

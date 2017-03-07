@@ -55,6 +55,7 @@ class PolicyService
   end
   
   def self.update_shares(object_id, share_contact_ids, previous_share_contact_ids, user)
+    return if Thread.current[:current_user] != user
     Vendor.find(object_id).shares.clear
     share_contact_ids.each do |x|
       Vendor.find(object_id).shares << Share.create(contact_id: x, user_id: user.id)

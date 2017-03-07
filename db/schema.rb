@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302045527) do
+ActiveRecord::Schema.define(version: 20170306072929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -459,7 +459,6 @@ ActiveRecord::Schema.define(version: 20170302045527) do
     t.string   "zip"
     t.string   "notes"
     t.string   "two_factor_phone_number"
-    t.boolean  "phone_authentication_skip"
   end
 
   create_table "users", force: :cascade do |t|

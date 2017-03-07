@@ -75,7 +75,6 @@ var new_contact_disable = function() {
     var element = $('#' + id).find('.create-new')
 
     if (!element.hasClass('inactive')) {
-      console.log('add inactive:' + element.hasClass('inactive'))
       element.addClass('inactive');
       setTimeout(function() {
         element.removeClass('inactive');
@@ -84,11 +83,15 @@ var new_contact_disable = function() {
   }
 };
 
-$('.chosen-container.chosen-container-multi').find('.chosen-drop').on('mousedown', function(e){
-  e.stopPropagation();
-});
+document.body.addEventListener('mousedown', function(event) {
+  if(event.target.parentElement.className.indexOf('chosen-container-multi') > -1) {
+    $('.chosen-container.chosen-container-multi').find('.chosen-drop').on('mousedown', function(e){
+      e.stopPropagation();
+    });
 
-$('.chosen-container.chosen-container-multi').on('mousedown', new_contact_disable)
+    $('.chosen-container.chosen-container-multi').on('mousedown', new_contact_disable)
+  }
+})
 
 var handleSelectOnChange = function(selectInput) {
   var selectedOption = $('option:selected:first', selectInput);

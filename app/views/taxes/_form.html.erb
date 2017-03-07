@@ -30,14 +30,6 @@
 </div>
 
 <script>
-  changeIdAndName = function($form, old_id, new_id, new_name){
-    $form.find("#" + old_id).attr({
-      id: new_id,
-      name: new_name,
-      value: ""
-    });
-    $form.find("#" + new_id + " option").prop("selected", false);
-  };
   clearForm = function($newWtlForm, old_id, new_id) {
     new_tax_name = "tax_year_info[tax_" + new_id + "]";
     changeIdAndName($newWtlForm, "tax_id_" + old_id,
@@ -48,6 +40,10 @@
       "tax_notes_id_" + new_id, new_tax_name + "[notes]")
     changeIdAndName($newWtlForm, "tax_share_id_" + old_id,
       "tax_share_id_" + new_id, new_tax_name + "[share_with_contact_ids][]")
+      
+    changeHiddenMultipleSelect($newWtlForm, "tax_year_info[tax_" + old_id + "][share_with_contact_ids][]",
+      "tax_year_info[tax_" + new_id + "][share_with_contact_ids][]")
+      
     $newWtlForm.find("#delete-tax").remove();
   }
 </script>

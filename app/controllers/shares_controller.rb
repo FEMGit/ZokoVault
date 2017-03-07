@@ -64,7 +64,9 @@ class SharesController < AuthenticatedController
 
     def shared_document_count(shareables, user)
       direct_document_share = shareables.select { |res| res.is_a? Document }
-      group_docs = Document.for_user(user).select { |x| shared_groups(user).include? x.group }
+      group_docs = Document.for_user(user).select { |x| (shared_groups(user).include? x.group) ||
+                                                        (shared_groups(user).include? x.financial_information_id) ||
+                                                        (shared_groups(user).include? x.vendor_id) }
       category_docs = Document.for_user(user).select { |x| shared_categories(user).include? x.category }
       (group_docs.map(&:id) + direct_document_share.map(&:id) + category_docs.map(&:id)).uniq.count
     end

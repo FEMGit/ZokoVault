@@ -6,10 +6,18 @@ class ApplicationController < ActionController::Base
   after_filter :user_activity
   rescue_from Exception, :with => :death_trap_handle
   rescue_from ActionController::RoutingError, :with => :death_trap_handle
-  
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  around_filter :save_current_user
 
   private
+  
+  def save_current_user
+    Thread.current[:current_user] = current_user
+    begin yield
+      ensure
+      Thread.current[:current_user] = nil
+    end
+  end
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."

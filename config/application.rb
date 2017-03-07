@@ -59,6 +59,9 @@ module ZokuVault
       config.x.TaxCategory => {
         "label" => "Taxes",
         "groups" => [
+          {"value" => "2017",
+            "label" => "2017"
+          },
           {"value" => "2016",
             "label" => "2016"
           },

@@ -21,7 +21,7 @@ class FinancialInformationService
   end
   
   def self.update_shares(financial_provider, share_with_contact_ids, previous_share_contact_ids, user, financial_subcategory = nil)
-    return if share_with_contact_ids.nil?
+    return if share_with_contact_ids.nil? || (Thread.current[:current_user] != user)
     financial_subcategory.shares.clear if financial_subcategory.present?
     financial_provider.shares.clear
     share_with_contact_ids.each do |share_with_contact_id|

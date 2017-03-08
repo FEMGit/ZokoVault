@@ -193,10 +193,10 @@ class PowerOfAttorneysController < AuthenticatedController
     end
     old_attorneys.each do |old_attorney|
       @old_vault_entries = PowerOfAttorneyBuilder.new(old_attorney.merge(user_id: resource_owner.id)).build
+      WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
       authorize_save(@old_vault_entries)
       raise "error saving new power of attorney" unless @old_vault_entries.save
       @old_params << @old_vault_entries
-      WtlService.update_shares(@old_vault_entries.id, old_attorney[:share_with_contact_ids], resource_owner.id, PowerOfAttorney)
     end
     ShareInheritanceService.update_document_shares(resource_owner, attorneys_shared_with_uniq_param,
                                                    @previous_shared_with, Rails.application.config.x.WtlCategory, 'Legal')

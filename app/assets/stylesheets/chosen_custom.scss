@@ -1,5 +1,5 @@
-$chosen-sprite: url('chosen-sprite.svg') !default;
-$chosen-sprite-retina: url('chosen-sprite@2x.svg') !default;
+$chosen-sprite: asset-data-url('chosen-sprite.svg') !default;
+$chosen-sprite-retina: asset-data-url('chosen-sprite@2x.svg') !default;
 
 $arrow-dropdown-margin-right: 30px;
 
@@ -132,14 +132,14 @@ $arrow-dropdown-margin-right: 30px;
   border-bottom: 1px solid $color-gray-light;
   background:  $color-off-white-shaded-more;
   padding: 8px 6px 7px 25px;
-  
+
   &.highlighted {
     border-bottom: 1px solid $color-gray-light;
     background: $color-off-white-shaded-more;
     background-color: $color-off-white-shaded-more;
     color: $color-gray-dark;
   }
-  
+
   &::before{
     content:"";
     background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;

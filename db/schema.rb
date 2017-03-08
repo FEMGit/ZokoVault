@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(version: 20170306072929) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.integer  "final_wish_info_id"
+    t.string   "group"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"

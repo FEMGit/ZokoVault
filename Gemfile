@@ -84,7 +84,6 @@ gem 'twilio-ruby', '~> 4.11.1'
 gem 'high_voltage', '~> 3.0'
 
 # Exception mailer
-gem 'exception_notification'
 gem 'rollbar'
 gem 'oj', '~> 2.12.14'
 

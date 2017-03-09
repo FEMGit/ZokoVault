@@ -71,7 +71,7 @@ class FinancialPropertyController < AuthenticatedController
     @previous_share_with = @property_provider.share_with_contact_ids
     respond_to do |format|
       if validate_params && @financial_property.update(property_params.merge(user_id: resource_owner.id))
-        @property_provider.update(name: property_params[:name])
+        @property_provider.update(name: property_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))

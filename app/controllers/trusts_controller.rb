@@ -18,6 +18,16 @@ class TrustsController < AuthenticatedController
   add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(edit index new), if: :shared_view?
   add_breadcrumb "Trusts - Setup", :shared_new_trusts_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Trusts"
+      when 'new'
+        return "Trusts - Setup"
+    end
+  end
   
   # GET /trusts
   # GET /trusts.json

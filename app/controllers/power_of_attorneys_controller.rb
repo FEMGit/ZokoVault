@@ -18,6 +18,16 @@ class PowerOfAttorneysController < AuthenticatedController
   add_breadcrumb "Legal - Power of Attorney", :shared_power_of_attorneys_path, :only => %w(edit index new), if: :shared_view?
   add_breadcrumb "Legal - Power of Attorney - Setup", :shared_new_power_of_attorneys_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Power of Attorneys"
+      when 'new'
+        return "Power of Attorneys - Setup"
+    end
+  end
 
   # GET /power_of_attorneys
   # GET /power_of_attorneys.json

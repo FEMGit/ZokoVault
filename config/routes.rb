@@ -106,6 +106,9 @@ Rails.application.routes.draw do
   put 'account_settings/update', to: 'account_settings#update'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
+  
+  resources :account_traffics
+  get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
@@ -126,9 +129,10 @@ Rails.application.routes.draw do
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Usage metrics path
-  get 'usage_metrics/details/:id', to: 'usage_metrics#details', as: :user_error_details
+  get 'usage_metrics/error_details/:id', to: 'usage_metrics#error_details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
+  get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'

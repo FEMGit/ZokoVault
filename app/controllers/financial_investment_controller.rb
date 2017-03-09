@@ -15,6 +15,19 @@ class FinancialInvestmentController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    financial_property = FinancialInvestment.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'new'
+        return "Financial Investment - Setup"
+      when 'edit'
+        return "Financial Investment - #{financial_property.name} - Edit"
+      when 'show'
+        return "Financial Investment - #{financial_property.name} - Details"
+    end
+  end
   
   def set_add_crumbs
     add_breadcrumb "Financial Info - Add Other Investment or Debt", add_investment_path(@shared_user)

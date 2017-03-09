@@ -11,7 +11,25 @@ class SharedViewController < AuthenticatedController
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:financial_information]
   
   include BreadcrumbsCacheModule
+  include UserTrafficModule
   before_action :set_shareables
+  
+  def page_name
+    case action_name
+      when 'dashboard'
+        return "Shared View Dashboard"
+      when 'insurance'
+        return "Shared Insurance"
+      when 'taxes'
+        return "Shared Taxes"
+      when 'final_wishes'
+        return "Shared Final Wishes"
+      when 'estate_planning'
+        return "Shared Wills - Trusts - Legal"
+      when 'financial_information'
+        return "Shared Financial Information"
+    end
+  end
   
   def dashboard
     session[:ret_url] = shared_view_dashboard_path

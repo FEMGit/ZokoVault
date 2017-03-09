@@ -16,6 +16,22 @@ class FinalWishesController < AuthenticatedController
   before_action :set_edit_crumbs, only: [:edit]
   before_action :set_new_crumbs, only: [:new]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Final Wishes"
+      when 'new'
+        return "Final Wishes - #{params[:group]} - Setup"
+      when 'edit'
+        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        return "Final Wishes - #{final_wish_info.group} - Edit"
+      when 'show'
+        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        return "Final Wishes - #{final_wish_info.group} - Details"
+    end
+  end
   
   def set_details_crumbs
     return unless @final_wish.final_wishes.any?

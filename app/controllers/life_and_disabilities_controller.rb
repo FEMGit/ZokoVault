@@ -17,6 +17,19 @@ class LifeAndDisabilitiesController < AuthenticatedController
   add_breadcrumb "Life & Disability - Setup", :shared_new_life_path, :only => %w(new), if: :shared_view?
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'show'
+        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
+      when 'new'
+        return "#{controller_name.humanize} - Setup"
+      when 'edit'
+        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
+    end
+  end
   
   def set_details_crumbs
     add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability) if general_view?

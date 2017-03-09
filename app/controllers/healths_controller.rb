@@ -16,6 +16,19 @@ class HealthsController < AuthenticatedController
   add_breadcrumb "Health - Setup", :shared_new_health_path, :only => %w(new), if: :shared_view?
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'show'
+        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
+      when 'new'
+        return "#{controller_name.humanize} - Setup"
+      when 'edit'
+        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
+    end
+  end
   
   def set_details_crumbs
     add_breadcrumb "#{@health.name}", health_path(@health) if general_view?

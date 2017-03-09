@@ -2,6 +2,14 @@ class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
     helper_method :shared_category_count
     helper_method :shared_document_count
+    include UserTrafficModule
+    
+    def page_name
+      case action_name
+        when 'index'
+          return "Shared With Me"
+      end
+    end
 
     def index
       @shares_by_user = policy_scope(Share)

@@ -18,7 +18,7 @@ class WelcomeController < AuthenticatedController
     @shared_resources = @shared_resources.compact.flatten
     @shared_users = @shares.map(&:user).compact.uniq
 
-    @new_shares = @new_shares.compact.flatten
+    @new_shares = @new_shares.compact.flatten.uniq(&:user_id)
     
     current_user.update_attribute(:last_sign_in_at, Time.now)
   end

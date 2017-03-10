@@ -68,6 +68,7 @@ function verifyCode() {
       data,
       function() {
         $("#mfa-form").submit()
+        window.location.replace('<%= back_path || root_path %>')
       })
   .fail(function() {
     $('#verify_code_text').html(' - Error!')

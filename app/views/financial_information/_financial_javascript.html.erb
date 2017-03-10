@@ -16,6 +16,18 @@ $(function () {
     percentPosition: true,
     itemSelector: '.flex-column'
   });
+  
+  var chartTooltip = function() {
+    var s = '<span style="font-size: 16px;">' + this.key + ' </span>'
+    s += '<span style="font-size: 16px;">' + this.percentage.toFixed(1) + '%</span><br/>';
+    s += '<span style="color: transparent">empty</span><br/>'
+    for (var key in this.point.parts) {
+      s += '<br/><span style="font-size: 14px;">' + key + ': ' + this.point.parts[key] + '%' + '</span>';
+    }
+
+    s += '<br/><span style="font-size: 14px;">$' + this.y.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, '$1,').slice(0, -2) + '</span>'
+    return s;
+  }
 
   //Highcharts
   Highcharts.chart('asset', {
@@ -41,7 +53,7 @@ $(function () {
           verticalAlign: 'bottom'
       },
       tooltip: {
-          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          formatter: chartTooltip
       },
       plotOptions: {
           pie: {
@@ -58,16 +70,20 @@ $(function () {
           colorByPoint: true,
           data: [{
               name: 'Investments',
-              y: <%= investments_sum %>
+              y: <%= investments_sum %>,
+              parts: <%= raw investment_parts.to_json %>
           }, {
               name: 'Property',
-              y: <%= properties_sum %>
+              y: <%= properties_sum %>,
+              parts: <%= raw property_parts.to_json %>
           }, {
               name: 'Cash',
-              y: <%= cash_sum %>
+              y: <%= cash_sum %>,
+              parts: <%= raw cash_parts.to_json %>
           }, {
               name: 'Alternatives',
-              y: <%= alternatives_sum %>
+              y: <%= alternatives_sum %>,
+              parts: <%= raw alternative_parts.to_json %>
           }]
       }]
   });
@@ -94,7 +110,7 @@ $(function () {
           verticalAlign: 'bottom'
       },
       tooltip: {
-          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          formatter: chartTooltip
       },
       plotOptions: {
           pie: {
@@ -111,10 +127,12 @@ $(function () {
           colorByPoint: true,
           data: [{
               name: 'Loans',
-              y: <%= loans_sum %>
+              y: <%= loans_sum %>,
+              parts: <%= raw loan_parts.to_json %>
           }, {
               name: 'Credit Cards',
-              y: <%= credit_cards_sum %>
+              y: <%= credit_cards_sum %>,
+              parts: <%= raw credit_card_parts.to_json %>
           }]
       }]
     });

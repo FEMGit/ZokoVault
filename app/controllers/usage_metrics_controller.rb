@@ -1,6 +1,7 @@
 class UsageMetricsController < AuthenticatedController
   before_action :check_privileges
-  before_action :stats, :death_traps, only: [:index]
+  before_action :stats, only: [:index]
+  before_action :death_traps, only: [:errors]
   before_action :set_user_death_drap, only: [:details]
   helper_method :documents_per_user, :login_count_per_week,
                 :login_count_per_week_avg, :session_length_avg,
@@ -8,6 +9,8 @@ class UsageMetricsController < AuthenticatedController
                 :shares_per_user, :user_invitations_count, :user_invitations_emails
   
   def index; end
+  
+  def errors; end
   
   def details; end
   

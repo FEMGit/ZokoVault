@@ -18,7 +18,7 @@
 
   <% if @insurance_card.webaddress.present? %>
     <label>Web Address</label>
-    <p><%= link_to @insurance_card.webaddress, @insurance_card.webaddress %></p>
+    <p><%= link_to @insurance_card.webaddress, @insurance_card.webaddress, target: "_blank" %></p>
   <% end %>
 
   <% if show_street?(@insurance_card) %>

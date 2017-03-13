@@ -59,7 +59,7 @@ class ShareService
       elsif user.present?
         SharedViewService.shares(owner, user).map(&:shareable)
       end
-    shareables.reject { |res| (res.is_a? Document) || (res.is_a? Category) }
+    shareables.compact.reject { |res| (res.is_a? Document) || (res.is_a? Category) }
   end
   
   def self.shared_groups(owner, user = nil, contact = nil)

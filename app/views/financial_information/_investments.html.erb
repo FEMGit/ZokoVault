@@ -1,6 +1,5 @@
 <% investments.each do |investment| %>
-  <div class="card cg-3 flex-column mb-20 cp">
-    <%= link_to content_tag(:a), show_investment_url(investment, @shared_user), class: "whole-card-link" %>
+  <div class="card cg-3 flex-column mb-20">
     <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, investment_provider_id(resource_owner, investment)) } %>
     <h3><%= investment.name %></h3>
 
@@ -29,5 +28,8 @@
         <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(provider, resource_owner) } %>
       </section>
     <% end %>
+    
+    <br>
+    <%= link_to 'View Details', show_investment_url(investment, @shared_user), class: "small-button outline-button mt-20" %>
   </div>
 <% end %>

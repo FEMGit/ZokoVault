@@ -9,7 +9,6 @@
 
         <% @wills.each_with_index do |will, index| %>
           <div <% if index != 0 %> class="data-border" <% end %>></div>
-          <%= link_to content_tag(:a), wills_path, class: "whole-card-link" %>
 
             <label><%= will.title %></label>
             <% if !will_present?(will) %>
@@ -59,7 +58,9 @@
             </section>
           <% end %>
         <% end %>
-
+        
+        <br>
+        <%= link_to 'View Details', wills_path, class: "small-button outline-button mt-20" %>
       <% else %>
         <h3>Wills</h3>
         <%= link_to 'Add Wills', new_will_path, class: "small-button outline-button mt-20" %>
@@ -70,35 +71,36 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= link_to content_tag(:a), trusts_path, class: "whole-card-link" %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category.name) } %>
+        <h3>Trusts</h3>
+        <section class="mb-20">
+          <% @trusts.each do |trust| %>
+            <label><%= trust.name %></label><br>
+          <% end %>
+        </section>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category.name) } %>
-          <h3>Trusts</h3>
-          <section class="mb-20">
-            <% @trusts.each do |trust| %>
-              <label><%= trust.name %></label><br>
-            <% end %>
+        <% if get_agents_uniq(@trusts).any? %>
+          <label>Advisor</label>
+        <% end %>
+        <ul class="data-list">
+          <% get_agents_uniq(@trusts) && get_agents_uniq(@trusts).each do |agent| %>
+            <li class="contact-pair">
+              <%= agent.name %><br>
+              <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
+              <%= agent.phone %>
+            </li>
+          <% end %>
+        </ul>
+
+        <% if category_subcategory_shares(@trusts, current_user).present? %>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, current_user) } %>
           </section>
+        <% end %>
 
-          <% if get_agents_uniq(@trusts).any? %>
-            <label>Advisor</label>
-          <% end %>
-          <ul class="data-list">
-            <% get_agents_uniq(@trusts) && get_agents_uniq(@trusts).each do |agent| %>
-              <li class="contact-pair">
-                <%= agent.name %><br>
-                <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
-                <%= agent.phone %>
-              </li>
-            <% end %>
-          </ul>
-
-          <% if category_subcategory_shares(@trusts, current_user).present? %>
-            <label>Shared With</label>
-            <section class="shared-list">
-              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, current_user) } %>
-            </section>
-          <% end %>
+        <br>
+        <%= link_to 'View Details', trusts_path, class: "small-button outline-button mt-20" %>
       <% else %>
 
         <h3>Trusts</h3>
@@ -112,37 +114,37 @@
   <div class="flex-column">
     <div class="card cg-3 column-card">
       <% if @power_of_attorneys.any? %>
-        <%= link_to content_tag(:a), power_of_attorneys_path, class: "whole-card-link" %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category.name) } %>
+        <h3>Powers of Attorney</h3>
 
-          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category.name) } %>
-          <h3>Powers of Attorney</h3>
-
-          <ul class="data-list mb-20">
-            <% @power_of_attorneys.each do |power_of_attorney| %>
-              <% if attorney_present?(power_of_attorney) %>
-                <li class="data-pair">
-                  <label>
-                    <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
-                  </label>
-                  <span class="data-right">
-                  <% if power_of_attorney.powers.present? %>
-                    <% power_of_attorney.powers.keys.each do |agent_power| %>
-                      <%= agent_power %><br>
-                    <% end %>
+        <ul class="data-list mb-20">
+          <% @power_of_attorneys.each do |power_of_attorney| %>
+            <% if attorney_present?(power_of_attorney) %>
+              <li class="data-pair">
+                <label>
+                  <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
+                </label>
+                <span class="data-right">
+                <% if power_of_attorney.powers.present? %>
+                  <% power_of_attorney.powers.keys.each do |agent_power| %>
+                    <%= agent_power %><br>
                   <% end %>
-                  </span>
-                </li>
-              <% end %>
+                <% end %>
+                </span>
+              </li>
             <% end %>
-          </ul>
-
-          <% if category_subcategory_shares(@power_of_attorneys, current_user).present? %>
-            <label>Shared With</label>
-            <section class="shared-list">
-              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, current_user) } %>
-            </section>
           <% end %>
+        </ul>
 
+        <% if category_subcategory_shares(@power_of_attorneys, current_user).present? %>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, current_user) } %>
+          </section>
+        <% end %>
+
+        <br>
+        <%= link_to 'View Details', power_of_attorneys_path, class: "small-button outline-button mt-20" %>
       <% else %>
         <h3>Power of Attorney</h3>
         <%= link_to 'Add Details', new_power_of_attorney_path, class: "small-button outline-button mt-20" %>

@@ -40,7 +40,7 @@ class FinancialProvider < ActiveRecord::Base
   validates :provider_type, inclusion: { in: FinancialProvider::provider_types }
 
   validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
-  validates_length_of :web_address, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :web_address, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :street_address, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)

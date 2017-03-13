@@ -73,25 +73,29 @@ var new_contact_disable = function() {
 
     var id = self[0].id
     var element = $('#' + id).find('.create-new')
-
     if (!element.hasClass('inactive')) {
       element.addClass('inactive');
       setTimeout(function() {
         element.removeClass('inactive');
-      }, 900);
+        
+        var multiDropDowns = document.querySelectorAll('#' + id + '.chosen-container.chosen-container-multi')
+        for (var i = 0; i < multiDropDowns.length; i++) {
+          multiDropDowns[i].removeEventListener('mousedown', new_contact_disable)
+        }
+      }, 700);
     }
   }
 };
 
-document.body.addEventListener('mousedown', function(event) {
-  if(event.target.parentElement.className.indexOf('chosen-container-multi') > -1) {
-    $('.chosen-container.chosen-container-multi').find('.chosen-drop').on('mousedown', function(e){
-      e.stopPropagation();
-    });
-
-    $('.chosen-container.chosen-container-multi').on('mousedown', new_contact_disable)
+document.body.addEventListener('mouseover', function(event) {
+  if (event.target.closest('.chosen-container-multi') === null) {
+    event.stopPropagation();
+    var multiDropDowns = document.querySelectorAll('.chosen-container.chosen-container-multi')
+    for (var i = 0; i < multiDropDowns.length; i++) {
+      multiDropDowns[i].addEventListener('mousedown', new_contact_disable)
+    }
   }
-})
+});
 
 var handleSelectOnChange = function(selectInput) {
   var selectedOption = $('option:selected:first', selectInput);

@@ -45,7 +45,7 @@ class Will < ActiveRecord::Base
 
   attr_writer :share_with_contact_ids
 
-  validates_length_of :title, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :title, :maximum => ApplicationController.helpers.get_max_length(:wtl_name)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
   
   private

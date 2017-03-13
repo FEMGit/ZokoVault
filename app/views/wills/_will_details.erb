@@ -1,6 +1,6 @@
 <% @wills.each do |will| %>
   <div class="card wills mb-20">
-    <h3 class="card-label"><%= will.title %></h3>
+    <h3 class="card-label word-break"><%= will.title %></h3>
     
     <% if !will_present?(will) %>
       <label>There is no information about this Will</label>

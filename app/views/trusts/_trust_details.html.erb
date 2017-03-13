@@ -1,7 +1,7 @@
 <% @trusts.each do |trust| %>
   <div class="card trusts mb-30">
 
-    <h3 class="card-label"><%= trust.name %></h3>
+    <h3 class="card-label word-break"><%= trust.name %></h3>
     
     <% if !trust_present?(trust) %>
       <label>There is no information about this Trust</label>

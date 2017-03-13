@@ -12,7 +12,7 @@
   <% if error_list && error_list[:error].messages[:name].any? %>
     <span class="error-label"> - <%= error_list[:error].messages[:name].first %></span>
   <% end %>
-  <%= f.text_field :name, value: data.name, class: ("input-error" if error_list && error_list[:error].messages[:name].present?), :maxlength => get_max_length(:default) %>
+  <%= f.text_field :name, value: data.name, class: ("input-error" if error_list && error_list[:error].messages[:name].present?), :maxlength => get_max_length(:wtl_name) %>
 
   <label>Attorney, Accountant or Advisor(s)</label>
   <div class="chosen-styled-select">

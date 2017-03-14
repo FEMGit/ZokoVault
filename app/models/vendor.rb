@@ -25,7 +25,7 @@ class Vendor < ActiveRecord::Base
   attr_writer :share_with_ids
   
   validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
-  validates_length_of :webaddress, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :webaddress, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   validates_length_of :street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)

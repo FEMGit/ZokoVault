@@ -140,6 +140,7 @@
 </section>
 
 <div>
+  <h3 class="mt-20">Financial Documents</h3>
   <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category), class: "add-link fr" do %>
     <span class="circle-button">
       <svg class="icon circle-icon">
@@ -147,7 +148,6 @@
       </svg>
     </span>Add Document
   <% end %>
-  <h3 class="mt-20">Financial Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

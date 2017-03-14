@@ -6,7 +6,7 @@
       <th>Tags</th>
       <th class="fixed-cell-small">Shared With</th>
       <th class="fixed-cell-small">Notes</th>
-      <th class="nosort">Actions</th>
+      <th class="nosort nosearch">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -46,14 +46,85 @@
 <script>
   $(document).ready(function(){
       $('#documents-table').DataTable( {
-        paging: false,
-        searching: false,
-        info: false,
+        paging: true,
+        lengthMenu: [5, 10, 15, 25, 50, 100],
+        searching: true,
+        info: true,
+        pagingType: 'numbers',
         aaSorting: [[0, 'asc']],
         'aoColumnDefs': [{
           'bSortable': false,
           'aTargets': ['nosort']
-        }]
+        }, {
+          'bSearchable': false,
+          'aTargets': ['nosearch']
+        }],
       } );
+      
+      var documentTableId = '#documents-table'
+      // Save all controlls to variables and add listeners
+      prepareTableControlls(documentTableId)
+      
+      // Change table to match design
+      updateSearchField(documentTableId)
+      updateTable(documentTableId)
   });
+  
+  var prepareTableControlls = function(table_id) {
+    window.info_global = $('.dataTables_info').detach()
+    window.pagination_global = $('.dataTables_paginate').detach()
+    window.record_select_global = $('.dataTables_length').detach()
+    window.search_global = $('.dataTables_filter').detach()
+    
+    pagination_global.on('click', function() {
+      updateTable(table_id)
+    })
+    record_select_global.on('change', function() {
+      updateTable(table_id)
+    })
+    search_global.find('input').on('keyup', function() {
+      updateTable(table_id)
+    })
+    $(table_id + ' thead').on('click', 'tr:first-child', function() {
+      updateTable(table_id)
+    })
+  }
+  
+  // Change View of Search Field
+  var updateSearchField = function(table_id) {
+    var search_label = search_global.find('label')
+    var search_input = search_global.find('input')
+    search_label.replaceWith(search_input)
+    $(table_id + '_wrapper').before(search_global)
+    search_global.find('input').attr('placeholder', 'Search Documents...')
+  }
+  
+  var updateTable = function(table_id) {
+    if ($(table_id + ' tr:last').attr('id') === undefined) {
+      $(table_id + ' tr:last').after('<tr id="control-row" class="control-row">' + '<td colspan="2" align="left" id="pagination_cell" style="text-align: center;"></td>' +
+                                               '<td colspan="2" align="center" id="record_select_cell"></td>' + 
+                                               '<td colspan="2" align="right" id="info_cell"></td>' + '</tr>')
+    }
+    
+    // Place controlls to table bottom row
+    $('#info_cell').append(info_global)
+    $('#pagination_cell').append(pagination_global)
+    $('#record_select_cell').append(record_select_global)
+    
+    // Change Text of Table Records Information
+    var table_info_text = info_global.text()
+    table_info_text = table_info_text.replace('Showing', 'Viewing')
+    table_info_text = table_info_text.replace(' to ', '-')
+    table_info_text = table_info_text.replace(' entries', '')
+    info_global.text(table_info_text)
+    
+    // Replace button classes for paginating
+    $('a.paginate_button').addClass('paginate_button_custom')
+    $('a.paginate_button').removeClass('paginate_button')
+    
+    // Change View of Number of records selection
+    var show_entries_label = record_select_global.find('label')
+    var show_entries_select = record_select_global.find('select')
+    show_entries_label.replaceWith(show_entries_select)
+  }
 </script>

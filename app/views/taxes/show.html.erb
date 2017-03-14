@@ -45,6 +45,7 @@
   </div>
 <% end %>
 
+<h3><%= @tax && @tax.year %> Tax Documents</h3>
 <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @tax.year), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -52,6 +53,5 @@
     </svg>
   </span>Add Document
 <% end %>
-<h3><%= @tax && @tax.year %> Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

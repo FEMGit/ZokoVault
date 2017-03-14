@@ -14,6 +14,8 @@
 </div>
 
 <%= render yield(:card_details_partial_path) %>
+
+<h3><%= yield(:add_document_title) %> Documents</h3>
 <div>
   <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group), class: "add-link fr" do %>
     <span class="circle-button">
@@ -22,7 +24,6 @@
       </svg>
     </span>Add Document
   <% end %>
-  <h3><%= yield(:add_document_title) %> Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents, shareable: yield(:shareable) } %>

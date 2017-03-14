@@ -205,6 +205,11 @@ a.button, input[type=submit].button{
   &.mrg-top {
     margin-top: $add-button-margin-top;
   }
+  @include media($eightfifty) {
+    display: block;
+    margin-bottom: 15px;
+    width: 100%;
+  }
 }
 
 .circle-button{

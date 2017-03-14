@@ -17,8 +17,8 @@
       <% if user.present? %>
         <tr>
           <td>
-            <span class="user-circle"><%= user.try(:initials) %></span>
-            <%= user.try(:name) %>
+            <% contact = Contact.for_user(current_user).detect { |c| c.emailaddress.downcase == user.email.downcase } %>
+            <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
           </td>
           <td>
             <%= user.try(:email) %>

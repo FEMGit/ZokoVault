@@ -1,6 +1,9 @@
 <% with_name ||= false %>
 <% if contact.present? %>
   <div class="tooltip-item">
+    <% if @shared_user.blank? %>
+      <%= link_to content_tag(:a), contact_path(contact), class: "avatar-link" %>
+    <% end %>
     <% if contact.photourl.present? %>
       <p class="avatar-initials transparent unselectable"><%= contact.initials %></p>
       <%= image_tag(get_file_url(contact.photourl), class: "avatar-small", alt: contact.initials.to_s) %>

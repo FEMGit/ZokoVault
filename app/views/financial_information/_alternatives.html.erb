@@ -1,6 +1,5 @@
 <% alternative_managers.each do |manager| %>
-  <div class="card cg-3 flex-column mb-20 cp cp">
-    <%= link_to content_tag(:a), show_alternative_url(manager, @shared_user), class: "whole-card-link" %>
+  <div class="card cg-3 flex-column mb-20">
     <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, manager.id) } %>
     <h3><%= manager.name %></h3>
     <p>
@@ -32,7 +31,10 @@
       <label>Shared With</label>
       <section class="shared-list">
         <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(manager, resource_owner) } %>
-       </section>
-     <% end %>
+      </section>
+    <% end %>
+     
+    <br>
+    <%= link_to 'View Details', show_account_url(manager, @shared_user), class: "small-button outline-button mt-20" %>
   </div>
 <% end %>

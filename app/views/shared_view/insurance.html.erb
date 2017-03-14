@@ -12,7 +12,6 @@
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= link_to content_tag(:a), shared_life_path(@shared_user, vendor.id), class: "whole-card-link" %>
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
@@ -48,6 +47,8 @@
                 <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, @shared_user) } %>
               </section>
             <% end %>
+            <br>
+            <%= link_to 'View Details', shared_life_path(@shared_user, vendor.id), class: "small-button outline-button mt-20" %>
           </div>
         <% end %>
       <% end %>
@@ -56,7 +57,6 @@
         <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= link_to content_tag(:a), shared_property_path(@shared_user, vendor), class: "whole-card-link" %>
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
@@ -92,7 +92,9 @@
                 <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, @shared_user) } %>
               </section>
             <% end %>
-
+            
+            <br>
+            <%= link_to 'View Details', shared_property_path(@shared_user, vendor), class: "small-button outline-button mt-20" %>
           </div>
         <% end %>
       <% end %>
@@ -101,7 +103,6 @@
         <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= link_to content_tag(:a), shared_health_path(@shared_user, vendor), class: "whole-card-link" %>
             <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(@shared_user, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
@@ -135,6 +136,9 @@
                   <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, @shared_user) } %>
                 </section>
               <% end %>
+              
+              <br>
+              <%= link_to 'View Details', shared_health_path(@shared_user, vendor), class: "small-button outline-button mt-20" %>
 
           </div>
         <% end %>

@@ -47,6 +47,6 @@ class Trust < ActiveRecord::Base
 
   attr_writer :share_with_contact_ids
   
-  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:wtl_name)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
 end

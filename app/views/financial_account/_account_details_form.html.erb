@@ -9,9 +9,9 @@
   <%= ff.label :name, 'Account Name' %>
   <%= ff.text_field :name, id: "account_name_#{index}", :maxlength => get_max_length(:default) %>
 
-  <%= ff.label :owner_id, 'Account Owner' %>
+  <%= ff.label :account_owner_ids, 'Account Owners' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :owner_id, @contacts, id: "account_owner_#{index}", multiple: false) %>
+    <%= contact_select_with_create_new(ff, :account_owner_ids, @contacts, id: "account_owner_#{index}") %>
   </div>
   
   <%= ff.label :value, 'Account Value' %>
@@ -47,7 +47,7 @@
     changeIdAndName($newForm, id_prefix + old_id + "_account_type",
       id_prefix + new_id + "_account_type", new_element_name + "[account_type]")
     changeIdAndName($newForm, "account_owner_" + old_id,
-      "account_owner_" + new_id, new_element_name + "[owner_id]")
+      "account_owner_" + new_id, new_element_name + "[account_owner_ids][]")
     changeIdAndName($newForm, "account_value_" + old_id,
       "account_value_" + new_id, new_element_name + "[value]")
     changeIdAndName($newForm, "account_number_" + old_id,
@@ -58,6 +58,9 @@
       "account_name_" + new_id, new_element_name + "[name]")
     changeIdAndName($newForm, "account_notes_" + old_id,
       "account_notes_" + new_id, new_element_name + "[notes]")
+      
+    changeHiddenMultipleSelect($newForm, "financial_provider[account_" + old_id + "][account_owner_ids][]",
+      "financial_provider[account_" + new_id + "][account_owner_ids][]")
     $newForm.find("#delete-account").remove();
   }
 </script>

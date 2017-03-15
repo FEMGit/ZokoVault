@@ -4,7 +4,7 @@
   <div class="flex-column">
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @wills.name, @category.name) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, @wills.name, @category.name) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -51,19 +51,23 @@
               </ul>
             <% end %>
 
-         <% if category_subcategory_shares(will, current_user).present? %>
+         <% if category_subcategory_shares(will, resource_owner).present? %>
             <label>Shared With</label>
             <section class="shared-list">
-              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(will, current_user) } %>
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(will, resource_owner) } %>
             </section>
           <% end %>
         <% end %>
         
         <br>
-        <%= link_to 'View Details', wills_path, class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', @shared_user.present? ? shared_wills_path(@shared_user) : wills_path, class: "small-button outline-button mt-20" %>
       <% else %>
         <h3>Wills</h3>
-        <%= link_to 'Add Wills', new_will_path, class: "small-button outline-button mt-20" %>
+        <% if @shared_user.blank? %>
+          <%= link_to 'Add Wills', new_will_path, class: "small-button outline-button mt-20" %>
+        <% else %>
+          <p>No shared items.</p>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -71,7 +75,7 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, @trusts.name, @category.name) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, @trusts.name, @category.name) } %>
         <h3>Trusts</h3>
         <section class="mb-20">
           <% @trusts.each do |trust| %>
@@ -92,20 +96,23 @@
           <% end %>
         </ul>
 
-        <% if category_subcategory_shares(@trusts, current_user).present? %>
+        <% if category_subcategory_shares(@trusts, resource_owner).present? %>
           <label>Shared With</label>
           <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, current_user) } %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trusts, resource_owner) } %>
           </section>
         <% end %>
 
         <br>
-        <%= link_to 'View Details', trusts_path, class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', @shared_user.present? ? shared_trusts_path(@shared_user) : trusts_path, class: "small-button outline-button mt-20" %>
       <% else %>
 
         <h3>Trusts</h3>
-        <%= link_to 'Add Trusts', new_trust_path, class: "small-button outline-button mt-20" %>
-
+        <% if @shared_user.blank? %>
+          <%= link_to 'Add Trusts', new_trust_path, class: "small-button outline-button mt-20" %>
+        <% else %>
+          <p>No shared items.</p>
+        <% end %>
       <% end %>
     </div>
   </div>
@@ -114,7 +121,7 @@
   <div class="flex-column">
     <div class="card cg-3 column-card">
       <% if @power_of_attorneys.any? %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, 'Legal', @category.name) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, 'Legal', @category.name) } %>
         <h3>Powers of Attorney</h3>
 
         <ul class="data-list mb-20">
@@ -136,18 +143,22 @@
           <% end %>
         </ul>
 
-        <% if category_subcategory_shares(@power_of_attorneys, current_user).present? %>
+        <% if category_subcategory_shares(@power_of_attorneys, resource_owner).present? %>
           <label>Shared With</label>
           <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, current_user) } %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorneys, resource_owner) } %>
           </section>
         <% end %>
 
         <br>
-        <%= link_to 'View Details', power_of_attorneys_path, class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', @shared_user.present? ? shared_power_of_attorneys_path(@shared_user) : power_of_attorneys_path, class: "small-button outline-button mt-20" %>
       <% else %>
         <h3>Power of Attorney</h3>
-        <%= link_to 'Add Details', new_power_of_attorney_path, class: "small-button outline-button mt-20" %>
+        <% if @shared_user.blank? %>
+          <%= link_to 'Add Details', new_power_of_attorney_path, class: "small-button outline-button mt-20" %>
+        <% else %>
+          <p>No shared items.</p>
+        <% end %>
       <% end %>
     </div>
   </div>

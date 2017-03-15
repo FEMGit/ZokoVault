@@ -66,6 +66,7 @@ class SharedViewController < AuthenticatedController
     end
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @groups.sort_by { |group| group["label"] }
+    sort_groups(@final_wishes.map(&:group).sort)
   end
 
   def estate_planning
@@ -164,5 +165,15 @@ class SharedViewController < AuthenticatedController
     shareables = @shares.map(&:shareable)
     shared_documents = ShareService.shared_documents(shared_user, current_user)
     @document_shareables |= shared_documents
+  end
+  
+  def sort_groups(existing_group_names)
+    all_group_names = @groups.map { |x| x["label"] }
+    end_group_names = all_group_names - existing_group_names
+    groups = []
+    (existing_group_names + end_group_names).each do |group|
+      groups.push(@groups.detect { |x| x["label"] == group })
+    end
+    @groups = groups
   end
 end

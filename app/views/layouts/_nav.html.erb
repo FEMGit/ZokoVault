@@ -88,6 +88,12 @@
       <use xlink:href="#icon-settings-1"></use>
     </svg>Account Settings
   <% end %>
+  <% zoku_support_current = 'active' if current_page?(email_support_url) %>
+  <%= link_to email_support_path, class: "main-nav #{zoku_support_current} bottom-nav" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-mail-2"></use>
+    </svg>ZokuVault Support
+  <% end %>
+  
   <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav mobile-show") %>
-
 </nav>

@@ -22,7 +22,7 @@ class Contact < ActiveRecord::Base
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
   
   validates_length_of :businessname, :maximum => ApplicationController.helpers.get_max_length(:default)
-  validates_length_of :businesswebaddress, :maximum => ApplicationController.helpers.get_max_length(:web)
+  validates_length_of :businesswebaddress, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_2, :maximum => ApplicationController.helpers.get_max_length(:default)

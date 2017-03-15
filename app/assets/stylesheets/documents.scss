@@ -1,6 +1,6 @@
 $document-form-width: 390px;
 $share-form-width: 390px;
-$document-button-margin-top: 13px;
+$document-button-margin-top: 7px;
 $date-time-changes-top-position: 15px;
 
 .image-preview {
@@ -55,10 +55,6 @@ $date-time-changes-top-position: 15px;
 
 .edit-data-label{
   font-weight: 600;
-}
-
-.add-link{
-	margin-top: $document-button-margin-top;
 }
 
 .show-document-iframe {

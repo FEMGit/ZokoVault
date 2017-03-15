@@ -12,6 +12,15 @@
   $tooltip-arrow-distance-from-box: -1.3em;
   $tooltip-arrow-distance-from-box-bottom: -1.6em;
   
+  a.avatar-link {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 200;
+  }
+  
   @mixin tooltip-box {
     position: absolute;
     left: 5px;

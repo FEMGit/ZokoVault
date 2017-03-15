@@ -31,7 +31,7 @@ class FinancialInvestment < ActiveRecord::Base
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:default)
-  validates_length_of :web_address, :maximum => ApplicationController.helpers.get_max_length(:default)
+  validates_length_of :web_address, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)

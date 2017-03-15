@@ -1,4 +1,4 @@
-$edit-button-margin-top: 13px;
+$edit-button-margin-top: 7px;
 $cards-margin: 12px;
 
 @mixin card-type-details{
@@ -41,6 +41,7 @@ $cards-margin: 12px;
   
   &.category-shared {
     padding: 0;
+    clear: both;
   }
 }
 
@@ -374,8 +375,10 @@ $cards-margin: 12px;
 
 .edit-link {
   float: right;
-  margin-top: $edit-button-margin-top;
   text-decoration: none;
+  &.mrg-top {
+    margin-top: $edit-button-margin-top;
+  }
 }
 
 .details-card-info {

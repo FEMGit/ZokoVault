@@ -13,11 +13,11 @@ class PolicyService
   def self.update_contacts(insurance_card, policy_params)
     insurance_card.policy.each_with_index do |policy, index|
       key = policy_params.keys[index]
-      policy_params[key]["primary_beneficiary_ids"].select(&:present?).each do |contact_id|
+      policy_params[key]["primary_beneficiary_ids"].to_a.select(&:present?).each do |contact_id|
         LifeAndDisabilityPoliciesPrimaryBeneficiary.create(life_and_disability_policy_id: policy.id, primary_beneficiary_id: contact_id)
       end
 
-      policy_params[key]["secondary_beneficiary_ids"].select(&:present?).each do |contact_id|
+      policy_params[key]["secondary_beneficiary_ids"].to_a.select(&:present?).each do |contact_id|
         LifeAndDisabilityPoliciesSecondaryBeneficiary.create(life_and_disability_policy_id: policy.id, secondary_beneficiary_id: contact_id)
       end
     end
@@ -37,7 +37,7 @@ class PolicyService
   def self.update_insured_members(insurance_card, policy_params)
     insurance_card.policy.each_with_index do |policy, index|
       key = policy_params.keys[index]
-      policy_params[key]["insured_member_ids"].select(&:present?).each do |contact_id|
+      policy_params[key]["insured_member_ids"].to_a.select(&:present?).each do |contact_id|
         HealthPoliciesInsuredMember.create(health_policy_id: policy.id, insured_member_id: contact_id)
       end
     end

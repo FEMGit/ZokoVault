@@ -1,6 +1,6 @@
 /* Chosen v1.6.2 | (c) 2011-2016 by Harvest | MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md */
-$chosen-sprite: url('chosen-sprite.svg') !default;  //Updated to SVG by CO
-$chosen-sprite-retina: url('chosen-sprite@2x.svg') !default; //Updated to SVG by CO
+$chosen-sprite: asset-data-url('chosen-sprite.svg') !default;  //Updated to SVG by CO
+$chosen-sprite-retina: asset-data-url('chosen-sprite@2x.svg') !default; //Updated to SVG by CO
 
 /* @group Base */
 .chosen-container {

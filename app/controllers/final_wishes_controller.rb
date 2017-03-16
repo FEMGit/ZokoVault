@@ -41,7 +41,18 @@ class FinalWishesController < AuthenticatedController
 
     @final_wishes = FinalWishInfo.for_user(resource_owner)
     @final_wishes.each { |fw| fw.final_wishes.each { |f| authorize f } }
+    sort_groups(@final_wishes.map(&:group).sort)
     session[:ret_url] = @shared_user.present? ? shared_final_wishes_path : final_wishes_path
+  end
+  
+  def sort_groups(existing_group_names)
+    all_group_names = @groups.map { |x| x["label"] }
+    end_group_names = all_group_names - existing_group_names
+    groups = []
+    (existing_group_names + end_group_names).each do |group|
+      groups.push(@groups.detect { |x| x["label"] == group })
+    end
+    @groups = groups
   end
 
   # GET /final_wishes/1

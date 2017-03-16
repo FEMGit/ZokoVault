@@ -8,13 +8,13 @@
       <span id="step-1" class="inner-counter">
         1
       </span>
-      <span class="modal-step-title">Details</span>
+      <span class="modal-step-title">General</span>
     </div>
     <div class="inner-step contact-modal" onclick="wizNav(2)">
       <span id="step-2" class="inner-counter">
         2
       </span>
-      <span class="modal-step-title">Relationship</span>
+      <span class="modal-step-title">Details</span>
     </div>
     <div class="inner-step contact-modal" onclick="wizNav(3)">
       <span id="step-3" class="inner-counter">
@@ -33,15 +33,13 @@
     <% end %>
   </div>
   <footer class="modal-footer">
+    <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitContact(event)">Save</button>
     <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="js-modal-close secondary-button big-button" onclick="submitContact(event)">Save</button>
-    <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close button secondary-button big-button", method: :get %>
-    <span class='footer_right'>
-      <% if @contact.persisted? && @contact != current_user.user_profile.contact %>
-        <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "button secondary-button big-button" %>
-      <% end %>
-    </span>
+    <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close outline-button big-button margin-right", method: :get %>
+    <% if @contact.persisted? && @contact != current_user.user_profile.contact %>
+      <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button" %>
+    <% end %>
   </footer>
 </div>
 

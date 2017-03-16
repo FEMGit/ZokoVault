@@ -83,6 +83,9 @@ Rails.application.routes.draw do
       delete 'share_category/:contact_id', to: 'categories#destroy_share_category'
     end
   end
+  
+  # contacts
+  get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category

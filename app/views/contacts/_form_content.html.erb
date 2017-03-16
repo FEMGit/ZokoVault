@@ -17,19 +17,19 @@
 
   <%= f.label :contact_type, 'Contact Type' %>
   <div class="styled-select">
-    <%= f.select :contact_type, options_for_select(Contact::CONTACT_TYPES.keys, @contact.contact_type) %>
+    <%= f.select :contact_type, options_for_select(Contact::CONTACT_TYPES.keys, @contact.contact_type), {}, onchange: 'contact_type_handle(this)' %>
   </div>
+  
+  <%= f.label :relationship %>
+    <div class="styled-select">
+      <%= f.select :relationship,
+        options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
+        {}, id: :relationships_select %>
+    </div>
 </div>
 
 <div id="category-form" class="contact-profile">
   <div id="personal_relationship">
-    <%= f.label :relationship %>
-    <div class="styled-select">
-      <%= f.select :relationship,
-        options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
-        {}, id: :personal_relationships_select %>
-    </div>
-
     <%= f.label :birthdate %>
     <p>
       <%= render partial: 'layouts/date_picker', locals: { birth_value: f.object.birthdate, error_condition: false, f: f, object: :birthdate} %>
@@ -40,22 +40,6 @@
   </div>
 
   <div id="professional_relationship">
-    <%= f.label :relationship %><br>
-    <div id="common_professional">
-      <div class="styled-select">
-        <%= f.select :relationship,
-          options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship),
-          {}, id: :common_professional_select %>
-      </div>
-    </div>
-    <div id="medical_professional">
-      <div class="styled-select">
-        <%= f.select :relationship,
-          options_for_select(Contact::RELATIONSHIP_TYPES[:medical_professional], @contact.relationship),
-          {}, id: :medical_professional_select %>
-      </div>
-    </div>
-
     <%= f.label :businessname, 'Business Name' %>
 
     <%= f.text_field :businessname, :maxlength => get_max_length(:default) %>
@@ -114,11 +98,24 @@
 </div>
 
 <script>
+var contact_type_handle = function(selectInput) {
+  var selectedOption = $('option:selected:first', selectInput).val();
+  
+  var url = '/contacts/relationship_values/' + selectedOption
+  $.get(url, function(data) {
+    relationsship_dropdown = $('#relationships_select');
+    relationsship_dropdown.empty();
+    data.forEach(function(relationship_type){
+      relationsship_dropdown.append("<option value='" + relationship_type + "'>" + relationship_type + "</option>");
+    });
+  });
+}
+
 var wizNav = function(step){
   currentStep = step;
   if(step===1){
+    $("#next-step").text('Add more details')
     $("#next-step").show();
-    $("#save-btn").hide();
     $("#detail-form").show();
     $("#avatar-form").hide();
     $("#category-form").hide();
@@ -131,8 +128,8 @@ var wizNav = function(step){
     $(".footer_right > a").css("float", "");
   }
   else if(step===2){
+    $("#next-step").text('Add avatar')
     $("#next-step").show();
-    $("#save-btn").hide();
     $("#detail-form").hide();
     $("#category-form").show();
     $("#avatar-form").hide();
@@ -146,7 +143,6 @@ var wizNav = function(step){
   }
   else if(step===3){
     $("#next-step").hide();
-    $("#save-btn").show();
     $("#detail-form").hide();
     $("#category-form").hide();
     $("#avatar-form").show();
@@ -161,30 +157,17 @@ var wizNav = function(step){
 
   if ($("#contact_contact_type").val() === "Family & Beneficiaries") {
     $('#personal_relationship').show();
-    $('#personal_relationships_select').removeAttr("disabled");
     $('#professional_relationship').hide();
-    $('#professional_relationships_select').prop('disabled', 'disabled');
-    $('#medical_professional_select').prop('disabled', 'disabled');
-    $('#common_professional_select').prop('disabled', 'disabled');
   }
   else {
     $('#personal_relationship').hide();
-    $('#personal_relationships_select').prop('disabled', 'disabled');
     if ($("#contact_contact_type").val() === "Medical Professional") {
       $('#professional_relationship').show();
-      $('#professional_relationships_select').removeAttr("disabled");
-      $('#medical_professional').show();
-      $('#medical_professional_select').removeAttr("disabled");
       $('#common_professional').hide();
-      $('#common_professional_select').prop('disabled', 'disabled');
     }
     else {
       $('#professional_relationship').show();
-      $('#professional_relationships_select').removeAttr("disabled");
-      $('#medical_professional').hide();
-      $('#medical_professional_select').prop('disabled', 'disabled');
       $('#common_professional').show();
-      $('#common_professional_select').removeAttr("disabled");
     }
   }
 }

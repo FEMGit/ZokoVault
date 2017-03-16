@@ -26,20 +26,7 @@ $cards-margin: 12px;
   &.details.taxes{
     padding: 0;
   }
-  
-  a:not(.whole-card-link):not(.button):not(.small-button):not(.outline-button):not(.big-button) {
-    position: absolute;
-    z-index: 2;
-  }
-  
-  a.whole-card-link {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 1;
-  }
+
   &.document {
     border-radius: 20px;
   }

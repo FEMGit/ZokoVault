@@ -1,6 +1,4 @@
 <div class="contact-header-info">
-  <%= link_to content_tag(:a), edit_contact_path(@contact), class: "whole-card-link" %>
-  
     <% if @contact.emailaddress.present? %>
       <label>Email</label>
       <p><%= mail_to @contact.emailaddress, @contact.emailaddress, class: "no-underline-link" %></p>

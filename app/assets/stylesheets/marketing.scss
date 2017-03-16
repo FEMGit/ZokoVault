@@ -6,6 +6,9 @@ body.logged-out{
   .header-inner{
     max-width: 1065px;
     margin: 0 auto;
+    &.blank {
+      width: 100%;
+    }
   }
 }
 

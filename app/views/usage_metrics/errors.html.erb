@@ -1,0 +1,56 @@
+<h3>User Errors</h3>
+<table id="user-errors-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Page Terminated On</th>
+      <th>Error Message</th>
+      <th>Date</th>
+      <th class="nosort">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @users && @users.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
+    <% @user_errors && @user_errors.each do |user_error| %>
+      <tr>
+        <td>
+          <%= user_error.user.try(:name) %>
+        </td>
+        <td>
+          <%= user_error.page_terminated_on %>
+        </td>
+        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">
+          <%= user_error.error_message %>
+        </td>
+        <td>
+          <%= date_format(user_error.created_at) %>
+        </td>
+        <td>
+          <%= link_to 'Details', user_error_details_path(user_error.id), class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function(){
+    var tableParams = {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[3, 'desc']],
+        'aoColumnDefs': [{
+          'bSortable': false,
+          'aTargets': ['nosort']
+        }]
+      };
+    $('#user-errors-table').DataTable(tableParams);
+  });
+</script>

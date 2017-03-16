@@ -128,6 +128,7 @@ Rails.application.routes.draw do
   # Usage metrics path
   get 'usage_metrics/details/:id', to: 'usage_metrics#details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
+  get 'usage_errors', to: 'usage_metrics#errors'
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'

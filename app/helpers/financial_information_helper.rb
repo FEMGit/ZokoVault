@@ -134,7 +134,51 @@ module FinancialInformationHelper
     cash_sum + investments_sum + properties_sum - credit_cards_sum - loans_sum + alternatives_sum
   end
   
+  # Part percentage section
+    
+  def investment_parts
+    investment_part = fill_part_percentage(FinancialInvestment.investments(resource_owner).group_by(&:investment_type), investments_sum)
+    account_part = fill_part_percentage(FinancialAccountInformation.investments(resource_owner).group_by(&:account_type), investments_sum)
+    investment_part.merge(account_part)
+  end
+  
+  def property_parts
+    fill_part_percentage(FinancialProperty.properties(resource_owner).group_by(&:property_type), properties_sum)
+  end
+  
+  def cash_parts
+    fill_part_percentage(FinancialAccountInformation.cash(resource_owner).group_by(&:account_type), cash_sum)
+  end
+  
+  def alternative_parts
+    fill_part_percentage_alternative(FinancialAlternative.alternatives(resource_owner).group_by(&:alternative_type), alternatives_sum)
+  end
+  
+  def credit_card_parts
+    fill_part_percentage(FinancialAccountInformation.credit_cards(resource_owner).group_by(&:account_type), credit_cards_sum)
+  end
+  
+  def loan_parts
+    account_part = fill_part_percentage(FinancialAccountInformation.loans(resource_owner).group_by(&:account_type), loans_sum)
+    investment_part = fill_part_percentage(FinancialInvestment.loans(resource_owner).group_by(&:investment_type), loans_sum)
+    account_part.merge(investment_part)
+  end
+  
   def resource_owner
     @shared_user.present? ? @shared_user : current_user
+  end
+  
+  private 
+  
+  def fill_part_percentage(collection, sum)
+    collection.each_with_object({}) do |(type, values), hsh|
+      hsh[type] = (values.flatten.reject { |v| v.value.blank? }.sum(&:value).to_f / sum.to_f * 100).round(1)
+    end
+  end
+  
+  def fill_part_percentage_alternative(collection, sum)
+    collection.each_with_object({}) do |(type, values), hsh|
+      hsh[type] = (values.flatten.reject { |v| v.current_value.blank? }.sum(&:current_value).to_f / sum.to_f * 100).round(1)
+    end
   end
 end

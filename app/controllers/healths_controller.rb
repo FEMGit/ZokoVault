@@ -27,14 +27,6 @@ class HealthsController < AuthenticatedController
     add_breadcrumb "Health - Setup", shared_edit_health_path(@shared_user, @health) if shared_view?
   end
 
-  # GET /healths
-  # GET /healths.json
-  def index
-    @healths = healths
-    @healths.each { |x| authorize x }
-    session[:ret_url] = @shared_user.present? ? shared_healths_path : healths_path
-  end
-
   # GET /healths/1
   # GET /healths/1.json
   def show

@@ -118,11 +118,19 @@ module DocumentsHelper
     return 0 unless documents
     documents.count
   end
+  
+  def exists?(document)
+    return false if document.try(:url).nil?
+    s3_object = S3Service.get_object_by_key(document.url)
+    s3_object.exists?
+  end
 
   def previewed?(document)
     return false if document.try(:url).nil?
     s3_object = S3Service.get_object_by_key(document.url)
-    Document.previewed?(s3_object.content_type)
+    if s3_object.exists?
+      return Document.previewed?(s3_object.content_type) 
+    end
   end
 
   def get_file_url(key)

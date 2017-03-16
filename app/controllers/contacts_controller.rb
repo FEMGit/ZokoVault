@@ -41,7 +41,9 @@ class ContactsController < AuthenticatedController
   end
 
   # GET /contacts/1/edit
-  def edit; end
+  def edit;
+    @contact_relationship = @contact.relationship
+  end
 
   # POST /contacts
   # POST /contacts.json

@@ -72,7 +72,7 @@ class FinancialInvestmentController < AuthenticatedController
     @previous_share_with = @investment_provider.share_with_contact_ids
     respond_to do |format|
       if validate_params && @financial_investment.update(investment_params.merge(user_id: resource_owner.id))
-        @investment_provider.update(name: investment_params[:name])
+        @investment_provider.update(name: investment_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_investment)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))

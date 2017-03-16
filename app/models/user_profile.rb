@@ -97,6 +97,18 @@ class UserProfile < ActiveRecord::Base
   def signed_terms_of_service=(val)
     self.signed_terms_of_service_at = Time.now if val
   end
+  
+  def mfa_never?
+    self.mfa_frequency == "never"
+  end
+  
+  def mfa_always?
+    self.mfa_frequency == "always"
+  end
+  
+  def mfa_new_ip?
+    self.mfa_frequency == "new_ip"
+  end
 
   private
 

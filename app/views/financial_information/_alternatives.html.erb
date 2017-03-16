@@ -3,7 +3,7 @@
     <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, manager.id) } %>
     <h3><%= manager.name %></h3>
     <p>
-      <%= link_to manager.web_address, manager.web_address %><br>
+      <%= link_to manager.web_address, manager.web_address, target: "_blank" %><br>
       <%= manager.phone_number %>
     </p>
       

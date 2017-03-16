@@ -17,7 +17,7 @@
 
   <% if @financial_provider.web_address.present? %>
     <label>Web Address</label>
-    <p><%= link_to @financial_provider.web_address, @financial_provider.web_address %></p>
+    <p><%= link_to @financial_provider.web_address, @financial_provider.web_address, target: "_blank" %></p>
   <% end %>
 
   <% if show_financial_provider_address?(@financial_provider) %>

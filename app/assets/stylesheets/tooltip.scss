@@ -9,8 +9,11 @@
   $tooltip-arrow-width: 8px;
   $tooltip-shadow: 0 2px 2px silver;
   $tooltip-distance-from-item: 3em;
-  $tooltip-arrow-distance-from-box: -1.3em;
-  $tooltip-arrow-distance-from-box-bottom: -1.6em;
+  $tooltip-arrow-distance-from-box-chrome: -1.2em;
+  $tooltip-arrow-distance-from-box-firefox: -1.2em;
+  $tooltip-arrow-distance-from-box-firefox-bottom: -1.3em;
+  $tooltip-arrow-distance-from-box-default: -1.3em;
+  $tooltip-arrow-distance-from-box-default-bottom: -1.2em;
   
   a.avatar-link {
     height: 100%;
@@ -80,7 +83,14 @@
     &::after {
       @include tooltip-box;
       content: "▼";
-      bottom: $tooltip-arrow-distance-from-box;
+      bottom: $tooltip-arrow-distance-from-box-default;
+      @media screen and (-webkit-min-device-pixel-ratio:0) 
+        and (min-resolution:.001dpcm) {
+          bottom: $tooltip-arrow-distance-from-box-chrome;
+      }
+      @-moz-document url-prefix() {
+        bottom: $tooltip-arrow-distance-from-box-firefox;
+      }
     }
     &.bottom::after {
       content: "";
@@ -88,7 +98,16 @@
     &.bottom::before {
       @include tooltip-box;
       content: "▲";
-      top: $tooltip-arrow-distance-from-box-bottom;
+      top: $tooltip-arrow-distance-from-box-default-bottom;
+      @media screen and (-webkit-min-device-pixel-ratio:0) 
+        and (min-resolution:.001dpcm) {
+          top: $tooltip-arrow-distance-from-box-chrome;
+      }
+      @-moz-document url-prefix() {
+        top: $tooltip-arrow-distance-from-box-firefox-bottom;
+      }
+      
+      text-shadow: 0 -2px .5px $color-primary-shaded;
     }
   }
 }

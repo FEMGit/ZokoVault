@@ -94,7 +94,7 @@
   }
 }
 
-@include media($small-mobile) {
+@include media($mobile) {
   .settings-inner-step {
     width: 100%;
   }

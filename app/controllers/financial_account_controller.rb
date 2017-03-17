@@ -16,6 +16,19 @@ class FinancialAccountController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'new'
+        return "Financial Account - Setup"
+      when 'edit'
+        return "Financial Account - #{provider.name} - Edit"
+      when 'show'
+        return "Financial Account - #{provider.name} - Details"
+    end
+  end
   
   def set_add_crumbs
     add_breadcrumb "Financial Info - Add Account", add_account_path(@shared_user)

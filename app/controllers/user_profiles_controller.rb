@@ -7,6 +7,16 @@ class UserProfilesController < AuthenticatedController
   add_breadcrumb "My Profile", :user_profile_path
   add_breadcrumb "Edit My Profile", :edit_user_profile_path
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'edit'
+        return "Edit My Profile"
+      when 'show'
+        return "My Profile"
+    end
+  end
   
   # GET /user_profiles
   # GET /user_profiles.json

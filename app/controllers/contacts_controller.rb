@@ -8,6 +8,22 @@ class ContactsController < AuthenticatedController
   add_breadcrumb "Contacts & Permissions", :contacts_path
   before_action :set_details_crumbs, only: [:show]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Documents"
+      when 'new'
+        return "Create Contact"
+      when 'edit'
+        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        return "Contacts - #{contact.name} - Edit"
+      when 'show'
+        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        return "Contacts - #{contact.name} - Details"
+    end
+  end
   
   def set_details_crumbs
     return unless @contact.present?

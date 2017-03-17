@@ -16,6 +16,19 @@ class FinancialAlternativeController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'new'
+        return "Financial Alternative - Setup"
+      when 'edit'
+        return "Financial Alternative - #{provider.name} - Edit"
+      when 'show'
+        return "Financial Alternative - #{provider.name} - Details"
+    end
+  end
   
   def set_add_crumbs
     add_breadcrumb "Alternative - Add Investment", add_alternative_path(@shared_user)

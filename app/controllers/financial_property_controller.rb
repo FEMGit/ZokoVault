@@ -15,6 +15,19 @@ class FinancialPropertyController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    financial_property = FinancialProperty.for_user(resource_owner).find_by(id: params[:id])
+    case action_name
+      when 'new'
+        return "Financial Property - Setup"
+      when 'edit'
+        return "Financial Property - #{financial_property.name} - Edit"
+      when 'show'
+        return "Financial Property - #{financial_property.name} - Details"
+    end
+  end
   
   def set_add_crumbs
     add_breadcrumb "Financial Info - Add Property", add_property_path(@shared_user)

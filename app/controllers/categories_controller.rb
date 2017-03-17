@@ -9,6 +9,16 @@ class CategoriesController < AuthenticatedController
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'estate_planning'
+        return "Wills - Trusts - Legal"
+      when 'insurance'
+        return "Insurance"
+    end
+  end
   
   def set_previous_crumbs
     return unless back_path.present?

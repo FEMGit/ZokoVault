@@ -5,6 +5,14 @@ class FinancialInformationController < AuthenticatedController
   add_breadcrumb "Financial Information", :financial_information_path, only: [:index], if: :general_view?
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:index], if: :shared_view?
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Financial Information"
+    end
+  end
   
   def index
     session[:ret_url] = financial_information_path

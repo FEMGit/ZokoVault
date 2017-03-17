@@ -19,6 +19,16 @@ class WillsController < AuthenticatedController
   add_breadcrumb "Wills", :shared_wills_path, :only => %w(edit index new), if: :shared_view?
   add_breadcrumb "Wills - Setup", :shared_new_wills_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Wills"
+      when 'new'
+        return "Wills - Setup"
+    end
+  end
   
   # GET /wills
   # GET /wills.json

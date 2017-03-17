@@ -2,21 +2,58 @@ class UsageMetricsController < AuthenticatedController
   before_action :check_privileges
   before_action :stats, only: [:index]
   before_action :death_traps, only: [:errors]
-  before_action :set_user_death_drap, only: [:details]
+  before_action :set_user_death_drap, only: [:error_details]
+
   helper_method :documents_per_user, :login_count_per_week,
                 :login_count_per_week_avg, :session_length_avg,
                 :site_completed, :categories_left_to_complete,
-                :shares_per_user, :user_invitations_count, :user_invitations_emails
+                :shares_per_user, :user_invitations_count, :user_invitations_emails,
+                :user_traffic
+  before_action :set_user, only: [:edit_user, :statistic_details]
+  before_action :set_user_traffic, only: [:statistic_details]
+  
+  # Breadcrumbs navigation
+  add_breadcrumb "Usage Metrics", :usage_metrics_path, only: [:statistic_details, :error_details, :edit_user]
+  before_action :set_statistic_details_crumbs, only: [:statistic_details, :edit_user]
+  before_action :set_edit_user_crumbs, only: [:edit_user]
+  add_breadcrumb "Error Details", :user_error_details_path, only: [:error_details]
+  
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "ZokuVault Users"
+      when 'error_details'
+        return "Usage Metrics Error Page"
+      when 'edit_user'
+        user = User.find_by(id: params[:id])
+        return "Admin Edit User - #{user.name}"
+      when 'statistic_details'
+        user = User.find_by(id: params[:id])
+        return "Admin User Details - #{user.name}"
+    end
+  end
+  
+  def set_edit_user_crumbs
+    return unless @user.present?
+    add_breadcrumb @user.name.to_s + " - Edit User", admin_edit_user_path(@user)
+  end
+  
+  def set_statistic_details_crumbs
+    return unless @user.present?
+    add_breadcrumb @user.name.to_s + " - User Details", statistic_details_path(@user)
+  end
   
   def index; end
   
   def errors; end
   
-  def details; end
+  def error_details; end
   
-  def statistic_details
-    @user = User.find(params[:id])
-  end
+  def edit_user; end
+  
+  def statistic_details; end
   
   def stats
     update_model_list
@@ -38,6 +75,14 @@ class UsageMetricsController < AuthenticatedController
   end
   
   private
+  
+  def set_user
+    @user = User.find(params[:id])
+  end
+  
+  def set_user_traffic
+    @user_traffic = UserTraffic.for_user(@user)
+  end
   
   def delete_system_models(models)
     return if models.blank?

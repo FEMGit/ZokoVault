@@ -16,6 +16,22 @@ class DocumentsController < AuthenticatedController
   before_action :set_edit_crumbs, only: [:edit]
   before_action :set_show_crumbs, only: [:show]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Documents"
+      when 'new'
+        return "Add Document"
+      when 'edit'
+        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        return "#{document.name} - Edit"
+      when 'show'
+        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        return "#{document.name} - Preview"
+    end
+  end
 
   def set_previous_crumbs
     return unless back_path.present?
@@ -74,6 +90,7 @@ class DocumentsController < AuthenticatedController
 
     respond_to do |format|
       if validate_params && @document.save && @document.update(document_share_params)
+        save_traffic_with_params(document_path(@document), 'Uploaded New Document')
         handle_document_saved(format)
       else
         handle_document_not_saved(format)
@@ -86,6 +103,7 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if validate_params && @document.update(document_share_params)
+        save_traffic_with_params(document_path(@document), 'Updated Document')
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }
         else

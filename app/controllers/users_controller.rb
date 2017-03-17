@@ -1,4 +1,5 @@
 class UsersController < AuthenticatedController
+  include BackPathHelper
   before_action :is_admin?
   before_action :set_user, only: [:destroy]
 
@@ -19,8 +20,11 @@ class UsersController < AuthenticatedController
       @user.destroy
     end
 
+    recognized_path = Rails.application.routes.recognize_path(back_path)
+    
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      return_path = recognized_path.present? ? {:controller => recognized_path[:controller], :action => :index } : users_url
+      format.html { redirect_to return_path, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

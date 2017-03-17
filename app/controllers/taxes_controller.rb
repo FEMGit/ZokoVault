@@ -17,6 +17,22 @@ class TaxesController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_add_edit_crumbs, only: [:edit, :new]
   include BreadcrumbsCacheModule
+  include UserTrafficModule
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "Taxes"
+      when 'new'
+        return "Taxes - #{params[:year]} - Setup"
+      when 'edit'
+        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        return "Taxes - #{tax_year_info.year} - Edit"
+      when 'show'
+        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        return "Taxes - #{tax_year_info.year} - Details"
+    end
+  end
   
   def set_details_crumbs
     return unless @tax.taxes.any?

@@ -1,0 +1,60 @@
+<h1>Account Traffic</h1>
+
+<table id="traffics-table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Time</th>
+      <th>Page/Document Name</th>
+      <th>URL</th>
+      <th>Requesting IP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @user_traffic && @user_traffic.empty? %>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+      <td style="display: none"></td>
+    <% end %>
+    <% @user_traffic && @user_traffic.each do |traffic_info| %>
+      <tr>
+        <% resource_link_url = resource_link(traffic_info) %>
+        <td>
+          <%= link_to traffic_info.user.name, user_link(traffic_info), class: 'no-underline-link' %>
+        </td>
+        <td>
+          <%= traffic_info.created_at %>
+        </td>
+        <td>
+          <%= link_to traffic_info.page_name, resource_link_url, class: 'no-underline-link' %>
+        </td>
+        <td>
+          <% link_name = resource_link_url.remove(root_url).blank? ? "/" : resource_link_url.remove(root_url) %>
+          <%= link_to link_name, resource_link_url, class: 'no-underline-link' %>
+        </td>
+        <td>
+          <%= traffic_info.ip_address %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back', usage_metrics_path, class: "button secondary-button big-button"%>
+
+<script>
+  $(document).ready(function(){
+      $('#traffics-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[1, 'desc']],
+        'aoColumnDefs': [{
+          'bSortable': false,
+          'aTargets': ['nosort']
+        }]
+      } );
+  });
+</script>

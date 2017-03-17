@@ -13,13 +13,12 @@
 }
 
 .settings-card {
-  border-bottom: 1px solid #aaa;
   border-radius: 5px;
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-clip: padding-box;
   background: white;
   border: 1px solid $color-gray-med-tinted;
-  
+
   footer {
     width: 100%;
     padding: 15px 25px;
@@ -38,20 +37,20 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-  
+
 .settings-inner-step {
   width: auto;
   padding: 20px 30px 0 5px;
   cursor: default;
   background: transparent asset-data-url('SVG/thin-chevron.svg') no-repeat center right;
-  
+
   &:first-child{
     padding-left: 10px;
   }
   &:last-child{
     background: transparent;
   }
-  
+
   .settings-inner-counter{
     background:$color-gray-light;
     color: white;
@@ -79,7 +78,7 @@
     &.last-line {
       display: none;
     }
-    
+
     .settings-inner-counter {
       margin-right: 5px;
       padding: 2px 5px 2px 8.5px;

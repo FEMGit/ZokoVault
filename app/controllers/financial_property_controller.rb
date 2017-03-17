@@ -54,6 +54,7 @@ class FinancialPropertyController < AuthenticatedController
     respond_to do |format|
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
+        FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
@@ -74,6 +75,7 @@ class FinancialPropertyController < AuthenticatedController
         @property_provider.update(name: property_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
+        FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }
@@ -159,8 +161,12 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   def property_params
-    params.require(:financial_property).permit(:id, :name, :property_type, :notes, :value, :owner_id, :city, :state, :zip, :address, :primary_contact_id, :category_id,
+    params.require(:financial_property).permit(:id, :name, :property_type, :notes, :value, :city, :state, :zip, :address, :primary_contact_id, :category_id,
                                                share_with_contact_ids: [])
+  end
+  
+  def property_owner_params
+    params.require(:financial_property).permit(property_owner_ids: [])
   end
   
   def set_contacts

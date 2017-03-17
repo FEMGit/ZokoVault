@@ -82,12 +82,12 @@
       <p><%= account.name %></p>
     <% end %>
 
-    <% if account.owner.present? %>
-      <label>Account Owner</label>
+    <% if account.account_owners.any? %>
+      <label>Account Owners</label>
       <p>
-        <%= account.owner.name %><br>
-        <%= mail_to account.owner.emailaddress, account.owner.emailaddress %><br>
-        <%= account.owner.phone %>
+        <% account.account_owners.each do |owner| %>
+          <%= owner.name %><br>
+        <% end %>
       </p>
     <% end %>
 

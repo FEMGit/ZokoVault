@@ -20,6 +20,23 @@ class FinancialInformationService
     end
   end
   
+  def self.update_property_owners(property, property_params)
+    property.property_owners.clear
+    property_params["property_owner_ids"].each do |contact_id|
+      FinancialAccountOwner.create(contact_id: contact_id, contactable_id: property.id, contactable_type: property.class)
+    end
+  end
+  
+  def self.update_account_owners(provider, account_params)
+    provider.accounts.each_with_index do |account, index|
+      key = account_params.keys[index]
+      account.account_owners.clear
+      account_params[key]["account_owner_ids"].to_a.select(&:present?).each do |contact_id|
+        FinancialAccountOwner.create(contact_id: contact_id, contactable_id: account.id, contactable_type: account.class)
+      end
+    end
+  end
+  
   def self.update_shares(financial_provider, share_with_contact_ids, previous_share_contact_ids, user, financial_subcategory = nil)
     return if share_with_contact_ids.nil? || (Thread.current[:current_user] != user)
     financial_subcategory.shares.clear if financial_subcategory.present?

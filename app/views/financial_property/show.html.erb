@@ -22,12 +22,12 @@
     <label>There is no information about Property</label>
   <% end %>
 
-  <% if @financial_property.owner %>
-    <label>Property Owner</label>
+  <% if @financial_property.property_owners.any? %>
+    <label>Property Owners</label>
     <p>
-      <%= @financial_property.owner.name %><br>
-      <%= mail_to @financial_property.owner.emailaddress, @financial_property.owner.emailaddress %><br>
-      <%= @financial_property.owner.phone %>
+      <% @financial_property.property_owners.each do |owner| %>
+        <%= owner.name %><br>
+      <% end %>
     </p>
   <% end %>
 

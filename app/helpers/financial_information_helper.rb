@@ -53,13 +53,13 @@ module FinancialInformationHelper
   end
   
   def financial_account_present?(account)
-    account.owner.present? || account.value.present? || account.number.present? ||
+    account.account_owners.any? || account.value.present? || account.number.present? ||
       account.primary_contact_broker.present? || account.notes.present? || account.name.present?
   end
   
   def financial_property_present?(property)
     provider = financial_provider(property)
-    property.owner.present? || property.value.present? || show_financial_property_address?(property) ||
+    property.property_owners.any? || property.value.present? || show_financial_property_address?(property) ||
       property.primary_contact.present? || property.notes.present? || category_subcategory_shares(provider, provider.user).present?
   end
   

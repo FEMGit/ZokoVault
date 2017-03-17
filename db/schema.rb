@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306072929) do
+ActiveRecord::Schema.define(version: 20170315083624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,16 @@ ActiveRecord::Schema.define(version: 20170306072929) do
 
   add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
   add_index "financial_account_informations", ["user_id"], name: "index_financial_account_informations_on_user_id", using: :btree
+
+  create_table "financial_account_owners", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "contactable_id"
+    t.string   "contactable_type"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "financial_account_owners", ["contact_id"], name: "index_financial_account_owners_on_contact_id", using: :btree
 
   create_table "financial_alternatives", force: :cascade do |t|
     t.integer  "alternative_type"
@@ -461,6 +471,19 @@ ActiveRecord::Schema.define(version: 20170306072929) do
     t.string   "two_factor_phone_number"
   end
 
+  create_table "user_traffics", force: :cascade do |t|
+    t.string   "page_name"
+    t.string   "page_url"
+    t.string   "ip_address"
+    t.integer  "user_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "shared_user_id"
+  end
+
+  add_index "user_traffics", ["shared_user_id"], name: "index_user_traffics_on_shared_user_id", using: :btree
+  add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
@@ -575,6 +598,7 @@ ActiveRecord::Schema.define(version: 20170306072929) do
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "final_wish_infos", "users"
+  add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "shares", "users"
@@ -582,6 +606,8 @@ ActiveRecord::Schema.define(version: 20170306072929) do
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_death_traps", "users"
+  add_foreign_key "user_traffics", "users"
+  add_foreign_key "user_traffics", "users", column: "shared_user_id"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade
   add_foreign_key "vault_entry_contacts", "contacts", on_delete: :cascade
   add_foreign_key "vendor_accounts", "vendors"

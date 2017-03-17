@@ -98,16 +98,24 @@
 </div>
 
 <script>
-var contact_type_handle = function(selectInput) {
+  $(document).ready(function() {
+    contact_type_handle($('#contact_contact_type'), true)
+  })
+var contact_type_handle = function(selectInput, first_time) {
   var selectedOption = $('option:selected:first', selectInput).val();
   
   var url = '/contacts/relationship_values/' + selectedOption
   $.get(url, function(data) {
-    relationsship_dropdown = $('#relationships_select');
-    relationsship_dropdown.empty();
+    relationship_dropdown = $('#relationships_select');
+    relationship_dropdown.empty();
     data.forEach(function(relationship_type){
-      relationsship_dropdown.append("<option value='" + relationship_type + "'>" + relationship_type + "</option>");
+      relationship_dropdown.append("<option value='" + relationship_type + "'>" + relationship_type + "</option>");
     });
+    
+    if (first_time === true) {
+      var relationship = '<%= @contact_relationship %>'
+      $('#relationships_select').find("option[value=\'" + relationship + "\']").prop('selected', true)
+    }
   });
 }
 

@@ -16,6 +16,15 @@
       right: 10%;
       left: 10%;
     }
+    
+    &.static {
+      position: relative;
+      width: 100%;
+      right: 0;
+      left: 0;
+      top: 0;
+      z-index: 0;
+    }
 }
 
 $base-spacing: 1.5em !default;
@@ -24,6 +33,7 @@ $flashes: (
   "error": #fbe3e4,
   "notice": #e5edf8,
   "success": #e6efc2,
+  "alert-static": #fff6bf
 ) !default;
 
 @each $flash-type, $color in $flashes {

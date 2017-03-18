@@ -282,6 +282,10 @@ main.app-nav{
   height: 100%;
   overflow:hidden;
   margin-left: 240px;
+  
+  &.blank {
+    margin: 0;
+  }
 
   .content{
     padding: 15px 25px 100px 25px;
@@ -290,6 +294,10 @@ main.app-nav{
 
     @include media($eightfifty) {
       padding: 20px 20px 100px;
+    }
+    
+    &.blank {
+      overflow-y: auto;
     }
   }
   @include media($mobile) {

@@ -16,7 +16,7 @@ module SecurityQuestions
       "What is your mother's maiden name?",
       "What street did you grow up on?",
       "What was the make of your first car?",
-      "When is your anniversary?."
+      "When is your anniversary?"
     ],
 
     Three: [

@@ -1,34 +1,34 @@
-<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
-  Wizard Modal
-</button>
-<div id="wizard-modal" class="modal wizard-modal modal-no-js">
-  <div class="step-wizard">
-    <div class="inner-step">
-      <span id="step-1" class="inner-counter">
+<h1>Account Setup</h1>
+
+<div class="settings-card">
+  <div class="settings-header">
+    <div class="settings-inner-step">
+      <span id="step-1" class="settings-inner-counter">
         1
       </span>
-      Terms
+      <span class="step-name" id="terms">Terms</span>
     </div>
-    <div class="inner-step questions-width">
-      <span id="step-2" class="inner-counter">
+    <div class="settings-inner-step">
+      <span id="step-2" class="settings-inner-counter">
         2
       </span>
-      Questions
+      <span class="step-name" id="security">Security Questions</span>
     </div>
-    <div class="inner-step">
-      <span id="step-3" class="inner-counter">
+    <div class="settings-inner-step">
+      <span id="step-3" class="settings-inner-counter">
         3
       </span>
-      Phone
+      <span class="step-name" id="phone">Phone Setup</span>
     </div>
-    <div class="inner-step">
-      <span id="step-4" class="inner-counter">
+    <div class="settings-inner-step">
+      <span id="step-4" class="settings-inner-counter">
         4
       </span>
-      Settings
+      <span class="step-name" id="login">Login Settings</span>
     </div>
+    <div class="settings-inner-step last-line"></div>
   </div>
-
+  
   <%= form_tag :account, { method: :put, id: 'account-form' } do %>
     <div id="form-step-1">
       <%= render partial: "terms_of_service" %>
@@ -43,44 +43,61 @@
       <%= render partial: "settings" %>
     </div>
   <% end %>
-
-  <footer class="modal-footer">
+  
+  <footer>
     <a href="javascript:;" id='next-step' class=" button primary-button big-button"
                                           onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitAccount(event)">Save</button>
-    <%= link_to 'Cancel', contacts_path, class: "js-modal-close" %>
+    <button id="save-btn" class="primary-button big-button" onclick="submitAccount(event)">Save</button>
   </footer>
 </div>
 
 <script>
-
 var currentStep = 1;
 var maxStep = 4;
 
-// Return true if form criteria is met.
-var guard = function() {
-  var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
-  return check_el.is(':checked');
+$(document).ready(function(){
+  changeTabNames()
+  $('button[data-modal-id]').click();
+  wizNav(1);
+});
+
+$(window).resize(function() {
+  changeTabNames()
+})
+
+var changeTabNames = function() {
+  $('#security').text('Security Questions')
+  $('#login').text('Login Settings')
+  $('#phone').text('Phone Setup')
+  $('#terms').text('Terms')
+
+  if (window.matchMedia("(max-width: 660px)").matches) {
+    $('#security').text('Security')
+    $('#login').text('Settings')
+    $('#phone').text('Phone')
+  } if (window.matchMedia("(max-width: 485px)").matches) {
+    $('#security').text('   ')
+    $('#login').text('   ')
+    $('#phone').text('   ')
+    $('#terms').text('   ')
+  }
 }
 
 var wizNav = function(step){
-
   currentStep = step;
   for(var i = 1; i < maxStep + 1; i++) {
     var step_el = $("#step-" + i);
     var form_el = $("#form-step-" + i);
     if (i === currentStep) {
-      step_el.removeClass().addClass("inner-counter current-step")
-        step_el.html(i);
+      step_el.removeClass().addClass("settings-inner-counter settings-current-step")
       form_el.show();
     }
     else {
       if (currentStep > i) {
-        step_el.removeClass().addClass("inner-counter completed-step");
+        step_el.removeClass().addClass("settings-inner-counter settings-completed-step");
         step_el.html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
       } else {
-        step_el.removeClass().addClass("inner-counter");
-        step_el.html(i);
+        step_el.removeClass().addClass("settings-inner-counter");
       }
       form_el.hide();
     }
@@ -108,48 +125,4 @@ var submitAccount = function(){
   var accountForm = document.getElementById("account-form");
   accountForm.submit();
 }
-$(function(){
-
-  //SOMEONE PLEASE FIX THIS GARBAGE
-  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
-  $(document).ready(function(){
-    $('button[data-modal-id]').click();
-    wizNav(1);
-  });
-  $('button[data-modal-id]').click(function(e) {
-    e.preventDefault();
-    $("body").append(appendthis);
-    $(".modal-overlay").fadeTo(500, 0.8);
-    $(".js-modalbox").fadeIn(500);
-    var modalBox = $(this).attr('data-modal-id');
-    $('#'+modalBox).fadeIn($(this).data());
-  });
-
-  $(".js-modal-close, .modal-overlay").click(function() {
-    $(".modal, .modal-overlay").fadeOut(500, function() {
-      $(".modal-overlay").remove();
-    });
-  });
-
-  //ESPECIALLY THIS GARBAGE
-  $(window).resize(function() {
-    $(".large-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".medium-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".small-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize();
-});
 </script>

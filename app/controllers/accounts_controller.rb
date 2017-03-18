@@ -2,19 +2,16 @@ class AccountsController < AuthenticatedController
 
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
+  layout "blank_layout", only: [:setup]
 
-  def setup
-    nil
-  end
+  def setup; end
 
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
     redirect_to root_path
   end
 
-  def show
-    nil
-  end
+  def show; end
 
   def send_code
     current_user.update_attributes(user_params)

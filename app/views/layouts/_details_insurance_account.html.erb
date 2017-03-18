@@ -71,6 +71,7 @@
 
 <%= render yield(:partial_path) %>
 
+<h3 class="mt-20"><%= params[:name] %> Documents</h3>
 <div>
   <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id), class: "add-link fr" do %>
     <span class="circle-button">
@@ -79,7 +80,6 @@
       </svg>
     </span>Add Document
   <% end %>
-  <h3 class="mt-20"><%= params[:name] %> Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

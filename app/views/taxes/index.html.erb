@@ -7,6 +7,7 @@
   <% end %>
 </section>
 
+<h3>Tax Documents</h3>
 <a class="add-link fr" href="<%= new_document_path(:category => @category.name) %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -14,7 +15,6 @@
     </svg>
   </span>Add Document
 </a>
-<h3>Tax Documents</h3>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 

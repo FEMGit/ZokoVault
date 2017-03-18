@@ -80,6 +80,7 @@
   <% end %>
 </div>
 
+<h3 class="mt-20">Property Documents</h3>
 <div>
   <%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group, :financial_information_id => @property_provider.id), class: "add-link fr" do %>
     <span class="circle-button">
@@ -88,7 +89,6 @@
       </svg>
     </span>Add Document
   <% end %>
-  <h3 class="mt-20">Property Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

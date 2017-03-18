@@ -104,7 +104,7 @@
   </div>
 <% end %>
 
-
+<h3><%= @user_profile.name %> Documents</h3>
 <div>
   <a class="add-link fr" href="<%= new_document_path(:category => @category) %>">
     <span class="circle-button">
@@ -113,7 +113,6 @@
       </svg>
     </span>Add Document
   </a>
-  <h3><%= @user_profile.name %> Documents</h3>
 </div>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @my_profile_documents} %>

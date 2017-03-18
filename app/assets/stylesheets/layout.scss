@@ -190,13 +190,14 @@ nav.primary-nav{
   padding: $bu 0 0 0;
   position: fixed;
   display: block;
+  overflow-y: auto;
 
   @include media($mobile) {
     display:none;
     position: absolute;
     top: -10px;
     right: 0;
-    z-index: 102;
+    z-index: 2147483628;
     overflow-y:scroll;
   }
 }
@@ -223,6 +224,21 @@ a:visited.main-nav{
   width:100%;
   cursor: pointer;
   text-decoration: none;
+  
+  @include media($nav-height) {
+    &.bottom-nav {
+      position: fixed;
+      width: inherit;
+      bottom: 20px;
+    }
+  }
+
+  @include media($mobile) {
+    &.bottom-nav {
+      position: relative;
+      bottom: 0;
+    }
+  }
 
   &.active{
     background: #22303A;

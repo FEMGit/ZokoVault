@@ -481,6 +481,10 @@ ActiveRecord::Schema.define(version: 20170315083624) do
   end
 
   add_index "user_traffics", ["shared_user_id"], name: "index_user_traffics_on_shared_user_id", using: :btree
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|

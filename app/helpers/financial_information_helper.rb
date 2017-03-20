@@ -64,14 +64,14 @@ module FinancialInformationHelper
   end
   
   def financial_alternative_present?(alternative)
-    alternative.owner.present? || alternative.total_calls.present? || alternative.total_distributions.present? ||
+    alternative.account_owners.any? || alternative.total_calls.present? || alternative.total_distributions.present? ||
       alternative.current_value.present? || alternative.commitment.present? || alternative.primary_contact.present? ||
       alternative.notes.present?
   end
   
   def financial_investment_present?(investment)
     provider = financial_provider(investment)
-    investment.owner.present? || investment.value.present? || show_financial_property_address?(investment) ||
+    investment.owners.any? || investment.value.present? || show_financial_property_address?(investment) ||
       investment.web_address.present? || investment.phone_number.present? || investment.primary_contact.present? ||
       investment.notes.present? || category_subcategory_shares(provider, provider.user).present?
   end

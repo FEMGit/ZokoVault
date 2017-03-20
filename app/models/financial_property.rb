@@ -17,7 +17,6 @@ class FinancialProperty < ActiveRecord::Base
   belongs_to :user
   belongs_to :category
   belongs_to :primary_contact, class_name: "Contact"
-  belongs_to :owner, class_name: "Contact"
   
   belongs_to :financial_provider, dependent: :destroy
   

@@ -38,7 +38,6 @@ class FinancialAccountInformation < ActiveRecord::Base
   belongs_to :user
   belongs_to :category
   belongs_to :primary_contact_broker, class_name: "Contact"
-  belongs_to :owner, class_name: "Contact"
   before_save { self.category = Category.fetch("financial information") }
   
 

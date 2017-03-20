@@ -68,6 +68,7 @@ class FinancialAlternativeController < AuthenticatedController
     respond_to do |format|
       if @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
+        FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
@@ -86,6 +87,7 @@ class FinancialAlternativeController < AuthenticatedController
     respond_to do |format|
       if @financial_provider.update(provider_params.merge(provider_type: provider_type))
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
+        FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
@@ -185,8 +187,17 @@ class FinancialAlternativeController < AuthenticatedController
     alternatives = params[:financial_provider].select { |k, _v| k.starts_with?("alternative_") }
     permitted_params = {}
     alternatives.keys.each do |alternative|
-      permitted_params[alternative] = [:id, :alternative_type, :owner_id, :commitment, :total_calls, :total_distributions,
+      permitted_params[alternative] = [:id, :alternative_type, :commitment, :total_calls, :total_distributions,
                                        :notes, :current_value, :primary_contact_id, :name]
+    end
+    alternatives.permit(permitted_params)
+  end
+  
+  def account_owner_params
+    alternatives = params[:financial_provider].select { |k, _v| k.starts_with?("alternative_") }
+    permitted_params = {}
+    alternatives.keys.each do |alternative|
+      permitted_params[alternative] = [account_owner_ids: []]
     end
     alternatives.permit(permitted_params)
   end

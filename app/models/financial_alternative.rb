@@ -6,6 +6,14 @@ class FinancialAlternative < ActiveRecord::Base
                           "Angel",
                           "Other Alternatives"]
 
+  has_many :financial_account_owners, as: :contactable, dependent: :destroy
+  
+  has_many :account_owners,
+    -> { where("financial_account_owners.contactable_type = ?",
+               "FinancialAlternative").uniq },
+  through: :financial_account_owners,
+  source: :contact
+  
   scope :for_user, ->(user) { where(user: user) }
   
   scope :alternatives, ->(user) { where(user: user, alternative_type: FinancialInformation::ALTERNATIVES) }
@@ -13,7 +21,6 @@ class FinancialAlternative < ActiveRecord::Base
   belongs_to :user
   belongs_to :category
   belongs_to :primary_contact, class_name: "Contact"
-  belongs_to :owner, class_name: "Contact"
   before_save { self.category = Category.fetch("financial information") }
   
   validates_length_of :commitment, :maximum => ApplicationController.helpers.get_max_length(:default)

@@ -10,11 +10,17 @@ class FinancialInvestment < ActiveRecord::Base
   belongs_to :category
   
   belongs_to :primary_contact, class_name: "Contact"
-  belongs_to :owner, class_name: "Contact"
   
   has_many :shares, as: :shareable, dependent: :destroy
   has_many :share_with_contacts, through: :shares, source: :contact
+  has_many :financial_account_owners, as: :contactable, dependent: :destroy
   has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
+  
+  has_many :owners,
+    -> { where("financial_account_owners.contactable_type = ?",
+               "FinancialInvestment").uniq },
+  through: :financial_account_owners,
+  source: :contact
   
   validates :name, presence: { :message => "Required"}
   

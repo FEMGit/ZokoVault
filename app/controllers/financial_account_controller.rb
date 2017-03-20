@@ -68,7 +68,7 @@ class FinancialAccountController < AuthenticatedController
     respond_to do |format|
       if @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
-        FinancialInformationService.update_account_owners(@financial_provider, account_owner_params)
+        FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
         @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Account was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_provider }
@@ -87,7 +87,7 @@ class FinancialAccountController < AuthenticatedController
     respond_to do |format|
       if @financial_provider.update(provider_params.merge(provider_type: provider_type))
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
-        FinancialInformationService.update_account_owners(@financial_provider, account_owner_params)
+        FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
         @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Account was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }

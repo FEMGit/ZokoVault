@@ -18,7 +18,12 @@
         <tr>
           <td>
             <% contact = Contact.for_user(current_user).detect { |c| c.emailaddress.downcase == user.email.downcase } %>
-            <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
+            <% if contact.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
+            <% else %>
+              <% user = User.all.detect { |u| u.email.downcase == user.email.downcase } %>
+              <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => nil, :user => user } %>
+            <% end %>
           </td>
           <td>
             <%= user.try(:email) %>

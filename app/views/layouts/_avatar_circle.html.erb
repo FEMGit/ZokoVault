@@ -20,4 +20,10 @@
   <% if with_name %>
     <span class="avatar-name"><%= contact.name %></span>
   <% end %>
+<% elsif user.present? %>
+  <div class="tooltip-item">
+    <p class="avatar-initials"><%= user.initials %></p>
+    <%= image_tag(empty_image, class: "avatar-small", alt: user.initials.to_s) %>
+  </div>
+  <span class="avatar-name"><%= user.name %></span>
 <% end %>

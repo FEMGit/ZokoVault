@@ -11,7 +11,7 @@ class DocumentsController < AuthenticatedController
   before_action :prepare_shares, only: [:update]
   
   # Breadcrumbs navigation
-  before_action :set_previous_crumbs, only: [:new, :edit, :show]
+  before_action :set_previous_crumbs, only: [:new, :edit, :show, :download]
   add_breadcrumb "Documents", :documents_path, only: [:index]
   before_action :set_add_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]

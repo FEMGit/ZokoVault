@@ -90,6 +90,17 @@ class DocumentService
     "Select..."
   end
   
+  def self.category_or_group_changed?(document, new_category, new_group, new_financial_information_id, new_vendor_id)
+    if new_category == Rails.configuration.x.InsuranceCategory
+      return true if (document.category != new_category) || (document.vendor_id != new_vendor_id.try(:to_i))
+    elsif new_category == Rails.configuration.x.FinancialInformationCategory
+      return true if (document.category != new_category) || (document.financial_information_id != new_financial_information_id.try(:to_i))
+    else
+      return true if (document.category != new_category) || (document.group != new_group)
+    end
+    return false
+  end
+  
   def self.update_group?(group, category)
     ![Rails.configuration.x.InsuranceCategory, Rails.configuration.x.FinancialInformationCategory].include? category
   end

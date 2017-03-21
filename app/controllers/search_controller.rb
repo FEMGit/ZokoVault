@@ -7,7 +7,7 @@ class SearchController < AuthenticatedController
     @search_results = 
       if params[:q].present?
         matched_resources = ResourceSearcher.new(
-          UserResourceGatherer.new(current_user).all_resources
+          UserResourceGatherer.new(current_user).my_resources
         ).search(params[:q])
       end
 

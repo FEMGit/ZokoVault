@@ -82,12 +82,12 @@
       <label>There is no information about Alternative Investment</label>
     <% end %>
 
-    <% if alternative.owner.present? %>
-      <label>Account Owner</label>
+    <% if alternative.account_owners.any? %>
+      <label>Account Owners</label>
       <p>
-        <%= alternative.owner.name %><br>
-        <%= mail_to alternative.owner.emailaddress, alternative.owner.emailaddress %><br>
-        <%= alternative.owner.phone %>
+        <% alternative.account_owners.each do |owner| %>
+          <%= owner.name %><br>
+        <% end %>
       </p>
     <% end %>
 

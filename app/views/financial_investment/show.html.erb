@@ -16,12 +16,12 @@
     <label>There is no information about Investment or Debt</label>
   <% end %>
   
-  <% if @financial_investment.owner %>
-    <label>Owner</label>
+  <% if @financial_investment.owners.any? %>
+    <label>Owners</label>
     <p>
-      <%= @financial_investment.owner.name %><br>
-      <%= mail_to @financial_investment.owner.emailaddress, @financial_investment.owner.emailaddress %><br>
-      <%= @financial_investment.owner.phone %>
+      <% @financial_investment.owners.each do |owner| %>
+        <%= owner.name %><br>
+      <% end %>
     </p>
   <% end %>
 

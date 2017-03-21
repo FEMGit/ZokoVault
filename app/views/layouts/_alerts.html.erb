@@ -6,6 +6,10 @@
 
 <div class="flash-alert flash" style="display:none;"><%= alert %></div>
 
+<% flash[:success] = nil %>
+<% flash[:error] = nil %>
+<% flash[:notice] = nil %>
+<% flash[:alert] = nil %>
 
 <script>
 $(document).ready(function(){

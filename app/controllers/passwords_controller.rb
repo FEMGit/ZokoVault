@@ -12,7 +12,7 @@ class PasswordsController < Devise::PasswordsController
         resource.errors.messages.clear
         flash[:notice] = email_sent_message
       end
-      respond_with(resource, location: new_password_path(resource_name))
+      respond_with(resource, location: after_sending_reset_password_instructions_path_for(resource_name))
     end
   end
 end

@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :vendor_accounts
   resources :vendors
   resources :contacts
-  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords',
+  devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords', sessions: 'sessions',
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
   
 

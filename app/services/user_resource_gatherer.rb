@@ -25,6 +25,7 @@ class UserResourceGatherer < Struct.new(:user)
       gather_insurance(user, Category.fetch('insurance')) |
       Contact.for_user(user) |
       gather_taxes(user, Category.fetch('taxes')) |
+      gather_documents(user) |
       gather_final_wishes(user, Category.fetch('final wishes')) |
       gather_financial_information(user, Category.fetch('financial information'))
     
@@ -110,5 +111,9 @@ class UserResourceGatherer < Struct.new(:user)
       FinancialProperty.for_user(user) |
       FinancialProvider.for_user(user) |
       Document.for_user(user).where(category: category.name)
+  end
+  
+  def gather_documents(user)
+    Document.for_user(user)
   end
 end

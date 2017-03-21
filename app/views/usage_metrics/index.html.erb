@@ -19,7 +19,7 @@
       <th>Logins/Week AVG</th>
       <th>Session Length AVG</th>
       <th>Site Completed (%)</th>
-      <th class="nosort">Actions</th>
+      <th class="nosort nosearch">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -84,15 +84,28 @@
 <script>
   $(document).ready(function(){
     var userTableParams = {
-        paging: false,
-        searching: false,
-        info: false,
+        paging: true,
+        lengthMenu: [100, 200, 500],
+        searching: true,
+        info: true,
+        pagingType: 'numbers',
         aaSorting: [[0, 'asc']],
         'aoColumnDefs': [{
           'bSortable': false,
           'aTargets': ['nosort']
+        }, {
+          'bSearchable': false,
+          'aTargets': ['nosearch']
         }]
       };
-    $('#user-statistics-table').DataTable(tableParams);
+    $('#user-statistics-table').DataTable(userTableParams);
+    
+    var documentTableId = '#user-statistics-table'
+    // Save all controlls to variables and add listeners
+    prepareTableControlls(documentTableId)
+
+    // Change table to match design
+    updateSearchField(documentTableId)
+    updateTable(documentTableId)
   });
 </script>

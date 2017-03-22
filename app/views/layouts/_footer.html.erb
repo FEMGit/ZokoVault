@@ -1,9 +1,7 @@
 <footer class="marketing-footer">
   <section class="footer-inner">
 
-
     <nav class="footer-nav flex-boxes">
-
       <section class="copyright flex-marketing">
         <%= image_tag "SVG/ZokuVault_logo_white.svg", :class=>"mb-10"%><br>
         <p class="small-text">&copy; <%= Time.zone.now.year %> Zoku Technologies, LLC.</p>
@@ -15,16 +13,16 @@
         <%= link_to 'About Us', about_path, class: "footer-link" %><br>
         <%= link_to 'Setup', setup_path, class: "footer-link" %><br>
         <%= link_to 'Security', security_path, class: "footer-link" %><br>
-
+        <%= link_to 'Enterprise', enterprise_path, class: "footer-link" %>
       </section>
       <section class="flex-marketing">
-        <%= link_to 'Enterprise', enterprise_path, class: "footer-link" %><br>
+        <a href="https://zokuresources.com" class="footer-link">Resources</a><br>
         <%= link_to 'Careers', careers_path, class: "footer-link" %><br>
         <%= link_to 'Contact Us', contact_page_path, class: "footer-link" %><br>
       </section>
       <section class="flex-marketing">
         <%= link_to 'Terms of Service', terms_of_service_path, class: "footer-link" %><br>
-        <%= link_to 'Privacy Policy', privacy_policy_path, class: "footer-link" %><br>
+        <%= link_to 'Privacy Policy', privacy_policy_path, class: "footer-link" %>
       </section>
     </nav>
 

@@ -13,17 +13,36 @@
 
 <script>
 $(document).ready(function(){
-  if ($(".flash-success").text().length > 0) {
+  var parameters = window.location.search.substr(1)
+  var assoc_parameters = parameters != null && parameters != "" ? transformToAssocArray(parameters) : {};
+
+  if (assoc_parameters['mfa_submit'] === 'true') {
+    
+    $(".flash-success").text('Code verified successfully.')
     $(".flash-success").show().fadeOut( 5000 );
-  }
-  if ($(".flash-error").text().length > 0) {
-    $(".flash-error").show();
-  }
-  if ($(".flash-notice").text().length > 0) {
-    $(".flash-notice").show().fadeOut( 5000 );
-  }
-  if ($(".flash-alert").text().length > 0) {
-    $(".flash-alert").show().fadeOut( 5000 );
+  } else {
+    if ($(".flash-error").text().length > 0) {
+      $(".flash-error").show();
+    }
+    if ($(".flash-notice").text().length > 0) {
+      $(".flash-notice").show().fadeOut( 5000 );
+    }
+    if ($(".flash-alert").text().length > 0) {
+     $(".flash-alert").show().fadeOut( 5000 );
+    }
+    if ($(".flash-success").text().length > 0) {
+      $(".flash-success").show().fadeOut( 5000 );
+    }
   }
 });
+
+function transformToAssocArray( parameters ) {
+  var params = {};
+  var prmarr = parameters.split("&");
+  for ( var i = 0; i < prmarr.length; i++) {
+      var tmparr = prmarr[i].split("=");
+      params[tmparr[0]] = tmparr[1];
+  }
+  return params;
+}
 </script>

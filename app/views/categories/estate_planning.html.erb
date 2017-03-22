@@ -4,7 +4,7 @@
   <div class="flex-column">
     <div class="card cg-1 column-card">
       <% if @wills.any? %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, @wills.name, @category.name) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, "Will", @category.name) } %>
         <h3>Wills</h3>
 
         <% @wills.each_with_index do |will, index| %>
@@ -75,7 +75,7 @@
   <div class="flex-column">
     <div class="card cg-2 column-card">
       <% if @trusts.any? %>
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, @trusts.name, @category.name) } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, "Trust", @category.name) } %>
         <h3>Trusts</h3>
         <section class="mb-20">
           <% @trusts.each do |trust| %>

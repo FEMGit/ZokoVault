@@ -31,7 +31,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def set_add_crumbs
-    add_breadcrumb "Alternative - Add Investment", add_alternative_path(@shared_user)
+    add_breadcrumb "Alternative - Setup", add_alternative_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -39,7 +39,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Alternative - Add Investment", edit_alternative_path(@financial_provider, @shared_user)
+    add_breadcrumb "Alternative - Setup", edit_alternative_path(@financial_provider, @shared_user)
   end
   
   def new

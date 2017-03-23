@@ -1,6 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<h1>Alternative - Add Investment</h1>
+<h1>Alternative - Setup</h1>
 
 <%= form_for @financial_provider, url: url_for(action: yield(:action), controller: :financial_alternative) do |f| %>
 <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>

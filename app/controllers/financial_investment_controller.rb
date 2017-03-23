@@ -30,7 +30,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def set_add_crumbs
-    add_breadcrumb "Financial Info - Add Other Investment or Debt", add_investment_path(@shared_user)
+    add_breadcrumb "Financial Investment or Debt - Setup", add_investment_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -38,7 +38,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Financial Info - Add Other Investment or Debt", edit_investment_path(@financial_investment, @shared_user)
+    add_breadcrumb "Financial Investment or Debt - Setup", edit_investment_path(@financial_investment, @shared_user)
   end
   
   def new

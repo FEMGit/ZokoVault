@@ -1,12 +1,12 @@
-<a class="add-link fr mrg-top" href="/contacts/new">
+<h1>Contacts and Permissions</h1>
+
+<a class="add-link fr" href="/contacts/new">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>
   </span>Add Contact
 </a>
-
-<h1>Contacts and Permissions</h1>
 
 <table id="documents-table">
   <thead>
@@ -16,7 +16,7 @@
       <th>First Name</th>
       <th>Email</th>
       <th>Relationship</th>
-      <th class="nosort">Details</th>
+      <th class="nosort nosearch">Details</th>
     </tr>
   </thead>
 
@@ -39,14 +39,28 @@
 <script>
   $(document).ready(function(){
       $('#documents-table').DataTable( {
-        paging: false,
-        searching: false,
-        info: false,
+        paging: true,
+        lengthMenu: [25, 50, 100],
+        searching: true,
+        info: true,
+        pagingType: 'numbers',
         aaSorting: [[1, 'asc']],
         'aoColumnDefs': [{
           'bSortable': false,
           'aTargets': ['nosort']
+        }, {
+          'bSearchable': false,
+          'aTargets': ['nosearch']
         }]
       } );
+      
+      var documentTableId = '#documents-table'
+      // Save all controlls to variables and add listeners
+      prepareTableControlls(documentTableId)
+      
+      // Change table to match design
+      updateSearchField(documentTableId)
+      updateTable(documentTableId)
+
   });
 </script>

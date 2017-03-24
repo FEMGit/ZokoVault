@@ -62,3 +62,8 @@
 .mh-200{
   min-height: 200px;
 }
+.mobile-hide{
+  @include media($mobile) {
+    display:none;
+  }
+}

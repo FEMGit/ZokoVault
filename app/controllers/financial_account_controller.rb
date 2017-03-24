@@ -31,7 +31,7 @@ class FinancialAccountController < AuthenticatedController
   end
   
   def set_add_crumbs
-    add_breadcrumb "Financial Info - Add Account", add_account_path(@shared_user)
+    add_breadcrumb "Financial Account - Setup", add_account_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -39,7 +39,7 @@ class FinancialAccountController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Financial Info - Add Account", edit_account_path(@financial_provider, @shared_user)
+    add_breadcrumb "Financial Account - Setup", edit_account_path(@financial_provider, @shared_user)
   end
   
   def new

@@ -30,7 +30,7 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def set_add_crumbs
-    add_breadcrumb "Financial Info - Add Property", add_property_path(@shared_user)
+    add_breadcrumb "Financial Property - Setup", add_property_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -38,7 +38,7 @@ class FinancialPropertyController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Financial Info - Add Property", edit_financial_property_path(@financial_property, @shared_user)
+    add_breadcrumb "Financial Property - Setup", edit_financial_property_path(@financial_property, @shared_user)
   end
   
   def new

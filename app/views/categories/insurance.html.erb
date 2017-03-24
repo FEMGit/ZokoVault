@@ -156,14 +156,8 @@
   <% end %>
 </section>
 
-<h3>Insurance Documents</h3>
-<a class="add-link fr" href="<%= new_document_path(:category => @category.name) %>">
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-</a>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
+  documents_title: 'Insurance Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @insurance_documents} %>
 

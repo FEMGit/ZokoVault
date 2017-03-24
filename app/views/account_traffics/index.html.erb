@@ -11,13 +11,6 @@
     </tr>
   </thead>
   <tbody>
-    <% if @user_traffic && @user_traffic.empty? %>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-    <% end %>
     <% @user_traffic && @user_traffic.each do |traffic_info| %>
       <tr>
         <% resource_link_url = resource_link(traffic_info) %>
@@ -46,15 +39,6 @@
 
 <script>
   $(document).ready(function(){
-      $('#traffics-table').DataTable( {
-        paging: false,
-        searching: false,
-        info: false,
-        aaSorting: [[1, 'desc']],
-        'aoColumnDefs': [{
-          'bSortable': false,
-          'aTargets': ['nosort']
-        }]
-      } );
+    DatatableUpdate('#traffics-table', tableSettingsGenerate([100, 200, 500], 'traffic', [[1, 'desc']]))
   });
 </script>

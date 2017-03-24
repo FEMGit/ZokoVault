@@ -10,14 +10,6 @@
     </tr>
   </thead>
   <tbody>
-    <% if documents && documents.empty? %>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-    <% end %>
     <% documents && documents.each do |document| %>
       <% if exists?(document) %>
         <tr>
@@ -45,28 +37,6 @@
 
 <script>
   $(document).ready(function(){
-      $('#documents-table').DataTable( {
-        paging: true,
-        lengthMenu: [5, 10, 15, 25, 50, 100],
-        searching: true,
-        info: true,
-        pagingType: 'numbers',
-        aaSorting: [[0, 'asc']],
-        'aoColumnDefs': [{
-          'bSortable': false,
-          'aTargets': ['nosort']
-        }, {
-          'bSearchable': false,
-          'aTargets': ['nosearch']
-        }],
-      } );
-      
-      var documentTableId = '#documents-table'
-      // Save all controlls to variables and add listeners
-      prepareTableControlls(documentTableId)
-      
-      // Change table to match design
-      updateSearchField(documentTableId)
-      updateTable(documentTableId)
+    DatatableUpdate('#documents-table', tableSettingsGenerate([5, 10, 15, 25, 50, 100], 'documents', [[0, 'asc']]))
   });
 </script>

@@ -1,0 +1,15 @@
+<% title ||= false %>
+
+<% if title %>
+  <h1><%= documents_title %></h1>
+<% else %>
+  <h3 class="mt-20"><%= documents_title %></h3>
+<% end %>
+
+<a class="add-link fr <% if title %>title<% end %>" href="<%=documents_path%>">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>

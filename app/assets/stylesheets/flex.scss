@@ -26,6 +26,11 @@
   justify-content: space-between;
   width: 100.3%;
 
+  &.justify-center {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 20px;
+  }
   @include media($twelvesixty) {
     &.padding-right {
       padding-right: 15px;
@@ -58,6 +63,62 @@
   @include media($mobile) {
     flex: 100%;
     margin: 0 0 2%;
+  }
+}
+
+//Account Setup Settings
+.flex-account-setup{
+  flex: 33%;
+  padding: 0 15px 15px 25px;
+  
+  img {
+    max-width: 80px;
+    margin-top: 15px;
+    margin-left: 15px;
+  }
+  
+  @include media($ninesixty) {
+    flex: 100%;
+    margin: 0 0 2%;
+    &:nth-of-type(1) { order: 2; }
+    &:nth-of-type(2) { order: 1; }
+    &:nth-of-type(3) { order: 3; }
+  }
+  
+  @include media($mobile) {
+    img {
+      margin-left: 3px;
+    }
+  }
+    
+  h4, h5 {
+    position: absolute;
+    top: 38%;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+  
+  &.recommended-setup {
+    border: 2px solid $color-primary;
+    color: $color-black;
+    padding-left: 10px;
+  }
+  
+  &.recommended-setup:before {
+    content: "RECOMMENDED";
+    color: $color-white;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: middle;
+    display: block;
+    margin-top: -50px;
+    margin-left: -12px;
+    width: calc(100% + 29px);
+    height: 50px;
+    line-height: 50px;
+    background: $color-primary;
   }
 }
 

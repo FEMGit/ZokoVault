@@ -6,25 +6,31 @@
       <span id="step-1" class="settings-inner-counter">
         1
       </span>
-      <span class="step-name" id="terms">Terms</span>
+      <span class="step-name" id="step-1-text">Terms</span>
     </div>
     <div class="settings-inner-step">
       <span id="step-2" class="settings-inner-counter">
         2
       </span>
-      <span class="step-name" id="security">Security Questions</span>
+      <span class="step-name" id="step-2-text">Security Questions</span>
     </div>
     <div class="settings-inner-step">
       <span id="step-3" class="settings-inner-counter">
         3
       </span>
-      <span class="step-name" id="phone">Phone Setup</span>
+      <span class="step-name" id="step-3-text">Phone Setup</span>
     </div>
     <div class="settings-inner-step">
       <span id="step-4" class="settings-inner-counter">
         4
       </span>
-      <span class="step-name" id="login">Login Settings</span>
+      <span class="step-name" id="step-4-text">Login Settings</span>
+    </div>
+    <div class="settings-inner-step">
+      <span id="step-5" class="settings-inner-counter">
+        5
+      </span>
+      <span class="step-name" id="step-5-text">Select Account Type</span>
     </div>
     <div class="settings-inner-step last-line"></div>
   </div>
@@ -42,18 +48,20 @@
     <div id="form-step-4">
       <%= render partial: "settings" %>
     </div>
+    <div id="form-step-5">
+      <%= render partial: "account_type" %>
+    </div>
   <% end %>
   
   <footer>
     <a href="javascript:;" id='next-step' class=" button primary-button big-button"
                                           onclick="wizNav(currentStep+1); return false;">Next</a>
-    <button id="save-btn" class="primary-button big-button" onclick="submitAccount(event)">Save</button>
   </footer>
 </div>
 
 <script>
 var currentStep = 1;
-var maxStep = 4;
+var maxStep = 5;
 
 $(document).ready(function(){
   changeTabNames()
@@ -66,20 +74,28 @@ $(window).resize(function() {
 })
 
 var changeTabNames = function() {
-  $('#security').text('Security Questions')
-  $('#login').text('Login Settings')
-  $('#phone').text('Phone Setup')
-  $('#terms').text('Terms')
+  $('#step-1-text').text('Terms')
+  $('#step-2-text').text('Security Questions')
+  $('#step-4-text').text('Login Settings')
+  $('#step-3-text').text('Phone Setup')
+  $('#step-5-text').text('Select Account Type')
 
-  if (window.matchMedia("(max-width: 660px)").matches) {
-    $('#security').text('Security')
-    $('#login').text('Settings')
-    $('#phone').text('Phone')
-  } if (window.matchMedia("(max-width: 485px)").matches) {
-    $('#security').text('   ')
-    $('#login').text('   ')
-    $('#phone').text('   ')
-    $('#terms').text('   ')
+  if (window.matchMedia("(max-width: 1020px)").matches) {
+    $('#step-2-text').text('Security')
+    $('#step-3-text').text('Phone')
+    $('#step-4-text').text('Settings')
+    $('#step-5-text').text('Account Type')
+  } if (window.matchMedia("(max-width: 670px)").matches) {
+    $('#step-2-text').text('Security')
+    $('#step-3-text').text('Phone')
+    $('#step-4-text').text('Settings')
+    $('#step-5-text').text('Account')
+  } if (window.matchMedia("(max-width: 625px)").matches) {
+    $('#step-1-text').text('   ')
+    $('#step-2-text').text('   ')
+    $('#step-3-text').text('   ')
+    $('#step-4-text').text('   ')
+    $('#step-5-text').text('   ')
   }
 }
 

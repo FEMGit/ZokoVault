@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ZokuVault</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-
-  
+  <%= render partial: 'layouts/application_head_tag' %>
   
   <span class="bold-title">Shared View:</span><span class="user-name"> <%= current_user.name %> </span>
   <%= link_to "Exit", shared_path,

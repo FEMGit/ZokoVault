@@ -44,7 +44,7 @@ module DocumentsHelper
     return [] if document.category.nil? || document.category.blank? || (document.category.eql? DocumentService.empty_value)
     category = Category.fetch(document.category.downcase)
     return [] unless category.present?
-    document.user.shares.select { |sh| sh.shareable == category }
+    document.user.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| Object.const_defined?(sh.shareable_type) && sh.shareable == category }
   end
 
   def add_new_document?(title)

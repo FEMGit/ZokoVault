@@ -1,0 +1,8 @@
+<div class="chosen-styled-select">
+  <select data-placeholder="Choose Contacts..." class="chosen-select add-new-contactable" <% if field_multiple %> multiple="multiple" <% end %>
+  onchange="handleSelectOnChange(this);" name=field_name id=field_id>
+  <option value=""></option>
+  <option class="create-new" value="create_new_contact">Create New Contact</option>
+  <option class="contact-item" value="2">User 1</option>
+  <option class="contact-item" value="1">User 2</option></select>
+</div>

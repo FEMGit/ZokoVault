@@ -3,6 +3,8 @@ table {
     background-color: #fcfcfc;
   }
   &.dataTable {
+    border: 1px solid $color-gray-light;
+    border-bottom: 1px solid $color-gray-light !important;
     th:first-child {
       padding: 15px 15px;
     }

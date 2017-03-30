@@ -1,0 +1,61 @@
+<div class="card mb-30 b-radius-0 b-none box-shadow-none">
+  <h3>Subscription Details</h3>
+  
+  <label>Plan</label>
+  <p>ZokuVault Annual Subscription</p>
+  
+  <label>Status</label>
+  <p>Active</p>
+  
+  <label>Start Date</label>
+  <p>8/25/2016</p>
+  
+  <label>Next Invoice</label>
+  <p>$119.99 - 8/25/2017 - Automatic Collection</p>
+  
+  <label>Billing Info</label>
+  <p>Visa XXX-1234 exp. 01/20
+  
+  <h3>Previous Invoices</h3>
+  
+  <table id="documents-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Paid on</th>
+        <th>Payment Amount</th>
+        <th>Invoice</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ZokuVault Annual Subscription</td>
+        <td>8/25/2016</td>
+        <td>$119.99</td>
+        <td><%= link_to 'Invoice', 'javascript:void(0);', class: 'no-underline-link' %></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="mt-30">
+    <%= link_to "Update", billing_info_path, class: "button primary-button big-button" %>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('#documents-table').DataTable( {
+      paging: false,
+      searching: false,
+      info: false,
+      aaSorting: [[1, 'asc']],
+      'aoColumnDefs': [{
+        'bSortable': false,
+        'aTargets': ['nosort']
+      }, {
+        'bSearchable': false,
+        'aTargets': ['nosearch']
+      }],
+    } );
+  });
+</script>

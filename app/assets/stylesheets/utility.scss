@@ -10,6 +10,9 @@
 .clear{
   clear:both;
 }
+.b-gray-light {
+  border: 1px solid $color-gray-light;
+}
 .bb-gray-light{
   border-bottom: 1px solid $color-gray-light;
 }
@@ -47,6 +50,12 @@
 .mt-20{
   margin-top: 20px;
 }
+.mt-30{
+  margin-top: 30px;
+}
+.ml-15 {
+  margin-left: 15px;
+}
 .pt-60{
   padding-top: 60px;
 }
@@ -56,14 +65,50 @@
 .mr-10{
   margin-right: 10px;
 }
+.mb-15 {
+  margin-bottom: 15px;
+}
+.mb-25 {
+  margin-bottom: 25px;
+}
 .mw-20{
   margin:0 20px;
 }
 .mh-200{
   min-height: 200px;
 }
+.pt-50 {
+  padding-top: 50px !important;
+}
+.ps-relative {
+  position: relative;
+}
+.text-center {
+  text-align: center;
+}
+.fz-20 {
+  font-size: 20px;
+}
+.fz-16 {
+  font-size: 16px;
+}
+.no-underline-link {
+  text-decoration: none;
+}
+.inline-block {
+  display: inline-block;
+}
 .mobile-hide{
   @include media($mobile) {
-    display:none;
+    display:none !important;
+  }
+}
+.mobile-show{
+  display:none !important;
+  @include media($mobile) {
+    display:block !important;
+    &.inline-block {
+      display:inline-block !important;
+    }
   }
 }

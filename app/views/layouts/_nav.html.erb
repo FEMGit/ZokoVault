@@ -26,8 +26,14 @@
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills - Powers of Attorney
   <% end %>
+  <% trusts_entities = 'active' if current_page?(trusts_entities_url) || trusts_entities? %>
+  <%= link_to trusts_entities_path, class: "main-nav #{trusts_entities}" do%>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-trust"></use>
+    </svg>Trusts & Entities
+  <% end %>
   <% estate_planning = 'active' if (current_page?(estate_planning_url) || controller?('wills', 'trusts', 'power_of_attorneys') ||
-      breadcrumb?(:estate_planning_path)) && !wills_poa? %>
+      breadcrumb?(:estate_planning_path)) && !wills_poa? && !trusts_entities? %>
   <%= link_to estate_planning_path, class: "main-nav #{estate_planning}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>

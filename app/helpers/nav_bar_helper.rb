@@ -1,4 +1,5 @@
 module NavBarHelper
+
   def wills_poa?
     if ((controller_name.downcase.eql? 'wills') && ((action_name.eql? 'new_wills_poa') || (action_name.eql? 'show') || (action_name.eql? 'edit'))) ||
        ((controller_name.downcase.eql? 'power_of_attorneys') && ((action_name.eql? 'new_wills_poa') || (action_name.eql? 'show') || (action_name.eql? 'edit')))
@@ -6,7 +7,14 @@ module NavBarHelper
     end
     return false
   end
-    
+
+  def trusts_entities?
+    if ((controller_name.downcase.eql? 'trusts') && ((action_name.eql? 'new_wills_poa') || (action_name.eql? 'show') || (action_name.eql? 'edit'))) ||
+       (controller_name.downcase.eql? 'entities')
+      return true
+    end
+    return false
+  end
     
   def controller?(*controller_names)
     controller_names.any? { |controller_name| params[:controller] == controller_name }

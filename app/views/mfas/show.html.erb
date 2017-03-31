@@ -3,32 +3,26 @@
     <div id="notice"></div>
     <h2>Two-Factor Authentication</h2>
     <% if @phone_number_error %>
-      <div class="field">
+      <div class="mb-10" >
         <%= label_tag 'Cell Phone Number' %>
         <span id='send_code_text'></span>
         <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'}, autofocus: true %>
         <input type="button" onClick="sendCode();" value="Send code" class="button fixed-width big-button primary-button">
       </div>
     <% end %>
-    <div class="field">
+    <div class="mb-10" >
       <%= label_tag 'user_user_profile_attributes_phone_code', 'Phone Code' %>
       <span id='verify_code_text'></span>
       <%= text_field_tag 'user[user_profile_attributes][phone_code]', "", autofocus: true %>
       <input type="button" onClick="verifyCode();" value="Verify code" class="button fixed-width big-button primary-button">
-      <div class="field">
-        <% if !@phone_number_error %>
-          <p><%= link_to 'Resend code', 'javascript:;', class: "no-underline-link", id: 'resend-code' %><span id='send_code_text'></span></p>
-        <% end %>
-      </div>
     </div>
+    <% if !@phone_number_error %>
+      <p><%= link_to 'Resend code', 'javascript:;', class: "no-underline-link", id: 'resend-code' %><span id='send_code_text'></span></p>
+    <% end %>
   <% end %>
 </section>
 
-
-
-
 <script>
-
 // handle 'enter press' to verify code
 $('#user_user_profile_attributes_phone_code').keypress(function(e) {
   if(e.which == 13) {
@@ -82,5 +76,4 @@ function verifyCode() {
     $(".flash-alert.flash").show().delay(3000).fadeOut();
   })
 }
-
 </script>

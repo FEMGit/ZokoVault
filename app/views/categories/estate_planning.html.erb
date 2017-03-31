@@ -164,14 +164,8 @@
   </div>
 </section>
 
-<h3>Wills - Trusts - Legal Documents</h3>
-<a class="add-link fr" href="<%= new_document_path(:category => @category.name, :return => "estate_planning") %>">
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-</a>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name, :return => "estate_planning"), 
+  documents_title: 'Wills - Trusts - Legal Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
 

@@ -1,4 +1,5 @@
-$add-button-margin-top: 7px;
+$add-button-margin-top: 20px;
+$add-button-margin-top-title: 25px;
 
 .inactive {
   pointer-events: none;
@@ -209,6 +210,9 @@ a.button, input[type=submit].button{
   text-decoration: none;
   &.mrg-top {
     margin-top: $add-button-margin-top;
+    &.title {
+      margin-top: $add-button-margin-top-title;
+    }
   }
   @include media($eightfifty) {
     display: block;

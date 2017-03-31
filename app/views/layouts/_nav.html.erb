@@ -30,7 +30,7 @@
   <%= link_to trusts_entities_path, class: "main-nav #{trusts_entities}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-trust"></use>
-    </svg>Trusts & Entities
+    </svg>Trusts &amp; Entities
   <% end %>
   <% estate_planning = 'active' if (current_page?(estate_planning_url) || controller?('wills', 'trusts', 'power_of_attorneys') ||
       breadcrumb?(:estate_planning_path)) && !wills_poa? && !trusts_entities? %>
@@ -106,6 +106,6 @@
       <use xlink:href="#icon-mail-2"></use>
     </svg>ZokuVault Support
   <% end %>
-  
+
   <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav mobile-show") %>
 </nav>

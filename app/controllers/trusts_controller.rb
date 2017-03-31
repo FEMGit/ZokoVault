@@ -3,19 +3,24 @@ class TrustsController < AuthenticatedController
   include SharedViewHelper
   include BackPathHelper
   include SanitizeModule
-  before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
-  before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_trust, :set_document_params, only: [:update, :destroy]
+  before_action :set_contacts, only: [:new, :create, :update]
   before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
   before_action :set_document_params, only: [:index]
   
   # General Breadcrumbs
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new edit index), if: :general_view?
-  add_breadcrumb "Trusts", :trusts_path, :only => %w(edit index new), if: :general_view?
+  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new index), if: :general_view?
+  add_breadcrumb "Trusts", :trusts_path, :only => %w(index new), if: :general_view?
   add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new), if: :general_view?
+  
+  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_wills_poa edit show), if: :general_view?
+  add_breadcrumb "Trusts - Setup", :wills_poa_new_trust_path, :only => %w(new_wills_poa), if: :general_view?
+  add_breadcrumb "Trust 1", :trust_path, :only => %w(show edit), if: :general_view?
+  add_breadcrumb "Trusts - Setup", :edit_trust_path, :only => %w(edit), if: :general_view?
   # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
-  add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
+  add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(index new), if: :shared_view?
   add_breadcrumb "Trusts - Setup", :shared_new_trusts_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
@@ -37,9 +42,15 @@ class TrustsController < AuthenticatedController
     session[:ret_url] = @shared_user.present? ? shared_trusts_path : trusts_path
   end
 
-  # GET /trusts/1
-  # GET /trusts/1.json
   def show; end
+  
+  def new_wills_poa
+    @contact = Contact.new(user: resource_owner)
+  end
+  
+  def edit
+    @contact = Contact.new(user: resource_owner)
+  end
 
   # GET /trusts/new
   def new
@@ -55,9 +66,6 @@ class TrustsController < AuthenticatedController
     @vault_entries << @vault_entry
     @vault_entries.each { |x| authorize x }
   end
-
-  # GET /trusts/1/edit
-  def edit; end
 
   def set_document_params
     @group = "Trust"

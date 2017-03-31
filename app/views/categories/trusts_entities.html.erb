@@ -1,0 +1,129 @@
+<h1>Trusts & Entities</h1>
+
+<div class="card trusts wide">
+  <h3 class="mb-20">Trusts</h3>
+  <%= link_to 'Add Trust', wills_poa_new_trust_path, class: "small-button outline-button fr" %>
+</div>
+
+<div class="card cg-3 wide">
+  <h3 class="mb-20">Entities and Corporations</h3>
+
+  <%= link_to 'Add Entity', new_entity_path, class: "small-button outline-button fr" %>
+</div>
+
+<% trusts = [{name: 'Trust 1', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
+shares_initials: ['JS', 'BB', 'PS']},
+
+{name: 'Trust 2', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
+shares_initials: ['JS', 'BB', 'PS']},
+
+{name: 'Trust 3', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
+shares_initials: ['JS', 'BB', 'PS']}] %>
+
+<% entities = [{name: 'Entity 1', partners: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}], shares_initials: ['JS', 'BB', 'PS']},
+
+{name: 'Entity 2', partners: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}], shares_initials: ['JS', 'BB', 'PS']},
+
+{name: 'Entity 3', partners: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
+{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}], shares_initials: ['JS', 'BB', 'PS']}] %>
+
+<section class="flex-boxes">
+  <% trusts.each do |trust| %>
+    <div class="flex-column">
+      <div class="card trusts column-card">
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
+        <h3><%= trust[:name] %></h3>
+
+        <label>Advisor</label>
+        <ul class="data-list">
+          <% trust[:agents].each do |agent| %>
+            <li class="contact-pair">
+              <%= agent[:name] %><br>
+              <a href="mailto:<%= agent[:email] %>"><%= agent[:email] %></a><br>
+              <%= agent[:phone] %>
+            </li>
+          <% end %>
+        </ul>
+
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% trust[:shares_initials].each do |share_initials| %>
+            <div class="tooltip-item">
+              <p class="avatar-initials"><%= share_initials %></p>
+              <%= image_tag(empty_image, class: "avatar-small") %>
+            </div>
+          <% end %>
+        </section>
+        <br>
+        <%= link_to 'View Details', trust_path, class: "small-button outline-button mt-20" %>
+      </div>
+    </div>
+  <% end %>
+  
+  <% entities.each do |entity| %>
+    <div class="flex-column">
+      <div class="card cg-3 column-card">
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
+
+        <h3><%= entity[:name] %></h3>
+
+        <label>Owner</label>
+        <ul class="data-list">
+          <% entity[:partners].each do |partner| %>
+            <li class="contact-pair">
+              <%= partner[:name] %><br>
+              <a href="mailto:<%= partner[:email] %>"><%= partner[:email] %></a><br>
+              <%= partner[:phone] %>
+            </li>
+          <% end %>
+        </ul>
+
+        <label>Shared With</label><br>
+        <section class="shared-list">
+          <% entity[:shares_initials].each do |share_initials| %>
+            <div class="tooltip-item">
+              <p class="avatar-initials"><%= share_initials %></p>
+              <%= image_tag(empty_image, class: "avatar-small") %>
+            </div>
+          <% end %>
+        </section>
+        <br>
+        <%= link_to 'View Details', entity_path, class: "small-button outline-button mt-20" %>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<h3>Trusts & Entities Documents</h3>
+
+<a class="add-link fr" href="#">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => []} %>
+
+<%= render :partial => "layouts/shared_category", :locals => { :category => nil } %>
+
+<%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

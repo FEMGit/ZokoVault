@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
   get 'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney'
+  get 'trusts_entities' => 'categories#trusts_entities'
   get 'share_estate_planning' => 'categories#share_estate_planning'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
@@ -86,11 +87,21 @@ Rails.application.routes.draw do
   delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy'
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
-  resources :trusts
-  get 'trusts/:trust', to: 'trusts#show', as: :details_trust
-  get 'trusts/new/get_trusts_details', to: 'trusts#get_trusts_details'
-  get 'trusts/create_empty_form/:category', to: 'trusts#create_empty_form'
-
+  # Trusts
+  get 'trusts/new', to: 'trusts#new', as: :new_trust
+  get 'trusts/new_wills_poa', to: 'trusts#new_wills_poa', as: :wills_poa_new_trust # todo: delete wills-poa routes
+  get 'trusts/edit', to: 'trusts#edit', as: :edit_trust
+  get 'trusts/show', to: 'trusts#show', as: :trust
+  patch 'trusts/:id', to: 'trusts#update'
+  get 'trusts', to: 'trusts#index', as: :trusts
+  post 'trusts', to: 'trusts#create'
+  delete 'trusts/:id', to: 'trusts#destroy'
+  
+  # Entities
+  get 'entities/new', to: 'entities#new', as: :new_entity
+  get 'entities/edit', to: 'entities#edit', as: :edit_entity
+  get 'entities/show', to: 'entities#show', as: :entity
+  
   resources :categories do
     member do
       post :share

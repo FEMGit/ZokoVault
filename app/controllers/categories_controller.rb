@@ -85,6 +85,8 @@ class CategoriesController < AuthenticatedController
   
   def wills_powers_of_attorney; end
 
+  def trusts_entities; end
+
   def estate_planning
     @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 

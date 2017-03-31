@@ -83,7 +83,11 @@ class CategoriesController < AuthenticatedController
                                                 @contacts_with_access.map(&:id))
   end
   
-  def wills_powers_of_attorney; end
+  def wills_powers_of_attorney
+    @powers_of_attorney = PowerOfAttorney.for_user(current_user)
+    @wills = Will.for_user(current_user)
+    session[:ret_url] = "/wills_powers_of_attorney"
+  end
 
   def trusts_entities; end
 

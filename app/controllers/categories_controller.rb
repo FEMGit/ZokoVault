@@ -89,7 +89,9 @@ class CategoriesController < AuthenticatedController
     session[:ret_url] = "/wills_powers_of_attorney"
   end
 
-  def trusts_entities; end
+  def trusts_entities
+    @trusts = Trust.for_user(current_user)
+  end
 
   def estate_planning
     @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)

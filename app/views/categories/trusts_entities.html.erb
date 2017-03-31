@@ -11,18 +11,6 @@
   <%= link_to 'Add Entity', new_entity_path, class: "small-button outline-button fr" %>
 </div>
 
-<% trusts = [{name: 'Trust 1', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
-{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
-shares_initials: ['JS', 'BB', 'PS']},
-
-{name: 'Trust 2', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
-{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
-shares_initials: ['JS', 'BB', 'PS']},
-
-{name: 'Trust 3', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
-{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
-shares_initials: ['JS', 'BB', 'PS']}] %>
-
 <% entities = [{name: 'Entity 1', partners: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
 {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}], shares_initials: ['JS', 'BB', 'PS']},
 
@@ -33,32 +21,35 @@ shares_initials: ['JS', 'BB', 'PS']}] %>
 {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}], shares_initials: ['JS', 'BB', 'PS']}] %>
 
 <section class="flex-boxes">
-  <% trusts.each do |trust| %>
+  <% @trusts.each do |trust| %>
     <div class="flex-column">
       <div class="card trusts column-card">
         <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
-        <h3><%= trust[:name] %></h3>
+        <h3><%= trust.name %></h3>
+        
+        <% if !trust_present?(trust) %>
+          <label>There is no information about this Trust</label>
+        <% end %>
 
-        <label>Advisor</label>
+        <% if trust.agents.any? %>
+          <label>Advisor</label>
+        <% end %>
         <ul class="data-list">
-          <% trust[:agents].each do |agent| %>
+          <% trust.agents.each do |agent| %>
             <li class="contact-pair">
-              <%= agent[:name] %><br>
-              <a href="mailto:<%= agent[:email] %>"><%= agent[:email] %></a><br>
-              <%= agent[:phone] %>
+              <%= agent.name %><br>
+              <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
+              <%= agent.phone %>
             </li>
           <% end %>
         </ul>
 
-        <label>Shared With</label>
-        <section class="shared-list">
-          <% trust[:shares_initials].each do |share_initials| %>
-            <div class="tooltip-item">
-              <p class="avatar-initials"><%= share_initials %></p>
-              <%= image_tag(empty_image, class: "avatar-small") %>
-            </div>
-          <% end %>
-        </section>
+        <% if category_subcategory_shares(trust, current_user).present? %>
+          <label>Shared With</label>
+          <section class="shared-list">
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(trust, current_user) } %>
+          </section>
+        <% end %>
         <br>
         <%= link_to 'View Details', trust_path, class: "small-button outline-button mt-20" %>
       </div>

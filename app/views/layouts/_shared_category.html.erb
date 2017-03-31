@@ -1,11 +1,13 @@
 <% if !@shared_user.present? %>
-  <a class="edit-link fr" href='<%= share_category_category_path(category) %>'>
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-pencil-1"></use>
-      </svg>
-    </span>Edit
-  </a>
+  <% if category.present? %>
+    <a class="edit-link fr" href='<%= share_category_category_path(category) %>'>
+      <span class="circle-button">
+        <svg class="icon circle-icon">
+          <use xlink:href="#icon-pencil-1"></use>
+        </svg>
+      </span>Edit
+    </a>
+  <% end %>
   <h3>Shared With</h3>
 
   <div class="card category-shared">

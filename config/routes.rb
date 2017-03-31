@@ -52,6 +52,7 @@ Rails.application.routes.draw do
 
   # Default category pages ?Could probably be done better programatically?
   get 'estate_planning' => 'categories#estate_planning'
+  get 'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney'
   get 'share_estate_planning' => 'categories#share_estate_planning'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
@@ -64,17 +65,31 @@ Rails.application.routes.draw do
 
   resources :users, only: [:index, :destroy]
 
-  resources :wills
-  get 'wills/:will', to: 'wills#show', as: :details_will
+  # Wills
+  get 'wills/new', to: 'wills#new', as: :new_will
+  get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
+  get 'wills/edit', to: 'wills#edit', as: :edit_will
+  get 'wills/show', to: 'wills#show', as: :will
+  patch 'wills/:id', to: 'wills#update'
+  get 'wills', to: 'wills#index', as: :wills
+  post 'wills', to: 'wills#create'
+  delete 'wills/:id', to: 'wills#destroy'
+  
+  # Powers of Attorney
+  get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
+  get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
+  get 'power_of_attorneys/edit', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
+  get 'power_of_attorneys/show', to: 'power_of_attorneys#show', as: :power_of_attorney
+  patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
+  get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
+  post 'power_of_attorneys', to: 'power_of_attorneys#create'
+  delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy'
+  get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   resources :trusts
   get 'trusts/:trust', to: 'trusts#show', as: :details_trust
   get 'trusts/new/get_trusts_details', to: 'trusts#get_trusts_details'
   get 'trusts/create_empty_form/:category', to: 'trusts#create_empty_form'
-
-  resources :power_of_attorneys
-  get 'power_of_attorneys/:power_of_attorney', to: 'power_of_attorneys#show', as: :details_attorney
-  get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   resources :categories do
     member do

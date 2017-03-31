@@ -1,0 +1,86 @@
+<% will = {title: 'Will Title 1', primary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ],
+  secondary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ], executor: { name: 'Billy Bob', email: 'bob@mail.com', phone: '255-555-5555' },
+  agents: [ {name: 'Jake Prinston',
+  email: 'jake@mail.com', phone: '777-777-7777'}, {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'} ],
+  shares_initials: ['JS', 'BB', 'PS'],
+  notes: 'Notes notes notes notes notes Notes notes notes notes notes Notes notes notes notes notes Notes notes notes notes notes'} %>
+  
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<%= link_to edit_will_path, class: "edit-link mrg-top" do%>
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+  </span>Edit Will
+<% end %>
+<h1><%= will[:title] %></h1>
+
+<div class="card wills mb-20">
+  <h3 class="card-label">Will Details</h3>
+  
+  <label>Primary Beneficiaries</label>
+  <p>
+    <% will[:primary_beneficiaries].each do |primary| %>
+      <%= primary[:name] %><br>
+    <% end %>
+  </p>
+
+  <label>Secondary Beneficiaries</label>
+  <p>
+    <% will[:secondary_beneficiaries].each do |secondary| %>
+      <%= secondary[:name] %><br>
+    <% end %>
+  </p>
+
+  <label class="title">Executor</label>
+    <p><%= will[:executor][:name] %><br>
+       <a href="mailto:<%= will[:executor][:email] %>">
+         <%= will[:executor][:email] %>
+       </a><br>
+      <%= will[:executor][:phone] %>
+    </p>
+
+  <label class="title">Attorney, Accountant, Advisor</label>
+  <% will[:agents].each do |agent| %>
+    <p><%= agent[:name] %><br>
+      <a href="mailto:<%= agent[:email] %>">
+        <%= agent[:email] %>
+      </a><br>
+      <%= agent[:phone] %>
+    </p>
+  <% end %>
+
+  <label>Notes</label>
+  <p><%= will[:notes] %></p>
+  <span class="clear"></span>
+  
+  <section class="shared-with">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+
+    <label>Shared With</label>
+    <section class="shared-list">
+      <% will[:shares_initials].each do |share_initials| %>
+        <div class="tooltip-item">
+          <p class="avatar-initials"><%= share_initials %></p>
+          <%= image_tag(empty_image, class: "avatar-small") %>
+        </div>
+      <% end %>
+    </section>
+  </section>
+</div>
+
+<h3>Documents</h3>
+<a class="add-link fr" href="#">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => [] } %>

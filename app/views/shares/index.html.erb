@@ -1,14 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Shared With Me</h1>
-<table>
+<table id="shares-table">
   <thead>
     <tr>
       <th>Name</th>
       <th>Email</th>
       <th>Documents</th>
       <th>Categories</th>
-      <th></th>
+      <th>Action</th>
     </tr>
   </thead>
 
@@ -37,3 +37,9 @@
     <% end %>
   </tbody>
 </table>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#shares-table', tableSettingsGenerate([10, 25, 50, 100], 'shares', [[0, 'asc']]), [1, 2, 2])
+  });
+</script>

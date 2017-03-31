@@ -1,11 +1,3 @@
-<h1>Documents</h1>
-
-<a class="add-link fr" href="<%=new_document_path%>">
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-</a>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path, documents_title: 'Documents', :title => true} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

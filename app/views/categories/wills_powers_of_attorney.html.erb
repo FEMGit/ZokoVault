@@ -1,0 +1,160 @@
+<h1>Wills & Powers of Attorney</h1>
+
+<div class="card cg-1 wide">
+  <h3 class="mb-20">Wills</h3>
+  <%= link_to 'Add Will', wills_poa_new_will_path, class: "small-button outline-button fr" %>
+</div>
+
+<div class="card cg-3 wide">
+  <h3 class="mb-20">Power of Attorneys</h3>
+
+  <%= link_to 'Add Power of Attorney', wills_poa_new_power_of_attorney_path, class: "small-button outline-button fr" %>
+</div>
+
+<% wills = [ {title: 'Will Title 1', primary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ],
+  secondary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ], agents: [ {name: 'Jake Prinston',
+  email: 'jake@mail.com', phone: '777-777-7777'}, {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'} ],
+  shares_initials: ['JS', 'BB', 'PS']},
+  
+  {title: 'Will Title 2', primary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ],
+  secondary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ], agents: [ {name: 'Jake Prinston',
+  email: 'jake@mail.com', phone: '777-777-7777'}, {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'} ],
+  shares_initials: ['JS', 'BB', 'PS']},
+  
+  {title: 'Will Title 3', primary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ],
+  secondary_beneficiaries: [ {name: 'Jake Prinston'}, {name: 'John Wolly'} ], agents: [ {name: 'Jake Prinston',
+  email: 'jake@mail.com', phone: '777-777-7777'}, {name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'} ],
+  shares_initials: ['JS', 'BB', 'PS']}] %>
+
+<% power_of_attorney_contacts = [ {contact_name: 'Contact Name 1',
+  power_of_attorneys: [{agent_name: 'Jake Prinston', powers: ['General', 'Digital'] }, {agent_name: 'John Wolly', powers: ['Digital']}],
+  shares_initials: ['JS', 'BB', 'PS']},
+  
+  {contact_name: 'Contact Name 2',
+  power_of_attorneys: [{agent_name: 'Jake Prinston', powers: ['General', 'Digital'] }, {agent_name: 'John Wolly', powers: ['Digital']}],
+  shares_initials: ['JS', 'BB', 'PS']},
+  
+  {contact_name: 'Contact Name 3',
+  power_of_attorneys: [{agent_name: 'Jake Prinston', powers: ['General', 'Digital'] }, {agent_name: 'John Wolly', powers: ['Digital']}],
+  shares_initials: ['JS', 'BB', 'PS']}] %>
+
+
+<section class="flex-boxes">
+  <% wills.each do |will| %>
+    <div class="flex-column">
+      <div class="card cg-1 column-card">
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
+
+        <h3><%= will[:title] %></h3>
+        <ul class="data-list mb-20">
+          <% will[:primary_beneficiaries].each do |primary| %>
+            <li class="data-pair">
+              <span class="pair-name"><%= primary[:name] %></span>
+              <span class="data-right">
+                Primary
+              </span>
+            </li>
+          <% end %>
+
+          <% will[:secondary_beneficiaries].each do |secondary| %>
+            <li class="data-pair">
+              <span class="pair-name"><%= secondary[:name] %></span>
+              <span class="data-right">
+                Secondary
+              </span>
+            </li>
+          <% end %>
+        </ul>
+
+        <label>Advisor</label>
+        <ul class="data-list">
+          <% will[:agents].each do |advisor| %>
+            <li class="contact-pair">
+              <%= advisor[:name] %><br>
+              <a href="mailto:<%= advisor[:email] %>"><%= advisor[:email] %></a><br>
+              <%= advisor[:phone] %>
+            </li>
+          <% end %>
+        </ul>
+
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% will[:shares_initials].each do |share_initials| %>
+            <div class="tooltip-item">
+              <p class="avatar-initials"><%= share_initials %></p>
+              <%= image_tag(empty_image, class: "avatar-small") %>
+            </div>
+          <% end %>
+        </section>
+        <br>
+        <%= link_to 'View Details', will_path, class: "small-button outline-button mt-20" %>
+      </div>
+    </div>
+  <% end %>
+    
+  <% power_of_attorney_contacts.each do |power_of_attorney_contact| %>
+    <div class="flex-column">
+      <div class="card cg-3 column-card">
+
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
+        <h3><%= power_of_attorney_contact[:contact_name] %></h3>
+
+        <% power_of_attorney_contact[:power_of_attorneys].each do |power_of_attorney| %>
+          <ul class="data-list mb-20">
+            <li class="data-pair">
+              <label>
+                <%= power_of_attorney[:agent_name] %>
+              </label>
+              <span class="data-right">
+                <% power_of_attorney[:powers].each do |agent_power| %>
+                  <%= agent_power %><br>
+                <% end %>
+              </span>
+            </li>
+          </ul>
+        <% end %>
+
+        <label>Shared With</label>
+        <section class="shared-list">
+          <% power_of_attorney_contact[:shares_initials].each do |share_initials| %>
+            <div class="tooltip-item">
+              <p class="avatar-initials"><%= share_initials %></p>
+              <%= image_tag(empty_image, class: "avatar-small") %>
+            </div>
+          <% end %>
+        </section>
+        <br>
+        <%= link_to 'View Details', power_of_attorney_path, class: "small-button outline-button mt-20" %>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<h3>Wills & Power of Attorney Documents</h3>
+
+<a class="add-link fr" href="#">
+  <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Add Document
+</a>
+
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => []} %>
+
+<%= render :partial => "layouts/shared_category", :locals => { :category => nil } %>
+
+<%= javascript_include_tag 'flex_boxes' %>
+<script>
+var is_safari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1;
+if(!is_safari){
+  $(function(){
+    $('.flex-boxes').masonry({
+      columnWidth: '.flex-column',
+      gutter: 20,
+      percentPosition: true,
+      itemSelector: '.flex-column'
+    });
+  });
+}
+</script>

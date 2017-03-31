@@ -8,7 +8,7 @@
   </span>Add Contact
 </a>
 
-<table id="documents-table">
+<table id="contacts-table">
   <thead>
     <tr>
       <th class="nosort">Avatar</th>
@@ -38,29 +38,6 @@
 
 <script>
   $(document).ready(function(){
-      $('#documents-table').DataTable( {
-        paging: true,
-        lengthMenu: [25, 50, 100],
-        searching: true,
-        info: true,
-        pagingType: 'numbers',
-        aaSorting: [[1, 'asc']],
-        'aoColumnDefs': [{
-          'bSortable': false,
-          'aTargets': ['nosort']
-        }, {
-          'bSearchable': false,
-          'aTargets': ['nosearch']
-        }]
-      } );
-      
-      var documentTableId = '#documents-table'
-      // Save all controlls to variables and add listeners
-      prepareTableControlls(documentTableId)
-      
-      // Change table to match design
-      updateSearchField(documentTableId)
-      updateTable(documentTableId)
-
+    DatatableUpdate('#contacts-table', tableSettingsGenerate([25, 50, 100], 'contacts', [[1, 'asc']]))
   });
 </script>

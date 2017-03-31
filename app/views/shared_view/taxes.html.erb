@@ -7,14 +7,9 @@
   <% end %>
 </section>
 
-<h3>Tax Documents</h3>
-<%= link_to new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.try(:name)), class: "add-link fr" do %>
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-<% end %>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.try(:name)), 
+  documents_title: "Tax Documents"} %>
+
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents, :shareable => true} %>
 

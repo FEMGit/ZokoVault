@@ -1,0 +1,66 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<h1><%= 'Power of Attorney - Setup' %></h1>
+  
+  <div class="card attorney mb-30">
+    <label>Power of Attorney For</label>
+    <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "attorney", field_id: "attorney"} %>
+
+    <% if delete_button.present? %>
+      <%= link_to 'Delete Power of Attorney', 'javascript:void(0);', class: 'button small-button secondary-button' %>
+    <% end %>
+  </div>
+  
+  <div id="wtl-forms">
+    <div id="wtl-form-1">
+      <%= render yield(:partial_path), index: 0, delete_button: delete_button %>
+    </div>
+  </div>
+
+  <div class="add-new-button" href="" onclick="addNewField();">
+    <svg class="icon add-icon">
+      <use xlink:href="#icon-add-1"></use>
+    </svg>
+    Add another Agent<br>
+  </div>
+  
+  <h3>Shared With</h3>
+
+  <div class="card category-shared">
+    <section class="shared-with category-shared">
+
+      <label>Shared With</label>
+      <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: true, field_name: "shares", field_id: "shares"} %>
+    </section>
+  </div><br>
+
+  <%= link_to 'Save', 'javascript:void(0);', {class: "button primary-button big-button"}%>
+  <%= link_to 'Cancel', back_path || wills_powers_of_attorney_path, {class: "button secondary-button big-button"}%>
+
+
+<script>
+  clearFormFields = function(form){
+    form.find(':text').val("");
+    form.find('textarea').val("");
+    form.find(':checked').prop('checked', false);
+  }
+  
+  addNewField = function(){
+    var $wtlForm = $('.card.attorney:last');
+    var $newWtlForm = $wtlForm.clone();
+    console.log($wtlForm)
+    old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
+    new_id_number = old_id_number + 1;
+    clearFormFields($newWtlForm);
+    clearForm($newWtlForm, old_id_number, new_id_number);
+    $('.chosen-container',$newWtlForm).remove();
+    $newWtlForm.find(':text').val("");
+    $newWtlForm.find(':checked').prop('checked', false);
+    $newWtlForm.appendTo('#wtl-form-1');
+    $('.chosen-select').chosen({allow_single_deselect: true});
+    $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+  };
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>
+
+<%= render partial: 'contacts/ajax_form' %>

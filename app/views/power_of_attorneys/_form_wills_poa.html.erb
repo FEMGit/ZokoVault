@@ -1,0 +1,48 @@
+<div class="card attorney mb-30">
+
+  <%= hidden_field_tag :id, id: "attorney_id_#{index}" %>
+  <h3 class="card-label">Legal Details</h3>
+
+  <label>Agent</label>
+  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "attorney_agent_id_#{index}", field_id: "attorney_agent_id_#{index}"} %>
+  <label>This Agent's powers are (please choose all that apply):</label>
+  <ul class="check-list">
+    <% PowerOfAttorney::POWERS.each do |option| %>
+      <li class="check-list">
+        <label>
+          <%= check_box_tag "power_of_attorney_contact[vault_entry_#{index}][powers][#{option}]" %>
+        <span></span> <%= option %>
+      </label>
+      </li>
+    <% end %>
+  </ul>
+  
+  <label>Notes</label>
+  <p><%= text_area_tag 'attorney_notes_id_#{index}' %></p>
+
+  <% if delete_button.present? %>
+    <%= link_to 'Delete Agent', "javascript:void(0);", class: 'button small-button secondary-button', id: 'delete-legal' %>
+  <% end %>
+</div>
+
+<script>
+  clearForm = function($newWtlForm, old_id, new_id){
+    new_vault_entry_id = "power_of_attorney_contact[vault_entry_" + new_id + "]";
+    changeIdAndName($newWtlForm, "attorney_id_" + old_id,
+      "attorney_id_" + new_id, new_vault_entry_id + "[id]");
+    changeIdAndName($newWtlForm, "attorney_agent_id_" + old_id,
+      "attorney_agent_id_" + new_id, new_vault_entry_id + "[agent_ids]");
+    changeIdAndName($newWtlForm, "attorney_notes_id_" + old_id,
+      "attorney_notes_id_" + new_id, new_vault_entry_id + "[notes]");
+    changeIdAndName($newWtlForm, "attorney_share_id_" + old_id,
+      "attorney_share_id_" + new_id, new_vault_entry_id + "[share_with_contact_ids][]");
+    
+    $newWtlForm.find(".check-list li").each(function() {
+      var checkBox = $(this).find("input[type=checkbox]");
+      checkBox.attr("name", "power_of_attorney_contact[vault_entry_" + new_id + "][powers][" + checkBox.attr('value') + "]")
+      checkBox.attr("id", "power_of_attorney_contact_vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
+    });
+    
+    $newWtlForm.find("#delete-legal").remove();
+  }
+</script>

@@ -1,13 +1,5 @@
-<h3>Contact Documents</h3>
-<div>
-  <a class="add-link fr" href="<%= new_document_path(:category => @category, :group => @contact.id) %>">
-    <span class="circle-button">
-      <svg class="icon circle-icon">
-        <use xlink:href="#icon-plus-1"></use>
-      </svg>
-    </span>Add Document
-  </a>
-</div>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category, :group => @contact.id), 
+  documents_title: 'Contact Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @contact_documents} %>
 
@@ -24,11 +16,6 @@
     </tr>
   </thead>
   <tbody>
-    <% if @shares && @shares.empty? %>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-      <td style="display: none"></td>
-    <% end %>
     <% @shares && @shares.each do |share| %>
       <tr>
         <td class="document-name-big">
@@ -47,11 +34,6 @@
 
 <script>
   $(document).ready(function(){
-      $('#share-with-table').DataTable({
-        paging: false,
-        searching: false,
-        info: false,
-        aaSorting: [[0, 'asc']],
-      });
+    DatatableUpdate('#share-with-table', tableSettingsGenerate([25, 50, 100], 'shares', [[0, 'asc']]))
   });
 </script>

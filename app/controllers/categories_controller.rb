@@ -82,6 +82,10 @@ class CategoriesController < AuthenticatedController
                                                 @category.id, 
                                                 @contacts_with_access.map(&:id))
   end
+  
+  def wills_powers_of_attorney; end
+
+  def trusts_entities; end
 
   def estate_planning
     @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)

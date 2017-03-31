@@ -15,4 +15,4 @@ $tablet: new-breakpoint(max-width 800px 12);
 $mobile: new-breakpoint(max-width 660px 12);
 
 // Height based media queries
-$nav-height: new-breakpoint(min-height 495px);
+$nav-height: new-breakpoint(min-height 575px);

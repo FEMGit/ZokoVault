@@ -134,7 +134,7 @@ input[type=submit].button {
   display: inline-block;
 }
 
-a.button, input[type=submit].button{
+a.button, input[type=submit].button, input[type=button].button{
   cursor: pointer;
   text-decoration: none;
   border:0;

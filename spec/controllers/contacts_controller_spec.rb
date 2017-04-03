@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ContactsController, type: :controller do
 
   let(:user) { create(:user) }
-  let(:valid_attributes) { { user: user, firstname: Faker::Name.first_name } }
+  let(:valid_attributes) { { user: user, firstname: Faker::Name.first_name, emailaddress: Faker::Internet.free_email } }
 
   let(:invalid_attributes) { { firstname: nil } }
 

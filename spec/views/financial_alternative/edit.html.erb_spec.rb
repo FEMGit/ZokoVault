@@ -10,15 +10,16 @@ RSpec.describe "financial_alternative/edit", type: :view do
   let(:valid_attributes) do
     {
       name: "Provider Name",
+      provider_type: "Alternative",
       web_address: "www.zokuvault.com",
       street_address: "Street",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       fax_number: "888-888-8888",
       primary_contact_id: contacts.first.id,
-      share_with_contact_ids: contacts.map(&:id),
+      share_with_contacts: contacts,
       user_id: user.id
     }
   end
@@ -27,7 +28,7 @@ RSpec.describe "financial_alternative/edit", type: :view do
     {
       alternative_type: "Venture Capital",
       name: "Investment Name",
-      owner_id: contacts.first.id,
+      account_owner_ids: [contacts.first.id],
       commitment: "99.99",
       total_calls: "99.99",
       total_distributions: "99.99",
@@ -80,7 +81,7 @@ RSpec.describe "financial_alternative/edit", type: :view do
                     "financial_provider[alternative_0][alternative_type]"
       
       assert_select "select#alternative_owner_0[name=?]",
-                    "financial_provider[alternative_0][owner_id]"
+                    "financial_provider[alternative_0][account_owner_ids][]"
       
       assert_select "input#alternative_commitment_0[name=?]",
                     "financial_provider[alternative_0][commitment]"

@@ -48,14 +48,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
   # LivesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all life_and_disabilities as @life_and_disabilities" do
-      post :create, { life_and_disability: valid_attributes}, session: valid_session
-      life = assigns(:insurance_card)
-      get :index, params: {}, session: valid_session
-      expect(assigns(:life_and_disabilities)).to eq([life])
-    end
-  end
+  # Removed #index rspec - because there is no index action for life
 
   describe "GET #show" do
     it "assigns the requested life_and_disability as @insurance_card" do
@@ -190,10 +183,6 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    before :each do
-      request.env["HTTP_REFERER"] = "show"
-    end
-
     it "destroys the requested life_and_disability_policy" do
       post :create, { life_and_disability: valid_attributes}, valid_session
       policy = assigns(:insurance_card).policy.first
@@ -206,7 +195,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
       post :create, { life_and_disability: valid_attributes}, valid_session
       policy = assigns(:insurance_card).policy.first
       delete :destroy, {id: policy.to_param}, valid_session
-      expect(response).to redirect_to("show")
+      expect(response).to redirect_to insurance_path
     end
   end
 

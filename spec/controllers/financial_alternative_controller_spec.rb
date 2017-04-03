@@ -9,10 +9,11 @@ RSpec.describe FinancialAlternativeController, type: :controller do
   let(:valid_attributes) do
     {
       name: "Provider Name",
+      provider_type: "Alternative",
       web_address: "www.zokuvault.com",
       street_address: "Street",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       fax_number: "888-888-8888",
@@ -26,7 +27,7 @@ RSpec.describe FinancialAlternativeController, type: :controller do
     {
       alternative_type: "Venture Capital",
       name: "Investment Name",
-      owner_id: contacts.first.id,
+      account_owner_ids: [contacts.first.id],
       commitment: "99.99",
       total_calls: "99.99",
       total_distributions: "99.99",
@@ -114,7 +115,7 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       end
       
       it "assigns state" do
-        expect(financial_provider.state).to eq "State"
+        expect(financial_provider.state).to eq "IL"
       end
         
       it "assigns zip" do
@@ -156,10 +157,11 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       let(:new_provider_attributes) do
         {
           name: "Provider Name New",
+          provider_type: "Alternative",
           web_address: "www.newzokuvault.com",
           street_address: "Street New",
           city: "City New",
-          state: "State New",
+          state: "AL",
           zip: 66666,
           phone_number: "444-444-4444",
           fax_number: "555-555-5555",
@@ -173,7 +175,7 @@ RSpec.describe FinancialAlternativeController, type: :controller do
         {
           alternative_type: "Seed",
           name: "Investment Name New",
-          owner_id: contacts.second.id,
+          account_owner_ids: [contacts.second.id],
           commitment: "199.99",
           total_calls: "199.99",
           total_distributions: "199.99",
@@ -203,7 +205,8 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       end
       
       it "assigns the requested financial alternative owner" do
-        expect(assigns(:financial_provider).alternatives.first.owner).to eq contacts.second
+        account_owner_id = FinancialAccountOwner.find_by(contactable_id: assigns(:financial_provider).alternatives.first.id).contact_id
+        expect(account_owner_id).to eq contacts.second.id
       end
       
       it "assigns the requested financial alternative commitment" do
@@ -237,10 +240,6 @@ RSpec.describe FinancialAlternativeController, type: :controller do
   end
   
   describe "DELETE #destroy" do
-    before do
-      request.env["HTTP_REFERER"] = "previous_page"
-    end
-    
     it "destroys the requested financial provider and redirect to main financial information page" do
       financial_provider = FinancialProvider.create! valid_attributes
       expect { delete :destroy_provider, { id: financial_provider.to_param }, session: valid_session }
@@ -254,7 +253,7 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       financial_provider.alternatives << financial_alternative
       expect { delete :destroy, { id: financial_alternative.to_param }, session: valid_session }
         .to change(financial_provider.alternatives, :count).by(-1)
-      expect(response).to redirect_to "previous_page"
+      expect(response).to redirect_to financial_information_path
     end
     
     it "shows correct flash message on destroy provider" do

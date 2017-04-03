@@ -61,6 +61,7 @@ class DocumentsController < AuthenticatedController
   def show
     authorize @document
     s3_object = S3Service.get_object_by_key(@document.url)
+    return unless s3_object.exists?
     @image = Document.image?(s3_object.content_type)
   end
 

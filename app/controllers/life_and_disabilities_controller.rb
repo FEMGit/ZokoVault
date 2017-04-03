@@ -118,7 +118,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to back_path || lives_url, notice: 'Insurance policy was successfully destroyed.' }
+      format.html { redirect_to back_path || insurance_url, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

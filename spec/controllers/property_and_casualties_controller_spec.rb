@@ -49,14 +49,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
   # PropertiesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all property_and_casualties as @property_and_casualties" do
-      post :create, { property_and_casualty: valid_attributes}, session: valid_session
-      property_and_casualty = assigns(:insurance_card)
-      get :index, params: {}, session: valid_session
-      expect(assigns(:property_and_casualties)).to eq([property_and_casualty])
-    end
-  end
+  # Removed #index rspec - because there is no index action for property
 
   describe "GET #show" do
     it "assigns the requested property_and_casualty as @property_and_casualty" do
@@ -190,10 +183,6 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    before :each do
-      request.env["HTTP_REFERER"] = "show"
-    end
-
     it "destroys the requested property_and_casualty_policy" do
       post :create, { property_and_casualty: valid_attributes}, valid_session
       property_and_casualty = assigns(:insurance_card)
@@ -208,7 +197,7 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
       property_and_casualty = assigns(:insurance_card)
       policy = property_and_casualty.policy.first
       delete :destroy, {id: policy.to_param}, valid_session
-      expect(response).to redirect_to("show")
+      expect(response).to redirect_to insurance_path
     end
   end
 end

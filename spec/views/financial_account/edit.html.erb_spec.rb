@@ -10,10 +10,11 @@ RSpec.describe "financial_account/edit", type: :view do
   let(:valid_attributes) do
     {
       name: "Provider Name",
+      provider_type: "Account",
       web_address: "www.zokuvault.com",
       street_address: "Street",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       fax_number: "888-888-8888",
@@ -27,7 +28,7 @@ RSpec.describe "financial_account/edit", type: :view do
     {
       account_type: "Bond",
       name: "Account Name",
-      owner_id: contacts.second.id,
+      account_owner_ids: [contacts.second.id],
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
       notes: "Notes",
@@ -80,7 +81,7 @@ RSpec.describe "financial_account/edit", type: :view do
                     "financial_provider[account_0][name]"
       
       assert_select "select#account_owner_0[name=?]",
-                    "financial_provider[account_0][owner_id]"
+                    "financial_provider[account_0][account_owner_ids][]"
       
       assert_select "input#account_value_0[name=?]",
                     "financial_provider[account_0][value]"

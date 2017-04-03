@@ -15,7 +15,7 @@ RSpec.describe "financial_investment/new", type: :view do
       
       assert_select "select#financial_investment_investment_type[name=?]", "financial_investment[investment_type]"
       
-      assert_select "select#financial_investment_owner_id[name=?]", "financial_investment[owner_id]"
+      assert_select "select#financial_investment_owner_ids[name=?]", "financial_investment[owner_ids][]"
       
       assert_select "input#financial_investment_value[name=?]", "financial_investment[value]"
       

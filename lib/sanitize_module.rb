@@ -21,7 +21,7 @@ module SanitizeModule
         hash_params[key].map! { |x| ActionController::Base.helpers.sanitize(x).gsub("&amp;", "&") }
       elsif value.is_a? Hash
         sanitize_recursive(hash_params[key])
-      elsif String
+      elsif value.is_a? String
         hash_params[key] = ActionController::Base.helpers.sanitize(value).gsub("&amp;", "&")
       end
     end

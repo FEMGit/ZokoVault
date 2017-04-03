@@ -5,7 +5,7 @@ RSpec.describe UserProfilesController, type: :controller do
   let(:user) { create :user }
   let(:valid_attributes) do
     attributes_for(:user_profile)
-      .merge(employers_attributes: [attributes_for(:employer)])
+      .merge(employers_attributes: {"0" => attributes_for(:employer) })
       .merge(user_id: user.id)
       .merge(email: "Email@email.com")
   end
@@ -82,7 +82,7 @@ RSpec.describe UserProfilesController, type: :controller do
     end
 
     context "with valid params" do
-      let(:new_state) { Faker::Address.state }
+      let(:new_state) { "IL" }
       let(:new_attributes) { valid_attributes.merge(state: new_state) }
 
       it "updates the requested user_profile" do

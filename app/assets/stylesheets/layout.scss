@@ -188,7 +188,7 @@ a.mobile-menu{
 
 //APPLICATION NAVIGATION
 nav.primary-nav{
-  width: 240px;
+  width: 250px;
   float:left;
   background: #3B4A54;
   padding: $bu 0 0 0;
@@ -223,7 +223,7 @@ a.main-nav,
 a:visited.main-nav{
   width: 100%;
   color: #C8C8C8;
-  padding: $bu 0 $bu $gu;
+  padding: $bu 0 $bu $bu;
   display:block;
   width:100%;
   cursor: pointer;
@@ -300,7 +300,7 @@ main.marketing{
 main.app-nav{
   height: 100%;
   overflow:hidden;
-  margin-left: 240px;
+  margin-left: 250px;
 
   &.blank {
     margin: 0;

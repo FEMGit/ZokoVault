@@ -1,7 +1,7 @@
 <section class="card login-card" >
   <%= form_tag mfa_path, id: 'mfa-form' do %>
-    <div id="notice"></div>
     <h2>Two-Factor Authentication</h2>
+    <div class="flash-alert-static flash static" style="display:none;"><%= alert %></div>
     <% if @phone_number_error %>
       <div class="mb-10" >
         <%= label_tag 'Cell Phone Number' %>
@@ -59,8 +59,11 @@ function sendCode() {
         $('#send_code_text').html(' - Code sent!');
       })
   .fail(function() {
-    $(".flash-alert.flash").html("Please reenter your Cell Phone number for verification purposes. You will be receiving a code shortly. If you do not receive a code, please reach out to support@zokuvault.com. Thank you.");
+    var msg = "Please reenter your Cell Phone number for verification purposes. You will be receiving a code shortly. If you do not receive a code, please reach out to support@zokuvault.com. Thank you."
+    $(".flash-alert.flash").html(msg);
+    $(".flash-alert-static.flash.static").html(msg)
     $(".flash-alert.flash").show().delay(3000).fadeOut();
+    $(".flash-alert-static.flash.static").show();
   })
 }
 

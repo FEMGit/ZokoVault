@@ -75,8 +75,11 @@ function verifyCode() {
         window.location.replace('<%= back_path || root_path %>' + "?mfa_submit=true")
       })
   .fail(function() {
-    $(".flash-alert.flash").html("Please reenter your Cell Phone number for verification purposes. You will be receiving a code shortly. If you do not receive a code, please reach out to support@zokuvault.com. Thank you.");
+    var msg = "Incorrect code submitted.";
+    $(".flash-alert.flash").html(msg);
+    $(".flash-alert-static.flash.static").html(msg)
     $(".flash-alert.flash").show().delay(3000).fadeOut();
+    $(".flash-alert-static.flash.static").show();
   })
 }
 </script>

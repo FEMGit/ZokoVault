@@ -90,8 +90,8 @@ Rails.application.routes.draw do
   # Trusts
   get 'trusts/new', to: 'trusts#new', as: :new_trust
   get 'trusts/new_wills_poa', to: 'trusts#new_wills_poa', as: :wills_poa_new_trust # todo: delete wills-poa routes
-  get 'trusts/edit', to: 'trusts#edit', as: :edit_trust
-  get 'trusts/show', to: 'trusts#show', as: :trust
+  get 'trusts/edit/:id', to: 'trusts#edit', as: :edit_trust
+  get 'trusts/show/:id', to: 'trusts#show', as: :trust
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'

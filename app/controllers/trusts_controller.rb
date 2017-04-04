@@ -3,7 +3,7 @@ class TrustsController < AuthenticatedController
   include SharedViewHelper
   include BackPathHelper
   include SanitizeModule
-  before_action :set_trust, :set_document_params, only: [:update, :destroy]
+  before_action :set_trust, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :update]
   before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
@@ -16,7 +16,7 @@ class TrustsController < AuthenticatedController
   
   add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_wills_poa edit show), if: :general_view?
   add_breadcrumb "Trusts - Setup", :wills_poa_new_trust_path, :only => %w(new_wills_poa), if: :general_view?
-  add_breadcrumb "Trust 1", :trust_path, :only => %w(show edit), if: :general_view?
+  before_action :set_details_crumbs, only: [:edit, :show]
   add_breadcrumb "Trusts - Setup", :edit_trust_path, :only => %w(edit), if: :general_view?
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
@@ -32,6 +32,10 @@ class TrustsController < AuthenticatedController
       when 'new'
         return "Trusts - Setup"
     end
+  end
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@trust.name}", trust_path(@trust) if general_view?
   end
   
   # GET /trusts

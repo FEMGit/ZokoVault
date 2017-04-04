@@ -33,7 +33,7 @@ module DocumentsHelper
           owner.shares.select { |sh| (sh.shareable.is_a? FinalWish) && (final_wish_ids.include? sh.shareable_id) }
         else
           return [] unless model.present?
-          owner.shares.select { |sh| sh.shareable.is_a? model }
+          owner.shares.reject { |x| x.shareable_type.nil? }.select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? model) }
         end
       else
         []

@@ -6,15 +6,24 @@
     <p>Please let us know how we can help you. Send us your questions, concerns or feedback</p>
     <p>
       <%= label_tag :first_name, 'First Name' %>
-      <%= text_field_tag :first_name, current_user.user_profile.first_name %>
+      <% if @message.errors && @message.errors[:name].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :first_name, params[:first_name] || current_user.user_profile.first_name, { class: ("input-error" if @message.errors && @message.errors[:name].present? ) } %>
     </p>
     <p>
       <%= label_tag :last_name, 'Last Name' %>
-      <%= text_field_tag :last_name, current_user.user_profile.last_name %>
+      <% if @message.errors && @message.errors[:name].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :last_name, params[:last_name] || current_user.user_profile.last_name, { class: ("input-error" if @message.errors && @message.errors[:name].present? ) } %>
     </p>
     <p>
       <%= label_tag :email %>
-      <%= text_field_tag :email, current_user.email %>
+      <% if @message.errors && @message.errors[:email].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :email, params[:email] || current_user.email, { class: ("input-error" if @message.errors && @message.errors[:email].present? ) } %>
     </p>
     <p>
       <%= label_tag :phone_number, 'Phone Number' %>
@@ -33,9 +42,12 @@
     </p>
     <p>
       <label>Message</label>
+      <% if @message.errors && @message.errors[:message_content].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
       <br>
       Please include any details that will help us with your inquiry.
-      <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big' %></p>
+      <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big '+(@message.errors && @message.errors[:message_content].present? ? "input-error" : "")  %></p>
     </p>
   </div>
 

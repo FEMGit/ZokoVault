@@ -4,6 +4,7 @@ class EmailSupportController < AuthenticatedController
   attr_reader :referrer
 
   def index
+    @message = Message.new
   end
 
   def thank_you
@@ -12,18 +13,18 @@ class EmailSupportController < AuthenticatedController
   def send_email
     user_name = [params[:first_name], params[:last_name]].join ' '
 
-    message = Message.new(
+    @message = Message.new(
       name: user_name,
       email: params[:email],
       message_content: params[:message],
       phone_number: params[:phone_number],
       preferred_contact_method:  params["user"]["connect_by"].capitalize)
 
-    if message.valid? && message.message_content.length > 0
-      MessageMailer.new_message_support(message, admin_emails).deliver
+    if @message.valid? && @message.message_content.length > 0
+      MessageMailer.new_message_support(@message, admin_emails).deliver
       render :thank_you
     else
-      flash[:alert] = "Invalid message, please check that you've filled in the correct information"
+      @message.errors.add(:message_content, :not_implemented, message: "required") if @message.message_content.length == 0
       render :index
     end
   end

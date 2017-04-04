@@ -12,47 +12,38 @@
       <span id="step-2" class="settings-inner-counter">
         2
       </span>
-      <span class="step-name" id="step-2-text">Security Questions</span>
+      <span class="step-name" id="step-2-text">Phone Setup</span>
     </div>
     <div class="settings-inner-step">
       <span id="step-3" class="settings-inner-counter">
         3
       </span>
-      <span class="step-name" id="step-3-text">Phone Setup</span>
+      <span class="step-name" id="step-3-text">Login Settings</span>
     </div>
     <div class="settings-inner-step">
       <span id="step-4" class="settings-inner-counter">
         4
       </span>
-      <span class="step-name" id="step-4-text">Login Settings</span>
-    </div>
-    <div class="settings-inner-step">
-      <span id="step-5" class="settings-inner-counter">
-        5
-      </span>
-      <span class="step-name" id="step-5-text">Select Account Type</span>
+      <span class="step-name" id="step-4-text">Select Account Type</span>
     </div>
     <div class="settings-inner-step last-line"></div>
   </div>
-  
+
   <%= form_tag :account, { method: :put, id: 'account-form' } do %>
     <div id="form-step-1">
       <%= render partial: "terms_of_service" %>
     </div>
     <div id="form-step-2">
-      <%= render partial: "security_questions" %>
-    </div>
-    <div id="form-step-3">
       <%= render partial: "phone" %>
     </div>
-    <div id="form-step-4">
+    <div id="form-step-3">
       <%= render partial: "settings" %>
     </div>
-    <div id="form-step-5">
+    <div id="form-step-4">
       <%= render partial: "account_type" %>
     </div>
   <% end %>
-  
+
   <footer>
     <a href="javascript:;" id='next-step' class=" button primary-button big-button"
                                           onclick="wizNav(currentStep+1); return false;">Next</a>
@@ -61,7 +52,7 @@
 
 <script>
 var currentStep = 1;
-var maxStep = 5;
+var maxStep = 4;
 
 $(document).ready(function(){
   changeTabNames()
@@ -75,27 +66,23 @@ $(window).resize(function() {
 
 var changeTabNames = function() {
   $('#step-1-text').text('Terms')
-  $('#step-2-text').text('Security Questions')
-  $('#step-4-text').text('Login Settings')
-  $('#step-3-text').text('Phone Setup')
-  $('#step-5-text').text('Select Account Type')
+  $('#step-3-text').text('Login Settings')
+  $('#step-2-text').text('Phone Setup')
+  $('#step-4-text').text('Select Account Type')
 
   if (window.matchMedia("(max-width: 1020px)").matches) {
-    $('#step-2-text').text('Security')
-    $('#step-3-text').text('Phone')
-    $('#step-4-text').text('Settings')
-    $('#step-5-text').text('Account Type')
+    $('#step-2-text').text('Phone')
+    $('#step-3-text').text('Settings')
+    $('#step-4-text').text('Account Type')
   } if (window.matchMedia("(max-width: 670px)").matches) {
-    $('#step-2-text').text('Security')
-    $('#step-3-text').text('Phone')
-    $('#step-4-text').text('Settings')
-    $('#step-5-text').text('Account')
+    $('#step-2-text').text('Phone')
+    $('#step-3-text').text('Settings')
+    $('#step-4-text').text('Account')
   } if (window.matchMedia("(max-width: 625px)").matches) {
     $('#step-1-text').text('   ')
     $('#step-2-text').text('   ')
     $('#step-3-text').text('   ')
     $('#step-4-text').text('   ')
-    $('#step-5-text').text('   ')
   }
 }
 
@@ -121,8 +108,8 @@ var wizNav = function(step){
     if (currentStep == 1) {
       $("#save-btn").hide();
       toggleNextOnTos();
-    } 
-    else if (currentStep == 3) {
+    }
+    else if (currentStep == 4) {
       $("#next-step").hide();
       $("#save-btn").hide();
     }

@@ -2,6 +2,7 @@
 
 <%= form_tag email_support_path do %>
   <div class="card cg-3 mb-30">
+    <h3 class="card-label">ZokuVault Support</h3>
     <p>Please let us know how we can help you. Send us your questions, concerns or feedback</p>
     <p>
       <%= label_tag :first_name, 'First Name' %>
@@ -20,7 +21,9 @@
       <%= text_field_tag :phone_number, current_user.user_profile.phone_number %>
     </p>
 
-    <p><label>Preferred Method of Contact</label></p>
+    <p>
+      <label>Preferred Method of Contact</label>
+    </p>
     <p>
       <%= radio_button("user", "connect_by", "email", options = { checked: true }) %>
       <%= label_tag :email, 'Email' %>
@@ -32,9 +35,10 @@
       <label>Message</label>
       <br>
       Please include any details that will help us with your inquiry.
-      <%= text_area_tag :message, nil, rows: 8 %>
+      <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big' %></p>
     </p>
   </div>
 
-  <%= submit_tag "Submit", class: "button primary-button big-button" %>
+  <%= submit_tag "Send", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', back_path(session[:ret_url]) || root_path, { class: "button secondary-button big-button" } %>
 <% end %>

@@ -2,7 +2,6 @@ class EmailSupportController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   attr_reader :referrer
-  layout "blank_layout", only: [:index]
 
   def index
   end
@@ -25,7 +24,7 @@ class EmailSupportController < AuthenticatedController
       render :thank_you
     else
       flash[:alert] = "Invalid message, please check that you've filled in the correct information"
-      render :index, layout: 'blank_layout'
+      render :index
     end
   end
 

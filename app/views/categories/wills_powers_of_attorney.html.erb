@@ -19,7 +19,7 @@
 
         <h3><%= will.title %></h3>
         <% if !will_present?(will) %>
-          <p>There is no information about this Will</p>
+          <label>There is no information about this Will</label>
         <% end %>
         <ul class="data-list mb-20">
           <% if will.primary_beneficiaries.present? %>
@@ -65,7 +65,7 @@
           </section>
         <% end %>
         <br>
-        <%= link_to 'View Details', will_path, class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', will_path(will), class: "small-button outline-button mt-20" %>
       </div>
     </div>
   <% end %>

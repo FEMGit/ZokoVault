@@ -3,7 +3,7 @@ class WillsController < AuthenticatedController
   include SharedViewHelper
   include BackPathHelper
   include SanitizeModule
-  before_action :set_will, :set_document_params, only: [:destroy]
+  before_action :set_will, :set_document_params, only: [:show, :destroy, :edit]
   before_action :set_contacts, only: [:new, :create, :new_wills_poa]
   before_action :set_previous_shared_with, only: [:create]
   before_action :update_share_params, only: [:create]
@@ -17,8 +17,8 @@ class WillsController < AuthenticatedController
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
   add_breadcrumb "Wills - Setup", :wills_poa_new_will_path, :only => %w(new_wills_poa), if: :general_view?
-  add_breadcrumb "Will Title 1", :will_path, :only => %w(show edit), if: :general_view?
-  add_breadcrumb "Wills - Setup", :edit_will_path, :only => %w(edit), if: :general_view?
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_edit_crumbs, only: [:edit]
   
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
@@ -34,6 +34,14 @@ class WillsController < AuthenticatedController
       when 'new'
         return "Wills - Setup"
     end
+  end
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@will.title}", will_path(@will) if general_view?
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Wills - Setup", edit_will_path(@will) if general_view?
   end
   
   # GET /wills

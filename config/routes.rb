@@ -69,8 +69,8 @@ Rails.application.routes.draw do
   # Wills
   get 'wills/new', to: 'wills#new', as: :new_will
   get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
-  get 'wills/edit', to: 'wills#edit', as: :edit_will
-  get 'wills/show', to: 'wills#show', as: :will
+  get 'wills/edit/:id', to: 'wills#edit', as: :edit_will
+  get 'wills/show/:id', to: 'wills#show', as: :will
   patch 'wills/:id', to: 'wills#update'
   get 'wills', to: 'wills#index', as: :wills
   post 'wills', to: 'wills#create'

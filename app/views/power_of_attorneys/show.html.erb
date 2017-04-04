@@ -1,60 +1,56 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<% power_of_attorney_contact = {contact_name: 'Contact Name 1',
-  power_of_attorneys: [{agent_name: 'Jake Prinston', powers: ['General', 'Digital'], notes: 'Notes notes notes notes notes notes notes notes notes notes notes notes notes' },
-  {agent_name: 'John Wolly', powers: ['Digital'], notes: 'Notes notes notes notes notes notes notes notes notes notes notes notes notes'}],
-  shares_initials: ['JS', 'BB', 'PS'] } %>
-
-<%= link_to edit_power_of_attorney_path, class: "edit-link mrg-top" do%>
+<%= link_to edit_power_of_attorney_path(@power_of_attorney), class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
     </svg>
   </span>Edit Power of Attorney
 <% end %>
-<h1>Power of Attorney - <%= power_of_attorney_contact[:contact_name] %></h1>
+<h1>Power of Attorney - Contact Name</h1>
 
 
-<% power_of_attorney_contact[:power_of_attorneys].each do |power_of_attorney| %>
-  <div class="card attorney mb-30">
+<div class="card attorney mb-30">
+  <% if !attorney_present?(@power_of_attorney) %>
+    <label>There is no information about this Power of Attorney</label>
+  <% end %>
 
-    <h3 class="card-label">Legal Details</h3>
-
-    <label class="title">Agent</label>
-    <p><%= power_of_attorney[:agent_name] %></p>
-
-    <label class="title">Agent Powers</label>
-    <p>
-      <% power_of_attorney[:powers].each do |agent_power| %>
-        <%= agent_power %><br>
+  <% if attorney_present?(@power_of_attorney) %>
+    <li class="data-pair">
+      <label>
+        <%= @power_of_attorney.agents && @power_of_attorney.agents.map(&:name).join(", ") %>
+      </label>
+      <span class="data-right">
+      <% if @power_of_attorney.powers.present? %>
+        <% @power_of_attorney.powers.keys.each do |agent_power| %>
+          <%= agent_power %><br>
+        <% end %>
       <% end %>
-    </p>
+      </span>
+    </li>
+  <% end %><br>
 
+  <% if @power_of_attorney.notes.present? %>
     <label>Notes</label>
-    <p><%= power_of_attorney[:notes] %></p>
-    <span class="clear"></span>
-  </div>
-<% end %>
+    <p><%= @power_of_attorney.notes %></p>
+  <% end %>
+  <span class="clear"></span>
 
-<div class="card category-shared">
-  <section class="shared-with category-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
-    
-    <label>Shared With</label>
-    <section class="shared-list">
-      <% power_of_attorney_contact[:shares_initials].each do |share_initials| %>
-        <div class="tooltip-item">
-          <p class="avatar-initials"><%= share_initials %></p>
-          <%= image_tag(empty_image, class: "avatar-small") %>
-        </div>
-      <% end %>
+  <% if category_subcategory_shares(@power_of_attorney, resource_owner).present? %>
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
+
+      <label>Shared With</label>
+      <div>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@power_of_attorney, resource_owner) } %>
+      </div>
     </section>
-  </section>
-</div><br>
+  <% end %>
+</div>
 
 <h3>Documents</h3>
 <a class="add-link fr" href="#">

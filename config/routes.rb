@@ -79,8 +79,8 @@ Rails.application.routes.draw do
   # Powers of Attorney
   get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
   get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
-  get 'power_of_attorneys/edit', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
-  get 'power_of_attorneys/show', to: 'power_of_attorneys#show', as: :power_of_attorney
+  get 'power_of_attorneys/edit/:id', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
+  get 'power_of_attorneys/show/:id', to: 'power_of_attorneys#show', as: :power_of_attorney
   patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
   post 'power_of_attorneys', to: 'power_of_attorneys#create'

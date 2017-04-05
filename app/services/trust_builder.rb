@@ -67,6 +67,7 @@ class TrustBuilder
     trust.share_with_contact_ids = options[:share_with_contact_ids]
     trust.notes = options[:notes]
     trust.name = options[:name]
+    trust.category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
   end
 
   attr_internal_accessor :trust, :options

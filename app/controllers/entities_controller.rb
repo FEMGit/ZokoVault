@@ -58,11 +58,6 @@ class EntitiesController < AuthenticatedController
     set_viewable_contacts
   end
 
-  def set_documents
-    @category = Rails.application.config.x.TrustsEntityCategory
-    @group_documents = []
-  end
-  
   def create
     @entity = Entity.new(entity_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)))
     authorize @entity
@@ -86,6 +81,9 @@ class EntitiesController < AuthenticatedController
       if @entity.update(entity_params)
         WtlService.update_shares(@entity.id, @entity.share_with_contact_ids, resource_owner.id, Entity)
         WtlService.update_entity(@entity, entity_params_multi[:agent_ids], entity_params_multi[:partner_ids])
+        will_poa_id = CardDocument.find_by(card_id: @entity.id, object_type: 'Entity').id
+        ShareInheritanceService.update_document_shares(resource_owner, @entity.share_with_contact_ids,
+                                                       @previous_shared_with, Rails.application.config.x.TrustsEntitiesCategory, nil, nil, nil, will_poa_id)
         format.html { redirect_to success_path, flash: { success: 'Entity successfully updated.' } }
         format.json { render :show, status: :created, location: @entity }
       else
@@ -106,6 +104,11 @@ class EntitiesController < AuthenticatedController
   end
 
   private
+
+  def set_documents
+    @category = Rails.application.config.x.TrustsEntityCategory
+    @group_documents = Document.for_user(resource_owner).where(:category => @entity.category.name, :card_document_id => CardDocument.entity(@entity.id).try(:id))
+  end
   
   def category_shared?
      @shared_category_names.include? Rails.application.config.x.TrustsEntitiesCategory

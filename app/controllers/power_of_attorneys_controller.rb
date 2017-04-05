@@ -6,8 +6,9 @@ class PowerOfAttorneysController < AuthenticatedController
   before_action :set_power_of_attorney_contact, only: [:show, :edit, :update, :destroy_power_of_attorney_contact]
   before_action :set_power_of_attorney, :set_document_params, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update, :new_wills_poa]
-  before_action :set_previous_shared_with, only: [:create, :update]
+  before_action :set_previous_shared_with, only: [:update]
   before_action :update_share_params, only: [:create, :update]
+  before_action :set_documents, only: [:show]
   before_action :set_document_params, only: [:index]
   
   # General Breadcrumbs
@@ -17,7 +18,7 @@ class PowerOfAttorneysController < AuthenticatedController
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
   add_breadcrumb "Power of Attorney - Setup", :wills_poa_new_power_of_attorney_path, :only => %w(new_wills_poa), if: :general_view?
-  add_breadcrumb "Power of Attorney - Contact Name", :power_of_attorney_path, :only => %w(show edit), if: :general_view?
+  before_action :set_details_crumbs, only: [:edit, :show], if: :general_view?
   add_breadcrumb "Power of Attorney - Setup", :edit_power_of_attorney_path, :only => %w(edit), if: :general_view?
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
@@ -25,6 +26,10 @@ class PowerOfAttorneysController < AuthenticatedController
   add_breadcrumb "Legal - Power of Attorney - Setup", :shared_new_power_of_attorneys_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  
+  def set_details_crumbs
+    add_breadcrumb "Power of Attorney - #{@power_of_attorney_contact.contact.try(:name)}", power_of_attorney_path(@power_of_attorney_contact, @shared_user)
+  end
   
   def page_name
     case action_name
@@ -49,7 +54,7 @@ class PowerOfAttorneysController < AuthenticatedController
     @power_of_attorney.vault_entry_contacts.build
 
     @power_of_attorney_contact = PowerOfAttorneyContact.new(user: resource_owner,
-      category: Category.fetch(Rails.application.config.x.WtlCategory.downcase))
+      category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase))
     @power_of_attorney_contact.power_of_attorneys << @power_of_attorney
     authorize @power_of_attorney_contact
     set_viewable_contacts_global
@@ -60,7 +65,9 @@ class PowerOfAttorneysController < AuthenticatedController
     set_viewable_contacts_global
   end
   
-  def show; end
+  def show
+    session[:ret_url] = power_of_attorney_path(@power_of_attorney_contact)
+  end
 
   # GET /power_of_attorneys/new
   def new
@@ -82,11 +89,17 @@ class PowerOfAttorneysController < AuthenticatedController
     @category = Rails.application.config.x.WtlCategory
     @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
+  
+  def set_documents
+    @category = Rails.application.config.x.WillsPoaCategory
+    @group_documents = Document.for_user(resource_owner).where(:category => @power_of_attorney_contact.category.name,
+      :card_document_id => CardDocument.power_of_attorney(@power_of_attorney_contact.id).id)
+  end
 
     # POST /power_of_attorneys
   # POST /power_of_attorneys.json
   def create
-    @power_of_attorney_contact = PowerOfAttorneyContact.new(power_of_attorney_contact_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.WtlCategory.downcase)))
+    @power_of_attorney_contact = PowerOfAttorneyContact.new(power_of_attorney_contact_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)))
     authorize @power_of_attorney_contact
     WtlService.fill_power_of_attorneys(power_of_attorney_params, @power_of_attorney_contact)
     respond_to do |format|
@@ -111,6 +124,9 @@ class PowerOfAttorneysController < AuthenticatedController
       if @power_of_attorney_contact.update(power_of_attorney_contact_params)
         WtlService.update_shares(@power_of_attorney_contact.id, @power_of_attorney_contact.share_with_contact_ids, resource_owner.id, PowerOfAttorneyContact)
         WtlService.fill_agents(@power_of_attorney_contact, power_of_attorney_params)
+        will_poa_id = CardDocument.find_by(card_id: @power_of_attorney_contact.id, object_type: 'PowerOfAttorneyContact').id
+        ShareInheritanceService.update_document_shares(resource_owner, @power_of_attorney_contact.share_with_contact_ids,
+                                                       @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
         @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
         format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully update.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -208,7 +224,7 @@ class PowerOfAttorneysController < AuthenticatedController
   
   def update_share_params
     if general_view?
-      viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+      viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
       params[:power_of_attorney_contact]["share_with_contact_ids"] -= viewable_shares
     end
   end
@@ -249,8 +265,6 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def set_previous_shared_with
-    old_attorneys = WtlService.get_old_records(power_of_attorney_params)
-    old_attorney_ids = old_attorneys.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)
-    @previous_shared_with = PowerOfAttorney.find(old_attorney_ids).map(&:share_with_contact_ids).flatten.uniq
+    @previous_shared_with = @power_of_attorney_contact.share_with_contact_ids
   end
 end

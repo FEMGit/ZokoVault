@@ -21,7 +21,7 @@ class PowerOfAttorney < ActiveRecord::Base
     through: :shares,
     source: :contact
 
-  before_save { self.category = Category.fetch("wills - trusts - legal") }
+  before_save { self.category = Category.fetch("wills - poa") }
   before_validation :build_shares
   after_save :clear_agents
   

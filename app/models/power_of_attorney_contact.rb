@@ -16,8 +16,10 @@ class PowerOfAttorneyContact < ActiveRecord::Base
     through: :shares,
     source: :contact
   
-  before_save { self.category = Category.fetch("wills - trusts - legal") }
+  before_save { self.category = Category.fetch("wills - poa") }
   before_validation :build_shares
+  after_save :update_wills_poa
+  after_destroy :delete_wills_poa
   
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)
@@ -39,5 +41,14 @@ class PowerOfAttorneyContact < ActiveRecord::Base
   def not_shared_mode?
     Thread.current[:current_user].present? && user.present? &&
       Thread.current[:current_user] == user
+  end
+  
+  def update_wills_poa
+    wills_poa = CardDocument.find_or_initialize_by(card_id: self.id, object_type: 'PowerOfAttorneyContact')
+    wills_poa.update(user_id: self.user_id, object_type: self.class, category: Category.fetch("wills - poa"))
+  end
+  
+  def delete_wills_poa
+    CardDocument.where(card_id: self.id, object_type: 'PowerOfAttorneyContact').destroy_all
   end
 end

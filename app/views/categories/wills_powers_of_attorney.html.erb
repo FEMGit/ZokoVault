@@ -13,9 +13,13 @@
 
 <section class="flex-boxes">
   <% @wills.each do |will| %>
+    <% wills_poa = CardDocument.will(will.id) %>
+    <% if wills_poa.blank? %>
+      <% next %>
+    <% end %>
     <div class="flex-column">
       <div class="card cg-1 column-card">
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
         <h3><%= will.title %></h3>
         <% if !will_present?(will) %>
@@ -71,10 +75,14 @@
   <% end %>
     
   <% @power_of_attorney_contacts.each do |power_of_attorney_contact| %>
+    <% wills_poa = CardDocument.power_of_attorney(power_of_attorney_contact.id) %>
+    <% if wills_poa.blank? %>
+      <% next %>
+    <% end %>
     <div class="flex-column">
       <div class="card cg-3 column-card">
+        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
         <% if power_of_attorney_contact.contact.blank? %>
           <h3>Power of Attorney Contact Not Chosen</h3>
         <% else %>
@@ -116,7 +124,7 @@
 
 <h3>Wills & Powers of Attorney Documents</h3>
 
-<a class="add-link fr" href="#">
+<a class="add-link fr" href="<%= new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name) %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
@@ -124,9 +132,9 @@
   </span>Add Document
 </a>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => []} %>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
 
-<%= render :partial => "layouts/shared_category", :locals => { :category => nil } %>
+<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.WillsPoaCategory.downcase } %>
 
 <%= javascript_include_tag 'flex_boxes' %>
 <script>

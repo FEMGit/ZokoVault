@@ -169,7 +169,7 @@
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @wtl_documents} %>
 
-<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.WtlCategory.downcase } %>
+<%= render :partial => "layouts/shared_category", :locals => { :category => nil } %>
 
 <%= javascript_include_tag 'flex_boxes' %>
 <script>

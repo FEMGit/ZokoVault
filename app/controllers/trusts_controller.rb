@@ -4,6 +4,7 @@ class TrustsController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   before_action :set_trust, only: [:show, :edit, :destroy]
+  before_action :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :create, :edit, :update, :new_trusts_entities]
   before_action :set_previous_shared_with, only: [:create, :update]
   before_action :set_document_params, only: [:index]
@@ -15,7 +16,7 @@ class TrustsController < AuthenticatedController
   
   add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_trusts_entities edit show), if: :general_view?
   add_breadcrumb "Trusts - Setup", :trusts_entities_new_trust_path, :only => %w(new_trusts_entities), if: :general_view?
-  add_breadcrumb "Trust 1", :trust_path, :only => %w(show edit), if: :general_view?
+   before_action :set_details_crumbs, only: [:edit, :show]
   add_breadcrumb "Trusts - Setup", :edit_trust_path, :only => %w(edit), if: :general_view?
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
@@ -23,6 +24,10 @@ class TrustsController < AuthenticatedController
   add_breadcrumb "Trusts - Setup", :shared_new_trusts_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@trust.name}", trust_path(@trust, @shared_user)
+  end
   
   def page_name
     case action_name
@@ -45,7 +50,9 @@ class TrustsController < AuthenticatedController
     session[:ret_url] = @shared_user.present? ? shared_trusts_path : trusts_path
   end
 
-  def show; end
+  def show
+    session[:ret_url] = trust_path(@trust)
+  end
   
   def new_trusts_entities
     @vault_entry = TrustBuilder.new(type: 'trust').build
@@ -137,6 +144,11 @@ class TrustsController < AuthenticatedController
 
   private
   
+  def set_documents
+    @category = Rails.application.config.x.TrustsEntityCategory
+    @group_documents = Document.for_user(resource_owner).where(:category => @trust.category.name, :card_document_id => CardDocument.trust(@trust.id).try(:id))
+  end
+  
   def set_viewable_contacts
     @vault_entries.each do |trust|
       trust.share_with_contact_ids |= category_subcategory_shares(trust, resource_owner).map(&:contact_id)
@@ -185,7 +197,7 @@ class TrustsController < AuthenticatedController
   end
   
   def update_share_params
-    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     trust_params.each do |k, v|
       if v["share_with_contact_ids"].present?
         v["share_with_contact_ids"] -= viewable_shares
@@ -248,8 +260,9 @@ class TrustsController < AuthenticatedController
       WtlService.update_trustees(@new_vault_entries, new_trust_params[:trustee_ids],
                                  new_trust_params[:successor_trustee_ids], new_trust_params[:agent_ids])
     end
-      ShareInheritanceService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with,
-                                                     Rails.application.config.x.WtlCategory, 'Trust')
+    will_poa_id = CardDocument.find_by(card_id: (@new_vault_entries || @old_vault_entries).id, object_type: 'Trust').id
+    ShareInheritanceService.update_document_shares(resource_owner, trust_shared_with_uinq_param, @previous_shared_with,
+                                                   Rails.application.config.x.TrustsEntitiesCategory, nil, nil, nil, will_poa_id)
     raise "error saving new trust" if @errors.any?
   end
   

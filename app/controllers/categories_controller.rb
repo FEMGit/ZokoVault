@@ -49,16 +49,22 @@ class CategoriesController < AuthenticatedController
 
   def redirect_path(category)
     case category.name
-    when 'Insurance'
+    when Rails.application.config.x.InsuranceCategory
       insurance_url
-    when 'Taxes'
+    when Rails.application.config.x.TaxCategory
       taxes_url
-    when 'Final Wishes'
+    when Rails.application.config.x.FinalWishesCategory
       final_wishes_url
-    when 'Financial Information'
+    when Rails.application.config.x.FinancialInformationCategory
       financial_information_url
-    else
+    when Rails.application.config.x.WtlCategory
       estate_planning_url
+    when Rails.application.config.x.WillsPoaCategory
+      wills_powers_of_attorney_url
+    when Rails.application.config.x.TrustsEntitiesCategory
+      trusts_entities_url
+    else
+      root_url
     end
   end
 
@@ -84,14 +90,21 @@ class CategoriesController < AuthenticatedController
   end
   
   def wills_powers_of_attorney
+    @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
+    
     @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
     @wills = Will.for_user(current_user)
+    @wtl_documents = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
     session[:ret_url] = "/wills_powers_of_attorney"
   end
 
   def trusts_entities
+    @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+    
     @trusts = Trust.for_user(current_user)
     @entities = Entity.for_user(current_user)
+    @documents = Document.for_user(current_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
+    session[:ret_url] = "/trusts_entities"
   end
 
   def estate_planning

@@ -87,6 +87,8 @@ gem 'high_voltage', '~> 3.0'
 gem 'rollbar'
 gem 'oj', '~> 2.12.14'
 
+# Mailchimp manipulation gem
+gem 'gibbon'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views

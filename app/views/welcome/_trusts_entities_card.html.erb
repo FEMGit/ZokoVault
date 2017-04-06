@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes padding-right">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-trust"></use>
+        </svg>Trusts & Entities
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= trusts_entities_document_count %> documents uploaded.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(trusts_entities_any?), trusts_entities_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

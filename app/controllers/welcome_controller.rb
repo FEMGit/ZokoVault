@@ -1,7 +1,9 @@
 class WelcomeController < AuthenticatedController
   skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed]
   helper_method :financial_information_any?, :estate_planning_document_count, :insurance_vendors_count,
-                :tax_year_count, :final_wishes_count, :contacts_count, :button_text, :estate_planning_any?
+                :tax_year_count, :final_wishes_count, :contacts_count, :button_text, :estate_planning_any?,
+                :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
+  
   include UserTrafficModule
   
   def page_name
@@ -40,6 +42,26 @@ class WelcomeController < AuthenticatedController
       Will.for_user(current_user).any? ||
       Trust.for_user(current_user).any? ||
       PowerOfAttorney.for_user(current_user).any?
+  end
+  
+  def wills_poa_any?
+    (wills_poa_document_count > 0) ||
+      Will.for_user(current_user).any? ||
+      PowerOfAttorneyContact.for_user(current_user).any?
+  end
+  
+  def trusts_entities_any?
+    (trusts_entities_document_count > 0) ||
+      Trust.for_user(current_user).any? ||
+      Entity.for_user(current_user).any?
+  end
+  
+  def wills_poa_document_count
+    Document.for_user(current_user).where(:category => Rails.application.config.x.WillsPoaCategory).count
+  end
+  
+  def trusts_entities_document_count
+    Document.for_user(current_user).where(:category => Rails.application.config.x.TrustsEntitiesCategory).count
   end
   
   def estate_planning_document_count

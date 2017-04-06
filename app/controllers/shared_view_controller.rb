@@ -7,8 +7,7 @@ class SharedViewController < AuthenticatedController
   add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
   add_breadcrumb "Taxes", :shared_view_taxes_path, only: [:taxes]
   add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
-  add_breadcrumb "Wills - Power of Attorney", :shared_view_wills_power_of_attorneys_path, only: [:wills_power_of_attorneys]
-  add_breadcrumb "Wills - Trusts - Legal", :shared_view_estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, only: [:wills_powers_of_attorney]
   add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, only: [:trusts_entities]
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:financial_information]
   
@@ -27,11 +26,9 @@ class SharedViewController < AuthenticatedController
       when 'final_wishes'
         return "Shared Final Wishes"
       when 'wills_powers_of_attorney'
-        return "Shared Wills - Power of Attorney"
+        return "Shared Wills & Powers of Attorney"
       when 'trusts_entities'
         return "Shared Trusts & Entities"
-      when 'estate_planning'
-        return "Shared Wills - Trusts - Legal"
       when 'financial_information'
         return "Shared Financial Information"
     end
@@ -131,40 +128,6 @@ class SharedViewController < AuthenticatedController
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
     session[:ret_url] = shared_view_trusts_entities_path
-  end
-
-  def estate_planning
-    @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)
-    if @shared_category_names.include? Rails.application.config.x.WtlCategory
-      @wtl_documents = Document.for_user(shared_user).where(category: @category.name)
-      @trusts = Trust.for_user(shared_user);
-      @wills = Will.for_user(shared_user);
-      @power_of_attorneys = PowerOfAttorney.for_user(shared_user);
-    else
-      @trusts, @wills, @power_of_attorneys, @wtl_documents = [], [], [], []
-      groups_whitelist = %w(Trust Will PowerOfAttorney)
-
-      @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable| 
-        case shareable
-        when Trust
-          @trusts << shareable
-          @wtl_documents |= Document.for_user(shared_user).where(:group => Trust.name)
-        when Will
-          @wills << shareable
-          @wtl_documents |= Document.for_user(shared_user).where(:group => Will.name)
-        when PowerOfAttorney
-          @power_of_attorneys << shareable
-          @wtl_documents |= Document.for_user(shared_user).where(:group => 'Legal')
-        when Document
-          if groups_whitelist.include?shareable.group
-            @wtl_documents |= [shareable]
-          end
-        end
-      end
-      @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
-      @wtl_documents.flatten!
-    end
-    session[:ret_url] = shared_view_estate_planning_path
   end
 
   def documents

@@ -5,29 +5,20 @@ class TrustsController < AuthenticatedController
   include SanitizeModule
   before_action :set_trust, only: [:show, :edit, :destroy]
   before_action :set_documents, only: [:show]
-  before_action :set_contacts, only: [:new, :create, :edit, :update, :new_trusts_entities]
+  before_action :set_contacts, only: [:new, :create, :edit, :update, :new]
   before_action :set_previous_shared_with, only: [:create, :update]
-  before_action :set_document_params, only: [:index]
   
   # General Breadcrumbs
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new index), if: :general_view?
-  add_breadcrumb "Trusts", :trusts_path, :only => %w(index new), if: :general_view?
-  add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new), if: :general_view?
-  
-  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_trusts_entities edit index show), if: :general_view?
+  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new edit index show), if: :general_view?
   add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  before_action :set_new_crumbs, only: [:new_trusts_entities]
+  before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
-  # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
-  add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(index new), if: :shared_view?
-  add_breadcrumb "Trusts - Setup", :shared_new_trusts_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
   
   def set_new_crumbs
-    add_breadcrumb "Trusts - Setup", trusts_entities_new_trust_path(@shared_user)
+    add_breadcrumb "Trusts - Setup", new_trust_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -39,28 +30,23 @@ class TrustsController < AuthenticatedController
   end
   
   def page_name
+    trust = CardDocument.trust(params[:id])
     case action_name
-      when 'index'
-        return "Trusts"
+      when 'show'
+        return "Trust - #{trust.name} - Details"
       when 'new'
-        return "Trusts - Setup"
+        return "Trust - Setup"
+      when 'edit'
+        return "Trust - #{trust.name} - Edit"
     end
   end
   
-  # GET /trusts
-  # GET /trusts.json
-  def index
-    @trusts = trusts
-    @trusts.each { |x| authorize x }
-    session[:ret_url] = @shared_user.present? ? shared_trusts_path : trusts_path
-  end
-
   def show
     authorize @trust
     session[:ret_url] = trust_path(@trust, @shared_user)
   end
   
-  def new_trusts_entities
+  def new
     @vault_entry = TrustBuilder.new(type: 'trust').build
     @vault_entry.user = resource_owner
     @vault_entry.vault_entry_contacts.build
@@ -81,28 +67,6 @@ class TrustsController < AuthenticatedController
     set_viewable_contacts
   end
 
-  # GET /trusts/new
-  def new
-    @vault_entry = TrustBuilder.new(type: 'trust').build
-    @vault_entry.user = resource_owner
-    @vault_entry.vault_entry_contacts.build
-
-    @vault_entries = trusts
-    @vault_entries.each { |x| authorize x }
-    set_viewable_contacts
-    return if @vault_entries.present?
-
-    @vault_entries << @vault_entry
-    @vault_entries.each { |x| authorize x }
-  end
-
-  def set_document_params
-    @group = "Trust"
-    @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
-  end
-
-    
   def create
     save_or_update_trust(:new)
   end
@@ -160,16 +124,6 @@ class TrustsController < AuthenticatedController
     @vault_entries.each do |trust|
       trust.share_with_contact_ids |= category_subcategory_shares(trust, resource_owner).map(&:contact_id)
     end
-  end
-  
-  def trusts
-    return Trust.for_user(resource_owner) unless @shared_user
-    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? Trust } unless category_shared?
-    Trust.for_user(@shared_user)
-  end
-  
-  def category_shared?
-     @shared_category_names.include? Rails.application.config.x.WtlCategory
   end
   
   def error_path(action)

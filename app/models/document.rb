@@ -1,6 +1,5 @@
 class Document < ActiveRecord::Base
   white_list_categories = [Rails.application.config.x.FinancialInformationCategory, 
-                           Rails.application.config.x.WtlCategory,
                            Rails.application.config.x.WillsPoaCategory, 
                            Rails.application.config.x.TrustsEntityCategory,
                            Rails.application.config.x.InsuranceCategory,
@@ -16,7 +15,6 @@ class Document < ActiveRecord::Base
   belongs_to :vendor
 
   scope :for_user, ->(user) {where(user: user)}
-  scope :wills, -> {where(category: "Wills - Trusts - Legal")}
 
   scope :in_folder, ->(folder) {where(folder: folder)}
   has_many :shares, as: :shareable, dependent: :destroy

@@ -34,14 +34,6 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
 
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all power_of_attorneys as @power_of_attorneys" do
-      power_of_attorney = create(:power_of_attorney, user_id: user.id)
-      get :index, {}, valid_session
-      expect(assigns(:power_of_attorneys)).to eq([power_of_attorney])
-    end
-  end
-  
   describe "GET #show" do
     it "assigns the requested power_of_attorney_contact as @power_of_attorney_contact" do
       power_of_attorney_contact = PowerOfAttorneyContact.create(user: user)
@@ -50,9 +42,9 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     end
   end
   
-  describe "GET #new_wills_poa" do
+  describe "GET #new" do
     it "assigns a new power_of_attorney_contact as @power_of_attorney_contact" do
-      get :new_wills_poa, {}, session: valid_session
+      get :new, {}, session: valid_session
       expect(assigns(:power_of_attorney_contact)).to be_a_new(PowerOfAttorneyContact)
       expect(assigns(:power_of_attorney_contact).power_of_attorneys.first).to be_a_new(PowerOfAttorney)
     end

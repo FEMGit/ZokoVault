@@ -20,10 +20,6 @@ class ShareInheritanceService
     elsif category.name == Rails.application.config.x.WillsPoaCategory
       Share.where(user_id: owner.id, shareable_type: 'Trust', contact_id: contact_ids_to_remove).delete_all
       Share.where(user_id: owner.id, shareable_type: 'Entity', contact_id: contact_ids_to_remove).delete_all
-    elsif category.name == Rails.application.config.x.WtlCategory
-      Share.where(user_id: owner.id, shareable_type: 'Will', contact_id: contact_ids_to_remove).delete_all
-      Share.where(user_id: owner.id, shareable_type: 'Trust', contact_id: contact_ids_to_remove).delete_all
-      Share.where(user_id: owner.id, shareable_type: 'PowerOfAttorney', contact_id: contact_ids_to_remove).delete_all
     elsif category.name == Rails.application.config.x.InsuranceCategory
       Share.where(user_id: owner.id, shareable_type: 'Vendor', contact_id: contact_ids_to_remove).delete_all
     elsif category.name == Rails.application.config.x.TaxCategory

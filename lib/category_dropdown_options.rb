@@ -2,7 +2,6 @@ module CategoryDropdownOptions
   CATEGORIES = [
     "Select...",
     Rails.application.config.x.FinancialInformationCategory,
-    Rails.application.config.x.WtlCategory,
     Rails.application.config.x.WillsPoaCategory,
     Rails.application.config.x.TrustsEntitiesCategory,
     Rails.application.config.x.InsuranceCategory,

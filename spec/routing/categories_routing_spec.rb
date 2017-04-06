@@ -37,7 +37,8 @@ RSpec.describe CategoriesController, type: :routing do describe "routing" do
     context "non-resource routes" do
       it "routes insurance" do
         {
-          'estate_planning' => 'categories#estate_planning',
+          'trusts_entities' => 'categories#trusts_entities',
+          'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney',
           'healthcare_choices' => 'categories#healthcare_choices',
           'insurance' => 'categories#insurance',
           'web_accounts' => 'categories#web_accounts',

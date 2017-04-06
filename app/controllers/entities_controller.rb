@@ -31,7 +31,7 @@ class EntitiesController < AuthenticatedController
   end
   
   def page_name
-    entity = Entity.find_by(id: params[:id])
+    entity = CardDocument.entity(params[:id])
     case action_name
       when 'show'
         "Entity - #{entity.name} - Details"

@@ -69,9 +69,9 @@ Rails.application.routes.draw do
 
   # Wills
   get 'wills/new', to: 'wills#new', as: :new_will
-  get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
-  get 'wills/edit/:id', to: 'wills#edit', as: :edit_will
-  get 'wills/show/:id', to: 'wills#show', as: :will
+  get 'wills/new_wills_poa(/:shared_user_id)', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
+  get 'wills/edit/:id(/:shared_user_id)', to: 'wills#edit', as: :edit_will
+  get 'wills/show/:id(/:shared_user_id)', to: 'wills#show', as: :will
   patch 'wills/show/:id', to: 'wills#update'
   patch 'wills/:id', to: 'wills#update'
   get 'wills', to: 'wills#index', as: :wills
@@ -81,9 +81,9 @@ Rails.application.routes.draw do
   
   # Powers of Attorney
   get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
-  get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
-  get 'power_of_attorneys/edit/:id', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
-  get 'power_of_attorneys/show/:id', to: 'power_of_attorneys#show', as: :power_of_attorney
+  get 'power_of_attorneys/new_wills_poa(/:shared_user_id)', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
+  get 'power_of_attorneys/edit/:id(/:shared_user_id)', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
+  get 'power_of_attorneys/show/:id(/:shared_user_id)', to: 'power_of_attorneys#show', as: :power_of_attorney
   patch 'power_of_attorneys/show/:id', to: 'power_of_attorneys#update'
   patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
@@ -236,6 +236,8 @@ Rails.application.routes.draw do
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
   get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
+  get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :shared_view_wills_powers_of_attorney
+  get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :shared_view_trusts_entities
   get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
   get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes

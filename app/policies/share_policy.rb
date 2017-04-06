@@ -10,6 +10,10 @@ class SharePolicy < BasicPolicy
     owned_or_shared?
   end
   
+  def new_wills_poa?
+    create?
+  end
+  
   def download?
     owned_or_shared?
   end
@@ -31,6 +35,7 @@ class SharePolicy < BasicPolicy
   # Shared view policies
   def dashboard?; index?; end
   def estate_planning?; index?; end
+  def wills_powers_of_attorney?; index? end
   def financial_information?; index?; end
   def final_wishes?; index?; end
   def taxes?; index?; end

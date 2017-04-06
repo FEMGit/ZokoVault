@@ -103,6 +103,7 @@ class CategoriesController < AuthenticatedController
 
   def trusts_entities
     @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     
     @trusts = Trust.for_user(current_user)
     @entities = Entity.for_user(current_user)

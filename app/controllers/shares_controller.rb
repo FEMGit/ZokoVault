@@ -76,7 +76,9 @@ class SharesController < AuthenticatedController
                                                         (shared_groups(user)["FinalWish"].include? x.group) ||
                                                         (shared_groups(user)["FinancialProvider"].include? x.financial_information_id) ||
                                                         (shared_groups(user)["Vendor"].include? x.vendor_id) ||
-                                                        (shared_groups(user)["Will - POA"].include? x.card_document_id)}
+                                                        (shared_groups(user)["Will - POA"].include? x.card_document_id) || 
+                                                        (shared_groups(user)["Trusts & Entities"].include? x.card_document_id)}
+
       category_docs = Document.for_user(user).select { |x| shared_categories(user).include? x.category }
       (group_docs.map(&:id) + direct_document_share.map(&:id) + category_docs.map(&:id)).uniq.count
     end

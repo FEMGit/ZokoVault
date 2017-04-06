@@ -11,6 +11,8 @@ module SharedViewHelper
       link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.WillsPoaCategory
       link_to 'View Category', shared_view_wills_powers_of_attorney_path(@shared_user), class: 'view-category'
+    when Rails.application.config.x.TrustsEntitiesCategory
+      link_to 'View Category', shared_view_trusts_entities_path(@shared_user), class: 'view-category'
     end
   end
   
@@ -41,7 +43,8 @@ module SharedViewHelper
     if (card_values.any? { |x| document.group == x } && document.vendor_id.blank? && document.financial_information_id.blank?) || 
        (document.category == Rails.application.config.x.InsuranceCategory && card_names.any? { |x| document.vendor_id == x}) ||
        (document.category == Rails.application.config.x.FinancialInformationCategory && card_names.any? { |x| document.financial_information_id == x}) ||
-       (document.category == Rails.application.config.x.WillsPoaCategory && card_names.any? { |x| document.card_document_id == x})
+       (document.category == Rails.application.config.x.WillsPoaCategory && card_names.any? { |x| document.card_document_id == x}) ||
+       (document.category == Rails.application.config.x.TrustsEntitiesCategory && card_names.any? { |x| document.card_document_id == x})
       return true
     end
     false

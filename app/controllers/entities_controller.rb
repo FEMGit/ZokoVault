@@ -27,7 +27,7 @@ class EntitiesController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Entity - Setup", edit_entity_path(@entity)
+    add_breadcrumb "Entity - Setup", edit_entity_path(@entity, @shared_user)
   end
   
   def page_name
@@ -53,7 +53,7 @@ class EntitiesController < AuthenticatedController
   end
   
   def new
-    @entity = Entity.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntityCategory.downcase))
+    @entity = Entity.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase))
     authorize @entity
     set_viewable_contacts
   end

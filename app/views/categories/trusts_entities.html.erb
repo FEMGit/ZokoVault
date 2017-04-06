@@ -1,15 +1,17 @@
 <h1>Trusts & Entities</h1>
 
-<div class="card trusts wide">
-  <h3 class="mb-20">Trusts</h3>
-  <%= link_to 'Add Trust', trusts_entities_new_trust_path, class: "small-button outline-button fr" %>
-</div>
+<% if category_shared?(resource_owner, @category.name) %>
+  <div class="card trusts wide">
+    <h3 class="mb-20">Trusts</h3>
+    <%= link_to 'Add Trust', trusts_entities_new_trust_path(@shared_user), class: "small-button outline-button fr" %>
+  </div>
 
-<div class="card cg-3 wide">
-  <h3 class="mb-20">Entities and Corporations</h3>
+  <div class="card cg-3 wide">
+    <h3 class="mb-20">Entities and Corporations</h3>
 
-  <%= link_to 'Add Entity', new_entity_path, class: "small-button outline-button fr" %>
-</div>
+    <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button fr" %>
+  </div>
+<% end %>
 
 <section class="flex-boxes">
   <% @trusts.each do |trust| %>
@@ -40,14 +42,14 @@
           <% end %>
         </ul>
 
-        <% if category_subcategory_shares(trust, current_user).present? %>
+        <% if category_subcategory_shares(trust, resource_owner).present? %>
           <label>Shared With</label>
           <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(trust, current_user) } %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(trust, resource_owner) } %>
           </section>
         <% end %>
         <br>
-        <%= link_to 'View Details', trust_path(trust), class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', trust_path(trust, @shared_user), class: "small-button outline-button mt-20" %>
       </div>
     </div>
   <% end %>
@@ -82,10 +84,10 @@
           <% end %>
         </ul>
 
-        <% if category_subcategory_shares(entity, current_user).present? %>
+        <% if category_subcategory_shares(entity, resource_owner).present? %>
           <label>Shared With</label>
           <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(entity, current_user) } %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(entity, resource_owner) } %>
           </section>
         <% end %>
         <br>

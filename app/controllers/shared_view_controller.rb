@@ -9,6 +9,7 @@ class SharedViewController < AuthenticatedController
   add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
   add_breadcrumb "Wills - Power of Attorney", :shared_view_wills_power_of_attorneys_path, only: [:wills_power_of_attorneys]
   add_breadcrumb "Wills - Trusts - Legal", :shared_view_estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, only: [:trusts_entities]
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:financial_information]
   
   include BreadcrumbsCacheModule
@@ -27,6 +28,8 @@ class SharedViewController < AuthenticatedController
         return "Shared Final Wishes"
       when 'wills_powers_of_attorney'
         return "Shared Wills - Power of Attorney"
+      when 'trusts_entities'
+        return "Shared Trusts & Entities"
       when 'estate_planning'
         return "Shared Wills - Trusts - Legal"
       when 'financial_information'
@@ -108,6 +111,26 @@ class SharedViewController < AuthenticatedController
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
     session[:ret_url] = shared_view_wills_powers_of_attorney_path
+  end
+
+  def trusts_entities
+    @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+    if @shared_category_names.include? Rails.application.config.x.TrustsEntitiesCategory
+      @trusts = Trust.for_user(shared_user)
+      @entities = Entity.for_user(shared_user)
+      @documents = Document.for_user(shared_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
+    else
+      @trust_ids = @other_shareables.select { |shareable| shareable.is_a? Trust }.map(&:id)
+      @entity_ids = @other_shareables.select { |shareable| shareable.is_a? Entity }.map(&:id)
+      
+      @trusts = Trust.for_user(shared_user).where(id: @trust_ids)
+      @entities = Entity.for_user(shared_user).where(id: @entity_ids)
+      card_document_ids = @trust_ids.collect { |t_id| CardDocument.trust(t_id) }.map(&:id) + 
+        @entity_ids.collect { |e_id| CardDocument.entity(e_id) }.map(&:id)
+      @documents = (Document.for_user(shared_user).where(:card_document_id => card_document_ids) + 
+        @document_shareables.select { |d| d.category == @category.name }).uniq
+    end
+    session[:ret_url] = shared_view_trusts_entities_path
   end
 
   def estate_planning

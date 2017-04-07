@@ -1,0 +1,33 @@
+<%= form_for @user_profile, :url => url_for(action: :update_account_users, controller: :account_settings) do |f| %>
+  <div class="card mb-30 b-radius-0 b-none box-shadow-none">
+    <%= f.label :full_primary_shared_with, 'Upon presentation of a valid death certificate, please grant full Primary Share access of my vault to:' %>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :full_primary_shared_with_ids, @contacts_shareable, id: "full_primary_shared_with") %>
+    </div>
+
+    <div class="card shared-with b-radius-0 bl-none">
+      <h3 class="card-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Primary Shared With
+      </h3>
+      <p class="shared-description">
+        The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
+      <%= f.label :primary_shared_with, 'Primary Shared With' %>
+      <div class="chosen-styled-select">
+        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, id: "primary_shared_with") %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="ml-15 mb-30">
+    <%= f.submit "Update", class: "button primary-button big-button" %>
+  </div>
+<% end %>
+
+<%= yield :new_contact_form %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

@@ -1,25 +1,59 @@
 class AccountSettingsController < AuthenticatedController
-  before_action :set_user_profile, only: [:index, :update, :send_code, :update_two_factor_phone, :verify_code]
-  before_action :set_contacts_shareable, only: [:index, :update]
-  before_action :create_contact_if_not_exists, only: [:update]
+  before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
+                                          :verify_code, :account_users, :update_account_users,
+                                          :login_settings, :update_login_settings]
+  before_action :set_contacts_shareable, only: [:account_users]
+  before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_account_users]
+  include UserTrafficModule
   
-  def index; end
-
-  def update
+  def page_name
+    case action_name
+      when 'account_users'
+        return "Account Settings - Account Users"
+      when 'login_settings'
+        return "Account Settings - Login Settings"
+      when 'manage_subscription'
+        return "Account Settings - Manage Subscription"
+      when 'billing_info'
+        return "Account Settings - Update Billing Info"
+    end
+  end
+  
+  def account_users; end
+  
+  def login_settings; end
+  
+  def manage_subscription; end
+  
+  def billing_info; end
+  
+  def update_login_settings
     respond_to do |format|
-      if @user_profile.update_attributes(account_settings_params)
+      if @user_profile.update_attributes(login_settings_params)
         errors = update_password
         if (errors.nil? && password_change_params[:password].present?) || password_change_params[:password].empty?
           bypass_sign_in(@user)
-          format.html { redirect_to account_settings_path, flash: { success: 'Account Settings were successfully updated.' } }
-          format.json { render :index, status: :updated, location: @user_profile }
+          format.html { redirect_to login_settings_path, flash: { success: 'Login Settings were successfully updated.' } }
+          format.json { render :login_settings, status: :updated, location: @user_profile }
         else
           @user_profile.errors.messages.merge!(errors.messages)
-          format.html { render :index }
+          format.html { render :login_settings }
           format.json { render json: @user_profile.errors, status: :unprocessable_entity }
         end
       else
-        format.html { render :index }
+        format.html { render :login_settings }
+        format.json { render json: @user_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def update_account_users
+    respond_to do |format|
+      if @user_profile.update_attributes(account_users_params)
+          format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
+          format.json { render :account_users, status: :updated, location: @user_profile }
+      else
+        format.html { render :account_users }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end
     end
@@ -38,7 +72,7 @@ class AccountSettingsController < AuthenticatedController
   end
   
   def verify_code
-    phone_code = account_settings_params[:phone_code]
+    phone_code = login_settings_params[:phone_code]
     verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
     status = if verified
                @user_profile.update_attributes(:two_factor_phone_number => new_phone)
@@ -49,12 +83,6 @@ class AccountSettingsController < AuthenticatedController
     head status
   end
 
-  def flash_notice
-    respond_to do |format|
-      format.js { flash[:notice] = "BLABLABLA" }
-    end
-  end
-  
   private
 
   def create_contact_if_not_exists
@@ -79,8 +107,15 @@ class AccountSettingsController < AuthenticatedController
   end
   
   def account_settings_params
-    params.require(:user_profile).permit(:mfa_frequency, :photourl, :phone_code, :two_factor_phone_number,
-                                         full_primary_shared_with_ids: [], primary_shared_with_ids: [])
+    params.require(:user_profile).permit(:photourl, :phone_code)
+  end
+
+  def account_users_params
+    params.require(:user_profile).permit(full_primary_shared_with_ids: [], primary_shared_with_ids: [])
+  end
+
+  def login_settings_params
+    params.require(:user_profile).permit(:mfa_frequency, :phone_code, :two_factor_phone_number)
   end
   
   def password_change_params
@@ -92,7 +127,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def new_phone
-    account_settings_params[:two_factor_phone_number]
+    login_settings_params[:two_factor_phone_number]
   end
   
   def set_contacts_shareable

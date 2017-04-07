@@ -1,0 +1,47 @@
+<h3>Account Settings</h3>
+
+<div class="card b-radius-0 p-0">
+  <div class="tab-header">
+    <% account_users_selected = 'selected' if current_page?(account_users_path) %>
+    <%= link_to 'Account Users', account_users_path, class: "tab left not-link #{account_users_selected}", id: "account_users"%>
+    
+    <% login_settings_selected = 'selected' if current_page?(login_settings_path) %>
+    <%= link_to 'Login Settings', login_settings_path, class: "tab not-link #{login_settings_selected}", id: "login_settings"%>
+    
+    <% manage_subscription_selected = 'selected' if current_page?(manage_subscription_path) %>
+    <%= link_to 'Manage Subscription', manage_subscription_path, class: "tab not-link #{manage_subscription_selected}", id: "manage_subscription"%>
+  </div>
+  <%= render partial: yield(:current_tab_path) %>
+</div>
+
+<script>
+$(document).ready(function() {
+  changeTabNames()
+})
+
+$(window).resize(function() {
+  changeTabNames()
+})
+
+var changeTabNames = function() {
+  $('#account_users').text('Account Users')
+  $('#login_settings').text('Login Settings')
+  $('#manage_subscription').text('Manage Subscription')
+
+  if (window.matchMedia("(max-width: 675px)").matches) {
+    $('#account_users').text('Users')
+    $('#login_settings').text('Login')
+    $('#manage_subscription').text('Subscription')
+  }
+  if (window.matchMedia("(max-width: 660px)").matches) {
+    $('#account_users').text('Account Users')
+    $('#login_settings').text('Login Settings')
+    $('#manage_subscription').text('Manage Subscription')
+  }
+  if (window.matchMedia("(max-width: 420px)").matches) {
+    $('#account_users').text('Users')
+    $('#login_settings').text('Login')
+    $('#manage_subscription').text('Subscription')
+  }
+}
+</script>

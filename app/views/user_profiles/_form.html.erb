@@ -56,6 +56,11 @@
 
     <%= f.label :notes %>
     <p><%= f.text_area :notes, :maxlength => get_max_length(:notes)  %></p>
+    
+    <%= f.label :photo_url, 'Avatar' %><br>
+    <%= render :partial => "avatar_upload" %>
+    
+    <%= f.text_field :photourl, id: "photo_url_account", style: "display: none;" %>
   </div>
 
 <!--
@@ -116,4 +121,7 @@
   <%= f.submit "Save", class: "button primary-button big-button" %>
   <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button"}%>
 <% end %>
-<script>$('.chosen-select').chosen();</script>
+
+<script>
+  $('.chosen-select').chosen();
+</script>

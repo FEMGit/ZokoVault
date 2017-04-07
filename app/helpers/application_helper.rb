@@ -2,6 +2,14 @@ module ApplicationHelper
   def us_states
     States::STATES
   end
+  
+  def months
+    Months::MONTHS
+  end
+  
+  def card_expiration_years
+    Years::CARD_EXPIRATION_YEARS
+  end
 
   def initialize_new_contact_form
     return if content_for?(:new_contact_form)

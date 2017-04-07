@@ -128,8 +128,14 @@ Rails.application.routes.draw do
   get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   post 'documents/download/:id(/:shared_user_id)', to: 'documents#download', as: :download_document
 
-  resources :account_settings
-  put 'account_settings/update', to: 'account_settings#update'
+  get 'account_settings', to: 'account_settings#index', as: :account_settings
+  get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users
+  get 'account_settings/login_settings', to: 'account_settings#login_settings', as: :login_settings
+  get 'account_settings/manage_subscription', to: 'account_settings#manage_subscription', as: :manage_subscription
+  get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
+  patch 'account_settings/update', to: 'account_settings#update'
+  patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
+  patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   

@@ -1,16 +1,9 @@
-<%= form_for @user_profile, :url => url_for(action: :update, controller: :account_settings) do |f| %>
-  <div class="card mb-30">
-    <h3 class="card-label">Account Settings</h3>
+<%= form_for @user_profile, :url => url_for(action: :update_login_settings, controller: :account_settings) do |f| %>
+  <div class="card b-radius-0 b-none box-shadow-none">
     <% if @user_profile.errors.any? %>
       <% errors = true %>
     <% end %>
     
-    <%= f.label :full_primary_shared_with, 'Upon presentation of a valid death certificate, please grant full Primary Share access of my vault to:' %>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :full_primary_shared_with_ids, @contacts_shareable, id: "full_primary_shared_with") %>
-    </div>
-
-
     <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
     <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
     
@@ -48,28 +41,13 @@
     <% end %>
     <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if @user_profile.errors.messages[:password_confirmation].present?) } %>
     
-    <%= render :partial => "avatar_upload" %>
-    <%= f.text_field :photourl, id: "photo_url_account", style: "display: none;" %>
-
-    <div class="card mb-30 shared-with">
-      <h3 class="card-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-        Primary Shared With
-      </h3>
-      <p class="shared-description">
-        The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
-      <%= f.label :primary_shared_with, 'Primary Shared With' %>
-      <div class="chosen-styled-select">
-        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, id: "primary_shared_with") %>
-      </div>
-    </div>
   </div>
-  <%= f.submit "Update", class: "button primary-button big-button" %>
+  
+  <div class="ml-15 mb-30">
+    <%= f.submit "Update", class: "button primary-button big-button" %>
+  </div>
 <% end %>
 
-<%= yield :new_contact_form %>
 <%= render :partial => "account_settings/two_factor_phone_setup" %>
 
 <script>

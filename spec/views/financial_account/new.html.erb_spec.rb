@@ -45,7 +45,7 @@ RSpec.describe "financial_account/new", type: :view do
                     "financial_provider[account_0][name]"
       
       assert_select "select#account_owner_0[name=?]",
-                    "financial_provider[account_0][owner_id]"
+                    "financial_provider[account_0][account_owner_ids][]"
       
       assert_select "input#account_value_0[name=?]",
                     "financial_provider[account_0][value]"

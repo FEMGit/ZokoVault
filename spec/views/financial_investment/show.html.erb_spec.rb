@@ -16,11 +16,11 @@ RSpec.describe "financial_investment/show", type: :view do
       owner_id: contacts.first.id,
       address: "Address",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       primary_contact_id: contacts.first.id,
-      share_with_contact_ids: contacts.map(&:id),
+      share_with_contacts: contacts,
       user_id: user.id
     }
   end
@@ -29,7 +29,8 @@ RSpec.describe "financial_investment/show", type: :view do
   let(:provider_attributes) do 
     {
       name: "Investment Name",
-      share_with_contact_ids: contacts.map(&:id),
+      provider_type: "Investment",
+      share_with_contacts: contacts,
       user_id: user.id
     }
   end
@@ -51,7 +52,7 @@ RSpec.describe "financial_investment/show", type: :view do
     expect(rendered).to match(/Notes/)
     expect(rendered).to match(/Address/)
     expect(rendered).to match(/City/)
-    expect(rendered).to match(/State/)
+    expect(rendered).to match(/IL/)
     expect(rendered).to match(/\$100/)
     expect(rendered).to match(/55555/)
     expect(rendered).to match(/777-777-7777/)

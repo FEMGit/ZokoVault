@@ -48,14 +48,7 @@ RSpec.describe HealthsController, type: :controller do
   # HealthsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all healths as @healths" do
-      post :create, { health: valid_attributes}, session: valid_session
-      health = assigns(:insurance_card)
-      get :index, params: {}, session: valid_session
-      expect(assigns(:healths)).to eq([health])
-    end
-  end
+  # Removed #index rspec - because there is no index action for health
 
   describe "GET #show" do
     before :each do

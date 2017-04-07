@@ -15,7 +15,7 @@ RSpec.describe "financial_property/new", type: :view do
       
       assert_select "select#financial_property_property_type[name=?]", "financial_property[property_type]"
       
-      assert_select "select#financial_property_owner_id[name=?]", "financial_property[owner_id]"
+      assert_select "select#financial_property_property_owner_ids[name=?]", "financial_property[property_owner_ids][]"
       
       assert_select "input#financial_property_value[name=?]", "financial_property[value]"
       

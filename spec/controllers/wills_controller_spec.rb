@@ -81,17 +81,23 @@ RSpec.describe WillsController, type: :controller do
         end
 
         it "assigns primary beneficiaries" do
-          expect(vault_entry.primary_beneficiaries).to eq contacts.first(2)
+          primary_contact_ids = VaultEntryBeneficiary.where(will_id: vault_entry.id,
+                                                            active: true,
+                                                            type: VaultEntryBeneficiary::types[:primary]).map(&:contact_id)
+          expect(primary_contact_ids).to eq contacts.first(2).map(&:id)
         end
 
         it "assigns secondary beneficiaries" do
-          beneficiaries = vault_entry.secondary_beneficiaries
-
-          expect(beneficiaries).to eq contacts.last(1)
+          secondary_contact_ids = VaultEntryBeneficiary.where(will_id: vault_entry.id,
+                                                              active: true,
+                                                              type: VaultEntryBeneficiary::types[:secondary]).map(&:contact_id)
+          expect(secondary_contact_ids).to eq contacts.last(1).map(&:id)
         end
 
         it "assigns agents" do
-          expect(vault_entry.agents.first).to eq contacts[0]
+          agent_id = VaultEntryContact.where(contactable_id: vault_entry.id,
+                                              type: VaultEntryContact.types[:agent]).map(&:contact_id).first
+          expect(agent_id).to eq contacts[0].id
         end
 
         it "assigns document" do

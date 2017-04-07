@@ -49,10 +49,10 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
   end
 
   describe "GET #edit" do
-    it "assigns the requested power_of_attorney as @power_of_attorney" do
+    it "assigns the requested power_of_attorney as @vault_entries" do
       power_of_attorney = create(:power_of_attorney, user_id: user.id)
-      get :edit, { id: power_of_attorney.to_param }, valid_session
-      expect(assigns(:power_of_attorney)).to eq(power_of_attorney)
+      get :new, { id: power_of_attorney.to_param }, valid_session
+      expect(assigns(:vault_entries).first).to eq(power_of_attorney)
     end
   end
 
@@ -160,10 +160,6 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    before :each do
-      request.env["HTTP_REFERER"] = "show"
-    end
-
     it "destroys the requested power_of_attorney" do
       power_of_attorney = create(:power_of_attorney, user_id: user.id)
       expect {
@@ -174,7 +170,7 @@ RSpec.describe PowerOfAttorneysController, type: :controller do
     it "redirects to the vault_entries list" do
       power_of_attorney = create(:power_of_attorney, user_id: user.id)
       delete :destroy, { id: power_of_attorney.to_param }, valid_session
-      expect(response).to redirect_to("show")
+      expect(response).to redirect_to power_of_attorneys_path
     end
   end
 

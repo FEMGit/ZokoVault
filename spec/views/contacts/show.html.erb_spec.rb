@@ -2,18 +2,19 @@ require 'rails_helper'
 
 RSpec.describe "contacts/show", type: :view do
   let(:user) { create :user }
+  let(:email) { Faker::Internet.free_email }
   let(:relationship_params) { { relationship: 'Son'} }
 
   let(:options) do
     {
       :firstname => "Firstname",
       :lastname => "Lastname",
-      :emailaddress => "Emailaddress",
+      :emailaddress => email,
       :phone => "Phone",
       :contact_type => Contact::CONTACT_TYPES.keys.first,
       :beneficiarytype => "Beneficiarytype",
       :address => "Address",
-      :zipcode => "Zipcode",
+      :zipcode => "11111",
       :city => "City",
       :state => States::STATES.map(&:last).first,
       :notes => "MyText",
@@ -34,7 +35,7 @@ RSpec.describe "contacts/show", type: :view do
     render
     expect(rendered).to match(/Firstname/)
     expect(rendered).to match(/Lastname/)
-    expect(rendered).to match(/Emailaddress/)
+    expect(rendered).to match(/#{email}/)
     expect(rendered).to match(/Phone/)
     expect(rendered).to match(/Contact Type/)
     expect(rendered).to match(/Relationship/)
@@ -49,7 +50,7 @@ RSpec.describe "contacts/show", type: :view do
       render
       expect(rendered).to match(/Beneficiarytype/)
       expect(rendered).to match(/Address/)
-      expect(rendered).to match(/Zipcode/)
+      expect(rendered).to match(/11111/)
     end
   end
 

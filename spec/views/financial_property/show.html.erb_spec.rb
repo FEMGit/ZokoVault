@@ -14,10 +14,10 @@ RSpec.describe "financial_property/show", type: :view do
       owner_id: contacts.first.id,
       address: "Address",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       primary_contact_id: contacts.first.id,
-      share_with_contact_ids: contacts.map(&:id),
+      share_with_contacts: contacts,
       user_id: user.id
     }
   end
@@ -25,8 +25,9 @@ RSpec.describe "financial_property/show", type: :view do
   let(:provider_attributes) do 
     {
       name: "Property Name",
+      provider_type: 'Property',
       user_id: user.id,
-      share_with_contact_ids: contacts.map(&:id)
+      share_with_contacts: contacts
     }
   end
   
@@ -46,7 +47,7 @@ RSpec.describe "financial_property/show", type: :view do
     expect(rendered).to match(/Notes/)
     expect(rendered).to match(/Address/)
     expect(rendered).to match(/City/)
-    expect(rendered).to match(/State/)
+    expect(rendered).to match(/IL/)
     expect(rendered).to match(/\$1,000/)
     expect(rendered).to match(/55555/)
   end

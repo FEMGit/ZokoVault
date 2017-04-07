@@ -37,7 +37,9 @@ RSpec.describe WillsController, type: :controller do
 
   describe "GET #show" do
     it "assigns the requested will as @will" do
-      skip("No template for this controller action")
+      @will = Will.create(valid_attributes)
+      get :show, {id: @will.to_param}, session: valid_session
+      expect(assigns(:will)).to eq(@will)
     end
   end
 
@@ -49,8 +51,10 @@ RSpec.describe WillsController, type: :controller do
   end
 
   describe "GET #edit" do
-    it "assigns the requested will as @will" do
-      skip("No template for this controller action")
+    it "assigns a new vault_entry as @vault_entry" do
+      @will = Will.create(valid_attributes)
+      get :edit, {id: @will.to_param}, session: valid_session
+      expect(assigns(:vault_entry)).to eq(@will)
     end
   end
 
@@ -136,50 +140,72 @@ RSpec.describe WillsController, type: :controller do
     end
   end
 
-  xdescribe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) do
-        skip("Add a hash of attributes valid for your model")
-      end
+  let(:new_valid_attributes) do
+    {
+      title: "Title New",
+      user_id: user.id,
+      primary_beneficiary_ids: contacts.first(1).map(&:id),
+      secondary_beneficiary_ids: contacts.first(1).map(&:id),
+      executor_id: contacts[0].id,
+      agent_ids: contacts[1].id,
+      share_with_contact_ids: contacts.first(2).map(&:id)
+    }
+  end
 
-      it "updates the requested vault_entry" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: new_attributes }, session: valid_session
-        vault_entry.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "assigns the requested vault_entry as @vault_entry" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: valid_attributes }, session: valid_session
-        expect(assigns(:vault_entry)).to eq(vault_entry)
-      end
-
-      it "redirects to the vault_entry" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: valid_attributes }, session: valid_session
-        expect(response).to redirect_to(vault_entry)
+  
+  describe "PUT #update" do
+    context "with invalid params" do
+      it "redirects to the edit will page" do
+        will = Will.create valid_attributes
+        put :update, params: {id: will.id, vault_entry_0: invalid_attributes.merge(id: will.id)}, session: valid_session
+        expect(response).to render_template :edit
       end
     end
-
-    context "with invalid params" do
-      it "assigns the vault_entry as @vault_entry" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: invalid_attributes }, session: valid_session
-        expect(assigns(:vault_entry)).to eq(vault_entry)
+    
+    context "with valid params" do
+      before :each do
+        will = Will.create valid_attributes
+        put :update, {id: will.id, vault_entry_0: new_valid_attributes.merge(id: will.id)}, session: valid_session
+        @will = Will.find(will.id)
       end
 
-      it "re-renders the 'edit' template" do
-        vault_entry = Will.create! valid_attributes
-        put :update, { id: vault_entry.to_param, will: invalid_attributes }, session: valid_session
-        expect(response).to render_template("edit")
+      it "assigns new title" do
+        expect(@will.title).to eq('Title New')
+      end
+      
+      it "assigns primary beneficiaries" do
+        primary_contact_ids = VaultEntryBeneficiary.where(will_id: @will.id,
+                                                          active: true,
+                                                          type: VaultEntryBeneficiary::types[:primary]).map(&:contact_id)
+        expect(primary_contact_ids).to eq contacts.first(1).map(&:id)
+      end
+
+      it "assigns secondary beneficiaries" do
+        secondary_contact_ids = VaultEntryBeneficiary.where(will_id: @will.id,
+                                                            active: true,
+                                                            type: VaultEntryBeneficiary::types[:secondary]).map(&:contact_id)
+        expect(secondary_contact_ids).to eq contacts.first(1).map(&:id)
+      end
+
+      it "assigns agents" do
+        agent_id = VaultEntryContact.where(contactable_id: @will.id,
+                                            type: VaultEntryContact.types[:agent]).map(&:contact_id).first
+        expect(agent_id).to eq contacts[1].id
+      end
+
+      it "assigns shares" do
+        expect(@will.share_with_contact_ids).to eq contacts.first(2).map(&:id)
+      end
+
+      it "assigns executor" do
+        expect(@will.executor).to eq contacts[0]
       end
     end
   end
 
   describe "DELETE #destroy" do
     before :each do
-        request.env["HTTP_REFERER"] = "/wills"
+      request.env["HTTP_REFERER"] = "/wills"
     end
 
     it "destroys the requested vault_entry" do
@@ -191,7 +217,7 @@ RSpec.describe WillsController, type: :controller do
     it "redirects to the vault_entries list" do
       vault_entry = Will.create! valid_attributes
       delete :destroy, { id: vault_entry.to_param }, session: valid_session
-      expect(response).to redirect_to(wills_path)
+      expect(response).to redirect_to(wills_powers_of_attorney_path)
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170320053633) do
+ActiveRecord::Schema.define(version: 20170403040721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,18 @@ ActiveRecord::Schema.define(version: 20170320053633) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
   end
+
+  create_table "entities", force: :cascade do |t|
+    t.string   "name"
+    t.string   "notes"
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
+  add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
@@ -597,6 +609,8 @@ ActiveRecord::Schema.define(version: 20170320053633) do
 
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
+  add_foreign_key "entities", "categories"
+  add_foreign_key "entities", "users"
   add_foreign_key "final_wish_infos", "users"
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"

@@ -99,8 +99,11 @@ Rails.application.routes.draw do
   
   # Entities
   get 'entities/new', to: 'entities#new', as: :new_entity
-  get 'entities/edit', to: 'entities#edit', as: :edit_entity
-  get 'entities/show', to: 'entities#show', as: :entity
+  get 'entities/:id/edit', to: 'entities#edit', as: :edit_entity
+  patch 'entities/:id', to: 'entities#update'
+  get 'entities/:id', to: 'entities#show', as: :entity
+  post 'entities', to: 'entities#create', as: :entities
+  delete 'entities/:id', to: 'entities#destroy'
   
   resources :categories do
     member do

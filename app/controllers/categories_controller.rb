@@ -91,6 +91,7 @@ class CategoriesController < AuthenticatedController
 
   def trusts_entities
     @trusts = Trust.for_user(current_user)
+    @entities = Entity.for_user(current_user)
   end
 
   def estate_planning

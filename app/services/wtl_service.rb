@@ -51,4 +51,18 @@ class WtlService
                                contactable_type: "Will")
     end
   end
+  
+  def self.update_entity(entity, agent_ids, partner_ids)
+    entity.agents.clear
+    agent_ids.to_a.each do |agent_id|
+      VaultEntryContact.create(type: VaultEntryContact.types[:agent], active: true, contact_id: agent_id, contactable_id: entity.id,
+                               contactable_type: "Entity")
+    end
+    
+    entity.partners.clear
+    partner_ids.to_a.each do |partner_id|
+      VaultEntryContact.create(type: VaultEntryContact.types[:partner], active: true, contact_id: partner_id, contactable_id: entity.id,
+                               contactable_type: "Entity")
+    end
+  end
 end

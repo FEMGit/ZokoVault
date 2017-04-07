@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403040721) do
+ActiveRecord::Schema.define(version: 20170407030337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "card_documents", force: :cascade do |t|
+    t.integer  "card_id"
+    t.integer  "user_id"
+    t.string   "object_type"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "card_documents", ["user_id"], name: "index_card_documents_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -86,7 +97,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.datetime "updated_at",               null: false
     t.string   "category"
     t.string   "group"
-    t.integer  "vault_entry_id"
+    t.integer  "card_document_id"
     t.integer  "vendor_id"
     t.integer  "financial_information_id"
   end
@@ -150,6 +161,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
 
   create_table "financial_account_informations", force: :cascade do |t|
     t.integer  "account_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "number"
     t.integer  "primary_contact_broker_id"
@@ -160,7 +172,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.integer  "account_provider_id"
     t.integer  "category_id"
     t.string   "name"
-    t.integer  "owner_id"
   end
 
   add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
@@ -179,6 +190,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_alternatives", force: :cascade do |t|
     t.integer  "alternative_type"
     t.string   "name"
+    t.integer  "owner_id"
     t.decimal  "commitment"
     t.decimal  "total_calls"
     t.decimal  "total_distributions"
@@ -190,7 +202,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_alternatives", ["category_id"], name: "index_financial_alternatives_on_category_id", using: :btree
@@ -199,6 +210,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_investments", force: :cascade do |t|
     t.string   "name"
     t.integer  "investment_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "web_address"
     t.string   "phone_number"
@@ -213,7 +225,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
@@ -222,6 +233,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_properties", force: :cascade do |t|
     t.string   "name"
     t.integer  "property_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "address"
     t.string   "city"
@@ -234,7 +246,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.integer  "user_id"
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
@@ -328,6 +339,17 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   end
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
+  create_table "power_of_attorney_contacts", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
+  add_index "power_of_attorney_contacts", ["user_id"], name: "index_power_of_attorney_contacts_on_user_id", using: :btree
 
   create_table "power_of_attorneys", force: :cascade do |t|
     t.integer  "document_id"
@@ -607,6 +629,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.string "word", null: false
   end
 
+  add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "entities", "categories"
@@ -615,6 +638,8 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
+  add_foreign_key "power_of_attorney_contacts", "categories"
+  add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"

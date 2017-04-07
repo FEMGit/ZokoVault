@@ -71,9 +71,11 @@ Rails.application.routes.draw do
   get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
   get 'wills/edit/:id', to: 'wills#edit', as: :edit_will
   get 'wills/show/:id', to: 'wills#show', as: :will
+  patch 'wills/show/:id', to: 'wills#update'
   patch 'wills/:id', to: 'wills#update'
   get 'wills', to: 'wills#index', as: :wills
   post 'wills', to: 'wills#create'
+  put 'wills', to: 'wills#update'
   delete 'wills/:id', to: 'wills#destroy'
   
   # Powers of Attorney

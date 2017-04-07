@@ -1,45 +1,7 @@
-<%= render :partial => "layouts/bread_crumbs" %>
-
-<h1><%= 'Wills - Setup' %></h1>
-<div class="card wills mb-30">
-  <h3 class="card-label">Will Details</h3>
-
-  <label>Will Title<span class="required">Required</span></label>
-  <%= text_field_tag :title %>
-  
-  <label>Executor</label>
-  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "executor", field_id: "executor"} %>
-
-  <label>Primary Beneficiaries</label>
-  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: true, field_name: "primary", field_id: "primary"} %>
-  
-  <label>Secondary Beneficiaries</label>
-  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: true, field_name: "secondary", field_id: "secondary"} %>
-  
-  <label>Attorney, Accountant or Advisor(s)</label>
-  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "agent", field_id: "agent"} %>
-  
-  <label>Notes</label>
-  <%= text_area_tag :notes %>
-  
-  <section class="shared-with edit-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
-    <label>Shared With</label>
-    <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: true, field_name: "shared", field_id: "shared"} %>
-  </section>
-  
-  <%= link_to 'Delete', "javascript:void(0);", class: 'button small-button secondary-button' %>
-</div>
-
-<%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>
-<%= link_to 'Cancel', back_path || wills_powers_of_attorney_path, class: "button secondary-button big-button" %>
-
-<script>
-  $('.chosen-select').chosen({allow_single_deselect: true});
-</script>
-
-<%= render partial: 'contacts/ajax_form' %>
+<%= content_for :title, "Wills" %>
+<%= content_for :question_title, "Will" %>
+<%= content_for :add_another_title, nil %>
+<%= content_for :partial_path, "wills/wills_poa_form" %>
+<%= content_for :delete_path, "/wills/" %>
+<%= render partial: "new_document" %>
+<%= yield :new_contact_form %>

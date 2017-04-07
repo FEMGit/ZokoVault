@@ -1,0 +1,22 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<h1><%= yield(:title) + ' - Setup' %></h1>
+  <%= form_for @vault_entry do |f| %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+  <div id="wtl-forms">
+    <div id="wtl-form-1">
+      <% @vault_entries.each_with_index do |data, index| %>
+        <%= fields_for "vault_entry_#{index}", data do |builder| %>
+          <%= render yield(:partial_path), f: builder, index: index, data: data %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= f.submit "Save", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', back_path || wills_powers_of_attorney_path, {class: "button secondary-button big-button"}%>
+<% end %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

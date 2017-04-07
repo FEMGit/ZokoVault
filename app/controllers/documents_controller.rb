@@ -48,7 +48,8 @@ class DocumentsController < AuthenticatedController
   end
   
   def set_show_crumbs
-    add_breadcrumb "Document Preview", document_path(@document, @shared_user)
+    add_breadcrumb "Document Preview", document_path(@document) if general_view?
+    add_breadcrumb "Document Preview", shared_document_path(@shared_user, @document) if shared_view?
   end
 
   @after_new_user_created = ""
@@ -63,6 +64,7 @@ class DocumentsController < AuthenticatedController
     s3_object = S3Service.get_object_by_key(@document.url)
     return unless s3_object.exists?
     @image = Document.image?(s3_object.content_type)
+    @pdf = Document.pdf?(s3_object.content_type)
   end
 
   def new

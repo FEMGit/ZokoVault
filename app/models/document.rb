@@ -36,6 +36,10 @@ class Document < ActiveRecord::Base
   def self.image?(extension)
     %w(image).any? { |x| extension.include?(x) }
   end
+    
+  def self.pdf?(extension)
+    extension.include?('pdf')
+  end
 
   validates :category, inclusion: { in: white_list_categories, allow_blank: true }
 

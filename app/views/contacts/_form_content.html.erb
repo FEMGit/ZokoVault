@@ -101,23 +101,31 @@
   $(document).ready(function() {
     contact_type_handle($('#contact_contact_type'), true)
   })
-var contact_type_handle = function(selectInput, first_time) {
-  var selectedOption = $('option:selected:first', selectInput).val();
-  
-  var url = '/contacts/relationship_values/' + selectedOption
-  $.get(url, function(data) {
-    relationship_dropdown = $('#relationships_select');
-    relationship_dropdown.empty();
-    data.forEach(function(relationship_type){
-      relationship_dropdown.append("<option value='" + relationship_type + "'>" + relationship_type + "</option>");
+  var setProfessionalDropdown = function(selectedOptions) {
+    contact_type_dropdown = $('#contact_contact_type');
+    contact_type_dropdown.empty();
+    selectedOptions.forEach(function(option){
+      contact_type_dropdown.append("<option value='" + option + "'>" + option + "</option>");
     });
-    
-    if (first_time === true) {
-      var relationship = '<%= @contact_relationship %>'
-      $('#relationships_select').find("option[value=\'" + relationship + "\']").prop('selected', true)
-    }
-  });
-}
+  }
+  
+  var contact_type_handle = function(selectInput, first_time) {
+    var selectedOption = $('option:selected:first', selectInput).val();
+
+    var url = '/contacts/relationship_values/' + selectedOption
+    $.get(url, function(data) {
+      relationship_dropdown = $('#relationships_select');
+      relationship_dropdown.empty();
+      data.forEach(function(relationship_type){
+        relationship_dropdown.append("<option value='" + relationship_type + "'>" + relationship_type + "</option>");
+      });
+
+      if (first_time === true) {
+        var relationship = '<%= @contact_relationship %>'
+        $('#relationships_select').find("option[value=\'" + relationship + "\']").prop('selected', true)
+      }
+    });
+  }
 
 var wizNav = function(step){
   currentStep = step;

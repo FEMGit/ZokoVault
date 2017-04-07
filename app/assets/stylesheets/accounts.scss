@@ -72,6 +72,41 @@
   }
 }
 
+.settings-card.big-names {
+  @include media($tablet) {
+  .settings-inner-step {
+      padding-right: 0;
+      width: 100%;
+    }
+  }
+  .settings-inner-step {
+    @include media($twelvesixty) {
+      padding: 20px 20px 0 5px;
+      &.last-line {
+        display: none;
+      }
+
+      .settings-inner-counter {
+        margin-right: 5px;
+        padding: 2px 5px 2px 8.5px;
+
+        &.settings-completed-step {
+          padding: 2px 4px 2px 7px;
+        }
+      }
+
+      .step-name {
+        font-size: 16px;
+      }
+    }
+    @include media($eightfifty) {
+      .step-name {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
 @include media($tablet) {
   .settings-inner-step {
     padding: 20px 20px 0 5px;

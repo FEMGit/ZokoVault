@@ -1,0 +1,43 @@
+<button class="hidden" data-modal-id="first-run-modal">
+</button>
+<div id="first-run-modal" class="modal modal-square modal-no-js">
+  <header>
+    <h3>Welcome to ZokuVault, <%= current_user.first_name %></h3>
+    <p>Choose the option below that best fits your comfort level.</p>
+  </header>
+  <div class="modal-content p-0">
+    <div class="bb-dashed mt-20 pl-15 pr-15">
+      <p class="clr-primary-shaded inline-block"><b>Step-by-Step Guided Tutorial </b></p>
+      <%= link_to 'Start Tutorial', tutorial_primary_contacts_path, class: 'button primary-button small-button inline-block fr' %>
+      <p class="mt-5 w-80-percent">This step-by-step guided tutorial will walk you through adding your key contacts, documents and details. It is the easiest way to get started.</p>
+    </div>
+  
+    <div class="bb-dashed mt-20 pl-15 pr-15">
+      <p class="clr-primary-shaded inline-block"><b>Introduction Video </b></p>
+      <%= link_to 'Watch Video', 'javascript:void(0);', class: 'button secondary-button small-button fr' %>
+      <p class="mt-5 w-80-percent">The introduction video will give you a quick tour of how ZokuVault works. Once you understand the basics, it is easy to configure your information.</p>
+    </div>
+    
+    <div class="mt-20 pl-15 pr-15">
+      <p class="clr-primary-shaded inline-block"><b>Explore the Site</b></p>
+      <%= link_to 'Explore', root_path, class: 'button secondary-button small-button fr' %>
+      <p class="mt-5 w-80-percent">Jump right into using the platform. The videos and tutorials are always available for your use.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+$(function(){
+  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+  $(document).ready(function(){
+    $('button[data-modal-id]').click();
+  });
+  $('button[data-modal-id]').click(function(e) {
+    e.preventDefault();
+    $("body").append(appendthis);
+    $(".modal-overlay").fadeTo(500, 0.8);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+  });
+});
+</script>

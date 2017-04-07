@@ -173,6 +173,6 @@ class ContactsController < AuthenticatedController
       format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, flash: { success: 'Contact was successfully created.' } }
       format.json { render :show, status: :created, location: @contact }
       contact_dropdown_position = Contact.for_user(resource_owner).sort_by { |s| s.lastname }.map(&:id).find_index(@contact.id)
-      format.js { render json: @contact.slice(:id, :firstname, :lastname).merge(:position => contact_dropdown_position), status: :ok }
+      format.js { render json: @contact.slice(:id, :firstname, :lastname, :relationship, :emailaddress).merge(:position => contact_dropdown_position), status: :ok }
     end
 end

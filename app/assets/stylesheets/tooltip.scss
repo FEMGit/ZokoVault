@@ -52,6 +52,14 @@
     &.top {
       @include position(absolute, null 0 $tooltip-distance-from-item 0);
     }
+    &.left {
+      position: absolute;
+      left: -190px;
+    }
+    &.right {
+      position: absolute;
+      left: 0;
+    }
     background-color: white;
     background: #fff;
     border: $color-primary-shaded 1px solid;
@@ -94,6 +102,12 @@
     }
     &.bottom::after {
       content: "";
+    }
+    &.left::after {
+      left: 195px;
+    }
+    &.right::after {
+      left: 4px;
     }
     &.bottom::before {
       @include tooltip-box;

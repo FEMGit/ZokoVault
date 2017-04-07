@@ -184,6 +184,10 @@ button{
   @include button-fixed-width(120px)
 }
 
+.fixed-width-big {
+  @include button-fixed-width(150px)
+}
+
 .float-right {
   float: right;
 }

@@ -117,7 +117,6 @@ var closeContactFormModal = function() {
 }
 
 var addContactAndCloseModal = function(json) {
-
   $('.add-new-contactable').each(function(i, obj) {
     position_to_insert_after = json['position'];
     ($('<option>', {
@@ -131,8 +130,26 @@ var addContactAndCloseModal = function(json) {
     }
     $(this).trigger("chosen:updated");
   })
-
+  
+  updateAddContactableTable(json);
   closeContactFormModal();
+}
+
+var updateAddContactableTable = function(json) {
+  if ($('.table-add-contactable').find(tableIdToUpdate) == null) {
+    return
+  } else {
+    var table = $(tableIdToUpdate).DataTable();
+    table.row.add([
+      json['lastname'],
+      json['firstname'],
+      json['emailaddress'],
+      json['relationship']
+    ]).draw(false)
+    $(tableIdToUpdate).show()
+    $(tableIdToUpdate + '-title').show()
+    $('.flash.add-contactable').show()
+  }
 }
 
 var addErrorMessage = function(selector, error_message) {

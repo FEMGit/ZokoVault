@@ -112,6 +112,7 @@ Rails.application.routes.draw do
   
   # contacts
   get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
+  
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -144,6 +145,8 @@ Rails.application.routes.draw do
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
+  
+  get 'account/first_run' => 'accounts#first_run', as: :first_run
   resource :account, only: [:update, :show] do
     collection do
       get :setup
@@ -154,6 +157,12 @@ Rails.application.routes.draw do
       put :verify_code
     end
   end
+  
+  # Tutorials
+  get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
+  get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
+  get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
+  get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 

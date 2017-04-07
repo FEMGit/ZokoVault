@@ -1,5 +1,5 @@
 .cp{
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .fr{
   float:right;
@@ -25,8 +25,13 @@
 .bb-gray-light {
   border-bottom: 1px solid $color-gray-light;
 }
+
 .bb-gray-light-dashed {
   border-bottom: 1px dashed $color-gray-light;
+}
+
+.bb-dashed {
+  border-bottom: 1px dashed $color-gray-med-tinted;
 }
 .bl-gray-light{
   border-left: 1px solid $color-gray-light;
@@ -40,6 +45,9 @@
 .b-radius-0 {
   border-radius: 0 !important;
  }
+.w-80-percent {
+  width: 80%;
+}
 .w-21{
   width: $gu * 21 !important;
 }
@@ -80,11 +88,23 @@
 .p-0 {
   padding: 0 !important;
 }
+.mt-5{
+  margin-top: 5px;
+}
 .pt-60{
   padding-top: 60px;
 }
 .pb-10{
   padding-bottom: 10px;
+}
+.pl-15 {
+  padding-left: 15px;
+}
+.pr-15 {
+  padding-right: 15px;
+}
+.p-0 {
+  padding: 0 !important;
 }
 .mr-0{
   margin-right: 0 !important;
@@ -137,8 +157,19 @@
 .inline-block {
   display: inline-block;
 }
+
 .block {
   display: block;
+}
+
+.not-link {
+  text-decoration: none;
+  span {
+    color: $color-black;
+  }
+  &:hover {
+    text-decoration: none;
+  }
 }
 .mobile-hide{
   @include media($mobile) {

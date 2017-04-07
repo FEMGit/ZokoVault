@@ -290,7 +290,7 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render :show, status: :created, location: @document }
+    format.json { render json: @document, status: :created }
   end
 
   def handle_document_not_saved(format)

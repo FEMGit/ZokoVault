@@ -98,7 +98,7 @@ class SharedViewController < AuthenticatedController
       @trusts, @wills, @power_of_attorneys, @wtl_documents = [], [], [], []
       groups_whitelist = %w(Trust Will PowerOfAttorney)
 
-      @shares.map(&:shareable).each do |shareable| 
+      @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable| 
         case shareable
         when Trust
           @trusts << shareable
@@ -169,7 +169,7 @@ class SharedViewController < AuthenticatedController
   def set_shareables
     @document_shareables, @category_shareables, @other_shareables = Array.new(3) { [] }
 
-    @shares.map(&:shareable).each do |shareable| 
+    @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable| 
       case shareable
       when Document
         @document_shareables |= [shareable]
@@ -180,7 +180,7 @@ class SharedViewController < AuthenticatedController
       end
     end
     
-    shareables = @shares.map(&:shareable)
+    shareables = @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable)
     shared_documents = ShareService.shared_documents(shared_user, current_user)
     @document_shareables |= shared_documents
   end

@@ -157,7 +157,7 @@ class WillsController < AuthenticatedController
   
   def wills
     return Will.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? Will } unless category_shared?
+    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? Will } unless category_shared?
     Will.for_user(@shared_user)
   end
   

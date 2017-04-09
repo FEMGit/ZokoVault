@@ -6,7 +6,12 @@ class SessionsController < Devise::SessionsController
     yield resource if block_given?
     respond_with(resource, serialize_options(resource))
   end
-  
+
+  def create
+    super
+    flash.delete(:notice)
+  end
+
   private
   
   def set_alert_message

@@ -1,6 +1,7 @@
 class MfasController < AuthenticatedController
   skip_before_filter :mfa_verify!
   before_filter :not_verified!
+  layout "blank_layout", only: [:show]
 
   def show
     MultifactorAuthenticator.new(current_user).send_code

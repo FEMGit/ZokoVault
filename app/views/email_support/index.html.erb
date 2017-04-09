@@ -3,13 +3,54 @@
 <%= form_tag email_support_path do %>
   <div class="card cg-3 mb-30">
     <h3 class="card-label">ZokuVault Support</h3>
-    
-    <p>We apologize for any issues or inconveniences you are experiencing. Please let us know how we can help.</p>
+    <p>Please let us know how we can help you. Send us your questions, concerns or feedback</p>
+    <p>
+      <%= label_tag :first_name, 'First Name' %>
+      <% if @message.errors && @message.errors[:name].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :first_name, params[:first_name] || current_user.user_profile.first_name, { class: ("input-error" if @message.errors && @message.errors[:name].present? ) } %>
+    </p>
+    <p>
+      <%= label_tag :last_name, 'Last Name' %>
+      <% if @message.errors && @message.errors[:name].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :last_name, params[:last_name] || current_user.user_profile.last_name, { class: ("input-error" if @message.errors && @message.errors[:name].present? ) } %>
+    </p>
+    <p>
+      <%= label_tag :email %>
+      <% if @message.errors && @message.errors[:email].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <%= text_field_tag :email, params[:email] || current_user.email, { class: ("input-error" if @message.errors && @message.errors[:email].present? ) } %>
+    </p>
+    <p>
+      <%= label_tag :phone_number, 'Phone Number' %>
+      <%= text_field_tag :phone_number, current_user.user_profile.phone_number %>
+    </p>
 
-    <label>Please detail below how we can help.</label>
-    <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big' %></p>
+    <p>
+      <label>Preferred Method of Contact</label>
+    </p>
+    <p>
+      <%= radio_button("user", "connect_by", "email", options = { checked: true }) %>
+      <%= label_tag :email, 'Email' %>
+      <br>
+      <%= radio_button("user", "connect_by", "phone") %>
+      <%= label_tag :phone, 'Phone' %>
+    </p>
+    <p>
+      <label>Message</label>
+      <% if @message.errors && @message.errors[:message_content].present? %>
+        <span class="error-label"> Required</span>
+      <% end %>
+      <br>
+      Please include any details that will help us with your inquiry.
+      <p><%= text_area_tag :message, nil, :maxlength => get_max_length(:notes), class: 'big '+(@message.errors && @message.errors[:message_content].present? ? "input-error" : "")  %></p>
+    </p>
   </div>
 
   <%= submit_tag "Send", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', back_path(session[:ret_url]) || root_path, {class: "button secondary-button big-button"}%>
+  <%= link_to 'Cancel', back_path(session[:ret_url]) || root_path, { class: "button secondary-button big-button" } %>
 <% end %>

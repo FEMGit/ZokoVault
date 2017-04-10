@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe DocumentsController, type: :controller do
   let!(:user) { create :user }
 
-  let(:valid_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url, user_id: user.id } }
+  let(:valid_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url, group: 'Select...', user_id: user.id } }
   let(:invalid_attributes) { { name: Faker::File.file_name } }
 
   let(:valid_session) { {} }
@@ -100,7 +100,7 @@ RSpec.describe DocumentsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url } }
+      let(:new_attributes) { { name: Faker::File.file_name, url: Faker::Internet.url, group: 'Select...' } }
 
       it "updates the requested document" do
         document = Document.create! valid_attributes

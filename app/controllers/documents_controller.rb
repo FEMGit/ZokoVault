@@ -61,6 +61,7 @@ class DocumentsController < AuthenticatedController
   def show
     authorize @document
     s3_object = S3Service.get_object_by_key(@document.url)
+    return unless s3_object.exists?
     @image = Document.image?(s3_object.content_type)
   end
 
@@ -290,7 +291,7 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render :show, status: :created, location: @document }
+    format.json { render json: @document, status: :created }
   end
 
   def handle_document_not_saved(format)

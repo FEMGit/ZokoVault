@@ -13,6 +13,7 @@ class PolicyService
   def self.update_contacts(insurance_card, policy_params)
     insurance_card.policy.each_with_index do |policy, index|
       key = policy_params.keys[index]
+      return if key.nil?
       policy_params[key]["primary_beneficiary_ids"].to_a.select(&:present?).each do |contact_id|
         LifeAndDisabilityPoliciesPrimaryBeneficiary.create(life_and_disability_policy_id: policy.id, primary_beneficiary_id: contact_id)
       end

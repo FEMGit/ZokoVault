@@ -10,9 +10,10 @@ RSpec.describe FinancialAccountController, type: :controller do
     {
       name: "Provider Name",
       web_address: "www.zokuvault.com",
+      provider_type: "Account",
       street_address: "Street",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       fax_number: "888-888-8888",
@@ -26,7 +27,7 @@ RSpec.describe FinancialAccountController, type: :controller do
     {
       account_type: "Bond",
       name: "Account Name",
-      owner_id: contacts.first.id,
+      account_owner_ids: [contacts.first.id],
       value: "99.99",
       primary_contact_broker_id: contacts.first.id,
       notes: "Notes",
@@ -111,7 +112,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       end
       
       it "assigns state" do
-        expect(financial_provider.state).to eq "State"
+        expect(financial_provider.state).to eq "IL"
       end
         
       it "assigns zip" do
@@ -144,7 +145,8 @@ RSpec.describe FinancialAccountController, type: :controller do
       end
       
       it "assigns the financial account owner" do
-        expect(financial_provider.accounts.first.owner).to eq contacts.first
+        account_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_provider.accounts.first.id).contact_id
+        expect(account_owner_id).to eq contacts.first.id
       end
       
       it "assigns the financial account value" do
@@ -178,10 +180,11 @@ RSpec.describe FinancialAccountController, type: :controller do
       let(:new_provider_attributes) do
         {
           name: "Provider Name New",
+          provider_type: "Account",
           web_address: "www.newzokuvault.com",
           street_address: "Street New",
           city: "City New",
-          state: "State New",
+          state: "AL",
           zip: 66666,
           phone_number: "444-444-4444",
           fax_number: "555-555-5555",
@@ -195,7 +198,7 @@ RSpec.describe FinancialAccountController, type: :controller do
         {
           account_type: "Savings",
           name: "New Account Name",
-          owner_id: contacts.second.id,
+          account_owner_ids: [contacts.second.id],
           value: "100",
           primary_contact_broker_id: contacts.second.id,
           notes: "Notes New"
@@ -226,7 +229,8 @@ RSpec.describe FinancialAccountController, type: :controller do
       end
       
       it "assigns the requested financial account owner" do
-        expect(assigns(:financial_provider).accounts.first.owner).to eq contacts.second
+        account_owner_id = FinancialAccountOwner.find_by(contactable_id: assigns(:financial_provider).accounts.first.id).contact_id
+        expect(account_owner_id).to eq contacts.second.id
       end
       
       it "assigns the requested financial account value" do
@@ -248,10 +252,6 @@ RSpec.describe FinancialAccountController, type: :controller do
   end
   
   describe "DELETE #destroy" do
-    before do
-      request.env["HTTP_REFERER"] = "previous_page"
-    end
-    
     it "destroys the requested financial provider and redirect to main financial information page" do
       financial_provider = FinancialProvider.create! valid_attributes
       expect { delete :destroy_provider, { id: financial_provider.to_param }, session: valid_session }
@@ -265,7 +265,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       financial_provider.accounts << financial_account
       expect { delete :destroy, { id: financial_account.to_param }, session: valid_session }
         .to change(financial_provider.accounts, :count).by(-1)
-      expect(response).to redirect_to "previous_page"
+      expect(response).to redirect_to financial_information_path
     end
     
     it "shows correct flash message on destroy provider" do

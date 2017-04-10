@@ -119,7 +119,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     authorize @property_and_casualty
     @policy.destroy
     respond_to do |format|
-      format.html { redirect_to back_path || properties_url, notice: 'Insurance policy was successfully destroyed.' }
+      format.html { redirect_to back_path || insurance_path, notice: 'Insurance policy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -147,7 +147,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   
   def property_and_casualties
     return PropertyAndCasualty.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? PropertyAndCasualty } unless @category_shared
+    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? PropertyAndCasualty } unless @category_shared
     PropertyAndCasualty.for_user(@shared_user)
   end
 

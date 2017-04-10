@@ -11,10 +11,10 @@ RSpec.describe "financial_property/new", type: :view do
       property_type: "Commercial",
       notes: "Notes",
       value: 99.99,
-      owner_id: contacts.first.id,
+      property_owner_ids: [contacts.first.id],
       address: "Address",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       primary_contact_id: contacts.first.id,
       share_with_contact_ids: contacts.map(&:id),
@@ -36,7 +36,7 @@ RSpec.describe "financial_property/new", type: :view do
       
       assert_select "select#financial_property_property_type[name=?]", "financial_property[property_type]"
       
-      assert_select "select#financial_property_owner_id[name=?]", "financial_property[owner_id]"
+      assert_select "select#financial_property_property_owner_ids[name=?]", "financial_property[property_owner_ids][]"
       
       assert_select "input#financial_property_value[name=?]", "financial_property[value]"
       

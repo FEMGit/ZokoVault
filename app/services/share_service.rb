@@ -27,7 +27,7 @@ class ShareService
   end
   
   def self.shared_documents_by_contact(resource_owner, contact)
-    shareables = SharedViewService.shares_by_contact(resource_owner, contact).map(&:shareable)
+    shareables = SharedViewService.shares_by_contact(resource_owner, contact).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
     
     shared_group_names = shared_groups(resource_owner, nil, contact)
@@ -36,7 +36,7 @@ class ShareService
   end
   
   def self.shared_documents(resource_owner, user)
-    shareables = SharedViewService.shares(resource_owner, user).map(&:shareable)
+    shareables = SharedViewService.shares(resource_owner, user).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
     
     shared_group_names = shared_groups(resource_owner, user)
@@ -55,9 +55,9 @@ class ShareService
   def self.shared_cards(owner, user = nil, contact = nil)
     shareables =
       if contact.present?
-        SharedViewService.shares_by_contact(owner, contact).map(&:shareable)
+        SharedViewService.shares_by_contact(owner, contact).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable)
       elsif user.present?
-        SharedViewService.shares(owner, user).map(&:shareable)
+        SharedViewService.shares(owner, user).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable)
       end
     shareables.compact.reject { |res| (res.is_a? Document) || (res.is_a? Category) }
   end
@@ -72,9 +72,11 @@ class ShareService
   
   def self.shared_categories(owner, user = nil, contact = nil)
     if contact.present?
-      SharedViewService.shares_by_contact(owner, contact).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+      SharedViewService.shares_by_contact(owner, contact).select(&:shareable_type)
+                                                         .select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
     elsif user.present?
-      SharedViewService.shares(owner, user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+      SharedViewService.shares(owner, user).select(&:shareable_type)
+                                           .select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
     end
   end
 end

@@ -42,7 +42,7 @@ RSpec.describe "financial_alternative/new", type: :view do
                     "financial_provider[alternative_0][alternative_type]"
       
       assert_select "select#alternative_owner_0[name=?]",
-                    "financial_provider[alternative_0][owner_id]"
+                    "financial_provider[alternative_0][account_owner_ids][]"
       
       assert_select "input#alternative_commitment_0[name=?]",
                     "financial_provider[alternative_0][commitment]"

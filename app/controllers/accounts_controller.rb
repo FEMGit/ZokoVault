@@ -5,10 +5,12 @@ class AccountsController < AuthenticatedController
   layout "blank_layout", only: [:setup]
 
   def setup; end
+  
+  def first_run; end
 
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
-    redirect_to root_path
+    redirect_to first_run_path
   end
 
   def show; end

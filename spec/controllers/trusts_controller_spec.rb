@@ -81,15 +81,21 @@ RSpec.describe TrustsController, type: :controller do
         end
 
         it "assigns trustees" do
-          expect(vault_entry.trustees).to eq contacts.first(2)
+          trustee_ids = VaultEntryContact.where(contactable_id: vault_entry.id,
+                                              type: VaultEntryContact.types[:trustee]).map(&:contact_id)
+          expect(trustee_ids).to eq contacts.first(2).map(&:id)
         end
 
         it "assigns successor trustees" do
-          expect(vault_entry.successor_trustees).to eq contacts.last(1)
+          trustee_ids = VaultEntryContact.where(contactable_id: vault_entry.id,
+                                              type: VaultEntryContact.types[:successor_trustee]).map(&:contact_id)
+          expect(trustee_ids).to eq contacts.last(1).map(&:id)
         end
 
         it "assigns agents" do
-          expect(vault_entry.agents.first).to eq contacts[0]
+          agent_id = VaultEntryContact.where(contactable_id: vault_entry.id,
+                                              type: VaultEntryContact.types[:agent]).map(&:contact_id).first
+          expect(agent_id).to eq contacts[0].id
         end
 
         it "assigns shares" do

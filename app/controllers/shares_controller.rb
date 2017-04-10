@@ -84,7 +84,7 @@ class SharesController < AuthenticatedController
     end
     
     def shared_categories(user)
-      SharedViewService.shares(user, current_user).map(&:shareable).select  { |res| res.is_a? Category }.map(&:name)
+      SharedViewService.shares(user, current_user).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
     end
 
     def set_share

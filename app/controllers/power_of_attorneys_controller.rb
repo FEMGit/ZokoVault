@@ -3,7 +3,7 @@ class PowerOfAttorneysController < AuthenticatedController
   include SharedViewHelper
   include BackPathHelper
   include SanitizeModule
-  before_action :set_power_of_attorney, :set_document_params, only: [:update, :destroy]
+  before_action :set_power_of_attorney, :set_document_params, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create]
   before_action :set_ret_url
@@ -16,7 +16,7 @@ class PowerOfAttorneysController < AuthenticatedController
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
   add_breadcrumb "Power of Attorney - Setup", :wills_poa_new_power_of_attorney_path, :only => %w(new_wills_poa), if: :general_view?
-  add_breadcrumb "Power of Attorney - Contact Name 1", :power_of_attorney_path, :only => %w(show edit), if: :general_view?
+  add_breadcrumb "Power of Attorney - Contact Name", :power_of_attorney_path, :only => %w(show edit), if: :general_view?
   add_breadcrumb "Power of Attorney - Setup", :edit_power_of_attorney_path, :only => %w(edit), if: :general_view?
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
@@ -128,7 +128,7 @@ class PowerOfAttorneysController < AuthenticatedController
   
   def attorneys
     return PowerOfAttorney.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless category_shared?
+    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless category_shared?
     PowerOfAttorney.for_user(@shared_user)
   end
   

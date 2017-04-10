@@ -12,10 +12,10 @@ RSpec.describe FinancialPropertyController, type: :controller do
       property_type: "Commercial",
       notes: "Notes",
       value: 99.99,
-      owner_id: contacts.first.id,
+      property_owner_ids: [contacts.first.id],
       address: "Address",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       primary_contact_id: contacts.first.id,
       share_with_contact_ids: contacts.map(&:id),
@@ -26,7 +26,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
   let(:provider_attributes) do 
     {
       name: "Property Name",
-      user_id: user.id
+      user_id: user.id,
+      provider_type: "Property"
     }
   end
   
@@ -111,7 +112,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns owner" do
-        expect(financial_property.owner).to eq contacts.first
+        property_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_property.id).contact_id
+        expect(property_owner_id).to eq contacts.first.id
       end
       
       it "assigns address" do
@@ -123,7 +125,7 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns state" do
-        expect(financial_property.state).to eq "State"
+        expect(financial_property.state).to eq "IL"
       end
       
       it "assigns zip code" do
@@ -135,7 +137,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns share_with-contacts" do
-        expect(financial_property.share_with_contacts).to eq contacts
+        share_contact_ids = Share.where(contact_id: financial_property.share_with_contact_ids, shareable_type:'FinancialProvider').map(&:contact_id)
+        expect(share_contact_ids).to eq contacts.map(&:id)
       end
     end
     
@@ -161,10 +164,10 @@ RSpec.describe FinancialPropertyController, type: :controller do
           property_type: "House",
           notes: "Notes New",
           value: 100,
-          owner_id: contacts.second.id,
+          property_owner_ids: [contacts.second.id],
           address: "Address New",
           city: "City New",
-          state: "State New",
+          state: "AL",
           zip: 44444,
           phone_number: "888-888-8888",
           primary_contact_id: contacts.second.id,
@@ -177,6 +180,7 @@ RSpec.describe FinancialPropertyController, type: :controller do
         {
           user_id: user.id,
           name: "Property Name New",
+          provider_type: "Property"
         }
       end
       
@@ -214,7 +218,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns owner" do
-        expect(financial_property.owner).to eq contacts.second
+        property_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_property.id).contact_id
+        expect(property_owner_id).to eq contacts.second.id
       end
       
       it "assigns address" do
@@ -226,7 +231,7 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns state" do
-        expect(financial_property.state).to eq "State New"
+        expect(financial_property.state).to eq "AL"
       end
       
       it "assigns zip code" do
@@ -238,7 +243,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns share_with-contacts" do
-        expect(financial_property.share_with_contacts).to eq contacts.first(2)
+        share_contact_ids = Share.where(contact_id: financial_property.share_with_contact_ids, shareable_type:'FinancialProvider').map(&:contact_id)
+        expect(share_contact_ids).to eq contacts.first(2).map(&:id)
       end
     end
   end

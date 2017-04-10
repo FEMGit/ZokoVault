@@ -1,0 +1,59 @@
+<h1>Update Billing Info</h1>
+
+<div class="card mb-30 min-w-330">
+  <h3>Subscription Details</h3>
+  <section class="bb-gray-light-dashed mb-10">
+    <div class="styled-select width-250 inline-block">
+      <%= select_tag :year, options_for_select(['Yearly Membership $119.99']), class: 'width-250' %>
+    </div>
+    <div class="subscription-description ml-15">This amount will be billed to your account on 8/25/17</div>
+    <span class="fr">$119.99</span>
+    <span class="clear"></span>
+  </section>
+  
+  <section class="bb-gray-light pb-10 mb-10">
+    <span class="bold">Total</span>
+    <span class="fr">$119.99</span>
+  </section>
+  
+  <section>
+    <span class="mr-10">Promo Code</span>
+    <%= text_field_tag 'promo_code', nil, class: 'promo-form inline-block width-250' %>
+    <%= text_field_tag 'promo_code', nil, class: 'promo-form inline-block small-width' %>
+    <%= link_to "Apply", 'javascript:void(0);', class: "button primary-button text-field-button" %>
+  </section>
+</div>
+
+<div class="card mb-30 min-w-330">
+  <h3>Payment Information</h3>
+  
+  <label>Name on Card</label>
+  <%= text_field_tag 'card_holder' %>
+  
+  <label>Card Number</label>
+  <%= text_field_tag 'card_number' %>
+  
+  <label class='block'>Expiration Date</label>
+  <div class="styled-select small-width inline-block">
+    <%= select_tag :month, options_for_select(months), :include_blank => "Month", class: 'small-width' %>
+  </div>
+  <div class="styled-select-separator">/</div>
+  <div class="styled-select small-width inline-block">
+    <%= select_tag :year, options_for_select(card_expiration_years), :include_blank => "Year", class: 'small-width' %>
+  </div><br>
+  
+  <label>CV Code</label>
+  <p>
+    <%= text_field_tag 'cv_code', nil, class: 'small-width inline-block' %>
+    <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card", alt: 'CVV Code') %>
+  </p>
+</div>
+
+
+<div>
+  <%= link_to "Submit", 'javascript:void(0);', class: "button primary-button big-button" %>
+</div>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

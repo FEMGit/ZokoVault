@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe TaxesController, type: :controller do
 
   let(:user) { create(:user) }
-  let(:valid_attributes) { { year: 2007 } }
+  let(:valid_attributes) { { year: 2015 } }
 
   let(:invalid_attributes) do
     skip("No validations on the model associated with this controller")
@@ -91,9 +91,9 @@ RSpec.describe TaxesController, type: :controller do
   end
 
   describe "PUT #update" do
-    let(:new_year) { 1871 }
+    let(:new_year) { 2017 }
     let(:new_valid_attributes) do
-      valid_attributes.merge({ year: new_year })
+      { year: 2017 }
     end
     let(:new_invalid_attributes) do
       skip("No validations on the model associated with this controller")
@@ -101,7 +101,7 @@ RSpec.describe TaxesController, type: :controller do
 
     context "with valid params" do
       it "updates the requested tax" do
-        tax = create(:tax_year_info, user_id: user.id)
+        tax = TaxYearInfo.create(year: new_year, user_id: user.id)
         put :update, { id: tax.to_param,  tax_year_info: new_valid_attributes }, valid_session
         tax.reload
         expect(tax.year).to eq(new_year)
@@ -114,7 +114,7 @@ RSpec.describe TaxesController, type: :controller do
       end
 
       it "redirects to the taxes details page" do
-        tax = create(:tax_year_info, user_id: user.id)
+        tax = TaxYearInfo.create(year: new_year, user_id: user.id)
         put :update, { id: tax.to_param,  tax_year_info: new_valid_attributes }, valid_session
         expect(response).to redirect_to(tax_path(tax))
       end

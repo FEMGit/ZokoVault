@@ -1,66 +1,69 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<% trust = {name: 'Trust 1', agents: [{name: 'Jake Prinston', email: 'prinston@mail.com', phone: '777-777-7777'},
-{name: 'John Wolly', email: 'wolly@mail.com', phone: '888-888-8888'}],
-trustees: [{name: 'Bob Marley'}, {name: 'Selma Bouvier'}],
-successor_trustees: [{name: 'Homer Simpson'}, {name: 'Lionel Hutz'}],
-shares_initials: ['JS', 'BB', 'PS'],
-notes: 'Notes notes notes notes notes notes notes notes notes notes notes notes notes'} %>
-
-<%= link_to edit_trust_path, class: "edit-link mrg-top" do%>
+<%= link_to edit_trust_path(@trust), class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
     </svg>
   </span>Edit Trust
 <% end %>
-<h1><%= trust[:name] %></h1>
+<h1><%= @trust.name %></h1>
 
 <div class="card trusts mb-20">
   <h3 class="card-label">Trust Details</h3>
   
-  <label class="title">Trustee(s)</label>
-  <p>
-    <% trust[:trustees].each do |trustee| %>
-      <%= trustee[:name] %><br>
-    <% end %>
-  </p>
+  <% if !trust_present?(@trust) %>
+    <label>There is no information about this Trust</label>
+  <% end %>
+  
+  <% if @trust.trustees.any? %>
+    <label class="title">Trustees</label>
+    <p>
+      <% @trust.trustees.each do |trustee| %>
+        <%= trustee.name %><br>
+      <% end %>
+    </p>
+  <% end %>
+  
+  <% if @trust.successor_trustees.any? %>
+    <label class="title">Successor Trustees</label>
+    <p>
+      <% @trust.successor_trustees.each do |trustee| %>
+        <%= trustee.name %><br>
+      <% end %>
+    </p>
+  <% end %>
 
-  <label class="title">Trustee(s)</label>
-  <p>
-    <% trust[:successor_trustees].each do |trustee| %>
-      <%= trustee[:name] %><br>
-    <% end %>
-  </p>
-  
-  <label class="title">Trust Advisor</label>
-  <p>
-    <% trust[:agents].each do |agent| %>
-      <%= agent[:name] %><br>
-    <% end %>
-  </p>
-  
-  <label>Notes</label>
-  <p><%= trust[:notes] %></p>
+  <% if @trust.agents.any? %>
+    <label class="title">Trust Advisors</label>
+    <p>
+      <% @trust.agents.each do |agent| %>
+        <%= agent.name %><br>
+      <% end %>
+    </p>
+  <% end %>
+
+  <% if @trust.notes.present? %>
+    <label>Notes</label>
+    <p><%= @trust.notes %></p>
+  <% end %>
   <span class="clear"></span>
   
-  <section class="shared-with">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
+  <% if category_subcategory_shares(@trust, resource_owner).present? %>
+    <section class="shared-with">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
 
-    <label>Shared With</label>
-    <section class="shared-list">
-      <% trust[:shares_initials].each do |share_initials| %>
-        <div class="tooltip-item">
-          <p class="avatar-initials"><%= share_initials %></p>
-          <%= image_tag(empty_image, class: "avatar-small") %>
-        </div>
-      <% end %>
+      <label>Shared With</label>
+      <div>
+        <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(@trust, resource_owner) } %>
+      </div>
+
     </section>
-  </section>
+  <% end %>
 </div>
 
 <h3>Documents</h3>

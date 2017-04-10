@@ -1,5 +1,5 @@
 .cp{
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .fr{
   float:right;
@@ -10,11 +10,28 @@
 .clear{
   clear:both;
 }
+.box-shadow-none {
+  box-shadow: none !important;
+}
+.b-none {
+  border: none !important;
+}
+.bl-none {
+  border-left: none !important;
+}
 .b-gray-light {
   border: 1px solid $color-gray-light;
 }
-.bb-gray-light{
+.bb-gray-light {
   border-bottom: 1px solid $color-gray-light;
+}
+
+.bb-gray-light-dashed {
+  border-bottom: 1px dashed $color-gray-light;
+}
+
+.bb-dashed {
+  border-bottom: 1px dashed $color-gray-med-tinted;
 }
 .bl-gray-light{
   border-left: 1px solid $color-gray-light;
@@ -25,21 +42,30 @@
 .bt-gray-light{
   border-top: 1px solid $color-gray-light;
 }
+.b-radius-0 {
+  border-radius: 0 !important;
+ }
+.w-80-percent {
+  width: 80%;
+}
 .w-21{
   width: $gu * 21 !important;
+}
+.min-w-330 {
+  min-width: 330px;
 }
 .bottom-fixed{
   position: relative;
   bottom:0;
 }
 .mb-10{
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 .mb-20{
   margin-bottom: 20px;
 }
 .mb-30{
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 .mt-100{
   margin-top: 100px;
@@ -47,23 +73,47 @@
 .mt-50{
   margin-top: 50px;
 }
-.mt-20{
-  margin-top: 20px;
-}
 .mt-30{
   margin-top: 30px;
+}
+.mt-20{
+  margin-top: 20px;
 }
 .ml-15 {
   margin-left: 15px;
 }
+.ml-10 {
+  margin-left: 10px;
+}
+.p-0 {
+  padding: 0 !important;
+}
+.mt-5{
+  margin-top: 5px;
+}
 .pt-60{
   padding-top: 60px;
+}
+.pb-10{
+  padding-bottom: 10px;
+}
+.pl-15 {
+  padding-left: 15px;
+}
+.pr-15 {
+  padding-right: 15px;
+}
+.p-0 {
+  padding: 0 !important;
 }
 .mr-0{
   margin-right: 0 !important;
 }
 .mr-10{
   margin-right: 10px;
+}
+.mb-10 {
+  margin-bottom: 10px;
 }
 .mb-15 {
   margin-bottom: 15px;
@@ -77,6 +127,12 @@
 .mh-200{
   min-height: 200px;
 }
+.not-link {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+}
 .pt-50 {
   padding-top: 50px !important;
 }
@@ -87,16 +143,33 @@
   text-align: center;
 }
 .fz-20 {
-  font-size: 20px;
+  font-size: 20px !important;
 }
 .fz-16 {
-  font-size: 16px;
+  font-size: 16px !important;
+}
+.fz-12 {
+  font-size: 12px !important;
 }
 .no-underline-link {
   text-decoration: none;
 }
 .inline-block {
   display: inline-block;
+}
+
+.block {
+  display: block;
+}
+
+.not-link {
+  text-decoration: none;
+  span {
+    color: $color-black;
+  }
+  &:hover {
+    text-decoration: none;
+  }
 }
 .mobile-hide{
   @include media($mobile) {

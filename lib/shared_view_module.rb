@@ -36,7 +36,8 @@ module SharedViewModule
 
   def set_shared_categories_names
     return unless params[:shared_user_id].present?
-    @shared_category_names = @shares.map(&:shareable).select { |s| s.is_a? Category }.map(&:name)
+    @shared_category_names = @shares.select(&:shareable_type)
+                                    .select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
     @shared_category_names_full = SharedViewService.shared_categories_full(@shares)
   end
   

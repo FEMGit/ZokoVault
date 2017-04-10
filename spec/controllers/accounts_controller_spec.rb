@@ -61,7 +61,7 @@ RSpec.describe AccountsController, type: :controller do
       end
 
       it "redirects to dashboard" do
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(first_run_path)
       end
     end
   end

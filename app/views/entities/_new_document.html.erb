@@ -1,0 +1,59 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<h1><%= yield(:title) + ' - Setup' %></h1>
+<%= form_for(@entity, url: "#{yield(:url_path)}") do |f| %>
+
+  <% if @entity.errors.any? %>
+    <% errors = true %>
+  <% end %>
+
+  <div class="card cg-3 mb-30">
+    <%= render partial: 'layouts/hidden_for_disabled', locals: { name: :share_with_contact_ids, shares: @entity.share_with_contact_ids, f: f } %>
+    
+    <h3 class="card-label">Entity Details</h3>
+    <label>Entity Name<span class="required">Required</span></label>
+    <% if errors && @entity.errors.messages[:name].present? %>
+      <span class="error-label"> - <%= @entity.errors.messages[:name].first %></span>
+    <% end %>
+    <%= f.text_field :name, class: ("input-error" if errors && @entity.errors.messages[:name].present?), :maxlength => get_max_length(:wtl_name) %>
+    
+    <label>Attorney, Accountant or Advisor(s)</label>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :agent_ids, @contacts) %>
+    </div>
+
+    <label>Owners/Partners</label>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :partner_ids, @contacts) %>
+    </div>
+
+    <%= f.label :notes %>
+    <p><%= f.text_area :notes, :maxlength => get_max_length(:notes) %></p>
+
+    <section class="shared-with edit-shared">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
+      <label>Shared With</label><br>
+      <div class="chosen-styled-select">
+        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
+      </div>
+    </section>
+
+    <% if @entity.id && policy(@entity).destroy? %>
+      <%= link_to 'Delete', "#{yield(:delete_path)}#{@entity.id}", method: :delete,
+          data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
+          class: 'button small-button secondary-button', id: 'delete-trust' %>
+    <% end %>
+
+  </div>
+
+  <%= f.submit "Save", class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', back_path || trusts_entities_path, {class: "button secondary-button big-button"}%>
+<% end %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

@@ -9,15 +9,16 @@ RSpec.describe "financial_account/show", type: :view do
   let(:valid_attributes) do
     {
       name: "Provider Name",
+      provider_type: "Account",
       web_address: "www.zokuvault.com",
       street_address: "Street",
       city: "City",
-      state: "State",
+      state: "IL",
       zip: 55555,
       phone_number: "777-777-7777",
       fax_number: "888-888-8888",
       primary_contact_id: contacts.first.id,
-      share_with_contact_ids: contacts.map(&:id),
+      share_with_contacts: contacts,
       user_id: user.id
     }
   end
@@ -26,7 +27,7 @@ RSpec.describe "financial_account/show", type: :view do
     {
       account_type: "Bond",
       name: "Account Name",
-      owner_id: contacts.second.id,
+      account_owner_ids: [contacts.second.id],
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
       notes: "Notes",
@@ -48,7 +49,7 @@ RSpec.describe "financial_account/show", type: :view do
     expect(rendered).to match(/www.zokuvault.com/)
     expect(rendered).to match(/Street/)
     expect(rendered).to match(/City/)
-    expect(rendered).to match(/State/)
+    expect(rendered).to match(/IL/)
     expect(rendered).to match(/55555/)
     expect(rendered).to match(/777-777-7777/)
     expect(rendered).to match(/888-888-8888/)

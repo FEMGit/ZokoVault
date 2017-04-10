@@ -69,18 +69,20 @@ Rails.application.routes.draw do
   # Wills
   get 'wills/new', to: 'wills#new', as: :new_will
   get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
-  get 'wills/edit', to: 'wills#edit', as: :edit_will
-  get 'wills/show', to: 'wills#show', as: :will
+  get 'wills/edit/:id', to: 'wills#edit', as: :edit_will
+  get 'wills/show/:id', to: 'wills#show', as: :will
+  patch 'wills/show/:id', to: 'wills#update'
   patch 'wills/:id', to: 'wills#update'
   get 'wills', to: 'wills#index', as: :wills
   post 'wills', to: 'wills#create'
+  put 'wills', to: 'wills#update'
   delete 'wills/:id', to: 'wills#destroy'
   
   # Powers of Attorney
   get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
   get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
-  get 'power_of_attorneys/edit', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
-  get 'power_of_attorneys/show', to: 'power_of_attorneys#show', as: :power_of_attorney
+  get 'power_of_attorneys/edit/:id', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
+  get 'power_of_attorneys/show/:id', to: 'power_of_attorneys#show', as: :power_of_attorney
   patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
   post 'power_of_attorneys', to: 'power_of_attorneys#create'
@@ -90,8 +92,8 @@ Rails.application.routes.draw do
   # Trusts
   get 'trusts/new', to: 'trusts#new', as: :new_trust
   get 'trusts/new_wills_poa', to: 'trusts#new_wills_poa', as: :wills_poa_new_trust # todo: delete wills-poa routes
-  get 'trusts/edit', to: 'trusts#edit', as: :edit_trust
-  get 'trusts/show', to: 'trusts#show', as: :trust
+  get 'trusts/edit/:id', to: 'trusts#edit', as: :edit_trust
+  get 'trusts/show/:id', to: 'trusts#show', as: :trust
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'
@@ -99,8 +101,11 @@ Rails.application.routes.draw do
   
   # Entities
   get 'entities/new', to: 'entities#new', as: :new_entity
-  get 'entities/edit', to: 'entities#edit', as: :edit_entity
-  get 'entities/show', to: 'entities#show', as: :entity
+  get 'entities/:id/edit', to: 'entities#edit', as: :edit_entity
+  patch 'entities/:id', to: 'entities#update'
+  get 'entities/:id', to: 'entities#show', as: :entity
+  post 'entities', to: 'entities#create', as: :entities
+  delete 'entities/:id', to: 'entities#destroy'
   
   resources :categories do
     member do
@@ -112,6 +117,7 @@ Rails.application.routes.draw do
   
   # contacts
   get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
+  
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -128,8 +134,14 @@ Rails.application.routes.draw do
   get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   post 'documents/download/:id(/:shared_user_id)', to: 'documents#download', as: :download_document
 
-  resources :account_settings
-  put 'account_settings/update', to: 'account_settings#update'
+  get 'account_settings', to: 'account_settings#index', as: :account_settings
+  get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users
+  get 'account_settings/login_settings', to: 'account_settings#login_settings', as: :login_settings
+  get 'account_settings/manage_subscription', to: 'account_settings#manage_subscription', as: :manage_subscription
+  get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
+  patch 'account_settings/update', to: 'account_settings#update'
+  patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
+  patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   
@@ -138,6 +150,8 @@ Rails.application.routes.draw do
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
+  
+  get 'account/first_run' => 'accounts#first_run', as: :first_run
   resource :account, only: [:update, :show] do
     collection do
       get :setup
@@ -148,6 +162,12 @@ Rails.application.routes.draw do
       put :verify_code
     end
   end
+  
+  # Tutorials
+  get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
+  get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
+  get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
+  get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 

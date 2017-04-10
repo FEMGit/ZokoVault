@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h2>Add Primary Contacts</h2>
+  
+  <p>Add the person with whom you will share most or all of your vault. This is your spouse, partner, or trusted family member. If you plan on sharing details with multiple contacts you can add them in this step.</p>
+</div>
+
+<div class="modal-content">
+  <h3 <% if @primary_contacts.blank? %> style="display: none;" <% end %> id='primary-contacts-table-title'>Your Personal Contacts</h3>
+  <table id="primary-contacts-table" class='table-add-contactable' <% if @primary_contacts.blank? %> style="display: none;" <% end %>>
+    <thead>
+      <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Email</th>
+        <th>Relationship</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @primary_contacts.each do |primary_contact| %>
+        <tr>
+          <td><%= primary_contact.lastname %></td>
+          <td><%= primary_contact.firstname %></td>
+          <td><%= primary_contact.emailaddress %></td>
+          <td><%= primary_contact.relationship %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <div class="flash-success-static flash add-contactable static small" style="display: none;">You added a contact! Add another one of your Primary Contacts, or click Next.</div>
+  <button class="button primary-button medium-button" onclick="createPrimaryContact();">Add Primary Contacts</button>
+</div>
+
+<script>
+  $(document).ready(function(){
+      $('#primary-contacts-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[0, 'asc']]
+    });
+  });
+  
+  var createPrimaryContact = function() {
+    window.tableIdToUpdate = '#primary-contacts-table'
+    setProfessionalDropdown(['Family & Beneficiaries'])
+    contact_type_handle($('#contact_contact_type'), true)
+    displayContactFormModal();
+  }
+</script>

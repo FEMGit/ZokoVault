@@ -35,26 +35,26 @@ class UserResourceGatherer < Struct.new(:user)
 
   def shared_resources
     return @shared_resources if @shared_resources
-    @shared_resources =
-      Share.includes(:user, :shareable)
+    @shared_resources = user.shares
       .where(contact: Contact.where("emailaddress ILIKE ?", user.email))
-      .map do |share|
-        if Category === share.shareable
-          category_resources(share)
-        else
-          share.shareable
+      .select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }
+        .map do |share|
+          if Category === share.shareable
+            category_resources(share)
+          else
+            share.shareable
+          end
         end
-      end
     @shared_resources.flatten!
     @shared_resources
   end
   
   def shares
     return @shares if @shares
-    @shared_resources =
-      Share.includes(:user, :shareable)
-      .where(contact: Contact.where("emailaddress ILIKE ?", user.email))
-      .flatten
+    @shared_resources = user.shares
+                            .where(contact: Contact.where("emailaddress ILIKE ?", user.email))
+                            .select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }
+                            .flatten
   end
 
   def all_resources

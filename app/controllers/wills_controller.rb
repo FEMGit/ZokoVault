@@ -3,12 +3,11 @@ class WillsController < AuthenticatedController
   include SharedViewHelper
   include BackPathHelper
   include SanitizeModule
-  before_action :set_will, :set_document_params, only: [:destroy]
-  before_action :set_contacts, only: [:new, :create, :new_wills_poa]
-  before_action :set_previous_shared_with, only: [:create]
-  before_action :update_share_params, only: [:create]
-  before_action :set_ret_url
-  before_action :set_document_params, only: [:index]
+  before_action :set_will, only: [:show, :edit, :destroy]
+  before_action :set_document_params, only: [:show, :index]
+  before_action :set_contacts, only: [:new, :create, :edit, :update, :new_wills_poa]
+  before_action :set_previous_shared_with, only: [:create, :update]
+  before_action :update_share_params, only: [:create, :update]
   
   # General Breadcrumbs
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new index), if: :general_view?
@@ -17,8 +16,8 @@ class WillsController < AuthenticatedController
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
   add_breadcrumb "Wills - Setup", :wills_poa_new_will_path, :only => %w(new_wills_poa), if: :general_view?
-  add_breadcrumb "Will Title 1", :will_path, :only => %w(show edit), if: :general_view?
-  add_breadcrumb "Wills - Setup", :edit_will_path, :only => %w(edit), if: :general_view?
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_edit_crumbs, only: [:edit]
   
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
@@ -36,6 +35,14 @@ class WillsController < AuthenticatedController
     end
   end
   
+  def set_details_crumbs
+    add_breadcrumb "#{@will.title}", will_path(@will) if general_view?
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Wills - Setup", edit_will_path(@will) if general_view?
+  end
+  
   # GET /wills
   # GET /wills.json
   def index
@@ -45,11 +52,26 @@ class WillsController < AuthenticatedController
   end
   
   def new_wills_poa
-    @contact = Contact.new(user: resource_owner)
+    @vault_entry = WillBuilder.new(type: 'will').build
+    @vault_entry.user = resource_owner
+    @vault_entry.vault_entry_contacts.build
+    @vault_entry.vault_entry_beneficiaries.build
+
+    @vault_entries = Array.wrap(@vault_entry)
+    @vault_entries.each { |x| authorize x }
+    set_viewable_contacts
+    return unless @vault_entries.empty?
+
+    @vault_entries << @vault_entry
+    @vault_entries.each { |x| authorize x }
   end
   
   def edit
-    @contact = Contact.new(user: resource_owner)
+    authorize @will
+    
+    @vault_entry = @will
+    @vault_entries = Array.wrap(@vault_entry)
+    set_viewable_contacts
   end
   
   def show; end
@@ -76,9 +98,15 @@ class WillsController < AuthenticatedController
     @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
 
-  # POST /wills
-  # POST /wills.json
   def create
+    save_or_update_will(:new)
+  end
+  
+  def update
+    save_or_update_will(:edit)
+  end
+  
+   def save_or_update_will(action)
     new_wills = WtlService.get_new_records(update_share_params)
     old_wills = WtlService.get_old_records(update_share_params)
     @vault_entries = []
@@ -92,12 +120,12 @@ class WillsController < AuthenticatedController
           @vault_entry = Will.new
           @old_params.each { |will| @vault_entries << will }
           @new_params.each { |will| @vault_entries << will }
-          error_path(:new)
+          error_path(action)
           format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @errors, status: :unprocessable_entity }
         end
       else
-        error_path(:new)
+        error_path(action)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }
       end
@@ -110,17 +138,13 @@ class WillsController < AuthenticatedController
     authorize @will
     @will.destroy
     respond_to do |format|
-      format.html { redirect_to back_path || wills_url, notice: 'Will was successfully destroyed.' }
+      format.html { redirect_to wills_powers_of_attorney_path, notice: 'Will was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def set_group
     @group = "Will"
-  end
-
-  def set_ret_url
-    session[:ret_url] = wills_path
   end
 
   private
@@ -133,7 +157,7 @@ class WillsController < AuthenticatedController
   
   def wills
     return Will.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? Will } unless category_shared?
+    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? Will } unless category_shared?
     Will.for_user(@shared_user)
   end
   
@@ -148,7 +172,8 @@ class WillsController < AuthenticatedController
   end
   
   def success_path
-    ReturnPathService.success_path(resource_owner, current_user, wills_path, shared_wills_path(shared_user_id: resource_owner.id))
+    ReturnPathService.success_path(resource_owner, current_user, will_path((@new_vault_entries || @old_vault_entries)), 
+      will_path((@new_vault_entries || @old_vault_entries), resource_owner))
   end
 
   def resource_owner 

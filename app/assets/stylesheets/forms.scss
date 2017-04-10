@@ -24,6 +24,15 @@ textarea{
     min-height: 200px;
   }
 }
+
+.width-250 {
+  width: $form-width-250;
+}
+
+.small-width {
+  width: $small-form-width;
+}
+
 input[type=radio]{
   display:inline;
   width: auto;
@@ -55,7 +64,62 @@ input[type=tel]{
   padding: 0;
   margin-bottom: 10px;
   @include form-width;
+  &.small-width {
+    width: $small-form-width;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 62px center;
+  }
+  &.width-250 {
+    width: $form-width-250;
+    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat 217px center;
+    @include media($ninesixty) {
+      display: block !important;
+    }
+  }
 }
+
+.styled-select-separator {
+  height: 32px;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 15px;
+  display: inline-block;
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.promo-form {
+  &.width-250 {
+    @include media($tablet) {
+      display:none !important;
+    }
+  }
+  &.small-width {
+    display:none !important;
+    @include media($tablet) {
+      display:block !important;
+      &.inline-block {
+        display:inline-block !important;
+      }
+    }
+  }
+}
+
+.subscription-description {
+  font-weight: 600;
+  font-size: 12px;
+  height: 32px;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: 0;
+  display: inline-block;
+  @include media($ninesixty) {
+    margin: 0 !important;
+  }
+  @include media($tablet) {
+    display: block !important;
+  }
+}
+
 
 select{
   background: transparent;
@@ -120,6 +184,9 @@ button{
   @include button-fixed-width(120px)
 }
 
+.fixed-width-big {
+  @include button-fixed-width(150px)
+}
 
 .float-right {
   float: right;
@@ -135,7 +202,7 @@ input[type=submit].button {
   display: inline-block;
 }
 
-a.button, input[type=submit].button{
+a.button, input[type=submit].button, input[type=button].button{
   cursor: pointer;
   text-decoration: none;
   border:0;
@@ -164,6 +231,17 @@ a.button, input[type=submit].button{
 .small-button{
   font-size: 12px;
   padding: 5px;
+}
+
+.text-field-button {
+  font-size: 12px;
+  padding: 10px 10px 7px 10px;
+  margin-left: -10px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  &:hover{
+    opacity: 1 !important;
+  }
 }
 
 .medium-button{

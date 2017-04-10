@@ -5,13 +5,13 @@ RSpec.describe "contacts/new", type: :view do
     assign(:contact, Contact.new(
       :firstname => "MyString",
       :lastname => "MyString",
-      :emailaddress => "MyString",
+      :emailaddress => Faker::Internet.free_email,
       :phone => "MyString",
       :contact_type => Contact::CONTACT_TYPES.keys.sample,
-      :relationship => "MyString",
-      :beneficiarytype => "MyString",
+      :relationship => "Grandparent",
+      :beneficiarytype => "Family & Beneficiaries",
       :address => "MyString",
-      :zipcode => "MyString",
+      :zipcode => "11111",
       :state => "MyString",
       :notes => "MyText",
       :photourl => "MyString",
@@ -37,13 +37,7 @@ RSpec.describe "contacts/new", type: :view do
 
       assert_select "select#contact_contact_type[name=?]", "contact[contact_type]"
 
-      assert_select "select#personal_relationships_select[name=?]", "contact[relationship]"
-
-      assert_select "select#common_professional_select[name=?]", "contact[relationship]"
-      
-      assert_select "select#medical_professional_select[name=?]", "contact[relationship]"
-
-      assert_select "input#contact_beneficiarytype[name=?]", "contact[beneficiarytype]"
+      assert_select "select#relationships_select[name=?]", "contact[relationship]"
 
       assert_select "input#contact_address[name=?]", "contact[address]"
 

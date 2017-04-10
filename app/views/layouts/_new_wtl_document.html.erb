@@ -20,7 +20,13 @@
     Add another <%= yield(:add_another_title) %><br>
   </div>
 
-<%= f.submit "Save", class: "button primary-button big-button" %>
+<% save_disabled ||= false %>
+<% if save_disabled %>
+  <%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>
+<% else %>
+  <%= f.submit 'Save', class: "button primary-button big-button" %>
+<% end %>
+
 <%= link_to 'Cancel', back_path || estate_planning_path, {class: "button secondary-button big-button"}%>
 <% end %>
 

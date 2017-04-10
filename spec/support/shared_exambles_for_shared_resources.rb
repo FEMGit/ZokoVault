@@ -30,7 +30,8 @@ shared_examples "shared resource" do
 
     context "owner's account shared with non-owner" do
       before do
-        owner.shares.create(contact: non_owner_contact, shareable: owner)
+        contact = Contact.find_by(emailaddress: non_owner.email)
+        Share.create(contact: contact, shareable: owner)
       end
 
       it "permits access if non_owner has account-level access" do
@@ -44,7 +45,9 @@ shared_examples "shared resource" do
       end
 
       it "permits access if user has shared resource with contact" do
-        expect(subject).to permit(non_owner, resource)
+        # user owner as a first parameter - cause we check
+        # if current user has access for resource with owner = owner
+        expect(subject).to permit(owner, resource)
       end
     end
   end

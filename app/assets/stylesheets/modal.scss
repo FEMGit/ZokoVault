@@ -11,7 +11,6 @@ $state-width: 210px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-clip: padding-box;
   background: white;
-//  padding: 15px 25px 0;
   min-height: 200px;
   border: 1px solid $color-gray-med-tinted;
 }
@@ -82,6 +81,80 @@ a.modal-close:hover {
   width: 90%;
 }
 
+// Square Modal
+.modal-square {
+  border-radius: 0;
+  padding: 0;
+  max-width: 600px;
+  
+  header {
+    text-align: center;
+    background-color: $color-primary-shaded;
+    h3 {
+      color: $white;
+    }
+    p {
+      color: $white;
+    }
+  }
+}
+
+.data-pair-modal {
+  list-style: none;
+  margin: 0;
+  @include display(flex);
+  justify-content: space-between;
+  padding: 15px 5px 0 15px;
+  border-bottom: none;
+  .data-right-modal {
+     width: 40%;
+     font-weight: 300;
+     font-size: 16px;
+     letter-spacing: .025em;
+     text-align: right;
+     white-space: nowrap;
+  }
+  label {
+    font-size: 18px;
+    width: 60%;
+  }
+}
+.data-list-modal {
+  padding: 0;
+  margin-bottom: 0;
+  width: 100%;
+  &.bottom {
+    border-bottom: none;
+    margin-bottom: 10px;
+  }
+}
+
+.pair-section {
+  a {
+    float: right;
+    display: inline-block;
+  }
+  h3, h2, label {
+    width: 55%;
+    display: inline-block;
+  }
+  @include media($tablet) {
+    a {
+      float: left;
+      margin-right: 100%;
+      margin-bottom: 15px;
+    }
+    h3, h2, label {
+      width: 100%;
+      display: block;
+    }
+  }
+  p {
+    margin-top: 5px;
+  }
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
 
 @include media($mobile) {
   .modal-content {

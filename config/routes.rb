@@ -160,12 +160,14 @@ Rails.application.routes.draw do
   get 'my_profile' => 'user_profiles#show'
 
   get 'account/first_run' => 'accounts#first_run', as: :first_run
+  post 'account/card_validation' => 'accounts#card_validation'
   resource :account, only: [:update, :show] do
     collection do
       get :setup
       get :my_profile
       post :send_code
       post :apply_promo_code
+      get :subscriptions
       put :send_code
       post :verify_code
       put :verify_code

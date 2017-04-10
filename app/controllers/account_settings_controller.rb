@@ -47,7 +47,9 @@ class AccountSettingsController < AuthenticatedController
     send_data pdf_file, filename: "#{invoice.receipt_number}_invoice.pdf", type: :pdf, disposition: 'inline'
   end
   
-  def billing_info; end
+  def billing_info
+    session[:ret_url] = manage_subscription_path
+  end
   
   def update_login_settings
     respond_to do |format|

@@ -91,16 +91,7 @@ input[type=tel]{
 .promo-form {
   &.width-250 {
     @include media($tablet) {
-      display:none !important;
-    }
-  }
-  &.small-width {
-    display:none !important;
-    @include media($tablet) {
-      display:block !important;
-      &.inline-block {
-        display:inline-block !important;
-      }
+      width: $small-form-width;
     }
   }
 }

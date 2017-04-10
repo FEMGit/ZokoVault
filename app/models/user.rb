@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
     api_key = ZokuVault::Application.config.mailchimp_secret_token
     gibbon = Gibbon::Request.new(api_key: api_key, debug: true, logger: nil)
 
-    gibbon.lists('2aeb3619b6').members.create(
+    gibbon.lists(ZokuVault::Application.config.mailchimp_listing_id).members.create(
       body: {
         email_address: self.email,
         status: "subscribed",

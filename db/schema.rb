@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403040721) do
+ActiveRecord::Schema.define(version: 20170407160553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
 
   create_table "financial_account_informations", force: :cascade do |t|
     t.integer  "account_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "number"
     t.integer  "primary_contact_broker_id"
@@ -160,7 +161,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.integer  "account_provider_id"
     t.integer  "category_id"
     t.string   "name"
-    t.integer  "owner_id"
   end
 
   add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_alternatives", force: :cascade do |t|
     t.integer  "alternative_type"
     t.string   "name"
+    t.integer  "owner_id"
     t.decimal  "commitment"
     t.decimal  "total_calls"
     t.decimal  "total_distributions"
@@ -190,7 +191,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_alternatives", ["category_id"], name: "index_financial_alternatives_on_category_id", using: :btree
@@ -199,6 +199,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_investments", force: :cascade do |t|
     t.string   "name"
     t.integer  "investment_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "web_address"
     t.string   "phone_number"
@@ -213,7 +214,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
@@ -222,6 +222,7 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   create_table "financial_properties", force: :cascade do |t|
     t.string   "name"
     t.integer  "property_type"
+    t.integer  "owner_id"
     t.decimal  "value"
     t.string   "address"
     t.string   "city"
@@ -234,7 +235,6 @@ ActiveRecord::Schema.define(version: 20170403040721) do
     t.integer  "user_id"
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.integer  "owner_id"
   end
 
   add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
@@ -421,6 +421,13 @@ ActiveRecord::Schema.define(version: 20170403040721) do
   end
 
   add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree
+
+  create_table "tutorials", force: :cascade do |t|
+    t.string   "name"
+    t.string   "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "uploads", force: :cascade do |t|
     t.string  "name"

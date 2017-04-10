@@ -130,7 +130,7 @@ class TrustsController < AuthenticatedController
   
   def trusts
     return Trust.for_user(resource_owner) unless @shared_user
-    return @shares.map(&:shareable).select { |resource| resource.is_a? Trust } unless category_shared?
+    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? Trust } unless category_shared?
     Trust.for_user(@shared_user)
   end
   

@@ -11,11 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20170407160553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "card_documents", force: :cascade do |t|
+    t.integer  "card_id"
+    t.integer  "user_id"
+    t.string   "object_type"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "card_documents", ["user_id"], name: "index_card_documents_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -86,7 +98,7 @@ ActiveRecord::Schema.define(version: 20170407160553) do
     t.datetime "updated_at",               null: false
     t.string   "category"
     t.string   "group"
-    t.integer  "vault_entry_id"
+    t.integer  "card_document_id"
     t.integer  "vendor_id"
     t.integer  "financial_information_id"
   end
@@ -328,6 +340,17 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   end
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
+  create_table "power_of_attorney_contacts", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "category_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
+  add_index "power_of_attorney_contacts", ["user_id"], name: "index_power_of_attorney_contacts_on_user_id", using: :btree
 
   create_table "power_of_attorneys", force: :cascade do |t|
     t.integer  "document_id"
@@ -614,6 +637,7 @@ ActiveRecord::Schema.define(version: 20170407160553) do
     t.string "word", null: false
   end
 
+  add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
   add_foreign_key "entities", "categories"
@@ -622,6 +646,8 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
+  add_foreign_key "power_of_attorney_contacts", "categories"
+  add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "uploads", "users"

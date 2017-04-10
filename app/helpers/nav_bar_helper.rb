@@ -9,7 +9,7 @@ module NavBarHelper
   end
 
   def trusts_entities?
-    if ((controller_name.downcase.eql? 'trusts') && ((action_name.eql? 'new_wills_poa') || (action_name.eql? 'show') || (action_name.eql? 'edit'))) ||
+    if ((controller_name.downcase.eql? 'trusts') && ((action_name.eql? 'new_trusts_entities') || (action_name.eql? 'show') || (action_name.eql? 'edit'))) ||
        (controller_name.downcase.eql? 'entities')
       return true
     end

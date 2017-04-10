@@ -1,28 +1,41 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<h1><%= 'Power of Attorney - Setup' %></h1>
+<h1><%= yield(:title) + ' - Setup' %></h1>
+  <%= form_for(@power_of_attorney_contact, url: "#{yield(:url_path)}") do |f| %>
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   
   <div class="card attorney mb-30">
-    <label>Power of Attorney For</label>
-    <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "attorney", field_id: "attorney"} %>
-
-    <% if delete_button.present? %>
-      <%= link_to 'Delete Power of Attorney', 'javascript:void(0);', class: 'button small-button secondary-button' %>
-    <% end %>
+    <%= f.label :contact_id, 'Power of Attorney For' %>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :contact_id, @contacts, id: "power_of_attorney_for_id", multiple: false) %>
+    </div>
   </div>
   
   <div id="wtl-forms">
     <div id="wtl-form-1">
-      <%= render yield(:partial_path), index: 0, delete_button: delete_button %>
+      <% @power_of_attorney_contact.power_of_attorneys.each_with_index do |data, index| %>
+        <%= f.fields_for "vault_entry_#{index}", data do |builder| %>
+          <%= render yield(:partial_path), f: builder, index: index, data: data %>
+        <% end %>
+      <% end %>
+      
+      <% if @power_of_attorney_contact.power_of_attorneys.blank? %>
+        <% index = 0 %>
+        <%= f.fields_for "vault_entry_#{index}" do |builder| %>
+          <%= render yield(:partial_path), f: builder, index: index, data: nil %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 
-  <div class="add-new-button" href="" onclick="addNewField();">
-    <svg class="icon add-icon">
-      <use xlink:href="#icon-add-1"></use>
-    </svg>
-    Add another Agent<br>
-  </div>
+  <% if yield(:add_another_title).present? %>
+    <div class="add-new-button" href="" onclick="addNewField();">
+      <svg class="icon add-icon">
+        <use xlink:href="#icon-add-1"></use>
+      </svg>
+      Add another <%= yield(:add_another_title) %><br>
+    </div>
+  <% end %>
   
   <h3>Shared With</h3>
 
@@ -30,13 +43,20 @@
     <section class="shared-with category-shared">
 
       <label>Shared With</label>
-      <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: true, field_name: "shares", field_id: "shares"} %>
+      <div class="chosen-styled-select">
+         <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "power_attorney_shared_id") %>
+      </div>
     </section>
   </div><br>
 
-  <%= link_to 'Save', 'javascript:void(0);', {class: "button primary-button big-button"}%>
+  <%= f.submit "Save", class: "button primary-button big-button" %>
   <%= link_to 'Cancel', back_path || wills_powers_of_attorney_path, {class: "button secondary-button big-button"}%>
-
+  <% if @power_of_attorney_contact.try(:id) && policy(@power_of_attorney_contact).destroy? %>
+    <%= link_to 'Delete Power of Attorney', delete_power_of_attorney_path(@power_of_attorney_contact), method: :delete,
+        data: { confirm: "Deleting this 'Power of Attorney' will permanently remove it from ZokuVault." },
+        class: 'big-button outline-button secondary-button fr', id: 'delete-legal' %>
+  <% end %>
+<% end %>
 
 <script>
   clearFormFields = function(form){
@@ -48,7 +68,6 @@
   addNewField = function(){
     var $wtlForm = $('.card.attorney:last');
     var $newWtlForm = $wtlForm.clone();
-    console.log($wtlForm)
     old_id_number = parseInt($wtlForm.find("input[type=hidden]").attr("id").split('_').last());
     new_id_number = old_id_number + 1;
     clearFormFields($newWtlForm);
@@ -62,5 +81,3 @@
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>
-
-<%= render partial: 'contacts/ajax_form' %>

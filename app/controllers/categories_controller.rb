@@ -84,7 +84,7 @@ class CategoriesController < AuthenticatedController
   end
   
   def wills_powers_of_attorney
-    @powers_of_attorney = PowerOfAttorney.for_user(current_user)
+    @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
     @wills = Will.for_user(current_user)
     session[:ret_url] = "/wills_powers_of_attorney"
   end

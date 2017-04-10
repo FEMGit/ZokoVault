@@ -1,3 +1,8 @@
+<%= content_for :title, "Power of Attorney" %>
+<%= content_for :question_title, "Agent" %>
+<%= content_for :add_another_title, "agent" %>
 <%= content_for :partial_path, "power_of_attorneys/form_wills_poa" %>
+<%= content_for :url_path, power_of_attorneys_path %>
+<%= content_for :delete_path, "/power_of_attorneys/" %>
 <%= render partial: "new_document", locals: {:delete_button => false} %>
 <%= yield :new_contact_form %>

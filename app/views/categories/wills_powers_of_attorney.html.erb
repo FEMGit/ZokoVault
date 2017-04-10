@@ -70,40 +70,45 @@
     </div>
   <% end %>
     
-  <% @powers_of_attorney.each do |power_of_attorney| %>
+  <% @power_of_attorney_contacts.each do |power_of_attorney_contact| %>
     <div class="flex-column">
       <div class="card cg-3 column-card">
 
         <%= render :partial => "layouts/documents_count_icon", :locals => { :count => 0 } %>
-        <h3>Contact Name</h3>
-        
-        <% if !attorney_present?(power_of_attorney) %>
-          <label>There is no information about this Power of Attorney</label><br>
+        <% if power_of_attorney_contact.contact.blank? %>
+          <h3>Power of Attorney Contact Not Chosen</h3>
+        <% else %>
+          <h3><%= power_of_attorney_contact.contact.try(:name) %></h3>
         <% end %>
 
-        <% if attorney_present?(power_of_attorney) %>
-          <li class="data-pair">
-            <label>
-              <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
-            </label>
-            <span class="data-right">
-            <% if power_of_attorney.powers.present? %>
-              <% power_of_attorney.powers.keys.each do |agent_power| %>
-                <%= agent_power %><br>
-              <% end %>
+        <% power_of_attorney_contact.power_of_attorneys.each do |power_of_attorney| %>
+          <ul class="data-list mb-20">
+            <% if attorney_present?(power_of_attorney) %>
+              <li class="data-pair">
+                <label>
+                  <%= power_of_attorney.agents && power_of_attorney.agents.map(&:name).join(", ") %>
+                </label>
+                <span class="data-right">
+                <% if power_of_attorney.powers.present? %>
+                  <% power_of_attorney.powers.keys.each do |agent_power| %>
+                    <%= agent_power %><br>
+                  <% end %>
+                <% end %>
+                </span>
+              </li>
             <% end %>
-            </span>
-          </li>
+          </ul>
         <% end %>
 
-        <% if category_subcategory_shares(power_of_attorney, resource_owner).present? %>
+        <% if category_subcategory_shares(power_of_attorney_contact, resource_owner).present? %>
           <label>Shared With</label>
           <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(power_of_attorney, resource_owner) } %>
+            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(power_of_attorney_contact, resource_owner) } %>
           </section>
         <% end %>
+        
         <br>
-        <%= link_to 'View Details', power_of_attorney_path(power_of_attorney), class: "small-button outline-button mt-20" %>
+        <%= link_to 'View Details', power_of_attorney_path(power_of_attorney_contact, @shared_user), class: "small-button outline-button mt-20" %>
       </div>
     </div>
   <% end %>

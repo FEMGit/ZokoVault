@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
 
   # Subscribe a member to a list:
   def add_subscriber_to_list
-    api_key = '8f2ae95c6e28ed563da7c841e72e7389-us14'
+    api_key = ZokuVault::Application.config.mailchimp_secret_token
     gibbon = Gibbon::Request.new(api_key: api_key, debug: true, logger: nil)
 
     gibbon.lists('2aeb3619b6').members.create(

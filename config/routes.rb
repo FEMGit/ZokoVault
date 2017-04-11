@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :tutorials
+  get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
+  resources :tutorials do
+    get '/:page_id', to: 'pages#show', as: :page
+  end
   resources :final_wishes
   resources :usage_metrics
   resources :taxes

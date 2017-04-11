@@ -46,29 +46,10 @@ class TutorialsController < AuthenticatedController
 
   def create
     session[:order_params] = params["tutorial"] if params["tutorial"]
-    @tutorial              = Tutorial.new(name: session[:order_params].first || 'Nothing')
-    @tutorial.current_step = session[:order_step]
-    @current_tutorial = nil
     @current_tutorial      = Tutorial.find(session[:order_params].shift) if session[:order_params].present?
-    @tutorial_array        = Tutorial.where(id: session[:order_params])
+    current_tutorial_name  = @current_tutorial.name.parameterize
 
-    if @tutorial.valid?
-      if @tutorial.last_step?
-        session[:order_step] = session[:order_params] = nil
-        # TODO: see what url should we redirect
-        redirect_to tutorial_path(Tutorial.last) and return
-      elsif @tutorial.current_step == 'initial' || @current_tutorial.blank?
-        @tutorial.next_step
-      end
-      session[:order_step] = @tutorial.current_step
-    end
-    if @tutorial.new_record?
-      render "new"
-    else
-      session[:order_step] = session[:order_params] = nil
-      flash[:notice]       = "Tutorial saved!"
-      redirect_to @tutorial
-    end
+    redirect_to tutorial_page_path(current_tutorial_name, '1')
   end
 
   def show

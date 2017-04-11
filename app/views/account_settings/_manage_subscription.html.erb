@@ -2,19 +2,24 @@
   <h3>Subscription Details</h3>
   
   <label>Plan</label>
-  <p>ZokuVault Annual Subscription</p>
-  
-  <label>Status</label>
-  <p>Active</p>
+  <p><%= @plan.try(:name) || '--' %></p>
   
   <label>Start Date</label>
-  <p>8/25/2016</p>
+  <p><%= date_format(@subscription.try(:created_at)) || '–' %></p>
   
   <label>Next Invoice</label>
-  <p>$119.99 - 8/25/2017 - Automatic Collection</p>
+  <% if @plan.present? %>
+    <p><%= "$#{@plan.amount / 100.0} - #{date_format(@next_invoice_date)} - Automatic Collection" %></p>
+  <% else %>
+    <p>–</p>
+  <% end %>
   
   <label>Billing Info</label>
-  <p>Visa XXX-1234 exp. 01/20
+  <% if @card.present? %>
+    <p><%= "#{@card[:brand]} XXXX-#{@subscription[:last4]} exp. #{@card[:exp_month]}/#{@card[:exp_year]}" %></p>
+  <% else %>
+    <p>–</p>
+  <% end %>
   
   <h3>Previous Invoices</h3>
   
@@ -28,12 +33,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>ZokuVault Annual Subscription</td>
-        <td>8/25/2016</td>
-        <td>$119.99</td>
-        <td><%= link_to 'Invoice', 'javascript:void(0);', class: 'no-underline-link' %></td>
-      </tr>
+      <% @invoices && @invoices.each do |invoice| %>
+        <tr>
+          <td><%= invoice[:plan][:name] %></td>
+          <td><%= date_format(DateTime.strptime(invoice[:plan][:created].to_s, '%s')) %></td>
+          <td><%= "$#{invoice[:amount] / 100.0}" %></td>
+          <td><%= link_to 'Invoice', 'javascript:void(0);', class: 'no-underline-link' %></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
   

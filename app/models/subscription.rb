@@ -6,6 +6,10 @@ class Subscription < ActiveRecord::Base
     @plans ||= Stripe::Plan.all.data
   end
   
+  def self.plan(id)
+    plans.detect { |x| x.id.eql? id }
+  end
+  
   before_create do
     customer = Stripe::Customer.create({
       description: user.name,

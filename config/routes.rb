@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tutorials
   resources :final_wishes
   resources :usage_metrics
   resources :taxes

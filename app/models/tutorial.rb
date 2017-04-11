@@ -3,6 +3,8 @@ class Tutorial < ActiveRecord::Base
 
   validates_presence_of :name, :if => lambda { |o| o.current_step == "cicle" }
 
+  has_many :pages
+
   def current_step
     @current_step || steps.first
   end

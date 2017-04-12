@@ -49,14 +49,18 @@ class AccountsController < AuthenticatedController
 
     head status
   end
-  
+
   def subscriptions
     render json: Subscription.plans.to_json.html_safe
   end
 
   def apply_promo_code
     coupon = Stripe::Coupon.retrieve(user_params[:subscription_attributes][:promo_code])
-    render json: coupon
+    if coupon.valid
+      render json: coupon
+    else
+      render json: { :message => 'Coupon Exprired', :status => 500 }
+    end
   end
 
   def verify_code

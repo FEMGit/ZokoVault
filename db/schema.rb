@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170407160553) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -150,7 +151,7 @@ ActiveRecord::Schema.define(version: 20170407160553) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.integer  "final_wish_info_id"
+    t.string   "group"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -338,17 +339,6 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   end
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
-
-  create_table "power_of_attorney_contacts", force: :cascade do |t|
-    t.integer  "contact_id"
-    t.integer  "category_id"
-    t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-  
-  add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
-  add_index "power_of_attorney_contacts", ["user_id"], name: "index_power_of_attorney_contacts_on_user_id", using: :btree
 
   create_table "payments", force: :cascade do |t|
     t.integer  "user_id"
@@ -685,8 +675,6 @@ ActiveRecord::Schema.define(version: 20170407160553) do
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
-  add_foreign_key "power_of_attorney_contacts", "categories"
-  add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"

@@ -51,6 +51,45 @@
   }
 }
 
+//TUTORIAL BUTTONS
+.flex-button{
+  @include display(flex);
+  flex-direction: row;
+  justify-content: flex-end;
+
+  .f-left{
+    display: flex;
+    margin-right: auto;
+    align-self: flex-start;
+  }
+  .f-right{
+    align-self: flex-end;
+    margin: 0 0 0 15px;
+  }
+
+}
+
+//TUTORIAL INPUT PAIRS
+.input-pair{
+  @include display(flex);
+  flex-direction: row;
+  max-width: 500px;
+
+  .inline-input{
+    flex: 70%;
+  }
+  .inline-button{
+    flex: 30%;
+    margin-left: 10px;
+    margin-right: 0;
+    text-align: center;
+    padding: 0;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
+
 //Marketing settings
 .flex-marketing{
   flex: 20%;
@@ -70,13 +109,13 @@
 .flex-account-setup{
   flex: 33%;
   padding: 0 15px 15px 25px;
-  
+
   img {
     max-width: 80px;
     margin-top: 15px;
     margin-left: 15px;
   }
-  
+
   @include media($ninesixty) {
     flex: 100%;
     margin: 0 0 2%;
@@ -84,13 +123,13 @@
     &:nth-of-type(2) { order: 1; }
     &:nth-of-type(3) { order: 3; }
   }
-  
+
   @include media($mobile) {
     img {
       margin-left: 3px;
     }
   }
-    
+
   h4, h5 {
     position: absolute;
     top: 38%;
@@ -98,13 +137,13 @@
   li {
     margin-bottom: 10px;
   }
-  
+
   &.recommended-setup {
     border: 2px solid $color-primary;
     color: $color-black;
     padding-left: 10px;
   }
-  
+
   &.recommended-setup:before {
     content: "RECOMMENDED";
     color: $color-white;
@@ -180,6 +219,7 @@
   border-top: 1px solid $color-gray-light;
   padding: 5px 0;
   margin-top: 5px;
+  
   &:first-child{
     border-top: 0px solid $color-gray-light;
     padding-top: 0;
@@ -209,82 +249,3 @@
     margin-right: 1px;
   }
 }
-
-//
-// .flex-card{
-//   flex: 31%;
-//   margin: 0 2% 2% 0;
-//
-//   @include media($ninesixty) {
-//     flex: 48%;
-//     margin: 0 2% 30px 0;
-//   }
-//
-//     @include media($eightfifty) {
-//       flex: 100%;
-//       margin: 0 0 2%;
-//     }
-// }
-//
-//
-// .flex-column{
-//   display: -ms-flex;
-//   display: -webkit-flex;
-//   display: flex;
-//   flex-wrap: wrap;
-//   flex-direction: column;
-//   width: 31%;
-//
-//   @include media($ninesixty) {
-//     width: 48%;
-//   }
-//
-//   @include media($eightfifty) {
-//     width: 100%;
-//   }
-// }
-// .column-card{
-//   width: 100%;
-//
-//   margin-bottom: 30px;
-// }
-//
-// .flex-card-column{
-//   display: -ms-flex;
-//   display: -webkit-flex;
-//   display: flex;
-//   flex-direction: column;
-//   width:33%;
-//   float:left;
-//
-//   @include media($ninesixty) {
-//     width: 50%;
-//   }
-// }
-//
-//
-// .flex-box {
-//   width: 50%;
-//
-//   &:first-child{
-//     margin-right: $gu;
-//   }
-// }
-// .flex-100{
-//   width:100%;
-// }
-// .flex-33{
-//   width: 33%;
-//
-//   @include media($ninesixty) {
-//     width: 50%
-//   }
-//   @include media($ninesixty) {
-//     width: 50%
-//   }
-// }
-//
-//
-// .flex-box-big {
-//   flex: 1 1 40em;
-// }

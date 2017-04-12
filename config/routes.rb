@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :contacts
   devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords', sessions: 'sessions',
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
-  
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -78,7 +78,7 @@ Rails.application.routes.draw do
   post 'wills', to: 'wills#create'
   put 'wills', to: 'wills#update'
   delete 'wills/:id', to: 'wills#destroy'
-  
+
   # Powers of Attorney
   get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
   get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   post 'trusts', to: 'trusts#create'
   put 'trusts', to: 'trusts#update'
   delete 'trusts/:id', to: 'trusts#destroy'
-  
+
   # Entities
   get 'entities/new', to: 'entities#new', as: :new_entity
   get 'entities/:id/edit', to: 'entities#edit', as: :edit_entity
@@ -112,7 +112,7 @@ Rails.application.routes.draw do
   get 'entities/:id', to: 'entities#show', as: :entity
   post 'entities', to: 'entities#create', as: :entities
   delete 'entities/:id', to: 'entities#destroy'
-  
+
   resources :categories do
     member do
       post :share
@@ -120,10 +120,10 @@ Rails.application.routes.draw do
       delete 'share_category/:contact_id', to: 'categories#destroy_share_category'
     end
   end
-  
+
   # contacts
   get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
-  
+
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -150,13 +150,13 @@ Rails.application.routes.draw do
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
-  
+
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
-  
+
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   resource :account, only: [:update, :show] do
     collection do
@@ -169,7 +169,7 @@ Rails.application.routes.draw do
       put :verify_code
     end
   end
-  
+
   # Tutorials
   get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
@@ -186,7 +186,7 @@ Rails.application.routes.draw do
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
-  
+
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
@@ -312,7 +312,8 @@ Rails.application.routes.draw do
   get "/setup", to: "pages#setup", as: :setup
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
-  
+  get "/html_template", to: "pages#html_template", as: :html_template
+
   get '/support/new_message', to: 'email_support#index', as: :email_support
   post '/support/new_message', to: 'email_support#send_email'
 

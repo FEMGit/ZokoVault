@@ -95,12 +95,14 @@ Rails.application.routes.draw do
 
   # Trusts
   get 'trusts/new', to: 'trusts#new', as: :new_trust
-  get 'trusts/new_wills_poa', to: 'trusts#new_wills_poa', as: :wills_poa_new_trust # todo: delete wills-poa routes
+  get 'trusts/new_trusts_entities', to: 'trusts#new_trusts_entities', as: :trusts_entities_new_trust # todo: delete wills-poa routes
   get 'trusts/edit/:id', to: 'trusts#edit', as: :edit_trust
   get 'trusts/show/:id', to: 'trusts#show', as: :trust
+  patch 'trusts/show/:id', to: 'trusts#update'
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'
+  put 'trusts', to: 'trusts#update'
   delete 'trusts/:id', to: 'trusts#destroy'
   
   # Entities

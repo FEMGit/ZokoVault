@@ -1,0 +1,53 @@
+<div class="card trusts mb-30">
+  <%= f.hidden_field :id, id: "trust_id_#{index}" %>
+  <%= render partial: 'layouts/hidden_for_disabled', locals: { name: :share_with_contact_ids, shares: data.share_with_contact_ids, f: f } %>
+  <% if data.id.present? && @errors %>
+    <% error_list = @errors.detect {|x| x[:id].to_i == data.id } %>
+  <% else %>
+    <% error_list = @errors && @errors.pop() %>
+  <% end %>
+
+  <h3 class="card-label">Trust Details</h3>
+  <label>Trust Name<span class="required">Required</span></label>
+  <% if error_list && error_list[:error].messages[:name].any? %>
+    <span class="error-label"> - <%= error_list[:error].messages[:name].first %></span>
+  <% end %>
+  <%= f.text_field :name, value: data.name, class: ("input-error" if error_list && error_list[:error].messages[:name].present?), :maxlength => get_max_length(:wtl_name) %>
+
+  <label>Attorney, Accountant or Advisor(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "trust_agent_id_#{index}", value: data.agent_ids) %>
+  </div>
+
+  <label>Trustee(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :trustee_ids, @contacts, id: "trust_trustee_id_#{index}", value: data.trustee_ids) %>
+  </div>
+
+  <label>Successor Trustee(s)</label>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :successor_trustee_ids, @contacts, id: "trust_successor_id_#{index}", value: data.successor_trustee_ids) %>
+  </div>
+
+  <%= f.label :notes %>
+  <p><%= f.text_area :notes, id: "trust_notes_id_#{index}", value: data.notes, :maxlength => get_max_length(:notes) %></p>
+
+  <section class="shared-with edit-shared">
+    <h3 class="card-label shared-label">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg> Shared With
+    </h3>
+    <label>Shared With</label><br>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "trust_share_id_#{index}", value: data.share_with_contact_ids) %>
+    </div>
+  </section>
+
+  <% if data.id && policy(data).destroy? %>
+    <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,
+        data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-trust' %>
+  <% end %>
+
+</div>

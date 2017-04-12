@@ -35,9 +35,10 @@ class Will < ActiveRecord::Base
   validates :user, presence: true
   validates :title, presence: { :message => "Required" }
 
-  before_save { self.category = Category.fetch("wills - trusts - legal") }
+  before_save { self.category = Category.fetch("wills - poa") }
   before_validation :build_shares
-  after_save :clear_beneficiaries
+  after_save :clear_beneficiaries, :update_card_documents
+  after_destroy :delete_card_documents
   
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)
@@ -54,5 +55,14 @@ class Will < ActiveRecord::Base
     self.primary_beneficiaries.clear
     self.secondary_beneficiaries.clear
     self.agents.clear
+  end
+  
+  def update_card_documents
+    wills_poa = CardDocument.find_or_initialize_by(card_id: self.id, object_type: 'Will')
+    wills_poa.update(user_id: self.user_id, object_type: self.class, category: Category.fetch("wills - poa"))
+  end
+  
+  def delete_card_documents
+    CardDocument.where(card_id: self.id, object_type: 'Will').destroy_all
   end
 end

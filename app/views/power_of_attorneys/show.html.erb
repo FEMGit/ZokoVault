@@ -58,7 +58,8 @@
   </div>
 
 <h3>Documents</h3>
-<a class="add-link fr" href="#">
+<a class="add-link fr" href="<%= new_documents_path(:category => @power_of_attorney_contact.category.name, :card_document_id => CardDocument.power_of_attorney(@power_of_attorney_contact.id).id,
+  :shared_user_id => @shared_user.present? ? @shared_user.id : "") %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
@@ -66,4 +67,4 @@
   </span>Add Document
 </a>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => []} %>
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

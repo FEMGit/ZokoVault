@@ -36,19 +36,25 @@ module ApplicationHelper
 
   def category_view_path(category, user = nil)
     case category.name
-    when 'Wills - Trusts - Legal'
+    when Rails.application.config.x.WtlCategory
       return shared_view_estate_planning_path(user) if @shared_user.present?
       estate_planning_path
-    when 'Insurance'
+    when Rails.application.config.x.WillsPoaCategory
+      #return shared_view_wills_power_of_attorneys_path(user) if @shared_user.present? ToDo: uncomment for share
+      wills_powers_of_attorney_path
+    when Rails.application.config.x.TrustsEntitiesCategory
+      #return shared_view_trusts_entities_path(user) if @shared_user.present? ToDo: uncomment for share
+      trusts_entities_path
+    when Rails.application.config.x.InsuranceCategory
       return shared_view_insurance_path(user) if @shared_user.present?
       insurance_path
-    when 'Taxes'
+    when Rails.application.config.x.TaxCategory
       return shared_view_taxes_path(user) if @shared_user.present?
       taxes_path
-    when 'Final Wishes'
+    when Rails.application.config.x.FinalWishesCategory
       return shared_view_final_wishes_path(user) if @shared_user.present?
       final_wishes_path
-    when 'Financial Information'
+    when Rails.application.config.x.FinancialInformationCategory
       return shared_view_financial_information_path(user) if @shared_user.present?
       financial_information_path
     else
@@ -78,11 +84,11 @@ module ApplicationHelper
   def subcategory_view_path(subcategory)
     case subcategory
       when Will
-        return wills_path
+        return will_path(subcategory)
       when Trust
-        return trusts_path
-      when PowerOfAttorney
-        return power_of_attorneys_path
+        return trust_path(subcategory)
+      when PowerOfAttorneyContact
+        return power_of_attorney_path(subcategory)
       when PropertyAndCasualty
         return property_path(subcategory)
       when LifeAndDisability

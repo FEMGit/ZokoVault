@@ -1,8 +1,15 @@
 class Document < ActiveRecord::Base
-  white_list_categories = [Rails.application.config.x.FinancialInformationCategory, Rails.application.config.x.WtlCategory,
-                                Rails.application.config.x.InsuranceCategory, Rails.application.config.x.TaxCategory, Rails.application.config.x.ProfileCategory,
-                                Rails.application.config.x.FinalWishesCategory, Rails.application.config.x.ContactCategory, "Select..."]
-    
+  white_list_categories = [Rails.application.config.x.FinancialInformationCategory, 
+                           Rails.application.config.x.WtlCategory,
+                           Rails.application.config.x.WillsPoaCategory, 
+                           Rails.application.config.x.TrustsEntityCategory,
+                           Rails.application.config.x.InsuranceCategory,
+                           Rails.application.config.x.TaxCategory, 
+                           Rails.application.config.x.ProfileCategory,
+                           Rails.application.config.x.TrustsEntitiesCategory,
+                           Rails.application.config.x.FinalWishesCategory,
+                           Rails.application.config.x.ContactCategory, "Select..."]
+  
   belongs_to :user
   belongs_to :folder
   

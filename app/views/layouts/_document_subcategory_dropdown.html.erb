@@ -21,3 +21,12 @@
       selected: params[:id] }
   %>
 </div>
+
+<div class="chosen-styled-select" id="subcategory_names_card_documents" <% if @card_names.empty? || (!category?(@card_names, Rails.configuration.x.WillsPoaCategory) && 
+  !category?(@card_names, Rails.configuration.x.TrustsEntitiesCategory)) %> style="display: none;" <% end %> >
+  <%= f.collection_select :card_document_id, 
+    @card_names.collect{|s| [s[0][:id], s[0][:name]]}, :first, :second, {},
+    { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, blank_value: "Select...", id: "document_subcategory_card_documents",
+      selected: params[:card_document_id] }
+  %>
+</div>

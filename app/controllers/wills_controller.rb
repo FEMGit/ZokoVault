@@ -4,7 +4,8 @@ class WillsController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   before_action :set_will, only: [:show, :edit, :destroy]
-  before_action :set_document_params, only: [:show, :index]
+  before_action :set_documents, only: [:show]
+  before_action :set_document_params, only: [:index]
   before_action :set_contacts, only: [:new, :create, :edit, :update, :new_wills_poa]
   before_action :set_previous_shared_with, only: [:create, :update]
   before_action :update_share_params, only: [:create, :update]
@@ -25,6 +26,10 @@ class WillsController < AuthenticatedController
   add_breadcrumb "Wills - Setup", :shared_new_wills_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@will.title}", will_path(@will, @shared_user)
+  end
   
   def page_name
     case action_name
@@ -74,7 +79,9 @@ class WillsController < AuthenticatedController
     set_viewable_contacts
   end
   
-  def show; end
+  def show
+    session[:ret_url] = will_path(@will)
+  end
 
   # GET /wills/new
   def new
@@ -96,6 +103,11 @@ class WillsController < AuthenticatedController
     @group = "Will"
     @category = Rails.application.config.x.WtlCategory
     @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
+  end
+  
+  def set_documents
+    @category = Rails.application.config.x.WillsPoaCategory
+    @group_documents = Document.for_user(resource_owner).where(:category => @will.category.name, :card_document_id => CardDocument.will(@will.id).id)
   end
 
   def create
@@ -200,7 +212,7 @@ class WillsController < AuthenticatedController
   end
   
   def update_share_params
-    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     will_params.each do |k, v|
       if v["share_with_contact_ids"].present?
         v["share_with_contact_ids"] -= viewable_shares
@@ -259,8 +271,9 @@ class WillsController < AuthenticatedController
                                         new_will_params[:secondary_beneficiary_ids], new_will_params[:agent_ids])
       end
     end
+    will_poa_id = CardDocument.find_by(card_id: (@new_vault_entries || @old_vault_entries).id, object_type: 'Will').id
     ShareInheritanceService.update_document_shares(resource_owner, will_shared_with_uniq_param,
-                                                   @previous_shared_with, Rails.application.config.x.WtlCategory, 'Will')
+                                                   @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
     raise "error saving new will" if @errors.any?
   end
   

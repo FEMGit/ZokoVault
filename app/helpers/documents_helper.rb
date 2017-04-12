@@ -19,6 +19,14 @@ module DocumentsHelper
       elsif document.financial_information_id.present? && document.financial_information_id.positive?
         FinancialProvider.find(document.financial_information_id).share_with_contacts
         owner.shares.select { |sh| (sh.shareable.is_a? FinancialProvider) && sh.shareable_id == document.financial_information_id }
+      elsif document.card_document_id.present? && document.card_document_id.positive?
+        card_document = CardDocument.find(document.card_document_id)
+        card_id = card_document.card_id
+        card_type = card_document.object_type
+        owner.shares.select { |sh| (sh.shareable.is_a? Will) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
+          owner.shares.select { |sh| (sh.shareable.is_a? PowerOfAttorneyContact) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
+          owner.shares.select { |sh| (sh.shareable.is_a? Trust) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
+          owner.shares.select { |sh| (sh.shareable.is_a? Entity) && sh.shareable_id == card_id && sh.shareable_type == card_type }
       elsif document.group.present?
         model = ModelService.model_by_name(document.group)
         if model == Tax
@@ -65,6 +73,8 @@ module DocumentsHelper
       Vendor.find(document.vendor_id).name
     elsif document.financial_information_id.present? && document.financial_information_id.positive?
       FinancialProvider.find(document.financial_information_id).name
+    elsif document.card_document_id.present? && document.card_document_id.positive?
+      CardDocument.find(document.card_document_id).name
     end
   end
 
@@ -111,6 +121,10 @@ module DocumentsHelper
   
   def document_card_insurance_count(user, category, group, id)
     DocumentService.new(:category => category).get_insurance_documents(user, group, id).count
+  end
+  
+  def document_card_count(user, category, id)
+    Document.for_user(user).where(:category => category, :card_document_id => id).count
   end
   
   def document_card_financial_count(user, category, id)

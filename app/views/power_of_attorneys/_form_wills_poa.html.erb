@@ -1,28 +1,38 @@
 <div class="card attorney mb-30">
 
-  <%= hidden_field_tag :id, id: "attorney_id_#{index}" %>
+  <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
   <h3 class="card-label">Legal Details</h3>
 
   <label>Agent</label>
-  <%= render partial: 'layouts/static_chosen_select', locals: {field_multiple: false, field_name: "attorney_agent_id_#{index}", field_id: "attorney_agent_id_#{index}"} %>
+  <div class="chosen-styled-select">
+    <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false, value: data && data.agent_ids) %>
+  </div>
+
   <label>This Agent's powers are (please choose all that apply):</label>
   <ul class="check-list">
     <% PowerOfAttorney::POWERS.each do |option| %>
       <li class="check-list">
         <label>
-          <%= check_box_tag "power_of_attorney_contact[vault_entry_#{index}][powers][#{option}]" %>
+          <%= hidden_field_tag "power_of_attorney_contact[vault_entry_#{index}][powers][#{option}]", "" %>
+          <%= check_box_tag "power_of_attorney_contact[vault_entry_#{index}][powers][#{option}]",
+            option,
+            data && data.powers.try(:[], option), {:checked => data && data.powers.present? && data.powers.keys.any? {|check| check == option} }
+          %>
         <span></span> <%= option %>
       </label>
       </li>
     <% end %>
   </ul>
   
-  <label>Notes</label>
-  <p><%= text_area_tag 'attorney_notes_id_#{index}' %></p>
+  <%= f.label :notes %>
+  <p><%= f.text_area :notes, id: "attorney_notes_id_#{index}", value: data && data.notes, :maxlength => get_max_length(:notes) %></p>
 
-  <% if delete_button.present? %>
-    <%= link_to 'Delete Agent', "javascript:void(0);", class: 'button small-button secondary-button', id: 'delete-legal' %>
+  <% if data && data.id && policy(data).destroy? %>
+    <%= link_to 'Delete Agent', "#{yield(:delete_path)}#{data.id}", method: :delete,
+        data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
+        class: 'button small-button secondary-button', id: 'delete-legal' %>
   <% end %>
+
 </div>
 
 <script>
@@ -41,6 +51,9 @@
       var checkBox = $(this).find("input[type=checkbox]");
       checkBox.attr("name", "power_of_attorney_contact[vault_entry_" + new_id + "][powers][" + checkBox.attr('value') + "]")
       checkBox.attr("id", "power_of_attorney_contact_vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
+      var checkBoxHidden = $(this).find("input[type=hidden]");
+      checkBoxHidden.attr("name", "power_of_attorney_contact[vault_entry_" + new_id + "][powers][" + checkBox.attr('value') + "]")
+      checkBoxHidden.attr("id", "power_of_attorney_contact_vault_entry_" + new_id + "_powers_" + checkBox.attr('value'))
     });
     
     $newWtlForm.find("#delete-legal").remove();

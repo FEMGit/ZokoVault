@@ -84,10 +84,13 @@ Rails.application.routes.draw do
   get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
   get 'power_of_attorneys/edit/:id', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
   get 'power_of_attorneys/show/:id', to: 'power_of_attorneys#show', as: :power_of_attorney
+  patch 'power_of_attorneys/show/:id', to: 'power_of_attorneys#update'
   patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
   post 'power_of_attorneys', to: 'power_of_attorneys#create'
+  put 'power_of_attorneys', to: 'power_of_attorneys#update'
   delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy'
+  delete 'power_of_attorneys/powers_of_attorney_contact/:id', to: 'power_of_attorneys#destroy_power_of_attorney_contact', as: :delete_power_of_attorney
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   # Trusts

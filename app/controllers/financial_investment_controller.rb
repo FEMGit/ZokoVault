@@ -70,6 +70,11 @@ class FinancialInvestmentController < AuthenticatedController
         FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner, @financial_investment)
         FinancialInformationService.update_investment_owners(@financial_investment, investment_owner_params)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+
+        if params[:tutorial_id]
+          redirect_to tutorial_page_path(params[:tutorial_id], params[:next_page_id]) and return
+        end
+
         format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else

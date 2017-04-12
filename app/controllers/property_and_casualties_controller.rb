@@ -82,6 +82,9 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        if params[:tutorial_id]
+          redirect_to tutorials_confirmation_path and return
+        end
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else

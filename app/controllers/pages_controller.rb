@@ -6,6 +6,7 @@ class PagesController < HighVoltage::PagesController
   def show
     @tutorial_name = params[:tutorial_id]
     @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").humanize)
+    @page_id       = params[:page_id]
     @page_name     = "page_#{params[:page_id]}"
     @next_page     = params[:page_id].to_i + 1
     @confirmation  = false

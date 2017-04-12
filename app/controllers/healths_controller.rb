@@ -78,6 +78,9 @@ class HealthsController < AuthenticatedController
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        if params[:tutorial_id]
+          redirect_to tutorial_page_path(params[:tutorial_id], params[:next_page_id]) and return
+        end
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else

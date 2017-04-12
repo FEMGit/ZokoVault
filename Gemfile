@@ -36,6 +36,10 @@ gem 'rufus-scheduler'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 
+# JS runtime
+gem 'execjs'
+gem 'therubyracer'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -87,6 +91,8 @@ gem 'high_voltage', '~> 3.0'
 gem 'rollbar'
 gem 'oj', '~> 2.12.14'
 
+# Payment
+gem 'stripe'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -115,4 +121,5 @@ group :test do
   gem 'rspec-rails', '~> 3.4'
   gem 'spring-commands-rspec'
   gem 'webmock'
+  gem 'stripe-ruby-mock', '~> 2.4.0', :require => 'stripe_mock'
 end

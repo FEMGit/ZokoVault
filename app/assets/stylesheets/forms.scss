@@ -164,6 +164,17 @@ label{
   width: $short-form-width;
 }
 
+//MONTH YEAR COMBO
+.card-info{
+  span {
+    input {
+      width: $short-form-width;
+      display: inline;
+      text-align: center;
+    }
+  }
+}
+
 //BUTTONS
 button{
   cursor: pointer;

@@ -9,14 +9,15 @@ class AccountsController < AuthenticatedController
   def first_run; end
 
   def update
-    current_user.update_attributes(user_params.merge(setup_complete: true))
+    update_params = free_account? ? user_params.except(:subscription_attributes) : user_params
+    current_user.update_attributes(update_params.merge(setup_complete: true))
     redirect_to first_run_path
   end
 
   def show; end
 
   def send_code
-    current_user.update_attributes(user_params)
+    current_user.update_attributes(user_params.except(:subscription_attributes))
     status =
       begin
         MultifactorAuthenticator.new(current_user).send_code
@@ -26,6 +27,12 @@ class AccountsController < AuthenticatedController
       end
 
     head status
+  end
+
+
+  def apply_promo_code
+    coupon = Stripe::Coupon.retrieve(user_params[:subscription_attributes][:promo_code])
+    render json: coupon
   end
 
   def verify_code
@@ -43,6 +50,10 @@ class AccountsController < AuthenticatedController
 
   private
 
+  def account_params
+    params.require(:user).permit(:free_account)
+  end
+
   def user_params
     params.require(:user).permit(
       user_profile_attributes: [
@@ -51,7 +62,17 @@ class AccountsController < AuthenticatedController
         :two_factor_phone_number,
         :mfa_frequency,
         :phone_code,
-        security_questions_attributes: [:question, :answer]
-      ])
+        security_questions_attributes: [:question, :answer],
+      ],
+      subscription_attributes: [
+        :name_on_card, 
+        :card_number,
+        :stripe_token,
+        :plan_id,
+        :promo_code])
+  end
+
+  def free_account?
+    account_params[:free_account].eql? 'true'
   end
 end

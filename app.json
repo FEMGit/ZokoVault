@@ -4,6 +4,12 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
+    "STRIPE_PUBLIC_KEY": {
+      "required": true
+    },
+    "STRIPE_SECRET_KEY": {
+      "required": true
+    },
     "AWS_ACCESS_KEY_ID": {
       "required": true
     },

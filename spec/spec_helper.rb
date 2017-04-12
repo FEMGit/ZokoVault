@@ -45,6 +45,10 @@ RSpec.configure do |config|
 # with RSpec, but feel free to customize to your heart's content.
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
+  # run specs as bin/rspec -t live to test against a live Stripe server (slow)
+  if config.filter_manager.inclusions.rules.include?(:live)
+    StripeMock.toggle_live true
+  end
 =begin
   # This allows you to limit a spec run to individual examples or groups
   # you care about by tagging them with `:focus` metadata. When nothing

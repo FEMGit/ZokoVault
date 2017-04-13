@@ -69,6 +69,9 @@ class FinancialPropertyController < AuthenticatedController
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
         FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
+        if params[:tutorial_id]
+          redirect_to tutorials_confirmation_path and return
+        end
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else

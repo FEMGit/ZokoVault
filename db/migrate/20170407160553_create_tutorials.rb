@@ -6,7 +6,7 @@ class CreateTutorials < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    ['Tutorial 1', 'Tutorial 2', 'Tutorial 3', 'Tutorial 4'].each do |tutorial|
+    ['Insurance', 'Home', 'Tutorial 3', 'Tutorial 4'].each do |tutorial|
       Tutorial.create(name: tutorial, content: "Content of #{tutorial}")
     end
   end

@@ -35,10 +35,10 @@
     <tbody>
       <% @invoices && @invoices.each do |invoice| %>
         <tr>
-          <td><%= invoice[:plan][:name] %></td>
-          <td><%= date_format(DateTime.strptime(invoice[:plan][:created].to_s, '%s')) %></td>
-          <td><%= "$#{invoice[:amount] / 100.0}" %></td>
-          <td><%= link_to 'Invoice', 'javascript:void(0);', class: 'no-underline-link' %></td>
+          <td><%= invoice.lines.data.first.plan.name %></td>
+          <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
+          <td><%= "$#{invoice.total / 100.0}" %></td>
+          <td><%= link_to 'Invoice', invoice_information_path(invoice.id), class: 'no-underline-link', target: :_blank %></td>
         </tr>
       <% end %>
     </tbody>

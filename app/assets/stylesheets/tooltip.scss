@@ -103,8 +103,9 @@
     &.bottom::after {
       content: "";
     }
-    &.left::after {
-      left: 195px;
+    &.left::after,
+    &.left::before {
+      left: 195px !important;
     }
     &.right::after {
       left: 4px;

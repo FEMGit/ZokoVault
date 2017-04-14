@@ -1,7 +1,7 @@
 class SharedViewService
   def self.shared_categories_full(shares)
-    @shared_category_names_full = shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
-    shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable|
+    @shared_category_names_full = shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+    shares.select(&:shareable_type).map(&:shareable).each do |shareable|
       case shareable
       when Will, PowerOfAttorneyContact
         @shared_category_names_full |= [Rails.application.config.x.WillsPoaCategory]
@@ -33,9 +33,9 @@ class SharedViewService
   def self.shared_group_names(owner, non_owner = nil, category = nil, contact = nil)
     all_shares = 
       if contact.present?
-        shares_by_contact(owner, contact).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).delete_if { |x| x.is_a? Category}.compact
+        shares_by_contact(owner, contact).select(&:shareable_type).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
       else
-        shares(owner, non_owner).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).delete_if { |x| x.is_a? Category}.compact
+        shares(owner, non_owner).select(&:shareable_type).map(&:shareable).delete_if { |x| x.is_a? Category}.compact
       end
     groups = Hash.new
     group_hash_initialize(groups)

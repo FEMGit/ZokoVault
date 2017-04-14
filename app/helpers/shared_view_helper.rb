@@ -55,12 +55,29 @@ module SharedViewHelper
   def show_add_link?(owner, non_owner, category, subcategory)
     return true if owner.nil?
     groups = SharedViewService.shared_group_names(owner, non_owner)
-    groups.include? subcategory
+    groups[category_shareable_type_transform(category)].include? subcategory
+  end
+  
+  def category_shareable_type_transform(category)
+    case category
+    when Rails.application.config.x.FinalWishesCategory
+      "Vendor"
+    when Rails.application.config.x.TaxCategory
+      "Tax"
+    when Rails.application.config.x.InsuranceCategory
+      "FinalWish"
+    when Rails.application.config.x.WillsPoaCategory
+      "Will - POA"
+    when Rails.application.config.x.TrustsEntitiesCategory
+      "Trusts & Entities"
+    when Rails.application.config.x.FinancialInformationCategory
+      "FinancialProvider"
+    end
   end
   
   def full_category_shares(category, owner)
     return [] if owner.nil?
-    owner.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| Object.const_defined?(sh.shareable_type) && sh.shareable == category }
+    owner.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| sh.shareable == category }
   end
   
   def category_subcategory_shares(object, owner)
@@ -68,7 +85,7 @@ module SharedViewHelper
     obj_shares = object.try(:shares) || object.map(&:shares).flatten.uniq
     category = object.try(:category) || object.try(:first).try(:category)
     return obj_shares.flatten if category.nil? || owner.nil?
-    category_shares = owner.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| Object.const_defined?(sh.shareable_type) && sh.shareable == category }
+    category_shares = owner.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| sh.shareable == category }
     return obj_shares.flatten if category_shares.nil?
     (obj_shares + category_shares).uniq(&:contact_id).reject { |sh| sh.contact_id.zero? }
   end

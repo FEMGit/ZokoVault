@@ -14,10 +14,11 @@ class TrustsController < AuthenticatedController
   add_breadcrumb "Trusts", :trusts_path, :only => %w(index new), if: :general_view?
   add_breadcrumb "Trusts - Setup", :new_trust_path, :only => %w(new), if: :general_view?
   
-  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_trusts_entities edit show), if: :general_view?
-  add_breadcrumb "Trusts - Setup", :trusts_entities_new_trust_path, :only => %w(new_trusts_entities), if: :general_view?
-   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Trusts - Setup", :edit_trust_path, :only => %w(edit), if: :general_view?
+  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new_trusts_entities edit index show), if: :general_view?
+  add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, if: :shared_view?
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_new_crumbs, only: [:new_trusts_entities]
+  before_action :set_edit_crumbs, only: [:edit]
   # Shared BreadCrumbs
   add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
   add_breadcrumb "Trusts", :shared_trusts_path, :only => %w(index new), if: :shared_view?
@@ -25,8 +26,16 @@ class TrustsController < AuthenticatedController
   include BreadcrumbsCacheModule
   include UserTrafficModule
   
+  def set_new_crumbs
+    add_breadcrumb "Trusts - Setup", trusts_entities_new_trust_path(@shared_user)
+  end
+  
   def set_details_crumbs
     add_breadcrumb "#{@trust.name}", trust_path(@trust, @shared_user)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Trusts - Setup", edit_trust_path(@trust)
   end
   
   def page_name
@@ -38,10 +47,6 @@ class TrustsController < AuthenticatedController
     end
   end
   
-  def set_details_crumbs
-    add_breadcrumb "#{@trust.name}", trust_path(@trust) if general_view?
-  end
-  
   # GET /trusts
   # GET /trusts.json
   def index
@@ -51,7 +56,8 @@ class TrustsController < AuthenticatedController
   end
 
   def show
-    session[:ret_url] = trust_path(@trust)
+    authorize @trust
+    session[:ret_url] = trust_path(@trust, @shared_user)
   end
   
   def new_trusts_entities
@@ -135,6 +141,7 @@ class TrustsController < AuthenticatedController
   # DELETE /trusts/1
   # DELETE /trusts/1.json
   def destroy
+    authorize @trust
     @trust.destroy
     respond_to do |format|
       format.html { redirect_to trusts_entities_path, notice: 'Trust was successfully destroyed.' }

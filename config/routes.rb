@@ -95,9 +95,9 @@ Rails.application.routes.draw do
 
   # Trusts
   get 'trusts/new', to: 'trusts#new', as: :new_trust
-  get 'trusts/new_trusts_entities', to: 'trusts#new_trusts_entities', as: :trusts_entities_new_trust # todo: delete wills-poa routes
-  get 'trusts/edit/:id', to: 'trusts#edit', as: :edit_trust
-  get 'trusts/show/:id', to: 'trusts#show', as: :trust
+  get 'trusts/new_trusts_entities(/:shared_user_id)', to: 'trusts#new_trusts_entities', as: :trusts_entities_new_trust # todo: delete wills-poa routes
+  get 'trusts/edit/:id(/:shared_user_id)', to: 'trusts#edit', as: :edit_trust
+  get 'trusts/show/:id(/:shared_user_id)', to: 'trusts#show', as: :trust
   patch 'trusts/show/:id', to: 'trusts#update'
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
@@ -106,10 +106,10 @@ Rails.application.routes.draw do
   delete 'trusts/:id', to: 'trusts#destroy'
 
   # Entities
-  get 'entities/new', to: 'entities#new', as: :new_entity
-  get 'entities/:id/edit', to: 'entities#edit', as: :edit_entity
+  get 'entities/new(/:shared_user_id)', to: 'entities#new', as: :new_entity
+  get 'entities/:id/edit(/:shared_user_id)', to: 'entities#edit', as: :edit_entity
   patch 'entities/:id', to: 'entities#update'
-  get 'entities/:id', to: 'entities#show', as: :entity
+  get 'entities/:id(/:shared_user_id)', to: 'entities#show', as: :entity
   post 'entities', to: 'entities#create', as: :entities
   delete 'entities/:id', to: 'entities#destroy'
 

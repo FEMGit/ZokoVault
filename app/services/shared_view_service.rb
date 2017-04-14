@@ -4,20 +4,21 @@ class SharedViewService
     shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable|
       case shareable
       when Will, PowerOfAttorneyContact
-        @shared_category_names_full |= ['Wills - POA']
+        @shared_category_names_full |= [Rails.application.config.x.WillsPoaCategory]
+      when Trust, Entity
+        @shared_category_names_full |= [Rails.application.config.x.TrustsEntitiesCategory]
       when Will, Trust, PowerOfAttorney
-        @shared_category_names_full |= ['Wills - Trusts - Legal']
+        @shared_category_names_full |= [Rails.application.config.x.WtlCategory]
       when Health, PropertyAndCasualty, LifeAndDisability
-        @shared_category_names_full |= ['Insurance']
+        @shared_category_names_full |= [Rails.application.config.x.InsuranceCategory]
       when Tax
-        @shared_category_names_full |= ['Taxes']
+        @shared_category_names_full |= [Rails.application.config.x.TaxCategory]
       when FinalWish
-        @shared_category_names_full |= ['Final Wishes']
+        @shared_category_names_full |= [Rails.application.config.x.FinalWishesCategory]
       when FinancialProvider
-        @shared_category_names_full |= ['Financial Information']
+        @shared_category_names_full |= [Rails.application.config.x.FinancialInformationCategory]
       end
     end
-    @shared_category_names_full.reject { |sh| sh == "Trusts & Entities" }
   end
   
   def self.shares(owner, non_owner)
@@ -48,6 +49,10 @@ class SharedViewService
         groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.will(shareable.id).id]).uniq)
       when PowerOfAttorneyContact
         groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.power_of_attorney(shareable.id).id]).uniq)
+      when Trust
+        groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.trust(shareable.id).id]).uniq)
+      when Entity
+        groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.entity(shareable.id).id]).uniq)
       when Tax
         tax_year = TaxYearInfo.find_by(id: shareable.tax_year_id)
         next unless tax_year.present?
@@ -71,6 +76,7 @@ class SharedViewService
   
   def self.group_hash_initialize(groups)
     groups["Will - POA"] ||= []
+    groups["Trusts & Entities"] ||= []
     groups["Tax"] ||= []
     groups["FinalWish"] ||= []
     groups["Vendor"] ||= []

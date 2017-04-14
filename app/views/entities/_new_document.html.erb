@@ -2,7 +2,7 @@
 
 <h1><%= yield(:title) + ' - Setup' %></h1>
 <%= form_for(@entity, url: "#{yield(:url_path)}") do |f| %>
-
+  <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
   <% if @entity.errors.any? %>
     <% errors = true %>
   <% end %>

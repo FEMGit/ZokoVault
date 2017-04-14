@@ -26,7 +26,10 @@ RSpec.describe "financial_investment/edit", type: :view do
   
   before(:each) do
     financial_investment = FinancialInvestment.create! valid_attributes
+    financial_investment.owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_investment.id,
+                                                                       contactable_type: financial_investment.class).id
     @financial_investment = assign(:financial_investment, financial_investment)
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     
     render
   end

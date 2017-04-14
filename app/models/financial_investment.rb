@@ -13,14 +13,9 @@ class FinancialInvestment < ActiveRecord::Base
   
   has_many :shares, as: :shareable, dependent: :destroy
   has_many :share_with_contacts, through: :shares, source: :contact
-  has_many :financial_account_owners, as: :contactable, dependent: :destroy
   has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
   
-  has_many :owners,
-    -> { where("financial_account_owners.contactable_type = ?",
-               "FinancialInvestment").uniq },
-  through: :financial_account_owners,
-  source: :contact
+  has_many :owners, as: :contactable, dependent: :destroy, :class_name => 'AccountPolicyOwner'
   
   validates :name, presence: { :message => "Required"}
   

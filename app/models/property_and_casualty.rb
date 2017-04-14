@@ -11,8 +11,15 @@ class PropertyAndCasualty < Vendor
   end
 
   before_save { self.category = Category.fetch("insurance") }
+  after_save :clear_properties
 
   private
+  
+  def clear_properties
+    self.policy.each do |policy|
+      policy.policy_holder = nil
+    end
+  end
 
   def initialize_category_and_group
     self.group = "property"

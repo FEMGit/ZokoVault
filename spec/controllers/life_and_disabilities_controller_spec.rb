@@ -13,7 +13,7 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
   let(:policy_attributes) do
     {
       policy_type: LifeAndDisabilityPolicy.policy_types.keys.sample,
-      policy_holder_id: contacts.first.id,
+      policy_holder_id: contacts.first.id.to_s + "_contact",
       coverage_amount: Faker::Commerce.price,
       policy_number: Faker::Code.imei,
       broker_or_primary_contact_id: contacts[2].id,
@@ -99,9 +99,11 @@ RSpec.describe LifeAndDisabilitiesController, type: :controller do
         end
 
         policy = life_and_disability.policy.first
-        valid_attributes[:policy_attributes].each do |attribute, value|
+        valid_attributes[:policy_attributes].except(:policy_holder_id).each do |attribute, value|
           expect(policy.send(attribute)).to eq value
         end
+        
+        expect(AccountPolicyOwner.find_by(contactable_id: policy.id).contact_id).to eq contacts.first.id
       end
 
       it "redirects to the created life" do

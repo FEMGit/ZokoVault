@@ -21,10 +21,11 @@
     <%= f.select :investment_type, FinancialInvestment::investment_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_investment_investment_type'), 
   $('#financial_investment_value'))" %>
   </div>
-  
+
   <%= f.label :owner_ids, 'Owners' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :owner_ids, @contacts) %>
+    <%= account_owner_select_with_create_new(f, :owner_ids, @account_owners,
+      {}, owner_ids_transform(@financial_investment.owner_ids)) %>
   </div>
   
   <%= f.label :value, 'Value' %>

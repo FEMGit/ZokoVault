@@ -91,7 +91,7 @@
     <% index= 0 %>
     <div class="card <%= @insurance_card.group %> mb-30 add-another">
       <%= f.fields_for "policy_#{index}" do |ff| %>
-        <%= render yield(:partial_path), ff: ff, index: index %>
+        <%= render yield(:partial_path), ff: ff, index: index, data: nil %>
       <% end %>
     </div>
   <% end %>

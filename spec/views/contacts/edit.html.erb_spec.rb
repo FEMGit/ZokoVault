@@ -22,7 +22,7 @@ RSpec.describe "contacts/edit", type: :view do
       :businessfax => "MyString",
       user: user
     ))
-    user.user_profile.contact = @contact
+    user.user_profile = UserProfile.new(date_of_birth: Time.now - 25.years, user: user, contact: @contact)
   end
 
   before do

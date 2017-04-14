@@ -27,7 +27,6 @@ RSpec.describe FinancialAccountController, type: :controller do
     {
       account_type: "Bond",
       name: "Account Name",
-      account_owner_ids: [contacts.first.id],
       value: "99.99",
       primary_contact_broker_id: contacts.first.id,
       notes: "Notes",
@@ -46,6 +45,8 @@ RSpec.describe FinancialAccountController, type: :controller do
   describe "GET #show" do
     it "assigns the requested financial account provider as @financial_provider" do
       financial_account = FinancialAccountInformation.create! account_0
+      financial_account.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_account.id,
+                                                                       contactable_type: financial_account.class).id
       financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.accounts << financial_account
       get :show, { id: financial_provider.to_param }, session: valid_session
@@ -87,6 +88,9 @@ RSpec.describe FinancialAccountController, type: :controller do
 
       before do
         post :create, {financial_provider: valid_attributes.merge(account_0: account_0)}, session: valid_session
+        financial_account = financial_provider.accounts.first
+        financial_account.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_account.id,
+                                                                         contactable_type: financial_account.class).id
       end
 
       it "assigns a newly created financial provider as @financial_provider" do
@@ -145,7 +149,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       end
       
       it "assigns the financial account owner" do
-        account_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_provider.accounts.first.id).contact_id
+        account_owner_id = AccountPolicyOwner.find_by(contactable_id: financial_provider.accounts.first.id).contact_id
         expect(account_owner_id).to eq contacts.first.id
       end
       
@@ -198,7 +202,6 @@ RSpec.describe FinancialAccountController, type: :controller do
         {
           account_type: "Savings",
           name: "New Account Name",
-          account_owner_ids: [contacts.second.id],
           value: "100",
           primary_contact_broker_id: contacts.second.id,
           notes: "Notes New"
@@ -210,6 +213,9 @@ RSpec.describe FinancialAccountController, type: :controller do
       before do
         financial_provider = FinancialProvider.create! valid_attributes
         put :update, { id: financial_provider.to_param, financial_provider: new_provider_attributes.merge(account_0: new_account_attributes) }, session: valid_session
+        financial_account = financial_provider.accounts.first
+        financial_account.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_account.id,
+                                                                         contactable_type: financial_account.class).id
       end
 
       it "shows correct flash message on update" do
@@ -229,7 +235,7 @@ RSpec.describe FinancialAccountController, type: :controller do
       end
       
       it "assigns the requested financial account owner" do
-        account_owner_id = FinancialAccountOwner.find_by(contactable_id: assigns(:financial_provider).accounts.first.id).contact_id
+        account_owner_id = AccountPolicyOwner.find_by(contactable_id: assigns(:financial_provider).accounts.first.id).contact_id
         expect(account_owner_id).to eq contacts.second.id
       end
       

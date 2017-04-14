@@ -27,7 +27,6 @@ RSpec.describe "financial_account/show", type: :view do
     {
       account_type: "Bond",
       name: "Account Name",
-      account_owner_ids: [contacts.second.id],
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
       notes: "Notes",
@@ -37,6 +36,8 @@ RSpec.describe "financial_account/show", type: :view do
   
   before(:each) do
     financial_account = FinancialAccountInformation.create! account_0
+    financial_account.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_account.id,
+                                                                       contactable_type: financial_account.class).id
     financial_provider = FinancialProvider.create! valid_attributes
     financial_provider.accounts << financial_account
     assign(:financial_provider, financial_provider)

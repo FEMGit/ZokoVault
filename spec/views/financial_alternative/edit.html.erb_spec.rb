@@ -28,7 +28,6 @@ RSpec.describe "financial_alternative/edit", type: :view do
     {
       alternative_type: "Venture Capital",
       name: "Investment Name",
-      account_owner_ids: [contacts.first.id],
       commitment: "99.99",
       total_calls: "99.99",
       total_distributions: "99.99",
@@ -44,6 +43,7 @@ RSpec.describe "financial_alternative/edit", type: :view do
     financial_provider = FinancialProvider.create! valid_attributes
     financial_provider.alternatives << financial_alternative
     @financial_provider = assign(:financial_provider, financial_provider)
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     render
   end
 

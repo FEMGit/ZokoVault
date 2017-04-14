@@ -15,7 +15,6 @@ RSpec.describe PropertyAndCasualtiesController, type: :controller do
       policy_type: PropertyAndCasualtyPolicy.policy_types.keys.sample,
       policy_number: Faker::Code.imei,
       insured_property: "foo",
-      policy_holder_id: contacts.first.id,
       coverage_amount: Faker::Commerce.price,
       broker_or_primary_contact_id: contacts[2].id,
       notes: Faker::Lorem.sentences(1).to_s,

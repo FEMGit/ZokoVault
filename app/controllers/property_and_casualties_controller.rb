@@ -7,6 +7,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_property_share_params, only: [:create, :update]
+  include AccountPolicyOwnerModule
   
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
@@ -81,6 +82,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
+        PolicyService.update_properties(@insurance_card, property_params)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
@@ -102,6 +104,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
+        PolicyService.update_properties(@insurance_card, property_params)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
@@ -156,6 +159,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
   
   def error_path(action)
+    set_contacts
+    set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
@@ -210,6 +215,15 @@ class PropertyAndCasualtiesController < AuthenticatedController
     policies.keys.each do |policy_key|
       permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number, 
                                       :broker_or_primary_contact_id, :notes]
+    end
+    policies.permit(permitted_params)
+  end
+  
+  def property_params
+    policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
+    permitted_params = {}
+    policies.keys.each do |policy_key|
+      permitted_params[policy_key] = [:policy_holder_id]
     end
     policies.permit(permitted_params)
   end

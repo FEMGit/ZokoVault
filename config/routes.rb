@@ -146,6 +146,7 @@ Rails.application.routes.draw do
   get 'account_settings/login_settings', to: 'account_settings#login_settings', as: :login_settings
   get 'account_settings/manage_subscription', to: 'account_settings#manage_subscription', as: :manage_subscription
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
+  get 'account_settings/invoice_information/:id', to: 'account_settings#invoice_information', as: :invoice_information
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'

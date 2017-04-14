@@ -30,7 +30,21 @@ class AccountSettingsController < AuthenticatedController
     @customer = Stripe::Customer.retrieve @subscription.customer_id
     @card = @customer[:sources][:data].detect { |x| x[:object] == 'card' }
     @next_invoice_date = DateTime.strptime(Stripe::Invoice.upcoming(:customer => @subscription.customer_id)[:date].to_s, '%s')
-    @invoices = []
+    customer_ids = Stripe::Customer.all.select { |i| i.email.downcase == current_user.email.downcase }.map(&:id)
+    @invoices = Stripe::Invoice.all.select { |i| customer_ids.include? i[:customer] }
+  end
+  
+  def invoice_information
+    invoice = Stripe::Invoice.retrieve(params[:id])
+    customer = Stripe::Customer.retrieve(invoice.customer)
+    card = customer[:sources][:data].detect { |x| x[:object] == 'card' }
+    html = render_to_string(
+      layout: 'pdf_invoice',
+      locals: { invoice: invoice, card: card }
+      )
+    kit = PDFKit.new(html)
+    pdf_file = kit.to_pdf
+    send_data pdf_file, filename: "#{invoice.receipt_number}_invoice.pdf", type: :pdf, disposition: 'inline'
   end
   
   def billing_info; end

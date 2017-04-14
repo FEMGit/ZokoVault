@@ -13,6 +13,11 @@ gem 'devise', '>= 4.2.0'
 # Authorization
 gem "pundit"
 
+# Pdf Generation
+gem 'pdfkit'
+gem 'wkhtmltopdf-binary'
+gem 'wkhtmltopdf-heroku'
+
 # 'To store old user passwords'
 gem 'devise_security_extension'
 

@@ -9,13 +9,13 @@ class AccountSettingsController < AuthenticatedController
   def page_name
     case action_name
       when 'account_users'
-        return "Account Settings - Account Users"
+        "Account Settings - Account Users"
       when 'login_settings'
-        return "Account Settings - Login Settings"
+        "Account Settings - Login Settings"
       when 'manage_subscription'
-        return "Account Settings - Manage Subscription"
+        "Account Settings - Manage Subscription"
       when 'billing_info'
-        return "Account Settings - Update Billing Info"
+        "Account Settings - Update Billing Info"
     end
   end
   
@@ -23,7 +23,15 @@ class AccountSettingsController < AuthenticatedController
   
   def login_settings; end
   
-  def manage_subscription; end
+  def manage_subscription
+    @subscription = Subscription.find_by(user: current_user)
+    return unless @subscription.present?
+    @plan = Subscription.plan(@subscription.plan_id)
+    @customer = Stripe::Customer.retrieve @subscription.customer_id
+    @card = @customer[:sources][:data].detect { |x| x[:object] == 'card' }
+    @next_invoice_date = DateTime.strptime(Stripe::Invoice.upcoming(:customer => @subscription.customer_id)[:date].to_s, '%s')
+    @invoices = []
+  end
   
   def billing_info; end
   

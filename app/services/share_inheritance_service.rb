@@ -1,7 +1,7 @@
 class ShareInheritanceService
   def self.contact_ids_to_remove_from_shares(owner, category_id, shareable_category_params)
     previous_share_contact_ids = owner.shares.select(&:shareable_type)
-                                             .select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) && (sh.shareable_id == category_id) }.map(&:contact_id)
+                                             .select { |sh| (sh.shareable.is_a? Category) && (sh.shareable_id == category_id) }.map(&:contact_id)
     current_share_contact_ids = Contact.find(shareable_category_params[:share_with_contact_ids].reject(&:blank?)).map(&:id)
     previous_share_contact_ids - current_share_contact_ids
   end

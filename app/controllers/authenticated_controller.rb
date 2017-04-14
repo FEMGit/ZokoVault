@@ -1,7 +1,14 @@
 class AuthenticatedController < ApplicationController
   before_action :authenticate_user!, :complete_setup!, :mfa_verify!
+  before_action :redirect_if_free_user
 
 private
+
+  def redirect_if_free_user
+    if current_user.free?
+      redirect_to my_profile_path
+    end
+  end
 
   def complete_setup!
     unless current_user.setup_complete?

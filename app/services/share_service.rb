@@ -45,11 +45,13 @@ class ShareService
   end
   
   def self.all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
-    group_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.group }
-    vendor_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.vendor_id }
-    financial_docs = Document.for_user(resource_owner).select { |x| shared_group_names.include? x.financial_information_id }
+    group_docs = Document.for_user(resource_owner).select { |x| (shared_group_names["Tax"].include? x.group) ||
+        (shared_group_names["FinalWish"].include? x.group) }
+    vendor_docs = Document.for_user(resource_owner).select { |x| (shared_group_names["Vendor"].include? x.vendor_id) }
+    financial_docs = Document.for_user(resource_owner).select { |x| (shared_group_names["FinancialProvider"].include? x.financial_information_id) }
+    card_document_docs = Document.for_user(resource_owner).select { |x| (shared_group_names["Will - POA"].include? x.card_document_id) }
     category_docs = Document.for_user(resource_owner).select { |x| shared_category_names.include? x.category }
-    (group_docs + direct_document_share + category_docs + vendor_docs + financial_docs).uniq
+    (group_docs + direct_document_share + category_docs + vendor_docs + financial_docs + card_document_docs).uniq
   end
   
   def self.shared_cards(owner, user = nil, contact = nil)

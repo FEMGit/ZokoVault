@@ -22,7 +22,8 @@ module ZokuVault
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
-    config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WtlCategory,
+    config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
+                                config.x.WtlCategory,
                                 config.x.InsuranceCategory, config.x.TaxCategory,
                                 config.x.FinalWishesCategory]
     

@@ -40,7 +40,7 @@ module ApplicationHelper
       return shared_view_estate_planning_path(user) if @shared_user.present?
       estate_planning_path
     when Rails.application.config.x.WillsPoaCategory
-      #return shared_view_wills_power_of_attorneys_path(user) if @shared_user.present? ToDo: uncomment for share
+      return shared_view_wills_powers_of_attorney_path(user) if @shared_user.present?
       wills_powers_of_attorney_path
     when Rails.application.config.x.TrustsEntitiesCategory
       #return shared_view_trusts_entities_path(user) if @shared_user.present? ToDo: uncomment for share

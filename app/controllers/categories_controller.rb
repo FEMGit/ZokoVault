@@ -7,6 +7,8 @@ class CategoriesController < AuthenticatedController
   before_action :set_previous_crumbs, only: [:share_category]
   before_action :set_share_category_crumbs, only: [:share_category]
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, only: [:wills_powers_of_attorney]
+  add_breadcrumb "Trusts & Entities", :trusts_entities_path, only: [:trusts_entities]
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
   include UserTrafficModule
@@ -93,6 +95,7 @@ class CategoriesController < AuthenticatedController
     @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
     
     @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @wills = Will.for_user(current_user)
     @wtl_documents = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
     session[:ret_url] = "/wills_powers_of_attorney"

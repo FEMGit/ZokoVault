@@ -9,7 +9,7 @@ RSpec.describe "power_of_attorneys/new_wills_poa", type: :view do
     @power_of_attorney.vault_entry_contacts.build
 
     @power_of_attorney_contact = PowerOfAttorneyContact.new(user: user,
-      category: Category.fetch(Rails.application.config.x.WtlCategory.downcase))
+      category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase))
     @power_of_attorney_contact.power_of_attorneys << @power_of_attorney
     render
   end

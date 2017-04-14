@@ -16,19 +16,28 @@ class WillsController < AuthenticatedController
   add_breadcrumb "Wills - Setup", :new_will_path, :only => %w(new), if: :general_view?
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
-  add_breadcrumb "Wills - Setup", :wills_poa_new_will_path, :only => %w(new_wills_poa), if: :general_view?
+  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_new_crumbs, only: [:new_wills_poa]
   before_action :set_edit_crumbs, only: [:edit]
   
   # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
-  add_breadcrumb "Wills", :shared_wills_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
+  add_breadcrumb "Wills", :shared_wills_path, :only => %w(index new), if: :shared_view?
   add_breadcrumb "Wills - Setup", :shared_new_wills_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
   
+  def set_new_crumbs
+    add_breadcrumb "Wills - Setup", wills_poa_new_will_path(@shared_user)
+  end
+  
   def set_details_crumbs
     add_breadcrumb "#{@will.title}", will_path(@will, @shared_user)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Wills - Setup", edit_will_path(@will, @shared_user)
   end
   
   def page_name
@@ -38,14 +47,6 @@ class WillsController < AuthenticatedController
       when 'new'
         return "Wills - Setup"
     end
-  end
-  
-  def set_details_crumbs
-    add_breadcrumb "#{@will.title}", will_path(@will) if general_view?
-  end
-  
-  def set_edit_crumbs
-    add_breadcrumb "Wills - Setup", edit_will_path(@will) if general_view?
   end
   
   # GET /wills
@@ -80,7 +81,8 @@ class WillsController < AuthenticatedController
   end
   
   def show
-    session[:ret_url] = will_path(@will)
+    authorize @will
+    session[:ret_url] = will_path(@will, @shared_user)
   end
 
   # GET /wills/new

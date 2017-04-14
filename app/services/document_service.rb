@@ -72,7 +72,7 @@ class DocumentService
     else
       groups = SharedViewService.shared_group_names(user, current_user, @category)
       return [get_empty_card_values] unless groups.present?
-      groups.collect{|x| [id: x, name: x]}
+      groups.values.flatten.collect{|x| [id: x, name: x]}
     end
   end
   

@@ -17,18 +17,27 @@ class PowerOfAttorneysController < AuthenticatedController
   add_breadcrumb "Legal - Power of Attorney - Setup", :new_power_of_attorney_path, :only => %w(new), if: :general_view?
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
-  add_breadcrumb "Power of Attorney - Setup", :wills_poa_new_power_of_attorney_path, :only => %w(new_wills_poa), if: :general_view?
-  before_action :set_details_crumbs, only: [:edit, :show], if: :general_view?
-  add_breadcrumb "Power of Attorney - Setup", :edit_power_of_attorney_path, :only => %w(edit), if: :general_view?
+  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
+  before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_new_crumbs, only: [:new_wills_poa]
+  before_action :set_edit_crumbs, only: [:edit]
   # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
-  add_breadcrumb "Legal - Power of Attorney", :shared_power_of_attorneys_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
+  add_breadcrumb "Legal - Power of Attorney", :shared_power_of_attorneys_path, :only => %w(index new), if: :shared_view?
   add_breadcrumb "Legal - Power of Attorney - Setup", :shared_new_power_of_attorneys_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+
+  def set_new_crumbs
+    add_breadcrumb "Power of Attorney - Setup", wills_poa_new_power_of_attorney_path(@shared_user)
+  end
   
   def set_details_crumbs
     add_breadcrumb "Power of Attorney - #{@power_of_attorney_contact.contact.try(:name)}", power_of_attorney_path(@power_of_attorney_contact, @shared_user)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Power of Attorney - Setup", edit_power_of_attorney_path(@power_of_attorney_contact, @shared_user)
   end
   
   def page_name
@@ -66,7 +75,8 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def show
-    session[:ret_url] = power_of_attorney_path(@power_of_attorney_contact)
+    authorize @power_of_attorney_contact
+    session[:ret_url] = power_of_attorney_path(@power_of_attorney_contact, @shared_user)
   end
 
   # GET /power_of_attorneys/new
@@ -141,6 +151,7 @@ class PowerOfAttorneysController < AuthenticatedController
   # DELETE /power_of_attorneys/1
   # DELETE /power_of_attorneys/1.json
   def destroy
+    authorize @power_of_attorney
     @power_of_attorney.destroy
     respond_to do |format|
       format.html { redirect_to back_path || wills_powers_of_attorney_path, notice: 'Power of attorney was successfully destroyed.' }

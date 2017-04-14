@@ -12,6 +12,26 @@ class WtlService
     params.values.select{ |values| values["id"].present? }
   end
   
+  def self.fill_power_of_attorneys(power_of_attorneys, power_of_attorney_contact)
+    power_of_attorneys.values.each do |power_of_attorney|
+      if power_of_attorney[:id].present?
+        power_of_attorney_contact.power_of_attorneys.update(power_of_attorney[:id], power_of_attorney)
+      else
+        power_of_attorney.except!(:agent_ids)
+        power_of_attorney_contact.power_of_attorneys << PowerOfAttorney.create(power_of_attorney.merge(user_id: power_of_attorney_contact.user_id, category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)))
+      end
+    end
+  end
+  
+  def self.fill_agents(power_of_attorney_contact, power_of_attorney_params)
+    power_of_attorney_contact.power_of_attorneys.each_with_index do |attorney, index|
+      key = power_of_attorney_params.keys[index]
+      Array.wrap(power_of_attorney_params[key]["agent_ids"]).select(&:present?).each do |contact_id|
+        VaultEntryContact.create(type: VaultEntryContact.types[:power_of_attorney], contact_id: contact_id, contactable_id: attorney.id, contactable_type: 'PowerOfAttorney')
+      end
+    end
+  end
+  
   def self.update_shares(object_id, share_contact_ids, user_id, model)
     return unless share_contact_ids.present?
     model.find(object_id).shares.clear

@@ -72,7 +72,7 @@ class DocumentService
     else
       groups = SharedViewService.shared_group_names(user, current_user, @category)
       return [get_empty_card_values] unless groups.present?
-      groups.collect{|x| [id: x, name: x]}
+      groups.values.flatten.collect{|x| [id: x, name: x]}
     end
   end
   
@@ -90,11 +90,13 @@ class DocumentService
     "Select..."
   end
   
-  def self.category_or_group_changed?(document, new_category, new_group, new_financial_information_id, new_vendor_id)
+  def self.category_or_group_changed?(document, new_category, new_group, new_financial_information_id, new_vendor_id, new_wills_poa_id)
     if new_category == Rails.configuration.x.InsuranceCategory
       return true if (document.category != new_category) || (document.vendor_id != new_vendor_id.try(:to_i))
     elsif new_category == Rails.configuration.x.FinancialInformationCategory
       return true if (document.category != new_category) || (document.financial_information_id != new_financial_information_id.try(:to_i))
+    elsif (new_category == Rails.configuration.x.WillsPoaCategory) || (new_category == Rails.configuration.x.TrustsEntitiesCategory)
+      return true if (document.category != new_category) || (document.card_document_id != new_wills_poa_id.try(:to_i))
     else
       return true if (document.category != new_category) || (document.group != new_group)
     end
@@ -102,7 +104,8 @@ class DocumentService
   end
   
   def self.update_group?(group, category)
-    ![Rails.configuration.x.InsuranceCategory, Rails.configuration.x.FinancialInformationCategory].include? category
+    ![Rails.configuration.x.InsuranceCategory, Rails.configuration.x.FinancialInformationCategory, 
+      Rails.configuration.x.WillsPoaCategory, Rails.configuration.x.TrustsEntitiesCategory].include? category
   end
   
   private
@@ -114,6 +117,14 @@ class DocumentService
     elsif @category == Rails.configuration.x.FinancialInformationCategory
       providers = user_cards(FinancialProvider, user, current_user)
       collect_card_names(providers, Rails.configuration.x.FinancialInformationCategory)
+    elsif (@category == Rails.configuration.x.WillsPoaCategory)
+      wills_poa = user_cards(CardDocument, user, current_user).select { |c| (c.object_type.eql? 'Will') ||
+                                                                            (c.object_type.eql? 'PowerOfAttorneyContact')}
+      collect_card_names(wills_poa, @category)
+    elsif (@category == Rails.configuration.x.TrustsEntitiesCategory)
+      wills_poa = user_cards(CardDocument, user, current_user).select { |c| (c.object_type.eql? 'Trust') ||
+                                                                            (c.object_type.eql? 'Entity') }
+      collect_card_names(wills_poa, @category)
     else
       []
     end
@@ -127,11 +138,11 @@ class DocumentService
     model.for_user(user).select{ |x| user_contacts(x, current_user).present?}
   end
   
-  def user_contacts(user, current_user)
-    Contact.find(user.share_with_contact_ids) & Contact.where("emailaddress ILIKE ?", current_user.email)
+  def user_contacts(object, current_user)
+    Contact.find(object.share_with_contact_ids) & Contact.where("emailaddress ILIKE ?", current_user.email)
   end
 
   def collect_card_names(collection, category)
-    collection.collect { |x| [id: x.id, name: x.name] }.prepend([id: category, name: "Select..."])
+    collection.collect { |x| [id: x.id, name: x.try(:name)] }.prepend([id: category, name: "Select..."])
   end
 end

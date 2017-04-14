@@ -14,13 +14,16 @@ module ZokuVault
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'services')
     config.x.WtlCategory = "Wills - Trusts - Legal"
+    config.x.WillsPoaCategory = "Wills - POA"
+    config.x.TrustsEntitiesCategory = "Trusts & Entities"
     config.x.InsuranceCategory = "Insurance"
     config.x.ContactCategory = "Contact"
     config.x.TaxCategory = "Taxes"
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
-    config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WtlCategory,
+    config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
+                                config.x.TrustsEntitiesCategory, config.x.WtlCategory,
                                 config.x.InsuranceCategory, config.x.TaxCategory,
                                 config.x.FinalWishesCategory]
     
@@ -28,6 +31,14 @@ module ZokuVault
     config.x.UserOnlineRangeScheduleFormat = '5m'
     
     config.x.categories = {
+      config.x.WillsPoaCategory => {
+        "label" => "Wills - POA",
+        "groups" => []
+      },
+      config.x.TrustsEntitiesCategory => {
+        "label" => "Trusts & Entities",
+        "groups" => []
+      },
       config.x.WtlCategory => {
         "label" => "Wills - Trusts - Legal",
         "groups" => [

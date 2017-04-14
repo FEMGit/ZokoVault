@@ -1,35 +1,11 @@
 <h1>Account Setup</h1>
 
 <div class="settings-card">
-  <div class="settings-header">
-    <div class="settings-inner-step">
-      <span id="step-1" class="settings-inner-counter">
-        1
-      </span>
-      <span class="step-name" id="step-1-text">Terms</span>
-    </div>
-    <div class="settings-inner-step">
-      <span id="step-2" class="settings-inner-counter">
-        2
-      </span>
-      <span class="step-name" id="step-2-text">Phone Setup</span>
-    </div>
-    <div class="settings-inner-step">
-      <span id="step-3" class="settings-inner-counter">
-        3
-      </span>
-      <span class="step-name" id="step-3-text">Login Settings</span>
-    </div>
-    <div class="settings-inner-step">
-      <span id="step-4" class="settings-inner-counter">
-        4
-      </span>
-      <span class="step-name" id="step-4-text">Select Account Type</span>
-    </div>
-    <div class="settings-inner-step last-line"></div>
-  </div>
-
+  <%= render partial: "settings_header" %>
+  
   <%= form_tag :account, { method: :put, id: 'account-form' } do %>
+    <%= hidden_field_tag 'user[free_account]', true %>
+    
     <div id="form-step-1">
       <%= render partial: "terms_of_service" %>
     </div>
@@ -42,6 +18,9 @@
     <div id="form-step-4">
       <%= render partial: "account_type" %>
     </div>
+    <div id="form-step-5">
+      <%= render partial: "billing_information" %>
+    </div>
   <% end %>
 
   <footer>
@@ -52,7 +31,7 @@
 
 <script>
 var currentStep = 1;
-var maxStep = 4;
+var maxStep = 5;
 
 $(document).ready(function(){
   changeTabNames()
@@ -66,23 +45,29 @@ $(window).resize(function() {
 
 var changeTabNames = function() {
   $('#step-1-text').text('Terms')
-  $('#step-3-text').text('Login Settings')
   $('#step-2-text').text('Phone Setup')
+  $('#step-3-text').text('Login Settings')
   $('#step-4-text').text('Select Account Type')
+  $('#step-5-text').text('Billing Information')
 
   if (window.matchMedia("(max-width: 1020px)").matches) {
     $('#step-2-text').text('Phone')
     $('#step-3-text').text('Settings')
     $('#step-4-text').text('Account Type')
-  } if (window.matchMedia("(max-width: 670px)").matches) {
+    $('#step-5-text').text('Billing')
+  }
+  if (window.matchMedia("(max-width: 670px)").matches) {
     $('#step-2-text').text('Phone')
     $('#step-3-text').text('Settings')
     $('#step-4-text').text('Account')
-  } if (window.matchMedia("(max-width: 625px)").matches) {
+    $('#step-5-text').text('Billing')
+  }
+  if (window.matchMedia("(max-width: 625px)").matches) {
     $('#step-1-text').text('   ')
     $('#step-2-text').text('   ')
     $('#step-3-text').text('   ')
     $('#step-4-text').text('   ')
+    $('#step-5-text').text('   ')
   }
 }
 
@@ -104,14 +89,15 @@ var wizNav = function(step){
       }
       form_el.hide();
     }
-
+    
     if (currentStep == 1) {
       $("#save-btn").hide();
       toggleNextOnTos();
-    }
-    else if (currentStep == 4) {
       $("#next-step").hide();
       $("#save-btn").hide();
+    }
+    else if (currentStep == 2 || currentStep == 4) {
+      $("#next-step").hide();
     }
     else if (maxStep === currentStep) {
       $("#next-step").hide();
@@ -121,6 +107,11 @@ var wizNav = function(step){
       $("#next-step").show();
       $("#save-btn").hide();
     }
+  }
+  
+  //Billing Information set free to false
+  if (currentStep == 5) {
+    $('#user_free_account').val(false)
   }
 }
 

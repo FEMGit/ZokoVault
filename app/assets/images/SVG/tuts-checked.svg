@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="120px" height="120px" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>tuts-checked</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Paid---First-Run" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="tuts-checked">
+            <path d="M0,0 L120,0 L120,120 L0,120 L0,0 Z M60,100 C82.09139,100 100,82.09139 100,60 C100,37.90861 82.09139,20 60,20 C37.90861,20 20,37.90861 20,60 C20,82.09139 37.90861,100 60,100 Z" id="Combined-Shape" fill="#97C761"></path>
+            <circle id="Oval" fill="#FFFFFF" cx="60" cy="60" r="40"></circle>
+            <path d="M50.0131459,81.1287754 L30.8027213,62.3739123 C29.7324262,61.342038 29.7324262,59.6624981 30.8027213,58.6251351 L34.6832271,54.8708693 C35.7590109,53.8444838 37.4934378,53.8444838 38.5637328,54.8708693 L51.9561431,68.005311 L81.8091429,38.7780222 C82.8849267,37.7406593 84.6193536,37.7406593 85.6896487,38.7780222 L89.5701545,42.5267993 C90.6459383,43.5641623 90.6459383,45.2437022 89.5701545,46.2755765 L53.8936517,81.1287754 C52.8233566,82.1661383 51.0889297,82.1661383 50.0131459,81.1287754" id="Fill-102" fill="#97C761"></path>
+        </g>
+    </g>
+</svg>

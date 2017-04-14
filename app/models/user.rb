@@ -26,6 +26,9 @@ class User < ActiveRecord::Base
   has_many :financial_account_informations, dependent: :destroy
   has_many :uploads, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
+  has_many :payments
+  has_one :subscription, -> { order("created_at DESC") }
+  accepts_nested_attributes_for :subscription
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
   accepts_nested_attributes_for :user_profile, update_only: true
@@ -86,7 +89,7 @@ class User < ActiveRecord::Base
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
     [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.downcase.include?(x.downcase) }
   end
-
+  
   before_create { set_as_admin }
   after_destroy :invitation_sent_clear
 

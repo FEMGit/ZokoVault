@@ -5,5 +5,9 @@
 <% if @image %>
   <img src=<%= get_file_url(@document.url) %> class="image-preview" >
 <% else %>
-  <iframe id="show-file" src= <%= get_file_url(@document.url) %> class="show-document-iframe"></iframe>
+  <% if @pdf %>
+    <iframe id="show-file" src='<%= "/web/viewer.html?file=#{u get_file_url(@document.url)}" %>' class="show-document-iframe"></iframe>
+  <% else %>
+    <iframe id="show-file" src= <%= get_file_url(@document.url) %> class="show-document-iframe"></iframe>
+  <% end %>
 <% end %>

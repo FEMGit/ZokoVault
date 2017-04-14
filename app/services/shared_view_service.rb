@@ -3,19 +3,22 @@ class SharedViewService
     @shared_category_names_full = shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
     shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).each do |shareable|
       case shareable
+      when Will, PowerOfAttorneyContact
+        @shared_category_names_full |= [Rails.application.config.x.WillsPoaCategory]
+      when Trust, Entity
+        @shared_category_names_full |= [Rails.application.config.x.TrustsEntitiesCategory]
       when Will, Trust, PowerOfAttorney
-        @shared_category_names_full |= ['Wills - Trusts - Legal']
+        @shared_category_names_full |= [Rails.application.config.x.WtlCategory]
       when Health, PropertyAndCasualty, LifeAndDisability
-        @shared_category_names_full |= ['Insurance']
+        @shared_category_names_full |= [Rails.application.config.x.InsuranceCategory]
       when Tax
-        @shared_category_names_full |= ['Taxes']
+        @shared_category_names_full |= [Rails.application.config.x.TaxCategory]
       when FinalWish
-        @shared_category_names_full |= ['Final Wishes']
+        @shared_category_names_full |= [Rails.application.config.x.FinalWishesCategory]
       when FinancialProvider
-        @shared_category_names_full |= ['Financial Information']
+        @shared_category_names_full |= [Rails.application.config.x.FinancialInformationCategory]
       end
     end
-    @shared_category_names_full
   end
   
   def self.shares(owner, non_owner)
@@ -35,34 +38,48 @@ class SharedViewService
       else
         shares(owner, non_owner).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).delete_if { |x| x.is_a? Category}.compact
       end
-    groups = []
+    groups = Hash.new
+    group_hash_initialize(groups)
     all_shares.each do |shareable|
       if category && shareable.category != Category.fetch(category.downcase)
         next
       end
       case shareable
       when Will
-        groups |= ['Will']
+        groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.will(shareable.id).id]).uniq)
+      when PowerOfAttorneyContact
+        groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.power_of_attorney(shareable.id).id]).uniq)
       when Trust
-        groups |= ['Trust']
-      when PowerOfAttorney
-        groups |= ['Legal']
+        groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.trust(shareable.id).id]).uniq)
+      when Entity
+        groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.entity(shareable.id).id]).uniq)
       when Tax
         tax_year = TaxYearInfo.find_by(id: shareable.tax_year_id)
         next unless tax_year.present?
-        groups |= [tax_year.year.to_s]
+        groups.merge!("Tax" => (groups["Tax"] + [tax_year.year.to_s]).uniq)
       when FinalWish
         final_wish_info = FinalWishInfo.find_by(id: shareable.final_wish_info_id)
         next unless final_wish_info.present?
-        groups |= [final_wish_info.group]
+        groups.merge!("FinalWish" => (groups["FinalWish"] + [final_wish_info.group]).uniq)
       when Vendor
-        groups |= [shareable.id]
+        groups.merge!("Vendor" => (groups["Vendor"] + [shareable.id]).uniq)
       when FinancialProvider
-        groups |= [shareable.id]
+        groups.merge!("FinancialProvider" => (groups["FinancialProvider"] + [shareable.id]).uniq)
       else
         next
       end
     end
-    groups.uniq
+    groups
+  end
+  
+  private
+  
+  def self.group_hash_initialize(groups)
+    groups["Will - POA"] ||= []
+    groups["Trusts & Entities"] ||= []
+    groups["Tax"] ||= []
+    groups["FinalWish"] ||= []
+    groups["Vendor"] ||= []
+    groups["FinancialProvider"] ||= []
   end
 end

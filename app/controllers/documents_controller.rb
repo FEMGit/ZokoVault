@@ -48,7 +48,8 @@ class DocumentsController < AuthenticatedController
   end
   
   def set_show_crumbs
-    add_breadcrumb "Document Preview", document_path(@document, @shared_user)
+    add_breadcrumb "Document Preview", document_path(@document) if general_view?
+    add_breadcrumb "Document Preview", shared_document_path(@shared_user, @document) if shared_view?
   end
 
   @after_new_user_created = ""
@@ -63,10 +64,11 @@ class DocumentsController < AuthenticatedController
     s3_object = S3Service.get_object_by_key(@document.url)
     return unless s3_object.exists?
     @image = Document.image?(s3_object.content_type)
+    @pdf = Document.pdf?(s3_object.content_type)
   end
 
   def new
-    @document = Document.new(base_params.slice(:category, :group, :vendor_id, :financial_information_id).merge(user: resource_owner))
+    @document = Document.new(base_params.slice(:category, :group, :vendor_id, :financial_information_id, :card_document_id).merge(user: resource_owner))
 
     authorize @document
     
@@ -218,7 +220,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def base_params
-    params.permit(:group, :category, :vendor_id, :financial_information_id)
+    params.permit(:group, :category, :vendor_id, :financial_information_id, :card_document_id)
   end
   
   def document_share_params
@@ -239,7 +241,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id, :group,
+    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id, :card_document_id, :group,
                                      shares_attributes: [:user_id, :contact_id])
   end
 
@@ -270,7 +272,7 @@ class DocumentsController < AuthenticatedController
   
   def prepare_shares
     if DocumentService.category_or_group_changed?(@document, document_params[:category], base_params[:group], 
-                                                  document_params[:financial_information_id], document_params[:vendor_id])
+                                                  document_params[:financial_information_id], document_params[:vendor_id], document_params[:card_document_id])
       params[:document][:contact_ids] = [];
     end
   end
@@ -279,6 +281,7 @@ class DocumentsController < AuthenticatedController
     if DocumentService.update_group?(base_params[:group], document_params[:category])
       params[:document][:vendor_id] = nil
       params[:document][:financial_information_id] = nil
+      params[:document][:card_document_id] = nil
     else
       params[:group] = DocumentService.empty_value
     end

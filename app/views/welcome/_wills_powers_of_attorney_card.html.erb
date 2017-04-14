@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes padding-right">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-document-3"></use>
+        </svg>Wills & Powers of Attorney
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= wills_poa_document_count %> documents uploaded.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(wills_poa_any?), wills_powers_of_attorney_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

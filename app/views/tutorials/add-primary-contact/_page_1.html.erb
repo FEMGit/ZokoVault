@@ -1,0 +1,23 @@
+<div class="card mb-30">
+  <h1 class="mb-20">Add Primary Content</h1>
+
+  <%- @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+  <%#- authorize @financial_property %>
+  <%#- set_viewable_contacts %>
+
+  <%= form_for @financial_property, url: url_for(action: :create, controller: :financial_property) do |f| %>
+    <%= hidden_field_tag :tutorial_id, @tutorial_name %>
+    <%= hidden_field_tag :page_id, @page_id %>
+    <%= hidden_field_tag :next_page_id, @next_page %>
+    <%= hidden_field_tag 'financial_property[property_type]', "House" %>
+    <%= label_tag "property_name", 'Property Name' %>
+    <%= text_field_tag "financial_property[name]", "", class: "form-control medium" %>
+
+    <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+      <a class="big-button outline-button padded f-left">Back</a>
+      <a class="big-button outline-button padded">Skip</a>
+      &nbsp
+      <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
+    </section>
+  <% end %>
+</div>

@@ -73,6 +73,8 @@ class FinancialInvestmentController < AuthenticatedController
 
         if params[:tutorial_id]
           redirect_to tutorial_page_path(params[:tutorial_id], params[:next_page_id]) and return
+        else
+          redirect_to tutorial_page_path('insurance', '2') and return
         end
 
         format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }

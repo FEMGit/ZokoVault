@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20170411122649) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -472,8 +472,8 @@ ActiveRecord::Schema.define(version: 20170411122649) do
   create_table "tutorials", force: :cascade do |t|
     t.string   "name"
     t.string   "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "number_of_pages"
   end
 

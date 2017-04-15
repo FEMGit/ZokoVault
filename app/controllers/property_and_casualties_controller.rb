@@ -84,6 +84,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         if params[:tutorial_id]
           redirect_to tutorials_confirmation_path and return
+        else
+          redirect_to tutorial_page_path('insurance', '3') and return
         end
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }

@@ -1,10 +1,14 @@
 <div class="modal-header"></div>
 
-<div class="modal-content">
+<div class="modal-content mb-30">
   <%= render partial: "subscription_details" %>
 </div>
 
-<div class="modal-content">
+<div class="bb-gray-med mb-30 mt-30">
+</div>
+
+<div class="modal-content overflow-y-visible p-rel">
+  
   <h1>Payment Information</h1>
 
   <div class="card-info">
@@ -21,31 +25,37 @@
     "data-stripe" => "number" 
   %>
 
-  <%= label_tag "user_subscription_attributes_expiration_month", 'Expiration Date' %><br>
+    <%= label_tag "user_subscription_attributes_expiration_month", 'Expiration Date' %><br>
+    <div class='styled-select small-width inline-block'>
+      <%= select_tag "user[subscription_attributes][expiration_month]", 
+        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),  
+        include_blank: "Month",
+        "data-stripe" => "exp_month",
+        class: 'small-width'
+      %>
+    </div>
+    <div class="styled-select-separator">/</div>
+    <div class='styled-select small-width inline-block'>
+      <%= select_tag "user[subscription_attributes][expiration_year]", 
+        options_for_select(card_expiration_years), 
+        include_blank: "Year",
+        "data-stripe" => "exp_year",
+        class: 'small-width'
+      %>
+    </div><br>
 
-  <div class='styled-select question-select'>
-    <%= select_tag "user[subscription_attributes][expiration_month]", 
-      options_for_select(Date::MONTHNAMES.map.with_index { |m, i| [m, i]}),  
-      include_blank: "Month",
-      "data-stripe" => "exp_month"
-    %>
+    <%= label_tag "user_subscription_attributes_cvc", 'CV Code' %><br>
+    <p>
+      <%= text_field_tag "user[subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
+      <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card b-40", alt: 'CVV Code') %>
+    </p>
+
+  <%= hidden_field_tag "user[subscription_attributes][stripe_token]", "" %>
+
+  <div>
+    <%= link_to "Submit", 'javascript:void(0);' , onClick: "addCreditCard(); return false", id: "submit-cc-button", class: "button primary-button big-button" %>
   </div>
-
-  <div class='styled-select question-select'>
-    <%= select_tag "user[subscription_attributes][expiration_year]", 
-      options_for_select(Date.today.year..(Date.today.year+10)), 
-      include_blank: "Year",
-      "data-stripe" => "exp_year"
-    %>
-  </div>
-
-  <%= label_tag "user_subscription_attributes_cvc", 'CV Code' %><br>
-  <%= text_field_tag "user[subscription_attributes][cvc]", "", "data-stripe" => "cvc" %>
 </div>
-
-<%= hidden_field_tag "user[subscription_attributes][stripe_token]", "" %>
-
-<button class="button primary-button big-button" onClick="addCreditCard(); return false" id="submit-cc-button">Submit</button>
 
 <%= javascript_include_tag "https://js.stripe.com/v2/" %>
 
@@ -93,7 +103,12 @@
     }
     $('#promo-name').text(data['id']);
     $('#promo-description').text(data['id']);
-    $('#promo-price').text(data['amount_off'] / 100.0);
+    var discount = data['amount_off'] / 100.0
+    $('#promo-price').text('-$ ' + discount);
+    var numberRegex = /\d+(\.\d+)?/g
+    var currentTotalValue = parseFloat($('#subscription-total').text().match(numberRegex))
+    var newTotal = ((currentTotalValue - discount) < 0) ? 0 : (currentTotalValue - discount)
+    $('#subscription-total').text('$ ' + newTotal);
     $('#promo-row').show();
   }
 
@@ -107,6 +122,7 @@
 
   function applyPromoCode() {
     var data = $('#user_subscription_attributes_promo_code').serialize();
+    updateSubscription()
     $.post("<%= apply_promo_code_account_path %>", data, updatePromoRow)
     .fail(function() {
       $('#promo-code-text').html('Error!');
@@ -118,10 +134,13 @@
     var select = $('#user_subscription_attributes_plan_id').prop('selectedIndex');
 
     var interval = "annually";
+    var today = new Date()
+    var billedData = (today.getMonth() + 1) + '/' + today.getDate() + '/' + (today.getFullYear() + 1)
     if (subscriptions[select]['interval'] === 'month') {
+      billedData = (today.getMonth() + 2) + '/' + today.getDate() + '/' + today.getFullYear()
       interval = "monthly";
     }
-    var description = "This amount is billed " + interval + " to your account.";
+    var description = "This amount will be billed to your account on " + billedData;
     $('#subscription-description').text(description);
 
     var price = '$ ' + (subscriptions[select]['amount'] / 100.0).toFixed(2);

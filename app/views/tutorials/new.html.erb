@@ -1,0 +1,5 @@
+<%= form_for @tutorial do |f| %>
+  <%= render "#{@tutorial.current_step}_step", :f => f %>
+  <p><%= f.submit "Next", class: "button big-button" %></p>
+  <!-- <p><%= f.submit "Back", name: "back_button" unless @tutorial.first_step? %></p> -->
+<% end %>

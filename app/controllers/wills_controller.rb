@@ -4,7 +4,8 @@ class WillsController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   before_action :set_will, only: [:show, :edit, :destroy]
-  before_action :set_document_params, only: [:show, :index]
+  before_action :set_documents, only: [:show]
+  before_action :set_document_params, only: [:index]
   before_action :set_contacts, only: [:new, :create, :edit, :update, :new_wills_poa]
   before_action :set_previous_shared_with, only: [:create, :update]
   before_action :update_share_params, only: [:create, :update]
@@ -15,16 +16,29 @@ class WillsController < AuthenticatedController
   add_breadcrumb "Wills - Setup", :new_will_path, :only => %w(new), if: :general_view?
   
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
-  add_breadcrumb "Wills - Setup", :wills_poa_new_will_path, :only => %w(new_wills_poa), if: :general_view?
+  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
+  before_action :set_new_crumbs, only: [:new_wills_poa]
   before_action :set_edit_crumbs, only: [:edit]
   
   # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new edit index), if: :shared_view?
-  add_breadcrumb "Wills", :shared_wills_path, :only => %w(edit index new), if: :shared_view?
+  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
+  add_breadcrumb "Wills", :shared_wills_path, :only => %w(index new), if: :shared_view?
   add_breadcrumb "Wills - Setup", :shared_new_wills_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  
+  def set_new_crumbs
+    add_breadcrumb "Wills - Setup", wills_poa_new_will_path(@shared_user)
+  end
+  
+  def set_details_crumbs
+    add_breadcrumb "#{@will.title}", will_path(@will, @shared_user)
+  end
+  
+  def set_edit_crumbs
+    add_breadcrumb "Wills - Setup", edit_will_path(@will, @shared_user)
+  end
   
   def page_name
     case action_name
@@ -33,14 +47,6 @@ class WillsController < AuthenticatedController
       when 'new'
         return "Wills - Setup"
     end
-  end
-  
-  def set_details_crumbs
-    add_breadcrumb "#{@will.title}", will_path(@will) if general_view?
-  end
-  
-  def set_edit_crumbs
-    add_breadcrumb "Wills - Setup", edit_will_path(@will) if general_view?
   end
   
   # GET /wills
@@ -74,7 +80,10 @@ class WillsController < AuthenticatedController
     set_viewable_contacts
   end
   
-  def show; end
+  def show
+    authorize @will
+    session[:ret_url] = will_path(@will, @shared_user)
+  end
 
   # GET /wills/new
   def new
@@ -96,6 +105,11 @@ class WillsController < AuthenticatedController
     @group = "Will"
     @category = Rails.application.config.x.WtlCategory
     @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
+  end
+  
+  def set_documents
+    @category = Rails.application.config.x.WillsPoaCategory
+    @group_documents = Document.for_user(resource_owner).where(:category => @will.category.name, :card_document_id => CardDocument.will(@will.id).id)
   end
 
   def create
@@ -200,7 +214,7 @@ class WillsController < AuthenticatedController
   end
   
   def update_share_params
-    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WtlCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
+    viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     will_params.each do |k, v|
       if v["share_with_contact_ids"].present?
         v["share_with_contact_ids"] -= viewable_shares
@@ -259,8 +273,9 @@ class WillsController < AuthenticatedController
                                         new_will_params[:secondary_beneficiary_ids], new_will_params[:agent_ids])
       end
     end
+    will_poa_id = CardDocument.find_by(card_id: (@new_vault_entries || @old_vault_entries).id, object_type: 'Will').id
     ShareInheritanceService.update_document_shares(resource_owner, will_shared_with_uniq_param,
-                                                   @previous_shared_with, Rails.application.config.x.WtlCategory, 'Will')
+                                                   @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
     raise "error saving new will" if @errors.any?
   end
   

@@ -2,7 +2,7 @@ class UserProfilesController < AuthenticatedController
   before_action :set_user_profile, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   include SanitizeModule
-  
+
   # Breadcrumbs navigation
   add_breadcrumb "My Profile", :user_profile_path
   add_breadcrumb "Edit My Profile", :edit_user_profile_path
@@ -41,6 +41,7 @@ class UserProfilesController < AuthenticatedController
 
   # GET /user_profiles/1/edit
   def edit
+    @plans = Subscription.plans
     @user_profile.employers.first_or_initialize
   end
 
@@ -97,7 +98,7 @@ class UserProfilesController < AuthenticatedController
     @contacts = Contact.for_user(current_user)
     @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
   end
-
+  
   def user_profile_params
     params.require(:user_profile).permit(:user_id, :first_name, :middle_name, 
                                          :last_name, :phone_number_mobile, :phone_number,
@@ -106,7 +107,7 @@ class UserProfilesController < AuthenticatedController
                                                                 :city, :state, :zip, :phone_number_office,
                                                                 :phone_number_fax, :id])
   end
-
+  
   def date_format
     return user_profile_params[:date_of_birth] unless user_profile_params[:date_of_birth].include?('/')
     date_params = user_profile_params[:date_of_birth].split('/')

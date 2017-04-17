@@ -28,6 +28,10 @@ class User < ActiveRecord::Base
   has_many :financial_account_informations, dependent: :destroy
   has_many :uploads, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
+  has_many :payments
+  has_one :subscription, -> { order("created_at DESC") }
+  accepts_nested_attributes_for :subscription
+
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
 
   accepts_nested_attributes_for :user_profile, update_only: true
@@ -54,7 +58,7 @@ class User < ActiveRecord::Base
       current_sign_in_ip != last_sign_in_ip
     end
   end
-  
+
   def after_database_authentication
     date = Date.current
     if UserActivity.for_date(date).for_user(self).any?
@@ -64,7 +68,7 @@ class User < ActiveRecord::Base
       UserActivity.create(user: self, login_date: date, login_count: 1, session_length: 0)
     end
   end
-  
+
   def password_complexity
     return unless password.present?
     if !satisfy_password_requirement?(password)
@@ -84,9 +88,9 @@ class User < ActiveRecord::Base
 
   def match_length(match)
     return 0 unless match.present?
-    match.length 
+    match.length
   end
-  
+
   def include_personal_data?
     email_nick = email.split("@").first
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
@@ -97,7 +101,7 @@ class User < ActiveRecord::Base
   after_destroy :invitation_sent_clear
 
   private
-  
+
   # XXX: We do not have "roles" established. I am using a weak association to
   # establish an admin. If the user has a zokuvault.com email address. Please
   # note that this is not secure at all. It is very dangerous. Proper roles
@@ -108,7 +112,7 @@ class User < ActiveRecord::Base
     self.admin ||= (email =~ ADMIN_REGEX).present?
     true
   end
-  
+
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
   end

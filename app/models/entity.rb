@@ -30,6 +30,8 @@ class Entity < ActiveRecord::Base
   
   before_save { self.category = Category.fetch("trusts & entities") }
   before_validation :build_shares
+  after_save :update_card_documents
+  after_destroy :delete_card_documents
   
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)
@@ -39,4 +41,15 @@ class Entity < ActiveRecord::Base
   
   validates_length_of :name, :maximum => ApplicationController.helpers.get_max_length(:wtl_name)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
+  
+  private
+  
+  def update_card_documents
+    wills_poa = CardDocument.find_or_initialize_by(card_id: self.id, object_type: 'Entity')
+    wills_poa.update(user_id: self.user_id, object_type: self.class, category: Category.fetch("trusts & entities"))
+  end
+  
+  def delete_card_documents
+    CardDocument.where(card_id: self.id, object_type: 'Entity').destroy_all
+  end
 end

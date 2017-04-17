@@ -13,6 +13,11 @@ gem 'devise', '>= 4.2.0'
 # Authorization
 gem "pundit"
 
+# Pdf Generation
+gem 'pdfkit'
+gem 'wkhtmltopdf-binary'
+gem 'wkhtmltopdf-heroku'
+
 # 'To store old user passwords'
 gem 'devise_security_extension'
 
@@ -35,6 +40,10 @@ gem 'rufus-scheduler'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+
+# JS runtime
+gem 'execjs'
+gem 'therubyracer'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -89,6 +98,8 @@ gem 'oj', '~> 2.12.14'
 
 # Mailchimp manipulation gem
 gem 'gibbon'
+# Payment
+gem 'stripe'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -117,4 +128,5 @@ group :test do
   gem 'rspec-rails', '~> 3.4'
   gem 'spring-commands-rspec'
   gem 'webmock'
+  gem 'stripe-ruby-mock', '~> 2.4.0', :require => 'stripe_mock'
 end

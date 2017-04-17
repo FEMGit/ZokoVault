@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tutorials
   resources :final_wishes
   resources :usage_metrics
   resources :taxes
@@ -8,7 +9,7 @@ Rails.application.routes.draw do
   resources :contacts
   devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords', sessions: 'sessions',
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
-  
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -68,45 +69,50 @@ Rails.application.routes.draw do
 
   # Wills
   get 'wills/new', to: 'wills#new', as: :new_will
-  get 'wills/new_wills_poa', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
-  get 'wills/edit/:id', to: 'wills#edit', as: :edit_will
-  get 'wills/show/:id', to: 'wills#show', as: :will
+  get 'wills/new_wills_poa(/:shared_user_id)', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
+  get 'wills/edit/:id(/:shared_user_id)', to: 'wills#edit', as: :edit_will
+  get 'wills/show/:id(/:shared_user_id)', to: 'wills#show', as: :will
   patch 'wills/show/:id', to: 'wills#update'
   patch 'wills/:id', to: 'wills#update'
   get 'wills', to: 'wills#index', as: :wills
   post 'wills', to: 'wills#create'
   put 'wills', to: 'wills#update'
   delete 'wills/:id', to: 'wills#destroy'
-  
+
   # Powers of Attorney
   get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
-  get 'power_of_attorneys/new_wills_poa', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
-  get 'power_of_attorneys/edit/:id', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
-  get 'power_of_attorneys/show/:id', to: 'power_of_attorneys#show', as: :power_of_attorney
+  get 'power_of_attorneys/new_wills_poa(/:shared_user_id)', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
+  get 'power_of_attorneys/edit/:id(/:shared_user_id)', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
+  get 'power_of_attorneys/show/:id(/:shared_user_id)', to: 'power_of_attorneys#show', as: :power_of_attorney
+  patch 'power_of_attorneys/show/:id', to: 'power_of_attorneys#update'
   patch 'power_of_attorneys/:id', to: 'power_of_attorneys#update'
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
   post 'power_of_attorneys', to: 'power_of_attorneys#create'
+  put 'power_of_attorneys', to: 'power_of_attorneys#update'
   delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy'
+  delete 'power_of_attorneys/powers_of_attorney_contact/:id', to: 'power_of_attorneys#destroy_power_of_attorney_contact', as: :delete_power_of_attorney
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   # Trusts
   get 'trusts/new', to: 'trusts#new', as: :new_trust
-  get 'trusts/new_wills_poa', to: 'trusts#new_wills_poa', as: :wills_poa_new_trust # todo: delete wills-poa routes
-  get 'trusts/edit/:id', to: 'trusts#edit', as: :edit_trust
-  get 'trusts/show/:id', to: 'trusts#show', as: :trust
+  get 'trusts/new_trusts_entities(/:shared_user_id)', to: 'trusts#new_trusts_entities', as: :trusts_entities_new_trust # todo: delete wills-poa routes
+  get 'trusts/edit/:id(/:shared_user_id)', to: 'trusts#edit', as: :edit_trust
+  get 'trusts/show/:id(/:shared_user_id)', to: 'trusts#show', as: :trust
+  patch 'trusts/show/:id', to: 'trusts#update'
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'
+  put 'trusts', to: 'trusts#update'
   delete 'trusts/:id', to: 'trusts#destroy'
-  
+
   # Entities
-  get 'entities/new', to: 'entities#new', as: :new_entity
-  get 'entities/:id/edit', to: 'entities#edit', as: :edit_entity
+  get 'entities/new(/:shared_user_id)', to: 'entities#new', as: :new_entity
+  get 'entities/:id/edit(/:shared_user_id)', to: 'entities#edit', as: :edit_entity
   patch 'entities/:id', to: 'entities#update'
-  get 'entities/:id', to: 'entities#show', as: :entity
+  get 'entities/:id(/:shared_user_id)', to: 'entities#show', as: :entity
   post 'entities', to: 'entities#create', as: :entities
   delete 'entities/:id', to: 'entities#destroy'
-  
+
   resources :categories do
     member do
       post :share
@@ -114,10 +120,10 @@ Rails.application.routes.draw do
       delete 'share_category/:contact_id', to: 'categories#destroy_share_category'
     end
   end
-  
+
   # contacts
   get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
-  
+
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -133,36 +139,39 @@ Rails.application.routes.draw do
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
   get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   post 'documents/download/:id(/:shared_user_id)', to: 'documents#download', as: :download_document
+  get 'shared_view/:shared_user_id/documents/:id', to: 'documents#show', as: :shared_document
 
   get 'account_settings', to: 'account_settings#index', as: :account_settings
   get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users
   get 'account_settings/login_settings', to: 'account_settings#login_settings', as: :login_settings
   get 'account_settings/manage_subscription', to: 'account_settings#manage_subscription', as: :manage_subscription
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
+  get 'account_settings/invoice_information/:id', to: 'account_settings#invoice_information', as: :invoice_information
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
-  
+
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
 
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
-  
+
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   resource :account, only: [:update, :show] do
     collection do
       get :setup
       get :my_profile
       post :send_code
+      post :apply_promo_code
       put :send_code
       post :verify_code
       put :verify_code
     end
   end
-  
+
   # Tutorials
   get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
@@ -179,7 +188,7 @@ Rails.application.routes.draw do
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
-  
+
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
@@ -229,6 +238,8 @@ Rails.application.routes.draw do
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
   get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
+  get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :shared_view_wills_powers_of_attorney
+  get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :shared_view_trusts_entities
   get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
   get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
@@ -283,6 +294,15 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/final_wishes/:id' => 'final_wishes#show', as: :shared_final_wishes
   get 'shared_view/:shared_user_id/final_wishes/:id/edit' => 'final_wishes#edit', as: :shared_final_wishes_edit
   get 'shared_view/:shared_user_id/final_wishes/new/:group' => 'final_wishes#new', as: :shared_new_final_wishes
+  
+  # Stripe callbacks
+  scope :stripe do
+    # Key must match token on Stripe dashboard to authenticate callback
+    post "/subscription_created" => "stripe_callbacks#subscription_created"
+    post "/payment_success" => "stripe_callbacks#payment_success"
+    post "/payment_failure" => "stripe_callbacks#payment_failure"
+    post "/subscription_expired" => "stripe_callbacks#subscription_expired"
+  end
 
   # Information pages
   get "/about", to: "pages#about", as: :about
@@ -296,7 +316,8 @@ Rails.application.routes.draw do
   get "/setup", to: "pages#setup", as: :setup
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
-  
+  get "/html_template", to: "pages#html_template", as: :html_template
+
   get '/support/new_message', to: 'email_support#index', as: :email_support
   post '/support/new_message', to: 'email_support#send_email'
 

@@ -71,6 +71,7 @@ class WillBuilder
     will.secondary_beneficiary_ids = options[:secondary_beneficiary_ids]
     will.share_with_contact_ids = options[:share_with_contact_ids]
     will.title = options[:title]
+    will.category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
   end
 
   attr_internal_accessor :will, :options

@@ -23,10 +23,32 @@
       </svg>Financial Information
     <% end %>
   <% end %>
+
+  <! -- Wills - Power of Attorney -->
+  <% if show_navigation_link?('Wills - POA') %>
+    <% shared_view_wills_powers_of_attorney = 'active' if current_page?(shared_view_wills_powers_of_attorney_path(@shared_user)) ||
+    controller?('wills', 'power_of_attorneys') || breadcrumb?(:shared_view_wills_powers_of_attorney_path) || wills_poa? %>
+    <%= link_to shared_view_wills_powers_of_attorney_path(@shared_user), class: "main-nav #{shared_view_wills_powers_of_attorney}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-document-3"></use>
+      </svg>Wills & Powers of Attorney
+    <% end %>
+  <% end %>
+
+  <! -- Trusts & Entities -- >
+  <% if show_navigation_link?('Trusts & Entities') %>
+    <% shared_view_trusts_entities = 'active' if current_page?(shared_view_trusts_entities_path(@shared_user)) ||
+    controller?('trusts', 'entities') || breadcrumb?(:shared_view_trusts_entities_path) || trusts_entities? %>
+    <%= link_to shared_view_trusts_entities_path(@shared_user), class: "main-nav #{shared_view_trusts_entities}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-trust"></use>
+      </svg>Trusts & Entities
+    <% end %>
+  <% end %>
   <! -- Wills, Trust & Legal -->
   <% if show_navigation_link?('Wills - Trusts - Legal') %>
-    <% shared_view_estate_planning = 'active' if current_page?(shared_view_estate_planning_path(@shared_user)) ||
-    controller?('wills', 'trusts', 'power_of_attorneys') || breadcrumb?(:shared_view_estate_planning_path) %>
+    <% shared_view_estate_planning = 'active' if (current_page?(shared_view_estate_planning_path(@shared_user)) ||
+    controller?('wills', 'trusts', 'power_of_attorneys') || breadcrumb?(:shared_view_estate_planning_path)) && !wills_poa? && !trusts_entities?%>
     <%= link_to shared_view_estate_planning_path(@shared_user), class: "main-nav #{shared_view_estate_planning}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>

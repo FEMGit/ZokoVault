@@ -1,6 +1,7 @@
 class RegistrationsController < Devise::RegistrationsController
-
-protected
+  before_action :set_plans, only: [:new]
+  
+  protected
 
   def after_inactive_sign_up_path_for(resource)
     thank_you_path
@@ -32,5 +33,11 @@ protected
     month = date_params[0]
     day = date_params[1]
     "#{year}-#{month}-#{day}"
+  end
+  
+  private
+  
+  def set_plans
+    @plans = Subscription.plans
   end
 end

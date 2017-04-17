@@ -117,9 +117,9 @@
 
     </div>
   <% end %>
-
+  
   <%= f.submit "Save", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button"}%>
+  <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button", id: "submit-button"} %>
 <% end %>
 
 <script>

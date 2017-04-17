@@ -21,7 +21,8 @@ class UserResourceGatherer < Struct.new(:user)
 
     @my_resources =
       categories |
-      gather_wtl(user) |
+      gather_wills_poa(user, Category.fetch('wills - poa')) |
+      gather_trusts_entities(user, Category.fetch('trusts & entities')) |
       gather_insurance(user, Category.fetch('insurance')) |
       Contact.for_user(user) |
       gather_taxes(user, Category.fetch('taxes')) |
@@ -65,8 +66,10 @@ class UserResourceGatherer < Struct.new(:user)
     user, category = share.user, share.shareable
 
     case category
-    when Category.fetch('wills - trusts - legal')
-      gather_wtl(user)
+    when Category.fetch('wills - poa')
+      gather_wills_poa(user, category)
+    when Category.fetch('trusts & entities')
+      gather_trusts_entities(user)
     when Category.fetch('insurance');
       gather_insurance(user, category)
     # when Category.fetch('contact')
@@ -81,12 +84,17 @@ class UserResourceGatherer < Struct.new(:user)
   end
   
   private
-
-  def gather_wtl(user)
+  
+  def gather_wills_poa(user, category)
     Will.for_user(user) |
+    PowerOfAttorneyContact.for_user(user) |
+    Document.for_user(user).where(category: category.name)
+  end
+  
+  def gather_trusts_entities(user, category)
     Trust.for_user(user) |
-    PowerOfAttorney.for_user(user) |
-    Document.for_user(user).where(group: %w(Trust Will PowerOfAttorney))
+    Entity.for_user(user) |
+    Document.for_user(user).where(category: category.name)
   end
 
   def gather_insurance(user, category)

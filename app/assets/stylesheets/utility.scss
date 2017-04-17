@@ -10,6 +10,9 @@
 .clear{
   clear:both;
 }
+.clr-red {
+  color: red;
+}
 .box-shadow-none {
   box-shadow: none !important;
 }
@@ -25,13 +28,20 @@
 .bb-gray-light {
   border-bottom: 1px solid $color-gray-light;
 }
-
+.bb-gray-med {
+  border-bottom: 1px solid $color-gray-med-tinted;
+}
 .bb-gray-light-dashed {
   border-bottom: 1px dashed $color-gray-light;
 }
-
 .bb-dashed {
   border-bottom: 1px dashed $color-gray-med-tinted;
+}
+.bt-dashed {
+  border-top: 1px dashed $color-gray-med-tinted;
+}
+.bt-gray-light{
+  border-top: 1px solid $color-gray-light;
 }
 .bl-gray-light{
   border-left: 1px solid $color-gray-light;
@@ -73,6 +83,9 @@
 .mt-50{
   margin-top: 50px;
 }
+.mt-60{
+  margin-top: 60px;
+}
 .mt-30{
   margin-top: 30px;
 }
@@ -90,6 +103,12 @@
 }
 .mt-5{
   margin-top: 5px;
+}
+.pt-20{
+  padding-top: 20px;
+}
+.pt-30{
+  padding-top: 30px;
 }
 .pt-60{
   padding-top: 60px;
@@ -111,6 +130,12 @@
 }
 .mr-10{
   margin-right: 10px;
+}
+.mr-15{
+  margin-right: 15px;
+}
+.mr-20{
+  margin-right: 20px;
 }
 .mb-10 {
   margin-bottom: 10px;
@@ -171,6 +196,16 @@
     text-decoration: none;
   }
 }
+.overflow-y-visible {
+  overflow-y: visible !important;
+}
+.p-rel {
+  position: relative;
+}
+.b-40 {
+  bottom: 40px !important;
+}
+
 .mobile-hide{
   @include media($mobile) {
     display:none !important;

@@ -52,8 +52,7 @@
 
     <% end %>
 
-
-      <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button' %>
+      <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button', id: "submit-button" %>
       <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>
 
     <p class="mt-20 small-text">By submitting this information, I agree to the ZokuVault
@@ -62,3 +61,4 @@
     </p>
   <% end %>
 </section>
+

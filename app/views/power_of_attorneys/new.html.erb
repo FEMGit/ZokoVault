@@ -3,5 +3,5 @@
 <%= content_for :add_another_title, "Power of Attorney" %>
 <%= content_for :partial_path, "power_of_attorneys/form" %>
 <%= content_for :delete_path, "/power_of_attorneys/" %>
-<%= render partial: "layouts/new_wtl_document" %>
+<%= render partial: "layouts/new_wtl_document", locals: { save_disabled: true } %>
 <%= yield :new_contact_form %>

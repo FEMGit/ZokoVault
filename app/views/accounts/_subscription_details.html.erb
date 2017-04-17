@@ -1,0 +1,39 @@
+<h2>Subscription Details</h2>
+
+<section class="bb-gray-light-dashed mb-10">
+  <div class='styled-select width-250 inline-block'>
+    <%= select_tag "user[subscription_attributes][plan_id]", 
+      options_from_collection_for_select(Subscription.plans, 'id', 'name'),
+      onchange: "updateSubscription()",
+      class: 'width-250'
+    %>
+  </div>
+
+  <span class="fr" id="subscription-price"></span>
+  <div class="subscription-description ml-15" id="subscription-description"></div>
+</section>
+
+<section class="pb-10 mb-10" id="promo-row">
+  <span class="bold" id="promo-name">Total</span>
+  <span class="fr clr-red" id="promo-price"></span>
+</section>
+
+<section class="bb-gray-light mb-10">
+  <span class="bold">Total</span>
+  <span class="fr" id="subscription-total"></span>
+</section>
+
+<div id='promo-row'>
+  <div id='promo-name'></div>
+  <div id='promo-price'></div>
+</div>
+
+<br/>
+
+<section>
+  <span class="mr-10">Promo Code</span>
+  <%= text_field_tag 'user[subscription_attributes][promo_code]', nil, class: 'promo-form inline-block width-250' %>
+  <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
+    class: "button primary-button text-field-button" %>
+  <span id='promo-code-text'></span>
+</section>

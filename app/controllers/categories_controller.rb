@@ -7,6 +7,8 @@ class CategoriesController < AuthenticatedController
   before_action :set_previous_crumbs, only: [:share_category]
   before_action :set_share_category_crumbs, only: [:share_category]
   add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
+  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, only: [:wills_powers_of_attorney]
+  add_breadcrumb "Trusts & Entities", :trusts_entities_path, only: [:trusts_entities]
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
   include UserTrafficModule
@@ -49,16 +51,22 @@ class CategoriesController < AuthenticatedController
 
   def redirect_path(category)
     case category.name
-    when 'Insurance'
+    when Rails.application.config.x.InsuranceCategory
       insurance_url
-    when 'Taxes'
+    when Rails.application.config.x.TaxCategory
       taxes_url
-    when 'Final Wishes'
+    when Rails.application.config.x.FinalWishesCategory
       final_wishes_url
-    when 'Financial Information'
+    when Rails.application.config.x.FinancialInformationCategory
       financial_information_url
-    else
+    when Rails.application.config.x.WtlCategory
       estate_planning_url
+    when Rails.application.config.x.WillsPoaCategory
+      wills_powers_of_attorney_url
+    when Rails.application.config.x.TrustsEntitiesCategory
+      trusts_entities_url
+    else
+      root_url
     end
   end
 
@@ -84,14 +92,23 @@ class CategoriesController < AuthenticatedController
   end
   
   def wills_powers_of_attorney
-    @powers_of_attorney = PowerOfAttorney.for_user(current_user)
+    @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
+    
+    @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @wills = Will.for_user(current_user)
+    @wtl_documents = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
     session[:ret_url] = "/wills_powers_of_attorney"
   end
 
   def trusts_entities
+    @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    
     @trusts = Trust.for_user(current_user)
     @entities = Entity.for_user(current_user)
+    @documents = Document.for_user(current_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
+    session[:ret_url] = "/trusts_entities"
   end
 
   def estate_planning

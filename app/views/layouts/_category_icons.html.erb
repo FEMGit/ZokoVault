@@ -7,6 +7,14 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>
+  <% elsif category.name.eql? Rails.application.config.x.WillsPoaCategory %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-document-3"></use>
+    </svg>
+  <% elsif category.name.eql? Rails.application.config.x.TrustsEntitiesCategory %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-trust"></use>
+    </svg>
   <% elsif category.name.eql? Rails.application.config.x.ContactCategory %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-share-3"></use>

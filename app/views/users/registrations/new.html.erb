@@ -51,34 +51,6 @@
       <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password_confirmation].present?) } %>
 
     <% end %>
-    <% @plans.each do |plan| %>
-      <div>
-        <%= label_tag "#{plan['name']}: #{number_to_currency plan['amount']*0.01}" %>
-        <%= radio_button_tag "plan_id", plan["id"], checked: true %>
-      </div>
-    <% end %>
-    <div class="promo-code">
-      <%= label_tag :promo_code %>
-      <%= text_field_tag :promo_code %>
-    </div>
-    <div class="card-info">
-      <span class="payment-errors" style="color: red;"></span>
-      <div>
-        <%= label_tag :number, "Credit Card Number" %>
-        <%= text_field_tag nil, "", id: "cc_number", maxlength: 19, "data-stripe" => "number" %>
-      </div>
-      <%= label_tag :expiration, "Expiration" %><br>
-      <span class="month-input">
-        <%= text_field_tag nil, "", id: "cc_exp_month", maxlength: 2, placeholder: "mm", "data-stripe" => "exp_month" %>
-      </span>/
-      <span class="year-input">
-        <%= text_field_tag nil, "", id: "cc_exp_year", maxlength: 4, placeholder: "yyyy", "data-stripe" => "exp_year" %>
-      </span><br>
-      <span>
-        <%= label_tag :cvc, "CVC" %><br>
-        <%= text_field_tag nil, "", size: 20, "data-stripe" => "cvc" %>
-      </span>
-    </div>
 
       <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button', id: "submit-button" %>
       <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>

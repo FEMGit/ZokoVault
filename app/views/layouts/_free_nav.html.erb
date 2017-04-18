@@ -1,0 +1,93 @@
+<nav class="primary-nav free-nav">
+
+  <a id="close-mobile-app-menu" class="main-nav close-primary-nav">
+    Close Menu
+    <svg class="icon close-icon fr">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+
+  <% shared_current = 'active' if current_page?(shares_path)%>
+  <%= link_to shares_path, class: "main-nav #{shared_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-Safe"></use>
+    </svg>Shared With Me
+  <% end %>
+
+  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(:my_profile_path) %>
+  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-contacts-2"></use>
+    </svg>My Profile
+  <% end %>
+
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Dashboard
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Contacts &amp; Permissions
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Financial Information
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Wills &amp; Powers of Attorney
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Trusts &amp; Entities
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Insurance
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Taxes
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Final Wishes
+  <% end %>
+  
+  <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-lock-1"></use>
+    </svg>Documents
+  <% end %>
+
+  <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
+  <%= link_to account_users_path, class: "main-nav mobile-show #{account_settings_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-settings-1"></use>
+    </svg>Account Settings
+  <% end %>
+
+  <% zoku_support_current = 'active' if current_page?(email_support_url) %>
+  <%= link_to email_support_path, class: "main-nav #{zoku_support_current} bottom-nav free" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-mail-2"></use>
+    </svg>ZokuVault Support
+  <% end %>
+
+  <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav mobile-show") %>
+</nav>

@@ -16,3 +16,4 @@ $mobile: new-breakpoint(max-width 660px 12);
 
 // Height based media queries
 $nav-height: new-breakpoint(min-height 575px);
+$nav-height-free: new-breakpoint(min-height 545px);

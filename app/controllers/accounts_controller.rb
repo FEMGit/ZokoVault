@@ -2,11 +2,14 @@ class AccountsController < AuthenticatedController
   before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
+  skip_before_action :redirect_if_free_user
   layout "blank_layout", only: [:setup]
 
   def setup; end
   
   def first_run; end
+  
+  def upgrade; end
 
   def update
     update_params = free_account? ? user_params.except(:subscription_attributes) : user_params

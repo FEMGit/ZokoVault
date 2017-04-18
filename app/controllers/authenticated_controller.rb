@@ -4,9 +4,10 @@ class AuthenticatedController < ApplicationController
 
 private
 
-  def redirect_if_free_user
-    if current_user.free?
-      redirect_to my_profile_path
+ def redirect_if_free_user
+    if current_user && current_user.setup_complete? &&
+       current_user.free? && !permitted_page_free_user?
+      redirect_to shares_path
     end
   end
 
@@ -26,5 +27,12 @@ private
     if current_user.mfa_verify? && !session[:mfa] 
       redirect_to mfa_path
     end
+  end
+  
+  private
+  
+  def permitted_page_free_user?
+    (controller_name && (UserPageAccess::FREE.include? controller_name)) ||
+      params[:shared_user_id].present?
   end
 end

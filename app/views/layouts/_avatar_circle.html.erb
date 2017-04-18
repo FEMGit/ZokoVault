@@ -11,7 +11,7 @@
       <p class="avatar-initials"><%= contact.initials %></p>
       <%= image_tag(empty_image, class: "avatar-small", alt: contact.initials.to_s) %>
     <% end %>
-    <div class="tooltip top">
+    <div class="tooltip bottom">
       <p><%= contact.name %></p>
       <%= mail_to(contact.emailaddress.to_s, contact.emailaddress.to_s, class: "no-underline-link") %>
       <p><%= contact.phone %></p>

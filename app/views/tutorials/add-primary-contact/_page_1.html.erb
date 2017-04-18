@@ -1,23 +1,56 @@
 <div class="card mb-30">
-  <h1 class="mb-20">Add Primary Content</h1>
+  <h1 class="mb-20">Add Your Family</h1>
 
-  <%- @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-  <%#- authorize @financial_property %>
-  <%#- set_viewable_contacts %>
+  <p>This is your spouse, partner, children, parents or trusted family memebers.
+  These people are your dependants and beneficiares</p>
 
-  <%= form_for @financial_property, url: url_for(action: :create, controller: :financial_property) do |f| %>
-    <%= hidden_field_tag :tutorial_id, @tutorial_name %>
-    <%= hidden_field_tag :page_id, @page_id %>
-    <%= hidden_field_tag :next_page_id, @next_page %>
-    <%= hidden_field_tag 'financial_property[property_type]', "House" %>
-    <%= label_tag "property_name", 'Property Name' %>
-    <%= text_field_tag "financial_property[name]", "", class: "form-control medium" %>
+  <div class="modal-content">
+    <h3 <% if @primary_contacts.blank? %> style="display: none;" <% end %> id='primary-contacts-table-title'>Your Personal Contacts</h3>
+    <table id="primary-contacts-table" class='table-add-contactable' <% if @primary_contacts.blank? %> style="display: none;" <% end %>>
+      <thead>
+        <tr>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>Email</th>
+          <th>Relationship</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @primary_contacts.each do |primary_contact| %>
+          <tr>
+            <td><%= primary_contact.lastname %></td>
+            <td><%= primary_contact.firstname %></td>
+            <td><%= primary_contact.emailaddress %></td>
+            <td><%= primary_contact.relationship %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-    <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
-      <a class="big-button outline-button padded f-left">Back</a>
-      <a class="big-button outline-button padded">Skip</a>
-      &nbsp
-      <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
-    </section>
-  <% end %>
+  <div class="flash-success-static flash add-contactable static small" style="display: none;">
+    You added a contact! Add another one of your Primary Contacts, or click Next.</div>
+    <button class="button primary-button big-button" onclick="createPrimaryContact();">Add Primary Contacts</button>
+  </div>
+
+  <%= render partial: 'tutorials/add-primary-contact/buttons_section' %>
 </div>
+
+<%= render partial: 'contacts/ajax_form', style: 'display: none;' %>
+
+<script>
+  $(document).ready(function(){
+      $('#primary-contacts-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[0, 'asc']]
+    });
+  });
+
+  var createPrimaryContact = function() {
+    window.tableIdToUpdate = '#primary-contacts-table'
+    setProfessionalDropdown(['Family & Beneficiaries'])
+    contact_type_handle($('#contact_contact_type'), true)
+    displayContactFormModal();
+  }
+</script>

@@ -70,6 +70,7 @@ class FinancialPropertyController < AuthenticatedController
       if params[:tutorial_id] && @financial_property.save
         redirect_to tutorials_confirmation_path and return
       else
+        flash[:alert] = "Fill in Property Name field to continue"
         redirect_to tutorial_page_path('home', '1') and return
       end
 

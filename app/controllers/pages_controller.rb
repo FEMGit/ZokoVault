@@ -11,6 +11,10 @@ class PagesController < HighVoltage::PagesController
     @next_page     = params[:page_id].to_i + 1
     @confirmation  = false
 
+    @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
+    @contact = Contact.new(user: current_user)
+    @show_footer = false
+
     if params[:page_id].to_i == @tutorial.number_of_pages
       if session[:order_params].present?
         @next_tutorial = Tutorial.find(session[:order_params].shift)

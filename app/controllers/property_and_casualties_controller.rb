@@ -82,14 +82,17 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
-        if params[:tutorial_id]
-          redirect_to tutorials_confirmation_path and return
-        else
-          redirect_to tutorial_page_path('insurance', '3') and return
-        end
+        # If comes from Tutorials workflow, redirect to next step
+        redirect_to tutorials_confirmation_path and return if params[:tutorial_id]
+
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
+        # If comes from Tutorials workflow, redirect to same Tutorial step
+        if params[:tutorial_id]
+          flash[:alert] = "Fill in Insurance Provider Name field to continue"
+          redirect_to tutorial_page_path('insurance', '3') and return
+        end
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }

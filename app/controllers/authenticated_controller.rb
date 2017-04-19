@@ -14,7 +14,7 @@ private
 
   def complete_setup!
     unless current_user.setup_complete?
-      redirect_to setup_account_path 
+      redirect_to terms_of_service_account_path 
     end
   end
 

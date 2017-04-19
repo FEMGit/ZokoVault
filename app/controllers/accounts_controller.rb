@@ -3,16 +3,44 @@ class AccountsController < AuthenticatedController
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
-  layout "blank_layout", only: [:setup]
+  layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
+                                :login_settings, :user_type]
 
   def setup; end
   
   def first_run; end
   
-  def upgrade; end
+  def terms_of_service; end
+  
+  def terms_of_service_update
+    current_user.update_attributes(user_params_except_subscription)
+    redirect_to phone_setup_account_path
+  end
+  
+  def phone_setup
+    check_terms_of_service_passed
+  end
+  
+  def phone_setup_update
+    current_user.update_attributes(user_params_except_subscription)
+    redirect_to login_settings_account_path
+  end
+  
+  def login_settings
+    check_phone_setup_passed
+  end
+  
+  def login_settings_update
+    current_user.update_attributes(user_params_except_subscription.merge(setup_complete: true))
+    redirect_to user_type_account_path
+  end
+  
+  def user_type
+    check_phone_setup_passed
+  end
 
   def update
-    update_params = free_account? ? user_params.except(:subscription_attributes) : user_params
+    update_params = free_account? ? user_params_except_subscription : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
   end
@@ -81,6 +109,20 @@ class AccountsController < AuthenticatedController
 
   private
 
+  def check_terms_of_service_passed
+    redirect_to terms_of_service_account_path unless current_user.user_profile.signed_terms_of_service_at.present?
+  end
+  
+  def check_phone_setup_passed
+    redirect_to_path = 
+      if current_user.user_profile.signed_terms_of_service_at.blank?
+        terms_of_service_account_path
+      elsif current_user.user_profile.two_factor_phone_number.blank?
+        phone_setup_account_path
+      end
+    redirect_to redirect_to_path if redirect_to_path.present?
+  end
+
   def account_params
     params.require(:user).permit(:free_account)
   end
@@ -93,6 +135,10 @@ class AccountsController < AuthenticatedController
         :expiration_month,
         :expiration_year,
         :cvc])
+  end
+
+  def user_params_except_subscription
+    user_params.except(:subscription_attributes)
   end
 
   def user_params

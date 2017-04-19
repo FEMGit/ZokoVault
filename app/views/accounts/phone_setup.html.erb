@@ -1,0 +1,63 @@
+<%= form_tag :account_phone_setup, { method: :put, id: 'account-form' } do %>
+  <div class="settings-card">
+    <div class="modal-header">
+      <h2>Phone Setup</h2>
+
+      <p>A cell phone number is used to provide an extra layer of security to your account. It can also be used for account recovery purposes. Please enter your cell phone number below.</p>
+    </div>
+
+    <div class="modal-content mb-30">
+
+      <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number' %><br>
+      <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= check_box_tag 'skip_auth', 'Skip dual setup', false %>
+
+      <button class="button primary-button big-button" onClick="sendCode(); return false" id="send-code-button">Send code</button>
+      <span id='send_code_text'></span>
+
+      <hr/>
+
+      <h1>Enter Phone Code</h1>
+
+      <p>You should recieve your phone code within the next few minutes.
+      Please enter the code below.</p>
+
+      <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
+      <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
+      <button class="button primary-button big-button" onClick="verifyCode(); return false" id="verify-code-button">Verify code</button>
+      <span id='verify_code_text'></span>
+
+    </div>
+  </div>
+<% end %>
+<script>
+
+function sendCode() {
+  var data = $('#account-form').serialize();
+  $.post("<%= send_code_account_path %>",
+      data,
+      function() {
+        $('#send_code_text').html('Code sent!');
+      })
+  .fail(function() {
+    $('#send_code_text').html('Error!');
+  })
+}
+function verifyCode() {
+  var data = $('#account-form').serialize();
+  $.post("<%= verify_code_account_path %>",
+      data,
+      function() {
+        $('#verify_code_text').html("You've been verified!");
+        submitAccount()
+      })
+  .fail(function() {
+    $('#verify_code_text').html('Error!')
+  })
+}
+
+var submitAccount = function(){
+  var accountForm = document.getElementById("account-form");
+  accountForm.submit();
+}
+</script>

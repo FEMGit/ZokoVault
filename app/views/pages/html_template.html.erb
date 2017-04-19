@@ -1,3 +1,50 @@
+<h3 class="mt-20 mb-20">Checkbox Icon Template</h3>
+<div class="card mb-30">
+  <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
+
+    <ul class="tut-button-wrapper mb-30">
+      <li class="icon-box">
+        <label>
+          <input type="checkbox" name="checkbox" value="1" >
+          <span>
+            <%= image_tag "marketing/cloud-2.png", :class => "" %><br>
+            Someone shared ZokuVault with Me.
+          </span>
+        </label>
+      </li>
+      <li class="icon-box">
+        <label>
+          <input type="checkbox" name="checkbox" value="2">
+          <span>
+            <%= image_tag "marketing/safe-2.png", :class => "" %><br>
+            I am interested in setting up my own ZokuVault.
+          </span>
+        </label>
+      </li>
+  </div>
+
+<div class="card mt-50 terms-card">
+  <h5 class="tut-top-label mt-10 mb-20">Terms of Service</h5>
+    <div class="show-terms">
+      <%= render :partial => 'pages/terms_of_service' %>
+    </div>
+    <ul class="check-list mt-30 mb-30">
+      <li class="check-list text-center">
+        <label>
+          <%= check_box_tag 'user[user_profile_attributes][signed_terms_of_service]',
+            1,
+            false,
+            onclick: "toggleNextOnTos(); return true;"
+            %> <span class="fn "></span>I agree to the Terms of Service
+        </label>
+      </li>
+    </ul>
+    <a class="button blue-button huge-button mb-20 mt-20">Continue</a>
+
+    <p class="mt-20 mb-0 text-center"><a>Cancel</a></p>
+</div>
+
+
 <h3 class="mt-20 mb-20">Setup Your Vault</h3>
 
 <div class="card mb-30">
@@ -103,26 +150,6 @@
     <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
 
-
-<h3 class="mt-20 mb-20">Add Another</h3>
-<div class="card mb-30">
-    <h1 class="mb-20">Template Title</h1>
-    <p>Here is some paragraph text explaining something about how this is suppose to work.</p>
-
-
-    <label>Form Label</label>
-    <div class="input-pair">
-      <input type="text" class="inline-input"><a class="medium-button outline-button inline-button">Remove</a>
-    </div>
-    <div class="input-pair">
-      <input type="text" class="inline-input"><a class="medium-button outline-button inline-button">Remove</a>
-    </div>
-    <div class="input-pair">
-      <input type="text" class="inline-input"><a class="medium-button button primary-button inline-button">Add Another</a>
-    </div>
-
-  <%= render :partial => 'pages/tutorial_buttons' %>
-</div>
 
 <h3 class="mt-20 mb-20">Add Another</h3>
 <div class="card mb-30">

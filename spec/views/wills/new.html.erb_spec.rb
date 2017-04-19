@@ -13,7 +13,7 @@ RSpec.describe "wills/new", type: :view do
     render
   end
 
-  it "renders new wills form" do
+  it "renders new wills poa form" do
     assert_select "form[id=?][method=?]", "new_will", "post" do
 
       assert_select "input#will_title_id_0[name=?]", "vault_entry_0[title]"

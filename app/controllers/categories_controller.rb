@@ -6,7 +6,6 @@ class CategoriesController < AuthenticatedController
   # Breadcrumbs navigation
   before_action :set_previous_crumbs, only: [:share_category]
   before_action :set_share_category_crumbs, only: [:share_category]
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, only: [:estate_planning]
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, only: [:wills_powers_of_attorney]
   add_breadcrumb "Trusts & Entities", :trusts_entities_path, only: [:trusts_entities]
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
@@ -15,10 +14,12 @@ class CategoriesController < AuthenticatedController
   
   def page_name
     case action_name
-      when 'estate_planning'
-        return "Wills - Trusts - Legal"
-      when 'insurance'
-        return "Insurance"
+    when 'wills_powers_of_attorney'
+      return "Wills & Powers of Attorney"
+    when 'trusts_entities'
+      return "Trusts & Entities"
+    when 'insurance'
+      return "Insurance"
     end
   end
   
@@ -59,8 +60,6 @@ class CategoriesController < AuthenticatedController
       final_wishes_url
     when Rails.application.config.x.FinancialInformationCategory
       financial_information_url
-    when Rails.application.config.x.WtlCategory
-      estate_planning_url
     when Rails.application.config.x.WillsPoaCategory
       wills_powers_of_attorney_url
     when Rails.application.config.x.TrustsEntitiesCategory
@@ -110,20 +109,6 @@ class CategoriesController < AuthenticatedController
     @documents = Document.for_user(current_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
     session[:ret_url] = "/trusts_entities"
   end
-
-  def estate_planning
-    @category = Category.fetch(Rails.application.config.x.WtlCategory.downcase)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
-
-    @power_of_attorneys = PowerOfAttorney.for_user(current_user)
-    @trusts = Trust.for_user(current_user)
-    @wills = Will.for_user(current_user)
-    @vault_entries = [@power_of_attorneys, @trusts, @wills].flatten
-    vault_documents = @vault_entries.map(&:document)
-    @wtl_documents = get_not_assigned_documents(vault_documents)
-    session[:ret_url] = "/estate_planning"
-  end
-
 
   def destroy_share_category
     category = Category.fetch(params[:id])

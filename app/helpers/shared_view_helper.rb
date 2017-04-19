@@ -7,8 +7,6 @@ module SharedViewHelper
       link_to 'View Category', shared_view_taxes_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.InsuranceCategory
       link_to 'View Category', shared_view_insurance_path(@shared_user), class: 'view-category'
-    when Rails.application.config.x.WtlCategory
-      link_to 'View Category', shared_view_estate_planning_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.WillsPoaCategory
       link_to 'View Category', shared_view_wills_powers_of_attorney_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.TrustsEntitiesCategory

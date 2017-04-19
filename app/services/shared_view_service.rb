@@ -7,8 +7,6 @@ class SharedViewService
         @shared_category_names_full |= [Rails.application.config.x.WillsPoaCategory]
       when Trust, Entity
         @shared_category_names_full |= [Rails.application.config.x.TrustsEntitiesCategory]
-      when Will, Trust, PowerOfAttorney
-        @shared_category_names_full |= [Rails.application.config.x.WtlCategory]
       when Health, PropertyAndCasualty, LifeAndDisability
         @shared_category_names_full |= [Rails.application.config.x.InsuranceCategory]
       when Tax
@@ -19,6 +17,7 @@ class SharedViewService
         @shared_category_names_full |= [Rails.application.config.x.FinancialInformationCategory]
       end
     end
+    @shared_category_names_full
   end
   
   def self.shares(owner, non_owner)

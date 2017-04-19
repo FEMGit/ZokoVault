@@ -1,7 +1,7 @@
 <%= content_for :title, "Wills" %>
 <%= content_for :question_title, "Will" %>
-<%= content_for :add_another_title, "Will" %>
-<%= content_for :partial_path, "wills/form" %>
+<%= content_for :add_another_title, nil %>
+<%= content_for :partial_path, "wills/wills_poa_form" %>
 <%= content_for :delete_path, "/wills/" %>
-<%= render partial: "layouts/new_wtl_document", locals: { save_disabled: true } %>
+<%= render partial: "new_document" %>
 <%= yield :new_contact_form %>

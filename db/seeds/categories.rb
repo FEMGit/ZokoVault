@@ -1,4 +1,5 @@
-["Wills - Trusts - Legal",
+["Wills - POA",
+ "Trusts & Entities",
  "Insurance",
  "Vault",
  "Taxes",

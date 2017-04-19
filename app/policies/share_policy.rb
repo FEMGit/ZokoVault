@@ -39,7 +39,6 @@ class SharePolicy < BasicPolicy
   # XXX: Move to SharedViewPolicy
   # Shared view policies
   def dashboard?; index?; end
-  def estate_planning?; index?; end
   def wills_powers_of_attorney?; index? end
   def trusts_entities?; index? end
   def financial_information?; index?; end

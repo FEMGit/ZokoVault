@@ -1,9 +1,0 @@
-<%= content_for :title, "Wills" %>
-<% if @wills.present? %>
-  <%= content_for :card_details_partial_path, "wills/will_details" %>
-<% else %>
-  <%= content_for :no_editable_resources, true %>
-  <%= content_for :resource, "Will" %>
-  <%= content_for :card_details_partial_path, "shared_view/no_shared_items" %>
-<% end %>
-<%= render partial: "layouts/wtl_details_page" %>

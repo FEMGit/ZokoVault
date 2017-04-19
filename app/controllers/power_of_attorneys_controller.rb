@@ -4,32 +4,23 @@ class PowerOfAttorneysController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   before_action :set_power_of_attorney_contact, only: [:show, :edit, :update, :destroy_power_of_attorney_contact]
-  before_action :set_power_of_attorney, :set_document_params, only: [:destroy]
-  before_action :set_contacts, only: [:new, :create, :edit, :update, :new_wills_poa]
+  before_action :set_power_of_attorney, only: [:destroy]
+  before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:update]
   before_action :update_share_params, only: [:create, :update]
   before_action :set_documents, only: [:show]
-  before_action :set_document_params, only: [:index]
   
   # General Breadcrumbs
-  add_breadcrumb "Wills Trusts & Legal", :estate_planning_path, :only => %w(new index), if: :general_view?
-  add_breadcrumb "Legal - Power of Attorney", :power_of_attorneys_path, :only => %w(index new), if: :general_view?
-  add_breadcrumb "Legal - Power of Attorney - Setup", :new_power_of_attorney_path, :only => %w(new), if: :general_view?
-  
-  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new_wills_poa edit show), if: :general_view?
+  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
   add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  before_action :set_new_crumbs, only: [:new_wills_poa]
+  before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
-  # Shared BreadCrumbs
-  add_breadcrumb "Wills Trusts & Legal", :shared_view_estate_planning_path, :only => %w(new index), if: :shared_view?
-  add_breadcrumb "Legal - Power of Attorney", :shared_power_of_attorneys_path, :only => %w(index new), if: :shared_view?
-  add_breadcrumb "Legal - Power of Attorney - Setup", :shared_new_power_of_attorneys_path, :only => %w(new), if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
 
   def set_new_crumbs
-    add_breadcrumb "Power of Attorney - Setup", wills_poa_new_power_of_attorney_path(@shared_user)
+    add_breadcrumb "Power of Attorney - Setup", new_power_of_attorney_path(@shared_user)
   end
   
   def set_details_crumbs
@@ -41,23 +32,18 @@ class PowerOfAttorneysController < AuthenticatedController
   end
   
   def page_name
+    poa = CardDocument.power_of_attorney(params[:id])
     case action_name
-      when 'index'
-        return "Power of Attorneys"
+      when 'show'
+        return "PoA - #{poa.name} - Details"
       when 'new'
-        return "Power of Attorneys - Setup"
+        return "PoA - Setup"
+      when 'edit'
+        return "PoA - #{poa.name} - Edit"
     end
   end
 
-  # GET /power_of_attorneys
-  # GET /power_of_attorneys.json
-  def index
-    @power_of_attorneys = attorneys
-    @power_of_attorneys.each { |x| authorize x }
-    session[:ret_url] = @shared_user.present? ? shared_power_of_attorneys_path : power_of_attorneys_path
-  end
-  
-  def new_wills_poa
+  def new
     @power_of_attorney = PowerOfAttorneyBuilder.new.build
     @power_of_attorney.user = resource_owner
     @power_of_attorney.vault_entry_contacts.build
@@ -77,27 +63,6 @@ class PowerOfAttorneysController < AuthenticatedController
   def show
     authorize @power_of_attorney_contact
     session[:ret_url] = power_of_attorney_path(@power_of_attorney_contact, @shared_user)
-  end
-
-  # GET /power_of_attorneys/new
-  def new
-    @vault_entry = PowerOfAttorneyBuilder.new.build
-    @vault_entry.user = resource_owner
-    @vault_entry.vault_entry_contacts.build
-
-    @vault_entries = attorneys
-    @vault_entries.each { |x| authorize x }
-    set_viewable_contacts
-    return unless @vault_entries.empty?
-
-    @vault_entries << @vault_entry
-    @vault_entries.each { |x| authorize x }
-  end
-  
-  def set_document_params
-    @group = "Legal"
-    @category = Rails.application.config.x.WtlCategory
-    @group_documents = DocumentService.new(:category => @category).get_group_documents(resource_owner, @group)
   end
   
   def set_documents
@@ -186,25 +151,15 @@ class PowerOfAttorneysController < AuthenticatedController
     @power_of_attorney_contact.share_with_contact_ids = category_subcategory_shares(@power_of_attorney_contact, resource_owner).map(&:contact_id)
   end
   
-  def attorneys
-    return PowerOfAttorney.for_user(resource_owner) unless @shared_user
-    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? PowerOfAttorney } unless category_shared?
-    PowerOfAttorney.for_user(@shared_user)
-  end
-  
-  def category_shared?
-     @shared_category_names.include? Rails.application.config.x.WtlCategory
-  end
-  
   def error_path(action)
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
   end
   
-    def success_path(common_path, shared_view_path)
-      ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
-    end
+  def success_path(common_path, shared_view_path)
+    ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
+  end
 
   def resource_owner 
     if shared_user_params[:shared_user_id].present?

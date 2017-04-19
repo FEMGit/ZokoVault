@@ -11,7 +11,6 @@ RSpec.describe "financial_property/new", type: :view do
       property_type: "Commercial",
       notes: "Notes",
       value: 99.99,
-      property_owner_ids: [contacts.first.id],
       address: "Address",
       city: "City",
       state: "IL",
@@ -24,8 +23,10 @@ RSpec.describe "financial_property/new", type: :view do
   
   before(:each) do
     financial_property = FinancialProperty.create! valid_attributes
+    financial_property.property_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_property.id,
+                                                                       contactable_type: financial_property.class).id
     @financial_property = assign(:financial_property, financial_property)
-    
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     render
   end
 

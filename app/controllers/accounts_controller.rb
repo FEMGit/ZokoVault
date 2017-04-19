@@ -1,5 +1,5 @@
 class AccountsController < AuthenticatedController
-
+  before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   layout "blank_layout", only: [:setup]
@@ -11,7 +11,28 @@ class AccountsController < AuthenticatedController
   def update
     update_params = free_account? ? user_params.except(:subscription_attributes) : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
-    redirect_to first_run_path
+    redirect_to session[:ret_url] || first_run_path
+  end
+  
+  def card_validation
+    begin
+      StripeService.token(params[:number], params[:exp_month], params[:exp_year], params[:cvc])
+      render :nothing => true
+    rescue Stripe::CardError => e
+      body = e.json_body
+      err = body[:error]
+      render json: err[:message], status: 500
+    end
+  end
+  
+  def generate_stripe_token
+    unless free_account?
+      stripe_token = StripeService.token(card_params[:subscription_attributes][:card_number],
+                                         card_params[:subscription_attributes][:expiration_month],
+                                         card_params[:subscription_attributes][:expiration_year],
+                                         card_params[:subscription_attributes][:cvc])
+      params[:user][:subscription_attributes][:stripe_token] = stripe_token.id
+    end
   end
 
   def show; end
@@ -28,7 +49,10 @@ class AccountsController < AuthenticatedController
 
     head status
   end
-
+  
+  def subscriptions
+    render json: Subscription.plans.to_json.html_safe
+  end
 
   def apply_promo_code
     coupon = Stripe::Coupon.retrieve(user_params[:subscription_attributes][:promo_code])
@@ -52,6 +76,16 @@ class AccountsController < AuthenticatedController
 
   def account_params
     params.require(:user).permit(:free_account)
+  end
+
+  def card_params
+    params.require(:user).permit(
+      subscription_attributes: [
+        :name_on_card, 
+        :card_number,
+        :expiration_month,
+        :expiration_year,
+        :cvc])
   end
 
   def user_params

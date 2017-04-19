@@ -17,6 +17,19 @@ ActiveRecord::Schema.define(version: 20170418201604) do
   enable_extension "plpgsql"
   enable_extension "hstore"
 
+  create_table "account_policy_owners", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "card_document_id"
+    t.integer  "user_id"
+    t.integer  "contactable_id"
+    t.string   "contactable_type"
+    t.integer  "category_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
+
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
     t.integer  "user_id"
@@ -313,12 +326,14 @@ ActiveRecord::Schema.define(version: 20170418201604) do
 
   create_table "life_and_disability_policies_primary_beneficiaries", force: :cascade do |t|
     t.integer "life_and_disability_policy_id"
-    t.integer "primary_beneficiary_id"
+    t.integer "contact_id"
+    t.integer "card_document_id"
   end
 
   create_table "life_and_disability_policies_secondary_beneficiaries", force: :cascade do |t|
     t.integer "life_and_disability_policy_id"
-    t.integer "secondary_beneficiary_id"
+    t.integer "contact_id"
+    t.integer "card_document_id"
   end
 
   create_table "multifactor_phone_codes", force: :cascade do |t|
@@ -667,6 +682,7 @@ ActiveRecord::Schema.define(version: 20170418201604) do
     t.string "word", null: false
   end
 
+  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

@@ -11,7 +11,8 @@
 
   <%= ff.label :account_owner_ids, 'Account Owners' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :account_owner_ids, @contacts, id: "alternative_owner_#{index}") %>
+    <%= account_owner_select_with_create_new(ff, :account_owner_ids, @account_owners,
+      {id: "alternative_owner_#{index}"}, owner_ids_transform(data.account_owner_ids)) %>
   </div>
   
   <%= ff.label :commitment, 'Commitment' %>

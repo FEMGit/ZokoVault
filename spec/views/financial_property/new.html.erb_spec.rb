@@ -1,10 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe "financial_property/new", type: :view do
+  let(:contacts) { Array.new(3) { create(:contact, user_id: user.id) } }
+  
+  let(:user) { create :user }
+  
   before(:each) do
     financial_property = FinancialProperty.new
     assign(:financial_property, financial_property)
-    
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     render
   end
 

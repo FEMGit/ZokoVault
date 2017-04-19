@@ -18,9 +18,10 @@
 
   <%= ff.label :policy_holder_id, 'Policy Holder' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(ff, :policy_holder_id, @contacts, id: "health_policy_holder_id_#{index}", multiple: false) %>
+    <%= account_owner_select_with_create_new(ff, :policy_holder_id, @account_owners,
+      {id: "health_policy_holder_id_#{index}", multiple: false}, data && owner_ids_transform(data.policy_holder.try(:id))) %>
   </div>
-
+  
   <%= ff.label :insured_member_ids, 'Insured Members' %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(ff, :insured_member_ids, @contacts, id: "health_insured_id_#{index}") %>

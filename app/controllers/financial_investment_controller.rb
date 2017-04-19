@@ -7,6 +7,7 @@ class FinancialInvestmentController < AuthenticatedController
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   before_action :prepare_share_params, only: [:create, :update]
+  include AccountPolicyOwnerModule
   
   # Breadcrumbs navigation
   add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
@@ -157,6 +158,8 @@ class FinancialInvestmentController < AuthenticatedController
   end
   
   def error_path(action)
+    set_contacts
+    set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)

@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "financial_alternative/new", type: :view do
+  let(:contacts) { Array.new(3) { create(:contact, user_id: user.id) } }
+  
+  let(:user) { create :user }
+  
   before(:each) do
     financial_alternative = FinancialAlternative.new
     financial_provider = FinancialProvider.new
     financial_provider.alternatives << financial_alternative
     assign(:financial_provider, financial_provider)
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     
     render
   end

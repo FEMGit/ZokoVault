@@ -7,6 +7,7 @@ class HealthsController < AuthenticatedController
   before_action :set_policy, :provider_by_policy, only: [:destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_health_share_params, only: [:create, :update]
+  include AccountPolicyOwnerModule
   
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
@@ -162,6 +163,8 @@ class HealthsController < AuthenticatedController
   end
 
   def error_path(action)
+    set_contacts
+    set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
@@ -214,7 +217,7 @@ class HealthsController < AuthenticatedController
     policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :policy_holder_id, :group_id,
+      permitted_params[policy_key] = [:id, :policy_type, :policy_number, :group_number, :group_id,
                                       :broker_or_primary_contact_id, :notes]
     end
     policies.permit(permitted_params)
@@ -224,7 +227,7 @@ class HealthsController < AuthenticatedController
     policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [insured_member_ids: []]
+      permitted_params[policy_key] = [:policy_holder_id, insured_member_ids: []]
     end
     policies.permit(permitted_params)
   end

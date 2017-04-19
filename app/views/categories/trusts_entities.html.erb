@@ -3,7 +3,7 @@
 <% if category_shared?(resource_owner, @category.name) %>
   <div class="card trusts wide">
     <h3 class="mb-20">Trusts</h3>
-    <%= link_to 'Add Trust', trusts_entities_new_trust_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button fr" %>
   </div>
 
   <div class="card cg-3 wide">

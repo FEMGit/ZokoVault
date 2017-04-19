@@ -1,7 +1,7 @@
 describe CategoryPolicy do
   subject { described_class }
 
-  let(:admin) { create(:user, email: "admin@zokuvault.com") }
+  let(:admin) { create(:user, email: "admin_mail@zokuvault.com") }
   let(:nonadmin) { create(:user, email: "nonadmin@nokuvault.com") }
   let(:category) { create(:category) }
 

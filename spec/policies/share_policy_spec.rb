@@ -6,6 +6,9 @@ describe SharePolicy do
   let(:resource) { create(:share, user: owner, contact: resource_contact) }
 
   let(:non_owner) { create(:user) }
+  let(:non_owner_contact) do
+    create(:contact, emailaddress: non_owner.email, user: non_owner)
+  end
 
   permissions :index?, :destroy?, :new?, :create? do
     context "resource is not shared" do
@@ -32,7 +35,6 @@ describe SharePolicy do
 
     context "resource is connected to non-owner contact" do
       it "permits access if user has shared resource with contact" do
-        non_owner_contact = Contact.find_by(emailaddress: non_owner.email)
         share = Share.create(user: owner, contact: non_owner_contact)
         expect(subject).to permit(non_owner, share)
       end

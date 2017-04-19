@@ -30,8 +30,7 @@ shared_examples "shared resource" do
 
     context "owner's account shared with non-owner" do
       before do
-        contact = Contact.find_by(emailaddress: non_owner.email)
-        Share.create(contact: contact, shareable: owner)
+        owner.shares.create(contact: non_owner_contact, shareable: owner)
       end
 
       it "permits access if non_owner has account-level access" do

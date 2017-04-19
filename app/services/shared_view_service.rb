@@ -7,8 +7,6 @@ class SharedViewService
         @shared_category_names_full |= [Rails.application.config.x.WillsPoaCategory]
       when Trust, Entity
         @shared_category_names_full |= [Rails.application.config.x.TrustsEntitiesCategory]
-      when Will, Trust, PowerOfAttorney
-        @shared_category_names_full |= [Rails.application.config.x.WtlCategory]
       when Health, PropertyAndCasualty, LifeAndDisability
         @shared_category_names_full |= [Rails.application.config.x.InsuranceCategory]
       when Tax
@@ -19,6 +17,7 @@ class SharedViewService
         @shared_category_names_full |= [Rails.application.config.x.FinancialInformationCategory]
       end
     end
+    @shared_category_names_full
   end
   
   def self.shares(owner, non_owner)
@@ -46,12 +45,16 @@ class SharedViewService
       end
       case shareable
       when Will
+        next if CardDocument.will(shareable.id).blank?
         groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.will(shareable.id).id]).uniq)
       when PowerOfAttorneyContact
+        next if CardDocument.power_of_attorney(shareable.id).blank?
         groups.merge!("Will - POA" => (groups["Will - POA"] + [CardDocument.power_of_attorney(shareable.id).id]).uniq)
       when Trust
+        next if CardDocument.trust(shareable.id).blank?
         groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.trust(shareable.id).id]).uniq)
       when Entity
+        next if CardDocument.entity(shareable.id).blank?
         groups.merge!("Trusts & Entities" => (groups["Trusts & Entities"] + [CardDocument.entity(shareable.id).id]).uniq)
       when Tax
         tax_year = TaxYearInfo.find_by(id: shareable.tax_year_id)

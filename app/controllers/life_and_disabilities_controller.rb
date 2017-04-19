@@ -8,6 +8,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_life_share_params, only: [:create, :update]
   after_action :set_viewable_contacts, only: [:new, :edit]
+  include AccountPolicyOwnerModule
   
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
@@ -151,6 +152,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
   
   def error_path(action)
+    set_contacts
+    set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
@@ -207,7 +210,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :policy_type, :policy_holder_id, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes]
+      permitted_params[policy_key] = [:id, :policy_type, :coverage_amount, :policy_number, :broker_or_primary_contact_id, :notes]
     end
     policies.permit(permitted_params)
   end
@@ -216,7 +219,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
+      permitted_params[policy_key] = [:policy_holder_id, primary_beneficiary_ids: [], secondary_beneficiary_ids: []]
     end
     policies.permit(permitted_params)
   end

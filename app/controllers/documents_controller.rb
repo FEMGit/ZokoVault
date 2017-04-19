@@ -248,7 +248,7 @@ class DocumentsController < AuthenticatedController
   def return_url?
     return if session[:ret_url].blank?
 
-    %w[/contacts /insurance /documents /estate_planning].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
+    %w[/contacts /insurance /documents].any? {|ret| session[:ret_url].start_with?(ret)} || :return_after_new_user
   end
 
   def save_return_url_path(document_id_to_change)

@@ -4,6 +4,7 @@ RSpec.describe ContactsController, type: :controller do
 
   let(:user) { create(:user) }
   let(:valid_attributes) { { user: user, firstname: Faker::Name.first_name, emailaddress: Faker::Internet.free_email } }
+  let(:user_profile) { UserProfile.create! user: user, date_of_birth: Time.now - 25.years }
 
   let(:invalid_attributes) { { firstname: nil } }
 
@@ -13,6 +14,7 @@ RSpec.describe ContactsController, type: :controller do
   let(:valid_session) { {} }
 
   before do
+    user.user_profile = user_profile
     sign_in user
   end
 

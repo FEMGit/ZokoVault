@@ -50,10 +50,12 @@ class AccountTrafficsController < AuthenticatedController
           return taxes_path
         when 'final_wishes'
           return final_wishes_path
-        when 'estate_planning'
-          return estate_planning_path
         when 'financial_information'
           return financial_information_path
+        when 'trusts_entities'
+          return trusts_entities_path
+        when 'wills_powers_of_attorney'
+          return wills_powers_of_attorney_path
         when 'dashboard'
           return root_path
       end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "power_of_attorneys/new_wills_poa", type: :view do
+RSpec.describe "power_of_attorneys/new", type: :view do
   let(:user) { create :user }
   
   before(:each) do

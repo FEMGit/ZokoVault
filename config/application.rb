@@ -13,7 +13,6 @@ module ZokuVault
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'services')
-    config.x.WtlCategory = "Wills - Trusts - Legal"
     config.x.WillsPoaCategory = "Wills - POA"
     config.x.TrustsEntitiesCategory = "Trusts & Entities"
     config.x.InsuranceCategory = "Insurance"
@@ -23,9 +22,8 @@ module ZokuVault
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
-                                config.x.TrustsEntitiesCategory, config.x.WtlCategory,
-                                config.x.InsuranceCategory, config.x.TaxCategory,
-                                config.x.FinalWishesCategory]
+                                config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
+                                config.x.TaxCategory, config.x.FinalWishesCategory]
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'
@@ -38,20 +36,6 @@ module ZokuVault
       config.x.TrustsEntitiesCategory => {
         "label" => "Trusts & Entities",
         "groups" => []
-      },
-      config.x.WtlCategory => {
-        "label" => "Wills - Trusts - Legal",
-        "groups" => [
-          {"value" => "will",
-            "label" => "Will"
-          },
-          {"value" => "trust",
-            "label" => "Trust"
-          },
-          {"value" => "attorney",
-            "label" => "Legal"
-          }
-        ]
       },
       config.x.InsuranceCategory => {
         "label" => "Insurance",

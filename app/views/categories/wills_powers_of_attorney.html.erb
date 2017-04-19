@@ -3,13 +3,13 @@
 <% if category_shared?(resource_owner, @category.name) %>
   <div class="card cg-1 wide">
     <h3 class="mb-20">Wills</h3>
-    <%= link_to 'Add Will', wills_poa_new_will_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Will', new_will_path(@shared_user), class: "small-button outline-button fr" %>
   </div>
 
   <div class="card cg-3 wide">
     <h3 class="mb-20">Powers of Attorney</h3>
 
-    <%= link_to 'Add Power of Attorney', wills_poa_new_power_of_attorney_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Power of Attorney', new_power_of_attorney_path(@shared_user), class: "small-button outline-button fr" %>
   </div>
 <% end %>
 

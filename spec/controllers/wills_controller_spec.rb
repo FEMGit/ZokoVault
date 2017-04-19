@@ -27,14 +27,6 @@ RSpec.describe WillsController, type: :controller do
 
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all wills as @wills" do
-      will = Will.create! valid_attributes
-      get :index, {}, session: valid_session
-      expect(assigns(:wills)).to eq([will])
-    end
-  end
-
   describe "GET #show" do
     it "assigns the requested will as @will" do
       @will = Will.create(valid_attributes)

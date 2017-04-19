@@ -51,10 +51,8 @@ Rails.application.routes.draw do
   get 'email_confirmed' => 'welcome#email_confirmed'
 
   # Default category pages ?Could probably be done better programatically?
-  get 'estate_planning' => 'categories#estate_planning'
   get 'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney'
   get 'trusts_entities' => 'categories#trusts_entities'
-  get 'share_estate_planning' => 'categories#share_estate_planning'
   get 'healthcare_choices' => 'categories#healthcare_choices'
   get 'insurance' => 'categories#insurance', as: 'insurance'
   get 'shared' => 'categories#shared'
@@ -67,8 +65,7 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :destroy]
 
   # Wills
-  get 'wills/new', to: 'wills#new', as: :new_will
-  get 'wills/new_wills_poa(/:shared_user_id)', to: 'wills#new_wills_poa', as: :wills_poa_new_will # todo: delete wills-poa routes
+  get 'wills/new(/:shared_user_id)', to: 'wills#new', as: :new_will
   get 'wills/edit/:id(/:shared_user_id)', to: 'wills#edit', as: :edit_will
   get 'wills/show/:id(/:shared_user_id)', to: 'wills#show', as: :will
   patch 'wills/show/:id', to: 'wills#update'
@@ -79,8 +76,7 @@ Rails.application.routes.draw do
   delete 'wills/:id', to: 'wills#destroy'
 
   # Powers of Attorney
-  get 'power_of_attorneys/new', to: 'power_of_attorneys#new', as: :new_power_of_attorney
-  get 'power_of_attorneys/new_wills_poa(/:shared_user_id)', to: 'power_of_attorneys#new_wills_poa', as: :wills_poa_new_power_of_attorney # todo: delete wills-poa routes
+  get 'power_of_attorneys/new(/:shared_user_id)', to: 'power_of_attorneys#new', as: :new_power_of_attorney
   get 'power_of_attorneys/edit/:id(/:shared_user_id)', to: 'power_of_attorneys#edit', as: :edit_power_of_attorney
   get 'power_of_attorneys/show/:id(/:shared_user_id)', to: 'power_of_attorneys#show', as: :power_of_attorney
   patch 'power_of_attorneys/show/:id', to: 'power_of_attorneys#update'
@@ -93,8 +89,7 @@ Rails.application.routes.draw do
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 
   # Trusts
-  get 'trusts/new', to: 'trusts#new', as: :new_trust
-  get 'trusts/new_trusts_entities(/:shared_user_id)', to: 'trusts#new_trusts_entities', as: :trusts_entities_new_trust # todo: delete wills-poa routes
+  get 'trusts/new(/:shared_user_id)', to: 'trusts#new', as: :new_trust
   get 'trusts/edit/:id(/:shared_user_id)', to: 'trusts#edit', as: :edit_trust
   get 'trusts/show/:id(/:shared_user_id)', to: 'trusts#show', as: :trust
   patch 'trusts/show/:id', to: 'trusts#update'
@@ -159,12 +154,14 @@ Rails.application.routes.draw do
   get 'my_profile' => 'user_profiles#show'
 
   get 'account/first_run' => 'accounts#first_run', as: :first_run
+  post 'account/card_validation' => 'accounts#card_validation'
   resource :account, only: [:update, :show] do
     collection do
       get :setup
       get :my_profile
       post :send_code
       post :apply_promo_code
+      get :subscriptions
       put :send_code
       post :verify_code
       put :verify_code
@@ -241,7 +238,6 @@ Rails.application.routes.draw do
 
   # Shared view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
-  get 'shared_view/:shared_user_id/estate_planning' => 'shared_view#estate_planning', as: :shared_view_estate_planning
   get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :shared_view_wills_powers_of_attorney
   get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :shared_view_trusts_entities
   get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
@@ -256,20 +252,8 @@ Rails.application.routes.draw do
   # Documents
   get 'shared_view/:shared_user_id/documents/:id' => 'documents#show', as: :shared_documents
 
-  # Shared wtl wills
-  get 'shared_view/:shared_user_id/estate_planning/wills' => 'wills#index', as: :shared_wills
-  get 'shared_view/:shared_user_id/estate_planning/wills/new' => 'wills#new', as: :shared_new_wills
-
   # Search
   get "/search", to: "search#index", as: :search
-
-  # Shared wtl trusts
-  get 'shared_view/:shared_user_id/estate_planning/trusts' => 'trusts#index', as: :shared_trusts
-  get 'shared_view/:shared_user_id/estate_planning/trusts/new' => 'trusts#new', as: :shared_new_trusts
-
-  # Shared wtl power of attorneys
-  get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys' => 'power_of_attorneys#index', as: :shared_power_of_attorneys
-  get 'shared_view/:shared_user_id/estate_planning/power_of_attorneys/new' => 'power_of_attorneys#new', as: :shared_new_power_of_attorneys
 
   # Shared insurance healths
   get 'shared_view/:shared_user_id/insurance/health' => 'healths#index', as: :shared_healths

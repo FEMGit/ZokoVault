@@ -25,14 +25,6 @@ RSpec.describe TrustsController, type: :controller do
 
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all trusts as @trusts" do
-      trust = create(:trust, user_id: user.id)
-      get :index, {}, valid_session
-      expect(assigns(:trusts)).to eq([trust])
-    end
-  end
-
   describe "GET #show" do
     it "assigns the requested trust as @trust" do
       @trust = Trust.create(valid_attributes)

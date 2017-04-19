@@ -20,13 +20,7 @@ class FinancialProperty < ActiveRecord::Base
   
   belongs_to :financial_provider, dependent: :destroy
   
-  has_many :financial_account_owners, as: :contactable, dependent: :destroy
-  
-  has_many :property_owners,
-    -> { where("financial_account_owners.contactable_type = ?",
-               "FinancialProperty").uniq },
-  through: :financial_account_owners,
-  source: :contact
+  has_many :property_owners, as: :contactable, dependent: :destroy, :class_name => 'AccountPolicyOwner'
   
   has_many :shares, as: :shareable, dependent: :destroy
   has_many :share_with_contacts, through: :shares, source: :contact

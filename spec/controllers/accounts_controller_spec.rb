@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AccountsController, type: :controller do
 
-  let(:current_user) { create :user, setup_complete: false, user_profile: UserProfile.new }
+  let(:current_user) { create :user, setup_complete: false, user_profile: UserProfile.new({date_of_birth: (Time.now - 25.years)}) }
 
   before do
     sign_in current_user

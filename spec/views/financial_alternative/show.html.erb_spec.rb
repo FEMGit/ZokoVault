@@ -27,7 +27,6 @@ RSpec.describe "financial_alternative/show", type: :view do
     {
       alternative_type: "Venture Capital",
       name: "Investment Name",
-      account_owner_ids: [contacts.first.id],
       commitment: "100",
       total_calls: "101",
       total_distributions: "102",
@@ -40,6 +39,8 @@ RSpec.describe "financial_alternative/show", type: :view do
   
   before(:each) do
     financial_alternative = FinancialAlternative.create! alternative_0
+    financial_alternative.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_alternative.id,
+                                                                       contactable_type: financial_alternative.class).id
     financial_provider = FinancialProvider.create! valid_attributes
     financial_provider.alternatives << financial_alternative
     assign(:financial_provider, financial_provider)

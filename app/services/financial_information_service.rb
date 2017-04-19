@@ -23,14 +23,14 @@ class FinancialInformationService
   def self.update_property_owners(property, property_params)
     property.property_owners.clear
     property_params["property_owner_ids"].to_a.select(&:present?).each do |contact_id|
-      FinancialAccountOwner.create(contact_id: contact_id, contactable_id: property.id, contactable_type: property.class)
+      AccountPolicyOwnerService.fill_account_policy_owner(contact_id, property)
     end
   end
   
   def self.update_investment_owners(investment, investment_params)
     investment.owners.clear
     investment_params["owner_ids"].to_a.select(&:present?).each do |contact_id|
-      FinancialAccountOwner.create(contact_id: contact_id, contactable_id: investment.id, contactable_type: investment.class)
+      AccountPolicyOwnerService.fill_account_policy_owner(contact_id, investment)
     end
   end
   
@@ -39,7 +39,7 @@ class FinancialInformationService
       key = account_params.keys[index]
       account.account_owners.clear
       account_params[key]["account_owner_ids"].to_a.select(&:present?).each do |contact_id|
-        FinancialAccountOwner.create(contact_id: contact_id, contactable_id: account.id, contactable_type: account.class)
+        AccountPolicyOwnerService.fill_account_policy_owner(contact_id, account)
       end
     end
   end

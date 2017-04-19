@@ -22,9 +22,10 @@
     $('#financial_property_value'))" %>
   </div>
   
-  <%= f.label :property_owner_ids, 'Property Owners' %>
+  <%= f.label :property_owner_ids, 'Owners' %>
   <div class="chosen-styled-select">
-    <%= contact_select_with_create_new(f, :property_owner_ids, @contacts) %>
+    <%= account_owner_select_with_create_new(f, :property_owner_ids, @account_owners,
+      {}, owner_ids_transform(@financial_property.property_owner_ids)) %>
   </div>
   
   <%= f.label :value, 'Property Value' %>

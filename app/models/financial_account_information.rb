@@ -20,13 +20,7 @@ class FinancialAccountInformation < ActiveRecord::Base
                       "Business Loan",
                       "Student Loan",
                       "Undrawn Commitment"]
-  has_many :financial_account_owners, as: :contactable, dependent: :destroy
-  
-  has_many :account_owners,
-    -> { where("financial_account_owners.contactable_type = ?",
-               "FinancialAccountInformation").uniq },
-  through: :financial_account_owners,
-  source: :contact
+  has_many :account_owners, as: :contactable, dependent: :destroy, :class_name => 'AccountPolicyOwner'
   
   scope :for_user, ->(user) { where(user: user) }
   

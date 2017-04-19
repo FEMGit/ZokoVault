@@ -13,7 +13,6 @@ RSpec.describe "financial_investment/show", type: :view do
       investment_type: "Private Company Stock",
       notes: "Notes",
       value: "100",
-      owner_id: contacts.first.id,
       address: "Address",
       city: "City",
       state: "IL",
@@ -37,6 +36,8 @@ RSpec.describe "financial_investment/show", type: :view do
   
   before(:each) do
     financial_investment = FinancialInvestment.create! valid_attributes
+    financial_investment.owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_investment.id,
+                                                                       contactable_type: financial_investment.class).id
     financial_provider = FinancialProvider.create! provider_attributes
     financial_provider.investments << financial_investment
     assign(:financial_investment, financial_investment)

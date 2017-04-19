@@ -16,6 +16,23 @@ module ApplicationHelper
     @contact = Contact.new
     content_for :new_contact_form, render("contacts/ajax_form")
   end
+  
+  def account_owner_select_with_create_new(form, name, account_owners, html_options = {}, selected_items = [])
+    initialize_new_contact_form
+    select_options = account_owners.dup
+    select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
+
+    local_options = {
+      'data-placeholder': 'Choose Contacts...',
+      class: 'chosen-select add-new-contactable',
+      multiple: true,
+      onchange: "handleSelectOnChange(this);",
+      disabled: disabled?(name)
+    }.merge(html_options)
+
+    form.collection_select(name, select_options,
+                           :first, :second, {selected: selected_items}, local_options)
+  end
 
   def contact_select_with_create_new(form, name, contacts, html_options = {})
     initialize_new_contact_form

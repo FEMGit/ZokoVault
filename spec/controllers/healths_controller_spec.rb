@@ -14,7 +14,6 @@ RSpec.describe HealthsController, type: :controller do
     {
       policy_type: HealthPolicy.policy_types.keys.sample,
       policy_number: Faker::Code.imei,
-      policy_holder_id: contacts.first.id,
       group_number: Faker::Code.imei,
       broker_or_primary_contact_id: contacts[2].id,
       notes: Faker::Lorem.sentences(1).to_s,

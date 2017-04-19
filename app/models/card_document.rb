@@ -35,4 +35,12 @@ class CardDocument < ActiveRecord::Base
   def self.entity(id)
     CardDocument.find_by(object_type: 'Entity', card_id: id)
   end
+  
+  def self.trusts
+    CardDocument.where(object_type: 'Trust')
+  end
+  
+  def self.entities
+    CardDocument.where(object_type: 'Entity')
+  end
 end

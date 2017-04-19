@@ -12,7 +12,6 @@ RSpec.describe FinancialPropertyController, type: :controller do
       property_type: "Commercial",
       notes: "Notes",
       value: 99.99,
-      property_owner_ids: [contacts.first.id],
       address: "Address",
       city: "City",
       state: "IL",
@@ -45,6 +44,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
     describe "GET #show" do
       it "assigns the requested financial property @financial_property" do
         financial_property = FinancialProperty.create! valid_attributes
+        financial_property.property_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_property.id,
+                                                                       contactable_type: financial_property.class).id
         financial_provider = FinancialProvider.create! provider_attributes
         financial_provider.properties << financial_property
         get :show, { id: financial_property.to_param }, session: valid_session
@@ -88,6 +89,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
 
       before do
         post :create, { financial_property: valid_attributes }, session: valid_session
+        financial_property.property_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_property.id,
+                                                                       contactable_type: financial_property.class).id
       end
 
       it "assigns a newly created financial property as @financial_property" do
@@ -112,7 +115,7 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns owner" do
-        property_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_property.id).contact_id
+        property_owner_id = AccountPolicyOwner.find_by(contactable_id: financial_property.id).contact_id
         expect(property_owner_id).to eq contacts.first.id
       end
       
@@ -164,7 +167,6 @@ RSpec.describe FinancialPropertyController, type: :controller do
           property_type: "House",
           notes: "Notes New",
           value: 100,
-          property_owner_ids: [contacts.second.id],
           address: "Address New",
           city: "City New",
           state: "AL",
@@ -191,6 +193,8 @@ RSpec.describe FinancialPropertyController, type: :controller do
         financial_property = FinancialProperty.create! valid_attributes
         financial_provider.properties << financial_property
         put :update, { id: financial_property.to_param, financial_property: new_valid_attributes }, session: valid_session
+        financial_property.property_owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_property.id,
+                                                                       contactable_type: financial_property.class).id
       end
 
       it "shows correct flash message on update" do
@@ -218,7 +222,7 @@ RSpec.describe FinancialPropertyController, type: :controller do
       end
       
       it "assigns owner" do
-        property_owner_id = FinancialAccountOwner.find_by(contactable_id: financial_property.id).contact_id
+        property_owner_id = AccountPolicyOwner.find_by(contactable_id: financial_property.id).contact_id
         expect(property_owner_id).to eq contacts.second.id
       end
       

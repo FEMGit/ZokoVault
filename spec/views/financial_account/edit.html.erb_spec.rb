@@ -28,7 +28,6 @@ RSpec.describe "financial_account/edit", type: :view do
     {
       account_type: "Bond",
       name: "Account Name",
-      account_owner_ids: [contacts.second.id],
       value: "15000",
       primary_contact_broker_id: primary_contact_broker.id,
       notes: "Notes",
@@ -41,6 +40,7 @@ RSpec.describe "financial_account/edit", type: :view do
     financial_provider = FinancialProvider.create! valid_attributes
     financial_provider.accounts << financial_account
     @financial_provider = assign(:financial_provider, financial_provider)
+    @account_owners = contacts.collect { |s| [s.id.to_s + '_contact', s.name, class: "contact-item"] }
     render
   end
 

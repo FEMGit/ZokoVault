@@ -13,7 +13,6 @@ RSpec.describe FinancialInvestmentController, type: :controller do
       investment_type: "Private Company Stock",
       notes: "Notes",
       value: "99.99",
-      owner_ids: [contacts.first.id],
       address: "Address",
       city: "City",
       state: "IL",
@@ -44,6 +43,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
   describe "GET #show" do
     it "assigns the requested financial investment @financial_investment" do
       financial_investment = FinancialInvestment.create! valid_attributes
+      financial_investment.owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_investment.id,
+                                                                       contactable_type: financial_investment.class).id
       financial_provider = FinancialProvider.create! provider_attributes
       financial_provider.investments << financial_investment
       get :show, { id: financial_investment.to_param }, session: valid_session
@@ -86,6 +87,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
 
       before do
         post :create, { financial_investment: valid_attributes }, session: valid_session
+        financial_investment.owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_investment.id,
+                                                                       contactable_type: financial_investment.class).id
       end
 
       it "assigns a newly created financial investment as @financial_investment" do
@@ -114,7 +117,7 @@ RSpec.describe FinancialInvestmentController, type: :controller do
       end
       
       it "assigns owner" do
-        owner_id = FinancialAccountOwner.find_by(contactable_id: financial_investment.id).contact_id
+        owner_id = AccountPolicyOwner.find_by(contactable_id: financial_investment.id).contact_id
         expect(owner_id).to eq contacts.first.id
       end
       
@@ -170,7 +173,6 @@ RSpec.describe FinancialInvestmentController, type: :controller do
           investment_type: "IOU",
           notes: "Notes New",
           value: 100,
-          owner_ids: [contacts.second.id],
           address: "Address New",
           city: "City New",
           state: "AL",
@@ -197,6 +199,8 @@ RSpec.describe FinancialInvestmentController, type: :controller do
         financial_provider = FinancialProvider.create! new_provider_attributes
         financial_provider.investments << financial_investment
         put :update, { id: financial_investment.to_param, financial_investment: new_valid_attributes }, session: valid_session
+        financial_investment.owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_investment.id,
+                                                                       contactable_type: financial_investment.class).id
       end
 
       it "shows correct flash message on update" do
@@ -228,7 +232,7 @@ RSpec.describe FinancialInvestmentController, type: :controller do
       end
       
       it "assigns owner" do
-        owner_id = FinancialAccountOwner.find_by(contactable_id: financial_investment.id).contact_id
+        owner_id = AccountPolicyOwner.find_by(contactable_id: financial_investment.id).contact_id
         expect(owner_id).to eq contacts.second.id
       end
       
@@ -258,7 +262,7 @@ RSpec.describe FinancialInvestmentController, type: :controller do
       
       it "assigns share_with-contacts" do
         share_contact_ids = Share.where(contact_id: financial_investment.share_with_contact_ids, shareable_type:'FinancialProvider').map(&:contact_id)
-        expect(share_contact_ids).to eq contacts.first(2).map(&:id)
+        expect(share_contact_ids.sort).to eq contacts.first(2).map(&:id).sort
       end
     end
   end

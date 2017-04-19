@@ -27,7 +27,6 @@ RSpec.describe FinancialAlternativeController, type: :controller do
     {
       alternative_type: "Venture Capital",
       name: "Investment Name",
-      account_owner_ids: [contacts.first.id],
       commitment: "99.99",
       total_calls: "99.99",
       total_distributions: "99.99",
@@ -49,6 +48,8 @@ RSpec.describe FinancialAlternativeController, type: :controller do
   describe "GET #show" do
     it "assigns the requested financial alternative provider as @financial_provider" do
       financial_alternative = FinancialAlternative.create! alternative_0
+      financial_alternative.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.first.id, contactable_id: financial_alternative.id,
+                                                                       contactable_type: financial_alternative.class).id
       financial_provider = FinancialProvider.create! valid_attributes
       financial_provider.alternatives << financial_alternative
       get :show, { id: financial_provider.to_param }, session: valid_session
@@ -189,7 +190,11 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       
       before do
         financial_provider = FinancialProvider.create! valid_attributes
+        AccountPolicyOwner
         put :update, { id: financial_provider.to_param, financial_provider: new_provider_attributes.merge(alternative_0: new_alternative_attributes) }, session: valid_session
+        financial_alternative = financial_provider.alternatives.first
+        financial_alternative.account_owner_ids = (AccountPolicyOwner.create contact_id: contacts.second.id, contactable_id: financial_alternative.id,
+                                                                         contactable_type: financial_alternative.class).id
       end
 
       it "shows correct flash message on update" do
@@ -205,7 +210,7 @@ RSpec.describe FinancialAlternativeController, type: :controller do
       end
       
       it "assigns the requested financial alternative owner" do
-        account_owner_id = FinancialAccountOwner.find_by(contactable_id: assigns(:financial_provider).alternatives.first.id).contact_id
+        account_owner_id = AccountPolicyOwner.find_by(contactable_id: assigns(:financial_provider).alternatives.first.id).contact_id
         expect(account_owner_id).to eq contacts.second.id
       end
       

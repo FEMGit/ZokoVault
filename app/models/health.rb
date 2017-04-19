@@ -18,6 +18,7 @@ class Health < Vendor
   def clear_insured_members
     self.policy.each do |policy|
       policy.insured_members.clear
+      policy.policy_holder = nil
     end
   end
   

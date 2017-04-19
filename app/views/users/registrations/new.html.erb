@@ -19,9 +19,6 @@
       <%= user_profile_form.label :first_name, 'First Name', autofocus: true %>
       <%= user_profile_form.text_field :first_name %>
 
-      <%= user_profile_form.label :middle_name, 'Middle Name' %><span class="optional"> optional</span>
-      <%= user_profile_form.text_field :middle_name %>
-
       <%= user_profile_form.label :last_name, 'Last Name' %>
       <%= user_profile_form.text_field :last_name %>
 
@@ -31,11 +28,6 @@
       <% end %>
       <%= f.email_field :email, { class: ("input-error" if resource.errors.messages[:email].present?) } %>
 
-      <%= user_profile_form.label :date_of_birth, 'Date of Birth'%>
-      <% if errors && resource.errors.messages[:'user_profile.Date of Birth'] %>
-        <span class="error-label"> - <%= resource.errors.messages[:'user_profile.Date of Birth'].first.html_safe %></span>
-      <% end %>
-      <%= render partial: 'layouts/date_picker', locals: { birth_value: user_profile_form.object.date_of_birth, error_condition: resource.errors.messages[:'user_profile.Date of Birth'].present?, f: user_profile_form, object: :date_of_birth} %>
       <%= f.label :password %>
       <%= render partial: 'layouts/password_requirements' %>
       <% if errors && resource.errors.messages[:password] %>

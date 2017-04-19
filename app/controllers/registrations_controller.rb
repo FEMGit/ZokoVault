@@ -8,12 +8,8 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def sign_up_params
-    params[:user][:user_profile_attributes][:date_of_birth] = date_format
-    params.require(:user)
-      .permit(:email, :password, :password_confirmation,
-        user_profile_attributes: [
-          :first_name, :middle_name, :last_name, :date_of_birth
-        ])
+    params.require(:user).permit :email, :password, :password_confirmation,
+      user_profile_attributes: [:first_name, :last_name]
   end
 
   def account_update_params

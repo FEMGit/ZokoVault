@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
-  resources :tutorials do
-    get '/:page_id', to: 'pages#show', as: :page
-  end
   resources :final_wishes
   resources :usage_metrics
   resources :taxes
@@ -180,6 +176,11 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
   get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
+
+  get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
+  resources :tutorials do
+    get '/:page_id', to: 'pages#show', as: :page
+  end
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 

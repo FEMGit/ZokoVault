@@ -1,17 +1,19 @@
 <h1>Trusts & Entities</h1>
 
-<% if category_shared?(resource_owner, @category.name) %>
-  <div class="card trusts wide">
-    <h3 class="mb-20">Trusts</h3>
+
+<div class="card trusts wide">
+  <h3 class="mb-20">Trusts</h3>
+  <% if category_shared?(resource_owner, @category.name) %>
     <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button fr" %>
-  </div>
+  <% end %>
+</div>
 
-  <div class="card cg-3 wide">
-    <h3 class="mb-20">Entities and Corporations</h3>
-
+<div class="card cg-3 wide">
+  <h3 class="mb-20">Entities and Corporations</h3>
+  <% if category_shared?(resource_owner, @category.name) %>
     <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button fr" %>
-  </div>
-<% end %>
+  <% end %>
+</div>
 
 <section class="flex-boxes">
   <% @trusts.each do |trust| %>

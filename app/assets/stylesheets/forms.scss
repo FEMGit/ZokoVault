@@ -137,6 +137,16 @@ label{
     font-size: 12px;
   }
 }
+//PASSWORD VALIDATION
+.password-validation{
+  font-size: 14px;
+}
+.conditions-met{
+  color: $color-confirm;
+}
+.conditions-fail{
+  color: $color-alert;
+}
 
 //STATE ZIP COMBO
 .state-input{

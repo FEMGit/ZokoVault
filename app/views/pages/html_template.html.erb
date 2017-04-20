@@ -1,6 +1,37 @@
 <h3 class="mt-20 mb-20">Setup Your Vault</h3>
 
 <div class="card mb-30">
+  <h1 class="mb-20">Password Strength</h1>
+  <label>Password</label>
+  <input type="text">
+  <div class="password-validation">
+    <span class="conditions-met">
+      <svg class="icon mr-10">
+        <use xlink:href="#icon-checkmark-1"></use>
+      </svg>Has 10 or more characters
+    </span><br>
+    <span class="conditions-fail">
+      <svg class="icon mr-10">
+        <use xlink:href="#icon-x-1"></use>
+      </svg>Use upper and lower case letters (e.g. Aa)
+    </span><br>
+    <span class="conditions-fail">
+      <svg class="icon mr-10">
+        <use xlink:href="#icon-x-1"></use>
+      </svg>Use a number (e.g. 1234)
+    </span><br>
+    <span class="conditions-fail">
+      <svg class="icon mr-10">
+        <use xlink:href="#icon-x-1"></use>
+      </svg>Use a symbol (e.g. !@#$)
+    </span>
+</div>
+  <%= render :partial => 'pages/tutorial_buttons' %>
+</div>
+
+<h3 class="mt-20 mb-20">Setup Your Vault</h3>
+
+<div class="card mb-30">
   <h1 class="mb-20">Template Title</h1>
   <label>Form Label</label>
   <input type="text">

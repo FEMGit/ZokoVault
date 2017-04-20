@@ -1,5 +1,87 @@
 $table-cell-small: 160px;
 
+//Product Comparison Table
+table.product-comparison {
+  margin: 0;
+  padding:0;
+  outline: 0;
+  font-size: 100%;
+  border: 1px solid $color-gray-light;
+  border-left: 0;
+  border-top: 0;
+  vertical-align: baseline;
+  background: transparent;
+  width: 100%;
+  th {
+    border-bottom: 0;
+    border-right: 0;
+    &.table-title {
+      text-align: left;
+      max-width: 100px;
+      overflow-wrap: break-word;
+      line-height: 30px;
+      width: 50%;
+    }
+    text-transform: none;
+    height: 250px;
+    &.plan-information {
+      width: 25%;
+      min-width: 155px;
+      border: 1px solid $color-gray-light;
+      border-bottom: 0;
+      border-right: 0;
+      background-color: $color-gray-light-tinted;
+      position: relative;
+      &:after {
+        color: $color-white;
+        font-weight: 600;
+        font-size: 18px;
+        text-align: center;
+        display: block;
+        position: absolute;
+        top:0;
+        margin-left: -5px;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        background: $color-primary-shaded;
+      }
+      &.free:after {
+        content: "FREE PLAN";
+        width: calc(100% + 1px);
+      }
+      &.premium:after {
+        content: "PREMIUM PLAN";
+        width: calc(100% + 1px);
+        margin-left: -6px;
+      }
+    }
+  }
+  td {
+    border: 1px solid $color-gray-light;
+    border-bottom: 0;
+    border-right: 0;
+    vertical-align: middle;
+    text-align: center;
+    &.description {
+      text-align: left;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .circle {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background: $color-green;
+  }
+}
+
 .dataTables_wrapper {
   @include media($eightfifty) {
     overflow-x: scroll;

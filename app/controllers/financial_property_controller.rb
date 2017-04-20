@@ -62,26 +62,28 @@ class FinancialPropertyController < AuthenticatedController
   
   def create
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
-    if !params[:tutorial_id]
-      @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
-      @financial_provider.properties << @financial_property
-      authorize @financial_property
-    end
-    respond_to do |format|
-      if params[:tutorial_id] && @financial_property.save
-        redirect_to tutorials_confirmation_path and return
-      else
-        flash[:alert] = "Fill in Property Name field to continue"
-        redirect_to tutorial_page_path('home', '1') and return
-      end
+    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
+    @financial_provider.properties << @financial_property
+    authorize @financial_property
 
+    respond_to do |format|
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
         FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
+
+        if params[:tutorial_id]
+          redirect_to tutorials_confirmation_path and return
+        end
+
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
+        if params[:tutorial_id]
+          flash[:alert] = "Fill in Property Name field to continue"
+          redirect_to tutorial_page_path('home', '1') and return
+        end
+
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }

@@ -9,6 +9,6 @@
     <%= link_to "Skip", tutorial_page_path(@current_tutorial_name, '1'), class: "big-button outline-button padded" %>
   <% end %>
   &nbsp
-  <%= link_to "Continue", tutorials_confirmation_path, class: "button big-button blue-button f-right" %>
+  <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
 
 </section>

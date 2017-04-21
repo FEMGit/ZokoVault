@@ -6,7 +6,8 @@ private
 
  def redirect_if_free_user
     if current_user && current_user.setup_complete? &&
-       current_user.free? && !permitted_page_free_user?
+       current_user.free? && !permitted_page_free_user? &&
+       current_user.mfa_verify? && session[:mfa] 
       redirect_to shares_path
     end
   end
@@ -23,7 +24,7 @@ private
     end
   end
 
-  def mfa_verify!  
+  def mfa_verify!
     if current_user.mfa_verify? && !session[:mfa] 
       redirect_to mfa_path
     end

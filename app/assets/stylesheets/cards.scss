@@ -62,6 +62,13 @@ $cards-margin: 12px;
   &.centered {
     margin: 0 auto;
   }
+  &.vault-info {
+    @include media($tablet) {
+      .description {
+        width: 100% !important;
+      }
+    }
+  }
 }
 
 //CARD TABS
@@ -248,6 +255,9 @@ $cards-margin: 12px;
   border-radius: 0 0 5px 0;
   border-top: 1px solid $color-primary;
 
+  &.shared-bottom-border {
+    border-bottom: 1px solid $color-primary;
+  }
   &.edit-shared{
     margin: 10px -15px 10px -15px;
     border-bottom: 1px solid $color-primary;

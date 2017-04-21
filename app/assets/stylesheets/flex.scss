@@ -166,6 +166,12 @@
   padding: 0 15px 15px 25px;
   position: relative;
   @include media($teneighty) {
+    img {
+      width: 50%;
+      margin-left: 0 !important;
+      margin-bottom: 0 !important;
+      margin-top: 15px;
+    }
     position: static !important;
     flex: 100%;
     .flex-footer {

@@ -1,3 +1,63 @@
+<h3 class="mt-20 mb-20">Share Your Vault</h3>
+<div class="card vault-info mb-30 text-center">
+  <h2 class="card-label fn clr-color-primary mb-30">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg> Shared With
+  </h2>
+  
+  <span class="mb-30 inline-block">ZokuVault lets you securely share your vault with family members and professional advisors.<br>
+     Here are some examples of how people share with ZokuVault.
+  </span>
+  
+   <div class="max-w-600 m-0-auto mb-30">
+     <%= image_tag "marketing/lock.png", :class => "w-120 inline-block w-30-percent"%>
+     <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share your entire vault with your spouse/domestic partner.</h4>
+     <span class="clear mb-30"></span>
+   
+     <%= image_tag "marketing/files.png", :class => "w-120 inline-block w-30-percent"%>
+     <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share documents with your estate planning attorney.</h4>
+     <span class="clear mb-30"></span>
+   
+     <%= image_tag "marketing/rocket.png", :class => "w-120 inline-block w-30-percent"%>
+     <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share your kids insurance cards with your parents.</h4>
+     <span class="clear mb-30"></span>
+   </div>
+  
+  <section class="mt-30 bt-gray-light pt-20 mb-10 flex-button">
+    <a class="big-button outline-button padded f-left">Back</a>
+    <a class="big-button outline-button padded">Skip</a>
+    <a class="button big-button blue-button f-right">Continue</a>
+  </section>
+</div>
+
+<h3 class="mt-20 mb-20">Share Your Vault</h3>
+<div class="card mb-30 text-center">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">You added a spouce. Do you want to share your entire vault with them?</h5>
+  <section class="max-w-600 inline-block">
+    <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
+    <p class="mb-30">You can share your entire vault with one other person. When you share with this user they will have full access to all of your documents, data and contacts. They are not required to pay any additional freed for this access.</p>
+  </section>
+  
+  <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
+    <h3 class="card-label fn clr-color-primary mb-30">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      Primary Shared With
+    </h3>
+    <%= render partial: 'layouts/static_chosen_select', locals: { field_multiple: true, field_name: 'primary_shared_with', field_id: 'primary_shared_with_id' } %>
+  </div>
+  
+  <span>When you share with Contact Name, ZokuVault will send a <%= link_to 'message', 'javascript:void(0);', class: 'no-underline-link' %> to let them know.</span>
+  
+  <section class="mt-30 bt-gray-light pt-20 mb-10 flex-button">
+    <a class="big-button outline-button padded f-left">Back</a>
+    <a class="big-button outline-button padded">Skip</a>
+    <a class="button big-button blue-button f-right">Continue</a>
+  </section>
+</div>
+
 <h3 class="mt-20 mb-20">Email verification sent</h3>
 <div class="card centered mb-30 max-w-430 text-center">
   <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Check your email.</h5>
@@ -30,7 +90,7 @@
   </ul>
   
   <p>2. Do you have feedback you would like to leave our team?</p>
-  <%= text_area_tag 'feedback', nil, class: 'max-w-430 w-430 h-100' %>
+  <%= text_area_tag 'feedback', nil, class: 'max-w-430 h-100' %>
   
   <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
     <a class="big-button outline-button padded f-left">Back</a>
@@ -99,7 +159,7 @@
       <p class="text-center mb-30">You have started your journey to securing your life's important details.</p>
       
       <div class="text-center flex-footer">
-        <p class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button' %></p>
+        <p class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button m-0' %></p>
         <p class="mb-0"><%= link_to 'No Thanks', 'javascript:void(0);', class: 'no-underline-link' %></p>
       </div>
     </div>
@@ -306,3 +366,9 @@
 
   <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
+
+<% @contact = Contact.new %>
+<%= render partial: 'contacts/ajax_form' %>
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

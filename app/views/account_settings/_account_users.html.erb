@@ -13,7 +13,7 @@
         Primary Shared With
       </h3>
       <p class="shared-description">
-        The contact(s) selected for 'Primary Shared With' has full read and write access to this Zoku Vault account and all of its details. This person is typically a spouse, attorney ot family member.</p>
+        The contact(s) selected for 'Primary Shared With' has full read and write access to this ZokuVault account and all of its details. This person is typically a spouse, attorney or family member.</p>
       <%= f.label :primary_shared_with, 'Primary Shared With' %>
       <div class="chosen-styled-select">
         <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, id: "primary_shared_with") %>

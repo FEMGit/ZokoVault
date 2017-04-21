@@ -231,6 +231,16 @@ a:visited.main-nav{
 
   @include media($nav-height) {
     &.bottom-nav {
+      &:not(.free) {
+        position: fixed;
+        width: inherit;
+        bottom: 20px;
+      }
+    }
+  }
+  
+  @include media($nav-height-free) {
+    &.bottom-nav.free {
       position: fixed;
       width: inherit;
       bottom: 20px;
@@ -239,9 +249,13 @@ a:visited.main-nav{
 
   @include media($mobile) {
     &.bottom-nav {
-      position: relative;
-      bottom: 0;
+      position: relative !important;
+      bottom: 0 !important;
     }
+  }
+  
+  &.blocked {
+    opacity: .5;
   }
 
   &.active{

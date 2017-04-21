@@ -156,6 +156,7 @@ Rails.application.routes.draw do
 
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   post 'account/card_validation' => 'accounts#card_validation'
+  get 'account/create_zokuvault' => 'accounts#upgrade', as: :account_upgrade
   resource :account, only: [:update, :show] do
     collection do
       get :setup

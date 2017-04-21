@@ -1,10 +1,10 @@
 var DatatableUpdate = function(tableId, tableSettings, desirableColspan) {
-  $(tableId).DataTable(tableSettings);
+  $(tableId).DataTable(tableSettings[0], tableSettings[1], tableSettings[2]);
   // Save all controls to variables and add listeners
   var controlsArray = prepareTableControls(tableId, desirableColspan)
 
   // Change table to match design
-  updateSearchField(tableId, controlsArray)
+  updateSearchField(tableId, controlsArray, tableSettings[1])
   updateTable(tableId, desirableColspan, controlsArray)
 }
 
@@ -53,12 +53,12 @@ var prepareTableControls = function(table_id, desirableColspan) {
 }
   
 // Change View of Search Field
-var updateSearchField = function(table_id, controlsArray) {
+var updateSearchField = function(table_id, controlsArray, recordName) {
   var search_label = controlsArray[3].find('label')
   var search_input = controlsArray[3].find('input')
   search_label.replaceWith(search_input)
   $(table_id + '_wrapper').before(controlsArray[3])
-  controlsArray[3].find('input').attr('placeholder', 'Search Documents...')
+  controlsArray[3].find('input').attr('placeholder', 'Search ' + capitalize(recordName) + '...')
 }
   
 var updateTable = function(table_id, desirableColspan, controlsArray) {
@@ -114,4 +114,9 @@ var tableEmpty = function (table_id) {
   } else {
     return false
   }
+}
+
+// Helper Functions
+var capitalize = function(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }

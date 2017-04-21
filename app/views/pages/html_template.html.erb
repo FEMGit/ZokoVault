@@ -1,12 +1,118 @@
-<h3 class="mt-20 mb-20">Setup Your Vault</h3>
+<h3 class="mt-20 mb-20">Email verification sent</h3>
+<div class="card centered mb-30 max-w-430 text-center">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Check your email.</h5>
+  <%= image_tag "marketing/airplane.png", :class => "mb-30 w-50-percent" %>
+  <p class="text-center mb-10">We sent you a link to verify your identity.</p>
+</div>
 
+<h3 class="mt-20 mb-20">Thanks for Being a Trial Member</h3>
+<div class="card mb-30">
+  <h3 class="mb-20">Thanks for Being a Trial Member</h3>
+  <p class="mb-20">Please help us by answering a few questions.</p>
+  
+  <p>1. Why did you quit your account?</p>
+  <ul class="check-list ml-15">
+    <li class="check-list">
+      <label>
+        <input type="checkbox" name="checkbox" value="1" checked> <span></span> Too expensive
+      </label>
+    </li>
+    <li class="check-list">
+      <label>
+        <input type="checkbox" name="checkbox" value="2"> <span></span> I didn't use the site
+      </label>
+    </li>
+    <li class="check-list">
+      <label>
+        <input type="checkbox" name="checkbox" value="99"> <span></span> Features did not match my needs
+      </label>
+    </li>
+  </ul>
+  
+  <p>2. Do you have feedback you would like to leave our team?</p>
+  <%= text_area_tag 'feedback', nil, class: 'max-w-430 w-430 h-100' %>
+  
+  <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
+    <a class="big-button outline-button padded f-left">Back</a>
+    <a class="big-button outline-button padded">Skip</a>
+    <a class="button big-button blue-button f-right">Continue</a>
+  </section>
+</div>
+
+<% products_comparison = [ { title: 'Full encryption of your data during storage and transmission', free: true, premium: true },
+                           { title: 'Two-factor authentication', free: true, premium: true },
+                           { title: 'View all data and documents shared with you', free: true, premium: true },
+                           { title: 'Store unlimited documents', free: false, premium: true },
+                           { title: 'Create and share with unlimited contacts', free: false, premium: true },
+                           { title: 'Financial Information & Estate Planning', free: false, premium: true },
+                           { title: 'Wills & Powers of Attorney management', free: false, premium: true },
+                           { title: 'Trust & Entity management', free: false, premium: true }] %>
+<h3 class="mt-20 mb-20">Compare ZokuVault Products</h3>
+<div class="card mb-30 min-w-460">
+  <table class="product-comparison" cellspacing="0">
+    <tr>
+      <th class="text-center table-title">
+        <h1>Compare ZokuVault Products</h1>
+      </th>
+      <th class="plan-information free text-center">
+        <h4 class="clr-gray-dark-tinted fw-500 mt-60">Access to files shared with you.</h4>
+        <%= link_to 'Continue', 'javascript:void(0);', class: 'button big-button primary-button inline-block mt-30 mr-0' %>
+        <h4 class="fw-600 clr-gray-dark-tinted mt-30">Free Vault</h4>
+      </th>
+      <th class="plan-information premium text-center">
+        <h4 class="clr-gray-dark-tinted fw-500 mt-50">Unlimited storage and contacts.</h4>
+        <h4 class="clr-gray-dark-tinted fw-500 mt-10">Access to shared files.</h4>
+        <%= link_to 'Start Now', 'javascript:void(0);', class: 'button big-button primary-button inline-block mt-18 mr-0' %>
+        <h4 class="fw-600 clr-gray-dark-tinted mt-30">$119.98 a year</h4>
+      </th>
+    </tr>
+    
+    <% products_comparison.each do |comparison| %>
+      <tr>
+        <td class="description">
+          <span><%= comparison[:title] %></span>
+        </td>
+        <td>
+          <% if comparison[:free] %>
+            <div class="circle"></div>
+          <% end %>
+        </td>
+        <td>
+          <% if comparison[:premium] %>
+            <div class="circle"></div>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+
+<h3 class="mt-20 mb-20">Trial Membership Ended</h3>
+<div class="card mb-30">
+  <div class="flex-boxes justify-center">
+    <div class="flex-trial text-center">
+      <%= image_tag "marketing/lock.png", :class => "mb-10 ml-15" %>
+    </div>
+    <div class="flex-trial">
+      <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Your trial membership has ended!</h5>
+      <p class="text-center mb-30">You have started your journey to securing your life's important details.</p>
+      
+      <div class="text-center flex-footer">
+        <p class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button' %></p>
+        <p class="mb-0"><%= link_to 'No Thanks', 'javascript:void(0);', class: 'no-underline-link' %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mt-20 mb-20">Setup Your Vault</h3>
 <div class="card mb-30">
   <h1 class="mb-20">Template Title</h1>
   <label>Form Label</label>
   <input type="text">
   <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
-
 
 <h3 class="mt-20 mb-20">Checkbox Icon Template</h3>
 <div class="card mb-30">

@@ -89,7 +89,6 @@
   }
 }
 
-
 //Marketing settings
 .flex-marketing{
   flex: 20%;
@@ -158,6 +157,34 @@
     height: 50px;
     line-height: 50px;
     background: $color-primary;
+  }
+}
+
+//Trial Ended
+.flex-trial {
+  flex: 33%;
+  padding: 0 15px 15px 25px;
+  position: relative;
+  @include media($teneighty) {
+    position: static !important;
+    flex: 100%;
+    .flex-footer {
+      position: static !important;
+    }
+    a.button {
+      display: inline-block;
+      position: static !important;
+    }
+  }
+  
+  .flex-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    a.button {
+      position: relative;
+      bottom: 20px;
+    }
   }
 }
 

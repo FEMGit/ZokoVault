@@ -41,6 +41,23 @@ class User < ActiveRecord::Base
     @category_shares ||= shares.categories
   end
 
+  def free?
+    !paid? && !primary_shared_of_paid?
+  end
+
+  def primary_shared_of_paid?
+    UserProfile
+      .includes(:user)
+      .where(id: Contact.where(emailaddress: email)
+      .map(&:full_primary_shared_id))
+      .map(&:user)
+      .any?(&:paid?)
+  end
+
+  def paid?
+    subscription.present? 
+  end
+
   def mfa_verify?
     case mfa_frequency
     when "never"

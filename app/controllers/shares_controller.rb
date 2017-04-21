@@ -1,5 +1,6 @@
 class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
+    skip_before_action :redirect_if_free_user
     helper_method :shared_category_count
     helper_method :shared_document_count
     include UserTrafficModule

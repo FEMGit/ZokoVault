@@ -4,24 +4,19 @@ class PagesController < HighVoltage::PagesController
   def confirmation; end
 
   def show
+    # Params = {"tutorial_id"=>"insurance", "page_id"=>"1"}
+    @page_number   = params[:page_id]
+    @page_name     = "page_#{@page_number}"
     @tutorial_name = params[:tutorial_id]
     @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").humanize)
-    @page_id       = params[:page_id]
-    @page_name     = "page_#{params[:page_id]}"
-    @next_page     = params[:page_id].to_i + 1
-    @confirmation  = false
 
+    # For Add Primary Contact view
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
     @contact = Contact.new(user: current_user)
     @show_footer = false
 
-    if params[:page_id].to_i == @tutorial.number_of_pages
-      if session[:order_params].present?
-        @next_tutorial = Tutorial.find(session[:order_params].shift)
-        @current_tutorial_name = @next_tutorial.name.parameterize
-      else
-        @confirmation = true
-      end
-    end
+    @next_page     = @page_number.to_i + 1
+    @next_tutorial = 'confirmation-page'
+    @next_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]]) if session[:tutorials_list][session[:tutorial_index]].present?
   end
 end

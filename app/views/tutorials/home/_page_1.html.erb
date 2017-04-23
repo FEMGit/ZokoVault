@@ -2,13 +2,13 @@
   <h1 class="mb-20">Add Your Home</h1>
 
   <%- @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-  <%#- authorize @financial_property %>
-  <%#- set_viewable_contacts %>
 
   <%= form_for @financial_property, url: url_for(action: :create, controller: :financial_property) do |f| %>
-    <%= hidden_field_tag :tutorial_id, @tutorial_name %>
-    <%= hidden_field_tag :page_id, @page_id %>
-    <%= hidden_field_tag :next_page_id, @next_page %>
+    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :page_number, @page_number %>
+
     <%= hidden_field_tag 'financial_property[property_type]', "House" %>
     <%= label_tag "property_name", 'Property Name' %>
     <%= text_field_tag "financial_property[name]", "", class: "form-control medium" %>

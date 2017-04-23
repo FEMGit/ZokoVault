@@ -82,13 +82,15 @@ class LifeAndDisabilitiesController < AuthenticatedController
         @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
 
         # If comes from Tutorials workflow, redirect to next step
-        redirect_to tutorial_page_path(params[:tutorial_id], params[:next_page_id]) and return if params[:tutorial_id]
+        if params[:tutorial_name]
+          redirect_to tutorial_page_path(params[:tutorial_name], params[:next_page_number]) and return
+        end
 
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        if params[:tutorial_id]
+        if params[:tutorial_name]
           flash[:alert] = "Fill in Insurance Provider Name field to continue"
           redirect_to tutorial_page_path('insurance', '2') and return
         end

@@ -4,9 +4,9 @@
   <%- @insurance_card = Health.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
 
   <%= form_for(@insurance_card, url: healths_path) do |f| %>
-    <%= hidden_field_tag :tutorial_id, @tutorial_name %>
-    <%= hidden_field_tag :page_id, @page_id %>
-    <%= hidden_field_tag :next_page_id, @next_page %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :page_number, @page_number %>
     <%= label_tag "insurance_provider", 'Insurance Provider Name' %>
     <%= text_field_tag "health[name]", "", class: "form-control medium" %>
 

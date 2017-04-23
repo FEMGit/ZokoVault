@@ -1,12 +1,16 @@
 <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
 
-  <a href="javascript:history.back()" class="big-button outline-button padded f-left">Back</a>
+  <a href="javascript:history.back()" onclick="" class="big-button outline-button padded f-left">Back</a>
   <%- if @next_page <= @tutorial.number_of_pages %>
     <%= link_to "Skip", tutorial_page_path(@tutorial_name, @next_page), class: "big-button outline-button padded" %>
-  <% elsif @confirmation %>
-    <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded" %>
+  <% elsif @next_tutorial.present? && !(@next_tutorial == 'confirmation-page') %>
+    <%- session[:tutorial_index] = session[:tutorial_index].to_i + 1 %>
+    <% if session[:failed_saved_tutorial] %>
+      <%- session[:failed_saved_tutorial] = false %>
+    <% end %>
+    <%= link_to 'Skip', tutorial_page_path(@next_tutorial.name.parameterize, '1') %>
   <% else %>
-    <%= link_to "Skip", tutorial_page_path(@current_tutorial_name, '1'), class: "big-button outline-button padded" %>
+    <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded" %>
   <% end %>
   &nbsp
   <%= f.submit "Continue", class: "button big-button blue-button f-right" %>

@@ -38,16 +38,21 @@ class TutorialsController < AuthenticatedController
   def category_setup; end
 
   def new
-    session[:order_params] ||= {}
+    session[:tutorials_list] ||= {}
     @tutorial_array = Tutorial.first(3)
-    @tutorial = Tutorial.new(name: session[:order_params])
+    @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
   end
 
   def create
-    session[:order_params] = params["tutorial"] if params["tutorial"]
-    @current_tutorial      = Tutorial.find(session[:order_params].shift) if session[:order_params].present?
-    current_tutorial_name  = @current_tutorial.name.parameterize
+    session[:tutorials_list] = params["tutorial"] if params["tutorial"]
+    session[:tutorial_index] = 0
+    session[:failed_saved_tutorial] = false
+    if session[:tutorials_list].present?
+      @current_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]])
+    end
+    current_tutorial_name = @current_tutorial.name.parameterize
+    session[:tutorial_index] = 1
 
     redirect_to tutorial_page_path(current_tutorial_name, '1')
   end

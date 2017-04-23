@@ -59,7 +59,7 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property.share_with_contact_ids = @property_provider.share_with_contact_ids
     set_viewable_contacts
   end
-  
+
   def create
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
@@ -72,18 +72,23 @@ class FinancialPropertyController < AuthenticatedController
         FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
 
-        if params[:tutorial_id]
-          redirect_to tutorials_confirmation_path and return
+        if params[:tutorial_name]
+          if params[:next_tutorial] == 'confirmation_page'
+            redirect_to tutorials_confirmation_path and return
+          else
+            redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+          end
         end
 
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else
-        if params[:tutorial_id]
+        if params[:tutorial_name]
           flash[:alert] = "Fill in Property Name field to continue"
+          session[:tutorial_index] = session[:tutorial_index].to_i - 1
+          session[:failed_saved_tutorial] = true
           redirect_to tutorial_page_path('home', '1') and return
         end
-
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
@@ -91,7 +96,7 @@ class FinancialPropertyController < AuthenticatedController
       end
     end
   end
-  
+
   def update
     authorize @financial_property
     @previous_share_with = @property_provider.share_with_contact_ids

@@ -1,10 +1,4 @@
 class TrustPolicy < CategorySharePolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
 
   def scope
     Pundit.policy_scope!(user, record.class)
@@ -13,7 +7,7 @@ class TrustPolicy < CategorySharePolicy
   def update_trusts?
     update?
   end
-  
+
   def new_trusts_entities?
     create?
   end

@@ -1,15 +1,9 @@
 class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
   
   def index?
     owned_or_shared?
   end
-  
+
   def new?
     owned_or_shared?
   end
@@ -17,7 +11,7 @@ class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
   def scope
     Pundit.policy_scope!(user, record.class)
   end
-  
+
   def destroy_provider?
     user_owned?
   end

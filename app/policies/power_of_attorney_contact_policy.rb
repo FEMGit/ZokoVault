@@ -1,15 +1,9 @@
 class PowerOfAttorneyContactPolicy < CategorySharePolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
-  end
   
   def destroy_power_of_attorney_contact?
     user_owned?
   end
-  
+
   def new_wills_poa?
     create?
   end

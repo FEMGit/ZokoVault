@@ -28,7 +28,7 @@
           <td>
             <%= user.try(:email) %>
           </td>
-          <% shareables = shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable) %>
+          <% shareables = shares.select(&:shareable_type).map(&:shareable) %>
           <td><%= shared_document_count(shareables, user) %></td>
           <td><%= shared_category_count(shares, user) %></td>
           <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id), :class=>"outline-button small-button" %></td>

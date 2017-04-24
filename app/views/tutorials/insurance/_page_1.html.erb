@@ -8,7 +8,7 @@
     <%= hidden_field_tag :tutorial_name, @tutorial_name %>
     <%= hidden_field_tag :page_number, @page_number %>
     <%= label_tag "insurance_provider", 'Insurance Provider Name' %>
-    <%= text_field_tag "health[name]", "", class: "form-control medium" %>
+    <%= text_field_tag "health[name]", "", class: "form-control medium", required: true %>
 
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>

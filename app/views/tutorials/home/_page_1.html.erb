@@ -11,7 +11,7 @@
 
     <%= hidden_field_tag 'financial_property[property_type]', "House" %>
     <%= label_tag "property_name", 'Property Name' %>
-    <%= text_field_tag "financial_property[name]", "", class: "form-control medium" %>
+    <%= text_field_tag "financial_property[name]", "", class: "form-control medium", required: true %>
 
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>

@@ -61,6 +61,10 @@ class TutorialsController < AuthenticatedController
     @tutorial = Tutorial.find(params[:id])
   end
 
+  def destroy
+    session[:previous_tuto].destroy and redirect_back
+  end
+
   private
 
   def set_new_contact

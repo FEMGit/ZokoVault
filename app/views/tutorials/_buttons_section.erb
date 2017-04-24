@@ -1,6 +1,6 @@
 <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
 
-  <a href="javascript:history.back()" onclick="" class="big-button outline-button padded f-left">Back</a>
+  <%= button_to 'Back', tutorial_destroy_path, class: "big-button outline-button padded f-left" %>
   <%- if @next_page <= @tutorial.number_of_pages %>
     <%= link_to "Skip", tutorial_page_path(@tutorial_name, @next_page), class: "big-button outline-button padded" %>
   <% elsif @next_tutorial.present? && !(@next_tutorial == 'confirmation-page') %>

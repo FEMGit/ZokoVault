@@ -175,8 +175,9 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
 
   get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
-  resources :tutorials do
+  resources :tutorials, except: :destroy do
     get '/:page_id', to: 'pages#show', as: :page
+    post '/destroy', to: 'tutorials#destroy'
   end
 
   resources :vault_entries, only: [:index, :new, :show, :create]

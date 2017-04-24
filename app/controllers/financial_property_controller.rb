@@ -76,6 +76,8 @@ class FinancialPropertyController < AuthenticatedController
           if params[:next_tutorial] == 'confirmation_page'
             redirect_to tutorials_confirmation_path and return
           else
+            session[:previous_tuto] = [] if session[:previous_tuto].nil?
+            session[:previous_tuto] << @financial_provider
             redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
           end
         end

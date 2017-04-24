@@ -10,16 +10,4 @@ class FinancialInvestmentPolicy < CategorySharePolicy
     Share.exists?(shareable: provider, contact: Contact.where("emailaddress ILIKE ?", user.email))
   end
 
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      scope.where(user: user)
-    end
-  end
 end

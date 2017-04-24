@@ -1,5 +1,5 @@
 class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
-  
+
   def index?
     owned_or_shared?
   end
@@ -16,16 +16,4 @@ class PropertyAndCasualtyPunditPolicy < CategorySharePolicy
     user_owned?
   end
 
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
-    def resolve
-      scope.where(user: user)
-    end
-  end
 end

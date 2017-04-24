@@ -10,6 +10,8 @@ class AccountsController < AuthenticatedController
   
   def first_run; end
   
+  def upgrade; end
+  
   def terms_of_service; end
   
   def terms_of_service_update

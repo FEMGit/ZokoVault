@@ -155,6 +155,7 @@ Rails.application.routes.draw do
   get 'my_profile' => 'user_profiles#show'
 
   get 'account/first_run' => 'accounts#first_run', as: :first_run
+  get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   post 'account/card_validation' => 'accounts#card_validation'
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup

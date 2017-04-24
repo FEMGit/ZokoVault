@@ -15,34 +15,37 @@
   <%= f.label :web_address, 'Web Address' %>
   <%= f.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) %>
   
-  <%= f.label :street_address, 'Street Address' %>
-  <%= f.text_field :street_address, :maxlength => get_max_length(:default) %>
-    
-  <%= f.label :city %>
-  <%= f.text_field :city, :maxlength => get_max_length(:default) %>
-  
-  <span class="state-input">
-    <label>State</label>
-    <div class="styled-select">
-      <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
-    </div>
-  </span>
-  <span class="zip-input">
-    <%= f.label :zip, 'Zip Code' %>
-    <%= zip_code_form(f, :zip) %>
-  </span>
-  
-  <%= f.label :phone_number, 'Phone Number' %>
-  <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
-  
-  <%= f.label :fax_number %>
-  <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
-  
   <%= f.label :primary_contact_id, 'Primary Contact' %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
   </div>
   
+  <%= render partial: 'layouts/address_phone_toggle_button', locals: { provider: @financial_provider } %>
+  
+  <section id="address_phone_details" <% if !edit?(@financial_provider) %> style="display: none;" <% end %>>
+    <%= f.label :street_address, 'Street Address' %>
+    <%= f.text_field :street_address, :maxlength => get_max_length(:default) %>
+
+    <%= f.label :city %>
+    <%= f.text_field :city, :maxlength => get_max_length(:default) %>
+
+    <span class="state-input">
+      <label>State</label>
+      <div class="styled-select">
+        <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
+      </div>
+    </span>
+    <span class="zip-input">
+      <%= f.label :zip, 'Zip Code' %>
+      <%= zip_code_form(f, :zip) %>
+    </span>
+
+    <%= f.label :phone_number, 'Phone Number' %>
+    <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
+
+    <%= f.label :fax_number %>
+    <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
+  </section>
   
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
@@ -102,6 +105,8 @@
 <%= link_to 'Cancel', back_path || financial_information_path, class: "button secondary-button big-button"%>
 
 <% end %>
+
+<%= javascript_include_tag "phone_address_toggle" %>
 <script>
   document.addEventListener('change', function(e) {
     element = e.target

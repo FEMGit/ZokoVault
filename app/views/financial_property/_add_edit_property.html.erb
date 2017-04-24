@@ -32,27 +32,32 @@
   <%= f.text_field :value, maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
   :value => f.object && number_to_currency(f.object.value, precision: 0, unit: "$") %>
   
-  <%= f.label :address, 'Property Address or Location' %>
-  <%= f.text_field :address, :maxlength => get_max_length(:default) %>
-    
-  <%= f.label :city %>
-  <%= f.text_field :city, :maxlength => get_max_length(:default) %>
-  
-  <span class="state-input">
-    <label>State</label>
-    <div class="styled-select">
-      <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
-    </div>
-  </span>
-  <span class="zip-input">
-    <%= f.label :zip, 'Zip Code' %>
-    <%= zip_code_form(f, :zip) %>
-  </span>
-  
   <%= f.label :primary_contact_id, 'Primary Contact' %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
   </div>
+  
+  <%= render partial: 'layouts/address_phone_toggle_button', locals: { provider: @financial_property } %>
+  
+  <section id="address_phone_details" <% if !edit?(@financial_property) %> style="display: none;" <% end %>>
+  
+    <%= f.label :address, 'Property Address or Location' %>
+    <%= f.text_field :address, :maxlength => get_max_length(:default) %>
+
+    <%= f.label :city %>
+    <%= f.text_field :city, :maxlength => get_max_length(:default) %>
+
+    <span class="state-input">
+      <label>State</label>
+      <div class="styled-select">
+        <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
+      </div>
+    </span>
+    <span class="zip-input">
+      <%= f.label :zip, 'Zip Code' %>
+      <%= zip_code_form(f, :zip) %>
+    </span>
+  </section>
   
   <%= f.label :notes, 'Notes' %>
   <%= f.text_area :notes, :maxlength => get_max_length(:notes) %>
@@ -81,6 +86,7 @@
 
 <% end %>
 
+<%= javascript_include_tag "phone_address_toggle" %>
 <script>
   $(document).ready(function(){
     setValue($('#financial_property_value'), $('#financial_property_value').val())

@@ -19,10 +19,6 @@ class DocumentPolicy < BasicPolicy
     false
   end
 
-  def scope
-    Pundit.policy_scope!(user, record.class)
-  end
-
   private
 
   def policy_share

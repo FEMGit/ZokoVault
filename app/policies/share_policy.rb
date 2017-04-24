@@ -43,10 +43,6 @@ class SharePolicy < BasicPolicy
   def wills?; index?; end
   def documents?; index?; end
 
-  def scope
-    Pundit.policy_scope!(user, record.class)
-  end
-
   class Scope
     attr_reader :user, :scope
 

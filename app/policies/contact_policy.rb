@@ -8,10 +8,6 @@ class ContactPolicy < BasicPolicy
     user_owned? || owner_shared_category_with_user?
   end
 
-  def scope
-    Pundit.policy_scope!(user, record.class)
-  end
-
   private
 
   def owner_shared_category_with_user?

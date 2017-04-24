@@ -2,10 +2,13 @@
   cursor: pointer !important;
 }
 .fr{
-  float:right;
+  float:right !important;
 }
 .fl{
-  float: left;
+  float: left !important;
+}
+.fn{
+  float:none !important;
 }
 .clear{
   clear:both;
@@ -192,7 +195,7 @@
   position: relative;
 }
 .text-center {
-  text-align: center;
+  text-align: center !important;
 }
 .fz-20 {
   font-size: 20px !important;

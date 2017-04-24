@@ -238,6 +238,10 @@ input[type=button].button{
     opacity: .8;
     box-shadow: none;
   }
+  &.disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
 }
 .call-to-action{
   padding: 12px;
@@ -248,6 +252,15 @@ input[type=button].button{
 .big-button{
   font-size: 14px;
   padding: 10px;
+}
+
+.huge-button{
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  padding: 15px 0;
+  display:block;
+
 }
 
 .small-button{
@@ -323,6 +336,10 @@ input[type=button].button{
     margin-bottom: 15px;
     width: 100%;
   }
+}
+
+.top-top {
+  z-index: 99999;
 }
 
 .circle-button{
@@ -407,6 +424,7 @@ li.check-list{
 
   label{
       cursor: pointer;
+      font-size: 16px;
   }
 }
 input[type="checkbox"] {
@@ -459,6 +477,7 @@ label:hover input[type="checkbox"]:checked + span {
   margin-bottom: 10px;
   color: #666;
   max-width: 800px;
+  font-size: 12px;
 }
 
 ///iOS hacks
@@ -480,7 +499,7 @@ and (not (-moz-appearance:none)){
 .tut-button-wrapper{
   margin: 0 auto;
   padding: 0;
-  max-width: 600px;
+  max-width: 660px;
   text-align: center;
   @include display(flex);
   @include flex-direction(row);
@@ -492,8 +511,8 @@ and (not (-moz-appearance:none)){
 li.icon-box{
   margin: 0 5px 10px 5px;
   list-style:none;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   display: inline-block;
   @include display(flex);
 
@@ -506,9 +525,9 @@ li.icon-box{
     border: 1px solid $color-gray-light;
     transition: border .25s linear;
     cursor: pointer;
-    width: 120px;
-    height: 120px;
-    padding: 15px 5px;
+    width: 150px;
+    height: 150px;
+    padding: 20px 5px 0px 5px;
     margin-right: 0;
   }
   input[type="checkbox"]:checked + span {
@@ -517,7 +536,7 @@ li.icon-box{
   input[type="checkbox"]:checked + span:after,
   input[type="checkbox"]:checked + span:hover:after {
     color: black;
-    content: asset-data-url('SVG/tuts-checked.svg');
+    content: asset-data-url('SVG/tuts-checked-2.svg');
     font-size: 24px;
     left: -1px;
     position: absolute;
@@ -526,7 +545,7 @@ li.icon-box{
   }
   input[type="checkbox"] + span:hover:after  {
     color: black;
-    content: asset-data-url('SVG/tuts-checked.svg');
+    content: asset-data-url('SVG/tuts-checked-2.svg');
     font-size: 24px;
     left: -1px;
     position: absolute;

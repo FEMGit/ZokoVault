@@ -36,6 +36,11 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :user_profile, update_only: true
 
+  has_many :user_subscriptions, dependent: :destroy
+  has_one :current_user_subscription_marker, dependent: :destroy
+  has_one :current_user_subscription,
+    through: :current_user_subscription_marker, source: :user_subscription
+
   # == Delegations
   delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
            :name, :phone_number, :phone_number_mobile, :two_factor_phone_number,
@@ -62,7 +67,7 @@ class User < ActiveRecord::Base
   end
 
   def paid?
-    subscription.present? 
+    subscription.present?
   end
 
   def mfa_verify?

@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418042701) do
+ActiveRecord::Schema.define(version: 20170425230909) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -82,6 +83,14 @@ ActiveRecord::Schema.define(version: 20170418042701) do
   add_index "contacts", ["full_primary_shared_id"], name: "index_contacts_on_full_primary_shared_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
+
+  create_table "current_user_subscription_markers", id: false, force: :cascade do |t|
+    t.integer "user_id",              null: false
+    t.integer "user_subscription_id", null: false
+  end
+
+  add_index "current_user_subscription_markers", ["user_id"], name: "index_current_user_subscription_uid", unique: true, using: :btree
+  add_index "current_user_subscription_markers", ["user_subscription_id"], name: "index_current_user_subscription_usid", unique: true, using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -283,6 +292,16 @@ ActiveRecord::Schema.define(version: 20170418042701) do
 
   add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
+
+  create_table "fundings", force: :cascade do |t|
+    t.integer  "user_subscription_id"
+    t.string   "method",               null: false
+    t.jsonb    "details",              null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "fundings", ["user_subscription_id"], name: "index_fundings_on_user_subscription_id", using: :btree
 
   create_table "health_policies", force: :cascade do |t|
     t.integer  "policy_type"
@@ -551,6 +570,16 @@ ActiveRecord::Schema.define(version: 20170418042701) do
     t.string   "two_factor_phone_number"
   end
 
+  create_table "user_subscriptions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "start_at",   null: false
+    t.datetime "end_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_subscriptions", ["user_id"], name: "index_user_subscriptions_on_user_id", using: :btree
+
   create_table "user_traffics", force: :cascade do |t|
     t.string   "page_name"
     t.string   "page_url"
@@ -690,6 +719,7 @@ ActiveRecord::Schema.define(version: 20170418042701) do
   add_foreign_key "financial_account_owners", "contacts", on_delete: :cascade
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
+  add_foreign_key "fundings", "user_subscriptions"
   add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"
@@ -698,6 +728,7 @@ ActiveRecord::Schema.define(version: 20170418042701) do
   add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_death_traps", "users"
+  add_foreign_key "user_subscriptions", "users"
   add_foreign_key "user_traffics", "users"
   add_foreign_key "user_traffics", "users", column: "shared_user_id"
   add_foreign_key "vault_entry_beneficiaries", "contacts", on_delete: :cascade

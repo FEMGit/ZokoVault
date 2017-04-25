@@ -1,3 +1,4 @@
+require 'pry'
 class PagesController < HighVoltage::PagesController
   layout 'blank_layout'
 
@@ -17,11 +18,11 @@ class PagesController < HighVoltage::PagesController
 
     @next_page = @page_number.to_i + 1
     if @tutorial_name == 'home'
-      session[:tutorial_index] = 2
+      session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
     elsif @tutorial_name == 'insurance'
-      session[:tutorial_index] = 1
+      session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
     else
-      session[:tutorial_index] = 3
+      session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
     end
     @next_tutorial = 'confirmation-page'
     @next_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]]) if session[:tutorials_list][session[:tutorial_index]].present?

@@ -70,11 +70,14 @@ class TutorialsController < AuthenticatedController
 
     if session[:previous_tuto].last[:reduce_tutorial_index]
       if previous_url.include? 'home'
-        session[:tutorial_index] = 2
+        @tutorial = Tutorial.find_by(name: 'Home')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
       elsif previous_url.include? 'insurance'
-        session[:tutorial_index] = 1
+        @tutorial = Tutorial.find_by(name: 'Insurance')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
       else
-        session[:tutorial_index] = 3
+        @tutorial = Tutorial.find_by(name: 'Add primary contact')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s) + 1
       end
     end
 

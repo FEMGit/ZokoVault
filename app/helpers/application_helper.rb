@@ -130,6 +130,10 @@ module ApplicationHelper
     @shared_user.present? && (shared_with_property_names.include? name.to_s)
   end
   
+  def edit?(object)
+    object.id.present?
+  end
+  
   def shared_with_property_names
     %w(share_with_contact_ids contact_ids share_with_ids)
   end

@@ -1,6 +1,7 @@
 class Tutorial < ActiveRecord::Base
+  belongs_to :category
+  
   attr_writer :current_step
-
   validates_presence_of :name, :if => lambda { |o| o.current_step == "cicle" }
 
   def current_step

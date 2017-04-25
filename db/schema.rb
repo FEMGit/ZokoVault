@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418042701) do
+ActiveRecord::Schema.define(version: 20170425094034) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -486,9 +487,13 @@ ActiveRecord::Schema.define(version: 20170418042701) do
   create_table "tutorials", force: :cascade do |t|
     t.string   "name"
     t.string   "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "category_id"
+    t.string   "relative_page_path"
   end
+
+  add_index "tutorials", ["category_id"], name: "index_tutorials_on_category_id", using: :btree
 
   create_table "uploads", force: :cascade do |t|
     t.string  "name"

@@ -4,4 +4,7 @@
 <p>
   <%= @current_tutorial.try(:content) %>
 </p>
+<% if (tutorial_path = @current_tutorial.try(:relative_page_path)).present? %>
+  <%= render partial: @current_tutorial.try(:relative_page_path) %>
+<% end %>
 <br>

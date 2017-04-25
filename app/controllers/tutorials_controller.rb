@@ -4,7 +4,8 @@ class TutorialsController < AuthenticatedController
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
-  layout 'blank_layout', only: [:new, :create, :show]
+  before_action :set_order_params, only: [:new, :insurance]
+  layout 'blank_layout', only: [:new, :create, :show, :insurance]
 
   add_breadcrumb "Guided Tutorial - Important Documents", :tutorial_important_documents_path, only: [:important_documents]
   include BreadcrumbsCacheModule
@@ -38,8 +39,15 @@ class TutorialsController < AuthenticatedController
   def category_setup; end
 
   def new
-    session[:order_params] ||= {}
-    @tutorial_array = Tutorial.first(4)
+    set_tutorials(Tutorial.first(4))
+  end
+  
+  def insurance
+    set_tutorials(Tutorial.where(category: Category.fetch('insurance')))
+  end
+  
+  def set_tutorials(tutorial_collection)
+    @tutorial_array = tutorial_collection
     @tutorial = Tutorial.new(name: session[:order_params])
     @tutorial.current_step = session[:order_step]
   end
@@ -76,6 +84,10 @@ class TutorialsController < AuthenticatedController
   end
 
   private
+  
+  def set_order_params
+    session[:order_params] ||= {}
+  end
 
   def set_new_contact
     @contact = Contact.new(user: current_user)

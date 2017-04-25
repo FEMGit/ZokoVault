@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :tutorials
   resources :final_wishes
   resources :usage_metrics
   resources :taxes
@@ -34,6 +33,10 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
+  
+  # Tutorials
+  get 'tutorials/insurance', to: 'tutorials#insurance'
+  resources :tutorials
 
   # Mailer
   post 'contact_us', to: 'messages#create'

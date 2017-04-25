@@ -136,6 +136,9 @@ var addContactAndCloseModal = function(json) {
 }
 
 var updateAddContactableTable = function(json) {
+  if (typeof tableIdToUpdate === 'undefined') {
+    return;
+  }
   if ($('.table-add-contactable').find(tableIdToUpdate) == null) {
     return
   } else {

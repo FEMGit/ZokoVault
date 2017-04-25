@@ -29,11 +29,11 @@
     </ul>
 
     <%= f.label :password, 'Update Password' %>
-    <%= render partial: 'layouts/password_requirements' %>
     <% if errors && @user_profile.errors.messages[:password].present? %>
       <span class="error-label"> - <%= @user_profile.errors.messages[:password].first %></span>
     <% end %>
     <%= f.password_field :password, {autocomplete: "off", class: ("input-error" if @user_profile.errors.messages[:password].present?) } %>
+    <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_profile_password' } %>
 
     <%= f.label :password_confirmation, 'Confirm Password' %>
     <% if errors && @user_profile.errors.messages[:password_confirmation].present? %>

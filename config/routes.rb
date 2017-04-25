@@ -154,10 +154,19 @@ Rails.application.routes.draw do
   get 'my_profile' => 'user_profiles#show'
 
   get 'account/first_run' => 'accounts#first_run', as: :first_run
+  get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   post 'account/card_validation' => 'accounts#card_validation'
+  put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
+  put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup
+  put 'account/login_settings_update' => 'accounts#login_settings_update', as: :account_login_settings
+  put 'account/user_type_update' => 'accounts#user_type_update', as: :account_user_type
+
   resource :account, only: [:update, :show] do
     collection do
-      get :setup
+      get :terms_of_service
+      get :phone_setup
+      get :login_settings
+      get :user_type
       get :my_profile
       post :send_code
       post :apply_promo_code

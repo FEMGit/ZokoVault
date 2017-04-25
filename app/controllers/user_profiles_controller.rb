@@ -3,6 +3,8 @@ class UserProfilesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   include SanitizeModule
 
+  skip_before_action :redirect_if_free_user
+
   # Breadcrumbs navigation
   add_breadcrumb "My Profile", :user_profile_path
   add_breadcrumb "Edit My Profile", :edit_user_profile_path

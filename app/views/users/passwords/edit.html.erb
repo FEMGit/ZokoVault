@@ -8,12 +8,12 @@
     <%= f.hidden_field :reset_password_token %>
 
     <%= f.label :password, "New password" %>
-    <%= render partial: 'layouts/password_requirements', locals: {bottom: 'bottom'} %>
     
     <% if errors && resource.errors.messages[:password].present? %>
       <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
     <% end %>
     <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+    <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>
 
     <%= f.label :password_confirmation, "Confirm new password" %>
     <% if errors && resource.errors.messages[:password_confirmation].present? %>
@@ -25,3 +25,9 @@
   <br>
   <%= render "users/shared/links" %>
 </section>
+
+<script>
+  $(document).ready(function() {
+    $('.password-validation').addClass('displayed')
+  })
+</script>

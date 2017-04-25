@@ -1,5 +1,6 @@
 class SharesController < AuthenticatedController
     before_action :set_share, only: [:show, :edit, :update, :destroy]
+    skip_before_action :redirect_if_free_user
     helper_method :shared_category_count
     helper_method :shared_document_count
     include UserTrafficModule
@@ -88,7 +89,7 @@ class SharesController < AuthenticatedController
     end
     
     def shared_categories(user)
-      SharedViewService.shares(user, current_user).select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
+      SharedViewService.shares(user, current_user).select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     end
 
     def set_share

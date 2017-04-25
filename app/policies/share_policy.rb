@@ -89,7 +89,7 @@ class SharePolicy < BasicPolicy
   def owner_shared_category_with_user?
     shares = policy_share
     return false unless shares
-    category_names = shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) && (sh.shareable.is_a? Category) }.map(&:shareable).map(&:name)
+    category_names = shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     category_names.include? record.category
   end
 

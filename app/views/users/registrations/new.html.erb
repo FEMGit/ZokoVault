@@ -37,12 +37,12 @@
       <% end %>
       <%= render partial: 'layouts/date_picker', locals: { birth_value: user_profile_form.object.date_of_birth, error_condition: resource.errors.messages[:'user_profile.Date of Birth'].present?, f: user_profile_form, object: :date_of_birth} %>
       <%= f.label :password %>
-      <%= render partial: 'layouts/password_requirements' %>
       <% if errors && resource.errors.messages[:password] %>
         <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
       <% end %>
 
       <%= f.password_field :password, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+      <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>
 
       <%= f.label :password_confirmation, 'Confirm Password' %>
       <% if errors && resource.errors.messages[:password_confirmation] %>

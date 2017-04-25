@@ -161,7 +161,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   
   def life_and_disabilities
     return LifeAndDisability.for_user(resource_owner) unless @shared_user
-    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? LifeAndDisability } unless @category_shared
+    return ShareService.shared_resource(@shares, LifeAndDisability) unless @category_shared
     LifeAndDisability.for_user(@shared_user)
   end
   

@@ -1,0 +1,44 @@
+<%= form_tag :account_term_of_service, { method: :put, id: 'account-form' } do %>
+  <div class="card mt-50 terms-card">
+    <h5 class="tut-top-label mt-10 mb-20">Terms of Service</h5>
+      <div class="show-terms">
+        <%= render :partial => 'pages/terms_of_service' %>
+      </div>
+      <ul class="check-list mt-30 mb-30">
+        <li class="check-list text-center">
+          <label>
+            <%= check_box_tag 'user[user_profile_attributes][signed_terms_of_service]',
+              1,
+              false,
+              onclick: "toggleNextOnTos(); return true;"
+              %> <span class="fn "></span>I agree to the Terms of Service
+          </label>
+        </li>
+      </ul>
+      <%= link_to('Continue', 'javascript:void(0);', :class=>"button blue-button huge-button mb-20 mt-20 disabled", :id=>"terms-accepted", onclick: 'submitAccount(event)') %>
+
+      <p class="mt-20 mb-0 text-center">
+        <%= link_to('Cancel', destroy_user_session_path, :method => :delete, :class=>"no-underline-link") %>
+      </p>
+  </div>
+<% end %>
+
+<script>
+
+
+function toggleNextOnTos() {
+  var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
+  var continue_button = $("#terms-accepted");
+  if (check_el.is(':checked')) {
+    continue_button.removeClass('disabled');
+  }
+  else {
+    continue_button.addClass('disabled');
+  }
+}
+
+var submitAccount = function(){
+  var accountForm = document.getElementById("account-form");
+  accountForm.submit();
+}
+</script>

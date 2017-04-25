@@ -36,17 +36,17 @@ $cards-margin: 12px;
   &.document {
     border-radius: 20px;
   }
-  
+
   .data-border {
     margin-top: 10px;
     border-bottom: 1px solid  $color-off-white-shaded-more;
   }
-  
+
   &.category-shared {
     padding: 0;
     clear: both;
   }
-  
+
   &.wide {
     width: 100%;
     padding: 5px 15px 5px 15px;
@@ -58,6 +58,9 @@ $cards-margin: 12px;
     .small-button {
       margin-top: 4px;
     }
+  }
+  &.centered {
+    margin: 0 auto;
   }
 }
 
@@ -208,6 +211,15 @@ $cards-margin: 12px;
 //LOGIN CARD
 .card.login-card {
   margin: 100px auto;
+  max-width: 400px;
+
+  @include media($mobile) {
+    margin: 80px 20px 0;
+    max-width: 100%;
+  }
+}
+.card.terms-card{
+  margin: 0 auto;
   max-width: 400px;
 
   @include media($mobile) {

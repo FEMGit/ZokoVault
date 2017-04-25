@@ -159,7 +159,7 @@ class HealthsController < AuthenticatedController
   
   def healths
     return Health.for_user(resource_owner) unless @shared_user
-    return @shares.select(&:shareable_type).select { |sh| Object.const_defined?(sh.shareable_type) }.map(&:shareable).select { |resource| resource.is_a? Health } unless @category_shared
+    return ShareService.shared_resource(@shares, Health) unless @category_shared
     Health.for_user(@shared_user)
   end
   

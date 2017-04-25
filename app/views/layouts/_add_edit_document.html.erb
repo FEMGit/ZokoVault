@@ -77,6 +77,9 @@
 <% end %>
 
 <script>
+  $(document).ready(function() {
+    categoryCheck($('#document_category.chosen-select :selected').text())
+  })
   var fileToPage = function(evt){
     var documentNameField = document.getElementById("document_name");
     var documentUrl = document.getElementById("document_url");
@@ -104,6 +107,7 @@
   
   //get ajax request to update card drop down info based on chosen category
   var update_category = function(category_selected){
+    categoryCheck(category_selected)
     shared_user_id = $("#shared_user_id").val();
     var url = '/documents/get_drop_down_options/' + category_selected.replace('...', '') + '/' + shared_user_id;
     $.get(url, function(data) {
@@ -115,6 +119,14 @@
       card_values.trigger('chosen:updated');
       updateCardNames()
     });
+  }
+  
+  var categoryCheck = function(category) {
+    if (category === '<%= Rails.application.config.x.ProfileCategory %>') {
+      $('#subcategory-dropdown').hide();
+    } else {
+      $('#subcategory-dropdown').show();
+    }
   }
   
   //get ajax request to update card names drop down if its insurance or financial category

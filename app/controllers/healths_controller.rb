@@ -1,4 +1,3 @@
-require 'pry'
 class HealthsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper

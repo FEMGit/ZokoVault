@@ -77,7 +77,7 @@ class FinancialPropertyController < AuthenticatedController
             redirect_to tutorials_confirmation_path and return
           else
             session[:previous_tuto] = [] if session[:previous_tuto].nil?
-            session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path}
+            session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path, reduce_tutorial_index: true}
             session[:prev_tutorial_added] = true
 
             redirect_to tutorial_page_path(params[:next_tutorial], '1') and return

@@ -69,6 +69,11 @@ class TutorialsController < AuthenticatedController
     end
     session[:previous_tuto].pop
 
+    if session[:reduce_tutorial_index]
+      session[:tutorial_index] = session[:tutorial_index].to_i - 1
+      session[:reduce_tutorial_index] = false
+    end
+
     session[:prev_tutorial_added] = true
     redirect_to previous_url
   end

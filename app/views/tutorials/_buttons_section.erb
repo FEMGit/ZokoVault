@@ -9,7 +9,7 @@
     <% if session[:failed_saved_tutorial] %>
       <%- session[:failed_saved_tutorial] = false %>
     <% end %>
-    <%- @from_skip = true %>
+    <%- @from_skip = @reduce_index = true %>
     <%= link_to 'Skip', tutorial_page_path(@next_tutorial.name.parameterize, '1'), class: 'big-button outline-button padded skip-btn' %>
   <% else %>
     <%- @from_skip = true %>
@@ -24,8 +24,8 @@
   <%- if session[:prev_tutorial_added] %>
     <%- session[:prev_tutorial_added] = false %>
   <%- else %>
-    <%= request.referer %>
     <%- session[:previous_tuto] = [] if session[:previous_tuto].nil? %>
-    <%- session[:previous_tuto] << { class_object: nil, object: nil, my_previous_url: request.referer || root_path } %>
+    <%- reduce_index = false  || @reduce_index %>
+    <%- session[:previous_tuto] << { class_object: nil, object: nil, my_previous_url: request.referer || root_path, reduce_tutorial_index: reduce_index} %>
   <% end %>
 <% end %>

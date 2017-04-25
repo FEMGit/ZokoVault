@@ -84,7 +84,8 @@ class LifeAndDisabilitiesController < AuthenticatedController
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
           session[:previous_tuto] = [] if session[:previous_tuto].nil?
-          session[:previous_tuto] << @insurance_card
+          session[:previous_tuto] << {class_object: 'LifeAndDisability', object: @insurance_card, my_previous_url: request.referer || root_path}
+          session[:prev_tutorial_added] = true
           redirect_to tutorial_page_path(params[:tutorial_name], params[:next_page_number]) and return
         end
 

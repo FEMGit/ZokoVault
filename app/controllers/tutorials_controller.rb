@@ -62,7 +62,15 @@ class TutorialsController < AuthenticatedController
   end
 
   def destroy
-    session[:previous_tuto].destroy and redirect_back
+    previous_url = session[:previous_tuto].last[:my_previous_url]
+
+    if session[:previous_tuto].last[:class_object]
+      eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy
+    end
+    session[:previous_tuto].pop
+
+    session[:prev_tutorial_added] = true
+    redirect_to previous_url
   end
 
   private

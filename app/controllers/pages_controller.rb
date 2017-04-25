@@ -1,4 +1,3 @@
-require 'pry'
 class PagesController < HighVoltage::PagesController
   layout 'blank_layout'
 

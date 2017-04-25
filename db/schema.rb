@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418201604) do
+ActiveRecord::Schema.define(version: 20170424225554) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -19,15 +20,11 @@ ActiveRecord::Schema.define(version: 20170418201604) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
-    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
-
-  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -411,6 +408,16 @@ ActiveRecord::Schema.define(version: 20170418201604) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string   "session_id", null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
   create_table "share_invitation_sents", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "contact_email"
@@ -681,7 +688,6 @@ ActiveRecord::Schema.define(version: 20170418201604) do
     t.string "word", null: false
   end
 
-  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

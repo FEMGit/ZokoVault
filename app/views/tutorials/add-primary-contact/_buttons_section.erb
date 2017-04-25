@@ -5,10 +5,6 @@
     <%- @from_skip  = true %>
     <%= link_to "Skip", tutorial_page_path(@tutorial_name, @next_page), class: "big-button outline-button padded skip-btn" %>
   <% elsif @next_tutorial.present? && !(@next_tutorial == 'confirmation-page') %>
-    <%- session[:tutorial_index] = session[:tutorial_index].to_i + 1 %>
-    <% if session[:failed_saved_tutorial] %>
-      <%- session[:failed_saved_tutorial] = false %>
-    <% end %>
     <%- @from_skip = true %>
     <%= link_to 'Skip', tutorial_page_path(@next_tutorial.name.parameterize, '1'), class: 'big-button outline-button padded skip-btn' %>
   <% else %>

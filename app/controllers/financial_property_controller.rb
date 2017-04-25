@@ -76,7 +76,6 @@ class FinancialPropertyController < AuthenticatedController
           if params[:next_tutorial] == 'confirmation_page'
             redirect_to tutorials_confirmation_path and return
           else
-            session[:tutorial_index] = session[:tutorial_index].to_i + 1
             session[:previous_tuto] = [] if session[:previous_tuto].nil?
             session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path, reduce_tutorial_index: true}
             session[:prev_tutorial_added] = true
@@ -90,7 +89,6 @@ class FinancialPropertyController < AuthenticatedController
       else
         if params[:tutorial_name]
           flash[:alert] = "Fill in Property Name field to continue"
-          session[:tutorial_index] = session[:tutorial_index].to_i - 1
           session[:failed_saved_tutorial] = true
           redirect_to tutorial_page_path('home', '1') and return
         end

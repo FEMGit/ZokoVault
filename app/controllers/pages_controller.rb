@@ -15,7 +15,14 @@ class PagesController < HighVoltage::PagesController
     @contact = Contact.new(user: current_user)
     @show_footer = false
 
-    @next_page     = @page_number.to_i + 1
+    @next_page = @page_number.to_i + 1
+    if @tutorial_name == 'home'
+      session[:tutorial_index] = 2
+    elsif @tutorial_name == 'insurance'
+      session[:tutorial_index] = 1
+    else
+      session[:tutorial_index] = 3
+    end
     @next_tutorial = 'confirmation-page'
     @next_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]]) if session[:tutorials_list][session[:tutorial_index]].present?
   end

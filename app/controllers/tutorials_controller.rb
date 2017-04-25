@@ -69,7 +69,13 @@ class TutorialsController < AuthenticatedController
     end
 
     if session[:previous_tuto].last[:reduce_tutorial_index]
-      session[:tutorial_index] = session[:tutorial_index].to_i - 2
+      if previous_url.include? 'home'
+        session[:tutorial_index] = 2
+      elsif previous_url.include? 'insurance'
+        session[:tutorial_index] = 1
+      else
+        session[:tutorial_index] = 3
+      end
     end
 
     session[:prev_tutorial_added] = true

@@ -61,11 +61,11 @@ module SharedViewHelper
   def category_shareable_type_transform(category)
     case category
     when Rails.application.config.x.FinalWishesCategory
-      "Vendor"
+      "FinalWish"
     when Rails.application.config.x.TaxCategory
       "Tax"
     when Rails.application.config.x.InsuranceCategory
-      "FinalWish"
+      "Vendor"
     when Rails.application.config.x.WillsPoaCategory
       "Will - POA"
     when Rails.application.config.x.TrustsEntitiesCategory

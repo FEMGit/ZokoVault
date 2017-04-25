@@ -61,10 +61,22 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   def create
-    @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
-    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
-    @financial_provider.properties << @financial_property
-    authorize @financial_property
+    if params[:tutorial_name]
+      properties = params[:financial_property][:names].reject { |c| c.empty? }
+      puts "*"*88
+      puts properties.inspect
+      properties.each do |name|
+        @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
+        @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: name, provider_type: provider_type)
+        @financial_provider.properties << @financial_property
+        authorize @financial_property
+      end
+    else
+      @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
+      @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
+      @financial_provider.properties << @financial_property
+      authorize @financial_property
+    end
 
     respond_to do |format|
       if validate_params && @financial_provider.save

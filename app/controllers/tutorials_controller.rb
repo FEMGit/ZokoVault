@@ -67,14 +67,14 @@ class TutorialsController < AuthenticatedController
     if session[:previous_tuto].last[:class_object]
       eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy
     end
-    session[:previous_tuto].pop
 
-    if session[:reduce_tutorial_index]
-      session[:tutorial_index] = session[:tutorial_index].to_i - 1
-      session[:reduce_tutorial_index] = false
+    if session[:previous_tuto].last[:reduce_tutorial_index]
+      session[:tutorial_index] = session[:tutorial_index].to_i - 2
     end
 
     session[:prev_tutorial_added] = true
+
+    session[:previous_tuto].pop
     redirect_to previous_url
   end
 

@@ -90,7 +90,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
             redirect_to tutorials_confirmation_path and return
           else
             # Was a successfull Insertion, then we should move to next Tutorial
-            # session[:tutorial_index] = session[:tutorial_index].to_i + 1
+            session[:tutorial_index] = session[:tutorial_index].to_i + 1
             session[:previous_tuto] = [] if session[:previous_tuto].nil?
             session[:previous_tuto] << {class_object: 'PropertyAndCasualty', object: @insurance_card, my_previous_url: request.referer || root_path, reduce_tutorial_index: false}
             session[:prev_tutorial_added] = true

@@ -99,53 +99,8 @@
   </section>
 </div>
 
-<% products_comparison = [ { title: 'Full encryption of your data during storage and transmission', free: true, premium: true },
-                           { title: 'Two-factor authentication', free: true, premium: true },
-                           { title: 'View all data and documents shared with you', free: true, premium: true },
-                           { title: 'Store unlimited documents', free: false, premium: true },
-                           { title: 'Create and share with unlimited contacts', free: false, premium: true },
-                           { title: 'Financial Information & Estate Planning', free: false, premium: true },
-                           { title: 'Wills & Powers of Attorney management', free: false, premium: true },
-                           { title: 'Trust & Entity management', free: false, premium: true }] %>
 <h3 class="mt-20 mb-20">Compare ZokuVault Products</h3>
-<div class="card mb-30 min-w-460">
-  <table class="product-comparison" cellspacing="0">
-    <tr>
-      <th class="text-center table-title">
-        <h1>Compare ZokuVault Products</h1>
-      </th>
-      <th class="plan-information free text-center">
-        <h4 class="clr-gray-dark-tinted fw-500 mt-60">Access to files shared with you.</h4>
-        <%= link_to 'Continue', 'javascript:void(0);', class: 'button big-button primary-button inline-block mt-30 mr-0' %>
-        <h4 class="fw-600 clr-gray-dark-tinted mt-30">Free Vault</h4>
-      </th>
-      <th class="plan-information premium text-center">
-        <h4 class="clr-gray-dark-tinted fw-500 mt-50">Unlimited storage and contacts.</h4>
-        <h4 class="clr-gray-dark-tinted fw-500 mt-10">Access to shared files.</h4>
-        <%= link_to 'Start Now', 'javascript:void(0);', class: 'button big-button primary-button inline-block mt-18 mr-0' %>
-        <h4 class="fw-600 clr-gray-dark-tinted mt-30">$119.98 a year</h4>
-      </th>
-    </tr>
-    
-    <% products_comparison.each do |comparison| %>
-      <tr>
-        <td class="description">
-          <span><%= comparison[:title] %></span>
-        </td>
-        <td>
-          <% if comparison[:free] %>
-            <div class="circle"></div>
-          <% end %>
-        </td>
-        <td>
-          <% if comparison[:premium] %>
-            <div class="circle"></div>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</div>
+<%= render partial: 'pages/product_comparison' %>
 
 
 <h3 class="mt-20 mb-20">Trial Membership Ended</h3>

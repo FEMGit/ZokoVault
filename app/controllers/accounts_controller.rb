@@ -5,11 +5,15 @@ class AccountsController < AuthenticatedController
   skip_before_action :redirect_if_free_user
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
-                                :trial_membership_update, :trial_questionnaire]
+                                :trial_membership_update, :trial_questionnaire, :payment]
 
   def setup; end
   
   def first_run; end
+  
+  def payment
+    session[:ret_url] = root_path
+  end
   
   def upgrade; end
   

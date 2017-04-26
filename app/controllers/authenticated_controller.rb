@@ -42,7 +42,11 @@ private
   def trial_whitelist_page?
     [trial_ended_path,
      trial_membership_update_path,
-     trial_questionnaire_path].include? request.path_info
+     trial_questionnaire_path,
+     payment_path,
+     subscriptions_account_path,
+     apply_promo_code_account_path,
+     account_path].include? request.path_info
   end
   
   def permitted_page_free_user?

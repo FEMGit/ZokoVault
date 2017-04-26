@@ -15,6 +15,9 @@ $cards-margin: 12px;
   width: 60px;
   bottom: 34px;
   position: absolute;
+  &.trial {
+    bottom: 110px;
+  }
 }
 
 img.questionnaire-heart {

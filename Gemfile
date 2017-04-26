@@ -109,6 +109,10 @@ group :development do
   gem 'spring'
 
   gem "letter_opener"
+
+  # Better error page for Rack apps
+  gem "better_errors"
+  gem "binding_of_caller"
 end
 
 group :development, :test do

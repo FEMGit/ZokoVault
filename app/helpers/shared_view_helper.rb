@@ -58,6 +58,11 @@ module SharedViewHelper
     groups[category_shareable_type_transform(category)].include? subcategory
   end
   
+  def show_insurance_info?(owner, vendors, vendor_group)
+    return true if owner == current_user
+    vendors.select { |v| v.group.eql? vendor_group }.count > 0
+  end
+  
   def category_shareable_type_transform(category)
     case category
     when Rails.application.config.x.FinalWishesCategory

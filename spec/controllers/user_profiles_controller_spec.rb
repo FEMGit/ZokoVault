@@ -1,11 +1,8 @@
 require 'rails_helper'
-require 'stripe_mock'
 
 RSpec.describe UserProfilesController, type: :controller do
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before { StripeMock.start }
-  after { StripeMock.stop }
-  
+
   let!(:plan) do
     stripe_helper.create_plan(
       id: "test_plan",

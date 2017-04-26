@@ -12,4 +12,14 @@ class Funding < ActiveRecord::Base
   validates :details, presence: true
   validates :method, inclusion: { in: METHODS }
 
+  def trial?
+    method == "trial"
+  end
+
+  def full?
+    method == "stripe_subscription"    ||
+    method == "stripe_onetime_payment" ||
+    method == "beta_user_gift"
+  end
+
 end

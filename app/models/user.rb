@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
 
   def paid?
     # TODO: after migrating subscriptions, switch to:
-    # user_subscription.present? && user_subscription.active?
+    # current_user_subscription.present? && current_user_subscription.active?
     subscription.present?
   end
 

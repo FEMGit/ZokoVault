@@ -154,13 +154,29 @@
     <div class="flex-trial text-center">
       <%= image_tag "marketing/lock.png", :class => "mb-10 ml-15" %>
     </div>
-    <div class="flex-trial">
+    <div class="flex-trial text-center">
       <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Your trial membership has ended!</h5>
-      <p class="text-center mb-30">You have started your journey to securing your life's important details.</p>
+      <span class="text-center mb-30">You have started your journey to securing your life's important details.
+      <% if account_data_any? %> You have stored: <% end %></span>
+      
+      <ul class="membership-stats text-center list-style-type-none">
+        <% if (count = family_members_count) > 0 %>
+          <li><%= count %> family members</li>
+        <% end %>
+        <% if (count = financial_properties_count) > 0 %>
+          <li><%= count %> pieces of property</li>
+        <% end %>
+        <% if (count = insurance_vendors_count) > 0 %>
+          <li><%= count %> insurance vendors</li>
+        <% end %>
+        <% if (count = documents_count) > 0 %>
+          <li><%= count %> documents</li>
+        <% end %>
+      </ul>
       
       <div class="text-center flex-footer">
-        <p class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button m-0' %></p>
-        <p class="mb-0"><%= link_to 'No Thanks', 'javascript:void(0);', class: 'no-underline-link' %></p>
+        <span class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button mr-0' %></span>
+        <span class="mb-30"><%= link_to 'No Thanks', 'javascript:void(0);', class: 'no-underline-link block' %></span>
       </div>
     </div>
   </div>

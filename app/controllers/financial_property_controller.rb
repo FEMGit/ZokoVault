@@ -61,22 +61,21 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   def create
-    if params[:tutorial_name]
-      properties = params[:financial_property][:names].reject { |c| c.empty? }
-      puts "*"*88
-      puts properties.inspect
-      properties.each do |name|
-        @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
-        @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: name, provider_type: provider_type)
-        @financial_provider.properties << @financial_property
-        authorize @financial_property
+    if params[:tutorial_name] && params[:financial_property][:name].empty?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        session[:previous_tuto] = [] if session[:previous_tuto].nil?
+        session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path, reduce_tutorial_index: true}
+        session[:prev_tutorial_added] = true
+
+        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
       end
-    else
-      @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
-      @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
-      @financial_provider.properties << @financial_property
-      authorize @financial_property
     end
+    @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
+    @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
+    @financial_provider.properties << @financial_property
+    authorize @financial_property
 
     respond_to do |format|
       if validate_params && @financial_provider.save

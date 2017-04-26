@@ -76,7 +76,7 @@ class TutorialsController < AuthenticatedController
         @tutorial = Tutorial.find_by(name: 'Insurance')
         session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
       else
-        @tutorial = Tutorial.find_by(name: 'Add primary contact')
+        @tutorial = Tutorial.find_by(name: 'Add Primary Contact')
         session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
       end
     end

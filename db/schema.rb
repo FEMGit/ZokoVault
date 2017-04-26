@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425230909) do
+ActiveRecord::Schema.define(version: 20170426001701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -409,6 +409,14 @@ ActiveRecord::Schema.define(version: 20170425230909) do
   end
 
   add_index "power_of_attorneys", ["category_id"], name: "index_power_of_attorneys_on_category_id", using: :btree
+
+  create_table "primary_shared_users", id: false, force: :cascade do |t|
+    t.integer "owning_user_id",      null: false
+    t.integer "shared_with_user_id", null: false
+  end
+
+  add_index "primary_shared_users", ["owning_user_id"], name: "index_primary_shared_users_on_owning_user_id", unique: true, using: :btree
+  add_index "primary_shared_users", ["shared_with_user_id"], name: "index_primary_shared_users_on_shared_with_user_id", using: :btree
 
   create_table "property_and_casualty_policies", force: :cascade do |t|
     t.integer  "policy_type"

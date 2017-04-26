@@ -58,6 +58,9 @@ class User < ActiveRecord::Base
   end
 
   def primary_shared_of_paid?
+    # TODO: after migrating data for PrimarySharedUser, switch to:
+    # persisted? && PrimarySharedUser.where(shared_with_user_id: id)
+    #                                .map(&:owning_user).any?(&:paid?)
     UserProfile
       .includes(:user)
       .where(id: Contact.where(emailaddress: email)
@@ -67,6 +70,8 @@ class User < ActiveRecord::Base
   end
 
   def paid?
+    # TODO: after migrating subscriptions, switch to:
+    # user_subscription.present? && user_subscription.active?
     subscription.present?
   end
 

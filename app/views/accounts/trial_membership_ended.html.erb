@@ -1,0 +1,33 @@
+<div class="card mb-30 max-w-1000-centered">
+  <div class="flex-boxes justify-center">
+    <div class="flex-trial text-center">
+      <%= image_tag "marketing/lock.png", :class => "mb-10 ml-15" %>
+    </div>
+    <div class="flex-trial text-center">
+      <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Your trial membership has ended!</h5>
+      <% if account_data_any? %>
+        <span class="text-center mb-30">You have started your journey to securing your life's important details. You have stored: </span>
+      <% end %>
+      
+      <ul class="membership-stats text-center list-style-type-none">
+        <% if (count = family_members_count) > 0 %>
+          <li><%= count %> family members</li>
+        <% end %>
+        <% if (count = financial_properties_count) > 0 %>
+          <li><%= count %> pieces of property</li>
+        <% end %>
+        <% if (count = insurance_vendors_count) > 0 %>
+          <li><%= count %> insurance vendors</li>
+        <% end %>
+        <% if (count = documents_count) > 0 %>
+          <li><%= count %> documents</li>
+        <% end %>
+      </ul>
+      
+      <div class="text-center flex-footer">
+        <span class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button mr-0' %></span>
+        <span class="mb-30"><%= link_to 'No Thanks', trial_membership_update_path, class: 'no-underline-link block' %></span>
+      </div>
+    </div>
+  </div>
+</div>

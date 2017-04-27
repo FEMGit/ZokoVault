@@ -70,9 +70,7 @@ class User < ActiveRecord::Base
   end
 
   def paid?
-    # TODO: after migrating subscriptions, switch to:
-    # current_user_subscription.present? && current_user_subscription.active?
-    subscription.present?
+    current_user_subscription.present? && current_user_subscription.active?
   end
 
   def mfa_verify?

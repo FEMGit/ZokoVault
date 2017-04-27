@@ -154,6 +154,10 @@ Rails.application.routes.draw do
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
 
+  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_ended
+  get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update
+  get 'account/questionnaire' => 'accounts#trial_questionnaire', as: :trial_questionnaire
+  put 'account/questionnaire' => 'accounts#trial_questionnaire_update'
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   post 'account/card_validation' => 'accounts#card_validation'

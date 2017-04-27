@@ -17,6 +17,19 @@ $cards-margin: 12px;
   position: absolute;
 }
 
+img.questionnaire-heart {
+  width: 400px;
+  margin-top: 20px;
+  float: right;
+  @include media($ninesixty) {
+    width: 320px;
+    margin-top: 15px;
+  }
+  @include media($tablet) {
+    display: none;
+  }
+}
+
 //GENERIC CARD STYLE
 .card {
   background: white;

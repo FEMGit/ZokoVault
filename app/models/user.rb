@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  include StagingHelper
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable,
          :password_archivable
@@ -146,18 +147,26 @@ class User < ActiveRecord::Base
 
   # Subscribe a member to a list:
   def add_subscriber_to_list
-    api_key = ZokuVault::Application.config.mailchimp_secret_token
-    gibbon = Gibbon::Request.new(api_key: api_key, debug: true, logger: nil)
+    return if develop_staging?
+    begin
+      api_key = ZokuVault::Application.config.mailchimp_secret_token
+      gibbon = Gibbon::Request.new(api_key: api_key, debug: true, logger: nil)
 
-    gibbon.lists(ZokuVault::Application.config.mailchimp_listing_id).members.create(
-      body: {
-        email_address: self.email,
-        status: "subscribed",
-        merge_fields: {
-          FNAME: self.first_name,
-          LNAME: self.last_name
+      gibbon.lists(ZokuVault::Application.config.mailchimp_listing_id).members.create(
+        body: {
+          email_address: self.email,
+          status: "subscribed",
+          merge_fields: {
+            FNAME: self.first_name,
+            LNAME: self.last_name
+          }
         }
-      }
-    )
+      )
+    rescue Exception => exception
+      requested_page = 'users/sign_up_form'
+      error = exception.message
+      user_death_trap = UserDeathTrap.new(user: self, page_terminated_on: requested_page, error_message: error)
+      user_death_trap.save
+    end
   end
 end

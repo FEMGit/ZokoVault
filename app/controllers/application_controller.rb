@@ -29,9 +29,8 @@ class ApplicationController < ActionController::Base
   end
   
   def death_trap_handle(exception)
-    requested_page = request.original_url
     error = exception.message
-    user_death_trap = UserDeathTrap.new(user: current_user, page_terminated_on: requested_page, error_message: error)
+    user_death_trap = UserDeathTrap.new(user: current_user, page_terminated_on: sign_up_path, error_message: error)
     user_death_trap.save
     raise exception
   end

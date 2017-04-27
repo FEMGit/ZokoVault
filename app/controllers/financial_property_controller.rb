@@ -96,7 +96,7 @@ class FinancialPropertyController < AuthenticatedController
             }
             session[:prev_tutorial_added] = true
 
-            format.json { render json: @financial_property.to_json(only: :id) and return }
+            format.json { render json: @financial_property.as_json and return }
             format.html { redirect_to tutorial_page_path(params[:next_tutorial], '1') and return }
           end
         end

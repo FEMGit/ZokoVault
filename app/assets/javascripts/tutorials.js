@@ -12,10 +12,10 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
   this.addAnotherBtnListener();
 };
 
-DynamicTutorialField.prototype.addRow = function($btn) {
+DynamicTutorialField.prototype.addRow = function($btn, id) {
   var html = $btn.closest(this.fields).clone();
   $btn.closest(this.fields).after(html);
-  html.find('input.repeated-field').focus().val('');
+  html.find('input.repeated-field').data('id', id).focus().val('');
   $btn.after(this.addRemoveBtn());
   $btn.remove();
 };
@@ -40,7 +40,8 @@ DynamicTutorialField.prototype.addRemoveBtn = function() {
 DynamicTutorialField.prototype.removeBtnListener = function($btn) {
   var that = this;
   $btn.on('click', function() {
-    var id = $('FIND-ID'); //PENDANT
+    var id = $($btn).find('input.repeated-field').data('id');
+    console.log('id...', id);
     that.destroy($btn, id).success(function() {
       $btn.closest(that.fields).remove();
     }).error(function() {
@@ -58,8 +59,10 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
       that.submit($btn).success(function(data) {
         console.log(data);
         $btn.closest('input').addClass('saved-field');
-        that.addRow($btn);
-      }).error(function() {
+        that.addRow($btn, data.id);
+      }).error(function(data) {
+        console.log('error');
+        console.log(data);
         that.showLittleError($btn)
       });
     else
@@ -73,7 +76,7 @@ DynamicTutorialField.prototype.submit = function($btn) {
   return $.ajax({
     url: that.submitURL,
     type: 'POST',
-    dataType: 'application/json',
+    dataType: 'json',
     data: $('.collect-fields input').not('.saved-field').serialize()
   });
 }

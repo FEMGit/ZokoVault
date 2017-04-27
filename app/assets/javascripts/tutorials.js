@@ -15,8 +15,8 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
 DynamicTutorialField.prototype.addRow = function($btn, id) {
   var html = $btn.closest(this.fields).clone();
   $btn.closest(this.fields).after(html);
-  html.find('input.repeated-field').data('id', id).focus().val('');
-  $btn.after(this.addRemoveBtn());
+  html.find('input.repeated-field').focus().val('');
+  $btn.after(this.addRemoveBtn(id));
   $btn.remove();
 };
 
@@ -31,8 +31,9 @@ DynamicTutorialField.prototype.showLittleError = function($btn) {
   }, 1000);
 };
 
-DynamicTutorialField.prototype.addRemoveBtn = function() {
+DynamicTutorialField.prototype.addRemoveBtn = function(id) {
   var $btn = $('<a class="medium-button outline-button inline-button">Remove</a>');
+  $btn.data('id', id);
   this.removeBtnListener($btn);
   return $btn;
 };
@@ -40,13 +41,10 @@ DynamicTutorialField.prototype.addRemoveBtn = function() {
 DynamicTutorialField.prototype.removeBtnListener = function($btn) {
   var that = this;
   $btn.on('click', function() {
-    var id = $($btn).find('input.repeated-field').data('id');
-    console.log('id...', id);
+    var id = $btn.data('id');
     that.destroy($btn, id).success(function() {
       $btn.closest(that.fields).remove();
-    }).error(function() {
-      console.log("Can't destroy it");
-    });
+    })
   });
 };
 
@@ -57,13 +55,10 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
 
     if (that.fieldIsEmpty($btn))
       that.submit($btn).success(function(data) {
-        console.log(data);
         $btn.closest('input').addClass('saved-field');
         that.addRow($btn, data.id);
       }).error(function(data) {
-        console.log('error');
-        console.log(data);
-        that.showLittleError($btn)
+        that.showLittleError($btn);
       });
     else
       that.showLittleError($btn);
@@ -95,7 +90,7 @@ $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.
   if ($('.tutorial-fields').length) {
     var create = "/financial_information/property/add_property";
-    var destroy = "/financial_information/property/DESTROY_PATH"; //PENDANT
+    var destroy = "/financial_information/property/";
 
     var tutorial = new DynamicTutorialField(create, destroy);
   }

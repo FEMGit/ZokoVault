@@ -93,5 +93,7 @@ $(document).on('ready', function() {
     var destroy = "/financial_information/property/";
 
     var tutorial = new DynamicTutorialField(create, destroy);
+
+    $('.remove-btn').each(function(){ tutorial.removeBtnListener($(this)) })
   }
 });

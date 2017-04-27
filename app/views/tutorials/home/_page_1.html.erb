@@ -8,10 +8,12 @@
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :page_number, @page_number %>
 
+    <%= label_tag "property_name", 'Street Address' %>
+    <%= render partial: 'tutorials/home/financial_properties' %>
+
     <div class="collect-fields">
       <%= hidden_field_tag :tutorial_name, @tutorial_name %>
       <%= hidden_field_tag 'financial_property[property_type]', "House" %>
-      <%= label_tag "property_name", 'Street Address' %>
       <div class="input-pair tutorial-fields">
         <%= text_field_tag "financial_property[name]", "", class: "form-control medium repeated-field", placeholder: '1010 Main Street' %>
         <a class="medium-button button primary-button inline-button add-another-btn">Add Another</a>

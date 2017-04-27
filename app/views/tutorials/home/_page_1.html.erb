@@ -6,10 +6,10 @@
   <%= form_for @financial_property, url: url_for(action: :create, controller: :financial_property) do |f| %>
     <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
     <%= hidden_field_tag :next_page_number, @next_page %>
-    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
     <%= hidden_field_tag :page_number, @page_number %>
 
     <div class="collect-fields">
+      <%= hidden_field_tag :tutorial_name, @tutorial_name %>
       <%= hidden_field_tag 'financial_property[property_type]', "House" %>
       <%= label_tag "property_name", 'Street Address' %>
       <div class="input-pair tutorial-fields">

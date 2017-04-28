@@ -88,9 +88,10 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
 }
 
 DynamicTutorialField.prototype.listenSkip = function() {
-  $('.skip-btn').on('click', function() {
-    if ($('.collect-fields input').not('.saved-field:last').val() == '')
-      alert('Clicking Skip will not save property name');
+  $('.skip-btn').on('click', function(ev) {
+    if ($('.collect-fields input').not('.saved-field').val() != '')
+      if (!confirm('Clicking Skip will not save property name'))
+        ev.preventDefault();
   });
 };
 

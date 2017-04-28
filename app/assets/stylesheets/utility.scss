@@ -16,11 +16,17 @@
 .clear{
   clear:both;
 }
+.clr-color-primary-shaded {
+  color: $color-primary-shaded !important;
+}
 .clr-color-primary {
   color: $color-primary !important;
 }
 .clr-gray-dark-tinted {
   color: $color-gray-dark-tinted !important;
+}
+.clr-gray-dark {
+  color: $color-gray-dark;
 }
 .clr-red {
   color: red;
@@ -87,6 +93,9 @@
 }
 .w-120 {
   width: 120px !important;
+}
+.w-200 {
+  width: 200px !important;
 }
 .w-430 {
   width: 430px !important;

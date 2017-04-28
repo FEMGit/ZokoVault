@@ -1,8 +1,44 @@
 <header>
   <section class="header-inner blank">
 
-    <%= link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
-    <%= link_to('Exit', destroy_user_session_path, :method => :delete, :class=>"button secondary-button big-button fr") %>
+    <% if !header_information %>
+      <%= link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
+      <%= link_to('Exit', destroy_user_session_path, :method => :delete, :class=>"button secondary-button big-button fr") %>
+    <% else %>
+      <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
+      
+      <% if user_signed_in? %>
+
+        <a class="user-menu-link" id="user-menu-toggle" href="javascript:void(0)">
+          <span class="user-avatar fr">
+            <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
+          </span>
+        </a>
+
+        <div class="user-menu">
+          <%= link_to my_profile_path, class: "user-nav" do %>
+            <svg class="icon nav-icon">
+              <use xlink:href="#icon-contacts-2"></use>
+            </svg>My Profile
+          <% end %>
+          <%= link_to user_account_traffics_path, class: "user-nav" do %>
+            <svg class="icon nav-icon">
+              <use xlink:href="#icon-user-1"></use>
+            </svg>Account Traffic
+          <% end %>
+          <%= link_to account_users_path, class: "user-nav" do %>
+            <svg class="icon nav-icon">
+              <use xlink:href="#icon-settings-1"></use>
+            </svg>Account Settings
+          <% end %>
+          <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"user-nav") %>
+        </div>
+
+        <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
+
+        <%=link_to( image_tag("SVG/search.svg", :alt=>"Search", :class=>"search-icon"), search_url, class: "fr header-search") %>
+      <% end %>
+    <% end %>
 
   </section>
 </header>

@@ -1,12 +1,32 @@
 class AccountsController < AuthenticatedController
+  include UserTrafficModule
   before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
-                                :trial_membership_update, :trial_questionnaire, :payment]
+                                :trial_membership_update, :trial_questionnaire, :payment,
+                                :first_run]
+  before_action :set_blank_layout_header_info, only: [:first_run]
 
+  def page_name
+    case action_name
+      when 'first_run'
+        "Account - First Run"
+      when 'upgrade'
+        "Account - Upgrade (Product Comparison)"
+      when 'terms_of_service'
+        "Account Setup - Terms of Service"
+      when 'phone_setup'
+        "Account Setup - Phone"
+      when 'login_settings'
+        "Account Setup - Login Setting"
+      when 'user_type'
+        "Account Setup - User Type"
+    end
+  end
+  
   def setup; end
   
   def first_run; end
@@ -147,6 +167,10 @@ class AccountsController < AuthenticatedController
   end
 
   private
+
+  def set_blank_layout_header_info
+    @header_information = true
+  end
 
   def check_terms_of_service_passed
     redirect_to terms_of_service_account_path unless current_user.user_profile.signed_terms_of_service_at.present?

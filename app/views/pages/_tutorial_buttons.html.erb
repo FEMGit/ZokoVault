@@ -1,5 +1,12 @@
+<% tutorial_back_path ||= 'javascript:void(0);' %>
+<% tutorial_skip_path ||= 'javascript:void(0);' %>
+<% tutorial_continue_path ||= 'javascript:void(0);' %>
+<% back_button_hide ||= false %>
+
 <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
-  <a class="big-button outline-button padded f-left">Back</a>
-  <a class="big-button outline-button padded">Skip</a>
-  <a class="button big-button blue-button f-right">Continue</a>
+  <% if !back_button_hide %>
+    <%= link_to 'Back', tutorial_back_path, class:"big-button outline-button padded f-left" %>
+  <% end %>
+  <%= link_to 'Skip', tutorial_skip_path, class: 'big-button outline-button padded' %>
+  <%= link_to 'Continue', tutorial_continue_path, class: 'button big-button blue-button f-right' %>
 </section>

@@ -4,7 +4,12 @@ class TutorialsController < AuthenticatedController
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
-  layout 'blank_layout', only: [:new, :create, :show]
+  layout 'blank_layout', only: [:new, :create, :show,
+                                :primary_contacts, :trusted_advisors,
+                                :important_documents, :video]
+  
+  before_action :set_blank_layout_header_info, only: [:primary_contacts, :trusted_advisors,
+                                                      :important_documents, :video]
 
   add_breadcrumb "Guided Tutorial - Important Documents", :tutorial_important_documents_path, only: [:important_documents]
   include BreadcrumbsCacheModule
@@ -17,8 +22,8 @@ class TutorialsController < AuthenticatedController
         "Guided Tutorial - Trusted Advisors"
       when 'important_documents'
         "Guided Tutorial - Important Documents"
-      when 'category_setup'
-        "Guided Tutorial - Category Setup"
+      when 'Video'
+        "Guided Tutorial - Video"
     end
   end
 
@@ -34,8 +39,8 @@ class TutorialsController < AuthenticatedController
     @documents = Document.for_user(current_user)
     session[:ret_url] = tutorial_important_documents_path
   end
-
-  def category_setup; end
+  
+  def video; end
 
   def new
     session[:order_params] ||= {}
@@ -76,6 +81,10 @@ class TutorialsController < AuthenticatedController
   end
 
   private
+  
+  def set_blank_layout_header_info
+    @header_information = true
+  end
 
   def set_new_contact
     @contact = Contact.new(user: current_user)

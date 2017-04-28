@@ -9,10 +9,10 @@
     <%= link_to 'Skip', tutorial_page_path(@next_tutorial.name.parameterize, '1'), class: 'big-button outline-button padded skip-btn' %>
   <% else %>
     <%- @from_skip = true %>
-    <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded skip-btn", id: 'skip-btn-id' %>
+    <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded skip-btn" %>
   <% end %>
   &nbsp
-  <%= f.submit "Continue", class: "button big-button blue-button f-right continue-btn" %>
+  <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
 
 </section>
 

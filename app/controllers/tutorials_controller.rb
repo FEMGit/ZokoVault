@@ -63,6 +63,9 @@ class TutorialsController < AuthenticatedController
 
   def destroy
     previous_url = session[:previous_tuto].last[:my_previous_url]
+    if previous_url.include? 'tutorials/new'
+      redirect_to new_tutorial_path and return
+    end
 
     if session[:previous_tuto].last[:class_object]
       eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy

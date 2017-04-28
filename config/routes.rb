@@ -187,7 +187,7 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
-  get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
+  get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 

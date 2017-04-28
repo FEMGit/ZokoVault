@@ -1,9 +1,9 @@
 <%- current_user.financial_properties.each do |fp| %>
   <div class="collect-fields">
-    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
-    <%= hidden_field_tag 'financial_property[property_type]', "House" %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
+    <%= hidden_field_tag 'financial_property[property_type]', "House", class: 'saved-field' %>
     <div class="input-pair tutorial-fields">
-      <%= text_field_tag "financial_property[name]", fp.name, class: "form-control medium repeated-field", placeholder: '1010 Main Street' %>
+      <%= text_field_tag "financial_property[name]", fp.name, class: "saved-field form-control medium repeated-field", placeholder: '1010 Main Street' %>
       <a data-id=<%= fp.id %> class="medium-button outline-button inline-button remove-btn">Remove</a>
     </div>
   </div>

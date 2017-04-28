@@ -10,6 +10,7 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
   this.addBtn = '.tutorial-fields .add-another-btn';
   this.savedClass = '.saved-field';
   this.addAnotherBtnListener();
+  this.listenSkip();
 };
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {
@@ -85,6 +86,13 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
     dataType: 'json'
   });
 }
+
+DynamicTutorialField.prototype.listenSkip = function() {
+  $('.skip-btn').on('click', function() {
+    if ($('.collect-fields input').not('.saved-field:last').val() == '')
+      alert('Clicking Skip will not save property name');
+  });
+};
 
 $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.

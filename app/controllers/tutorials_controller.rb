@@ -67,10 +67,6 @@ class TutorialsController < AuthenticatedController
       redirect_to new_tutorial_path and return
     end
 
-    if session[:previous_tuto].last[:class_object]
-      eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy
-    end
-
     if session[:previous_tuto].last[:reduce_tutorial_index]
       if previous_url.include? 'home'
         @tutorial = Tutorial.find_by(name: 'Home')

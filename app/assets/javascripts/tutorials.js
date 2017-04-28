@@ -9,7 +9,11 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
   this.fields = '.tutorial-fields';
   this.addBtn = '.tutorial-fields .add-another-btn';
   this.savedClass = '.saved-field';
+  this.skipBtnId = '#skip-btn-id';
+  this.continueBtn = '.continue-btn';
+  this.continueSkipBtn = '.continue-skip-btn';
   this.addAnotherBtnListener();
+  this.continueBtnListener();
 };
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {
@@ -22,6 +26,10 @@ DynamicTutorialField.prototype.addRow = function($btn, id) {
 
 DynamicTutorialField.prototype.fieldIsEmpty = function($btn) {
   return $btn.siblings('input.repeated-field').val() != '';
+};
+
+DynamicTutorialField.prototype.lastFieldIsEmpty = function() {
+  return $('input.repeated-field').last().val() == "";
 };
 
 DynamicTutorialField.prototype.showLittleError = function($btn) {
@@ -64,6 +72,21 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
       that.showLittleError($btn);
   });
 };
+
+DynamicTutorialField.prototype.continueBtnListener = function() {
+  var that = this;
+  $(document).on('click', this.continueBtn, function(event) {
+    if (!that.lastFieldIsEmpty()){
+      event.preventDefault();
+      var result = confirm('Clicking Skip will not save property-name');
+      if (result == true) { $(that.skipBtnId)[0].click(); }
+      return false;
+    } else {
+      $(that.skipBtnId)[0].click();
+    }
+  });
+};
+
 
 DynamicTutorialField.prototype.submit = function($btn) {
   var that = this;

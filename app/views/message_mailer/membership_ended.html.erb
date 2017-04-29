@@ -1,0 +1,16 @@
+<p><b>Name:</b> <%= @message.name %></p>
+
+<p><b>Email:</b> <%= @message.email %></p>
+
+<p><b>Phone:</b> <%= @message.phone_number %></p>
+
+<b>Reasons to end membership:</b>
+<ul>
+  <% @message.message_content[:reasons] && 
+     @message.message_content[:reasons].each do |reason| %>
+    <li><%= reason %></li>
+  <% end %>
+</ul>
+
+<b>Feedback message:</b>
+<p> <%= @message.message_content[:feedback] %> </p>

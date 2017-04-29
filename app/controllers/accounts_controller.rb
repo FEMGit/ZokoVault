@@ -1,16 +1,73 @@
 class AccountsController < AuthenticatedController
+  include UserTrafficModule
   before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
-                                :login_settings, :user_type]
+                                :login_settings, :user_type, :trial_membership_ended,
+                                :trial_membership_update, :trial_questionnaire, :payment,
+                                :first_run]
+  before_action :set_blank_layout_header_info, only: [:first_run]
 
+  def page_name
+    case action_name
+      when 'first_run'
+        "Account - First Run"
+      when 'upgrade'
+        "Account - Upgrade (Product Comparison)"
+      when 'terms_of_service'
+        "Account Setup - Terms of Service"
+      when 'phone_setup'
+        "Account Setup - Phone"
+      when 'login_settings'
+        "Account Setup - Login Setting"
+      when 'user_type'
+        "Account Setup - User Type"
+    end
+  end
+  
   def setup; end
   
   def first_run; end
   
+  def payment
+    session[:ret_url] = root_path
+  end
+  
   def upgrade; end
+  
+  def trial_membership_ended; end
+  
+  def trial_membership_update; end
+  
+  def trial_questionnaire
+    @deny_reasons = ["Too expensive", "I didn't use the site", "Features did not match my needs"]
+  end
+  
+  def trial_questionnaire_update
+    if skip_param[:skip].eql? false.to_s
+      send_message
+    end
+    
+    current_user.current_user_subscription_marker.try(:delete)
+    redirect_to shares_path
+  end
+  
+  def send_message
+    reasons = questionnaire_params[:reasons].try(:keys)
+    feedback = questionnaire_params[:feedback]
+    
+    @message = Message.new(
+      name: current_user.name,
+      email: current_user.email,
+      message_content: { reasons: reasons, feedback: feedback },
+      phone_number: current_user.two_factor_phone_number)
+
+    if @message.valid? && @message.message_content.length > 0
+      MessageMailer.membership_ended(@message).deliver
+    end
+  end
   
   def terms_of_service; end
   
@@ -111,6 +168,10 @@ class AccountsController < AuthenticatedController
 
   private
 
+  def set_blank_layout_header_info
+    @header_information = true
+  end
+
   def check_terms_of_service_passed
     redirect_to terms_of_service_account_path unless current_user.user_profile.signed_terms_of_service_at.present?
   end
@@ -127,6 +188,10 @@ class AccountsController < AuthenticatedController
 
   def account_params
     params.require(:user).permit(:free_account)
+  end
+  
+  def skip_param
+    params.permit(:skip)
   end
 
   def card_params
@@ -159,6 +224,10 @@ class AccountsController < AuthenticatedController
         :stripe_token,
         :plan_id,
         :promo_code])
+  end
+
+  def questionnaire_params
+    params.require(:questionnaire)
   end
 
   def free_account?

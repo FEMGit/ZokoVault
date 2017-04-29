@@ -22,6 +22,7 @@ function cardIsValidRequest(handleData) {
     error: function(data) {
       $('#payment-errors').text(data["responseText"]);
       $('#submit-cc-button').prop('disabled', false);
+      $('#submit-cc-button-continue').prop('disabled', false);
     },
     data: attrs,
     async: false
@@ -40,6 +41,7 @@ function addCreditCard() {
   if (paymentEntryStarted() && cardIsValid()) {
     // conditional prevents the form from breaking if not updating card
     $('#submit-cc-button').prop('disabled', true);
+    $('#submit-cc-button-continue').prop('disabled', true);
     $('#account-form').submit();
   }
 }
@@ -68,6 +70,7 @@ var checkError = function(data) {
 function updatePromoRow(data) {
   if (isNaN(data['amount_off']) && isNaN(data['percent_off'])) {
     $('#promo-code-text').html('Error!');
+    $('#user_subscription_attributes_promo_code').val('')
     checkError(data)
     return
   } else {

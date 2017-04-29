@@ -4,6 +4,12 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
+    "MAILCHIMP_API_KEY": {
+      "required": true
+    },
+    "MAILCHIMP_LISTING_ID": {
+      "required": true
+    },
     "STRIPE_PUBLIC_KEY": {
       "required": true
     },

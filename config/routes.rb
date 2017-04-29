@@ -153,8 +153,13 @@ Rails.application.routes.draw do
   resource :user_profile
   get 'my_profile' => 'user_profiles#show'
 
+  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_ended
+  get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update
+  get 'account/questionnaire' => 'accounts#trial_questionnaire', as: :trial_questionnaire
+  put 'account/questionnaire' => 'accounts#trial_questionnaire_update'
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
+  get 'account/payment' => 'accounts#payment', as: :payment
   post 'account/card_validation' => 'accounts#card_validation'
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup
@@ -181,7 +186,7 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
-  get 'tutorials/getting_started/category_setup' => 'tutorials#category_setup', as: :tutorial_category_setup
+  get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
 
   get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
   resources :tutorials, except: :destroy do

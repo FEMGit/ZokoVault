@@ -2,18 +2,25 @@
 
 <section class="flex-boxes">
   <% new_link_paths = {
-  "life" => new_life_path,
-  "property" => new_property_path,
-  "health" => new_health_path,
+  "life" => @shared_user.present? ? shared_new_life_path : new_life_path,
+  "property" => @shared_user.present? ? shared_new_property_path : new_property_path,
+  "health" => @shared_user.present? ? shared_new_health_path : new_health_path,
   } %>
 
   <% @groups.each do |group| %>
     <div class="flex-column">
-       <div class="card <%= group['value'] %> column-card section-header">
-          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => insurance_document_count(current_user, group['value'], @category.name) } %>
+      <div class="card <%= group['value'] %> column-card section-header">
+        <% count = insurance_document_count(resource_owner, group['value'], @category.name) %>
+        <% if show_insurance_info?(resource_owner, @insurance_vendors, group['value']) %>
+          <%= render :partial => "layouts/documents_count_icon", :locals => {:count => count } %>
           <h3 class="mb-20"><%= group["label"] %></h3>
-
-        <%= link_to 'Add Insurance', new_link_paths[group['value']], class: "small-button outline-button " %>
+        <% else %>
+          <h3 class="mb-20"><%= group["label"] %></h3>
+          <p>No shared items.</p>
+        <% end %>
+        <% if category_shared?(resource_owner, @category.name) %>
+          <%= link_to 'Add Insurance', new_link_paths[group['value']], class: "small-button outline-button " %>
+        <% end %>
         <span class="clear"></span>
       </div>
 
@@ -21,7 +28,7 @@
         <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
             <% vendor.try(:policy) && vendor.policy.each do |policy| %>
@@ -67,7 +74,7 @@
         <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
             <% vendor.try(:policy) && vendor.policy.each do |policy| %>
@@ -113,7 +120,7 @@
         <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
           <div class="card <%= group['value'] %> column-card">
 
-            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(current_user, @category, group['label'], vendor.id) } %>
+            <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
             <h3><%= vendor.name %></h3>
 
               <% vendor.try(:policy) && vendor.policy.each do |policy| %>
@@ -156,8 +163,10 @@
   <% end %>
 </section>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
-  documents_title: 'Insurance Documents'} %>
+
+
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name),
+  documents_title: "Insurance Documents"} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @insurance_documents} %>
 

@@ -1,4 +1,5 @@
 require "pundit/rspec"
+require "stripe_mock"
 require "factory_girl_rails"
 include Pundit
 
@@ -45,6 +46,8 @@ RSpec.configure do |config|
 # with RSpec, but feel free to customize to your heart's content.
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
+  config.before(:each) { StripeMock.start }
+  config.after(:each) { StripeMock.stop }
   # run specs as bin/rspec -t live to test against a live Stripe server (slow)
   if config.filter_manager.inclusions.rules.include?(:live)
     StripeMock.toggle_live true

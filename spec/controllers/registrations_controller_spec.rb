@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'stripe_mock'
 
 RSpec.describe RegistrationsController, type: :controller do
 
@@ -8,9 +7,7 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   let(:stripe_helper) { StripeMock.create_test_helper }
-  before { StripeMock.start }
-  after { StripeMock.stop }
-  
+
   let!(:plan) do
     stripe_helper.create_plan(
       id: "test_plan",
@@ -26,9 +23,9 @@ RSpec.describe RegistrationsController, type: :controller do
           email: Faker::Internet.free_email,
           password: 'fgfdfGFGGF56@%FSfghhfasgd5',
           user_profile_attributes: {
-            first_name: Faker::Name.first_name, 
+            first_name: Faker::Name.first_name,
             middle_name: Faker::Name.first_name,
-            last_name: Faker::Name.last_name, 
+            last_name: Faker::Name.last_name,
             date_of_birth: 30.years.ago
           }
         },

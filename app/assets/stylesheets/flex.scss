@@ -165,15 +165,33 @@
   flex: 33%;
   padding: 0 15px 15px 25px;
   position: relative;
+  .membership-stats {
+    padding-left: 35px;
+  }
+  .flex-footer {
+    margin-bottom: 15px;
+  }
   @include media($teneighty) {
+    img {
+      width: 50%;
+      margin-left: 0 !important;
+      margin-bottom: 0 !important;
+      margin-top: 15px;
+    }
     position: static !important;
     flex: 100%;
     .flex-footer {
+      margin-top: 30px;
+      margin-bottom: 0;
       position: static !important;
     }
     a.button {
       display: inline-block;
       position: static !important;
+      margin-bottom: 15px;
+    }
+    .membership-stats {
+      padding: 0;
     }
   }
   

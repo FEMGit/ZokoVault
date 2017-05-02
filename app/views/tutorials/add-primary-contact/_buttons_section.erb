@@ -15,13 +15,3 @@
   <%= link_to "Continue", tutorials_confirmation_path, class: "button big-button blue-button f-right" %>
 
 </section>
-
-<%- if @from_skip %>
-  <%- if session[:prev_tutorial_added] %>
-    <%- session[:prev_tutorial_added] = false %>
-  <%- else %>
-    <%- session[:previous_tuto] = [] if session[:previous_tuto].nil? %>
-    <%- reduce_index = false  || @reduce_index %>
-    <%- session[:previous_tuto] << { class_object: nil, object: nil, my_previous_url: request.referer || root_path, reduce_tutorial_index: @page_number.to_i == 1} %>
-  <% end %>
-<% end %>

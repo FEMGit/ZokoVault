@@ -90,10 +90,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
             redirect_to tutorials_confirmation_path and return
           else
             # Was a successfull Insertion, then we should move to next Tutorial
-            session[:previous_tuto] = [] if session[:previous_tuto].nil?
-            session[:previous_tuto] << {class_object: 'PropertyAndCasualty', object: @insurance_card, my_previous_url: request.referer || root_path, reduce_tutorial_index: false}
-            session[:prev_tutorial_added] = true
-            redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+            # session[:previous_tuto] = [] if session[:previous_tuto].nil?
+            # session[:previous_tuto] << {class_object: 'PropertyAndCasualty', object: @insurance_card, my_previous_url: request.referer || root_path, reduce_tutorial_index: false}
+            tuto_index = session[:tutorial_index]
+            tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
+            redirect_to tutorial_page_path(tuto_name, '1') and return
           end
         end
 
@@ -103,7 +104,6 @@ class PropertyAndCasualtiesController < AuthenticatedController
         # If comes from Tutorials workflow, redirect to same Tutorial step
         if params[:tutorial_name]
           flash[:alert] = "Fill in Insurance Provider Name field to continue"
-          session[:failed_saved_tutorial] = true
           redirect_to tutorial_page_path('insurance', '3') and return
         end
         error_path(:new)

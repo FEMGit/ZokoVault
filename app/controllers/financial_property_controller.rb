@@ -61,17 +61,16 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   def create
-    if params[:tutorial_name] && params[:financial_property][:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        session[:previous_tuto] = [] if session[:previous_tuto].nil?
-        session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path, reduce_tutorial_index: true}
-        session[:prev_tutorial_added] = true
+    # if params[:tutorial_name] && params[:financial_property][:name].empty?
+    #   if params[:next_tutorial] == 'confirmation_page'
+    #     redirect_to tutorials_confirmation_path and return
+    #   else
+    #     session[:previous_tuto] = [] if session[:previous_tuto].nil?
+    #     session[:previous_tuto] << {class_object: 'FinancialProvider', object: @financial_provider, my_previous_url: request.referer || root_path, reduce_tutorial_index: true}
 
-        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
-      end
-    end
+    #     redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+    #   end
+    # end
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
     @financial_provider.properties << @financial_property
@@ -84,22 +83,28 @@ class FinancialPropertyController < AuthenticatedController
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
-          if params[:next_tutorial] == 'confirmation_page'
-            format.html { redirect_to tutorials_confirmation_path, flash: { success: 'Property was successfully created.' } }
-            format.json { render json: @financial_property.as_json.merge(:next_tutorial => params[:next_tutorial]) and return }
-          else
-            session[:previous_tuto] = [] if session[:previous_tuto].nil?
-            session[:previous_tuto] << {
-              class_object: 'FinancialProvider',
-              object: @financial_provider,
-              my_previous_url: request.referer || root_path,
-              reduce_tutorial_index: true
-            }
-            session[:prev_tutorial_added] = true
-
+          # if params[:next_tutorial] == 'confirmation_page'
+          # else
+            # session[:previous_tuto] = [] if session[:previous_tuto].nil?
+            # session[:previous_tuto] << {
+            #   class_object: 'FinancialProvider',
+            #   object: @financial_provider,
+            #   my_previous_url: request.referer || root_path,
+            #   reduce_tutorial_index: true
+            # }
+            tuto_index = session[:tutorial_index]
+            next_tuto = session[:tutorial_paths][tuto_index]
+            path = if next_tuto[:tuto_name] == 'confirmation'
+              tutorials_confirmation_path
+            else
+               tutorial_page_path(next_tuto[:tuto_name], '1')
+            end
+            binding.pry
+            # format.json { render json: @financial_property.as_json.merge(:next_tutorial => params[:next_tutorial]) and return }
+            # format.html { redirect_to , flash: { success: 'Property was successfully created.' } }
             format.json { render json: @financial_property.as_json and return }
-            format.html { redirect_to tutorial_page_path(params[:next_tutorial], '1') and return }
-          end
+            format.html { redirect_to path, flash: { success: 'Property was successfully created.' } and return }
+          # end
         end
 
         format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
@@ -107,7 +112,6 @@ class FinancialPropertyController < AuthenticatedController
       else
         if params[:tutorial_name]
           flash[:alert] = "Fill in Property Name field to continue"
-          session[:failed_saved_tutorial] = true
           redirect_to tutorial_page_path('home', '1') and return
         end
         set_contacts

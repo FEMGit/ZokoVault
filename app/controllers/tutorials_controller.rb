@@ -51,13 +51,12 @@ class TutorialsController < AuthenticatedController
 
   def create
     session[:tutorials_list] = params["tutorial"] if params["tutorial"]
-    session[:tutorial_index] = 0
-    session[:failed_saved_tutorial] = false
-    if session[:tutorials_list].present?
-      @current_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]])
-    end
-    current_tutorial_name = @current_tutorial.name.parameterize
+    session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
+    tuto_index = session[:tutorial_index]
+    tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+    @current_tutorial = Tutorial.find tuto_id
+    current_tutorial_name = @current_tutorial.name.parameterize
 
     redirect_to tutorial_page_path(current_tutorial_name, '1')
   end
@@ -85,8 +84,6 @@ class TutorialsController < AuthenticatedController
       end
     end
 
-    session[:prev_tutorial_added] = true
-
     session[:previous_tuto].pop
     redirect_to previous_url
   end
@@ -99,5 +96,19 @@ class TutorialsController < AuthenticatedController
 
   def set_new_contact
     @contact = Contact.new(user: current_user)
+  end
+
+  def tutorial_path_generator(list)
+    result = [{ tuto_id: 0, current_page: 0 }] # tutorial / new
+    list.each do |tuto|
+      tutorial = Tutorial.find(tuto)
+      tutorial.number_of_pages.times do |p|
+        result << {
+          tuto_id: tuto,
+          current_page: p + 1,
+          tuto_name: tutorial.name.split(" ").join("-").downcase }
+      end
+    end
+    result << { tuto_id: -1, current_page: -1, tuto_name: 'confirmation' } # tutorial / confirmation page
   end
 end

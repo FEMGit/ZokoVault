@@ -4,7 +4,6 @@
   <%- @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
 
   <%= form_for @financial_property, url: url_for(action: :create, controller: :financial_property) do |f| %>
-    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :page_number, @page_number %>
 
@@ -13,6 +12,7 @@
 
     <div class="collect-fields">
       <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+      <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
       <%= hidden_field_tag 'financial_property[property_type]', "House" %>
       <div class="input-pair tutorial-fields">
         <%= text_field_tag "financial_property[name]", "", class: "form-control medium repeated-field", placeholder: '1010 Main Street' %>

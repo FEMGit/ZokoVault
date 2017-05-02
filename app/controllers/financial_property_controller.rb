@@ -85,7 +85,8 @@ class FinancialPropertyController < AuthenticatedController
 
         if params[:tutorial_name]
           if params[:next_tutorial] == 'confirmation_page'
-            redirect_to tutorials_confirmation_path and return
+            format.html { redirect_to tutorials_confirmation_path, flash: { success: 'Property was successfully created.' } }
+            format.json { render json: @financial_property.as_json.merge(:next_tutorial => params[:next_tutorial]) and return }
           else
             session[:previous_tuto] = [] if session[:previous_tuto].nil?
             session[:previous_tuto] << {

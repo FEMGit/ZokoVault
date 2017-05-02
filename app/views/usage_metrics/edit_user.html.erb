@@ -2,10 +2,10 @@
 
 <div class="card mb-30">
   <h3 class="card-label">Edit User Details</h3>
-  
+
   <label>Name</label>
   <p><%= @user.name %></p>
-  
+
   <label>Email</label>
   <p><%= @user.email %></p>
 
@@ -13,6 +13,19 @@
   <div class="styled-select">
     <%= select_tag :user_type, options_for_select(UsageMetric::USER_TYPES), :include_blank => "Select..." %>
   </div>
+
+  <% if @subscription_info[:status] == :trial %>
+    <label><%= @subscription_info[:label] %></label>
+    <p><%= @subscription_info[:expire] %></p>
+  <% elsif @subscription_info[:status] == :full %>
+    <label><%= @subscription_info[:label] %></label>
+    <p><%= @subscription_info[:expire] %></p>
+  <% elsif @subscription_info[:status] == :none %>
+    <label>Free User</label>
+  <% else %>
+    <label>Invalid Subscription State</label>
+    <p>must be corrected manually</p>
+  <% end %>
 </div>
 
 <%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>

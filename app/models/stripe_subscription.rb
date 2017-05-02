@@ -10,6 +10,7 @@ class StripeSubscription < ActiveRecord::Base
     plans.detect { |x| x.id.eql? id }
   end
 
+  # TODO we should make this logic explicit, and not part of a callback
   before_create do
     new_sub = StripeService.subscribe(
       user:       user,

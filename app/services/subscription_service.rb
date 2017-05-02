@@ -12,7 +12,7 @@ class SubscriptionService
     user_sub
   end
 
-  def self.activate_trial(user:, duration:)
+  def self.activate_trial(user:, duration: 14.days)
     user_sub = UserSubscription.new
     user_sub.user = user
     user_sub.start_at = Time.current

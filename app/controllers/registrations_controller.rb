@@ -1,6 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   before_action :set_plans, only: [:new]
-  
+
   protected
 
   def after_inactive_sign_up_path_for(resource)
@@ -20,7 +20,7 @@ class RegistrationsController < Devise::RegistrationsController
           :first_name, :middle_name, :last_name, :date_of_birth
         ])
   end
-  
+
   def date_format
     user_profile_attributes = params[:user][:user_profile_attributes]
     return user_profile_attributes[:date_of_birth] unless user_profile_attributes[:date_of_birth].include?('/')
@@ -30,10 +30,10 @@ class RegistrationsController < Devise::RegistrationsController
     day = date_params[1]
     "#{year}-#{month}-#{day}"
   end
-  
+
   private
-  
+
   def set_plans
-    @plans = Subscription.plans
+    @plans = StripeSubscription.plans
   end
 end

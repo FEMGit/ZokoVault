@@ -2,8 +2,8 @@
 
 <section class="bb-gray-light-dashed mb-10">
   <div class='styled-select width-250 inline-block'>
-    <%= select_tag "user[subscription_attributes][plan_id]", 
-      options_from_collection_for_select(Subscription.plans, 'id', 'name'),
+    <%= select_tag "user[subscription_attributes][plan_id]",
+      options_from_collection_for_select(StripeSubscription.plans, 'id', 'name'),
       onchange: "updateSubscription()",
       class: 'width-250'
     %>

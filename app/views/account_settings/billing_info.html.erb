@@ -9,8 +9,8 @@
     <h3>Subscription Details</h3>
     <section class="bb-gray-light-dashed mb-10">
       <div class='styled-select width-250 inline-block'>
-        <%= select_tag "user[subscription_attributes][plan_id]", 
-          options_from_collection_for_select(Subscription.plans, 'id', 'name'),
+        <%= select_tag "user[subscription_attributes][plan_id]",
+          options_from_collection_for_select(StripeSubscription.plans, 'id', 'name'),
           onchange: "updateSubscription()",
           class: 'width-250'
         %>
@@ -52,15 +52,15 @@
     <%= text_field_tag "user[subscription_attributes][name_on_card]" %>
 
     <%= label_tag "user_subscription_attributes_card_number", 'Card Number' %><br>
-    <%= text_field_tag "user[subscription_attributes][card_number]", 
+    <%= text_field_tag "user[subscription_attributes][card_number]",
       "",
-      "data-stripe" => "number" 
+      "data-stripe" => "number"
     %>
 
     <%= label_tag "user_subscription_attributes_expiration_month", 'Expiration Date' %><br>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_month]", 
-        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),  
+      <%= select_tag "user[subscription_attributes][expiration_month]",
+        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),
         include_blank: "Month",
         "data-stripe" => "exp_month",
         class: 'small-width'
@@ -68,8 +68,8 @@
     </div>
     <div class="styled-select-separator">/</div>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_year]", 
-        options_for_select(card_expiration_years), 
+      <%= select_tag "user[subscription_attributes][expiration_year]",
+        options_for_select(card_expiration_years),
         include_blank: "Year",
         "data-stripe" => "exp_year",
         class: 'small-width'
@@ -82,7 +82,7 @@
       <% trial_class = trial_update ? 'trial' : '' %>
       <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card #{trial_class}", alt: 'CVV Code') %>
     </p>
-    
+
     <% if trial_update %>
       <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
         <%= link_to 'Back', trial_membership_update_path, class: 'big-button outline-button padded f-left' %>

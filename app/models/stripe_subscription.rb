@@ -21,7 +21,8 @@ class StripeSubscription < ActiveRecord::Base
     self.subscription_id = new_sub.id
     self.customer_id = new_sub.customer
     self.last4 = card_number.last(4) # TODO not PCI compliant
-    SubscriptionService.create_from_stripe(new_sub)
+    SubscriptionService.create_from_stripe(
+      user: user, stripe_subscription_object: new_sub)
   end
 
   def customer

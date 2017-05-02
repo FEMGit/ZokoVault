@@ -9,7 +9,7 @@
     <h3>Subscription Details</h3>
     <section class="bb-gray-light-dashed mb-10">
       <div class='styled-select width-250 inline-block'>
-        <%= select_tag "user[subscription_attributes][plan_id]",
+        <%= select_tag "user[stripe_subscription_attributes][plan_id]",
           options_from_collection_for_select(StripeSubscription.plans, 'id', 'name'),
           onchange: "updateSubscription()",
           class: 'width-250'
@@ -33,7 +33,7 @@
 
     <section>
       <span class="mr-10">Promo Code</span>
-      <%= hidden_field_tag 'user[subscription_attributes][promo_code]' %>
+      <%= hidden_field_tag 'user[stripe_subscription_attributes][promo_code]' %>
       <%= text_field_tag 'promo_code_text_field', nil, class: 'promo-form inline-block width-250' %>
       <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
         class: "button primary-button text-field-button" %>
@@ -48,18 +48,18 @@
       <span id="payment-errors" style="color: red"></span>
     </div>
 
-    <%= label_tag "user_subscription_attributes_name_on_card", 'Name on Card' %><br>
-    <%= text_field_tag "user[subscription_attributes][name_on_card]" %>
+    <%= label_tag "user_stripe_subscription_attributes_name_on_card", 'Name on Card' %><br>
+    <%= text_field_tag "user[stripe_subscription_attributes][name_on_card]" %>
 
-    <%= label_tag "user_subscription_attributes_card_number", 'Card Number' %><br>
-    <%= text_field_tag "user[subscription_attributes][card_number]",
+    <%= label_tag "user_stripe_subscription_attributes_card_number", 'Card Number' %><br>
+    <%= text_field_tag "user[stripe_subscription_attributes][card_number]",
       "",
       "data-stripe" => "number"
     %>
 
-    <%= label_tag "user_subscription_attributes_expiration_month", 'Expiration Date' %><br>
+    <%= label_tag "user_stripe_subscription_attributes_expiration_month", 'Expiration Date' %><br>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_month]",
+      <%= select_tag "user[stripe_subscription_attributes][expiration_month]",
         options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),
         include_blank: "Month",
         "data-stripe" => "exp_month",
@@ -68,7 +68,7 @@
     </div>
     <div class="styled-select-separator">/</div>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_year]",
+      <%= select_tag "user[stripe_subscription_attributes][expiration_year]",
         options_for_select(card_expiration_years),
         include_blank: "Year",
         "data-stripe" => "exp_year",
@@ -76,9 +76,9 @@
       %>
     </div><br>
 
-    <%= label_tag "user_subscription_attributes_cvc", 'CV Code' %><br>
+    <%= label_tag "user_stripe_subscription_attributes_cvc", 'CV Code' %><br>
     <p>
-      <%= text_field_tag "user[subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
+      <%= text_field_tag "user[stripe_subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
       <% trial_class = trial_update ? 'trial' : '' %>
       <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card #{trial_class}", alt: 'CVV Code') %>
     </p>
@@ -91,7 +91,7 @@
     <% end %>
   </div>
 
-  <%= hidden_field_tag "user[subscription_attributes][stripe_token]", "" %>
+  <%= hidden_field_tag "user[stripe_subscription_attributes][stripe_token]", "" %>
 
   <% if !trial_update %>
     <div>

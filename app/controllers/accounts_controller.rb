@@ -117,18 +117,17 @@ class AccountsController < AuthenticatedController
 
   def generate_stripe_token
     unless free_account?
-      stripe_token = StripeService.token(card_params[:subscription_attributes][:card_number],
-                                         card_params[:subscription_attributes][:expiration_month],
-                                         card_params[:subscription_attributes][:expiration_year],
-                                         card_params[:subscription_attributes][:cvc])
-      params[:user][:subscription_attributes][:stripe_token] = stripe_token.id
+      token_args = card_params[:stripe_subscription_attributes].values_at(
+        :card_number, :expiration_month, :expiration_year, :cvc)
+      stripe_token = StripeService.token(*token_args)
+      params[:user][:stripe_subscription_attributes][:stripe_token] = stripe_token.id
     end
   end
 
   def show; end
 
   def send_code
-    current_user.update_attributes(user_params.except(:subscription_attributes))
+    current_user.update_attributes(user_params.except(:stripe_subscription_attributes))
     status =
       begin
         MultifactorAuthenticator.new(current_user).send_code
@@ -145,7 +144,7 @@ class AccountsController < AuthenticatedController
   end
 
   def apply_promo_code
-    coupon = Stripe::Coupon.retrieve(user_params[:subscription_attributes][:promo_code])
+    coupon = Stripe::Coupon.retrieve(user_params[:stripe_subscription_attributes][:promo_code])
     if coupon.valid
       render json: coupon
     else
@@ -196,7 +195,7 @@ class AccountsController < AuthenticatedController
 
   def card_params
     params.require(:user).permit(
-      subscription_attributes: [
+      stripe_subscription_attributes: [
         :name_on_card,
         :card_number,
         :expiration_month,
@@ -205,7 +204,7 @@ class AccountsController < AuthenticatedController
   end
 
   def user_params_except_subscription
-    user_params.except(:subscription_attributes)
+    user_params.except(:stripe_subscription_attributes)
   end
 
   def user_params
@@ -218,7 +217,7 @@ class AccountsController < AuthenticatedController
         :phone_code,
         security_questions_attributes: [:question, :answer],
       ],
-      subscription_attributes: [
+      stripe_subscription_attributes: [
         :name_on_card,
         :card_number,
         :stripe_token,

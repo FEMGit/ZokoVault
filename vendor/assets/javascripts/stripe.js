@@ -1,17 +1,17 @@
 function paymentEntryStarted() {
   return (
       $("#user__card_number").val() != "" ||
-      $("#user_subscription_attributes_expiration_month").val() != "" ||
-      $("#user_subscription_attributes_expiration_year").val() != "" 
+      $("#user_stripe_subscription_attributes_expiration_month").val() != "" ||
+      $("#user_stripe_subscription_attributes_expiration_year").val() != "" 
     );
 }
 
 function cardIsValidRequest(handleData) {
   var attrs = {
-    number: $("#user_subscription_attributes_card_number").val(),
-    exp_month: $("#user_subscription_attributes_expiration_month").val(),
-    exp_year: $("#user_subscription_attributes_expiration_year").val(),
-    cvc: $("#user_subscription_attributes_cvc").val() 
+    number: $("#user_stripe_subscription_attributes_card_number").val(),
+    exp_month: $("#user_stripe_subscription_attributes_expiration_month").val(),
+    exp_year: $("#user_stripe_subscription_attributes_expiration_year").val(),
+    cvc: $("#user_stripe_subscription_attributes_cvc").val() 
   }
   $.ajax({
     type: 'POST',
@@ -31,7 +31,7 @@ function cardIsValidRequest(handleData) {
 
 var cardIsValid = function() {
   var isValid = false
-  cardIsValidRequest(function(cardValidationResult) { 
+  cardIsValidRequest(function(cardValidationResult) {
     isValid = cardValidationResult
   })
   return isValid
@@ -55,12 +55,12 @@ var discount = function(data, currentTotalValue) {
   }
   return discountValue.toFixed(2)
 }
-  
+
 var currentTotal = function() {
   var numberRegex = /\d+(\.\d+)?/g
   return parseFloat($('#subscription-total').text().match(numberRegex))
 }
-  
+
 var checkError = function(data) {
   if(data['status'] === 500 && data['message'] != null) {
     $('#promo-code-text').html(data['message']);
@@ -70,7 +70,7 @@ var checkError = function(data) {
 function updatePromoRow(data) {
   if (isNaN(data['amount_off']) && isNaN(data['percent_off'])) {
     $('#promo-code-text').html('Error!');
-    $('#user_subscription_attributes_promo_code').val('')
+    $('#user_stripe_subscription_attributes_promo_code').val('')
     checkError(data)
     return
   } else {
@@ -95,8 +95,8 @@ function clearPromoRow(data) {
 }
 
 function applyPromoCode() {
-  $('#user_subscription_attributes_promo_code').val($('#promo_code_text_field').val());
-  var data = $('#user_subscription_attributes_promo_code').serialize();
+  $('#user_stripe_subscription_attributes_promo_code').val($('#promo_code_text_field').val());
+  var data = $('#user_stripe_subscription_attributes_promo_code').serialize();
   updateSubscription()
   $.post("/account/apply_promo_code", data, updatePromoRow)
   .fail(function() {
@@ -108,7 +108,7 @@ function updateSubscription() {
   $.get('/account/subscriptions', function() {
   }).done(function(data) {
     var subscriptions = data
-    var select = $('#user_subscription_attributes_plan_id').prop('selectedIndex');
+    var select = $('#user_stripe_subscription_attributes_plan_id').prop('selectedIndex');
 
     var interval = "annually";
     var today = new Date()

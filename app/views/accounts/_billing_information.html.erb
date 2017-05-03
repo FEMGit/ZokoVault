@@ -8,26 +8,26 @@
 </div>
 
 <div class="modal-content overflow-y-visible p-rel">
-  
+
   <h1>Payment Information</h1>
 
   <div class="card-info">
     <span id="payment-errors" style="color: red"></span>
   </div>
 
-  <%= label_tag "user_subscription_attributes_name_on_card", 'Name on Card' %><br>
-  <%= text_field_tag "user[subscription_attributes][name_on_card]" %>
+  <%= label_tag "user_stripe_subscription_attributes_name_on_card", 'Name on Card' %><br>
+  <%= text_field_tag "user[stripe_subscription_attributes][name_on_card]" %>
 
-  <%= label_tag "user_subscription_attributes_card_number", 'Card Number' %><br>
-  <%= text_field_tag "user[subscription_attributes][card_number]", 
+  <%= label_tag "user_stripe_subscription_attributes_card_number", 'Card Number' %><br>
+  <%= text_field_tag "user[stripe_subscription_attributes][card_number]",
     "",
-    "data-stripe" => "number" 
+    "data-stripe" => "number"
   %>
 
-    <%= label_tag "user_subscription_attributes_expiration_month", 'Expiration Date' %><br>
+    <%= label_tag "user_stripe_subscription_attributes_expiration_month", 'Expiration Date' %><br>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_month]", 
-        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),  
+      <%= select_tag "user[stripe_subscription_attributes][expiration_month]",
+        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),
         include_blank: "Month",
         "data-stripe" => "exp_month",
         class: 'small-width'
@@ -35,21 +35,21 @@
     </div>
     <div class="styled-select-separator">/</div>
     <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[subscription_attributes][expiration_year]", 
-        options_for_select(card_expiration_years), 
+      <%= select_tag "user[stripe_subscription_attributes][expiration_year]",
+        options_for_select(card_expiration_years),
         include_blank: "Year",
         "data-stripe" => "exp_year",
         class: 'small-width'
       %>
     </div><br>
 
-    <%= label_tag "user_subscription_attributes_cvc", 'CV Code' %><br>
+    <%= label_tag "user_stripe_subscription_attributes_cvc", 'CV Code' %><br>
     <p>
-      <%= text_field_tag "user[subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
+      <%= text_field_tag "user[stripe_subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
       <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card b-40", alt: 'CVV Code') %>
     </p>
 
-  <%= hidden_field_tag "user[subscription_attributes][stripe_token]", "" %>
+  <%= hidden_field_tag "user[stripe_subscription_attributes][stripe_token]", "" %>
 
   <div>
     <%= link_to "Submit", 'javascript:void(0);' , onClick: "addCreditCard(); return false", id: "submit-cc-button", class: "button primary-button big-button" %>

@@ -82,6 +82,9 @@ table.product-comparison {
 }
 
 .dataTables_wrapper {
+  &.scroll {
+    overflow-x: scroll;
+  }
   @include media($eightfifty) {
     overflow-x: scroll;
   }

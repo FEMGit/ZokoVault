@@ -18,6 +18,11 @@
       <th>Logins/Current Week</th>
       <th>Logins/Week AVG</th>
       <th>Session Length AVG</th>
+      <th>Categories with Information</th>
+      <th>Subcategories with Information</th>
+      <th>Member Since</th>
+      <th>Current Subscription Start Date</th>
+      <th>Current Subscription End Date</th>
       <th>Site Completed (%)</th>
       <th class="nosort nosearch">Actions</th>
     </tr>
@@ -35,7 +40,7 @@
           <%= user.email %>
         </td>
         <td>
-          User Type
+          <%= user_type(user) %>
         </td>
         <td>
           <%= user_invitations_count(user) %>
@@ -55,6 +60,23 @@
         <td>
           <%= session_length_avg(user) %>
         </td>
+        <td>
+          <%= categories_with_information_count(user) %>
+        </td>
+        <td>
+          <%= subcategories_with_information_count(user) %>
+        </td>
+        <td>
+          <%= date_format(user.created_at) %>
+        </td>
+        <td>
+          <%= date_format(user.current_user_subscription && 
+                          user.current_user_subscription.start_at) || '--' %>
+        </td>
+        <td>
+          <%= date_format(user.current_user_subscription && 
+                          user.current_user_subscription.end_at) || '--' %>
+        </td>
         <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">
           <%= site_completed(user) %>
         </td>
@@ -69,5 +91,6 @@
 <script>
   $(document).ready(function(){
     DatatableUpdate('#user-statistics-table', [ [100, 200, 500], 'data', [[0, 'asc']] ])
+    $('#user-statistics-table_wrapper').addClass('scroll')
   });
 </script>

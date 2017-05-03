@@ -3,12 +3,15 @@ class UsageMetricsController < AuthenticatedController
   before_action :stats, only: [:index]
   before_action :death_traps, only: [:errors]
   before_action :set_user_death_drap, only: [:error_details]
+  skip_before_action :redirect_if_free_user, :trial_check
 
   helper_method :documents_per_user, :login_count_per_week,
                 :login_count_per_week_avg, :session_length_avg,
                 :site_completed, :categories_left_to_complete,
                 :shares_per_user, :user_invitations_count, :user_invitations_emails,
-                :user_traffic
+                :user_traffic, :categories_with_information_count,
+                :subcategories_with_information_count, :user_type
+  
   before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial]
   before_action :set_user_traffic, only: [:statistic_details]
 
@@ -174,27 +177,109 @@ class UsageMetricsController < AuthenticatedController
   end
 
   def site_completed(user)
-    all_models = ActiveRecord::Base.descendants
-    delete_system_models(all_models)
-    models_with_user = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
     completed_count = models_with_user.collect { |x| x.where(:user_id => user.id).any? }.count(true)
     models_with_user_count = models_with_user.map(&:name).count
     ((completed_count.to_f / models_with_user_count) * 100).round(2)
   end
 
   def categories_left_to_complete(user)
+    completed = models_with_user.select { |x| x.where(:user_id => user.id).any? }
+    (models_with_user - completed).map(&:name)
+  end
+  
+  def models_with_user
     update_model_list
     all_models = ActiveRecord::Base.descendants
     delete_system_models(all_models)
-    models_with_user = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
-    completed = models_with_user.select { |x| x.where(:user_id => user.id).any? }
-    (models_with_user - completed).map(&:name)
+    all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
+  end
+  
+  def categories_with_information_count(user)
+    contact_service = ContactService.new(:user => user)
+    
+    if_any_return_one(FinancialProvider.for_user(user)) + 
+      if_any_return_one(CardDocument.for_user(user)
+                                    .where(category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase))) + 
+      if_any_return_one(CardDocument.for_user(user)
+                                    .where(category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase))) +
+      if_any_return_one(Vendor.for_user(user)) +
+      if_any_return_one(TaxYearInfo.for_user(user)) +
+      if_any_return_one(FinalWishInfo.for_user(user)) +
+      if_any_return_one(contact_service.contacts_shareable)
+  end
+  
+  def subcategories_with_information_count(user)
+    financial_information_count(user) + 
+      wills_powers_of_attorney_count(user) +
+      trusts_entities_count(user) + 
+      insurance_count(user) + 
+      taxes_count(user) + 
+      final_wishes_count(user) +
+      contacts_count(user)
+  end
+  
+  def contacts_count(user)
+    contact_service = ContactService.new(:user => user)
+    contact_service.contacts_shareable.count
+  end
+  
+  def final_wishes_count(user)
+    FinalWishInfo.for_user(user).count
+  end
+  
+  def taxes_count(user)
+    TaxYearInfo.for_user(user).count
+  end
+  
+  def insurance_count(user)
+    Vendor.for_user(user).count
+  end
+  
+  def trusts_entities_count(user)
+    Trust.for_user(user).count + 
+      Entity.for_user(user).count
+  end
+  
+  def wills_powers_of_attorney_count(user)
+    Will.for_user(user).count +
+      PowerOfAttorneyContact.for_user(user).count
+  end
+  
+  def financial_information_count(user)
+    FinancialAccountInformation.for_user(user).count +
+      FinancialInvestment.for_user(user).count +
+      FinancialAlternative.for_user(user).count +
+      FinancialProperty.for_user(user).count
+  end
+  
+  def if_any_return_one(object)
+    object.any? ? 1 : 0
   end
 
   def update_model_list
     Rails.application.eager_load!
   end
-
+  
+  def user_type(user)
+    if user.current_user_subscription
+      if user.current_user_subscription.active_trial?
+        "Trial Active"
+      elsif user.current_user_subscription.expired_trial?
+        "Trial Expired"
+      elsif user.current_user_subscription.active_full?
+        "Paid"
+      elsif user.current_user_subscription.expired_full?
+        "Paid Expired"
+      end
+    elsif user.primary_shared_of_paid?
+      "Primary Shared of Paid"
+    elsif user.paid?
+      "Paid"
+    elsif user.free?
+      "Free"
+    end
+  end
+  
   def death_traps
     @user_errors = UserDeathTrap.last(1000)
   end

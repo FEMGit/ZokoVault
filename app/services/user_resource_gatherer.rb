@@ -36,7 +36,7 @@ class UserResourceGatherer < Struct.new(:user)
 
   def shared_resources
     return @shared_resources if @shared_resources
-    @shared_resources = user.shares
+    @shared_resources = Share
       .where(contact: Contact.where("emailaddress ILIKE ?", user.email))
       .select(&:shareable_type)
         .map do |share|
@@ -52,8 +52,7 @@ class UserResourceGatherer < Struct.new(:user)
   
   def shares
     return @shares if @shares
-    @shared_resources = user.shares
-                            .where(contact: Contact.where("emailaddress ILIKE ?", user.email))
+    @shared_resources = Share.where(contact: Contact.where("emailaddress ILIKE ?", user.email))
                             .select(&:shareable_type)
                             .flatten
   end

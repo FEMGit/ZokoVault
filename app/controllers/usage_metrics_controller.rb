@@ -109,7 +109,6 @@ class UsageMetricsController < AuthenticatedController
     models.delete(UserDeathTrap)
     models.delete(UserActivity)
     models.delete(Category)
-    models.delete(Upload)
   end
 
   def set_user_death_drap

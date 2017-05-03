@@ -27,7 +27,6 @@ class User < ActiveRecord::Base
   has_many :financial_alternatives, dependent: :destroy
   has_many :financial_properties, dependent: :destroy
   has_many :financial_account_informations, dependent: :destroy
-  has_many :uploads, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
   has_one  :stripe_subscription, -> { order("created_at DESC") }

@@ -1,0 +1,43 @@
+<h1>Shared With Me</h1>
+<table id="shares-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Documents</th>
+      <th>Categories</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shares_by_user.each do |user, shares| %>
+      <% if user.present? %>
+        <tr>
+          <td>
+            <% contact = Contact.for_user(current_user).detect { |c| c.emailaddress.downcase == user.email.downcase } %>
+            <% if contact.present? %>
+              <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
+            <% else %>
+              <% user = User.all.detect { |u| u.email.downcase == user.email.downcase } %>
+              <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => nil, :user => user } %>
+            <% end %>
+          </td>
+          <td>
+            <%= user.try(:email) %>
+          </td>
+          <% shareables = shares.select(&:shareable_type).map(&:shareable) %>
+          <td><%= shared_document_count(shareables, user) %></td>
+          <td><%= shared_category_count(shares, user) %></td>
+          <td class="details-col"><%= link_to 'View', user && shared_view_dashboard_path(user.id), :class=>"outline-button small-button" %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#shares-table', [ [10, 25, 50, 100], 'shares', [[0, 'asc']] ], [1, 2, 2])
+  });
+</script>

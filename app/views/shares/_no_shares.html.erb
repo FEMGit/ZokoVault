@@ -1,0 +1,11 @@
+<div class="card mb-30 text-center">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">No Shares Available.</h5>
+  <section class="max-w-1000 inline-block mb-30">
+    <%= image_tag "marketing/files.png", :class => "w-200 mb-30" %><br>
+    <p class="mb-30 max-w-1000">There are 0 users sharing data with you on ZokuVault.</p>
+
+    <% if current_user.free? %>
+      <%= link_to 'Upgrage Your Account', account_upgrade_path, class: "button big-button blue-button" %>
+    <% end %>
+  </section>
+</div>

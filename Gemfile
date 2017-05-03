@@ -59,6 +59,9 @@ gem 'maskedinput-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+# jQuery UI for the Rails asset pipeline
+gem 'jquery-ui-rails'
+
 # Highcharts
 gem 'highcharts-rails'
 

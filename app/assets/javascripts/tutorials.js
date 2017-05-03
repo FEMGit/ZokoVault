@@ -98,10 +98,13 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
         modal: true,
         buttons: {
           "Skip and Continue": function() {
+            $('.collect-fields input').not('.saved-field').val('');
             $( this ).dialog( "close" );
+            $('form').submit();
           },
           "Save and Continue": function() {
             $( this ).dialog( "close" );
+            $('form').unbind('submit').submit();
           }
         }
       });

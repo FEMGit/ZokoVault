@@ -50,7 +50,18 @@ class TutorialsController < AuthenticatedController
   end
 
   def create
-    session[:tutorials_list] = params["tutorial"] if params["tutorial"]
+    if params["tutorial"].present?
+      session[:tutorials_list] = params["tutorial"]
+    else
+      flash[:error] = 'Select at least one Tutorial checkbox'
+      session[:tutorials_list] ||= {}
+      @tutorial_array = Tutorial.first(3)
+      @tutorial = Tutorial.new(name: session[:tutorials_list])
+      @tutorial.current_step = session[:order_step]
+
+      render :new
+      return
+    end
     session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
     tuto_index = session[:tutorial_index]

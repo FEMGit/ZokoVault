@@ -43,41 +43,53 @@ class TutorialsController < AuthenticatedController
   def video; end
 
   def new
-    session[:order_params] ||= {}
-    @tutorial_array = Tutorial.first(4)
-    @tutorial = Tutorial.new(name: session[:order_params])
+    session[:tutorials_list] ||= {}
+    @tutorial_array = Tutorial.first(3)
+    @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
   end
 
   def create
-    session[:order_params] = params["tutorial"] if params["tutorial"]
-    @tutorial              = Tutorial.new(name: session[:order_params].first || 'Nothing')
-    @tutorial.current_step = session[:order_step]
-    @current_tutorial = nil
-    @current_tutorial      = Tutorial.find(session[:order_params].shift) if session[:order_params].present?
-    @tutorial_array        = Tutorial.where(id: session[:order_params])
+    session[:tutorials_list] = params["tutorial"] if params["tutorial"]
+    session[:tutorial_index] = 0
+    session[:failed_saved_tutorial] = false
+    if session[:tutorials_list].present?
+      @current_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]])
+    end
+    current_tutorial_name = @current_tutorial.name.parameterize
+    session[:tutorial_index] = 1
 
-    if @tutorial.valid?
-      if @tutorial.last_step?
-        session[:order_step] = session[:order_params] = nil
-        # TODO: see what url should we redirect
-        redirect_to tutorial_path(Tutorial.last) and return
-      elsif @tutorial.current_step == 'initial' || @current_tutorial.blank?
-        @tutorial.next_step
-      end
-      session[:order_step] = @tutorial.current_step
-    end
-    if @tutorial.new_record?
-      render "new"
-    else
-      session[:order_step] = session[:order_params] = nil
-      flash[:notice]       = "Tutorial saved!"
-      redirect_to @tutorial
-    end
+    redirect_to tutorial_page_path(current_tutorial_name, '1')
   end
 
   def show
     @tutorial = Tutorial.find(params[:id])
+  end
+
+  def destroy
+    previous_url = session[:previous_tuto].last[:my_previous_url]
+
+    if session[:previous_tuto].last[:class_object]
+      eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy
+    end
+
+    if session[:previous_tuto].last[:reduce_tutorial_index]
+      if previous_url.include? 'home'
+        @tutorial = Tutorial.find_by(name: 'Home')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
+      elsif previous_url.include? 'insurance'
+        @tutorial = Tutorial.find_by(name: 'Insurance')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
+      else
+        @tutorial = Tutorial.find_by(name: 'Add primary contact')
+        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
+      end
+    end
+
+    session[:prev_tutorial_added] = true
+
+    session[:previous_tuto].pop
+    redirect_to previous_url
   end
 
   private

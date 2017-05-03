@@ -84,9 +84,28 @@ class PropertyAndCasualtiesController < AuthenticatedController
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        # If comes from Tutorials workflow, redirect to next step
+        if params[:tutorial_name]
+          if params[:next_tutorial] == 'confirmation_page'
+            redirect_to tutorials_confirmation_path and return
+          else
+            # Was a successfull Insertion, then we should move to next Tutorial
+            session[:previous_tuto] = [] if session[:previous_tuto].nil?
+            session[:previous_tuto] << {class_object: 'PropertyAndCasualty', object: @insurance_card, my_previous_url: request.referer || root_path, reduce_tutorial_index: false}
+            session[:prev_tutorial_added] = true
+            redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+          end
+        end
+
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
+        # If comes from Tutorials workflow, redirect to same Tutorial step
+        if params[:tutorial_name]
+          flash[:alert] = "Fill in Insurance Provider Name field to continue"
+          session[:failed_saved_tutorial] = true
+          redirect_to tutorial_page_path('insurance', '3') and return
+        end
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }

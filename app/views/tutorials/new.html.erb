@@ -1,5 +1,16 @@
-<%= form_for @tutorial do |f| %>
-  <%= render "#{@tutorial.current_step}_step", :f => f %>
-  <p><%= f.submit "Next", class: "button big-button" %></p>
-  <!-- <p><%= f.submit "Back", name: "back_button" unless @tutorial.first_step? %></p> -->
-<% end %>
+<div class="card mb-30">
+  <h1 class="mb-20">Choose Tutorials</h1>
+
+  <%= form_for @tutorial do |f| %>
+    <%= render "#{@tutorial.current_step}_step", :f => f %>
+
+    <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+      <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
+
+      <!-- <p><%= f.submit "Continue", class: "button big-button blue-button f-right" %></p> -->
+      <!-- <p><%= f.submit "Back", name: "back_button" unless @tutorial.first_step? %></p> -->
+    </section>
+
+  <% end %>
+</div>
+

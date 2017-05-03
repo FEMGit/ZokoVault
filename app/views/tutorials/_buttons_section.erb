@@ -1,0 +1,27 @@
+<section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+
+  <%= link_to 'Back', tutorial_destroy_path, method: :post, class: "big-button outline-button padded f-left" %>
+  <%- if @next_page <= @tutorial.number_of_pages %>
+    <%- @from_skip  = true %>
+    <%= link_to "Skip", tutorial_page_path(@tutorial_name, @next_page), class: "big-button outline-button padded skip-btn" %>
+  <% elsif @next_tutorial.present? && !(@next_tutorial == 'confirmation-page') %>
+    <%- @from_skip = true %>
+    <%= link_to 'Skip', tutorial_page_path(@next_tutorial.name.parameterize, '1'), class: 'big-button outline-button padded skip-btn' %>
+  <% else %>
+    <%- @from_skip = true %>
+    <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded skip-btn" %>
+  <% end %>
+  &nbsp
+  <%= f.submit "Continue", class: "button big-button blue-button f-right" %>
+
+</section>
+
+<%- if @from_skip %>
+  <%- if session[:prev_tutorial_added] %>
+    <%- session[:prev_tutorial_added] = false %>
+  <%- else %>
+    <%- session[:previous_tuto] = [] if session[:previous_tuto].nil? %>
+    <%- session[:previous_tuto] << { class_object: nil, object: nil, my_previous_url: request.referer || root_path, reduce_tutorial_index: @page_number.to_i == 1} %>
+  <% end %>
+<% end %>
+

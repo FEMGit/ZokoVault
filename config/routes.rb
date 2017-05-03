@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :tutorials
   resources :final_wishes
   resources :usage_metrics
   resources :taxes
@@ -189,6 +188,12 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
   get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
+
+  get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
+  resources :tutorials, except: :destroy do
+    get '/:page_id', to: 'pages#show', as: :page
+    post '/destroy', to: 'tutorials#destroy'
+  end
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 

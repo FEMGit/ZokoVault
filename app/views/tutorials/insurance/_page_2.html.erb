@@ -1,0 +1,15 @@
+<div class="card mb-30">
+  <h1 class="mb-20">Add Life & Disability Insurance</h1>
+
+  <%- @insurance_card = LifeAndDisability.new(user: resource_owner, category: Category.fetch(Rails.configuration.x.InsuranceCategory.downcase)) %>
+  <%= form_for @insurance_card, url: url_for(action: :create, controller: :life_and_disabilities) do |f| %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :page_number, @page_number %>
+
+    <%= label_tag "life_and_disability", 'Insurance Provider Name' %>
+    <%= text_field_tag "life_and_disability[name]", "", class: "form-control medium", required: true %>
+
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>

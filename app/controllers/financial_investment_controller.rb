@@ -71,9 +71,11 @@ class FinancialInvestmentController < AuthenticatedController
         FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner, @financial_investment)
         FinancialInformationService.update_investment_owners(@financial_investment, investment_owner_params)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+
         format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else
+        set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }

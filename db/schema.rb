@@ -19,15 +19,11 @@ ActiveRecord::Schema.define(version: 20170502215312) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
-    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
-
-  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -539,6 +535,14 @@ ActiveRecord::Schema.define(version: 20170502215312) do
     t.integer  "number_of_pages"
   end
 
+  create_table "uploads", force: :cascade do |t|
+    t.string  "name"
+    t.text    "description"
+    t.string  "folder"
+    t.string  "url"
+    t.integer "user_id"
+  end
+
   create_table "user_activities", force: :cascade do |t|
     t.integer  "user_id"
     t.date     "login_date"
@@ -729,7 +733,6 @@ ActiveRecord::Schema.define(version: 20170502215312) do
     t.string "word", null: false
   end
 
-  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

@@ -9,7 +9,7 @@ class UsageMetricsController < AuthenticatedController
                 :site_completed, :categories_left_to_complete,
                 :shares_per_user, :user_invitations_count, :user_invitations_emails,
                 :user_traffic
-  before_action :set_user, only: [:edit_user, :statistic_details]
+  before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial]
   before_action :set_user_traffic, only: [:statistic_details]
 
   # Breadcrumbs navigation
@@ -53,6 +53,21 @@ class UsageMetricsController < AuthenticatedController
 
   def edit_user
     @subscription_info = subscription_info
+  end
+
+  def extend_trial
+    with_trial_and_back_to_edit do |sub|
+      sub.start_at = Time.current
+      sub.end_at = sub.start_at + 14.days
+      sub.save!
+    end
+  end
+
+  def cancel_trial
+    with_trial_and_back_to_edit do |sub|
+      sub.end_at = 1.minute.ago
+      sub.save!
+    end
   end
 
   def statistic_details; end
@@ -199,6 +214,16 @@ class UsageMetricsController < AuthenticatedController
     else
       { status: :unknown, label: 'Invalid Subscription State',
                            text: 'must be corrected manually' }
+    end
+  end
+
+  def with_trial_and_back_to_edit
+    if @user
+      sub = @user && @user.current_user_subscription
+      yield(sub) if sub && sub.trial?
+      redirect_to admin_edit_user_path(@user)
+    else
+      redirect_to statistic_details_path
     end
   end
 end

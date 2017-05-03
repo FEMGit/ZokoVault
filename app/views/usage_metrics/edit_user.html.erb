@@ -17,9 +17,9 @@
   <label><%= @subscription_info[:label] %></label>
   <p><%= @subscription_info[:text] %></p>
   <% if @subscription_info[:status] == :trial %>
-    <%= link_to 'Extend Trial', 'javascript:trialButton("extend")', class: "button secondary-button big-button"%>
+    <%= link_to 'Extend Trial', admin_extend_trial_path(@user), class: "button secondary-button big-button"%>
     <% if @subscription_info[:active] %>
-      <%= link_to 'Cancel Trial', 'javascript:trialButton("cancel")', class: "button secondary-button big-button"%>
+      <%= link_to 'Cancel Trial', admin_cancel_trial_path(@user), class: "button secondary-button big-button"%>
     <% end %>
   <% end %>
 </div>
@@ -27,8 +27,3 @@
 <%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>
 <%= link_to 'Cancel', back_path || usage_metrics_path, class: "button secondary-button big-button"%>
 <%= link_to 'Delete', @user, method: :delete, data: { confirm: 'are you sure?' }, class: "button secondary-button big-button" %>
-
-<script>
-  var trialButton = function(type) {
-  }
-</script>

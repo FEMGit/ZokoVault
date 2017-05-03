@@ -103,8 +103,10 @@ class AccountsController < AuthenticatedController
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
+      redirect_to first_run_path
+    else
+      redirect_to root_path
     end
-    redirect_to root_path
   end
 
   def update

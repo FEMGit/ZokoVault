@@ -1,68 +1,10 @@
 <div class="card mb-30 b-radius-0 b-none box-shadow-none">
   <h3>Subscription Details</h3>
-  
-  <label>Plan</label>
-  <p><%= @plan.try(:name) || '--' %></p>
-  
-  <label>Start Date</label>
-  <p><%= date_format(@subscription.try(:created_at)) || '–' %></p>
-  
-  <label>Next Invoice</label>
-  <% if @plan.present? %>
-    <p><%= "$#{@plan.amount / 100.0} - #{date_format(@next_invoice_date)} - Automatic Collection" %></p>
+  <% subscription = current_user.current_user_subscription %>
+  <% if subscription && subscription.active_trial? %>
+    <%= render partial: 'free_trial_subscription_info.html.erb', locals: { subscription: subscription } %>
   <% else %>
-    <p>–</p>
+    <%= render partial: 'subscription_info.html.erb' %>
   <% end %>
   
-  <label>Billing Info</label>
-  <% if @card.present? %>
-    <p><%= "#{@card[:brand]} XXXX-#{@subscription[:last4]} exp. #{@card[:exp_month]}/#{@card[:exp_year]}" %></p>
-  <% else %>
-    <p>–</p>
-  <% end %>
-  
-  <h3>Previous Invoices</h3>
-  
-  <table id="documents-table">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Paid on</th>
-        <th>Payment Amount</th>
-        <th>Invoice</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @invoices && @invoices.each do |invoice| %>
-        <tr>
-          <td><%= invoice.lines.data.first.plan.name %></td>
-          <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
-          <td><%= "$#{invoice.total / 100.0}" %></td>
-          <td><%= link_to 'Invoice', invoice_information_path(invoice.id), class: 'no-underline-link', target: :_blank %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  
-  <div class="mt-30">
-    <%= link_to "Update", billing_info_path, class: "button primary-button big-button" %>
-  </div>
 </div>
-
-<script>
-  $(document).ready(function(){
-    $('#documents-table').DataTable( {
-      paging: false,
-      searching: false,
-      info: false,
-      aaSorting: [[1, 'asc']],
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }, {
-        'bSearchable': false,
-        'aTargets': ['nosearch']
-      }],
-    } );
-  });
-</script>

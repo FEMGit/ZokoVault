@@ -18,7 +18,7 @@ class SubscriptionService
     user_sub.user = user
     user_sub.start_at = Time.current
     user_sub.end_at = user_sub.start_at + duration
-    user_sub.build_funding(method: "trial", details: {})
+    user_sub.build_funding(method: "trial", details: {"": ""})
     user_sub.save!
     CurrentUserSubscriptionMarker.set_for(
       user_id: user.id, user_subscription_id: user_sub.id)

@@ -72,7 +72,9 @@ class MailchimpService
   
   def member_id_by_email(list_id, email)
     return if members_emails(list_id).blank?
-    @gibbon.lists(list_id).members.retrieve.body["members"].detect { |m| m["email_address"] == email }["id"]
+    member_email = @gibbon.lists(list_id).members.retrieve.body["members"].detect { |m| m["email_address"] == email }
+    return nil unless member_email
+    member_email["id"]
   end
   
   def members_emails(list_id)
@@ -80,7 +82,9 @@ class MailchimpService
   end
   
   def list_id_by_name(name)
-    lists.detect { |l| l["name"] == name }["id"]
+    list_name = lists.detect { |l| l["name"] == name }
+    return nil unless list_name
+    list_name["id"]
   end
 
   def mailchimp_lists

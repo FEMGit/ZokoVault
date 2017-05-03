@@ -64,8 +64,7 @@ class User < ActiveRecord::Base
     #                                .map(&:owning_user).any?(&:paid?)
     UserProfile
       .includes(:user)
-      .where(id: Contact.where(emailaddress: email)
-      .map(&:full_primary_shared_id))
+      .where(id: Contact.where(emailaddress: email).map(&:full_primary_shared_id))
       .map(&:user)
       .any?(&:paid?)
   end

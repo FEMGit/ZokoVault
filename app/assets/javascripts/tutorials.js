@@ -10,7 +10,7 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
   this.addBtn = '.tutorial-fields .add-another-btn';
   this.savedClass = '.saved-field';
   this.addAnotherBtnListener();
-  this.listenSkip();
+  this.listenUnsavedChanges();
 };
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {
@@ -87,12 +87,27 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
   });
 }
 
-DynamicTutorialField.prototype.listenSkip = function() {
-  $('.skip-btn').on('click', function(ev) {
+DynamicTutorialField.prototype.listenUnsavedChanges = function() {
+  var confirmDialog = function(ev) {
     if ($('.collect-fields input').not('.saved-field').val() != '')
-      if (!confirm('Clicking Skip will not save property name'))
-        ev.preventDefault();
-  });
+      ev.preventDefault();
+      $( "#dialog-confirm" ).dialog({
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        buttons: {
+          "Skip and Continue": function() {
+            $( this ).dialog( "close" );
+          },
+          "Save and Continue": function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      });
+  }
+  $('.skip-btn').on('click', confirmDialog);
+  $('form').on('submit', confirmDialog);
 };
 
 $(document).on('ready', function() {

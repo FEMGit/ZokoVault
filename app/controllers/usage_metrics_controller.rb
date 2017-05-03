@@ -187,17 +187,18 @@ class UsageMetricsController < AuthenticatedController
   def subscription_info
     sub = @user && @user.current_user_subscription
     if sub.blank?
-      { status: :none }
+      { status: :none, label: 'Free User', text: '' }
     elsif sub.trial?
       label  = "#{sub.active? ? 'Active' : 'Expired'} Trial Period"
       expire = "Expire#{sub.active? ? 's' : 'd'} At: #{sub.end_at}"
-      { status: :trial, label: label, expire: expire }
+      { status: :trial, label: label, text: expire, active: sub.active? }
     elsif sub.full?
       label  = "#{sub.active? ? 'Active' : 'Expired'} Full Subscription"
       expire = "Expire#{sub.active? ? 's' : 'd'} At: #{sub.end_at}"
-      { status: :full, label: label, expire: expire }
+      { status: :full, label: label, text: expire, active: sub.active? }
     else
-      { status: :unknown , funding_method: sub.funding.try(:method) }
+      { status: :unknown, label: 'Invalid Subscription State',
+                           text: 'must be corrected manually' }
     end
   end
 end

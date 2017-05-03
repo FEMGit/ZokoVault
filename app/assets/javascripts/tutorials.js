@@ -89,9 +89,9 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
 
 DynamicTutorialField.prototype.listenUnsavedChanges = function() {
   var confirmDialog = function(ev) {
-    if ($('.collect-fields input').not('.saved-field').val() != '')
+    if ($('.collect-fields input').not('.saved-field').val() != '') {
       ev.preventDefault();
-      $( "#dialog-confirm" ).dialog({
+      $("#dialog-confirm").dialog({
         resizable: false,
         height: "auto",
         width: 400,
@@ -99,15 +99,16 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
         buttons: {
           "Skip and Continue": function() {
             $('.collect-fields input').not('.saved-field').val('');
-            $( this ).dialog( "close" );
+            $(this).dialog("close");
             $('form').submit();
           },
           "Save and Continue": function() {
-            $( this ).dialog( "close" );
+            $(this).dialog("close");
             $('form').unbind('submit').submit();
           }
         }
       });
+    }
   }
   $('.skip-btn').on('click', confirmDialog);
   $('form').on('submit', confirmDialog);

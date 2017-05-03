@@ -1,3 +1,6 @@
+@import 'jquery-ui/core.css';
+@import 'jquery-ui/theme.css';
+@import 'jquery-ui/dialog.css';
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700';
 @import "normalize";
 @import "bourbon";
@@ -51,7 +54,6 @@
 @import "my_profile";
 @import "web_address";
 @import "jquery.dataTables";
-@import "jquery-ui";
 @import "tooltip";
 @import "file_picker_custom";
 @import "datatable";

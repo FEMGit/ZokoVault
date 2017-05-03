@@ -1,3 +1,4 @@
+//HEADER STUFF
 .header-search{
   width: 40px;
   height: 40px;
@@ -7,6 +8,18 @@
   width:25px;
   height: 25px;
 }
+.question-icon{
+  width: 40px;
+  height: 34px;
+  padding-top: 11px;
+  padding-right: 10px;
+
+  @include media($mobile) {
+    display:none;
+  }
+}
+
+//SEARCH PAGE
 .search-input{
   padding: 9px 0 8px 25px;
   background: white asset-data-url('SVG/search.svg') no-repeat 7px center;
@@ -26,12 +39,9 @@
   float:left;
   margin-right: 10px;
 }
-.pagination{
-
-}
 
 
-//Results
+//RESULTS
 $font-size: 16px;
 $line-height: 1.4;
 $lines-to-show: 2;
@@ -40,10 +50,6 @@ $lines-to-show: 2;
   float: left;
   width: 40px
 }
-.result-block{
-    
-}
-
 .result-text{
   display: inline-block; /* Fallback for non-webkit */
   display: -webkit-box;

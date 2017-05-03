@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426081919) do
+ActiveRecord::Schema.define(version: 20170502215312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -466,7 +466,7 @@ ActiveRecord::Schema.define(version: 20170426081919) do
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
 
-  create_table "subscriptions", force: :cascade do |t|
+  create_table "stripe_subscriptions", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "name_on_card"
     t.string   "last4"
@@ -474,9 +474,21 @@ ActiveRecord::Schema.define(version: 20170426081919) do
     t.string   "stripe_token"
     t.string   "plan_id"
     t.string   "promo_code"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "subscription_id"
   end
+
+  add_index "stripe_subscriptions", ["subscription_id"], name: "index_stripe_subscriptions_on_subscription_id", using: :btree
+
+  create_table "subtutorials", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "tutorial_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
 
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
@@ -530,8 +542,6 @@ ActiveRecord::Schema.define(version: 20170426081919) do
     t.string  "url"
     t.integer "user_id"
   end
-
-  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
 
   create_table "user_activities", force: :cascade do |t|
     t.integer  "user_id"
@@ -737,8 +747,8 @@ ActiveRecord::Schema.define(version: 20170426081919) do
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"
+  add_foreign_key "subtutorials", "tutorials"
   add_foreign_key "tax_year_infos", "users"
-  add_foreign_key "uploads", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_death_traps", "users"
   add_foreign_key "user_subscriptions", "users"

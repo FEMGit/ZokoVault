@@ -1,4 +1,4 @@
-RSpec.describe Subscription do
+RSpec.describe StripeSubscription do
   let(:stripe_helper) { StripeMock.create_test_helper }
 
   let!(:plan) do
@@ -19,15 +19,15 @@ RSpec.describe Subscription do
   end
 
   describe "::plans" do
-    it "retrieves a list of all subscription plans" do
-      plans = Subscription.plans
+    it "retrieves a list of all StripeSubscription plans" do
+      plans = StripeSubscription.plans
       expect(plans).to eq([plan])
     end
   end
 
   describe "::create" do
     before :each do
-      @subscription = Subscription.create valid_params
+      @subscription = StripeSubscription.create valid_params
     end
     it "creates a Stripe customer from a token and a user email" do
       expect {
@@ -40,29 +40,29 @@ RSpec.describe Subscription do
       expect(cust_object.subscriptions.data).to_not be_empty
     end
 
-    it "initializes a Subscription object" do
-      expect(@subscription).to be_a(Subscription)
+    it "initializes a StripeSubscription object" do
+      expect(@subscription).to be_a(StripeSubscription)
     end
   end
 
   describe "::find" do
     before :each do
-      @id = Subscription.create(valid_params).id
+      @id = StripeSubscription.create(valid_params).id
     end
 
-    it "initializes a Subscription object from a stripe_id" do
-      subscription = Subscription.find @id
-      expect(subscription).to be_a(Subscription)
+    it "initializes a StripeSubscription object from a stripe_id" do
+      subscription = StripeSubscription.find @id
+      expect(subscription).to be_a(StripeSubscription)
     end
   end
 
   describe "#initialize" do
     before :each do
-      @subscription = Subscription.create valid_params
+      @subscription = StripeSubscription.create valid_params
       @cust_object = Stripe::Customer.retrieve @subscription.id
     end
 
-    it "creates a Subscription with various attributes" do
+    it "creates a StripeSubscription with various attributes" do
       expect(@subscription.id).to eq(@cust_object.id)
       plan_data = @cust_object.subscriptions.data[0].plan
       expect(@subscription.plan_id).to eq(plan_data.id)
@@ -87,8 +87,8 @@ RSpec.describe Subscription do
   end
 
   describe "#refresh!" do
-    it "resets the Subscription to equal it's state on Stripe's server" do
-      subscription = Subscription.create valid_params
+    it "resets the StripeSubscription to equal it's state on Stripe's server" do
+      subscription = StripeSubscription.create valid_params
       stripe_cust = Stripe::Customer.retrieve subscription.id
       stripe_cust.email = "new_email@zokuvault.com"
       stripe_cust.save
@@ -100,7 +100,7 @@ RSpec.describe Subscription do
 
   xdescribe "#update" do
     before :each do
-      @subscription = Subscription.create valid_params
+      @subscription = StripeSubscription.create valid_params
       @cust_object = Stripe::Customer.retrieve @subscription.id
     end
 
@@ -148,30 +148,30 @@ RSpec.describe Subscription do
   end
 
   describe "#user" do
-    it "finds the user associated with this Subscription" do
+    it "finds the user associated with this StripeSubscription" do
       params = valid_params.merge(user_email: user.email)
-      subscription = Subscription.create params
+      subscription = StripeSubscription.create params
       expect(subscription.user).to eq(user)
     end
   end
 
   describe "#payments" do
     it "delegates to the User#payments method" do
-      subscription = Subscription.create valid_params
+      subscription = StripeSubscription.create valid_params
       expect(subscription.payments).to eq(user.payments)
     end
   end
 
   describe "#status" do
     it "delegates to the User#subscription method" do
-      subscription = Subscription.create valid_params
+      subscription = StripeSubscription.create valid_params
       expect(subscription.status).to eq(user.subscription_status)
     end
   end
 
   describe "#apply_discount" do
     before :each do
-      @subscription = Subscription.create valid_params
+      @subscription = StripeSubscription.create valid_params
       @discount = Discount.create(
         id: Faker::Company.buzzword,
         currency: "usd",
@@ -182,7 +182,7 @@ RSpec.describe Subscription do
       @subscription.apply_discount @discount
     end
 
-    it "adds a discount to the Stripe Subscription" do
+    it "adds a discount to the Stripe subscription" do
       stripe_object = Stripe::Customer.retrieve(user.stripe_id).subscriptions.data[0]
       expect(stripe_object.discount.coupon.id).to eq @discount.id
     end

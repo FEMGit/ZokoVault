@@ -102,6 +102,7 @@ var handleSelectOnChange = function(selectInput) {
     selectedOption.removeAttr('selected');
     $(selectInput).trigger("chosen:updated");
 
+    contact_type_handle($('#contact_contact_type'), true)
     displayContactFormModal();
   }
 }

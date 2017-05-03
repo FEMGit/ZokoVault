@@ -2,6 +2,7 @@ class SharedViewController < AuthenticatedController
   include DocumentsHelper
   include FinancialInformationHelper
   include SharedViewModule
+  before_action :check_expired
   
   add_breadcrumb "Dashboard", :shared_view_dashboard_path, only: [:dashboard]
   add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
@@ -202,5 +203,14 @@ class SharedViewController < AuthenticatedController
       groups.push(@groups.detect { |x| x["label"] == group })
     end
     @groups = groups
+  end
+  
+  def check_expired
+    if @shared_user.free? || 
+        (@shared_user.current_user_subscription &&
+          (@shared_user.current_user_subscription.expired_trial? ||
+           @shared_user.current_user_subscription.expired_full?))
+      redirect_to shared_expired_path(@shared_user)
+    end
   end
 end

@@ -5,7 +5,7 @@ class AuthenticatedController < ApplicationController
 private
   
   def trial_check
-    if current_user.current_user_subscription &&
+    if current_user && current_user.current_user_subscription &&
        current_user.current_user_subscription.expired_trial? && !trial_whitelist_page?
       redirect_to trial_ended_path
     end

@@ -16,11 +16,17 @@
 .clear{
   clear:both;
 }
+.clr-color-primary-shaded {
+  color: $color-primary-shaded !important;
+}
 .clr-color-primary {
   color: $color-primary !important;
 }
 .clr-gray-dark-tinted {
   color: $color-gray-dark-tinted !important;
+}
+.clr-gray-dark {
+  color: $color-gray-dark;
 }
 .clr-red {
   color: red;
@@ -88,6 +94,9 @@
 .w-120 {
   width: 120px !important;
 }
+.w-200 {
+  width: 200px !important;
+}
 .w-430 {
   width: 430px !important;
 }
@@ -99,6 +108,9 @@
 }
 .max-w-600 {
   max-width: 600px !important;
+}
+.max-w-1000 {
+  max-width: 1000px !important;
 }
 .max-w-1000-centered {
   max-width: 1000px !important;
@@ -188,9 +200,6 @@
 }
 .pr-15 {
   padding-right: 15px !important;
-}
-.p-0 {
-  padding: 0 !important;
 }
 .mr-0{
   margin-right: 0 !important;

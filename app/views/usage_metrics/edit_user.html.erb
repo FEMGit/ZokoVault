@@ -2,10 +2,10 @@
 
 <div class="card mb-30">
   <h3 class="card-label">Edit User Details</h3>
-  
+
   <label>Name</label>
   <p><%= @user.name %></p>
-  
+
   <label>Email</label>
   <p><%= @user.email %></p>
 
@@ -13,6 +13,15 @@
   <div class="styled-select">
     <%= select_tag :user_type, options_for_select(UsageMetric::USER_TYPES), :include_blank => "Select..." %>
   </div>
+
+  <label><%= @subscription_info[:label] %></label>
+  <p><%= @subscription_info[:text] %></p>
+  <% if @subscription_info[:status] == :trial %>
+    <%= link_to 'Extend Trial', admin_extend_trial_path(@user), class: "button secondary-button big-button"%>
+    <% if @subscription_info[:active] %>
+      <%= link_to 'Cancel Trial', admin_cancel_trial_path(@user), class: "button secondary-button big-button"%>
+    <% end %>
+  <% end %>
 </div>
 
 <%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>

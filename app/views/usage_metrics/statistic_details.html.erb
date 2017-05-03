@@ -46,7 +46,7 @@
   <p>Corporate Account Name</p>
   
   <label>User Type</label>
-  <p>User Type</p>
+  <p><%= user_type(@user) %></p>
 
   <label>Documents/User</label>
   <p><%= documents_per_user(@user) %></p>
@@ -72,6 +72,21 @@
 
   <label>Site Completed (%)</label>
   <p><%= site_completed(@user) %></p>
+  
+  <label>Categories with Information</label>
+  <p><%= categories_with_information_count(@user) %></p>
+  
+  <label>Subcategories with Information</label>
+  <p><%= subcategories_with_information_count(@user) %></p>
+  
+  <label>Member Since</label>
+  <p><%= date_format(@user.created_at) %></p>
+  
+  <label>Current Subscription Start Date</label>
+  <p><%= date_format(@user.current_user_subscription && @user.current_user_subscription.start_at) || '--' %></p>
+  
+  <label>Current Subscription End Date</label>
+  <p><%= date_format(@user.current_user_subscription && @user.current_user_subscription.end_at) || '--' %></p>
 
   <% left_to_complete = categories_left_to_complete(@user) %>
   <% if left_to_complete.any? %>
@@ -118,5 +133,6 @@
 <script>
   $(document).ready(function(){
     DatatableUpdate('#traffics-table', [ [100, 200, 500], 'errors', [[3, 'desc']] ])
+    $('#traffics-table-table_wrapper').addClass('scroll')
   });
 </script>

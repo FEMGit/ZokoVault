@@ -52,7 +52,7 @@
   }
   
   var passwordValidate = function(password_selector) {
-    password_selector.on('click', function() {
+    password_selector.on('focus', function() {
       $('.password-validation').addClass('displayed')
     })
     password_selector.on('keyup', function(e) {

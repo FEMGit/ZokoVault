@@ -24,7 +24,8 @@
 
     <label>Owners/Partners</label>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :partner_ids, @contacts) %>
+      <%= account_owner_select_with_create_new(f, :partner_ids, @account_owners,
+        {}, owner_ids_transform(@entity.partner_ids)) %>
     </div>
 
     <%= f.label :notes %>

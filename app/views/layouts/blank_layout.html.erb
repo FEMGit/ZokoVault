@@ -6,7 +6,7 @@
   <%= render :partial => 'layouts/alerts' %>
     <main class="app-nav blank">
 
-    <%= render :partial => 'layouts/blank_header' %>
+    <%= render :partial => 'layouts/blank_header', locals: { header_information: @header_information } %>
 
     <div class="content blank">
       <%= yield %>

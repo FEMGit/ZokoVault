@@ -67,12 +67,24 @@ img.questionnaire-heart {
     width: 100%;
     padding: 5px 15px 5px 15px;
     margin: 15px 0;
+    @include media($tablet) {
+      padding: 5px 15px 15px 15px;
+    }
+
     h3 {
       display: inline-block;
-      margin-bottom: 0;
+      margin:0;
+      @include media($tablet) {
+        display: block;
+        margin-bottom: 10px
+      }
     }
-    .small-button {
+    .small-button{
       margin-top: 4px;
+      float:right;
+      @include media($tablet) {
+        float:none;
+      }
     }
   }
   &.centered {

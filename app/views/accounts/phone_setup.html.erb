@@ -1,9 +1,9 @@
 <%= form_tag :account_phone_setup, { method: :put, id: 'account-form' } do %>
-  <div class="settings-card">
+  <div class="settings-card max-w-1000-centered">
     <div class="modal-header">
-      <h2>Phone Setup</h2>
+      <h2>Phone Set Up - Two-Factor Authentication</h2>
 
-      <p>A cell phone number is used to provide an extra layer of security to your account. It can also be used for account recovery purposes. Please enter your cell phone number below.</p>
+      <p>Two-factor authentication via a cell phone number is used to provide an extra layer of security to your account. Please enter your cell phone number below.</p>
     </div>
 
     <div class="modal-content mb-30">
@@ -12,26 +12,25 @@
       <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
       <%= check_box_tag 'skip_auth', 'Skip dual setup', false %>
 
-      <button class="button primary-button big-button" onClick="sendCode(); return false" id="send-code-button">Send code</button>
-      <span id='send_code_text'></span>
+      <button class="button primary-button big-button mb-15" onClick="sendCode(); return false" id="send-code-button">Send code</button>
+      <span id='send_code_text' class="bold clr-color-primary-shaded"></span>
 
       <hr/>
 
-      <h1>Enter Phone Code</h1>
+      <h2>Enter Phone Code</h2>
 
-      <p>You should recieve your phone code within the next few minutes.
-      Please enter the code below.</p>
+      <p>You should recieve your phone code within the next few minutes. Please enter the code below.</p>
 
       <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
       <%= text_field_tag "user[user_profile_attributes][phone_code]" %>
       <button class="button primary-button big-button" onClick="verifyCode(); return false" id="verify-code-button">Verify code</button>
-      <span id='verify_code_text'></span>
+      <span id='verify_code_text' class="bold clr-color-primary-shaded"></span>
 
     </div>
   </div>
 <% end %>
-<script>
 
+<script>
 function sendCode() {
   var data = $('#account-form').serialize();
   $.post("<%= send_code_account_path %>",
@@ -40,9 +39,10 @@ function sendCode() {
         $('#send_code_text').html('Code sent!');
       })
   .fail(function() {
-    $('#send_code_text').html('Error!');
+    $('#send_code_text').html('Error, please try again.');
   })
 }
+
 function verifyCode() {
   var data = $('#account-form').serialize();
   $.post("<%= verify_code_account_path %>",
@@ -52,7 +52,7 @@ function verifyCode() {
         submitAccount()
       })
   .fail(function() {
-    $('#verify_code_text').html('Error!')
+    $('#verify_code_text').html('Error, please check that your code is correct.')
   })
 }
 

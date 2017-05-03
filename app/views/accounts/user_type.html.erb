@@ -1,24 +1,24 @@
-<div class="card mb-30">
-  <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
+<div class="card mb-30 max-w-1000-centered">
+  <h5 class="tut-top-label mt-10 mb-30">Please select your vault from the options below.</h5>
 
     <ul class="tut-button-wrapper mb-30">
-        <li class="icon-box">
+        <li class="icon-box-large">
           <label>
             <%= link_to root_path do %>
               <input type="checkbox" name="checkbox" value="1" >
               <span>
-                <%= image_tag "marketing/cloud-2.png", :class => "" %><br>
-                Someone shared ZokuVault with Me.
+                <%= image_tag "marketing/cloud-3.png", :class => "" %><br>
+                Someone shared<br>ZokuVault with me.
               </span>
             <% end %>
           </label>
         </li>
-      <li class="icon-box">
+      <li class="icon-box-large">
         <label>
           <%= link_to first_run_path do %>
             <input type="checkbox" name="checkbox" value="2">
             <span>
-              <%= image_tag "marketing/safe-2.png", :class => "" %><br>
+              <%= image_tag "marketing/safe-3.png", :class => "" %><br>
               I am interested in setting up my own ZokuVault.
             </span>
           <% end %>

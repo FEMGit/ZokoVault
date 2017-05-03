@@ -2,16 +2,16 @@
 
 
 <div class="card trusts wide">
-  <h3 class="mb-20">Trusts</h3>
+  <h3>Trusts</h3>
   <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button" %>
   <% end %>
 </div>
 
 <div class="card cg-3 wide">
-  <h3 class="mb-20">Entities and Corporations</h3>
+  <h3>Entities and Corporations</h3>
   <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button" %>
   <% end %>
 </div>
 
@@ -26,7 +26,7 @@
         <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
         <h3><%= trust.name %></h3>
-        
+
         <% if !trust_present?(trust) %>
           <label>There is no information about this Trust</label>
         <% end %>
@@ -55,7 +55,7 @@
       </div>
     </div>
   <% end %>
-  
+
   <% @entities.each do |entity| %>
     <% wills_poa = CardDocument.entity(entity.id) %>
     <% if wills_poa.blank? %>
@@ -66,7 +66,7 @@
         <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
         <h3><%= entity.name %></h3>
-        
+
         <% if !entity_present?(entity) %>
           <label>There is no information about this Entity</label>
         <% end %>

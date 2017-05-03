@@ -1,0 +1,13 @@
+<% return if user.nil? %>
+<% with_name ||= false %>
+<% avatar_size ||= 'small' %>
+<div class="avatar-wrapper">
+  <% if user.photourl.present? %>
+    <%= image_tag(get_file_url(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
+  <% else %>
+  <span class="no-vatar"></span>
+  <% end %>
+</div>
+<% if with_name %>
+  <span class="avatar-name"><%= user.name %></span>
+<% end %>

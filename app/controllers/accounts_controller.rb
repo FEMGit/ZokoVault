@@ -98,6 +98,15 @@ class AccountsController < AuthenticatedController
     check_phone_setup_passed
   end
 
+  def user_type_update
+    if user_params[:user_type].eql? 'trial'
+      unless SubscriptionService.trial_was_used?(current_user)
+        SubscriptionService.activate_trial(user: current_user)
+      end
+    end
+    redirect_to root_path
+  end
+
   def update
     update_params = free_account? ? user_params_except_subscription : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
@@ -209,6 +218,7 @@ class AccountsController < AuthenticatedController
 
   def user_params
     params.require(:user).permit(
+      :user_type,
       user_profile_attributes: [
         :signed_terms_of_service,
         :phone_number_mobile,

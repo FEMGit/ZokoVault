@@ -66,30 +66,25 @@ class TutorialsController < AuthenticatedController
   end
 
   def destroy
-    previous_url = session[:previous_tuto].last[:my_previous_url]
-    if previous_url.include? 'tutorials/new'
+    tuto_index = session[:tutorial_index] - 2
+    # Destroy element if it was created
+    insurance_card = session[:tutorial_paths][tuto_index][:object]
+    insurance_card.destroy if insurance_card
+    @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+
+    if @prev_tutorial_name == 'tutorial_new'
       redirect_to new_tutorial_path and return
     end
 
-    if session[:previous_tuto].last[:reduce_tutorial_index]
-      if previous_url.include? 'home'
-        @tutorial = Tutorial.find_by(name: 'Home')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      elsif previous_url.include? 'insurance'
-        @tutorial = Tutorial.find_by(name: 'Insurance')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      else
-        @tutorial = Tutorial.find_by(name: 'Add Primary Contact')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      end
-    end
+    @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
+    @prev_page = session[:tutorial_paths][tuto_index][:current_page]
+    session[:tutorial_index] = session[:tutorial_index] - 2
 
-    session[:previous_tuto].pop
-    redirect_to previous_url
+    redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
   end
 
   private
-  
+
   def set_blank_layout_header_info
     @header_information = true
   end
@@ -99,7 +94,7 @@ class TutorialsController < AuthenticatedController
   end
 
   def tutorial_path_generator(list)
-    result = [{ tuto_id: 0, current_page: 0 }] # tutorial / new
+    result = [{ tuto_id: 0, current_page: 0, tuto_name: 'tutorial_new' }] # tutorial / new
     list.each do |tuto|
       tutorial = Tutorial.find(tuto)
       tutorial.number_of_pages.times do |p|
@@ -109,6 +104,6 @@ class TutorialsController < AuthenticatedController
           tuto_name: tutorial.name.split(" ").join("-").downcase }
       end
     end
-    result << { tuto_id: -1, current_page: -1, tuto_name: 'confirmation' } # tutorial / confirmation page
+    result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
   end
 end

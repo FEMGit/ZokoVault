@@ -86,15 +86,16 @@ class PropertyAndCasualtiesController < AuthenticatedController
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
+          tuto_index = session[:tutorial_index] - 1
+          session[:tutorial_paths][tuto_index][:object] = @insurance_card
+
           if params[:next_tutorial] == 'confirmation_page'
             redirect_to tutorials_confirmation_path and return
           else
-            # Was a successfull Insertion, then we should move to next Tutorial
-            # session[:previous_tuto] = [] if session[:previous_tuto].nil?
-            # session[:previous_tuto] << {class_object: 'PropertyAndCasualty', object: @insurance_card, my_previous_url: request.referer || root_path, reduce_tutorial_index: false}
             tuto_index = session[:tutorial_index]
             tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
-            redirect_to tutorial_page_path(tuto_name, '1') and return
+            next_page = session[:tutorial_paths][tuto_index][:current_page] # should be 1
+            redirect_to tutorial_page_path(tuto_name, next_page) and return
           end
         end
 

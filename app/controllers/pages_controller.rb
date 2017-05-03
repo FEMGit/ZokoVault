@@ -14,23 +14,13 @@ class PagesController < HighVoltage::PagesController
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
     @contact = Contact.new(user: current_user)
     @show_footer = false
-
     tuto_index = session[:tutorial_index] + 1
-    @tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+
+    @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+    @next_tutorial = Tutorial.find_by(name: @next_tutorial_name.titleize)
     @next_page = session[:tutorial_paths][tuto_index][:current_page]
-    @page_name     = "page_#{@next_page}"
-    # if @tutorial_name == 'home'
-    #   session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-    # elsif @tutorial_name == 'insurance'
-    #   session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-    # else
-    #   session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-    # end
-    # @next_tutorial = 'confirmation-page'
-    # @next_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]]) if session[:tutorials_list][session[:tutorial_index]].present?
-    tuto_id = session[:tutorial_paths][tuto_index - 1][:tuto_id]
-    @next_tutorial = Tutorial.find tuto_id
-    # binding.pry
+    @page_name     = "page_#{@page_number}"
+
     session[:tutorial_index] = session[:tutorial_index] + 1
   end
 

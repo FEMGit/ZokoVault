@@ -1,7 +1,8 @@
 <div class="card mb-30">
   <h1 class="mb-20">Add Property Insurance</h1>
 
-  <%- @insurance_card = Health.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
+  <%- @insurance_card = PropertyAndCasualty.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
+  <%- @insurance_card.policy.build %>
 
   <%= form_for(@insurance_card,  url: url_for(action: :create, controller: :property_and_casualties)) do |f| %>
     <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>

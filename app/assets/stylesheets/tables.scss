@@ -53,7 +53,6 @@ table.product-comparison {
       &.premium:after {
         content: "PREMIUM PLAN";
         width: calc(100% + 1px);
-        margin-left: -6px;
       }
     }
   }

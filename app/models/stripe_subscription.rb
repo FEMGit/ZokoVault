@@ -5,6 +5,10 @@ class StripeSubscription < ActiveRecord::Base
   def self.plans
     @plans ||= Stripe::Plan.all.data
   end
+  
+  def self.yearly_plan
+    plans.detect { |p| p["id"] == 'zoku-yearly-v1' }
+  end
 
   def self.plan(id)
     plans.detect { |x| x.id.eql? id }

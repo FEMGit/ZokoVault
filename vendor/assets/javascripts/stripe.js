@@ -105,10 +105,10 @@ function applyPromoCode() {
 }
 
 function updateSubscription() {
-  $.get('/account/subscriptions', function() {
+  $.get('/account/yearly_subscription', function() {
   }).done(function(data) {
     var subscriptions = data
-    var select = $('#user_stripe_subscription_attributes_plan_id').prop('selectedIndex');
+    var select = 0;
 
     var interval = "annually";
     var today = new Date()

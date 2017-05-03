@@ -99,8 +99,8 @@ input[type=tel]{
 .subscription-description {
   font-weight: 600;
   font-size: 12px;
-  height: 32px;
-  overflow: hidden;
+  height: 25px;
+  overflow: hidden !important;
   padding: 0;
   margin-bottom: 0;
   display: inline-block;
@@ -109,6 +109,7 @@ input[type=tel]{
   }
   @include media($tablet) {
     display: block !important;
+    overflow: visible !important;
   }
 }
 

@@ -11,9 +11,9 @@
     <%= render partial: 'tutorials/home/financial_properties' %>
 
     <div class="collect-fields">
-      <%= hidden_field_tag :tutorial_name, @tutorial_name %>
-      <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
-      <%= hidden_field_tag 'financial_property[property_type]', "House" %>
+      <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
+      <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page', class: 'saved-field' %>
+      <%= hidden_field_tag 'financial_property[property_type]', "House", class: 'saved-field' %>
       <div class="input-pair tutorial-fields">
         <%= text_field_tag "financial_property[name]", "", class: "form-control medium repeated-field", placeholder: '1010 Main Street' %>
         <a class="medium-button button primary-button inline-button add-another-btn">Add Another</a>

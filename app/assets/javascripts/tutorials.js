@@ -10,7 +10,7 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
   this.addBtn = '.tutorial-fields .add-another-btn';
   this.savedClass = '.saved-field';
   this.addAnotherBtnListener();
-  // this.listenSkip();
+  this.listenSkip();
 };
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {

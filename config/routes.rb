@@ -124,6 +124,7 @@ Rails.application.routes.draw do
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
   get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category
 
+  get 'shares/expired/:shared_user_id' => 'shares#shared_user_expired', as: :shared_expired
   resources :shares
   get 'shares' => 'shares#index'
   get 'shares/new/:document' => 'shares#new'

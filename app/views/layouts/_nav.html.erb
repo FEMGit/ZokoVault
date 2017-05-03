@@ -75,7 +75,7 @@
       <use xlink:href="#icon-share-3"></use>
     </svg>Contacts &amp; Permissions
   <% end %>
-  <% shared_current = 'active' if current_page?(shares_path)%>
+  <% shared_current = 'active' if current_page?(shares_path) || controller?('shares')%>
   <%= link_to shares_path, class: "main-nav #{shared_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-Safe"></use>

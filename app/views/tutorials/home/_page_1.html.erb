@@ -1,8 +1,15 @@
-<div id="dialog-confirm" title="Unsaved changes">
-  <p>
-    <span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>
-    These items will be permanently deleted and cannot be recovered. Are you sure?
-  </p>
+ <button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+   Wizard Modal
+ </button>
+ <div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+  <div class="confirmation-wrapper">
+    <h2>Unsaved changes</h2>
+    <p>These items will be permanently deleted and cannot be recovered. Are you sure?<p>
+  </div>
+  <footer class="modal-footer confirmation-footer">
+    <%= link_to 'Skip and Continue', '#', class: "button primary-button big-button", id: 'skip_and_continue' %>
+    <%= link_to 'Save and Continue', '#', class: "button primary-button big-button", id: 'save_and_continue' %>
+  </footer>
 </div>
 
 <div class="card mb-30">
@@ -30,3 +37,25 @@
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>
 </div>
+
+
+<script>
+  $(function(){
+    var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+    $('button[data-modal-id]').click(function(e) {
+      e.preventDefault();
+      $("body").append(appendthis);
+      $(".modal-overlay").fadeTo(500, 0.8);
+      $(".js-modalbox").fadeIn(500);
+      var modalBox = $(this).attr('data-modal-id');
+      $('#'+modalBox).fadeIn($(this).data());
+    });
+
+    $(".js-modal-close, .modal-overlay").click(function() {
+      $(".modal, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
+      });
+
+    });
+  });
+</script>

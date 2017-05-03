@@ -16,7 +16,13 @@ class PagesController < HighVoltage::PagesController
     @show_footer = false
     tuto_index = session[:tutorial_index] + 1
 
-    @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+    if session[:tutorial_paths][tuto_index]
+     @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+    else
+      redirect_to new_tutorial_path and return
+    end
+
+    # @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     @next_tutorial = Tutorial.find_by(name: @next_tutorial_name.titleize)
     @next_page = session[:tutorial_paths][tuto_index][:current_page]
     @page_name     = "page_#{@page_number}"

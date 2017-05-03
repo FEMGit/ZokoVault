@@ -91,22 +91,20 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
   var confirmDialog = function(ev) {
     if ($('.collect-fields input').not('.saved-field').val() != '') {
       ev.preventDefault();
-      $("#dialog-confirm").dialog({
-        resizable: false,
-        height: "auto",
-        width: 400,
-        modal: true,
-        buttons: {
-          "Skip and Continue": function() {
-            $('.collect-fields input').not('.saved-field').val('');
-            $(this).dialog("close");
-            $('form').submit();
-          },
-          "Save and Continue": function() {
-            $(this).dialog("close");
-            $('form').unbind('submit').submit();
-          }
-        }
+      $('button[data-modal-id]').click();
+
+      document.getElementById("skip_and_continue").addEventListener("click", function(){
+        $('.collect-fields input').not('.saved-field').val('');
+        $(".modal, .modal-overlay").fadeOut(500, function() {
+          $(".modal-overlay").remove();
+        });
+        $('form').submit();
+      });
+      document.getElementById("save_and_continue").addEventListener("click", function(){
+        $(".modal, .modal-overlay").fadeOut(500, function() {
+          $(".modal-overlay").remove();
+        });
+        $('form').unbind('submit').submit();
       });
     }
   }

@@ -30,8 +30,8 @@ class User < ActiveRecord::Base
   has_many :uploads, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
-  has_one :subscription, -> { order("created_at DESC") }
-  accepts_nested_attributes_for :subscription
+  has_one  :stripe_subscription, -> { order("created_at DESC") }
+  accepts_nested_attributes_for :stripe_subscription
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
 

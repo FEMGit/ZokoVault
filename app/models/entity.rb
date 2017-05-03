@@ -19,11 +19,7 @@ class Entity < ActiveRecord::Base
     through: :shares,
     source: :contact
 
-  has_many :partners,
-    -> { where("vault_entry_contacts.type = ? AND vault_entry_contacts.active = ?",
-               VaultEntryContact.types[:partner], true).uniq },
-  through: :vault_entry_contacts,
-  source: :contact
+  has_many :partners, as: :contactable, dependent: :destroy, :class_name => 'AccountPolicyOwner'
 
   validates :user, presence: true
   validates :name, presence: { :message => "Required" }

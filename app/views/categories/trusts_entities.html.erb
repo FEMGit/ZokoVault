@@ -79,9 +79,13 @@
             <li class="contact-pair mb-10">
               <%= partner.name %>
               <% if partner.name.present? %><br><% end %>
-              <a href="mailto:<%= partner.emailaddress %>"><%= partner.emailaddress %></a>
-              <% if partner.emailaddress.present? %><br><% end %>
-              <%= partner.phone %>
+              <% if partner.try(:emailaddress) %>
+                <a href="mailto:<%= partner.emailaddress %>"><%= partner.emailaddress %></a>
+                <br>
+              <% end %>
+              <% if partner.try(:phone) %>
+                <%= partner.phone %>
+              <% end %>
             </li>
           <% end %>
         </ul>

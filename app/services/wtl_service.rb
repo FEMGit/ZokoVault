@@ -81,8 +81,7 @@ class WtlService
     
     entity.partners.clear
     partner_ids.to_a.each do |partner_id|
-      VaultEntryContact.create(type: VaultEntryContact.types[:partner], active: true, contact_id: partner_id, contactable_id: entity.id,
-                               contactable_type: "Entity")
+      AccountPolicyOwnerService.fill_account_policy_owner(partner_id, entity)
     end
   end
 end

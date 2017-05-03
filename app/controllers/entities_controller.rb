@@ -8,6 +8,7 @@ class EntitiesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :update_share_params, only: [:create, :update]
   before_action :set_previous_shared_with, only: [:update]
+  include AccountPolicyOwnerModule
   
   # General Breadcrumbs
   add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new edit index show), if: :general_view?

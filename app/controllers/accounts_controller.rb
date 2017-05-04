@@ -9,6 +9,7 @@ class AccountsController < AuthenticatedController
                                 :trial_membership_update, :trial_questionnaire, :payment,
                                 :first_run]
   before_action :set_blank_layout_header_info, only: [:first_run]
+  skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
   def page_name
     case action_name

@@ -6,6 +6,11 @@
   <%= render "shares_card" %>
 <% end %>
 
+<% subscription = current_user.current_user_subscription %>
+<% if subscription.active_trial? %>
+  <%= render partial: 'dashboard_trial_header', locals: { subscription: subscription } %>
+<% end %>
+
 <%= render "financial_information_card" %>
 
 <%= render "wills_powers_of_attorney_card" %>

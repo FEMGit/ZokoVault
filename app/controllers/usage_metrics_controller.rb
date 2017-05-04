@@ -1,4 +1,5 @@
 class UsageMetricsController < AuthenticatedController
+  include DateHelper
   before_action :check_privileges
   before_action :stats, only: [:index]
   before_action :death_traps, only: [:errors]
@@ -12,7 +13,7 @@ class UsageMetricsController < AuthenticatedController
                 :user_traffic, :categories_with_information_count,
                 :subcategories_with_information_count, :user_type
   
-  before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial]
+  before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial, :create_trial]
   before_action :set_user_traffic, only: [:statistic_details]
 
   # Breadcrumbs navigation
@@ -57,12 +58,18 @@ class UsageMetricsController < AuthenticatedController
   def edit_user
     @subscription_info = subscription_info
   end
+  
+  def create_trial
+    SubscriptionService.activate_trial(user: @user)
+    redirect_to admin_edit_user_path(@user)
+  end
 
   def extend_trial
     with_trial_and_back_to_edit do |sub|
       sub.start_at = Time.current
-      sub.end_at = sub.start_at + 14.days
+      sub.end_at = sub.start_at + SubscriptionDuration::TRIAL
       sub.save!
+      MailchimpService.new.subscribe_to_trial(@user)
     end
   end
 
@@ -70,6 +77,7 @@ class UsageMetricsController < AuthenticatedController
     with_trial_and_back_to_edit do |sub|
       sub.end_at = 1.minute.ago
       sub.save!
+      MailchimpService.new.subscribe_to_shared(@user)
     end
   end
 
@@ -269,6 +277,8 @@ class UsageMetricsController < AuthenticatedController
         "Paid"
       elsif user.current_user_subscription.expired_full?
         "Paid Expired"
+      else
+        "Invalid User Type"
       end
     elsif user.primary_shared_of_paid?
       "Primary Shared of Paid"
@@ -289,11 +299,11 @@ class UsageMetricsController < AuthenticatedController
       { status: :none, label: 'Free User', text: '' }
     elsif sub.trial?
       label  = "#{sub.active? ? 'Active' : 'Expired'} Trial Period"
-      expire = "Expire#{sub.active? ? 's' : 'd'} At: #{sub.end_at}"
+      expire = "Expire#{sub.active? ? 's' : 'd'} At: #{cst(sub.end_at)}"
       { status: :trial, label: label, text: expire, active: sub.active? }
     elsif sub.full?
       label  = "#{sub.active? ? 'Active' : 'Expired'} Full Subscription"
-      expire = "Expire#{sub.active? ? 's' : 'd'} At: #{sub.end_at}"
+      expire = "Expire#{sub.active? ? 's' : 'd'} At: #{cst(sub.end_at)}"
       { status: :full, label: label, text: expire, active: sub.active? }
     else
       { status: :unknown, label: 'Invalid Subscription State',

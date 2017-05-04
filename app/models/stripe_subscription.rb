@@ -45,7 +45,7 @@ class StripeSubscription < ActiveRecord::Base
     refresh!
   end
 
-private
+  private
 
   # TODO is this being used?
   def initialize_payment_for(customer)

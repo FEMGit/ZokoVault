@@ -51,6 +51,7 @@ class AccountsController < AuthenticatedController
     end
 
     current_user.current_user_subscription_marker.try(:delete)
+    MailchimpService.new.subscribe_to_shared(current_user)
     redirect_to shares_path
   end
 
@@ -96,6 +97,15 @@ class AccountsController < AuthenticatedController
 
   def user_type
     check_phone_setup_passed
+  end
+  
+  def user_type_update
+    if user_params[:user_type].eql? 'trial'
+      SubscriptionService.create_trial(current_user)
+    elsif user_params[:user_type].eql? 'free'
+      MailchimpService.new.subscribe_to_shared(current_user)
+    end
+    redirect_to root_path
   end
 
   def user_type_update

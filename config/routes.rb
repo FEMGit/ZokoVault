@@ -207,6 +207,7 @@ Rails.application.routes.draw do
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
   get 'usage_metrics/error_details/:id/extend_trial', to: 'usage_metrics#extend_trial', as: :admin_extend_trial
+  get 'usage_metrics/error_details/:id/create_trial', to: 'usage_metrics#create_trial', as: :admin_create_trial
   get 'usage_metrics/error_details/:id/cancel_trial', to: 'usage_metrics#cancel_trial', as: :admin_cancel_trial
 
   # Financial information

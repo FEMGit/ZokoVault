@@ -103,11 +103,12 @@ class User < ActiveRecord::Base
   end
 
   def satisfy_password_requirement?(password)
+    required_conditions_number_to_pass = 4
     lowercase = password.match(/^(?=.*[a-z])/)
     uppercase = password.match(/^(?=.*[A-Z])/)
     number = password.match(/^(?=.*\d)/)
     characters = password.match(/^(?=.*[&!',:\\;"\\.*@#\\$%\\^()_])/)
-    match_length(lowercase) + match_length(uppercase) + match_length(number) + match_length(characters) >= 3
+    match_length(lowercase) + match_length(uppercase) + match_length(number) + match_length(characters) >= required_conditions_number_to_pass
   end
 
   def match_length(match)

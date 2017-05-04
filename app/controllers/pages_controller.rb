@@ -1,6 +1,6 @@
 class PagesController < HighVoltage::PagesController
-  layout 'blank_layout'
   before_action :set_cache_headers
+  layout 'blank_layout', only: [:show, :confirmation]
 
   def confirmation; end
 

@@ -15,6 +15,7 @@ var DynamicTutorialField = function(creationPath, destroyPath) {
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {
   var html = $btn.closest(this.fields).clone();
+  $('.repeated-field').removeClass('repeated-field');
   $btn.closest(this.fields).after(html);
   html.find('input.repeated-field').focus().val('');
   $btn.after(this.addRemoveBtn(id));
@@ -56,7 +57,7 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
 
     if (that.fieldIsEmpty($btn))
       that.submit($btn).success(function(data) {
-        $btn.closest('input').addClass('saved-field');
+        $btn.closest('.repeated-field').addClass('saved-field');
         that.addRow($btn, data.id);
       }).error(function(data) {
         that.showLittleError($btn);
@@ -87,30 +88,54 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
   });
 }
 
-DynamicTutorialField.prototype.listenUnsavedChanges = function() {
-  var confirmDialog = function(ev) {
-    if ($('.collect-fields input').not('.saved-field').val() != '') {
-      ev.preventDefault();
-      $('button[data-modal-id]').click();
+DynamicTutorialField.prototype.dialogBehaviour = function(ev) {
+  if ($('.collect-fields input.repeated-field').val() != '') {
+    ev.preventDefault();
+    $('.unsaved-changes-modal').click();
 
-      document.getElementById("skip_and_continue").addEventListener("click", function(){
-        $('.collect-fields input').not('.saved-field').val('');
-        $(".modal, .modal-overlay").fadeOut(500, function() {
-          $(".modal-overlay").remove();
-        });
+    $(".skip-and-continue").on("click", function() {
+      $('.collect-fields input.repeated-field').val('');
+      $(".modal, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
         $('form').submit();
       });
-      document.getElementById("save_and_continue").addEventListener("click", function(){
-        $(".modal, .modal-overlay").fadeOut(500, function() {
-          $(".modal-overlay").remove();
-        });
+    });
+
+    $(".save-and-continue").on("click", function() {
+      $(".modal, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
         $('form').unbind('submit').submit();
       });
-    }
-  }
-  $('.skip-btn').on('click', confirmDialog);
-  $('form').on('submit', confirmDialog);
+    });
+  };
 };
+
+DynamicTutorialField.prototype.listenUnsavedChanges = function() {
+  this.modalSettings();
+
+  $('.skip-btn').on('click', this.dialogBehaviour);
+  $('form').on('submit', this.dialogBehaviour);
+};
+
+DynamicTutorialField.prototype.modalSettings = function() {
+  $(function() {
+    var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
+    $('button[data-modal-id]').click(function(e) {
+      e.preventDefault();
+      $("body").append(appendthis);
+      $(".modal-overlay").fadeTo(500, 0.8);
+      $(".js-modalbox").fadeIn(500);
+      var modalBox = $(this).attr('data-modal-id');
+      $('#' + modalBox).fadeIn($(this).data());
+    });
+
+    $(".js-modal-close, .modal-overlay").click(function() {
+      $(".modal, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
+      });
+    });
+  });
+}
 
 $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.

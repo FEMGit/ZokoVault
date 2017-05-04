@@ -153,6 +153,10 @@ class AccountsController < AuthenticatedController
   def subscriptions
     render json: StripeSubscription.plans.to_json.html_safe
   end
+  
+  def yearly_subscription
+    render json: Array.wrap(StripeSubscription.yearly_plan).to_json.html_safe
+  end
 
   def apply_promo_code
     coupon = Stripe::Coupon.retrieve(user_params[:stripe_subscription_attributes][:promo_code])

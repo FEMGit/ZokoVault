@@ -177,6 +177,7 @@ Rails.application.routes.draw do
       post :send_code
       post :apply_promo_code
       get :subscriptions
+      get :yearly_subscription
       put :send_code
       post :verify_code
       put :verify_code

@@ -1,5 +1,6 @@
 class UserSubscription < ActiveRecord::Base
-
+  scope :for_user, ->(user) { where(user: user) }
+  
   belongs_to :user
   has_one :current_user_subscription_marker, dependent: :destroy
 

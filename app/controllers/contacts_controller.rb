@@ -172,7 +172,32 @@ class ContactsController < AuthenticatedController
       UpdateDocumentService.new(:user => resource_owner, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
       format.html { redirect_to session[:ret_url] || @contact, redirect: get_redirect_new_user_creating, flash: { success: 'Contact was successfully created.' } }
       format.json { render :show, status: :created, location: @contact }
-      contact_dropdown_position = Contact.for_user(resource_owner).sort_by { |s| s.lastname }.map(&:id).find_index(@contact.id)
-      format.js { render json: @contact.slice(:id, :firstname, :lastname, :relationship, :emailaddress).merge(:position => contact_dropdown_position), status: :ok }
+      
+      contact_ids = Contact.for_user(resource_owner).sort_by { |s| s.lastname.downcase }.map(&:id)
+      contact_position = contact_ids.find_index(@contact.id)
+      general_after_id = general_after_id(contact_ids, contact_position)
+      after_contact = Contact.find_by(id: general_after_id)
+      
+      if after_contact && after_contact.account_owner?
+        shared_after_id = share_contact_after_id(contact_ids, contact_position)
+      end
+      
+      format.js { render json: @contact.slice(:id, :firstname, :lastname, :relationship, :emailaddress).merge(:position => general_after_id, shared_position: shared_after_id), status: :ok }
     end
+  
+  def general_after_id(contact_ids, contact_position)
+    contact_after_id(contact_ids, contact_position - 1)
+  end
+  
+  def share_contact_after_id(contact_ids, contact_position)
+    contact_after_id(contact_ids, contact_position - 2)
+  end
+  
+  def contact_after_id(contact_ids, contact_position)
+    if contact_position < 0
+      'create_new_contact'
+    else
+      contact_ids[contact_position]
+    end
+  end
 end

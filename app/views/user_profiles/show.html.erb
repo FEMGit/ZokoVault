@@ -104,7 +104,9 @@
   </div>
 <% end %>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category), 
-  documents_title: "#{@user_profile.name} Documents"} %>
+<% if !current_user.free? %>
+  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category), 
+    documents_title: "#{@user_profile.name} Documents"} %>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @my_profile_documents} %>
+  <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @my_profile_documents} %>
+<% end %>

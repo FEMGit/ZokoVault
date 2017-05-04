@@ -61,7 +61,7 @@ class UsageMetricsController < AuthenticatedController
   def extend_trial
     with_trial_and_back_to_edit do |sub|
       sub.start_at = Time.current
-      sub.end_at = sub.start_at + 14.days
+      sub.end_at = sub.start_at + SubscriptionDuration::TRIAL
       sub.save!
     end
   end

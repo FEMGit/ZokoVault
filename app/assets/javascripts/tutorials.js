@@ -114,7 +114,6 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
   this.modalSettings();
 
   $('.skip-btn').on('click', this.dialogBehaviour);
-  $('form').on('submit', this.dialogBehaviour);
 };
 
 DynamicTutorialField.prototype.modalSettings = function() {

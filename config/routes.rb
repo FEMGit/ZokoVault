@@ -123,6 +123,7 @@ Rails.application.routes.draw do
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
   get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category
 
+  get 'shares/expired/:shared_user_id' => 'shares#shared_user_expired', as: :shared_expired
   resources :shares
   get 'shares' => 'shares#index'
   get 'shares/new/:document' => 'shares#new'
@@ -176,6 +177,7 @@ Rails.application.routes.draw do
       post :send_code
       post :apply_promo_code
       get :subscriptions
+      get :yearly_subscription
       put :send_code
       post :verify_code
       put :verify_code
@@ -204,6 +206,9 @@ Rails.application.routes.draw do
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
+  get 'usage_metrics/error_details/:id/extend_trial', to: 'usage_metrics#extend_trial', as: :admin_extend_trial
+  get 'usage_metrics/error_details/:id/create_trial', to: 'usage_metrics#create_trial', as: :admin_create_trial
+  get 'usage_metrics/error_details/:id/cancel_trial', to: 'usage_metrics#cancel_trial', as: :admin_cancel_trial
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
@@ -297,7 +302,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/final_wishes/:id' => 'final_wishes#show', as: :shared_final_wishes
   get 'shared_view/:shared_user_id/final_wishes/:id/edit' => 'final_wishes#edit', as: :shared_final_wishes_edit
   get 'shared_view/:shared_user_id/final_wishes/new/:group' => 'final_wishes#new', as: :shared_new_final_wishes
-  
+
   # Stripe callbacks
   scope :stripe do
     # Key must match token on Stripe dashboard to authenticate callback

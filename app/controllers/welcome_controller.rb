@@ -3,6 +3,7 @@ class WelcomeController < AuthenticatedController
   helper_method :financial_information_any?, :insurance_vendors_count,
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
+  before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed]
   include UserTrafficModule
   
   def page_name
@@ -83,4 +84,9 @@ class WelcomeController < AuthenticatedController
 
   def email_confirmed; end
   
+  private
+  
+  def redirect_if_signed_in
+    redirect_to root_path if user_signed_in?
+  end
 end

@@ -1,5 +1,6 @@
 class UserSubscription < ActiveRecord::Base
-
+  scope :for_user, ->(user) { where(user: user) }
+  
   belongs_to :user
   has_one :current_user_subscription_marker, dependent: :destroy
 
@@ -14,20 +15,28 @@ class UserSubscription < ActiveRecord::Base
     (start_at && at >= start_at) && (end_at && at < end_at)
   end
 
+  def trial?
+    funding && funding.trial?
+  end
+
+  def full?
+    funding && funding.full?
+  end
+
   def active_trial?
-    funding && funding.trial? && active?
+    trial? && active?
   end
 
   def expired_trial?
-    funding && funding.trial? && !active?
+    trial? && !active?
   end
 
   def active_full?
-    funding && funding.full? && active?
+    full? && active?
   end
 
   def expired_full?
-    funding && funding.full? && !active?
+    full? && !active?
   end
 
 end

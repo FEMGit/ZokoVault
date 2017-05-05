@@ -5,7 +5,7 @@ gem 'json', github: 'flori/json', branch: 'v1.8'
 gem 'rails', '4.2.7.1'
 
 gem 'pg'
-gem "rails_12factor"
+gem "rails_12factor", group: :production
 
 # Authentication
 gem 'devise', '>= 4.2.0'

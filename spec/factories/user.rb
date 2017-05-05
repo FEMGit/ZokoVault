@@ -18,7 +18,7 @@ FactoryGirl.define do
         )
       end
       user.build_user_profile(mfa_frequency: :never, date_of_birth: Date.today - 14.year)
-      user.stripe_id = Subscription.create(
+      user.stripe_id = StripeSubscription.create(
         stripe_token: stripe_helper.generate_card_token(last4: "4242"),
         plan_id: plan.id,
         user: user,

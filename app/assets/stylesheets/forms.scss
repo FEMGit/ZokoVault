@@ -99,8 +99,8 @@ input[type=tel]{
 .subscription-description {
   font-weight: 600;
   font-size: 12px;
-  height: 32px;
-  overflow: hidden;
+  height: 25px;
+  overflow: hidden !important;
   padding: 0;
   margin-bottom: 0;
   display: inline-block;
@@ -109,6 +109,7 @@ input[type=tel]{
   }
   @include media($tablet) {
     display: block !important;
+    overflow: visible !important;
   }
 }
 
@@ -254,13 +255,17 @@ input[type=button].button{
   padding: 10px;
 }
 
+.big-button-2{
+  font-size: 16px;
+  padding: 10px 40px;
+}
+
 .huge-button{
   width: 100%;
   text-align: center;
   font-size: 16px;
   padding: 15px 0;
   display:block;
-
 }
 
 .small-button{
@@ -547,6 +552,52 @@ li.icon-box{
     color: black;
     content: asset-data-url('SVG/tuts-checked-2.svg');
     font-size: 24px;
+    left: -1px;
+    position: absolute;
+    top: -1px;
+    opacity: .5;
+  }
+}
+
+//ICON BOX LARGE
+li.icon-box-large{
+  margin: 0 10px 10px;
+  list-style:none;
+  width: 240px;
+  height: 240px;
+  display: inline-block;
+  @include display(flex);
+
+  label{
+    cursor: pointer;
+    text-align: center;
+  }
+  input[type="checkbox"] + span {
+    background-color: white;
+    border: 1px solid $color-gray-light;
+    transition: border .25s linear;
+    cursor: pointer;
+    width: 240px;
+    height: 240px;
+    padding: 40px 20px 0px 20px;
+    margin-right: 0;
+    font-size: 16px;
+  }
+  input[type="checkbox"]:checked + span {
+    color: black;
+  }
+  input[type="checkbox"]:checked + span:after,
+  input[type="checkbox"]:checked + span:hover:after {
+    color: black;
+    content: asset-data-url('SVG/tuts-checked-3.svg');
+    left: -1px;
+    position: absolute;
+    top: -1px;
+    opacity: .9;
+  }
+  input[type="checkbox"] + span:hover:after  {
+    color: black;
+    content: asset-data-url('SVG/tuts-checked-3.svg');
     left: -1px;
     position: absolute;
     top: -1px;

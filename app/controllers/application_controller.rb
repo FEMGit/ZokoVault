@@ -8,8 +8,19 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::RoutingError, :with => :death_trap_handle
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   around_filter :save_current_user
+  before_action :redirect_if_user_terms_of_service_empty
 
   private
+  
+  def redirect_if_user_terms_of_service_empty
+    return if (user_signed_in? && current_user.signed_terms_of_service?) ||
+               !user_signed_in?
+    current_path = Rails.application.routes.recognize_path(request.fullpath)
+    terms_of_service_path = Rails.application.routes.recognize_path(terms_of_service_account_path)
+    if current_path != terms_of_service_path
+      redirect_to terms_of_service_account_path
+    end
+  end
   
   def save_current_user
     Thread.current[:current_user] = current_user

@@ -10,7 +10,7 @@ class UserProfilesController < AuthenticatedController
   add_breadcrumb "Edit My Profile", :edit_user_profile_path
   include BreadcrumbsCacheModule
   include UserTrafficModule
-  
+
   def page_name
     case action_name
       when 'edit'
@@ -19,7 +19,7 @@ class UserProfilesController < AuthenticatedController
         return "My Profile"
     end
   end
-  
+
   # GET /user_profiles
   # GET /user_profiles.json
   def index
@@ -43,7 +43,7 @@ class UserProfilesController < AuthenticatedController
 
   # GET /user_profiles/1/edit
   def edit
-    @plans = Subscription.plans
+    @plans = StripeSubscription.plans
     @user_profile.employers.first_or_initialize
   end
 
@@ -98,18 +98,18 @@ class UserProfilesController < AuthenticatedController
 
   def set_contacts
     @contacts = Contact.for_user(current_user)
-    @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email } 
+    @contacts_shareable = @contacts.reject { |c| c.emailaddress == current_user.email }
   end
-  
+
   def user_profile_params
-    params.require(:user_profile).permit(:user_id, :first_name, :middle_name, 
+    params.require(:user_profile).permit(:user_id, :first_name, :middle_name,
                                          :last_name, :phone_number_mobile, :phone_number,
                                          :date_of_birth, :photourl, :street_address_1, :city, :state, :zip, :notes,
-                                         employers_attributes: [:name, :web_address, :street_address_1, 
+                                         employers_attributes: [:name, :web_address, :street_address_1,
                                                                 :city, :state, :zip, :phone_number_office,
                                                                 :phone_number_fax, :id])
   end
-  
+
   def date_format
     return user_profile_params[:date_of_birth] unless user_profile_params[:date_of_birth].include?('/')
     date_params = user_profile_params[:date_of_birth].split('/')

@@ -27,11 +27,14 @@ class User < ActiveRecord::Base
   has_many :financial_alternatives, dependent: :destroy
   has_many :financial_properties, dependent: :destroy
   has_many :financial_account_informations, dependent: :destroy
-  has_many :uploads, dependent: :destroy
+  has_many :power_of_attorneys, dependent: :destroy
+  has_many :power_of_attorney_contacts, dependent: :destroy
+  has_many :entities, dependent: :destroy
+  has_many :card_documents, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
-  has_one :subscription, -> { order("created_at DESC") }
-  accepts_nested_attributes_for :subscription
+  has_one  :stripe_subscription, -> { order("created_at DESC") }
+  accepts_nested_attributes_for :stripe_subscription
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
 
@@ -64,8 +67,7 @@ class User < ActiveRecord::Base
     #                                .map(&:owning_user).any?(&:paid?)
     UserProfile
       .includes(:user)
-      .where(id: Contact.where(emailaddress: email)
-      .map(&:full_primary_shared_id))
+      .where(id: Contact.where(emailaddress: email).map(&:full_primary_shared_id))
       .map(&:user)
       .any?(&:paid?)
   end
@@ -105,11 +107,12 @@ class User < ActiveRecord::Base
   end
 
   def satisfy_password_requirement?(password)
+    required_conditions_number_to_pass = 4
     lowercase = password.match(/^(?=.*[a-z])/)
     uppercase = password.match(/^(?=.*[A-Z])/)
     number = password.match(/^(?=.*\d)/)
     characters = password.match(/^(?=.*[&!',:\\;"\\.*@#\\$%\\^()_])/)
-    match_length(lowercase) + match_length(uppercase) + match_length(number) + match_length(characters) >= 3
+    match_length(lowercase) + match_length(uppercase) + match_length(number) + match_length(characters) >= required_conditions_number_to_pass
   end
 
   def match_length(match)

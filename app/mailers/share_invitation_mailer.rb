@@ -1,5 +1,5 @@
 class ShareInvitationMailer < ApplicationMailer
-  default from: "no-reply@zokuvault.com"
+  default from: '"ZokuVault" <support@zokuvault.com>'
 
   def new_user(contact, resource_owner)
     @contact = contact

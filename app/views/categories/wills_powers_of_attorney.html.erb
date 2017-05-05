@@ -1,16 +1,16 @@
 <h1>Wills & Powers of Attorney</h1>
 
 <div class="card cg-1 wide">
-  <h3 class="mb-20">Wills</h3>
+  <h3>Wills</h3>
   <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Will', new_will_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Will', new_will_path(@shared_user), class: "small-button outline-button" %>
   <% end %>
 </div>
 
 <div class="card cg-3 wide">
-  <h3 class="mb-20">Powers of Attorney</h3>
+  <h3>Powers of Attorney</h3>
   <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Power of Attorney', new_power_of_attorney_path(@shared_user), class: "small-button outline-button fr" %>
+    <%= link_to 'Add Power of Attorney', new_power_of_attorney_path(@shared_user), class: "small-button outline-button" %>
     <% end %>
 </div>
 
@@ -76,7 +76,7 @@
       </div>
     </div>
   <% end %>
-    
+
   <% @power_of_attorney_contacts.each do |power_of_attorney_contact| %>
     <% wills_poa = CardDocument.power_of_attorney(power_of_attorney_contact.id) %>
     <% if wills_poa.blank? %>
@@ -117,7 +117,7 @@
             <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(power_of_attorney_contact, resource_owner) } %>
           </section>
         <% end %>
-        
+
         <br>
         <%= link_to 'View Details', power_of_attorney_path(power_of_attorney_contact, @shared_user), class: "small-button outline-button mt-20" %>
       </div>

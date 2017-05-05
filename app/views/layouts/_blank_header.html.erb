@@ -6,12 +6,12 @@
       <%= link_to('Exit', destroy_user_session_path, :method => :delete, :class=>"button secondary-button big-button fr") %>
     <% else %>
       <%=link_to( image_tag("SVG/ZokuVault.svg", :alt=>"Zoku Vault"), root_url, :class=>"logo") %>
-      
+
       <% if user_signed_in? %>
 
         <a class="user-menu-link" id="user-menu-toggle" href="javascript:void(0)">
           <span class="user-avatar fr">
-            <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
+            <%= render :partial => "layouts/user_header_avatar", locals: { user: current_user.user_profile, :with_name => true, :avatar_size => 'small' } %>
           </span>
         </a>
 
@@ -37,6 +37,7 @@
         <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
 
         <%=link_to( image_tag("SVG/search.svg", :alt=>"Search", :class=>"search-icon"), search_url, class: "fr header-search") %>
+        <%= image_tag("SVG/question-blue.svg", :alt=>"Search", :class=>"question-icon fr") %>
       <% end %>
     <% end %>
 

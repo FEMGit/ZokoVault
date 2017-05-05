@@ -17,8 +17,6 @@ class UsersController < AuthenticatedController
         Vendor.where(contact: contact).destroy_all
         contact.destroy
       end
-      PowerOfAttorneyContact.where(user: @user).each { |pofc| pofc.destroy }
-      CardDocument.where(user_id: @user.id).each { |card_doc| card_doc.destroy }
       @user.destroy
     end
 

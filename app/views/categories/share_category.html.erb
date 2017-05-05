@@ -18,9 +18,6 @@ Sharing your entire category with a Contact will enable them to view all categor
         <div class="chosen-styled-select">
           <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts) %>
         </div>
-        <% if @contacts_with_access.blank? %>
-          <p>No shared access</p>
-        <% end %>
       </div>
     </section>
     

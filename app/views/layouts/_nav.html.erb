@@ -20,13 +20,13 @@
       <use xlink:href="#icon-activity-monitor-1"></use>
     </svg>Financial Information
   <% end %>
-  <% wills_powers_of_attorney = 'active' if current_page?(wills_powers_of_attorney_url) || wills_poa?%>
+  <% wills_powers_of_attorney = 'active' if current_page?(wills_powers_of_attorney_url) || controller?('wills', 'power_of_attorneys') %>
   <%= link_to wills_powers_of_attorney_path, class: "main-nav #{wills_powers_of_attorney}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills & Powers of Attorney
   <% end %>
-  <% trusts_entities = 'active' if current_page?(trusts_entities_url) || trusts_entities? %>
+  <% trusts_entities = 'active' if current_page?(trusts_entities_url) || controller?('trusts', 'entities') %>
   <%= link_to trusts_entities_path, class: "main-nav #{trusts_entities}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-trust"></use>

@@ -50,14 +50,24 @@ class TutorialsController < AuthenticatedController
   end
 
   def create
-    session[:tutorials_list] = params["tutorial"] if params["tutorial"]
-    session[:tutorial_index] = 0
-    session[:failed_saved_tutorial] = false
-    if session[:tutorials_list].present?
-      @current_tutorial = Tutorial.find(session[:tutorials_list][session[:tutorial_index]])
+    if params["tutorial"].present?
+      session[:tutorials_list] = params["tutorial"]
+    else
+      flash[:error] = 'Select at least one Tutorial checkbox'
+      session[:tutorials_list] ||= {}
+      @tutorial_array = Tutorial.first(3)
+      @tutorial = Tutorial.new(name: session[:tutorials_list])
+      @tutorial.current_step = session[:order_step]
+
+      render :new
+      return
     end
-    current_tutorial_name = @current_tutorial.name.parameterize
+    session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
+    tuto_index = session[:tutorial_index]
+    tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+    @current_tutorial = Tutorial.find tuto_id
+    current_tutorial_name = @current_tutorial.name.parameterize
 
     redirect_to tutorial_page_path(current_tutorial_name, '1')
   end
@@ -67,38 +77,44 @@ class TutorialsController < AuthenticatedController
   end
 
   def destroy
-    previous_url = session[:previous_tuto].last[:my_previous_url]
+    tuto_index = session[:tutorial_index] - 2
+    # Destroy element if it was created
+    insurance_card = session[:tutorial_paths][tuto_index][:object]
+    insurance_card.destroy if insurance_card
+    @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
 
-    if session[:previous_tuto].last[:class_object]
-      eval(session[:previous_tuto].last[:class_object]).find(session[:previous_tuto].last[:object][:id]).destroy
+    if @prev_tutorial_name == 'tutorial_new'
+      redirect_to new_tutorial_path and return
     end
 
-    if session[:previous_tuto].last[:reduce_tutorial_index]
-      if previous_url.include? 'home'
-        @tutorial = Tutorial.find_by(name: 'Home')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      elsif previous_url.include? 'insurance'
-        @tutorial = Tutorial.find_by(name: 'Insurance')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      else
-        @tutorial = Tutorial.find_by(name: 'Add primary contact')
-        session[:tutorial_index] = session[:tutorials_list].find_index(@tutorial.id.to_s).to_i + 1
-      end
-    end
+    @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
+    @prev_page = session[:tutorial_paths][tuto_index][:current_page]
+    session[:tutorial_index] = session[:tutorial_index] - 2
 
-    session[:prev_tutorial_added] = true
-
-    session[:previous_tuto].pop
-    redirect_to previous_url
+    redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
   end
 
   private
-  
+
   def set_blank_layout_header_info
     @header_information = true
   end
 
   def set_new_contact
     @contact = Contact.new(user: current_user)
+  end
+
+  def tutorial_path_generator(list)
+    result = [{ tuto_id: 0, current_page: 0, tuto_name: 'tutorial_new' }] # tutorial / new
+    list.each do |tuto|
+      tutorial = Tutorial.find(tuto)
+      tutorial.number_of_pages.times do |p|
+        result << {
+          tuto_id: tuto,
+          current_page: p + 1,
+          tuto_name: tutorial.name.split(" ").join("-").downcase }
+      end
+    end
+    result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
   end
 end

@@ -89,7 +89,7 @@
     <% index = 0 %>
     <div class="card cg-3 mb-30 add-another">
       <%= f.fields_for "account_#{index}" do |ff| %>
-        <%= render 'account_details_form', ff: ff, index: index %>
+        <%= render 'account_details_form', ff: ff, index: index, data: nil %>
       <% end %>
     </div>
   <% end %>

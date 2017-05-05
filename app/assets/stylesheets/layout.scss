@@ -18,7 +18,7 @@ header{
   z-index: 100;
   position: relative;
 
-  @include media($eightfifty) {
+  @include media($ninesixty) {
     padding: $bu 5px 5px $bu;
   }
 }
@@ -94,6 +94,7 @@ a.user-nav:visited{
 
 .login-link{
   float:right;
+  font-size: 15px;
   color: $color-link-blue;
   margin: 10px 0 0;
   padding:0 20px;
@@ -102,27 +103,36 @@ a.user-nav:visited{
   @include media($ninesixty) {
     padding:0 10px 0 5px;
   }
+
+  @include media($eightfifty) {
+    margin-top: 50px !important;
+  }
 }
 
 //MARKEITNG NAVIGATION
 nav.marketing-nav{
   float: right;
-  margin-top: 10px;
+  margin-top: 9px;
   margin-right: 30px;
 
-    @include media($ninesixty) {
-      margin-right: 0;
-    }
+  @include media($teneighty) {
+    margin-right: 0;
+  }
 }
 a.marketing-link{
   color: $color-primary-shaded !important;
   padding: 10px;
   text-decoration: none;
-  @include media($ninesixty) {
-    padding: 10px 5px;
+  font-size: 15px;
+  @include media($teneighty) {
+    padding: 10px 8px;
   }
 
-  @include media($tablet) {
+  @include media($ninesixty) {
+    padding: 10px 7px;
+  }
+
+  @include media($eightfifty) {
     color: white !important;
   }
 }
@@ -131,24 +141,22 @@ a.mobile-menu{
   display:none;
   border-bottom: none;
 
-  @include media($tablet) {
+  @include media($eightfifty) {
     display:block;
   }
 }
-
 .menu-signup{
   display: block;
-  @include media($tablet) {
+  @include media($eightfifty) {
     display:none;
   }
-
 }
 
 //MARKETING NAV MOBILE
 .slide-nav{
   display: block;
 
-  @include media($tablet) {
+  @include media($eightfifty) {
     position: absolute;
     right: 0;
     width: 200px;
@@ -180,13 +188,12 @@ a.mobile-menu{
       color:  white;
       border-bottom: 1px solid $color-primary;
       border-radius: 0;
-
+      font-size: 15px;
       &:hover{
         text-decoration:none;
         background: darken($color-primary-shaded,20%)
       }
     }
-
   }
 }
 

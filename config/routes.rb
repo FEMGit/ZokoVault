@@ -318,6 +318,7 @@ Rails.application.routes.draw do
   get "/contact_us", to: "pages#contact_us", as: :contact_page
   get "/enterprise", to: "pages#enterprise", as: :enterprise
   get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
+  get "/pricing", to: "pages#pricing", as: :pricing
   get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
   get "/resources", to: "pages#resources", as: :resources
   get "/security", to: "pages#security", as: :security

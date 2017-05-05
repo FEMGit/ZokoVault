@@ -25,6 +25,10 @@
   flex-flow: row wrap;
   justify-content: space-between;
   width: 100.3%;
+  
+  &.percent-100 {
+    width: 100% !important;
+  }
 
   &.justify-center {
     justify-content: center;
@@ -106,13 +110,13 @@
 
 //Account Setup Settings
 .flex-account-setup{
+  background: $color-white;
   flex: 33%;
-  padding: 0 15px 15px 25px;
+  padding: 0 15px 15px 15px;
 
   img {
     max-width: 80px;
     margin-top: 15px;
-    margin-left: 15px;
   }
 
   @include media($ninesixty) {

@@ -72,7 +72,12 @@ function updateSubscription() {
     var description = "This amount will be billed to your account on " + billedData;
     $('#subscription-description').text(description);
 
-    var price = '$ ' + (subscriptions[select]['amount'] / 100.0).toFixed(2);
+    var priceValue = (subscriptions[select]['amount'] / 100.0).toFixed(2)
+    if (isNaN(priceValue)) {
+      priceValue = '--'
+    }
+
+    var price = '$ ' + priceValue
     $('#subscription-price').text(price);
     $('#subscription-total').text(price);
     clearPromoRow();

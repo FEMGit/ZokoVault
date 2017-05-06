@@ -8,17 +8,17 @@ class HealthsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_health_share_params, only: [:create, :update]
   include AccountPolicyOwnerModule
-  
+
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
   add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Health - Setup", :new_health_path, :only => %w(new), if: :general_view?
-  add_breadcrumb "Health - Setup", :shared_new_health_path, :only => %w(new), if: :shared_view?
+  before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+
   def page_name
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
@@ -30,12 +30,17 @@ class HealthsController < AuthenticatedController
         return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
     end
   end
-  
+
+  def set_new_crumbs
+    add_breadcrumb "Health - Setup", :new_health_path if general_view?
+    add_breadcrumb "Health - Setup", shared_new_health_path(@shared_user) if shared_view?
+  end
+
   def set_details_crumbs
     add_breadcrumb "#{@health.name}", health_path(@health) if general_view?
     add_breadcrumb "#{@health.name}", shared_health_path(@shared_user, @health) if shared_view?
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Health - Setup", edit_health_path(@health) if general_view?
     add_breadcrumb "Health - Setup", shared_edit_health_path(@shared_user, @health) if shared_view?
@@ -148,21 +153,21 @@ class HealthsController < AuthenticatedController
   end
 
   private
-  
+
   def validate_params
     policy_params.values.select{ |x| HealthPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0
   end
-  
+
   def set_viewable_contacts
     @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)
   end
-  
+
   def healths
     return Health.for_user(resource_owner) unless @shared_user
     return ShareService.shared_resource(@shares, Health) unless @category_shared
     Health.for_user(@shared_user)
   end
-  
+
   def provider_by_policy
     @health = Health.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
   end
@@ -173,12 +178,13 @@ class HealthsController < AuthenticatedController
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    insurance_breadcrumb_update(:health)
   end
-  
+
   def success_path(common_path, shared_view_path)
     ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
@@ -204,7 +210,7 @@ class HealthsController < AuthenticatedController
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
-  
+
   def prepare_health_share_params
     return unless health_params[:share_with_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.InsuranceCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
@@ -227,7 +233,7 @@ class HealthsController < AuthenticatedController
     end
     policies.permit(permitted_params)
   end
-  
+
   def policy_insured_params
     policies = params[:health].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}

@@ -9,7 +9,7 @@ class EntitiesController < AuthenticatedController
   before_action :update_share_params, only: [:create, :update]
   before_action :set_previous_shared_with, only: [:update]
   include AccountPolicyOwnerModule
-  
+
   # General Breadcrumbs
   add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new edit index show), if: :general_view?
   add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, if: :shared_view?
@@ -17,20 +17,21 @@ class EntitiesController < AuthenticatedController
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+
   def set_new_crumbs
     add_breadcrumb "Entity - Setup", new_entity_path(@shared_user)
   end
-  
+
   def set_details_crumbs
     add_breadcrumb "#{@entity.name}", entity_path(@entity, @shared_user)
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Entity - Setup", edit_entity_path(@entity, @shared_user)
   end
-  
+
   def page_name
     entity = CardDocument.entity(params[:id])
     case action_name
@@ -42,17 +43,17 @@ class EntitiesController < AuthenticatedController
         "Entity - #{entity.name} - Edit"
     end
   end
-  
+
   def show
     authorize @entity
     session[:ret_url] = entity_path(@entity, @shared_user)
   end
-  
+
   def edit
     authorize @entity
     set_viewable_contacts
   end
-  
+
   def new
     @entity = Entity.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase))
     authorize @entity
@@ -75,7 +76,7 @@ class EntitiesController < AuthenticatedController
       end
     end
   end
-  
+
   def update
     authorize @entity
     respond_to do |format|
@@ -89,8 +90,9 @@ class EntitiesController < AuthenticatedController
         format.json { render :show, status: :created, location: @entity }
       else
         error_path(:edit)
+        @entity.update(entity_params)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
-        format.json { render json: @entity.errors, status: :unprocessable_entity }
+        format.json { render json: @entity.errors , status: :unprocessable_entity }
       end
     end
   end
@@ -110,23 +112,25 @@ class EntitiesController < AuthenticatedController
     @category = Rails.application.config.x.TrustsEntityCategory
     @group_documents = Document.for_user(resource_owner).where(:category => @entity.category.name, :card_document_id => CardDocument.entity(@entity.id).try(:id))
   end
-  
+
   def category_shared?
      @shared_category_names.include? Rails.application.config.x.TrustsEntitiesCategory
   end
-  
+
   def error_path(action)
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    set_account_owners
+    entities_breadcrumb_update
   end
-  
+
   def success_path
-    ReturnPathService.success_path(resource_owner, current_user, entity_path(@entity), 
+    ReturnPathService.success_path(resource_owner, current_user, entity_path(@entity),
       entity_path(@entity, resource_owner))
   end
 
-  def resource_owner 
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
@@ -143,30 +147,30 @@ class EntitiesController < AuthenticatedController
   def set_entity
     @entity = Entity.find(params[:id])
   end
-  
+
   def set_viewable_contacts
     @entity.share_with_contact_ids = category_subcategory_shares(@entity, resource_owner).map(&:contact_id)
   end
-  
+
   def update_share_params
     if general_view? && params[:entity]["share_with_contact_ids"].present?
       viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
       params[:entity]["share_with_contact_ids"] -= viewable_shares
     end
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
-  
+
   def entity_params
     params[:entity].permit(:name, :notes, share_with_contact_ids: [])
   end
-  
+
   def entity_params_multi
     params[:entity].permit(agent_ids: [], partner_ids: [])
   end
-  
+
   def set_previous_shared_with
     @previous_shared_with = @entity.share_with_contact_ids
   end

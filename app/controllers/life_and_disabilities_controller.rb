@@ -9,17 +9,17 @@ class LifeAndDisabilitiesController < AuthenticatedController
   before_action :prepare_life_share_params, only: [:create, :update]
   after_action :set_viewable_contacts, only: [:new, :edit]
   include AccountPolicyOwnerModule
-  
+
   # Breadcrumbs navigation
   add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
   add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Life & Disability - Setup", :new_life_path, :only => %w(new), if: :general_view?
-  add_breadcrumb "Life & Disability - Setup", :shared_new_life_path, :only => %w(new), if: :shared_view?
+  before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+
   def page_name
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
@@ -31,12 +31,17 @@ class LifeAndDisabilitiesController < AuthenticatedController
         return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
     end
   end
-  
+
+  def set_new_crumbs
+    add_breadcrumb "Life & Disability - Setup", :new_life_path if general_view?
+    add_breadcrumb "Life & Disability - Setup", shared_new_life_path(@shared_user) if shared_view?
+  end
+
   def set_details_crumbs
     add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability) if general_view?
     add_breadcrumb "#{@life_and_disability.name}", shared_life_path(@shared_user, @life_and_disability) if shared_view?
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Life & Disability - Setup", edit_life_path(@life_and_disability) if general_view?
     add_breadcrumb "Life & Disability - Setup", shared_edit_life_path(@shared_user, @life_and_disability) if shared_view?
@@ -150,33 +155,34 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
-  
+
   def validate_params
     policy_params.values.select{ |x| LifeAndDisabilityPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0
   end
-  
+
   def set_viewable_contacts
     @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)
   end
-  
+
   def life_and_disabilities
     return LifeAndDisability.for_user(resource_owner) unless @shared_user
     return ShareService.shared_resource(@shares, LifeAndDisability) unless @category_shared
     LifeAndDisability.for_user(@shared_user)
   end
-  
+
   def error_path(action)
     set_contacts
     set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    insurance_breadcrumb_update(:life)
   end
-  
+
   def success_path(common_path, shared_view_path)
     ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
@@ -188,7 +194,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       @life_and_disability.present? ? @life_and_disability.user : current_user
     end
   end
-  
+
   def provider_by_policy
     @life_and_disability = LifeAndDisability.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
   end
@@ -206,7 +212,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
-  
+
   def prepare_life_share_params
     return unless life_params[:share_with_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.InsuranceCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
@@ -216,7 +222,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def life_params
-    params.require(:life_and_disability).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+    params.require(:life_and_disability).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id,
                                                 share_with_ids: [])
   end
 
@@ -228,7 +234,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     end
     policies.permit(permitted_params)
   end
-  
+
   def policy_contact_params
     policies = params[:life_and_disability].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}

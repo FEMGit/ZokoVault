@@ -1,12 +1,6 @@
-<% trial_update ||= false %>
-
-<% if !trial_update %>
-  <h1>Update Billing Info</h1>
-<% end %>
-
-<%= form_tag :account, { method: :put, id: 'account-form' } do %>
-  <div class="card mb-30 min-w-330">
-    <h3>Subscription Details</h3>
+<div class="card mb-30 min-w-330">
+  <h3>Subscription Details</h3>
+  <%= form_tag :account, { method: :put, id: 'account-form' } do %>
     <section class="bb-gray-light-dashed mb-10">
       <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.id %>
 
@@ -34,71 +28,29 @@
         class: "button primary-button text-field-button" %>
       <span id='promo-code-text'></span>
     </section>
-  </div>
-
-  <div class="card mb-30 min-w-330">
-    <h3>Payment Information</h3>
-
-    <div class="card-info">
-      <span id="payment-errors" style="color: red"></span>
-    </div>
-
-    <%= label_tag "user_stripe_subscription_attributes_name_on_card", 'Name on Card' %><br>
-    <%= text_field_tag "user[stripe_subscription_attributes][name_on_card]" %>
-
-    <%= label_tag "user_stripe_subscription_attributes_card_number", 'Card Number' %><br>
-    <%= text_field_tag "user[stripe_subscription_attributes][card_number]",
-      "",
-      "data-stripe" => "number"
-    %>
-
-    <%= label_tag "user_stripe_subscription_attributes_expiration_month", 'Expiration Date' %><br>
-    <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[stripe_subscription_attributes][expiration_month]",
-        options_for_select(Date::MONTHNAMES.compact.map.with_index { |m, i| [m, i]}),
-        include_blank: "Month",
-        "data-stripe" => "exp_month",
-        class: 'small-width'
-      %>
-    </div>
-    <div class="styled-select-separator">/</div>
-    <div class='styled-select small-width inline-block'>
-      <%= select_tag "user[stripe_subscription_attributes][expiration_year]",
-        options_for_select(card_expiration_years),
-        include_blank: "Year",
-        "data-stripe" => "exp_year",
-        class: 'small-width'
-      %>
-    </div><br>
-
-    <%= label_tag "user_stripe_subscription_attributes_cvc", 'CV Code' %><br>
-    <p>
-      <%= text_field_tag "user[stripe_subscription_attributes][cvc]", "", "data-stripe" => "cvc", class: 'small-width inline-block' %>
-      <% trial_class = trial_update ? 'trial' : '' %>
-      <%= image_tag(cvv_code_image, class: "inline-block ml-10 cvv-card #{trial_class}", alt: 'CVV Code') %>
-    </p>
-
-    <% if trial_update %>
-      <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
-        <%= link_to 'Back', trial_membership_update_path, class: 'big-button outline-button padded f-left' %>
-        <%= link_to 'Continue', 'javascript:void(0);', onClick: "addCreditCard(); return false", id: "submit-cc-button-continue", class: 'button big-button blue-button f-right' %>
-      </section>
-    <% end %>
-  </div>
-
-  <%= hidden_field_tag "user[stripe_subscription_attributes][stripe_token]", "" %>
-
-  <% if !trial_update %>
-    <div>
-      <%= link_to "Submit", 'javascript:void(0);', onClick: "addCreditCard(); return false", id: "submit-cc-button", class: "button primary-button big-button" %>
-    </div>
   <% end %>
-<% end %>
+</div>
 
-<%= javascript_include_tag "https://js.stripe.com/v2/" %>
+<div class="card mb-30 min-w-330">
+  <h3>Payment Information</h3>
+  <form action="/account_settings/update_billing_info" method="post" id="payment-form">
+    <div class="form-row">
+      <label for="card-element">
+        Credit or debit card
+      </label>
+      <div id="card-element">
+        <!-- a Stripe Element will be inserted here. -->
+      </div>
+      <div id="card-errors"></div> <!-- Used to display Element errors -->
+    </div>
+    <button id="submit-cc-button" class="button primary-button big-button">Submit</button>
+  </form>
+</div>
+
+<%= javascript_include_tag "https://js.stripe.com/v3/" %>
+<%= javascript_include_tag "stripe_elements_card" %>
 <%= javascript_include_tag "sub_with_promo" %>
 
 <script>
-  Stripe.setPublishableKey('pk_test_scUbHdLYHhbE8cQ6k6t7iCMq')
-  $('.chosen-select').chosen({allow_single_deselect: true});
+  setupStripeCardEntryForm('<%= ENV["STRIPE_PUBLIC_KEY"] %>')
 </script>

@@ -14,9 +14,15 @@ function setupStripeCardEntryForm(key) {
 
   var style = {
     base: {
-      fontSize: '16px',
-      lineHeight: '24px'
-    }
+      fontSize: '20px',
+      lineHeight: '32px',
+      '::placeholder': {
+         color: '#CFD7E0',
+       },
+    },
+    invalid: {
+      color: 'red',
+    },
   };
 
   var card = elements.create('card', {style: style});

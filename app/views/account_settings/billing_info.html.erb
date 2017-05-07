@@ -33,10 +33,10 @@
 
 <div class="card mb-30 min-w-330">
   <h3>Payment Information</h3>
-  <form action="/account_settings/update_billing_info" method="post" id="payment-form">
+  <%= form_tag '/account_settings/update_billing_info', { id: 'payment-form' } do %>
     <div class="form-row">
       <label for="card-element">
-        Credit or debit card
+        Credit or Debit Card
       </label>
       <div id="card-element">
         <!-- a Stripe Element will be inserted here. -->
@@ -44,7 +44,7 @@
       <div id="card-errors"></div> <!-- Used to display Element errors -->
     </div>
     <button id="submit-cc-button" class="button primary-button big-button">Submit</button>
-  </form>
+  <% end %>
 </div>
 
 <%= javascript_include_tag "https://js.stripe.com/v3/" %>

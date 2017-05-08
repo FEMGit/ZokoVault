@@ -9,8 +9,7 @@ class StripeService
     customer
   end
 
-  def self.subscribe(user:, plan_id:, promo_code: nil)
-    customer = ensure_stripe_customer(user: user)
+  def self.subscribe(customer:, plan_id:, promo_code: nil)
     subscription_attrs = { plan: plan_id }
     subscription_attrs[:coupon] = promo_code if promo_code.present?
     customer.subscriptions.create(subscription_attrs)

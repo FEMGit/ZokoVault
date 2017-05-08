@@ -114,6 +114,14 @@ class AccountSettingsController < AuthenticatedController
       source = customer.sources.create(source: token)
       customer.default_source = source.id
       customer.save
+      if customer.subscriptions.blank?
+        sub = StripeService.subscribe(
+          customer: customer, **stripe_subscription_params)
+        current_user.create_stripe_subscription(
+          customer_id: customer.id,
+          subscription_id: sub.id,
+          **stripe_subscription_params)
+      end
     end
     redirect_to session[:ret_url] || first_run_path
   end
@@ -155,6 +163,12 @@ class AccountSettingsController < AuthenticatedController
 
   def password_change_params
     params.require(:user_profile).permit(:password, :password_confirmation)
+  end
+
+  def stripe_subscription_params
+    params.require(:user
+         ).require(:stripe_subscription_attributes
+         ).permit(:plan_id, :promo_code)
   end
 
   def set_user_profile

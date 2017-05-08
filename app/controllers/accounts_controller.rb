@@ -190,16 +190,6 @@ class AccountsController < AuthenticatedController
     params.permit(:skip)
   end
 
-  def card_params
-    params.require(:user).permit(
-      stripe_subscription_attributes: [
-        :name_on_card,
-        :card_number,
-        :expiration_month,
-        :expiration_year,
-        :cvc])
-  end
-
   def user_params_except_subscription
     user_params.except(:stripe_subscription_attributes)
   end
@@ -216,9 +206,6 @@ class AccountsController < AuthenticatedController
         security_questions_attributes: [:question, :answer],
       ],
       stripe_subscription_attributes: [
-        :name_on_card,
-        :card_number,
-        :stripe_token,
         :plan_id,
         :promo_code])
   end

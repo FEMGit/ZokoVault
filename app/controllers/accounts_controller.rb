@@ -1,6 +1,5 @@
 class AccountsController < AuthenticatedController
   include UserTrafficModule
-  before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
@@ -116,15 +115,6 @@ class AccountsController < AuthenticatedController
     update_params = free_account? ? user_params_except_subscription : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
-  end
-
-  def generate_stripe_token
-    unless free_account?
-      token_args = card_params[:stripe_subscription_attributes].values_at(
-        :card_number, :expiration_month, :expiration_year, :cvc)
-      stripe_token = StripeService.token(*token_args)
-      params[:user][:stripe_subscription_attributes][:stripe_token] = stripe_token.id
-    end
   end
 
   def show; end

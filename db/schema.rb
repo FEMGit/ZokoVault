@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502215312) do
+ActiveRecord::Schema.define(version: 20170508141817) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -465,6 +466,14 @@ ActiveRecord::Schema.define(version: 20170502215312) do
   end
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
+
+  create_table "stripe_customers", id: false, force: :cascade do |t|
+    t.integer "user_id",            null: false
+    t.string  "stripe_customer_id", null: false
+  end
+
+  add_index "stripe_customers", ["stripe_customer_id"], name: "index_stripe_customers_on_stripe_customer_id", unique: true, using: :btree
+  add_index "stripe_customers", ["user_id"], name: "index_stripe_customers_on_user_id", unique: true, using: :btree
 
   create_table "stripe_subscriptions", force: :cascade do |t|
     t.integer  "user_id"

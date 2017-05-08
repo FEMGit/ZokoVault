@@ -107,6 +107,17 @@ class AccountSettingsController < AuthenticatedController
     head status
   end
 
+  def update_payment
+    token = params[:stripeToken]
+    if token.present?
+      customer = StripeService.ensure_stripe_customer(user: current_user)
+      source = customer.sources.create(source: token)
+      customer.default_source = source.id
+      customer.save
+    end
+    redirect_to session[:ret_url] || first_run_path
+  end
+
   private
 
   def create_contact_if_not_exists

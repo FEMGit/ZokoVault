@@ -63,9 +63,9 @@
                 <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
               </section>
             <% end %>
-            
+
             <br>
-            <%= link_to 'View Details', life_path(vendor), class: "small-button outline-button mt-20" %>
+            <%= link_to 'View Details', @shared_user.present? ? shared_life_path(@shared_user, vendor) : life_path(vendor), class: "small-button outline-button mt-20" %>
           </div>
         <% end %>
       <% end %>
@@ -109,9 +109,9 @@
                 <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
               </section>
             <% end %>
-            
+
             <br>
-            <%= link_to 'View Details', property_path(vendor), class: "small-button outline-button mt-20" %>
+            <%= link_to 'View Details', @shared_user.present? ? shared_property_path(@shared_user, vendor) : property_path(vendor), class: "small-button outline-button mt-20" %>
           </div>
         <% end %>
       <% end %>
@@ -155,7 +155,7 @@
               <% end %>
 
             <br>
-            <%= link_to 'View Details', health_path(vendor), class: "small-button outline-button mt-20" %>
+            <%= link_to 'View Details', @shared_user.present? ? shared_health_path(@shared_user, vendor) : health_path(vendor), class: "small-button outline-button mt-20" %>
           </div>
         <% end %>
       <% end %>

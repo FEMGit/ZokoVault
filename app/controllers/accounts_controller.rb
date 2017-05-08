@@ -102,22 +102,14 @@ class AccountsController < AuthenticatedController
 
   def user_type_update
     if user_params[:user_type].eql? 'trial'
-      SubscriptionService.create_trial(current_user)
-    elsif user_params[:user_type].eql? 'free'
-      MailchimpService.new.subscribe_to_shared(current_user)
-    end
-    redirect_to root_path
-  end
-
-  def user_type_update
-    if user_params[:user_type].eql? 'trial'
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
-      redirect_to first_run_path
-    else
-      redirect_to root_path
+      redirect_to(first_run_path) and return
+    elsif user_params[:user_type].eql? 'free'
+      MailchimpService.new.subscribe_to_shared(current_user)
     end
+    redirect_to(root_path)
   end
 
   def update

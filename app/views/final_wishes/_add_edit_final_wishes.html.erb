@@ -30,8 +30,7 @@
     Add another Final Wish<br>
   </div>
 
-  <%= f.submit 'Save', class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', back_path || final_wishes_path, class: "button secondary-button big-button" %>
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: final_wishes_path, f: f } %>
 <% end %>
 
 <script>

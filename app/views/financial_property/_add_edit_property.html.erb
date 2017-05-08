@@ -9,38 +9,38 @@
   <% if @financial_property.errors.any? %>
     <% errors = true %>
   <% end %>
-  
+
   <h3 class="card-label">Property Details</h3>
-  
+
   <%= f.label :name, 'Property Name' %><span class="required">Required</span>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @financial_property.errors.messages[:name] } %>
   <%= f.text_field :name, { class: ("input-error" if @financial_property.errors.messages[:name].present?), :maxlength => get_max_length(:default) } %>
-  
+
   <%= f.label :property_type, 'Property Type' %>
   <div class="styled-select">
-    <%= f.select :property_type, FinancialProperty::property_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_property_property_type'), 
+    <%= f.select :property_type, FinancialProperty::property_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_property_property_type'),
     $('#financial_property_value'))" %>
   </div>
-  
+
   <%= f.label :property_owner_ids, 'Owners' %>
   <div class="chosen-styled-select">
     <%= account_owner_select_with_create_new(f, :property_owner_ids, @account_owners,
       {}, owner_ids_transform(@financial_property.property_owner_ids)) %>
   </div>
-  
+
   <%= f.label :value, 'Property Value' %>
   <%= f.text_field :value, maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
   :value => f.object && number_to_currency(f.object.value, precision: 0, unit: "$") %>
-  
+
   <%= f.label :primary_contact_id, 'Primary Contact' %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
   </div>
-  
+
   <%= render partial: 'layouts/address_phone_toggle_button', locals: { provider: @financial_property } %>
-  
+
   <section id="address_phone_details" <% if !edit?(@financial_property) %> style="display: none;" <% end %>>
-  
+
     <%= f.label :address, 'Property Address or Location' %>
     <%= f.text_field :address, :maxlength => get_max_length(:default) %>
 
@@ -58,10 +58,10 @@
       <%= zip_code_form(f, :zip) %>
     </span>
   </section>
-  
+
   <%= f.label :notes, 'Notes' %>
   <%= f.text_area :notes, :maxlength => get_max_length(:notes) %>
-  
+
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
       <svg class="icon" viewBox="0 0 20 20">
@@ -73,7 +73,7 @@
       <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
     </div>
   </section>
-  
+
   <% if params[:id] && policy(@financial_property).destroy? %>
     <%= link_to 'Delete this Property', delete_property_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this property will permanently remove it from ZokuVault." },
@@ -81,8 +81,7 @@
   <% end %>
 </div>
 
-<%= f.submit 'Save', class: "button primary-button big-button" %>
-<%= link_to 'Cancel', back_path || financial_information_path, class: "button secondary-button big-button"%>
+<%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: financial_information_path, f: f } %>
 
 <% end %>
 
@@ -90,7 +89,7 @@
 <script>
   $(document).ready(function(){
     setValue($('#financial_property_value'), $('#financial_property_value').val())
-    updateValues($('#financial_property_property_type'), 
+    updateValues($('#financial_property_property_type'),
       $('#financial_property_value'))
     $('.chosen-select').chosen({allow_single_deselect: true});
   });

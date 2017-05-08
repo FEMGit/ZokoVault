@@ -13,8 +13,7 @@
     </div>
   </div>
 
-  <%= f.submit "Save", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', back_path || trusts_entities_path, {class: "button secondary-button big-button"}%>
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: trusts_entities_path, f: f } %>
 <% end %>
 
 <script>

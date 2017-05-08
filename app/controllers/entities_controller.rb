@@ -19,6 +19,7 @@ class EntitiesController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include CancelPathErrorUpdateModule
 
   def set_new_crumbs
     add_breadcrumb "Entity - Setup", new_entity_path(@shared_user)
@@ -118,6 +119,8 @@ class EntitiesController < AuthenticatedController
   end
 
   def error_path(action)
+    set_contacts
+    set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)

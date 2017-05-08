@@ -17,6 +17,7 @@ class WillsController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include CancelPathErrorUpdateModule
 
   def set_new_crumbs
     add_breadcrumb "Wills - Setup", new_will_path(@shared_user)

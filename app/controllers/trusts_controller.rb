@@ -16,6 +16,7 @@ class TrustsController < AuthenticatedController
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include CancelPathErrorUpdateModule
 
   def set_new_crumbs
     add_breadcrumb "Trusts - Setup", new_trust_path(@shared_user)

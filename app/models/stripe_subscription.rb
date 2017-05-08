@@ -5,7 +5,7 @@ class StripeSubscription < ActiveRecord::Base
   def self.plans
     @plans ||= Stripe::Plan.all.data
   end
-  
+
   def self.yearly_plan
     plans.detect { |p| p["id"] == 'zoku-yearly-v1' }
   end
@@ -18,7 +18,6 @@ class StripeSubscription < ActiveRecord::Base
   before_create do
     new_sub = StripeService.subscribe(
       user:       user,
-      token:      stripe_token,
       plan_id:    plan_id,
       promo_code: promo_code
     )

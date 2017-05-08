@@ -14,20 +14,6 @@ class StripeSubscription < ActiveRecord::Base
     plans.detect { |x| x.id.eql? id }
   end
 
-  # TODO we should make this logic explicit, and not part of a callback
-  before_create do
-    new_sub = StripeService.subscribe(
-      user:       user,
-      plan_id:    plan_id,
-      promo_code: promo_code
-    )
-    self.subscription_id = new_sub.id
-    self.customer_id = new_sub.customer
-    self.last4 = card_number.last(4) # TODO not PCI compliant
-    SubscriptionService.create_from_stripe(
-      user: user, stripe_subscription_object: new_sub)
-  end
-
   def customer
     @customer ||= Stripe::Customer.retrieve customer_id
   end

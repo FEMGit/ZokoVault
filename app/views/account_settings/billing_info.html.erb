@@ -1,37 +1,6 @@
-<div class="card mb-30 min-w-330">
-  <h3>Subscription Details</h3>
-  <%= form_tag :account, { method: :put, id: 'account-form' } do %>
-    <section class="bb-gray-light-dashed mb-10">
-      <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.id %>
-
-      <div class="h-28 overflow-hidden inline-block"><%= StripeSubscription.yearly_plan.name %></div>
-      <div class="subscription-description ml-15" id='subscription-description'></div>
-      <span class="fr" id="subscription-price"></span>
-      <span class="clear"></span>
-    </section>
-
-    <section class="pb-10 mb-10" id="promo-row">
-      <span class="bold" id="promo-name">Total</span>
-      <span class="fr clr-red" id="promo-price"></span>
-    </section>
-
-    <section class="bb-gray-light pb-10 mb-10">
-      <span class="bold">Total</span>
-      <span class="fr" id="subscription-total"></span>
-    </section>
-
-    <section>
-      <span class="mr-10">Promo Code</span>
-      <%= hidden_field_tag 'user[stripe_subscription_attributes][promo_code]' %>
-      <%= text_field_tag 'promo_code_text_field', nil, class: 'promo-form inline-block width-250' %>
-      <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
-        class: "button primary-button text-field-button" %>
-      <span id='promo-code-text'></span>
-    </section>
-  <% end %>
-</div>
-
-<%= javascript_include_tag "sub_with_promo" %>
+<%= render partial: "account_settings/subscription_form",
+            locals: { subscription_route: :account }
+%>
 
 <%= render partial: "account_settings/payment_form",
             locals: { payment_route: '/account_settings/update_payment' }

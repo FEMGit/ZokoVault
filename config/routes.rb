@@ -147,6 +147,7 @@ Rails.application.routes.draw do
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
+  post 'account_settings/update_payment', to: 'account_settings#update_payment', as: :update_payment_account_settings
 
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics

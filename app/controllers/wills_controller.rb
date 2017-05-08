@@ -8,27 +8,28 @@ class WillsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_previous_shared_with, only: [:create, :update]
   before_action :update_share_params, only: [:create, :update]
-  
+
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
   add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+
   def set_new_crumbs
     add_breadcrumb "Wills - Setup", new_will_path(@shared_user)
   end
-  
+
   def set_details_crumbs
     add_breadcrumb "#{@will.title}", will_path(@will, @shared_user)
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Wills - Setup", edit_will_path(@will, @shared_user)
   end
-  
+
   def page_name
     will = CardDocument.will(params[:id])
     case action_name
@@ -40,7 +41,7 @@ class WillsController < AuthenticatedController
         return "Will - #{will.name} - Edit"
     end
   end
-  
+
   def new
     @vault_entry = WillBuilder.new(type: 'will').build
     @vault_entry.user = resource_owner
@@ -55,15 +56,15 @@ class WillsController < AuthenticatedController
     @vault_entries << @vault_entry
     @vault_entries.each { |x| authorize x }
   end
-  
+
   def edit
     authorize @will
-    
+
     @vault_entry = @will
     @vault_entries = Array.wrap(@vault_entry)
     set_viewable_contacts
   end
-  
+
   def show
     authorize @will
     session[:ret_url] = will_path(@will, @shared_user)
@@ -77,11 +78,11 @@ class WillsController < AuthenticatedController
   def create
     save_or_update_will(:new)
   end
-  
+
   def update
     save_or_update_will(:edit)
   end
-  
+
    def save_or_update_will(action)
     new_wills = WtlService.get_new_records(update_share_params)
     old_wills = WtlService.get_old_records(update_share_params)
@@ -124,25 +125,26 @@ class WillsController < AuthenticatedController
   end
 
   private
-  
+
   def set_viewable_contacts
     @vault_entries.each do |will|
       will.share_with_contact_ids |= category_subcategory_shares(will, resource_owner).map(&:contact_id)
     end
   end
-  
+
   def error_path(action)
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    wills_error_breadcrumb_update
   end
-  
+
   def success_path
-    ReturnPathService.success_path(resource_owner, current_user, will_path((@new_vault_entries || @old_vault_entries)), 
+    ReturnPathService.success_path(resource_owner, current_user, will_path((@new_vault_entries || @old_vault_entries)),
       will_path((@new_vault_entries || @old_vault_entries), resource_owner))
   end
 
-  def resource_owner 
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
@@ -164,7 +166,7 @@ class WillsController < AuthenticatedController
   def set_will
     @will = Will.find(params[:id])
   end
-  
+
   def update_share_params
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     will_params.each do |k, v|
@@ -173,11 +175,11 @@ class WillsController < AuthenticatedController
       end
     end
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
-  
+
   def will_shared_with_uniq_param
     will_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?).map(&:to_i)
   end
@@ -209,7 +211,7 @@ class WillsController < AuthenticatedController
       unless @old_vault_entries.save
         @errors << { id: old_will[:id], error: @old_vault_entries.errors }
       end
-      
+
       WtlService.update_beneficiaries(@old_vault_entries, old_will[:primary_beneficiary_ids],
                                         old_will[:secondary_beneficiary_ids], old_will[:agent_ids])
     end
@@ -230,14 +232,14 @@ class WillsController < AuthenticatedController
                                                    @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
     raise "error saving new will" if @errors.any?
   end
-  
+
   def authorize_save(resource)
     authorize_ids = will_params.values.map { |x| x[:id].to_i }
     if authorize_ids.include? resource.id
       authorize resource
     end
   end
-  
+
   def set_previous_shared_with
     old_wills = WtlService.get_old_records(will_params)
     old_will_ids = old_wills.map { |x| x["id"] }.flatten.uniq.reject(&:blank?)

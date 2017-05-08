@@ -99,7 +99,7 @@ class AccountsController < AuthenticatedController
   def user_type
     check_phone_setup_passed
   end
-  
+
   def user_type_update
     if user_params[:user_type].eql? 'trial'
       SubscriptionService.create_trial(current_user)
@@ -124,17 +124,6 @@ class AccountsController < AuthenticatedController
     update_params = free_account? ? user_params_except_subscription : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
-  end
-
-  def card_validation
-    begin
-      StripeService.token(params[:number], params[:exp_month], params[:exp_year], params[:cvc])
-      render :nothing => true
-    rescue Stripe::CardError => e
-      body = e.json_body
-      err = body[:error]
-      render json: err[:message], status: 500
-    end
   end
 
   def generate_stripe_token
@@ -164,7 +153,7 @@ class AccountsController < AuthenticatedController
   def subscriptions
     render json: StripeSubscription.plans.to_json.html_safe
   end
-  
+
   def yearly_subscription
     render json: Array.wrap(StripeSubscription.yearly_plan).to_json.html_safe
   end

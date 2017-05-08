@@ -9,7 +9,7 @@ class PowerOfAttorneysController < AuthenticatedController
   before_action :set_previous_shared_with, only: [:update]
   before_action :update_share_params, only: [:create, :update]
   before_action :set_documents, only: [:show]
-  
+
   # General Breadcrumbs
   add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
   add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
@@ -22,15 +22,15 @@ class PowerOfAttorneysController < AuthenticatedController
   def set_new_crumbs
     add_breadcrumb "Power of Attorney - Setup", new_power_of_attorney_path(@shared_user)
   end
-  
+
   def set_details_crumbs
     add_breadcrumb "Power of Attorney - #{@power_of_attorney_contact.contact.try(:name)}", power_of_attorney_path(@power_of_attorney_contact, @shared_user)
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Power of Attorney - Setup", edit_power_of_attorney_path(@power_of_attorney_contact, @shared_user)
   end
-  
+
   def page_name
     poa = CardDocument.power_of_attorney(params[:id])
     case action_name
@@ -54,17 +54,17 @@ class PowerOfAttorneysController < AuthenticatedController
     authorize @power_of_attorney_contact
     set_viewable_contacts_global
   end
-  
+
   def edit
     authorize @power_of_attorney_contact
     set_viewable_contacts_global
   end
-  
+
   def show
     authorize @power_of_attorney_contact
     session[:ret_url] = power_of_attorney_path(@power_of_attorney_contact, @shared_user)
   end
-  
+
   def set_documents
     @category = Rails.application.config.x.WillsPoaCategory
     @group_documents = Document.for_user(resource_owner).where(:category => @power_of_attorney_contact.category.name,
@@ -91,7 +91,7 @@ class PowerOfAttorneysController < AuthenticatedController
       end
     end
   end
-  
+
   def update
     authorize @power_of_attorney_contact
     WtlService.fill_power_of_attorneys(power_of_attorney_params, @power_of_attorney_contact)
@@ -123,7 +123,7 @@ class PowerOfAttorneysController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   def destroy_power_of_attorney_contact
     authorize @power_of_attorney_contact
     @power_of_attorney_contact.destroy
@@ -132,7 +132,7 @@ class PowerOfAttorneysController < AuthenticatedController
       format.json { head :no_content }
     end
   end
-  
+
   def get_powers_of_attorney_details
     render :json => WtlService.get_powers_of_attorney_details(PowerOfAttorney.for_user(resource_owner))
   end
@@ -140,28 +140,28 @@ class PowerOfAttorneysController < AuthenticatedController
   def details; end
 
   private
-  
+
   def set_viewable_contacts
     @vault_entries.each do |attorney|
       attorney.share_with_contact_ids |= category_subcategory_shares(attorney, resource_owner).map(&:contact_id)
     end
   end
-  
+
   def set_viewable_contacts_global
     @power_of_attorney_contact.share_with_contact_ids = category_subcategory_shares(@power_of_attorney_contact, resource_owner).map(&:contact_id)
   end
-  
+
   def error_path(action)
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
   end
-  
+
   def success_path(common_path, shared_view_path)
     ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
 
-  def resource_owner 
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
@@ -183,26 +183,26 @@ class PowerOfAttorneysController < AuthenticatedController
   def set_power_of_attorney
     @power_of_attorney = PowerOfAttorney.find(params[:id])
   end
-  
+
   def set_power_of_attorney_contact
     @power_of_attorney_contact = PowerOfAttorneyContact.find(params[:id])
   end
-  
+
   def update_share_params
     if general_view?
       viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
       params[:power_of_attorney_contact]["share_with_contact_ids"] -= viewable_shares
     end
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
-  
+
   def attorneys_shared_with_uniq_param
     power_of_attorney_params.values.map { |x| x["share_with_contact_ids"] }.flatten.uniq.reject(&:blank?)
   end
-  
+
   def power_of_attorney_contact_params
     params.require(:power_of_attorney_contact).permit(:id, :contact_id, share_with_contact_ids: [])
   end
@@ -217,19 +217,19 @@ class PowerOfAttorneysController < AuthenticatedController
     attorneys.values.map { |p| p["powers"] }.each { |p| p.reject! { |_k, v| v.blank? } }
     attorneys.permit(permitted_params)
   end
-  
+
   def success_message(old_attorneys)
     return 'Power of Attorney was successfully created.' unless old_attorneys.any?
     'Power of Attorney was successfully updated.'
   end
-  
+
   def authorize_save(resource)
     authorize_ids = power_of_attorney_params.values.map { |x| x[:id].to_i }
     if authorize_ids.include? resource.id
       authorize resource
     end
   end
-  
+
   def set_previous_shared_with
     @previous_shared_with = @power_of_attorney_contact.share_with_contact_ids
   end

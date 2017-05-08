@@ -3,14 +3,14 @@
 <h1><%= yield(:title) + ' - Setup' %></h1>
   <%= form_for(@power_of_attorney_contact, url: "#{yield(:url_path)}") do |f| %>
   <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
-  
+
   <div class="card attorney mb-30">
     <%= f.label :contact_id, 'Power of Attorney For' %>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(f, :contact_id, @contacts, id: "power_of_attorney_for_id", multiple: false) %>
     </div>
   </div>
-  
+
   <div id="wtl-forms">
     <div id="wtl-form-1">
       <% @power_of_attorney_contact.power_of_attorneys.each_with_index do |data, index| %>
@@ -18,7 +18,7 @@
           <%= render yield(:partial_path), f: builder, index: index, data: data %>
         <% end %>
       <% end %>
-      
+
       <% if @power_of_attorney_contact.power_of_attorneys.blank? %>
         <% index = 0 %>
         <%= f.fields_for "vault_entry_#{index}" do |builder| %>
@@ -36,7 +36,7 @@
       Add another <%= yield(:add_another_title) %><br>
     </div>
   <% end %>
-  
+
   <h3>Shared With</h3>
 
   <div class="card category-shared">
@@ -49,8 +49,7 @@
     </section>
   </div><br>
 
-  <%= f.submit "Save", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', back_path || wills_powers_of_attorney_path, {class: "button secondary-button big-button"}%>
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: wills_powers_of_attorney_path, f: f } %>
   <% if @power_of_attorney_contact.try(:id) && policy(@power_of_attorney_contact).destroy? %>
     <%= link_to 'Delete Power of Attorney', delete_power_of_attorney_path(@power_of_attorney_contact), method: :delete,
         data: { confirm: "Deleting this 'Power of Attorney' will permanently remove it from ZokuVault." },
@@ -64,7 +63,7 @@
     form.find('textarea').val("");
     form.find(':checked').prop('checked', false);
   }
-  
+
   addNewField = function(){
     var $wtlForm = $('.card.attorney:last');
     var $newWtlForm = $wtlForm.clone();

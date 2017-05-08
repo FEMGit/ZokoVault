@@ -18,6 +18,7 @@ class HealthsController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include CancelPathErrorUpdateModule
 
   def page_name
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])

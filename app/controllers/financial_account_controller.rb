@@ -11,8 +11,7 @@ class FinancialAccountController < AuthenticatedController
   include AccountPolicyOwnerModule
 
   # Breadcrumbs navigation
-  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
-  add_breadcrumb "Financial Information", :shared_view_financial_information_path, :only => %w(show new edit), if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(show new edit)
   before_action :set_add_crumbs, only: [:new]
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
@@ -20,7 +19,7 @@ class FinancialAccountController < AuthenticatedController
   include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
-
+  
   def page_name
     provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
     case action_name
@@ -31,6 +30,11 @@ class FinancialAccountController < AuthenticatedController
       when 'show'
         return "Financial Account - #{provider.name} - Details"
     end
+  end
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Financial Information", financial_information_path if general_view?
+    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user) if shared_view?
   end
 
   def set_add_crumbs

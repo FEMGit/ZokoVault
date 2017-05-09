@@ -10,14 +10,18 @@ class FinalWishesController < AuthenticatedController
   before_action :prepare_share_params, only: [:create, :update]
 
   # Breadcrumbs navigation
-  add_breadcrumb "Final Wishes", :final_wishes_path, if: :general_view?
-  add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, if: :shared_view?
+  before_action :set_index_breadcrumbs
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   before_action :set_new_crumbs, only: [:new]
   include BreadcrumbsCacheModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Final Wishes", final_wishes_path if general_view?
+    add_breadcrumb "Final Wishes", shared_view_final_wishes_path(@shared_user) if shared_view?
+  end
 
   def page_name
     case action_name

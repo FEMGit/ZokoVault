@@ -107,6 +107,29 @@ class AccountSettingsController < AuthenticatedController
     head status
   end
 
+  def update_payment
+    token = params[:stripeToken]
+    if token.present?
+      customer = StripeService.ensure_stripe_customer(user: current_user)
+      source = customer.sources.create(source: token)
+      customer.default_source = source.id
+      customer.save
+      if customer.subscriptions.blank?
+        plan = stripe_subscription_params[:plan_id]
+        promo = stripe_subscription_params[:promo_code]
+        stripe_obj = StripeService.subscribe(
+          customer: customer, plan_id: plan, promo_code: promo)
+        our_obj = current_user.create_stripe_subscription(
+          customer_id: customer.id,
+          subscription_id: stripe_obj.id,
+          plan_id: plan, promo_code: promo)
+        SubscriptionService.create_from_stripe(
+          user: current_user, stripe_subscription_object: stripe_obj)
+      end
+    end
+    redirect_to session[:ret_url] || first_run_path
+  end
+
   private
 
   def create_contact_if_not_exists
@@ -144,6 +167,12 @@ class AccountSettingsController < AuthenticatedController
 
   def password_change_params
     params.require(:user_profile).permit(:password, :password_confirmation)
+  end
+
+  def stripe_subscription_params
+    params.require(:user
+         ).require(:stripe_subscription_attributes
+         ).permit(:plan_id, :promo_code)
   end
 
   def set_user_profile

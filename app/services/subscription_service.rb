@@ -26,14 +26,6 @@ class SubscriptionService
     user_sub
   end
 
-  def self.create_trial(user)
-    return if trial_was_used?(user)
-    user_subscription = UserSubscription.create!(user: user, start_at: Time.now, end_at: Time.now + SubscriptionDuration::TRIAL,
-                                                 funding: Funding.new(method: "trial", details: {"": ""}))
-    CurrentUserSubscriptionMarker.find_or_initialize_by(user: user).update_attribute(:user_subscription_id, user_subscription.id)
-    MailchimpService.new.subscribe_to_trial(user)
-  end
-  
   def self.trial_was_used?(user)
     UserSubscription.includes(:funding).where(user: user).map(&:funding).any?(&:trial?)
   end

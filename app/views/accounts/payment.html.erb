@@ -1,1 +1,3 @@
-<%= render template: 'account_settings/billing_info', locals: { trial_update: true } %>
+<%= render partial: "account_settings/payment_form",
+            locals: { payment_route: '/account_settings/update_payment' }
+%>

@@ -1,6 +1,5 @@
 class AccountsController < AuthenticatedController
   include UserTrafficModule
-  before_action :generate_stripe_token, only: [:update]
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
@@ -99,51 +98,23 @@ class AccountsController < AuthenticatedController
   def user_type
     check_phone_setup_passed
   end
-  
-  def user_type_update
-    if user_params[:user_type].eql? 'trial'
-      SubscriptionService.create_trial(current_user)
-    elsif user_params[:user_type].eql? 'free'
-      MailchimpService.new.subscribe_to_shared(current_user)
-    end
-    redirect_to root_path
-  end
 
   def user_type_update
     if user_params[:user_type].eql? 'trial'
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
-      redirect_to first_run_path
-    else
-      redirect_to root_path
+      redirect_to(first_run_path) and return
+    elsif user_params[:user_type].eql? 'free'
+      MailchimpService.new.subscribe_to_shared(current_user)
     end
+    redirect_to(root_path)
   end
 
   def update
     update_params = free_account? ? user_params_except_subscription : user_params
     current_user.update_attributes(update_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
-  end
-
-  def card_validation
-    begin
-      StripeService.token(params[:number], params[:exp_month], params[:exp_year], params[:cvc])
-      render :nothing => true
-    rescue Stripe::CardError => e
-      body = e.json_body
-      err = body[:error]
-      render json: err[:message], status: 500
-    end
-  end
-
-  def generate_stripe_token
-    unless free_account?
-      token_args = card_params[:stripe_subscription_attributes].values_at(
-        :card_number, :expiration_month, :expiration_year, :cvc)
-      stripe_token = StripeService.token(*token_args)
-      params[:user][:stripe_subscription_attributes][:stripe_token] = stripe_token.id
-    end
   end
 
   def show; end
@@ -164,7 +135,7 @@ class AccountsController < AuthenticatedController
   def subscriptions
     render json: StripeSubscription.plans.to_json.html_safe
   end
-  
+
   def yearly_subscription
     render json: Array.wrap(StripeSubscription.yearly_plan).to_json.html_safe
   end
@@ -219,16 +190,6 @@ class AccountsController < AuthenticatedController
     params.permit(:skip)
   end
 
-  def card_params
-    params.require(:user).permit(
-      stripe_subscription_attributes: [
-        :name_on_card,
-        :card_number,
-        :expiration_month,
-        :expiration_year,
-        :cvc])
-  end
-
   def user_params_except_subscription
     user_params.except(:stripe_subscription_attributes)
   end
@@ -245,9 +206,6 @@ class AccountsController < AuthenticatedController
         security_questions_attributes: [:question, :answer],
       ],
       stripe_subscription_attributes: [
-        :name_on_card,
-        :card_number,
-        :stripe_token,
         :plan_id,
         :promo_code])
   end

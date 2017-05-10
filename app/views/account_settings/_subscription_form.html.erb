@@ -4,7 +4,7 @@
     <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.id %>
 
     <div class="h-28 overflow-hidden inline-block"><%= StripeSubscription.yearly_plan.name %></div>
-    <div class="subscription-description ml-15" id='subscription-description'></div>
+    <div class="subscription-description ml-15 d-none" id='subscription-description'></div>
     <span class="fr" id="subscription-price"></span>
     <span class="clear"></span>
   </section>

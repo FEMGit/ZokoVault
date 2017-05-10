@@ -416,3 +416,15 @@ body.logged-out{
       padding: 50px 20px;
   }
 }
+
+//SHARED VIEW MODE
+.shared-name {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @include media($mobile) {
+    max-width: 80%;
+  }
+}

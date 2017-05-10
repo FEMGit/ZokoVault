@@ -34,7 +34,7 @@ module ApplicationHelper
                            :first, :second, {selected: selected_items}, local_options)
   end
 
-  def contact_select_with_create_new(form, name, contacts, html_options = {})
+  def contact_select_with_create_new(form, name, contacts, html_options = {}, selected_items = [])
     initialize_new_contact_form
     select_options = contacts ? contacts.sort_by { |s| s.lastname }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
     select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
@@ -48,7 +48,7 @@ module ApplicationHelper
     }.merge(html_options)
 
     form.collection_select(name, select_options,
-                           :first, :second, {}, local_options)
+                           :first, :second, {selected: selected_items}, local_options)
   end
 
   def category_view_path(category, user = nil)

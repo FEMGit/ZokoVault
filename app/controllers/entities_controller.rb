@@ -71,6 +71,8 @@ class EntitiesController < AuthenticatedController
         format.html { redirect_to success_path, flash: { success: 'Entity successfully created.' } }
         format.json { render :show, status: :created, location: @entity }
       else
+        set_account_owners
+        set_agents_and_partners
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @entity.errors, status: :unprocessable_entity }
@@ -176,5 +178,11 @@ class EntitiesController < AuthenticatedController
 
   def set_previous_shared_with
     @previous_shared_with = @entity.share_with_contact_ids
+  end
+
+  def set_agents_and_partners
+    @selected_agents = params[:entity][:agent_ids]
+    @selected_partners = params[:entity][:partner_ids]
+    @selected_shareables = params[:entity][:share_with_contact_ids]
   end
 end

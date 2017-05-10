@@ -19,13 +19,13 @@
 
     <label>Attorney, Accountant or Advisor(s)</label>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :agent_ids, @contacts) %>
+      <%= contact_select_with_create_new(f, :agent_ids, @contacts, {}, @selected_agents) %>
     </div>
 
     <label>Owners/Partners</label>
     <div class="chosen-styled-select">
       <%= account_owner_select_with_create_new(f, :partner_ids, @account_owners,
-        {}, owner_ids_transform(@entity.partner_ids)) %>
+        {}, @selected_partners) %>
     </div>
 
     <%= f.label :notes %>
@@ -39,7 +39,7 @@
       </h3>
       <label>Shared With</label><br>
       <div class="chosen-styled-select">
-        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
+        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, {}, @selected_shareables) %>
       </div>
     </section>
 

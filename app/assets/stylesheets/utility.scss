@@ -291,9 +291,11 @@
 .inline-block {
   display: inline-block;
 }
-
 .block {
   display: block;
+}
+.d-none {
+  display: none !important;
 }
 
 .not-link {

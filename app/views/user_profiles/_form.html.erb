@@ -23,10 +23,11 @@
     <p><%= f.email_field :email, { class: ("input-error" if @user_profile.errors.messages[:email].present?), :maxlength => get_max_length(:default) } %></p>
     
     <%= f.label :phone_number_mobile, 'Cell Phone Number' %>
-    <p><%= f.text_field :phone_number_mobile, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
+    
+    <p><%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number_mobile, phone_additional_classes: 'phone-number' } %></p>
 
     <%= f.label :phone_number, 'Home Phone Number' %>
-    <p><%= f.text_field :phone_number, class: "form-control phone-number", :data => {:mask => '999-999-9999'} %></p>
+    <p><%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number, phone_additional_classes: 'phone-number' } %></p>
 
     <%= f.label :date_of_birth, 'Birthdate (mm/dd/yyyy)' %>
     <% if errors && @user_profile.errors.messages[:'Date of Birth'] %>
@@ -110,10 +111,10 @@
       </span>
 
       <%= ff.label :phone_number_office, 'Business Phone Number' %>
-      <p><%= ff.text_field :phone_number_office, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+      <p><%= render partial: 'layouts/phone_number', locals: { f: ff, phone: :phone_number_office } %></p>
 
       <%= ff.label :phone_number_fax, 'Business Fax Number' %>
-      <p><%= ff.text_field :phone_number_fax, class: "form-control", :data => {:mask => '999-999-9999'} %></p>
+      <p><%= render partial: 'layouts/phone_number', locals: { f: ff, phone: :phone_number_fax } %></p>
 
     </div>
   <% end %>

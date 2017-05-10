@@ -27,6 +27,6 @@ class SubscriptionService
   end
 
   def self.trial_was_used?(user)
-    UserSubscription.includes(:funding).where(user: user).map(&:funding).any?(&:trial?)
+    UserSubscription.includes(:funding).where(user: user).map(&:funding).compact.any?(&:trial?)
   end
 end

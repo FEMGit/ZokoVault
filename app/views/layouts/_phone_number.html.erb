@@ -1,1 +1,9 @@
-<%= f.text_field phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
+<% phone_additional_classes ||= '' %>
+<% autofocus ||= false %>
+<% if f.present? %>
+  <%= f.text_field phone, class: "form-control phone-mask-field " + phone_additional_classes, autofocus: autofocus %>
+<% else %>
+  <%= text_field_tag phone, "", class: "form-control phone-mask-field " + phone_additional_classes, autofocus: autofocus %>
+<% end %>
+
+<%= javascript_include_tag 'phone_mask' %>

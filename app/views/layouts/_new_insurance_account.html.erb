@@ -45,10 +45,10 @@
         </span>
 
       <label>Business Phone Number</label>
-      <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone } %>
 
       <label>Business Fax Number</label>
-      <%= f.text_field :fax, class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax } %>
     </section>
 
     <section class="shared-with edit-shared">

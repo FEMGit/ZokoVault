@@ -90,6 +90,11 @@
 }
 .w-21{
   width: $gu * 21 !important;
+}.w-75{
+  width: 75px;
+}
+.w-100{
+  width: 100px !important;
 }
 .w-120 {
   width: 120px !important;
@@ -232,6 +237,9 @@
   margin-right: 15px !important;
 }
 .mr-20{
+  margin-right: 20px !important;
+}
+.mr-30{
   margin-right: 20px !important;
 }
 .mb-10 {

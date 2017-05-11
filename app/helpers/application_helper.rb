@@ -47,8 +47,13 @@ module ApplicationHelper
       disabled: disabled?(name)
     }.merge(html_options)
 
-    form.collection_select(name, select_options,
-                           :first, :second, {selected: selected_items}, local_options)
+    if selected_items.present?
+      form.collection_select(name, select_options,
+                             :first, :second, {selected: selected_items}, local_options)
+    else
+      form.collection_select(name, select_options,
+                             :first, :second, {}, local_options)
+    end
   end
 
   def category_view_path(category, user = nil)

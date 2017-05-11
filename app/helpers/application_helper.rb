@@ -24,7 +24,7 @@ module ApplicationHelper
 
     local_options = {
       'data-placeholder': 'Choose Contacts...',
-      class: 'chosen-select add-new-contactable',
+      class: 'chosen-select add-new-contactable account-owner',
       multiple: true,
       onchange: "handleSelectOnChange(this);",
       disabled: disabled?(name)
@@ -36,7 +36,7 @@ module ApplicationHelper
 
   def contact_select_with_create_new(form, name, contacts, html_options = {}, selected_items = [])
     initialize_new_contact_form
-    select_options = contacts ? contacts.sort_by { |s| s.lastname }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
+    select_options = contacts ? contacts.sort_by { |s| s.lastname.downcase }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
     select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
 
     local_options = {

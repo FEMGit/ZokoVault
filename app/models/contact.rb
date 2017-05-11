@@ -93,6 +93,10 @@ class Contact < ActiveRecord::Base
   def initials
     [firstname, lastname].compact.map(&:first).join
   end
+  
+  def account_owner?
+    relationship.eql? 'Account Owner'
+  end
 
   def name(biblio = false)
     if biblio

@@ -120,14 +120,29 @@ var closeContactFormModal = function() {
 var addContactAndCloseModal = function(json) {
   $('.add-new-contactable').each(function(i, obj) {
     position_to_insert_after = json['position'];
+    shared_after_id = json['shared_position'];
+    var id_value = json['id'];
+    if (obj.className.includes('account-owner')) {
+      id_value += '_contact'
+      if (position_to_insert_after !== 'create_new_contact') {
+        position_to_insert_after += '_contact'
+      }
+      if (shared_after_id !== 'create_new_contact') {
+        shared_after_id += '_contact'
+      }
+    }
+    var account_owner_contact_count = $(this).find('option[value=' + position_to_insert_after + ']').length
+    if (account_owner_contact_count == 0) {
+      position_to_insert_after = shared_after_id
+    }
     ($('<option>', {
-      value: json['id'],
+      value: id_value,
       text: json['firstname'] + ' ' + json['lastname']
-    })).insertAfter($(this).children('option')[position_to_insert_after]);
+    })).insertAfter($(this).children('option[value=' + position_to_insert_after + ']'))
 
     // XXX: This is a hack to select the new value
     if (!!currentSelectedInput) {
-      currentSelectedInput.find("[value='"+json['id']+"']").prop('selected', true);
+      currentSelectedInput.find("[value='"+id_value+"']").prop('selected', true);
     }
     $(this).trigger("chosen:updated");
   })

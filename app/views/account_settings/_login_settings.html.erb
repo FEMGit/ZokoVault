@@ -3,8 +3,9 @@
     <% if @user_profile.errors.any? %>
       <% errors = true %>
     <% end %>
-    
-    <%= f.label :two_factor_phone_number, 'Two Factor Authentication Phone Number' %>
+    <h3>Two-Factor Authentication</h3>
+
+    <%= f.label :two_factor_phone_number, 'Cell Phone Number' %>
     <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
     
     <p><%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button", id: "change-phone-btn"%></p>
@@ -28,6 +29,7 @@
       </li>
     </ul>
 
+    <h3>Password</h3>
     <%= f.label :password, 'Update Password' %>
     <% if errors && @user_profile.errors.messages[:password].present? %>
       <span class="error-label"> - <%= @user_profile.errors.messages[:password].first %></span>

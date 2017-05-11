@@ -7,9 +7,9 @@ class TutorialsController < AuthenticatedController
   layout 'blank_layout', only: [:new, :create, :show,
                                 :primary_contacts, :trusted_advisors,
                                 :important_documents, :video]
-  
+
   before_action :set_blank_layout_header_info, only: [:primary_contacts, :trusted_advisors,
-                                                      :important_documents, :video]
+                                                      :important_documents, :video, :new_document]
 
   add_breadcrumb "Guided Tutorial - Important Documents", :tutorial_important_documents_path, only: [:important_documents]
   include BreadcrumbsCacheModule
@@ -39,7 +39,10 @@ class TutorialsController < AuthenticatedController
     @documents = Document.for_user(current_user)
     session[:ret_url] = tutorial_important_documents_path
   end
-  
+
+  def new_document
+  end
+
   def video; end
 
   def new

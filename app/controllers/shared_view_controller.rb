@@ -4,13 +4,13 @@ class SharedViewController < AuthenticatedController
   include SharedViewModule
   before_action :check_expired
   
-  add_breadcrumb "Dashboard", :shared_view_dashboard_path, only: [:dashboard]
-  add_breadcrumb "Insurance", :shared_view_insurance_path, only: [:insurance]
-  add_breadcrumb "Taxes", :shared_view_taxes_path, only: [:taxes]
-  add_breadcrumb "Final Wishes", :shared_view_final_wishes_path, only: [:final_wishes]
-  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, only: [:wills_powers_of_attorney]
-  add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, only: [:trusts_entities]
-  add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:financial_information]
+  before_action :dashboard_breadcrumbs, only: [:dashboard]
+  before_action :insurance_breadcrumbs, only: [:insurance]
+  before_action :taxes_breadcrumbs, only: [:taxes]
+  before_action :final_wishes_breadcrumbs, only: [:final_wishes]
+  before_action :wills_poa_breadcrumbs, only: [:wills_powers_of_attorney]
+  before_action :trusts_entities_breadcrumbs, only: [:trusts_entities]
+  before_action :financial_information_breadcrumbs, only: [:financial_information]
   
   include BreadcrumbsCacheModule
   include UserTrafficModule
@@ -33,6 +33,34 @@ class SharedViewController < AuthenticatedController
       when 'financial_information'
         return "Shared Financial Information"
     end
+  end
+  
+  def dashboard_breadcrumbs
+    add_breadcrumb "Dashboard", shared_view_dashboard_path(@shared_user)
+  end
+  
+  def insurance_breadcrumbs
+    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user)
+  end
+  
+  def taxes_breadcrumbs
+    add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user)
+  end
+  
+  def final_wishes_breadcrumbs
+    add_breadcrumb "Final Wishes", shared_view_final_wishes_path(@shared_user)
+  end
+  
+  def wills_poa_breadcrumbs
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user)
+  end
+  
+  def trusts_entities_breadcrumbs
+    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(@shared_user)
+  end
+  
+  def financial_information_breadcrumbs
+    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user)
   end
   
   def dashboard

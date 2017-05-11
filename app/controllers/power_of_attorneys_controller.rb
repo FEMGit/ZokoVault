@@ -11,14 +11,18 @@ class PowerOfAttorneysController < AuthenticatedController
   before_action :set_documents, only: [:show]
 
   # General Breadcrumbs
-  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
-  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_path if general_view?
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user) if shared_view?
+  end
 
   def set_new_crumbs
     add_breadcrumb "Power of Attorney - Setup", new_power_of_attorney_path(@shared_user)

@@ -9,8 +9,7 @@ class WillsController < AuthenticatedController
   before_action :set_previous_shared_with, only: [:create, :update]
   before_action :update_share_params, only: [:create, :update]
 
-  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
-  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
@@ -18,6 +17,11 @@ class WillsController < AuthenticatedController
   include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_path if general_view?
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user) if shared_view?
+  end
 
   def set_new_crumbs
     add_breadcrumb "Wills - Setup", new_will_path(@shared_user)

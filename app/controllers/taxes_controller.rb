@@ -12,14 +12,13 @@ class TaxesController < AuthenticatedController
   before_action :prepare_share_params, only: [:create, :update]
 
   # Breadcrumbs navigation
-  add_breadcrumb "Taxes", :taxes_path, if: :general_view?
-  add_breadcrumb "Taxes", :shared_view_taxes_path, if: :shared_view?
+  before_action :set_index_breadcrumbs
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_add_edit_crumbs, only: [:edit, :new]
   include BreadcrumbsCacheModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
-
+  
   def page_name
     case action_name
       when 'index'
@@ -34,6 +33,12 @@ class TaxesController < AuthenticatedController
         return "Taxes - #{tax_year_info.year} - Details"
     end
   end
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Taxes", taxes_path if general_view?
+    add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user) if shared_view?
+  end
+
 
   def set_details_crumbs
     return unless @tax.taxes.any?

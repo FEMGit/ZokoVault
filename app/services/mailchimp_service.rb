@@ -57,17 +57,23 @@ class MailchimpService
     list_id = list_id_by_name(list_name)
     return unless list_id.present? &&
                   (!members_emails(list_id).include? user.email)
-    
-    @gibbon.lists(list_id).members.create(
-      body: {
-        email_address: user.email,
-        status: "subscribed",
-        merge_fields: {
-          FNAME: user.first_name,
-          LNAME: user.last_name
+    begin
+      @gibbon.lists(list_id).members.create(
+        body: {
+          email_address: user.email,
+          status: "subscribed",
+          merge_fields: {
+            FNAME: user.first_name,
+            LNAME: user.last_name
+          }
         }
-      }
-    )
+      )
+    rescue Exception => exception
+      requested_page = 'mailchimp service'
+      error = exception.message
+      user_death_trap = UserDeathTrap.new(user: self, page_terminated_on: requested_page, error_message: error)
+      user_death_trap.save
+    end
   end
   
   def member_id_by_email(list_id, email)

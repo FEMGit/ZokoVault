@@ -3,6 +3,7 @@ class DocumentsController < AuthenticatedController
   include DocumentsHelper
   include BackPathHelper
   include SanitizeModule
+  before_action :set_header_info_blank_layout, only: [:new]
   before_action :set_document, only: [:show, :edit, :update, :destroy]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_viewable_contacts, only: [:update, :edit]
@@ -337,10 +338,14 @@ class DocumentsController < AuthenticatedController
 
   def resolve_layout
     if first_run?
-      @header_information = true
+      set_header_info_blank_layout
       'blank_layout'
     else
       set_layout
     end
+  end
+  
+  def set_header_info_blank_layout
+    @header_information = true
   end
 end

@@ -1,18 +1,22 @@
-<%= render :partial => "layouts/bread_crumbs" %>
+<div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+  <%= render :partial => "layouts/bread_crumbs" %>
+</div>
 
 <%= form_for @document, html: { id: "doc-form" } do |f| %>
   <%= hidden_field_tag :shared_user_id, @shared_user.present? ? @shared_user.id : "" %>
   <%= hidden_field_tag :group, f.object.group %>
   <%= hidden_field_tag :first_run, @first_run || false %>
 
-  <h3 class="document-title"> <%= yield(:title) %> </h3>
+  <div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+    <h3 class="document-title"> <%= yield(:title) %> </h3>
+  </div>
   <% if @document.persisted? %>
     <span class='document-change-data'>
       <span class="edit-data-label">Created: </span><%= date_format(@document.created_at) %>
       <span class="edit-data-label">Modified: </span><%= date_format(@document.updated_at) %>
     </span>
   <% end %>
-  <div class="card document mb-30">
+  <div class="card document mb-30 <% if @first_run %> max-w-1000-centered <% end %>">
     <% if @document.errors.any? %>
       <% errors = true %>
     <% end %>
@@ -65,17 +69,19 @@
     </section>
   </div>
 
-  <button
-    class="js-modal-close
-      primary-button
-      big-button" >
-      Save</button>
-  <%= link_to "Cancel", document_return_path(@document),
-    {class: "js-modal-close button secondary-button big-button"} %>
-  <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
-    <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
-      class: "button outline-button big-button fr"%>
-  <% end %>
+  <div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+    <button
+      class="js-modal-close
+        primary-button
+        big-button" >
+        Save</button>
+    <%= link_to "Cancel", document_return_path(@document),
+      {class: "js-modal-close button secondary-button big-button"} %>
+    <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
+      <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
+        class: "button outline-button big-button fr"%>
+    <% end %>
+  </div>
 <% end %>
 
 <script>

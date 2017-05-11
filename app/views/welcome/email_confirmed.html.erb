@@ -1,62 +1,6 @@
-<% current_user = User.last %>
-<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
-  Wizard Modal
-</button>
-<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
-  <div class="confirmation-wrapper">
-    <h2>Thank You</h2>
-    <p>Thank you for successfully activating your ZokuVault account. Please login to continue.</p>
-  </div>
-  <footer class="modal-footer confirmation-footer">
-    <%= link_to 'Login', new_user_session_path, class: "button primary-button big-button" %>
-  </footer>
+<div class="card centered mb-30 mt-100 max-w-430 text-center w-80-percent">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-10">You successfully activated your account.</h5>
+  <p class="text-center mb-30">Please login to continue.</p>
+  <%= image_tag "marketing/shield.png", :class => "mb-30 w-50-percent" %>
+  <p class="text-center mb-10"><%= link_to 'Login', new_user_session_path, class: "button blue-button big-button-2 mr-0"%></p>
 </div>
-
-<script>
-$(function(){
-
-  //SOMEONE PLEASE FIX THIS GARBAGE
-  var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
-  $(document).ready(function(){
-    $('button[data-modal-id]').click();
-
-    wizNav(1);
-  });
-  $('button[data-modal-id]').click(function(e) {
-    e.preventDefault();
-    $("body").append(appendthis);
-    $(".modal-overlay").fadeTo(500, 0.8);
-    $(".js-modalbox").fadeIn(500);
-    var modalBox = $(this).attr('data-modal-id');
-    $('#'+modalBox).fadeIn($(this).data());
-  });
-
-  $(".js-modal-close, .modal-overlay").click(function() {
-    $(".modal, .modal-overlay").fadeOut(500, function() {
-      $(".modal-overlay").remove();
-    });
-
-  });
-
-  //ESPECIALLY THIS GARBAGE
-  $(window).resize(function() {
-    $(".large-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".large-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".medium-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize(function() {
-    $(".small-modal").css({
-      top: ($(window).height() - $(".modal").outerHeight()) / 2,
-      left: ($(window).width() - $(".small-modal").outerWidth()) / 2,
-    });
-  });
-  $(window).resize();
-});
-</script>

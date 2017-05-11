@@ -239,18 +239,14 @@ class DocumentsController < AuthenticatedController
   end
 
   def document_share_attributes
-    if @shared_user.nil?
-      @document.contact_ids = params[:document][:contact_ids]
-      share_service = ShareService.new(user_id: resource_owner.id, contact_ids: params[:document][:contact_ids])
-      share = share_service.fill_document_share
-      # Clear document shares before updating current document
-      share_service.clear_shares(@document)
-
-      viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
-      share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
-
-      share
-    end
+    @document.contact_ids = params[:document][:contact_ids]
+    share_service = ShareService.new(user_id: resource_owner.id, contact_ids: params[:document][:contact_ids])
+    share = share_service.fill_document_share
+    # Clear document shares before updating current document
+    share_service.clear_shares(@document)
+    viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
+    share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
+    share
   end
 
   def editable_document_attrs

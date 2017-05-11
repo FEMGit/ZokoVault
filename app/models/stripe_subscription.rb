@@ -7,7 +7,7 @@ class StripeSubscription < ActiveRecord::Base
   end
 
   def self.yearly_plan
-    plans.detect { |p| p["id"] == 'zoku-yearly-v1' }
+    plans.detect { |p| p["id"] == StripePlans::YEARLY_PLAN }
   end
 
   def self.plan(id)

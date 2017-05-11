@@ -27,7 +27,11 @@ class AccountSettingsController < AuthenticatedController
     @subscription = StripeSubscription.find_by(user: current_user)
     return unless @subscription.present?
     @plan = StripeSubscription.plan(@subscription.plan_id)
-    @customer = Stripe::Customer.retrieve @subscription.customer_id
+    begin
+      @customer = Stripe::Customer.retrieve @subscription.customer_id
+    rescue
+      return
+    end
     @card = @customer[:sources][:data].detect { |x| x[:object] == 'card' }
     @next_invoice_date = DateTime.strptime(Stripe::Invoice.upcoming(:customer => @subscription.customer_id)[:date].to_s, '%s')
     customer_ids = Stripe::Customer.all.select { |i| i.email.downcase == current_user.email.downcase }.map(&:id)

@@ -1,9 +1,9 @@
 <div class="card mb-30 min-w-330">
   <h3>Subscription Details</h3>
   <section class="bb-gray-light-dashed mb-10">
-    <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.id %>
+    <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.try(:id) %>
 
-    <div class="h-28 overflow-hidden inline-block"><%= StripeSubscription.yearly_plan.name %></div>
+    <div class="h-28 overflow-hidden inline-block"><%= StripeSubscription.yearly_plan.try(:name) %></div>
     <div class="subscription-description ml-15 d-none" id='subscription-description'></div>
     <span class="fr" id="subscription-price"></span>
     <span class="clear"></span>

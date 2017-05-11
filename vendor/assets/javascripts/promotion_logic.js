@@ -33,7 +33,7 @@ function updatePromoRow(data) {
   var currentTotalValue = currentTotal()
   var discountValue = discount(data, currentTotalValue)
   $('#promo-price').text('-$ ' + discountValue);
-  var newTotal = ((currentTotalValue - discountValue) < 0) ? 0 : (currentTotalValue - discountValue)
+  var newTotal = ((currentTotalValue - discountValue) < 0) ? 0 : +(currentTotalValue - discountValue).toFixed(2)
   $('#subscription-total').text('$ ' + newTotal);
   $('#promo-row').show();
 }

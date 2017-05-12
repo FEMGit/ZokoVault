@@ -6,7 +6,7 @@
     <%= link_to 'Account Users', account_users_path, class: "tab left not-link #{account_users_selected}", id: "account_users"%>
     
     <% login_settings_selected = 'selected' if current_page?(login_settings_path) %>
-    <%= link_to 'Frequency', login_settings_path, class: "tab not-link #{login_settings_selected}", id: "login_settings"%>
+    <%= link_to 'Login Settings', login_settings_path, class: "tab not-link #{login_settings_selected}", id: "login_settings"%>
     
     <% manage_subscription_selected = 'selected' if current_page?(manage_subscription_path) %>
     <%= link_to 'Manage Subscription', manage_subscription_path, class: "tab not-link #{manage_subscription_selected}", id: "manage_subscription"%>
@@ -25,7 +25,7 @@ $(window).resize(function() {
 
 var changeTabNames = function() {
   $('#account_users').text('Account Users')
-  $('#login_settings').text('Frequency')
+  $('#login_settings').text('Login Settings')
   $('#manage_subscription').text('Manage Subscription')
 
   if (window.matchMedia("(max-width: 675px)").matches) {
@@ -35,7 +35,7 @@ var changeTabNames = function() {
   }
   if (window.matchMedia("(max-width: 660px)").matches) {
     $('#account_users').text('Account Users')
-    $('#login_settings').text('Frequency')
+    $('#login_settings').text('Login Settings')
     $('#manage_subscription').text('Manage Subscription')
   }
   if (window.matchMedia("(max-width: 420px)").matches) {

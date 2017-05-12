@@ -1,8 +1,0 @@
-.walkme-icon-image-div {
-  &.walkme-launcher-image-div {
-    visibility: hidden;
-    @include media($mobile) {
-      display:none;
-    }
-  }
-}

@@ -29,6 +29,11 @@ class Vendor < ActiveRecord::Base
   validates_length_of :street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
+  
+  validates_format_of :webaddress,
+                      :with => Validation::WEB_ADDRESS_URL,
+                      :message => "Please enter a valid url (starts with 'http://' or 'https://')",
+                      :allow_blank => true
 
   private 
 

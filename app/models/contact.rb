@@ -26,6 +26,11 @@ class Contact < ActiveRecord::Base
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_2, :maximum => ApplicationController.helpers.get_max_length(:default)
+  
+  validates_format_of :businesswebaddress,
+                      :with => Validation::WEB_ADDRESS_URL,
+                      :message => "Please enter a valid url (starts with 'http://' or 'https://')",
+                      :allow_blank => true
 
   RELATIONSHIP_TYPES = {
     personal: [

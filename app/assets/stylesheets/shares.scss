@@ -37,7 +37,7 @@ $left-nav-margin-top: 10px;
 }
 .primary-nav.share-with {
   margin-top: $banner-height - $left-nav-margin-top;
-  @include media($mobile) {
+  @include media($tablet) {
     margin-top: 0;
   }
 }

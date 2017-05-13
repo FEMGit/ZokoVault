@@ -27,3 +27,21 @@
 
 <h3>Documents</h3>
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @document_shareables, :shareable => true} %>
+
+<script>
+$(document).ready(function() {
+  updateBtnName();
+})
+
+$(window).resize(function() {
+  updateBtnName();
+})
+
+var updateBtnName = function() {
+  var $texts = $('a.outline-button');
+
+  $texts.text('View Category');
+  if (window.matchMedia("(max-width: 876px)").matches)
+    $texts.text('View');
+}
+</script>

@@ -1,4 +1,5 @@
-<%- current_user.financial_properties.each do |fp| %>
+<%- houses = current_user.financial_properties.select{|p| p.property_type == 'House'} %>
+<%- houses.each do |fp| %>
   <div class="collect-fields">
     <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
     <%= hidden_field_tag 'financial_property[property_type]', "House", class: 'saved-field' %>

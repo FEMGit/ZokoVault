@@ -45,7 +45,8 @@
     <%= f.text_field :businessname, :maxlength => get_max_length(:default) %>
 
     <%= f.label :businesswebaddress, 'Business Web Address' %>
-    <%= f.text_field :businesswebaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) %>
+    <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:businesswebaddress] } %>
+    <%= f.text_field :businesswebaddress, { class: ("input-error" if @contact.errors.messages[:businesswebaddress].present?), type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
 
     <%= f.label :businessphone, 'Business Phone' %>
     <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :businessphone } %>

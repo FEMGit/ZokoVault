@@ -47,7 +47,7 @@ class TutorialsController < AuthenticatedController
 
   def new
     session[:tutorials_list] ||= {}
-    @tutorial_array = Tutorial.first(3)
+    @tutorial_array = Tutorial.all
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
   end

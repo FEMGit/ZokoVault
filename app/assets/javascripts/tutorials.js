@@ -138,9 +138,15 @@ DynamicTutorialField.prototype.modalSettings = function() {
 
 $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.
-  if ($('.tutorial-fields').length) {
-    var create = "/financial_information/property/add_property";
-    var destroy = "/financial_information/property/";
+  var tutorial_fields = $('.tutorial-fields')
+  if (tutorial_fields.length) {
+    if (tutorial_fields.hasClass('property-fields')) {
+      var create = "/financial_information/property/add_property";
+      var destroy = "/financial_information/property/";
+    } else if (tutorial_fields.hasClass('trust-fields')) {
+      var create = "/trusts/";
+      var destroy = "/trusts/";
+    }
 
     var tutorial = new DynamicTutorialField(create, destroy);
 

@@ -41,12 +41,12 @@ class WtlService
   end
   
   def self.update_trustees(trust, trustee_ids, successor_trustee_ids, agent_ids)
-    trustee_ids.each do |trustee_id|
+    trustee_ids.to_a.each do |trustee_id|
       VaultEntryContact.create(type: VaultEntryContact.types[:trustee], active: true, contact_id: trustee_id, contactable_id: trust.id,
                                contactable_type: "Trust")
     end
     
-    successor_trustee_ids.each do |trustee_id|
+    successor_trustee_ids.to_a.each do |trustee_id|
       VaultEntryContact.create(type: VaultEntryContact.types[:successor_trustee], active: true, contact_id: trustee_id, contactable_id: trust.id,
                                contactable_type: "Trust")
     end
@@ -58,11 +58,11 @@ class WtlService
   end
   
   def self.update_beneficiaries(will, primary_beneficiary_ids, secondary_beneficiary_ids, agent_ids)
-    primary_beneficiary_ids.each do |primary_id|
+    primary_beneficiary_ids.to_a.each do |primary_id|
       VaultEntryBeneficiary.create(will_id: will.id, contact_id: primary_id, active: true, type: :primary)
     end
     
-    secondary_beneficiary_ids.each do |secondary_id|
+    secondary_beneficiary_ids.to_a.each do |secondary_id|
       VaultEntryBeneficiary.create(will_id: will.id, contact_id: secondary_id, active: true, type: :secondary)
     end
     

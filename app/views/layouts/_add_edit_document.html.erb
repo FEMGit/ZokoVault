@@ -147,7 +147,9 @@
         card_names = $('#document_subcategory' + idPostFixShow(data));
         card_names.empty();
         data.forEach(function(group){
-          card_names.append("<option value='" + group.id + "'>" + group.name + "</option>");
+          var shortSubCat = group.name;
+          if (group.name.length > 25) { shortSubCat = group.name.substring(0, 24) + '...' };
+          card_names.append("<option value='" + group.id + "'>" + shortSubCat + "</option>");
         });
         card_names.trigger('chosen:updated');
       }

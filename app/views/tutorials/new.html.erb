@@ -1,5 +1,5 @@
-<div class="card mb-30">
-  <h1 class="mb-20">Choose Tutorials</h1>
+<div class="card mb-30 max-w-1000-centered">
+  <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
 
   <%= form_for @tutorial do |f| %>
     <%= render "#{@tutorial.current_step}_step", :f => f %>
@@ -13,4 +13,3 @@
 
   <% end %>
 </div>
-

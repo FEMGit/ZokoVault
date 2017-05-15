@@ -108,7 +108,7 @@ class PowerOfAttorneysController < AuthenticatedController
         ShareInheritanceService.update_document_shares(resource_owner, @power_of_attorney_contact.share_with_contact_ids,
                                                        @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
         @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
-        format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully update.' } }
+        format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully updated.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         error_path(:edit)
@@ -124,7 +124,7 @@ class PowerOfAttorneysController < AuthenticatedController
     authorize @power_of_attorney
     @power_of_attorney.destroy
     respond_to do |format|
-      format.html { redirect_to back_path || wills_powers_of_attorney_path, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to back_path || wills_powers_of_attorney_path, notice: 'Power of Attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -133,7 +133,7 @@ class PowerOfAttorneysController < AuthenticatedController
     authorize @power_of_attorney_contact
     @power_of_attorney_contact.destroy
     respond_to do |format|
-      format.html { redirect_to wills_powers_of_attorney_path, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to wills_powers_of_attorney_path, notice: 'Power of Attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

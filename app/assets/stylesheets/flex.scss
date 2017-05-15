@@ -292,6 +292,8 @@
   text-align:right;
   padding-top: 5px;
   @include media($teneighty) {
+    border-top: 1px solid $color-gray-light;
+    flex:20%;
     padding-bottom: 12px;
     margin-right: 1px;
   }

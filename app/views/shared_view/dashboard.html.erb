@@ -38,10 +38,10 @@ $(window).resize(function() {
 })
 
 var updateBtnName = function() {
-  var $texts = $('a.outline-button');
+  var $btns = $('a.outline-button');
 
-  $texts.text('View Category');
-  if (window.matchMedia("(max-width: 876px)").matches)
-    $texts.text('View');
+  $btns.css('float', 'none');
+  if (window.matchMedia("(max-width: 1080px)").matches)
+    $btns.css('float', 'left');
 }
 </script>

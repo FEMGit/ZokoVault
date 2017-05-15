@@ -13,7 +13,7 @@
       <use xlink:href="#icon-dashboard"></use>
     </svg>Dashboard
   </a>
-  <% financial_information_current = 'active' if current_page?(financial_information_url) || controller?('financial_account', 'financial_property', 'financial_investment') ||
+  <% financial_information_current = 'active' if current_page?(financial_information_url) || controller?('financial_account', 'financial_property', 'financial_investment', 'financial_alternative') ||
       breadcrumb?(:financial_information_path) %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">

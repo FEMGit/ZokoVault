@@ -4,9 +4,7 @@ class TutorialsController < AuthenticatedController
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
-  layout 'blank_layout', only: [:new, :create, :show,
-                                :primary_contacts, :trusted_advisors,
-                                :important_documents, :video]
+  layout 'without_sidebar_layout'
 
   before_action :set_blank_layout_header_info, only: [:primary_contacts, :trusted_advisors,
                                                       :important_documents, :video, :new_document]

@@ -29,7 +29,13 @@ class AccountsController < AuthenticatedController
 
   def setup; end
 
-  def first_run; end
+  def first_run
+    unless SubscriptionService.trial_was_used?(current_user)
+      SubscriptionService.activate_trial(user: current_user)
+    else
+      redirect_to root_path
+    end
+  end
 
   def payment
     session[:ret_url] = root_path

@@ -41,7 +41,11 @@ var updateBtnName = function() {
   var $btns = $('a.outline-button');
 
   $btns.css('float', 'none');
-  if (window.matchMedia("(max-width: 1080px)").matches)
+  $('.shared-link').css('border-top', '1px');
+
+  if (window.matchMedia("(max-width: 1080px)").matches) {
     $btns.css('float', 'left');
+    $btns.css('.shared-link', '0px');
+  }
 }
 </script>

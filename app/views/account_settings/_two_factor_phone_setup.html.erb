@@ -31,7 +31,7 @@
       <div id="phone-setup-form">
         <%= label_tag "user_profile_two_factor_phone_number", 'Cell Phone Number' %>
         <span class="error-label" id="phone-number-error" style="display: none;"> - Phone Number Invalid </span>
-        <%= text_field_tag "user_profile[two_factor_phone_number]", "", class: "form-control medium", :data => {:mask => '999-999-9999'}, autofocus: true %>
+        <%= render partial: 'layouts/phone_number', locals: { f: nil, phone: "user_profile[two_factor_phone_number]", phone_additional_classes: 'medium', autofocus: true } %>
       </div>
 
       <div id="phone-code-form">

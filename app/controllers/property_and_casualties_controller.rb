@@ -8,17 +8,17 @@ class PropertyAndCasualtiesController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :prepare_property_share_params, only: [:create, :update]
   include AccountPolicyOwnerModule
-  
+
   # Breadcrumbs navigation
-  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
-  add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show index)
   before_action :set_details_crumbs, only: [:edit, :show]
-  add_breadcrumb "Property & Casualty - Setup", :new_property_path, :only => %w(new), if: :general_view?
-  add_breadcrumb "Property & Casualty - Setup", :shared_new_property_path, :only => %w(new), if: :shared_view?
+  before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+  include CancelPathErrorUpdateModule
+
   def page_name
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
@@ -31,11 +31,21 @@ class PropertyAndCasualtiesController < AuthenticatedController
     end
   end
   
+  def set_index_breadcrumbs
+    add_breadcrumb "Insurance", insurance_path if general_view?
+    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user) if shared_view?
+  end
+
+  def set_new_crumbs
+    add_breadcrumb "Property & Casualty - Setup", :new_property_path if general_view?
+    add_breadcrumb "Property & Casualty - Setup", shared_new_property_path(@shared_user) if shared_view?
+  end
+
   def set_details_crumbs
     add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty) if general_view?
     add_breadcrumb "#{@property_and_casualty.name}", shared_property_path(@shared_user, @property_and_casualty) if shared_view?
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Property & Casualty - Setup", edit_property_path(@property_and_casualty) if general_view?
     add_breadcrumb "Property & Casualty - Setup", shared_edit_property_path(@shared_user, @property_and_casualty) if shared_view?
@@ -159,15 +169,15 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   private
-  
+
   def validate_params
     policy_params.values.select{ |x| PropertyAndCasualtyPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0
   end
-  
+
   def set_viewable_contacts
     @insurance_card.share_with_ids |= category_subcategory_shares(@insurance_card, resource_owner).map(&:contact_id)
   end
-  
+
   def property_and_casualties
     return PropertyAndCasualty.for_user(resource_owner) unless @shared_user
     return ShareService.shared_resource(@shares, PropertyAndCasualty) unless @category_shared
@@ -177,24 +187,25 @@ class PropertyAndCasualtiesController < AuthenticatedController
   def provider_by_policy
     @property_and_casualty = PropertyAndCasualty.for_user(current_user).detect { |p| p.policy.any? { |x| x == @policy } }
   end
-  
+
   def error_path(action)
     set_contacts
     set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    insurance_breadcrumb_update(:property)
   end
-  
+
   def success_path(common_path, shared_view_path)
     ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
 
-  def resource_owner 
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
@@ -216,7 +227,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @contacts = contact_service.contacts
     @contacts_shareable = contact_service.contacts_shareable
   end
-  
+
   def prepare_property_share_params
     return unless property_and_casualty_params[:share_with_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.InsuranceCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
@@ -225,7 +236,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   def property_and_casualty_params
-    params.require(:property_and_casualty).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id, 
+    params.require(:property_and_casualty).permit(:id, :name, :webaddress, :street_address_1, :city, :state, :zip, :phone, :fax, :contact_id,
                                                   share_with_ids: [])
   end
 
@@ -233,12 +244,12 @@ class PropertyAndCasualtiesController < AuthenticatedController
     policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}
     policies.keys.each do |policy_key|
-      permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number, 
+      permitted_params[policy_key] = [:id, :policy_type, :insured_property, :policy_holder_id, :coverage_amount, :policy_number,
                                       :broker_or_primary_contact_id, :notes]
     end
     policies.permit(permitted_params)
   end
-  
+
   def property_params
     policies = params[:property_and_casualty].select { |k, _v| k.starts_with?("policy_") }
     permitted_params = {}

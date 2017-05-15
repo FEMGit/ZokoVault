@@ -147,6 +147,7 @@ Rails.application.routes.draw do
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
+  post 'account_settings/update_payment', to: 'account_settings#update_payment', as: :update_payment_account_settings
 
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
@@ -161,7 +162,6 @@ Rails.application.routes.draw do
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   get 'account/payment' => 'accounts#payment', as: :payment
-  post 'account/card_validation' => 'accounts#card_validation'
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup
   put 'account/login_settings_update' => 'accounts#login_settings_update', as: :account_login_settings
@@ -188,6 +188,7 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
   get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
+  get 'tutorials/getting_started/new_document' => 'tutorials#new_document', as: :tutorial_new_document
   get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
 
   get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation

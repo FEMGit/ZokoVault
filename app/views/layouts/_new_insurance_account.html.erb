@@ -15,10 +15,13 @@
     <%= f.text_field :name, { class: ("input-error" if @insurance_card.errors.messages[:name].present?), :maxlength => get_max_length(:default) } %>
 
     <label>Insurance Provider Web Address</label>
+    <% if @insurance_card.errors && @insurance_card.errors.messages[:webaddress] %>
+      <span class="error-label"> - <%= @insurance_card.errors.messages[:webaddress].first %></span>
+    <% end %>
     <a>
-      <%= f.text_field :webaddress, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) %>
+      <%= f.text_field :webaddress, { class: ("input-error" if @insurance_card.errors.messages[:webaddress].present?), type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
     </a>
-    
+
     <label>Primary Contact</label>
     <div class="chosen-styled-select">
         <%= contact_select_with_create_new(f, :contact_id, @contacts, multiple: false) %>
@@ -45,10 +48,10 @@
         </span>
 
       <label>Business Phone Number</label>
-      <%= f.text_field :phone, class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone } %>
 
       <label>Business Fax Number</label>
-      <%= f.text_field :fax, class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax } %>
     </section>
 
     <section class="shared-with edit-shared">
@@ -110,8 +113,7 @@
 </div>
 
 <div class="wtl-btn-group">
-  <%= f.submit 'Save', class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', back_path || insurance_path, class: "button secondary-button big-button"%>
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: insurance_path, f: f } %>
 </div>
 <% end %>
 
@@ -137,7 +139,7 @@
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
       $(document).trigger('refresh_autonumeric')
     }
-    
+
     var policiesCount = <%= @insurance_card.policy.count %>
     for(var i = 0; i < policiesCount; i++ ) {
       setValue($('#life_coverage_amount_id_' + i), $('#life_coverage_amount_id_' + i).val())

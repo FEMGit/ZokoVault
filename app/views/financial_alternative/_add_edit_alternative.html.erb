@@ -7,21 +7,22 @@
 <%= f.hidden_field :category_id, :value => @financial_provider.category_id %>
 <div class="card mb-30">
   <h3 class="card-label">Manager Details</h3>
-  
+
   <%= f.label :name, 'Investment Manager Name' %>
   <%= render partial: 'layouts/error_message', locals: { errors: @financial_provider.errors, error: @financial_provider.errors.messages[:name] } %>
   <%= f.text_field :name, { class: ("input-error" if @financial_provider.errors.messages[:name].present?), :maxlength => get_max_length(:default) } %>
 
   <%= f.label :web_address, 'Web Address' %>
-  <%= f.text_field :web_address, type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) %>
-  
+  <%= render partial: 'layouts/error_message', locals: { errors: @financial_provider.errors, error: @financial_provider.errors.messages[:web_address] } %>
+  <%= f.text_field :web_address, { class: ("input-error" if @financial_provider.errors.messages[:web_address].present?), type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
+
   <%= f.label :primary_contact_id, 'Primary Contact' %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :primary_contact_id, @contacts, multiple: false) %>
   </div>
-  
+
   <%= render partial: 'layouts/address_phone_toggle_button', locals: { provider: @financial_provider } %>
-  
+
   <section id="address_phone_details" <% if !edit?(@financial_provider) %> style="display: none;" <% end %>>
     <%= f.label :street_address, 'Street Address' %>
     <%= f.text_field :street_address, :maxlength => get_max_length(:default) %>
@@ -46,7 +47,7 @@
     <%= f.label :fax_number %>
     <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
   </section>
-  
+
   <section class="shared-with edit-shared">
     <h3 class="card-label shared-label">
       <svg class="icon" viewBox="0 0 20 20">
@@ -58,7 +59,7 @@
       <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
     </div>
   </section>
-  
+
   <% if params[:id] && policy(@financial_provider).destroy? %>
     <%= link_to 'Delete this Manager', delete_provider_alternative_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this manager will permanently remove it from ZokuVault." },
@@ -84,12 +85,12 @@
 
     </div>
   <% end %>
-  
+
   <% if @financial_provider.alternatives.empty? %>
     <% index = 0 %>
     <div class="card cg-3 mb-30 add-another">
       <%= f.fields_for "alternative_#{index}" do |ff| %>
-        <%= render 'alternative_details_form', ff: ff, index: index %>
+        <%= render 'alternative_details_form', ff: ff, index: index, data: nil %>
       <% end %>
     </div>
   <% end %>
@@ -101,8 +102,7 @@
   Add another Investment<br>
 </div>
 
-<%= f.submit 'Save', class: "button primary-button big-button" %>
-<%= link_to 'Cancel', back_path || financial_information_path, class: "button secondary-button big-button"%>
+<%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: financial_information_path, f: f } %>
 
 <% end %>
 
@@ -129,7 +129,7 @@
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
       $(document).trigger('refresh_autonumeric')
     }
-    
+
     var alternativeCount = <%= @financial_provider.alternatives.count %>
     for(var i = 0; i < alternativeCount; i++ ) {
       setValue($('#alternative_commitment_' + i), $('#alternative_commitment_' + i).val(), true)

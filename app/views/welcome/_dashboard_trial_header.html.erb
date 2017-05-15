@@ -1,8 +1,7 @@
-<div class="card mb-30 text-center">
-  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">ZokuVault Free Trial</h5>
-  <section class="max-w-600 inline-block">
-    <%= image_tag "marketing/rocket.png", :class => "w-200 mb-30" %><br>
-    <p class="mb-30"><%= subscription_days_remaining(subscription) %> days remaining in your free trial.</p>
-    <%= link_to 'Upgrade', billing_info_path, class: "button big-button-2 blue-button inline-block" %>
+<div class="card mb-30 dash-free-trial">
+  <%= link_to 'Upgrade', billing_info_path, class: "button big-button-2 blue-button mt-10 fr" %>
+  <%= image_tag "marketing/rocket.png", :class => "w-75 mr-30 fl w-75 " %>
+  <h5 class="clr-gray-dark-tinted fw-600 mt-15 ">ZokuVault Free Trial</h5>
+    <p class="mb-0"><%= subscription_days_remaining(subscription) %> days remaining in your free trial.</p>
   </section>
 </div>

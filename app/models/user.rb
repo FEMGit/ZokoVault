@@ -33,8 +33,11 @@ class User < ActiveRecord::Base
   has_many :card_documents, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
+
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription
+
+  has_one  :stripe_customer_record, class_name: "StripeCustomer", inverse_of: :user
 
   has_one :user_profile, -> { order("created_at DESC") }, dependent: :destroy
 
@@ -55,6 +58,10 @@ class User < ActiveRecord::Base
 
   def category_shares
     @category_shares ||= shares.categories
+  end
+
+  def stripe_customer
+    stripe_customer_record.try(:fetch)
   end
 
   def free?

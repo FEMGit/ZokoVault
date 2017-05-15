@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502215312) do
+ActiveRecord::Schema.define(version: 20170511070938) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -19,11 +20,15 @@ ActiveRecord::Schema.define(version: 20170502215312) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
+    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
+    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
+
+  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -466,6 +471,14 @@ ActiveRecord::Schema.define(version: 20170502215312) do
 
   add_index "shares", ["user_id"], name: "index_shares_on_user_id", using: :btree
 
+  create_table "stripe_customers", id: false, force: :cascade do |t|
+    t.integer "user_id",            null: false
+    t.string  "stripe_customer_id", null: false
+  end
+
+  add_index "stripe_customers", ["stripe_customer_id"], name: "index_stripe_customers_on_stripe_customer_id", unique: true, using: :btree
+  add_index "stripe_customers", ["user_id"], name: "index_stripe_customers_on_user_id", unique: true, using: :btree
+
   create_table "stripe_subscriptions", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "name_on_card"
@@ -533,14 +546,6 @@ ActiveRecord::Schema.define(version: 20170502215312) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "number_of_pages"
-  end
-
-  create_table "uploads", force: :cascade do |t|
-    t.string  "name"
-    t.text    "description"
-    t.string  "folder"
-    t.string  "url"
-    t.integer "user_id"
   end
 
   create_table "user_activities", force: :cascade do |t|
@@ -733,6 +738,7 @@ ActiveRecord::Schema.define(version: 20170502215312) do
     t.string "word", null: false
   end
 
+  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

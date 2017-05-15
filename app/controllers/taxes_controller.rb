@@ -10,14 +10,14 @@ class TaxesController < AuthenticatedController
   before_action :set_all_documents, only: [:index]
   before_action :set_contacts, only: [:new, :edit]
   before_action :prepare_share_params, only: [:create, :update]
-  
+
   # Breadcrumbs navigation
-  add_breadcrumb "Taxes", :taxes_path, if: :general_view?
-  add_breadcrumb "Taxes", :shared_view_taxes_path, if: :shared_view?
+  before_action :set_index_breadcrumbs
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_add_edit_crumbs, only: [:edit, :new]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include CancelPathErrorUpdateModule
   
   def page_name
     case action_name
@@ -34,12 +34,18 @@ class TaxesController < AuthenticatedController
     end
   end
   
+  def set_index_breadcrumbs
+    add_breadcrumb "Taxes", taxes_path if general_view?
+    add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user) if shared_view?
+  end
+
+
   def set_details_crumbs
     return unless @tax.taxes.any?
     add_breadcrumb "#{@tax.year} Tax Details", show_tax_path(@tax) if general_view?
     add_breadcrumb "#{@tax.year} Tax Details", shared_taxes_path(@shared_user, @tax) if shared_view?
   end
-  
+
   def set_add_edit_crumbs
     if @tax && TaxesService.tax_by_year(@tax.year, resource_owner).present?
       add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_path(@tax) if general_view?
@@ -50,12 +56,12 @@ class TaxesController < AuthenticatedController
       add_breadcrumb "#{year} Taxes Setup", shared_new_taxes_path(@shared_user, year) if shared_view?
     end
   end
-  
+
   # GET /taxes
   # GET /taxes.json
   def index
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
-    @contacts_with_access = resource_owner.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = resource_owner.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
 
     @taxes = TaxYearInfo.for_user(resource_owner)
     @taxes.each { |ty| ty.taxes.each { |t| authorize t } }
@@ -108,7 +114,7 @@ class TaxesController < AuthenticatedController
       else
         @taxes = @tax_year.taxes
         @taxes.each { |t| authorize t }
-        
+
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @tax_year.errors, status: :unprocessable_entity }
@@ -133,7 +139,7 @@ class TaxesController < AuthenticatedController
       else
         @taxes = @tax_year.taxes
         @taxes.each { |t| authorize t }
-        
+
         error_path(:edit)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @tax.errors, status: :unprocessable_entity }
@@ -153,19 +159,19 @@ class TaxesController < AuthenticatedController
   end
 
   private
-  
+
   def validate_params
     tax_values = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.TaxCategory }.values
     tax_values.map! {|x| x["groups"]}.flatten!.map! {|x| x["value"]}
     tax_values.include? @tax_year.year.to_s
   end
-  
+
   def set_viewable_contacts
     @taxes.each do |tax|
       tax.share_with_contact_ids |= category_subcategory_shares(tax, resource_owner).map(&:contact_id)
     end
   end
-  
+
   def prepare_share_params
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.TaxCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     tax_form_params.each do |k, v|
@@ -174,34 +180,34 @@ class TaxesController < AuthenticatedController
       end
     end
   end
-  
+
   def authorize_save
     authorize_ids = tax_form_params.values.map { |x| x[:id].to_i }
     @tax_year.taxes.where(:id => authorize_ids).each { |t| authorize t }
   end
-  
+
   def taxes
     return @tax.taxes if @shared_user.nil? || (@shared_category_names.include? 'Taxes')
     contact_ids = Contact.where("emailaddress ILIKE ?", current_user.email).map(&:id)
     shared_taxes_ids = Share.where(user: resource_owner, shareable_type: 'Tax', contact_id: contact_ids).map(&:shareable_id)
     @tax.taxes.select { |t| shared_taxes_ids.include? t.id }
   end
-  
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
-  
+
   def error_path(action)
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names = ReturnPathService.shared_category_names(@path)
   end
-  
+
   def success_path(common_path, shared_view_path)
     @path = ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
-  
-  def resource_owner 
+
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
@@ -228,7 +234,7 @@ class TaxesController < AuthenticatedController
   def tax_params
     params.require(:tax_year_info).permit(:id, :year)
   end
-  
+
   def success_message
     return 'Tax was successfully created.' unless @tax.taxes.any?
     'Tax was successfully updated.'

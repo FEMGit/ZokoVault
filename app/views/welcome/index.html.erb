@@ -7,7 +7,7 @@
 <% end %>
 
 <% subscription = current_user.current_user_subscription %>
-<% if subscription.active_trial? %>
+<% if subscription && subscription.active_trial? %>
   <%= render partial: 'dashboard_trial_header', locals: { subscription: subscription } %>
 <% end %>
 

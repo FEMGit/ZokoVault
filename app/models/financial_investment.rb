@@ -34,6 +34,11 @@ class FinancialInvestment < ActiveRecord::Base
   validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :web_address, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   
+  validates_format_of :web_address,
+                      :with => Validation::WEB_ADDRESS_URL,
+                      :message => "Please enter a valid url (starts with 'http://' or 'https://')",
+                      :allow_blank => true
+  
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)
   end

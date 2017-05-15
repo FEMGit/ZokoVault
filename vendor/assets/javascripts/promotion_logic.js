@@ -1,51 +1,3 @@
-function paymentEntryStarted() {
-  return (
-      $("#user__card_number").val() != "" ||
-      $("#user_stripe_subscription_attributes_expiration_month").val() != "" ||
-      $("#user_stripe_subscription_attributes_expiration_year").val() != "" 
-    );
-}
-
-function cardIsValidRequest(handleData) {
-  var attrs = {
-    number: $("#user_stripe_subscription_attributes_card_number").val(),
-    exp_month: $("#user_stripe_subscription_attributes_expiration_month").val(),
-    exp_year: $("#user_stripe_subscription_attributes_expiration_year").val(),
-    cvc: $("#user_stripe_subscription_attributes_cvc").val() 
-  }
-  $.ajax({
-    type: 'POST',
-    url: '/account/card_validation',
-    success: function() {
-      handleData(true)
-    },
-    error: function(data) {
-      $('#payment-errors').text(data["responseText"]);
-      $('#submit-cc-button').prop('disabled', false);
-      $('#submit-cc-button-continue').prop('disabled', false);
-    },
-    data: attrs,
-    async: false
-  });
-}
-
-var cardIsValid = function() {
-  var isValid = false
-  cardIsValidRequest(function(cardValidationResult) {
-    isValid = cardValidationResult
-  })
-  return isValid
-}
-
-function addCreditCard() {
-  if (paymentEntryStarted() && cardIsValid()) {
-    // conditional prevents the form from breaking if not updating card
-    $('#submit-cc-button').prop('disabled', true);
-    $('#submit-cc-button-continue').prop('disabled', true);
-    $('#account-form').submit();
-  }
-}
-
 var discount = function(data, currentTotalValue) {
   var discountValue = 0
   if (data['amount_off'] != null) {
@@ -81,7 +33,7 @@ function updatePromoRow(data) {
   var currentTotalValue = currentTotal()
   var discountValue = discount(data, currentTotalValue)
   $('#promo-price').text('-$ ' + discountValue);
-  var newTotal = ((currentTotalValue - discountValue) < 0) ? 0 : (currentTotalValue - discountValue)
+  var newTotal = ((currentTotalValue - discountValue) < 0) ? 0 : +(currentTotalValue - discountValue).toFixed(2)
   $('#subscription-total').text('$ ' + newTotal);
   $('#promo-row').show();
 }
@@ -120,7 +72,12 @@ function updateSubscription() {
     var description = "This amount will be billed to your account on " + billedData;
     $('#subscription-description').text(description);
 
-    var price = '$ ' + (subscriptions[select]['amount'] / 100.0).toFixed(2);
+    var priceValue = (subscriptions[select]['amount'] / 100.0).toFixed(2)
+    if (isNaN(priceValue)) {
+      priceValue = '--'
+    }
+
+    var price = '$ ' + priceValue
     $('#subscription-price').text(price);
     $('#subscription-total').text(price);
     clearPromoRow();

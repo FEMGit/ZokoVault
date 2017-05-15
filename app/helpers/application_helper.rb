@@ -24,7 +24,7 @@ module ApplicationHelper
 
     local_options = {
       'data-placeholder': 'Choose Contacts...',
-      class: 'chosen-select add-new-contactable',
+      class: 'chosen-select add-new-contactable account-owner',
       multiple: true,
       onchange: "handleSelectOnChange(this);",
       disabled: disabled?(name)
@@ -34,9 +34,9 @@ module ApplicationHelper
                            :first, :second, {selected: selected_items}, local_options)
   end
 
-  def contact_select_with_create_new(form, name, contacts, html_options = {})
+  def contact_select_with_create_new(form, name, contacts, html_options = {}, selected_items = [])
     initialize_new_contact_form
-    select_options = contacts ? contacts.sort_by { |s| s.lastname }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
+    select_options = contacts ? contacts.sort_by { |s| s.lastname.downcase }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
     select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
 
     local_options = {
@@ -47,8 +47,13 @@ module ApplicationHelper
       disabled: disabled?(name)
     }.merge(html_options)
 
-    form.collection_select(name, select_options,
-                           :first, :second, {}, local_options)
+    if selected_items.present?
+      form.collection_select(name, select_options,
+                             :first, :second, {selected: selected_items}, local_options)
+    else
+      form.collection_select(name, select_options,
+                             :first, :second, {}, local_options)
+    end
   end
 
   def category_view_path(category, user = nil)

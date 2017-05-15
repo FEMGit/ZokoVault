@@ -1,16 +1,22 @@
-<%= render :partial => "layouts/bread_crumbs" %>
+<div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+  <%= render :partial => "layouts/bread_crumbs" %>
+</div>
 
 <%= form_for @document, html: { id: "doc-form" } do |f| %>
   <%= hidden_field_tag :shared_user_id, @shared_user.present? ? @shared_user.id : "" %>
   <%= hidden_field_tag :group, f.object.group %>
-  <h3 class="document-title"> <%= yield(:title) %> </h3>
+  <%= hidden_field_tag :first_run, @first_run || false %>
+
+  <div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+    <h3 class="document-title"> <%= yield(:title) %> </h3>
+  </div>
   <% if @document.persisted? %>
     <span class='document-change-data'>
       <span class="edit-data-label">Created: </span><%= date_format(@document.created_at) %>
       <span class="edit-data-label">Modified: </span><%= date_format(@document.updated_at) %>
     </span>
   <% end %>
-  <div class="card document mb-30">
+  <div class="card document mb-30 <% if @first_run %> max-w-1000-centered <% end %>">
     <% if @document.errors.any? %>
       <% errors = true %>
     <% end %>
@@ -22,7 +28,7 @@
       <div id="file-pick-section">
         <% policy = FilepickerService.policy %>
         <% signature = FilepickerService.signature(policy) %>
-    
+
         <input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3" data-fp-button-text="Select File"
          data-fp-maxSize="104857600" data-fp-policy=<%= policy %> data-fp-signature=<%= signature %> data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" data-buttonText="Select file" id="select-file"/>
       </div>
@@ -38,14 +44,14 @@
 
     <label>Category</label>
     <div class="chosen-styled-select">
-      <%= f.collection_select :category, 
-        @category_dropdown_options, :to_s, :to_s, {}, 
+      <%= f.collection_select :category,
+        @category_dropdown_options, :to_s, :to_s, {},
         { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, :onchange => 'get_drop_down_options();' }
       %>
     </div>
-    
+
     <%= render partial: 'layouts/document_subcategory_dropdown', locals: { f: f } %>
-    
+
     <label>Notes</label>
     <%= f.text_area :description, :maxlength => get_max_length(:notes) %>
 
@@ -62,18 +68,20 @@
       </div>
     </section>
   </div>
-  
-  <button
-    class="js-modal-close
-      primary-button
-      big-button" >
-      Save</button>
-  <%= link_to "Cancel", document_return_path(@document),
-    {class: "js-modal-close button secondary-button big-button"} %>
-  <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
-    <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
-      class: "button outline-button big-button fr"%>
-  <% end %>
+
+  <div class="<% if @first_run %> max-w-1000-centered <% end %>" >
+    <button
+      class="js-modal-close
+        primary-button
+        big-button" >
+        Save</button>
+    <%= link_to "Cancel", document_return_path(@document),
+      {class: "js-modal-close button secondary-button big-button"} %>
+    <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
+      <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
+        class: "button outline-button big-button fr"%>
+    <% end %>
+  </div>
 <% end %>
 
 <script>
@@ -86,25 +94,25 @@
     documentNameField.value = evt.fpfile.filename;
     documentUrl.value = evt.fpfile.key;
   }
-  
+
   $('.chosen-select').chosen()
-  function showForm() { 
+  function showForm() {
     $('#form-fields').show();
     $('#upload-will-message').hide();
   }
-  function showUploadMessage() { 
+  function showUploadMessage() {
     $('#form-fields').hide();
     $('#upload-will-message').show();
   }
-  
+
   function get_drop_down_options() {
     update_category($('#document_category.chosen-select :selected').text())
   }
-  
+
   $("#document_category_groups.chosen-select").change(function(e, params){
     $("#group").val(params.selected)
   });
-  
+
   //get ajax request to update card drop down info based on chosen category
   var update_category = function(category_selected){
     categoryCheck(category_selected)
@@ -120,7 +128,7 @@
       updateCardNames()
     });
   }
-  
+
   var categoryCheck = function(category) {
     if (category === '<%= Rails.application.config.x.ProfileCategory %>') {
       $('#subcategory-dropdown').hide();
@@ -128,7 +136,7 @@
       $('#subcategory-dropdown').show();
     }
   }
-  
+
   //get ajax request to update card names drop down if its insurance or financial category
   var updateCardNames = function(){
     shared_user_id = $("#shared_user_id").val();
@@ -150,7 +158,7 @@
         idPostFixHide(data)
       } else {
         $("#category_groups").show();
-        
+
         $("#subcategory_names_insurance").hide();
         $("#subcategory_names_financial").hide();
         $("#subcategory_names_card_documents").hide();
@@ -159,7 +167,7 @@
       }
     });
   }
-  
+
   var idPostFixShow = function(data) {
     var data_id = data[0].id.replace(/&/g, '&amp;')
     if (data_id === "<%= Rails.configuration.x.InsuranceCategory %>") {
@@ -173,20 +181,20 @@
       return "_card_documents"
     }
   }
-  
+
   var idPostFixHide = function(data) {
     var data_id = data[0].id.replace(/&amp;/g, '&')
     if (data_id === "<%= Rails.configuration.x.InsuranceCategory %>") {
       $("#subcategory_names_financial").hide();
       $("#document_subcategory_financial").find('option:selected').removeAttr('selected')
-      
+
       $("#subcategory_names_card_documents").hide();
       $("#document_subcategory_card_documents").find('option:selected').removeAttr('selected')
     }
     if (data_id === "<%= Rails.configuration.x.FinancialInformationCategory %>") {
       $("#subcategory_names_insurance").hide();
       $("#document_subcategory_insurace").find('option:selected').removeAttr('selected')
-      
+
       $("#subcategory_names_card_documents").hide();
       $("#document_subcategory_card_documents").find('option:selected').removeAttr('selected')
     }
@@ -194,12 +202,12 @@
         data_id === "<%= Rails.configuration.x.TrustsEntitiesCategory %>") {
       $("#subcategory_names_insurance").hide();
       $("#document_subcategory_insurace").find('option:selected').removeAttr('selected')
-      
+
       $("#subcategory_names_financial").hide();
       $("#document_subcategory_financial").find('option:selected').removeAttr('selected')
     }
   }
-  
+
   $("#document_group.chosen-select").chosen().change(updateCardNames)
 </script>
 <%= yield :new_contact_form %>

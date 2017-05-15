@@ -4,14 +4,6 @@ class SharePolicy < BasicPolicy
     owned_or_shared?
   end
 
-  def new_wills_poa?
-    create?
-  end
-
-  def new_trusts_entities?
-    create?
-  end
-
   def download?
     owned_or_shared?
   end

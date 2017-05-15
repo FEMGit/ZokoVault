@@ -3,21 +3,22 @@ class FinancialPropertyController < AuthenticatedController
   include SharedViewHelper
   include SanitizeModule
   before_action :set_financial_property, only: [:show, :edit, :update, :destroy]
-  before_action :set_financial_property_provider, only: [:show, :edit, :update, :destroy, :set_documents]
+  before_action :set_provider, only: [:show, :edit, :update, :destroy, :set_documents]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :edit]
   before_action :prepare_share_params, only: [:create, :update]
   include AccountPolicyOwnerModule
-  
+
   # Breadcrumbs navigation
-  add_breadcrumb "Financial Information", :financial_information_path, :only => %w(show new edit), if: :general_view?
-  add_breadcrumb "Financial Information", :shared_view_financial_information_path, :only => %w(show new edit), if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(show new edit)
   before_action :set_add_crumbs, only: [:new]
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
-  
+  include CancelPathErrorUpdateModule
+
   def page_name
     financial_property = FinancialProperty.for_user(resource_owner).find_by(id: params[:id])
     case action_name
@@ -30,30 +31,35 @@ class FinancialPropertyController < AuthenticatedController
     end
   end
   
+  def set_index_breadcrumbs
+    add_breadcrumb "Financial Information", financial_information_path if general_view?
+    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user) if shared_view?
+  end
+
   def set_add_crumbs
     add_breadcrumb "Financial Property - Setup", add_property_path(@shared_user)
   end
-  
+
   def set_details_crumbs
     add_breadcrumb "#{@financial_property.name}", show_property_path(@financial_property, @shared_user)
   end
-  
+
   def set_edit_crumbs
     add_breadcrumb "Financial Property - Setup", edit_financial_property_path(@financial_property, @shared_user)
   end
-  
+
   def new
     @financial_property = FinancialProperty.new(user: resource_owner,
                                                 category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase))
     authorize @financial_property
     set_viewable_contacts
   end
-  
+
   def show
     authorize @financial_property
     session[:ret_url] = show_property_url(@financial_property, @shared_user)
   end
-  
+
   def edit
     authorize @financial_property
     @financial_property.share_with_contact_ids = @property_provider.share_with_contact_ids
@@ -121,12 +127,13 @@ class FinancialPropertyController < AuthenticatedController
         format.json { render :show, status: :created, location: @financial_property }
       else
         error_path(:edit)
+        validate_params && @financial_property.update(property_params.merge(user_id: resource_owner.id))
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_property.errors, status: :unprocessable_entity }
       end
     end
   end
-  
+
   def destroy
     authorize @financial_property
     @financial_property.destroy
@@ -138,65 +145,67 @@ class FinancialPropertyController < AuthenticatedController
   end
 
   private
-  
+
   def provider_type
     FinancialProvider::provider_types["Property"]
   end
-  
+
   def validate_params
     return false unless (FinancialProperty::property_types.include? property_params[:property_type])
     true
   end
-  
+
   def set_viewable_contacts
     contacts = category_subcategory_shares(@financial_property, resource_owner)
     return unless contacts.present?
     @financial_property.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
-  
+
   def prepare_share_params
     return unless property_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
     params[:financial_property][:share_with_contact_ids] -= viewable_shares
     params[:financial_property][:share_with_contact_ids].reject!(&:blank?)
   end
- 
+
   def shared_user_params
     params.permit(:shared_user_id)
   end
-  
-  def resource_owner 
+
+  def resource_owner
     if shared_user_params[:shared_user_id].present?
       User.find_by(id: params[:shared_user_id])
     else
       @property_provider.present? ? @property_provider.user : current_user
     end
   end
-  
+
   def error_path(action)
     set_contacts
     set_account_owners
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    financial_error_breadcrumb_update
   end
-  
+
   def success_path(common_path, shared_view_path)
     ReturnPathService.success_path(resource_owner, current_user, common_path, shared_view_path)
   end
 
-  def set_financial_property_provider
+  def set_provider
+    set_financial_property
     @property_provider = FinancialProvider.for_user(resource_owner).find(@financial_property.empty_provider_id)
   end
-  
+
   def set_financial_property
     @financial_property = FinancialProperty.for_user(resource_owner).find(params[:id])
   end
-  
+
   def set_documents
     @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @property_provider.id)
   end
-  
+
   def initialize_category_and_group
     @category = Rails.application.config.x.FinancialInformationCategory
     @group = "Property"
@@ -206,11 +215,11 @@ class FinancialPropertyController < AuthenticatedController
     params.require(:financial_property).permit(:id, :name, :property_type, :notes, :value, :city, :state, :zip, :address, :primary_contact_id, :category_id,
                                                share_with_contact_ids: [])
   end
-  
+
   def property_owner_params
     params.require(:financial_property).permit(property_owner_ids: [])
   end
-  
+
   def set_contacts
     contact_service = ContactService.new(:user => resource_owner)
     @contacts = contact_service.contacts

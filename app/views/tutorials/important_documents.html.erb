@@ -10,7 +10,7 @@
     <li>Insurance Information (Health Insurance Card, Policies)</li>
     <li>Identification (Driver's License, Passport)</li>
   </ul>
-  
+
   <h3 <% if @documents.blank? %> style="display: none;" <% end %> id='important-documents-table-title'>Your Documents</h3>
   <table id="important-documents-table" <% if @documents.blank? %> style="display: none;" <% end %>>
     <thead>
@@ -44,11 +44,11 @@
       <% end %>
     </tbody>
   </table>
-  
+
   <div class="flash-success-static flash important-doc static small" style="display: none;">You added a document! Upload another Document, or click Continue.</div>
-  
-  <%= link_to 'Upload a Document', new_document_path, class: 'button primary-button big-button inline-block' %>
-  
+
+  <%= link_to 'Upload a Document', new_document_path(:first_run => true), class: 'button primary-button big-button inline-block' %>
+
   <%= render partial: 'pages/tutorial_buttons', locals: { tutorial_skip_path: tutorial_video_path,
                                                           tutorial_continue_path: tutorial_video_path,
                                                           tutorial_back_path: tutorial_trusted_advisors_path } %>
@@ -62,7 +62,7 @@
         info: false,
         aaSorting: [[0, 'asc']]
     });
-    
+
     if ($('.flash-success.flash').text() === 'Document was successfully created.') {
       $('.flash.important-doc').show()
     }

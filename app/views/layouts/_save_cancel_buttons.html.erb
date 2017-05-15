@@ -1,0 +1,4 @@
+<% cancel_button_path = @cancel_button_path || back_path || previous_path %>
+<%= hidden_field_tag :cancel_button_path, cancel_button_path %>
+<%= f.submit 'Save', class: "button primary-button big-button" %>
+<%= link_to 'Cancel', cancel_button_path, class: "button secondary-button big-button"%>

@@ -9,7 +9,7 @@
     <div class="modal-content mb-30">
 
       <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number' %><br>
-      <%= text_field_tag "user[user_profile_attributes][two_factor_phone_number]", "", class: "form-control", :data => {:mask => '999-999-9999'} %>
+      <%= render partial: 'layouts/phone_number', locals: { f: nil, phone: 'user[user_profile_attributes][two_factor_phone_number]' } %>
       <%= check_box_tag 'skip_auth', 'Skip dual setup', false %>
 
       <button class="button primary-button big-button mb-15" onClick="sendCode(); return false" id="send-code-button">Send code</button>
@@ -19,7 +19,7 @@
 
       <h2>Enter Phone Code</h2>
 
-      <p>You should recieve your phone code within the next few minutes. Please enter the code below.</p>
+      <p>You should receive your phone code within the next few minutes. Please enter the code below.</p>
 
       <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code' %><br>
       <%= text_field_tag "user[user_profile_attributes][phone_code]" %>

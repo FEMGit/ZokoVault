@@ -10,7 +10,7 @@
   </footer>
 </div>
 
-<div class="card mb-30">
+<div class="card mb-30 mt-20 max-w-1000-centered">
   <h1 class="mb-20">Add a Vehicle</h1>
 
   <%- @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>

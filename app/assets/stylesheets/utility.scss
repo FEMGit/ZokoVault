@@ -338,13 +338,13 @@
 }
 
 .mobile-hide{
-  @include media($mobile) {
+  @include media($tablet) {
     display:none !important;
   }
 }
 .mobile-show{
   display:none !important;
-  @include media($mobile) {
+  @include media($tablet) {
     display:block !important;
     &.inline-block {
       display:inline-block !important;

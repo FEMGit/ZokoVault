@@ -36,7 +36,7 @@ header{
   padding-right: 5px;
   color: $color-primary-shaded;
 
-  @include media($mobile) {
+  @include media($tablet) {
     display:none;
   }
 
@@ -155,7 +155,7 @@ a.mobile-menu{
 //MARKETING NAV MOBILE
 .slide-nav{
   display: block;
-
+  
   @include media($eightfifty) {
     position: absolute;
     right: 0;
@@ -207,8 +207,8 @@ nav.primary-nav{
   position: fixed;
   display: block;
   overflow-y: auto;
-
-  @include media($mobile) {
+  
+  @include media($tablet) {
     display:none;
     position: absolute;
     top: -10px;
@@ -220,13 +220,13 @@ nav.primary-nav{
 
 .mobile-app-menu{
   display:none;
-  @include media($mobile) {
+  @include media($tablet) {
     display:block;
   }
 }
 .logout-link{
   display:block;
-  @include media($mobile) {
+  @include media($tablet) {
     display:none;
   }
 }
@@ -259,7 +259,7 @@ a:visited.main-nav{
     }
   }
 
-  @include media($mobile) {
+  @include media($tablet) {
     &.bottom-nav {
       position: relative !important;
       bottom: 0 !important;
@@ -285,14 +285,14 @@ a:visited.main-nav{
     background: #22303A;
     border-bottom: 1px solid black;
     display:none;
-    @include media($mobile) {
+    @include media($tablet) {
       display:block;
     }
   }
 
   &.mobile-show{
     display:none;
-    @include media($mobile) {
+    @include media($tablet) {
       display:block;
     }
   }
@@ -345,7 +345,7 @@ main.app-nav{
       overflow-y: auto;
     }
   }
-  @include media($mobile) {
+  @include media($tablet) {
     margin-left: 0 ;
   }
 
@@ -396,8 +396,8 @@ a.footer-link{
   margin-right: 50px;
 
   @include media($mobile) {
-      margin: 0 0 20px;
-      float:none;
+    margin: 0 0 20px;
+    float:none;
   }
 }
 

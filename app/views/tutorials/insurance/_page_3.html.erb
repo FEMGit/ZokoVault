@@ -1,4 +1,4 @@
-<div class="card mb-30">
+<div class="card mb-30 mt-20 max-w-1000-centered">
   <h1 class="mb-20">Add Property Insurance</h1>
 
   <%- @insurance_card = PropertyAndCasualty.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>

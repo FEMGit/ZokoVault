@@ -8,7 +8,7 @@ class PagesController < HighVoltage::PagesController
     # Params = {"tutorial_id"=>"insurance", "page_id"=>"1"}
     @page_number   = params[:page_id]
     @tutorial_name = params[:tutorial_id]
-    @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
+    @tutorial      = Tutorial.find_by(slug: @tutorial_name.split("-").join(" ").titleize)
 
     # For Add Primary Contact view
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
@@ -23,7 +23,7 @@ class PagesController < HighVoltage::PagesController
     end
 
     # @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
-    @next_tutorial = Tutorial.find_by(name: @next_tutorial_name.titleize)
+    @next_tutorial = Tutorial.find_by(slug: @next_tutorial_name.titleize)
     @next_page = session[:tutorial_paths][tuto_index][:current_page]
     @page_name     = "page_#{@page_number}"
 

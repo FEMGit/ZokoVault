@@ -55,8 +55,13 @@ class Vendor < ActiveRecord::Base
       Thread.current[:current_user] == user
   end
   
+
   def self.healths
     self.where(type: 'Health')
+  end
+
+  def self.properties
+    self.where(type: 'PropertyAndCasualty')
   end
   
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }

@@ -151,6 +151,9 @@ $(document).on('ready', function() {
     } else if (tutorial_fields.hasClass('health-fields')) {
       create = "/insurance/healths";
       destroy = "/insurance/healths/provider/";
+    } else if (tutorial_fields.hasClass('property-casualty-fields')) {
+      create = "/insurance/properties";
+      destroy = "/insurance/properties/provider/";
     }
 
     var tutorial = new DynamicTutorialField(create, destroy);

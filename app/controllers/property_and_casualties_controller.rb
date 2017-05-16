@@ -87,6 +87,14 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
+    if params[:tutorial_name] && property_and_casualty_params[:name].empty?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+      end
+    end
+    
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
@@ -158,6 +166,10 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   private
+
+  def tutorial_params
+    params.permit(:tutorial_name)
+  end
 
   def validate_params
     policy_params.values.select{ |x| PropertyAndCasualtyPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0

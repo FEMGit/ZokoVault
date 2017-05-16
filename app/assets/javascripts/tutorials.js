@@ -140,12 +140,17 @@ $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.
   var tutorial_fields = $('.tutorial-fields')
   if (tutorial_fields.length) {
+    var create = ''
+    var destroy = ''
     if (tutorial_fields.hasClass('property-fields')) {
-      var create = "/financial_information/property/add_property";
-      var destroy = "/financial_information/property/";
+      create = "/financial_information/property/add_property";
+      destroy = "/financial_information/property/";
     } else if (tutorial_fields.hasClass('trust-fields')) {
-      var create = "/trusts/";
-      var destroy = "/trusts/";
+      create = "/trusts/";
+      destroy = "/trusts/";
+    } else if (tutorial_fields.hasClass('health-fields')) {
+      create = "/insurance/healths";
+      destroy = "/insurance/healths/provider/";
     }
 
     var tutorial = new DynamicTutorialField(create, destroy);

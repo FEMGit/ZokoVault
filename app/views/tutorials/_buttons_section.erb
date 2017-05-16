@@ -11,10 +11,10 @@
   <% if f.present? %>
     <%= f.submit "Continue", class: "button big-button blue-button f-right submit-btn" %>
   <% else %>
-    <%- if @next_tutorial_name == 'confirmation_page' %>
-      <%= link_to "Continue", tutorials_confirmation_path, class: "button big-button blue-button f-right submit-btn" %>
-    <%- else %>
-      <%= link_to "Continue", tutorial_page_path(@next_tutorial_name, @next_page), class: "button big-button blue-button f-right submit-btn" %>
+    <% if @next_tutorial_name == 'confirmation_page' %>
+      <%= link_to "Continue", tutorials_confirmation_path, class: "button big-button blue-button f-right submit-btn ml-0" %>
+    <% else %>
+      <%= link_to "Continue", tutorial_page_path(@next_tutorial_name, @next_page), class: "button big-button blue-button f-right submit-btn ml-0" %>
     <% end %>
   <% end %>
 

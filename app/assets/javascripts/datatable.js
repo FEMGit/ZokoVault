@@ -1,5 +1,5 @@
 var DatatableUpdate = function(tableId, tableSettings, desirableColspan) {
-  $(tableId).DataTable(tableSettings[0], tableSettings[1], tableSettings[2]);
+  $(tableId).DataTable(tableSettingsGenerate(tableSettings[0], tableSettings[1], tableSettings[2]));
   // Save all controls to variables and add listeners
   var controlsArray = prepareTableControls(tableId, desirableColspan)
 

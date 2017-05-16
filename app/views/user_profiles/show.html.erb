@@ -74,7 +74,7 @@
       <p>
         <span class="field-block"><%= employer.name %></span>
         <% if employer.web_address.present? %>
-          <%= link_to employer.web_address, employer.web_address, class: "no-underline-link", target: "_blank" %>
+          <%= sanitize link_to employer.web_address, employer.web_address, class: "no-underline-link", target: "_blank" %>
         <% end %>
       </p>
     <% end %>

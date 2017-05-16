@@ -62,7 +62,7 @@
       
       <% if @contact.businesswebaddress.present? %>
         <label>Business Web Address</label>
-        <p><%= link_to @contact.businesswebaddress, @contact.businesswebaddress, class: "no-underline-link", target: "_blank" %></p>
+        <p><%= sanitize link_to @contact.businesswebaddress, @contact.businesswebaddress, class: "no-underline-link", target: "_blank" %></p>
       <% end %>
 
       <% if @contact.businessphone.present? %>

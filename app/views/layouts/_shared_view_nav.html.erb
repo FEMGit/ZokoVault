@@ -16,7 +16,7 @@
   <! -- Financial Information -- >
   <% if show_navigation_link?('Financial Information') %>
     <% shared_view_financial_information = 'active' if current_page?(shared_view_financial_information_path(@shared_user)) ||
-    controller?('financial_account', 'financial_property', 'financial_investment') || breadcrumb?(:shared_view_financial_information_path) %>
+    controller?('financial_account', 'financial_property', 'financial_investment', 'financial_alternative') || breadcrumb?(:shared_view_financial_information_path) %>
     <%= link_to shared_view_financial_information_path(@shared_user), class: "main-nav #{shared_view_financial_information}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-activity-monitor-1"></use>
@@ -71,9 +71,5 @@
         <use xlink:href="#icon-bookmark-2"></use>
       </svg>Final Wishes
     <% end %>
-  <% end %>
-
-  <%= link_to shares_path, class: "main-nav mobile-show" do %>
-    Exit Shared View
   <% end %>
 </nav>

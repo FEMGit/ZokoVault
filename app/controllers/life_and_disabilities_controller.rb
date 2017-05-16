@@ -11,8 +11,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   include AccountPolicyOwnerModule
 
   # Breadcrumbs navigation
-  add_breadcrumb "Insurance", :insurance_path, :only => %w(new edit show index), if: :general_view?
-  add_breadcrumb "Insurance", :shared_view_insurance_path, :only => %w(new edit show index), if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show index)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
@@ -31,6 +30,11 @@ class LifeAndDisabilitiesController < AuthenticatedController
       when 'edit'
         return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
     end
+  end
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Insurance", insurance_path if general_view?
+    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs

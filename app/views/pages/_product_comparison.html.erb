@@ -8,7 +8,6 @@
                            { title: 'Trust & Entity management', free: false, premium: true }] %>
 <% continue_path ||= shares_path %>
 <% start_now_path ||= billing_info_path %>
-
 <div class="card mb-30 min-w-460">
   <table class="product-comparison" cellspacing="0">
     <tr>
@@ -16,14 +15,19 @@
         <h1>Compare ZokuVault Products</h1>
       </th>
       <th class="plan-information free text-center">
-        <h4 class="clr-gray-dark-tinted fw-500 mt-60">Access to files shared with you.</h4>
+        <h4 class="clr-gray-dark-tinted fw-500 mt-80">Access to files shared with you.</h4>
         <%= link_to 'Continue', continue_path, class: 'button big-button primary-button inline-block mt-30 mr-0' %>
-        <h4 class="fw-600 clr-gray-dark-tinted mt-30">Free Vault</h4>
+        <h4 class="fw-600 clr-gray-dark-tinted mt-30 h-35">Free Vault</h4>
       </th>
       <th class="plan-information premium text-center">
-        <h4 class="clr-gray-dark-tinted fw-500 mt-60">Unlimited storage and sharing.</h4>
-        <%= link_to 'Start Now', start_now_path, class: 'button big-button primary-button inline-block mt-18 mr-0' %>
-        <h4 class="fw-600 clr-gray-dark-tinted mt-30">$9.99 a month</h4>
+        <h4 class="clr-gray-dark-tinted fw-500 mt-80">Unlimited storage and sharing.</h4>
+        <% if trial_was_used?(current_user) %>
+          <%= link_to 'Start Now', start_now_path, class: 'button big-button primary-button inline-block mt-30 mr-0' %>
+          <h4 class="fw-600 clr-gray-dark-tinted mt-30 h-35">$9.99 a month</h4>
+        <% else %>
+          <%= link_to 'Start Free Trial', first_run_path, class: 'button big-button primary-button inline-block mt-30 mr-0' %>
+          <h4 class="fw-600 clr-gray-dark-tinted mt-30 h-35">14 day free trial and then $9.99 a month</h4>
+        <% end %>
       </th>
     </tr>
 

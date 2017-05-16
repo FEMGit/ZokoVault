@@ -9,14 +9,18 @@ class TrustsController < AuthenticatedController
   before_action :set_previous_shared_with, only: [:create, :update]
 
   # General Breadcrumbs
-  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new edit index show), if: :general_view?
-  add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Trusts & Entities", trusts_entities_path if general_view?
+    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(@shared_user) if shared_view?
+  end
 
   def set_new_crumbs
     add_breadcrumb "Trusts - Setup", new_trust_path(@shared_user)
@@ -69,6 +73,14 @@ class TrustsController < AuthenticatedController
   end
 
   def create
+    if params[:tutorial_name] && params[:vault_entry_0][:name].empty?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
+      end
+    end
+    
     save_or_update_trust(:new)
   end
 
@@ -85,9 +97,26 @@ class TrustsController < AuthenticatedController
       if trusts.present?
         begin
           update_trusts(new_trusts, old_trusts)
+          
+          if tutorial_params[:tutorial_name]
+            tuto_index = session[:tutorial_index]
+            next_tuto = session[:tutorial_paths][tuto_index]
+            path = if next_tuto[:tuto_name] == 'confirmation_page'
+              tutorials_confirmation_path
+            else
+              tutorial_page_path(next_tuto[:tuto_name], '1')
+            end
+            format.json { render json: @new_vault_entries.as_json and return }
+            format.html { redirect_to path, flash: { success: success_message(old_trusts) } and return }
+          end
+        
           format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
           format.json { render :show, status: :created, location: @trust }
         rescue
+          if tutorial_params[:tutorial_name]
+            flash[:alert] = "Fill in Trust Name field to continue"
+            redirect_to tutorial_page_path('trust', '1') and return
+          end
           @vault_entry = Trust.new
           @old_params.try(:each) { |trust| @vault_entries << trust }
           @new_params.try(:each) { |trust| @vault_entries << trust }
@@ -179,6 +208,10 @@ class TrustsController < AuthenticatedController
         v["share_with_contact_ids"] -= viewable_shares
       end
     end
+  end
+
+  def tutorial_params
+    params.permit(:tutorial_name)
   end
 
   def shared_user_params

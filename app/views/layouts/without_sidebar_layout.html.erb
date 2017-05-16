@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <%= render partial: 'layouts/application_head_tag' %>
+
+  <% if user_signed_in? %>
+    <body class="logged-in">
+  <% else %>
+    <body class="logged-out">
+  <% end %>
+
+  <%= render :partial => 'layouts/svgdefs' %>
+  <%= render :partial => 'layouts/alerts' %>
+
+
+    <%= render :partial => 'layouts/header' %>
+
+    <div class="content">
+      <%= yield %>
+
+    </div>
+    <%= render :partial => 'layouts/footer' %>
+  </main>
+    <%= javascript_include_tag 'autonumeric' %>
+    <%= javascript_include_tag 'tooltip_position' %>
+  </body>
+</html>
+
+<%= javascript_include_tag 'date_picker_check' %>

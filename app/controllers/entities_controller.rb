@@ -11,8 +11,7 @@ class EntitiesController < AuthenticatedController
   include AccountPolicyOwnerModule
 
   # General Breadcrumbs
-  add_breadcrumb "Trusts & Entities", :trusts_entities_path, :only => %w(new edit index show), if: :general_view?
-  add_breadcrumb "Trusts & Entities", :shared_view_trusts_entities_path, if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit index show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
@@ -20,6 +19,11 @@ class EntitiesController < AuthenticatedController
   include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Trusts & Entities", trusts_entities_path if general_view?
+    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(@shared_user) if shared_view?
+  end
 
   def set_new_crumbs
     add_breadcrumb "Entity - Setup", new_entity_path(@shared_user)

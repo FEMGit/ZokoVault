@@ -11,14 +11,18 @@ class PowerOfAttorneysController < AuthenticatedController
   before_action :set_documents, only: [:show]
 
   # General Breadcrumbs
-  add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path, :only => %w(new edit show), if: :general_view?
-  add_breadcrumb "Wills & Powers of Attorney", :shared_view_wills_powers_of_attorney_path, if: :shared_view?
+  before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  
+  def set_index_breadcrumbs
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_path if general_view?
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user) if shared_view?
+  end
 
   def set_new_crumbs
     add_breadcrumb "Power of Attorney - Setup", new_power_of_attorney_path(@shared_user)
@@ -104,7 +108,7 @@ class PowerOfAttorneysController < AuthenticatedController
         ShareInheritanceService.update_document_shares(resource_owner, @power_of_attorney_contact.share_with_contact_ids,
                                                        @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
         @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
-        format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully update.' } }
+        format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully updated.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         error_path(:edit)
@@ -120,7 +124,7 @@ class PowerOfAttorneysController < AuthenticatedController
     authorize @power_of_attorney
     @power_of_attorney.destroy
     respond_to do |format|
-      format.html { redirect_to back_path || wills_powers_of_attorney_path, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to back_path || wills_powers_of_attorney_path, notice: 'Power of Attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -129,7 +133,7 @@ class PowerOfAttorneysController < AuthenticatedController
     authorize @power_of_attorney_contact
     @power_of_attorney_contact.destroy
     respond_to do |format|
-      format.html { redirect_to wills_powers_of_attorney_path, notice: 'Power of attorney was successfully destroyed.' }
+      format.html { redirect_to wills_powers_of_attorney_path, notice: 'Power of Attorney was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

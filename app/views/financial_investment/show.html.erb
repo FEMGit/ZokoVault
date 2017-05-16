@@ -34,7 +34,7 @@
 
   <% if @financial_investment.web_address.present? %>
     <label>Web Address</label>
-    <p><%= link_to @financial_investment.web_address, @financial_investment.web_address, target: "_blank" %></p>
+    <p><%= sanitize link_to @financial_investment.web_address, @financial_investment.web_address, target: "_blank" %></p>
   <% end %>
   
   <% if @financial_investment.phone_number.present? %>

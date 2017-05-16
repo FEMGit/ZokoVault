@@ -9,8 +9,10 @@ $(function(){
   });
   //window navigation resize reset
   $( window ).resize(function() {
-    if ($(window).width() < 660) {
+    if ($(window).width() < 800) {
        $('.primary-nav, .slide-nav').css('display', '');
+    } else {
+       $('.primary-nav, .slide-nav').css('display', 'block');
     }
   });
   //user menu

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515045935) do
+ActiveRecord::Schema.define(version: 20170516073025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,11 +20,15 @@ ActiveRecord::Schema.define(version: 20170515045935) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
+    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
+    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
+
+  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -168,7 +172,7 @@ ActiveRecord::Schema.define(version: 20170515045935) do
     t.integer  "user_id"
     t.integer  "primary_contact_id"
     t.string   "notes"
-    t.string   "group"
+    t.integer  "final_wish_info_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
@@ -490,6 +494,15 @@ ActiveRecord::Schema.define(version: 20170515045935) do
 
   add_index "stripe_subscriptions", ["subscription_id"], name: "index_stripe_subscriptions_on_subscription_id", using: :btree
 
+  create_table "subtutorials", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "tutorial_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
+
   create_table "tax_year_infos", force: :cascade do |t|
     t.integer  "year"
     t.datetime "created_at",  null: false
@@ -725,6 +738,7 @@ ActiveRecord::Schema.define(version: 20170515045935) do
     t.string "word", null: false
   end
 
+  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"
@@ -739,6 +753,7 @@ ActiveRecord::Schema.define(version: 20170515045935) do
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"
+  add_foreign_key "subtutorials", "tutorials"
   add_foreign_key "tax_year_infos", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_death_traps", "users"

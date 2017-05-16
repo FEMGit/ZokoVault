@@ -109,6 +109,13 @@
       contact_type_dropdown.append("<option value='" + option + "'>" + option + "</option>");
     });
   }
+  var setRelationshipDropdown = function(selectedOptions) {
+    relationship_dropdown = $('#relationships_select');
+    relationship_dropdown.empty();
+    selectedOptions.forEach(function(option){
+      relationship_dropdown.append("<option value='" + option + "'>" + option + "</option>");
+    });
+  }
   
   var contact_type_handle = function(selectInput, first_time) {
     var selectedOption = $('option:selected:first', selectInput).val();

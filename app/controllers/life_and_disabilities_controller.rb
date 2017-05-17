@@ -83,6 +83,16 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # POST /lives
   # POST /lives.json
   def create
+    if params[:tutorial_name] && life_params[:name].empty?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        tuto_index = session[:tutorial_index] - 1
+        next_tuto = session[:tutorial_paths][tuto_index]
+        redirect_to tutorial_page_path(next_tuto[:tuto_name], '3') and return
+      end
+    end
+    
     @insurance_card = LifeAndDisability.new(life_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.configuration.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_life_policies(policy_params, @insurance_card)
@@ -155,6 +165,10 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
+
+  def tutorial_params
+    params.permit(:tutorial_name)
+  end
 
   def validate_params
     policy_params.values.select{ |x| LifeAndDisabilityPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0

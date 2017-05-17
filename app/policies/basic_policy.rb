@@ -68,7 +68,8 @@ class BasicPolicy
   def shared_with_user?
     owner_shared_account_with_user? ||
       owner_shared_category_with_user? ||
-      owner_shared_record_with_user?
+      owner_shared_record_with_user? ||
+      owner_primary_shared_with_user?
   end
 
   def owner_shared_category_with_user?
@@ -81,5 +82,9 @@ class BasicPolicy
 
   def owner_shared_record_with_user?
     Share.exists?(shareable: record, contact: Contact.where("emailaddress ILIKE ?", user.email))
+  end
+  
+  def owner_primary_shared_with_user?
+    user.primary_shared_with? record.user
   end
 end

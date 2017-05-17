@@ -33,7 +33,7 @@ module SharedViewHelper
   end
   
   def subcategory_shared?(owner, non_owner, document)
-    return true if owner == current_user
+    return true if current_user.primary_shared_with_or_owner?(owner)
     service = DocumentService.new(:category => document.category)
     card_values = service.get_card_values(owner, non_owner).flatten(2).collect{ |x| x[:id] }
     card_names = service.get_card_names(owner, non_owner).flatten(2).collect{ |x| x[:id] }

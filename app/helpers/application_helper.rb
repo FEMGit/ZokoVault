@@ -57,7 +57,7 @@ module ApplicationHelper
   end
 
   def category_view_path(category, user = nil)
-    case category.name
+    case category.try(:name)
     when Rails.application.config.x.WillsPoaCategory
       return shared_view_wills_powers_of_attorney_path(user) if @shared_user.present?
       wills_powers_of_attorney_path

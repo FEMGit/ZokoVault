@@ -9,6 +9,8 @@ module TutorialsHelper
         '#icon-document-shield'
       when 'vehicle'
         '#icon-car-large'
+      when 'add-financial-advisor'
+        '#icon-business-man-2'
       else
         '#icon-activity-monitor-1'
     end

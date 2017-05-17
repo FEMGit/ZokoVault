@@ -43,6 +43,8 @@ class PagesController < HighVoltage::PagesController
       @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
     elsif @tutorial_name.include? 'insurance-broker'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+    elsif @tutorial_name.include? 'financial-advisor'
+      @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     end
     @contact = Contact.new(user: current_user)
   end

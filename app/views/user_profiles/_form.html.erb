@@ -52,7 +52,7 @@
     </span>
     <span class="zip-input">
       <%= f.label :zip, 'Zip Code' %>
-      <%= zip_code_form(f, :zip) %>
+      <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip } %>
     </span>
 
     <%= f.label :notes %>
@@ -110,7 +110,7 @@
       </span>
       <span class="zip-input">
         <%= ff.label :zip, 'Zip Code' %>
-        <%= zip_code_form(ff, :zip) %>
+        <%= render partial: 'layouts/zip_code', locals: { f: ff, zip: :zip } %>
       </span>
 
       <%= ff.label :phone_number_office, 'Business Phone Number' %>

@@ -44,7 +44,7 @@
         </span>
         <span class="zip-input">
           <label>Zip Code</label>
-          <%= zip_code_form(f, :zip) %>
+          <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip } %>
         </span>
 
       <label>Business Phone Number</label>

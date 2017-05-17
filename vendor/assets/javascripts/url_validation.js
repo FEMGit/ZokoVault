@@ -6,3 +6,11 @@ function checkURL (urlInput) {
   urlInput.value = string;
   return urlInput
 }
+
+$(document).ready(function() {
+  $('input[type=url]').keydown(function(event) {
+    if(event.keyCode === 13) {
+      checkURL(this)
+    }
+  })
+})

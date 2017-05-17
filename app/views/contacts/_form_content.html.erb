@@ -98,6 +98,7 @@
   <%= f.text_field :photourl, id: "photo_url", style: "display: none;" %>
 </div>
 
+<%= javascript_include_tag 'url_validation' %>
 <script>
   $(document).ready(function() {
     contact_type_handle($('#contact_contact_type'), true)

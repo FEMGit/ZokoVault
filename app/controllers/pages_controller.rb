@@ -10,7 +10,7 @@ class PagesController < HighVoltage::PagesController
     tuto_index = session[:tutorial_index] + 1
 
     if session[:tutorial_paths][tuto_index]
-     @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+      @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     else
       redirect_to new_tutorial_path and return
     end
@@ -36,6 +36,8 @@ class PagesController < HighVoltage::PagesController
     @page_number   = params[:page_id]
     @tutorial_name = params[:tutorial_id]
     @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
+    @subtutorials = @tutorial.try(:subtutorials)
+    clean_subtutorials
   end
   
   def set_contacts
@@ -49,5 +51,15 @@ class PagesController < HighVoltage::PagesController
       @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
     end
     @contact = Contact.new(user: current_user)
+  end
+  
+  def clean_subtutorials
+    if @tutorial && @tutorial.has_subtutorials?
+      tuto_index = session[:tutorial_index]
+      tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+      if session[:tutorial_paths][tuto_index][:current_page].eql? 'subtutorials_choice'
+        session[:tutorial_paths].delete_if { |x| x[:tuto_id].to_s == tuto_id.to_s && x[:current_page] != 'subtutorials_choice' }
+      end
+    end
   end
 end

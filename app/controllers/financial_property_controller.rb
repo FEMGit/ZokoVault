@@ -1,6 +1,7 @@
 class FinancialPropertyController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_financial_property, only: [:show, :edit, :update, :destroy]
   before_action :set_provider, only: [:show, :edit, :update, :destroy, :set_documents]
@@ -65,15 +66,9 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property.share_with_contact_ids = @property_provider.share_with_contact_ids
     set_viewable_contacts
   end
-
+  
   def create
-    if params[:tutorial_name] && params[:financial_property][:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
-      end
-    end
+    check_tutorial_params(property_params[:name]) && return
 
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
@@ -87,24 +82,13 @@ class FinancialPropertyController < AuthenticatedController
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
-          tuto_index = session[:tutorial_index]
-          next_tuto = session[:tutorial_paths][tuto_index]
-          path = if next_tuto[:tuto_name] == 'confirmation_page'
-            tutorials_confirmation_path
-          else
-             tutorial_page_path(next_tuto[:tuto_name], '1')
-          end
-          format.json { render json: @financial_property.as_json and return }
-          format.html { redirect_to path, flash: { success: 'Property was successfully created.' } and return }
+          tutorial_redirection(format, @financial_property.as_json, 'Property was successfully created.')
+        else
+          format.json { render :show, status: :created, location: @financial_property }
+          format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         end
-
-        format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
-        format.json { render :show, status: :created, location: @financial_property }
       else
-        if params[:tutorial_name]
-          flash[:alert] = "Fill in Property Name field to continue"
-          redirect_to tutorial_page_path('home', '1') and return
-        end
+        tutorial_error_handle("Fill in Property Name field to continue", "home", "1") && return
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }

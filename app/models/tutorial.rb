@@ -4,6 +4,7 @@ class Tutorial < ActiveRecord::Base
   validates_presence_of :name, :if => lambda { |o| o.current_step == "cicle" }
 
   has_many :pages
+  has_many :subtutorials
 
   def current_step
     @current_step || steps.first
@@ -27,6 +28,10 @@ class Tutorial < ActiveRecord::Base
 
   def last_step?
     current_step == steps.last
+  end
+  
+  def has_subtutorials?
+    subtutorials.present?
   end
 
   def all_valid?

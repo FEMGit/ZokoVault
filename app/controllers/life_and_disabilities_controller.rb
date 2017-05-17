@@ -2,6 +2,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_life, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
@@ -93,20 +94,14 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
-          tuto_index = session[:tutorial_index] - 1
-          session[:tutorial_paths][tuto_index][:object] = @insurance_card
-
-          redirect_to tutorial_page_path(params[:tutorial_name], params[:next_page_number]) and return
+          tutorial_redirection(format, @insurance_card.as_json, 'Insurance successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
+          format.json { render :show, status: :created, location: @insurance_card }
         end
-
-        format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
-        format.json { render :show, status: :created, location: @insurance_card }
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        if params[:tutorial_name]
-          flash[:alert] = "Fill in Insurance Provider Name field to continue"
-          redirect_to tutorial_page_path('insurance', '2') and return
-        end
+        tutorial_error_handle("Fill in Insurance Provider Name field to continue", "insurance", "1") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }

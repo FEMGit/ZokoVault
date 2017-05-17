@@ -2,6 +2,7 @@ class HealthsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_health, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
@@ -100,26 +101,15 @@ class HealthsController < AuthenticatedController
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         # If comes from Tutorials workflow, redirect to next step
-        if tutorial_params[:tutorial_name]
-          tuto_index = session[:tutorial_index] - 1
-          next_tuto = session[:tutorial_paths][tuto_index]
-          path = if next_tuto[:tuto_name] == 'confirmation_page'
-            tutorials_confirmation_path
-          else
-            tutorial_page_path(next_tuto[:tuto_name], '2')
-          end
-          format.json { render json: @insurance_card.as_json and return }
-          format.html { redirect_to path, flash: { success: 'Insurance successfully created.' } and return }
+        if params[:tutorial_name]
+          tutorial_redirection(format, @insurance_card.as_json, 'Insurance successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
+          format.json { render :show, status: :created, location: @insurance_card }
         end
-
-        format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
-        format.json { render :show, status: :created, location: @insurance_card }
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        if tutorial_params[:tutorial_name]
-          flash[:alert] = "Fill in Insurance Provider Name field to continue"
-          redirect_to tutorial_page_path('insurance', '1') and return
-        end
+        tutorial_error_handle("Fill in Insurance Provider Name field to continue", "insurance", "3") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }

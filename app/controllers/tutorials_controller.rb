@@ -68,7 +68,7 @@ class TutorialsController < AuthenticatedController
     tuto_index = session[:tutorial_index]
     tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
     @current_tutorial = Tutorial.find tuto_id
-    current_tutorial_name = @current_tutorial.slug.parameterize
+    current_tutorial_name = @current_tutorial.name.parameterize
 
     redirect_to tutorial_page_path(current_tutorial_name, '1')
   end
@@ -88,7 +88,7 @@ class TutorialsController < AuthenticatedController
       redirect_to new_tutorial_path and return
     end
 
-    @prev_tutorial = Tutorial.find_by(slug: @prev_tutorial_name.titleize)
+    @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
     @prev_page = session[:tutorial_paths][tuto_index][:current_page]
     session[:tutorial_index] = session[:tutorial_index] - 2
 
@@ -113,7 +113,7 @@ class TutorialsController < AuthenticatedController
         result << {
           tuto_id: tuto,
           current_page: p + 1,
-          tuto_name: tutorial.slug.split(" ").join("-").downcase }
+          tuto_name: tutorial.name.split(" ").join("-").downcase }
       end
     end
     result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page

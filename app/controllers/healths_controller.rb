@@ -82,15 +82,7 @@ class HealthsController < AuthenticatedController
   # POST /healths
   # POST /healths.json
   def create
-    if params[:tutorial_name] && health_params[:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        tuto_index = session[:tutorial_index] - 1
-        next_tuto = session[:tutorial_paths][tuto_index]
-        redirect_to tutorial_page_path(next_tuto[:tuto_name], '2') and return
-      end
-    end
+    check_tutorial_params(health_params[:name]) and return
     
     @insurance_card = Health.new(health_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card

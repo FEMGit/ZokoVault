@@ -8,6 +8,10 @@ class PagesController < HighVoltage::PagesController
   def show
     @show_footer = false
     tuto_index = session[:tutorial_index] + 1
+    
+    if @tutorial_name.eql? 'confirmation_page'
+      redirect_to tutorials_confirmation_path and return
+    end
 
     if session[:tutorial_paths][tuto_index]
       @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
@@ -36,14 +40,16 @@ class PagesController < HighVoltage::PagesController
     @page_number   = params[:page_id]
     @tutorial_name = params[:tutorial_id]
     @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
-    @subtutorials = @tutorial.try(:subtutorials)
-    clean_subtutorials
+    if @tutorial_name != 'confirmation_page'
+      @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
+      clean_subtutorials
+    end
   end
   
   def set_contacts
     if @tutorial_name.include? 'primary-contact'
       @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
-    elsif @tutorial_name.include? 'insurance-broker'
+    elsif @tutorial_name.include? 'insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'financial-advisor'
       @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')

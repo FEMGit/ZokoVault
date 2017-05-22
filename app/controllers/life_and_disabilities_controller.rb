@@ -83,15 +83,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   # POST /lives
   # POST /lives.json
   def create
-    if params[:tutorial_name] && life_params[:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        tuto_index = session[:tutorial_index] - 1
-        next_tuto = session[:tutorial_paths][tuto_index]
-        redirect_to tutorial_page_path(next_tuto[:tuto_name], '3') and return
-      end
-    end
+    check_tutorial_params(life_params[:name]) and return
     
     @insurance_card = LifeAndDisability.new(life_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.configuration.x.InsuranceCategory.downcase)))
     authorize @insurance_card

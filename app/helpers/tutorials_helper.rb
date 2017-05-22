@@ -5,19 +5,23 @@ module TutorialsHelper
         '#icon-house-large'
       when 'add-primary-contact', 'add-tax-accountant'
         '#icon-woman'
-      when 'insurance'
+      when 'insurance', 'life-disability'
         '#icon-document-shield'
       when 'vehicle'
         '#icon-car-large'
       when 'add-financial-advisor'
         '#icon-business-man-2'
+      when 'property-casualty'
+        '#icon-umbrella-1'
+      when 'insurance-broker'
+        '#icon-business-man-1'
       else
         '#icon-activity-monitor-1'
     end
   end
   
   def tutorial_id(tutorial)
-    tutorial[:name].downcase.split(' ').join('-')
+    tutorial.try(:short_name) || tutorial[:name].downcase.split(' ').join('-')
   end
   
   def check_tutorial_params(property_param)

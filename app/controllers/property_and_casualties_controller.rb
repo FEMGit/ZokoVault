@@ -87,13 +87,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
-    if params[:tutorial_name] && property_and_casualty_params[:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
-      end
-    end
+    check_tutorial_params(property_and_casualty_params[:name]) and return
     
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card

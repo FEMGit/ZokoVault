@@ -81,6 +81,16 @@ class HealthsController < AuthenticatedController
   # POST /healths
   # POST /healths.json
   def create
+    if params[:tutorial_name] && health_params[:name].empty?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        tuto_index = session[:tutorial_index] - 1
+        next_tuto = session[:tutorial_paths][tuto_index]
+        redirect_to tutorial_page_path(next_tuto[:tuto_name], '2') and return
+      end
+    end
+    
     @insurance_card = Health.new(health_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_health_policies(policy_params, @insurance_card)
@@ -90,18 +100,23 @@ class HealthsController < AuthenticatedController
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
         @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         # If comes from Tutorials workflow, redirect to next step
-        if params[:tutorial_name]
+        if tutorial_params[:tutorial_name]
           tuto_index = session[:tutorial_index] - 1
-          session[:tutorial_paths][tuto_index][:object] = @insurance_card
-
-          redirect_to tutorial_page_path(params[:tutorial_name], params[:next_page_number]) and return
+          next_tuto = session[:tutorial_paths][tuto_index]
+          path = if next_tuto[:tuto_name] == 'confirmation_page'
+            tutorials_confirmation_path
+          else
+            tutorial_page_path(next_tuto[:tuto_name], '2')
+          end
+          format.json { render json: @insurance_card.as_json and return }
+          format.html { redirect_to path, flash: { success: 'Insurance successfully created.' } and return }
         end
 
         format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
         format.json { render :show, status: :created, location: @insurance_card }
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        if params[:tutorial_name]
+        if tutorial_params[:tutorial_name]
           flash[:alert] = "Fill in Insurance Provider Name field to continue"
           redirect_to tutorial_page_path('insurance', '1') and return
         end
@@ -158,6 +173,10 @@ class HealthsController < AuthenticatedController
   end
 
   private
+
+  def tutorial_params
+    params.permit(:tutorial_name)
+  end
 
   def validate_params
     policy_params.values.select{ |x| HealthPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0

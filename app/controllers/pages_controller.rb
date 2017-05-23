@@ -13,6 +13,10 @@ class PagesController < HighVoltage::PagesController
       redirect_to tutorials_confirmation_path and return
     end
 
+    if @tutorial_name.eql? 'confirmation_page'
+      redirect_to tutorials_confirmation_path and return
+    end
+    
     if session[:tutorial_paths][tuto_index]
       @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     else
@@ -55,6 +59,15 @@ class PagesController < HighVoltage::PagesController
       @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'tax-accountant'
       @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+    elsif @tutorial_name.include? 'trust'
+      @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+      @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+
+      @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+      @shareable_category = ShareableCategory.new(current_user,
+                                                  @category.id, 
+                                                  @contacts_with_access.map(&:id))
     end
     @contact = Contact.new(user: current_user)
   end

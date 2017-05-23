@@ -1,6 +1,7 @@
 class EntitiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include TutorialsHelper
   include BackPathHelper
   include SanitizeModule
   before_action :set_entity, only: [:show, :edit, :update, :destroy]
@@ -66,15 +67,21 @@ class EntitiesController < AuthenticatedController
   end
 
   def create
+    check_tutorial_params(entity_params[:name]) && return
     @entity = Entity.new(entity_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)))
     authorize @entity
     respond_to do |format|
       if @entity.save
         WtlService.update_shares(@entity.id, @entity.share_with_contact_ids, resource_owner.id, Entity)
         WtlService.update_entity(@entity, entity_params_multi[:agent_ids], entity_params_multi[:partner_ids])
-        format.html { redirect_to success_path, flash: { success: 'Entity successfully created.' } }
-        format.json { render :show, status: :created, location: @entity }
+        if tutorial_params[:tutorial_name]
+          tutorial_redirection(format, @entity.as_json, 'Entity successfully created.')
+        else
+          format.html { redirect_to success_path, flash: { success: 'Entity successfully created.' } }
+          format.json { render :show, status: :created, location: @entity }
+        end
       else
+        tutorial_error_handle("Fill in Entity Name field to continue", "trust", "2") && return
         set_account_owners
         set_agents_and_partners
         error_path(:new)
@@ -159,6 +166,10 @@ class EntitiesController < AuthenticatedController
 
   def set_viewable_contacts
     @entity.share_with_contact_ids = category_subcategory_shares(@entity, resource_owner).map(&:contact_id)
+  end
+  
+  def tutorial_params
+    params.permit(:tutorial_name)
   end
 
   def update_share_params

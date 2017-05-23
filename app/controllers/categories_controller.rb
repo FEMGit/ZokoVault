@@ -11,6 +11,7 @@ class CategoriesController < AuthenticatedController
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include TutorialsHelper
   
   def page_name
     case action_name
@@ -77,6 +78,7 @@ class CategoriesController < AuthenticatedController
       params[:id],
       shareable_category_params[:share_with_contact_ids]).execute
 
+    check_tutorial_params([]) and return
     redirect_to redirect_path(sc.category)
   end
   

@@ -2,6 +2,7 @@ class TrustsController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_trust, only: [:show, :edit, :destroy]
   before_action :set_documents, only: [:show]
@@ -73,14 +74,7 @@ class TrustsController < AuthenticatedController
   end
 
   def create
-    if params[:tutorial_name] && params[:vault_entry_0][:name].empty?
-      if params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
-      else
-        redirect_to tutorial_page_path(params[:next_tutorial], '1') and return
-      end
-    end
-    
+    check_tutorial_params(params[:vault_entry_0][:name]) && return
     save_or_update_trust(:new)
   end
 
@@ -99,24 +93,13 @@ class TrustsController < AuthenticatedController
           update_trusts(new_trusts, old_trusts)
           
           if tutorial_params[:tutorial_name]
-            tuto_index = session[:tutorial_index]
-            next_tuto = session[:tutorial_paths][tuto_index]
-            path = if next_tuto[:tuto_name] == 'confirmation_page'
-              tutorials_confirmation_path
-            else
-              tutorial_page_path(next_tuto[:tuto_name], '1')
-            end
-            format.json { render json: @new_vault_entries.as_json and return }
-            format.html { redirect_to path, flash: { success: success_message(old_trusts) } and return }
+            tutorial_redirection(format, @new_vault_entries.as_json, success_message(old_trusts))
+          else
+            format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
+            format.json { render :show, status: :created, location: @trust }
           end
-        
-          format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
-          format.json { render :show, status: :created, location: @trust }
         rescue
-          if tutorial_params[:tutorial_name]
-            flash[:alert] = "Fill in Trust Name field to continue"
-            redirect_to tutorial_page_path('trust', '1') and return
-          end
+          tutorial_error_handle("Fill in Trust Name field to continue", "trust", "1") && return
           @vault_entry = Trust.new
           @old_params.try(:each) { |trust| @vault_entries << trust }
           @new_params.try(:each) { |trust| @vault_entries << trust }
@@ -126,6 +109,7 @@ class TrustsController < AuthenticatedController
           set_error_breadcrumbs
         end
       else
+        tutorial_error_handle("Fill in Trust Name field to continue", "trust", "1") && return
         error_path(action)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }

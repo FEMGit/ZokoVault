@@ -58,6 +58,14 @@ class Vendor < ActiveRecord::Base
   def self.healths
     self.where(type: 'Health')
   end
+
+  def self.properties
+    self.where(type: 'PropertyAndCasualty')
+  end
+
+  def self.lives
+    self.where(type: 'LifeAndDisability')
+  end
   
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
 end

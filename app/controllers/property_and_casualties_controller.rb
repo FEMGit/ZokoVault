@@ -2,6 +2,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_property_and_casualty, only: [:show, :edit, :update, :destroy_provider]
   before_action :set_policy, :provider_by_policy, only: [:destroy]
@@ -86,6 +87,8 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # POST /properties
   # POST /properties.json
   def create
+    check_tutorial_params(property_and_casualty_params[:name]) and return
+    
     @insurance_card = PropertyAndCasualty.new(property_and_casualty_params.merge(user_id: resource_owner.id, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)))
     authorize @insurance_card
     PolicyService.fill_property_and_casualty_policies(policy_params, @insurance_card)
@@ -94,29 +97,17 @@ class PropertyAndCasualtiesController < AuthenticatedController
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
         @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
-          tuto_index = session[:tutorial_index] - 1
-          session[:tutorial_paths][tuto_index][:object] = @insurance_card
-
-          if params[:next_tutorial] == 'confirmation_page'
-            redirect_to tutorials_confirmation_path and return
-          else
-            tuto_index = session[:tutorial_index]
-            tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
-            next_page = session[:tutorial_paths][tuto_index][:current_page] # should be 1
-            redirect_to tutorial_page_path(tuto_name, next_page) and return
-          end
+          tutorial_redirection(format, @insurance_card.as_json, 'Insurance successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
+          format.json { render :show, status: :created, location: @insurance_card }
         end
-
-        format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
-        format.json { render :show, status: :created, location: @insurance_card }
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        if params[:tutorial_name]
-          flash[:alert] = "Fill in Insurance Provider Name field to continue"
-          redirect_to tutorial_page_path('insurance', '3') and return
-        end
+        tutorial_error_handle("Fill in Insurance Provider Name field to continue", "insurance", "2") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
@@ -169,6 +160,10 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   private
+
+  def tutorial_params
+    params.permit(:tutorial_name)
+  end
 
   def validate_params
     policy_params.values.select{ |x| PropertyAndCasualtyPolicy::policy_types.exclude? x["policy_type"] }.count.eql? 0

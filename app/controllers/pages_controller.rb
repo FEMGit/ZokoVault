@@ -8,9 +8,13 @@ class PagesController < HighVoltage::PagesController
   def show
     @show_footer = false
     tuto_index = session[:tutorial_index] + 1
+    
+    if @tutorial_name.eql? 'confirmation_page'
+      redirect_to tutorials_confirmation_path and return
+    end
 
     if session[:tutorial_paths][tuto_index]
-     @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+      @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     else
       redirect_to new_tutorial_path and return
     end
@@ -36,12 +40,16 @@ class PagesController < HighVoltage::PagesController
     @page_number   = params[:page_id]
     @tutorial_name = params[:tutorial_id]
     @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
+    if @tutorial_name != 'confirmation_page'
+      @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
+      clean_subtutorials
+    end
   end
   
   def set_contacts
     if @tutorial_name.include? 'primary-contact'
       @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
-    elsif @tutorial_name.include? 'insurance-broker'
+    elsif @tutorial_name.include? 'insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'financial-advisor'
       @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
@@ -49,5 +57,15 @@ class PagesController < HighVoltage::PagesController
       @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
     end
     @contact = Contact.new(user: current_user)
+  end
+  
+  def clean_subtutorials
+    if @tutorial && @tutorial.has_subtutorials?
+      tuto_index = session[:tutorial_index]
+      tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+      if session[:tutorial_paths][tuto_index][:current_page].eql? 'subtutorials_choice'
+        session[:tutorial_paths].delete_if { |x| x[:tuto_id].to_s == tuto_id.to_s && x[:current_page] != 'subtutorials_choice' }
+      end
+    end
   end
 end

@@ -148,6 +148,9 @@ $(document).on('ready', function() {
     } else if (tutorial_fields.hasClass('trust-fields')) {
       create = "/trusts/";
       destroy = "/trusts/";
+    } else if (tutorial_fields.hasClass('entity-fields')) {
+      var create = "/entities/";
+      var destroy = "/entities/";
     } else if (tutorial_fields.hasClass('health-fields')) {
       create = "/insurance/healths";
       destroy = "/insurance/healths/provider/";

@@ -24,7 +24,7 @@ class TutorialsController < AuthenticatedController
         "Guided Tutorial - Video"
     end
   end
-
+  
   def primary_contacts
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
   end
@@ -85,8 +85,7 @@ class TutorialsController < AuthenticatedController
         redirect_to tutorial_page_path(tuto_name, next_page) and return
       end
     else
-      subtutorial_pages = params[:tutorial][:pages].keys
-      
+      subtutorial_pages = params[:tutorial][:pages]
       tuto_index = session[:tutorial_index]
       tutorial_id = session[:tutorial_paths][tuto_index - 1][:tuto_id].to_i
       tutorial_path_update(subtutorial_pages, tutorial_id)
@@ -117,7 +116,7 @@ class TutorialsController < AuthenticatedController
     session[:tutorial_index] = session[:tutorial_index] - 2
     redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
   end
-
+  
   private
 
   def set_blank_layout_header_info
@@ -145,10 +144,22 @@ class TutorialsController < AuthenticatedController
   
   def tutorial_path_update(subtutorial_pages, tuto_index)
     tutorial = Tutorial.find(tuto_index)
+    
+    subtutorials_path = []
+    subtutorial_pages.try(:each) do |number, id|
+      subtutorial = Subtutorial.find_by(:id => id)
+      next unless subtutorial.present?
+      (number.to_i ... number.to_i + subtutorial.number_of_pages).each do |page_numer|
+        subtutorials_path << page_numer
+      end
+    end
+    
+      
     tuto_name = tutorial.name.split(" ").join("-").downcase 
     tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
+    
     session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
-                               subtutorial_pages.collect { |s| tutorial_path(tuto_index, s, tutorial) } +
+                               subtutorials_path.collect { |s| tutorial_path(tuto_index, s, tutorial) } +
                                session[:tutorial_paths][tutorial_path_position + 1..-1]
   end
   
@@ -158,5 +169,9 @@ class TutorialsController < AuthenticatedController
       current_page: current_page,
       tuto_name: tutorial.name.split(" ").join("-").downcase 
     }
+  end
+  
+  def subtutorial_id_params
+    params.permit(subtutorial_ids: [])
   end
 end

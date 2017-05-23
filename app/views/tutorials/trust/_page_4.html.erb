@@ -20,7 +20,7 @@
       </h3>
       
       <div class="chosen-styled-select text-left max-w-340 m-0-auto">
-        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts) %>
+        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts, {}, @contacts_with_access.try(:map, &:id)) %>
       </div>
     </div>
 

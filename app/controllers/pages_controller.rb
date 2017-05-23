@@ -1,4 +1,5 @@
 class PagesController < HighVoltage::PagesController
+  include BreadcrumbsCacheModule
   before_action :set_cache_headers
   before_action :set_tutorial, :set_contacts, only: [:show]
   layout 'without_sidebar_layout'
@@ -57,8 +58,16 @@ class PagesController < HighVoltage::PagesController
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'financial-advisor'
       @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
-    elsif @tutorial_name.include? 'tax-accountant'
+    elsif @tutorial_name.include? 'taxes'
       @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+      @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
+      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+      @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
+
+      @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
+      @shareable_category = ShareableCategory.new(current_user,
+                                                  @category.id, 
+                                                  @contacts_with_access.map(&:id))
     elsif @tutorial_name.include? 'trust'
       @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
       @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 

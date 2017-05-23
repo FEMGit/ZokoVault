@@ -25,6 +25,28 @@ class TutorialsController < AuthenticatedController
     end
   end
   
+  def tutorial_add_document
+    # Save breadcrumbs for current tutorial page
+    @page_number   = params[:page_number]
+    @tutorial_name = params[:tutorial_name]
+    if @tutorial_name.include? 'wills'
+      if @page_number.to_i.eql? 2
+        add_breadcrumb "Wills Tutorial - Digital Will", '/tutorials/wills/2'
+        cache_breadcrumbs_write
+      end
+      @category = Rails.application.config.x.WillsPoaCategory
+    end
+    if @tutorial_name.include? 'taxes'
+      if @page_number.to_i.eql? 1
+        add_breadcrumb "Taxes Tutorial - Digital Tax Records", '/tutorials/taxes/1'
+        cache_breadcrumbs_write
+      end
+      @category = Rails.application.config.x.TaxCategory
+    end
+    session[:tutorial_index] -= 1
+    redirect_to new_document_path(:first_run => true, :category => @category) and return
+  end
+
   def primary_contacts
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
   end
@@ -86,6 +108,7 @@ class TutorialsController < AuthenticatedController
       end
     else
       subtutorial_pages = params[:tutorial][:pages]
+      
       tuto_index = session[:tutorial_index]
       tutorial_id = session[:tutorial_paths][tuto_index - 1][:tuto_id].to_i
       tutorial_path_update(subtutorial_pages, tutorial_id)
@@ -154,7 +177,6 @@ class TutorialsController < AuthenticatedController
       end
     end
     
-      
     tuto_name = tutorial.name.split(" ").join("-").downcase 
     tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
     

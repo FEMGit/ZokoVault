@@ -43,7 +43,7 @@ $left-nav-margin-top: 10px;
 }
 
 .shared-link {
-  @include media($teneighty) {
+  @include media($tablet) {
     border-top: 1px;
 
     .outline-button {

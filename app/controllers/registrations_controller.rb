@@ -4,6 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def after_inactive_sign_up_path_for(resource)
+    FailedEmailLoginAttempt.where(email: resource.email).destroy_all
     thank_you_path
   end
 

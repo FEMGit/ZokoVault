@@ -196,6 +196,7 @@ Rails.application.routes.draw do
   resources :tutorials, except: :destroy do
     get '/:page_id', to: 'pages#show', as: :page
     post '/destroy', to: 'tutorials#destroy'
+    post '/create_wills', to: 'tutorials#create_wills', as: :create_wills
   end
 
   resources :vault_entries, only: [:index, :new, :show, :create]

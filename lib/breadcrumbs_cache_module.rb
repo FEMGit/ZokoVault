@@ -44,7 +44,7 @@ module BreadcrumbsCacheModule
 
   module_function :cache_breadcrumbs_pop, :cache_key,
                   :cache_temp_breadcrumbs_write, :cache_temp_breadcrumbs_pop,
-                  :cache_temp_breadcrumbs_delete
+                  :cache_temp_breadcrumbs_delete, :cache_breadcrumbs_write
 
   private
 

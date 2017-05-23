@@ -77,6 +77,17 @@ class PagesController < HighVoltage::PagesController
       @shareable_category = ShareableCategory.new(current_user,
                                                   @category.id, 
                                                   @contacts_with_access.map(&:id))
+    elsif @tutorial_name.include? 'wills'
+      @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+      @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
+      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+      @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
+
+      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
+                               @estate_planning_attorneys).uniq
+      @shareable_category = ShareableCategory.new(current_user,
+                                                  @category.id, 
+                                                  @contacts_with_access.map(&:id))
     end
     @contact = Contact.new(user: current_user)
   end

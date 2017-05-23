@@ -64,7 +64,8 @@ class PagesController < HighVoltage::PagesController
       @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
       @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
 
-      @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
+      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
+                               @tax_accountants).uniq
       @shareable_category = ShareableCategory.new(current_user,
                                                   @category.id, 
                                                   @contacts_with_access.map(&:id))
@@ -73,7 +74,8 @@ class PagesController < HighVoltage::PagesController
       @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
       @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
 
-      @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
+                               @trust_planning_attorneys).uniq
       @shareable_category = ShareableCategory.new(current_user,
                                                   @category.id, 
                                                   @contacts_with_access.map(&:id))

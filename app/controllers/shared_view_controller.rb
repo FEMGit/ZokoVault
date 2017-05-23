@@ -87,15 +87,15 @@ class SharedViewController < AuthenticatedController
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
 
     @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
-      if @shared_category_names.include? 'Taxes'
-        @category_shared = true
-        @taxes = TaxYearInfo.for_user(@shared_user)
-        @documents = Document.for_user(shared_user).where(category: @category.name)
-      else
-        tax_year_ids = @other_shareables.select { |shareable| shareable.is_a?Tax }.map(&:tax_year_id).uniq
-        @taxes = TaxYearInfo.for_user(@shared_user).where(id: tax_year_ids)
-        @documents = Document.for_user(shared_user).where(group: @taxes.map(&:year))
-      end
+    if @shared_category_names.include? 'Taxes'
+      @category_shared = true
+      @taxes = TaxYearInfo.for_user(@shared_user)
+      @documents = Document.for_user(shared_user).where(category: @category.name)
+    else
+      tax_year_ids = @other_shareables.select { |shareable| shareable.is_a?Tax }.map(&:tax_year_id).uniq
+      @taxes = TaxYearInfo.for_user(@shared_user).where(id: tax_year_ids)
+      @documents = Document.for_user(shared_user).where(group: @taxes.map(&:year))
+    end
     session[:ret_url] = shared_view_taxes_path
   end
 
@@ -205,22 +205,26 @@ class SharedViewController < AuthenticatedController
   private
 
   def set_shareables
-    @document_shareables, @category_shareables, @other_shareables = Array.new(3) { [] }
+    if current_user.primary_shared_with?(shared_user)
+      @document_shareables = Document.for_user(shared_user)
+    else
+      @document_shareables, @category_shareables, @other_shareables = Array.new(3) { [] }
 
-    @shares.select(&:shareable_type).map(&:shareable).each do |shareable| 
-      case shareable
-      when Document
-        @document_shareables |= [shareable]
-      when Category
-        @category_shareables << shareable
-      else
-        @other_shareables << shareable
+      @shares.select(&:shareable_type).map(&:shareable).each do |shareable| 
+        case shareable
+        when Document
+          @document_shareables |= [shareable]
+        when Category
+          @category_shareables << shareable
+        else
+          @other_shareables << shareable
+        end
       end
+
+      shareables = @shares.select(&:shareable_type).map(&:shareable)
+      shared_documents = ShareService.shared_documents(shared_user, current_user)
+      @document_shareables |= shared_documents
     end
-    
-    shareables = @shares.select(&:shareable_type).map(&:shareable)
-    shared_documents = ShareService.shared_documents(shared_user, current_user)
-    @document_shareables |= shared_documents
   end
   
   def sort_groups(existing_group_names)

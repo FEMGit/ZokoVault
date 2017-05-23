@@ -72,10 +72,12 @@ class SharesController < AuthenticatedController
     private
     
     def shared_category_count(shares, user)
+      return Rails.application.config.x.ShareCategories.count if current_user.primary_shared_with? user
       SharedViewService.shared_categories_full(shares).count
     end
 
     def shared_document_count(shareables, user)
+      return Document.for_user(user).count if current_user.primary_shared_with? user
       direct_document_share = shareables.select { |res| res.is_a? Document }
       group_docs = Document.for_user(user).select { |x| (shared_groups(user)["Tax"].include? x.group) ||
                                                         (shared_groups(user)["FinalWish"].include? x.group) ||

@@ -66,7 +66,12 @@ class DocumentService
   end
   
   def shared_user_values(user, current_user)
-    shares = SharedViewService.shares(user, current_user).select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+    shares = 
+      if current_user.primary_shared_with?(user)
+        Rails.application.config.x.ShareCategories.dup
+      else
+        SharedViewService.shares(user, current_user).select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+      end
     if shares.include? @category
       @all_groups.detect{|x| x[:label] == @category}[:groups].collect{|x| [id: x["label"], name: x["label"]]}
     else
@@ -131,7 +136,7 @@ class DocumentService
   end
   
   def user_cards(model, user, current_user)
-    return model.for_user(user).where(:category => Category.fetch(@category.downcase)) if current_user == user
+    return model.for_user(user).where(:category => Category.fetch(@category.downcase)) if current_user.primary_shared_with_or_owner? user
     share_categories = user.shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     return model.for_user(user) if (share_categories.include? @category)
     

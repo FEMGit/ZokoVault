@@ -38,7 +38,7 @@
     </span>
     <span class="zip-input">
       <%= f.label :zip, 'Zip Code' %>
-      <%= zip_code_form(f, :zip) %>
+      <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip } %>
     </span>
 
     <%= f.label :phone_number, 'Phone Number' %>
@@ -107,6 +107,7 @@
 <% end %>
 
 <%= javascript_include_tag "phone_address_toggle" %>
+<%= javascript_include_tag 'url_validation' %>
 <script>
   document.addEventListener('change', function(e) {
     element = e.target

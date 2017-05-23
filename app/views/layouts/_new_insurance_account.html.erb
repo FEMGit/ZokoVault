@@ -1,4 +1,4 @@
-<%= render :partial => "layouts/bread_crumbs" %>
+﻿<%= render :partial => "layouts/bread_crumbs" %>
 
 <h1><%= "#{yield(:title).gsub("&amp;", "&")} - Setup" %></h1>
 <%= form_for(@insurance_card, url: "#{yield(:url_path)}") do |f| %>
@@ -44,7 +44,7 @@
         </span>
         <span class="zip-input">
           <label>Zip Code</label>
-          <%= zip_code_form(f, :zip) %>
+          <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip } %>
         </span>
 
       <label>Business Phone Number</label>
@@ -118,6 +118,7 @@
 <% end %>
 
 <%= javascript_include_tag "phone_address_toggle" %>
+<%= javascript_include_tag 'url_validation' %>
 <script>
   $(document).ready(function() {
     clearFormFields = function(form){

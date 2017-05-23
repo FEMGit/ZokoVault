@@ -8,7 +8,7 @@ class DocumentsController < AuthenticatedController
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_viewable_contacts, only: [:update, :edit]
   before_action :prepare_document_params, only: [:create, :update]
-  before_action :set_shared_view_settings, :set_dropdown_options, only: [:new, :edit]
+  before_action :set_dropdown_options, only: [:new, :edit]
   before_action :prepare_shares, only: [:update]
 
   # Breadcrumbs navigation
@@ -173,12 +173,6 @@ class DocumentsController < AuthenticatedController
     else
      (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES
     end
-  end
-
-  def set_shared_view_settings
-    return unless resource_owner != current_user
-    @shared_user = resource_owner
-    @shared_category_names_full = ResourceOwnerService.shared_category_names(resource_owner, current_user)
   end
 
   def card_values(category)

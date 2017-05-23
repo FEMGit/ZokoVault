@@ -82,6 +82,20 @@ class User < ActiveRecord::Base
   def paid?
     current_user_subscription.present? && current_user_subscription.active?
   end
+  
+  def primary_shared_with?(shared_user)
+    return false unless shared_user.present?
+    shared_user.user_profile
+               .primary_shared_with
+               .map { |sh| sh.emailaddress.downcase }
+               .include? email.downcase
+  end
+  
+  def primary_shared_with_or_owner?(shared_user)
+    return false unless shared_user.present?
+    return true if shared_user == self
+    self.primary_shared_with?(shared_user)
+  end
 
   def mfa_verify?
     case mfa_frequency

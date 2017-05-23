@@ -31,6 +31,15 @@
 <% end %>
 
 <script>
+$(document).ready(function() {
+  $('#user_user_profile_attributes_phone_code').on('keydown', function(event) {
+    if(event.keyCode === 13) {
+      event.preventDefault()
+      verifyCode();
+    }
+  })
+})
+
 function sendCode() {
   var data = $('#account-form').serialize();
   $.post("<%= send_code_account_path %>",

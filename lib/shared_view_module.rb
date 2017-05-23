@@ -36,9 +36,14 @@ module SharedViewModule
 
   def set_shared_categories_names
     return unless params[:shared_user_id].present?
-    @shared_category_names = @shares.select(&:shareable_type)
-                                    .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
-    @shared_category_names_full = SharedViewService.shared_categories_full(@shares)
+    if current_user.primary_shared_with?(shared_user)
+      @shared_category_names = Rails.application.config.x.ShareCategories.dup
+      @shared_category_names_full = Rails.application.config.x.ShareCategories.dup
+    else
+      @shared_category_names = @shares.select(&:shareable_type)
+                                      .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+      @shared_category_names_full = SharedViewService.shared_categories_full(@shares)
+    end
   end
 
   def set_category_shared

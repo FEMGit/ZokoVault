@@ -3,7 +3,8 @@ module TutorialsHelper
     case tutorial_id(tutorial)
       when 'home'
         '#icon-house-large'
-      when 'add-primary-contact', 'add-tax-accountant'
+      when 'add-primary-contact', 'add-tax-accountant',
+           'estate-attorney'
         '#icon-woman'
       when 'insurance', 'life-disability'
         '#icon-document-shield'
@@ -54,5 +55,11 @@ module TutorialsHelper
       flash[:alert] = message
       redirect_to tutorial_page_path(tutorial, page) and return true
     end
+  end
+
+  # Will Subtutorials
+  def will_subtutorial_show?(tutorial)
+    return true unless tutorial.short_name.eql? 'spouse-will'
+    Contact.for_user(current_user).any? { |c| c.relationship == 'Spouse/Domestic Partner' }
   end
 end

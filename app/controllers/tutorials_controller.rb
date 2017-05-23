@@ -140,6 +140,24 @@ class TutorialsController < AuthenticatedController
     redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
   end
   
+  def create_wills
+    subtutorial_id_params[:subtutorial_ids].each do |subtutorial_id|
+      short_name = Subtutorial.find_by(:id => subtutorial_id).try(:short_name)
+      return unless short_name.present?
+      begin
+        if short_name.eql? 'my-will'
+          Will.create!(title: current_user.name + ' Will', user: current_user)
+        elsif short_name.eql? 'spouse-will'
+          spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse/Domestic Partner')
+          spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
+        end
+      rescue
+        render :json => { :errors => 'Error saving a record, please try again.' }, :status => 500
+      end
+    end
+    render :json => {}, :status => 200
+  end
+
   private
 
   def set_blank_layout_header_info

@@ -1,0 +1,26 @@
+<div class="card mb-30 mt-20 max-w-1000-centered">
+  <h1 class="mb-20">Add Your Estate Planning Attorney</h1>
+
+  <div class="modal-content">
+  <%= render partial: 'tutorials/contact_tutorial_table', locals: { table_title: 'Your Estate Planning Attorneys', 
+                                                                    contacts: @estate_planning_attorneys, 
+                                                                    table_id: 'attorney-table' } %>
+
+  <div class="flash-success-static flash add-contactable static small" style="display: none;">
+    You added an Attorney! Add another one of your Estate Planning Attorneys, or click Next.</div>
+    <button class="button primary-button big-button" onclick="createAttorneyContact();">Add Estate Planning Attorney</button>
+  </div>
+
+  <%= render partial: 'tutorials/buttons_section' %>
+</div>
+
+<%= render partial: 'contacts/ajax_form', style: 'display: none;' %>
+
+<script>
+  var createAttorneyContact = function() {
+    window.tableIdToUpdate = '#attorney-table'
+    setProfessionalDropdown(['Advisor'])
+    setRelationshipDropdown(['Attorney'])
+    displayContactFormModal();
+  }
+</script>

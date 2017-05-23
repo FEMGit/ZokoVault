@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   around_filter :save_current_user
   before_action :redirect_if_user_terms_of_service_empty
+  after_action :clean_headers
 
   private
   
@@ -44,6 +45,10 @@ class ApplicationController < ActionController::Base
     user_death_trap = UserDeathTrap.new(user: current_user, page_terminated_on: sign_up_path, error_message: error)
     user_death_trap.save
     raise exception
+  end
+  
+  def clean_headers
+    response.headers['Server'] = '-'
   end
 
   # Run Schedule for handling online users

@@ -1,5 +1,5 @@
 <div class="card mb-30 mt-20 max-w-1000-centered no-pages-form">
-  <h1 class="mb-20">Choose Insurance Tutorials</h1>
+  <h1 class="mb-20">Choose Will Tutorials</h1>
   <%= form_for @tutorial do |f| %>
     <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
     <%= hidden_field_tag :next_page_number, @next_page %>

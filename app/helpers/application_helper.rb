@@ -76,6 +76,9 @@ module ApplicationHelper
     when Rails.application.config.x.FinancialInformationCategory
       return shared_view_financial_information_path(user) if @shared_user.present?
       financial_information_path
+    when Rails.application.config.x.DocumentsCategory
+      return shared_view_documents_path(user) if @shared_user.present?
+      documents_path
     else
      return shared_view_dashboard_path(user) if @shared_user.present?
     end

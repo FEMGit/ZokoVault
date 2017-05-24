@@ -28,6 +28,7 @@ class SharePolicy < BasicPolicy
   def trusts_entities?; index? end
   def financial_information?; index?; end
   def final_wishes?; index?; end
+  def documents?; index?; end
   def taxes?; index?; end
   def insurance?; index?; end
   def power_of_attorneys?; index?; end

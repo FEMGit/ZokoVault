@@ -13,6 +13,7 @@ module ZokuVault
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'services')
+    config.x.DocumentsCategory = "Documents"
     config.x.WillsPoaCategory = "Wills - POA"
     config.x.TrustsEntitiesCategory = "Trusts & Entities"
     config.x.InsuranceCategory = "Insurance"
@@ -23,7 +24,7 @@ module ZokuVault
     config.x.ProfileCategory = "My Profile"
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
                                 config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
-                                config.x.TaxCategory, config.x.FinalWishesCategory]
+                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.DocumentsCategory]
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'
@@ -137,6 +138,11 @@ module ZokuVault
       },
       config.x.ContactCategory => {
         "label" => "Contact",
+        "groups" => [
+        ]
+      },
+      config.x.DocumentsCategory => {
+        "label" => "Documents",
         "groups" => [
         ]
       },

@@ -72,4 +72,13 @@
       </svg>Final Wishes
     <% end %>
   <% end %>
+  <! -- Documents -->
+  <% if show_navigation_link?('Documents') %>
+    <% shared_view_documents = 'active' if current_page?(shared_view_documents_path(@shared_user))  %>
+    <%= link_to shared_view_documents_path(@shared_user), class: "main-nav #{shared_view_documents}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-folder-1"></use>
+      </svg>Documents
+    <% end %>
+  <% end %>
 </nav>

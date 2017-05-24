@@ -1,0 +1,12 @@
+<%- checking_accounts = current_user.financial_account_informations.select{|p| p.account_type == 'Credit Card'} %>
+<% providers = FinancialProvider.where(id: checking_accounts.try(:map, &:account_provider_id)) %>
+<%- providers.each do |pr| %>
+  <div class="collect-fields">
+    <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
+    <%= hidden_field_tag 'financial_provider[account_0][property_type]', "Credit Card", class: 'saved-field' %>
+    <div class="input-pair tutorial-fields account-fields">
+      <%= text_field_tag "financial_provider[name]", pr.name, class: "saved-field form-control medium", placeholder: 'Provider Name', :maxlength => get_max_length(:default) %>
+      <a data-id=<%= pr.id %> class="medium-button outline-button inline-button remove-btn">Remove</a>
+    </div>
+  </div>
+<% end %>

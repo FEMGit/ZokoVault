@@ -64,42 +64,51 @@ class PagesController < HighVoltage::PagesController
       @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
     elsif @tutorial_name.include? 'insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
-    elsif @tutorial_name.include? 'financial-advisor'
-      @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'taxes'
-      @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
-      @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
-      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
-      @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
-
-      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
-                               @tax_accountants).uniq
-      @shareable_category = ShareableCategory.new(current_user,
-                                                  @category.id, 
-                                                  @contacts_with_access.map(&:id))
+      set_taxes_tutorial_contacts
     elsif @tutorial_name.include? 'trust'
-      @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
-      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
-      @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
-
-      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
-                               @trust_planning_attorneys).uniq
-      @shareable_category = ShareableCategory.new(current_user,
-                                                  @category.id, 
-                                                  @contacts_with_access.map(&:id))
+      set_trusts_tutorial_contacts
     elsif @tutorial_name.include? 'wills'
-      @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
-      @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
-      @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
-      @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
-
-      @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
-                               @estate_planning_attorneys).uniq
-      @shareable_category = ShareableCategory.new(current_user,
-                                                  @category.id, 
-                                                  @contacts_with_access.map(&:id))
+      set_wills_tutorial_contacts
+    elsif @tutorial_name.include? 'financial-information'
+      set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)
+  end
+  
+  def set_taxes_tutorial_contacts
+    @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
+    
+    @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+    set_contact_and_category_share(@tax_accountants, Rails.application.config.x.TaxCategory)
+  end
+  
+  def set_trusts_tutorial_contacts
+    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    set_contact_and_category_share(@trust_planning_attorneys, Rails.application.config.x.TrustsEntitiesCategory)
+  end
+  
+  def set_wills_tutorial_contacts
+    @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
+    
+    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    set_contact_and_category_share(@estate_planning_attorneys, Rails.application.config.x.WillsPoaCategory)
+  end
+  
+  def set_financial_information_tutorial_contacts
+    @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    set_contact_and_category_share(@financial_advisors, Rails.application.config.x.FinancialInformationCategory)
+  end
+  
+  def set_contact_and_category_share(contact_collection, category_name)
+    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    @category = Category.fetch(category_name.downcase)
+
+    @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
+                             contact_collection).uniq
+    @shareable_category = ShareableCategory.new(current_user,
+                                                @category.id, 
+                                                @contacts_with_access.map(&:id))
   end
   
   def clean_subtutorials

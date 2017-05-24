@@ -1,0 +1,44 @@
+<% wide ||= false %>
+<% hidden_field_tag_values ||= nil %>
+
+<div class="card mb-30 mt-20 max-w-1000-centered">
+  <h1 class="mb-20"><%= title %></h1>
+
+  <%= form_for form_for_object, url: url_for(action: :create, controller: form_controller) do |f| %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :page_number, @page_number %>
+
+    <% if wide %>
+      <div class="input-pair wide inline-input h-25">
+        <% label_tag.each do |tag| %>
+          <%= label_tag tag[:name], tag[:value], class: 'inline-input-50' %>
+        <% end %>
+        <%= label_tag "investment_name", '', class: 'inline-button' %>
+      </div>
+    <% else %>
+      <%= label_tag label_tag[:name], label_tag[:value] %>
+    <% end %>
+    <%= render partial: partial_path %>
+
+    <div class="collect-fields">
+      <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+      <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+
+      <% hidden_field_tag_values.try(:each) do |hidden_field_tag_value| %>
+        <%= hidden_field_tag hidden_field_tag_value[:name], hidden_field_tag_value[:value] %>
+      <% end %>
+
+      <div class="input-pair <% if wide %> wide <% end %> tutorial-fields <%= fields_class %>">
+        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+        <% if wide %>
+          <div class="styled-select form-control medium repeated-field ml-15 h-34">
+            <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+          </div>
+        <% end %>
+        <a class="medium-button button primary-button inline-button add-another-btn">Add Another</a>
+      </div>
+    </div>
+
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>

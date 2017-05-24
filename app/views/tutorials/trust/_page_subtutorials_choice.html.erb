@@ -7,6 +7,7 @@
     <%= hidden_field_tag :page_number, @page_number %>
 
     <% no_page_tutorials = 0 %>
+    <% tutorial_pages_counter = 1 %>
     <ul class="tut-button-wrapper">
       <%- @subtutorials.each_with_index do |tutorial, index|%>
         <% if tutorial.no_page %>
@@ -15,14 +16,17 @@
         <li class="icon-box">
           <label>
             <% if tutorial.no_page %>
-              <%= check_box_tag "tutorial[no-pages][#{index + 1}]", index, false, {class: "check-list-item no-page-#{tutorial.id}", value: tutorial.id} %>
+              <%= check_box_tag "tutorial[no-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item no-page-#{tutorial.id}", value: tutorial.id} %>
             <% else %>
               <% index -= no_page_tutorials %>
-              <%= check_box_tag "tutorial[pages][#{index + 1}]", index, false, {class: "check-list-item", value: tutorial.id } %>
+              <%= check_box_tag "tutorial[pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item", value: tutorial.id } %>
             <% end %>
             <%= render partial: 'tutorials/tutorial_icon', locals: { tutorial: tutorial } %>
           </label>
         </li>
+        <% if tutorial.number_of_pages > 1 %>
+          <% tutorial_pages_counter += tutorial.number_of_pages - 1 %>
+        <% end %>
       <% end %>
 
     </ul>

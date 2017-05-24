@@ -69,12 +69,16 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
 
 DynamicTutorialField.prototype.submit = function($btn) {
   var that = this;
+  var select_serialized = $('.collect-fields select').not('.saved-field').serialize()
+  var input_serialized = $('.collect-fields input').not('.saved-field').serialize()
+  
+  var serialized_data = input_serialized + '&' + select_serialized
 
   return $.ajax({
     url: that.submitURL,
     type: 'POST',
     dataType: 'json',
-    data: $('.collect-fields input').not('.saved-field').serialize()
+    data: serialized_data
   });
 }
 
@@ -145,6 +149,15 @@ $(document).on('ready', function() {
     if (tutorial_fields.hasClass('property-fields')) {
       create = "/financial_information/property/add_property";
       destroy = "/financial_information/property/";
+    } else if (tutorial_fields.hasClass('account-fields')) {
+      create = "/financial_information/account/add_account";
+      destroy = "/financial_information/account/provider/";
+    } else if (tutorial_fields.hasClass('investment-fields')) {
+      create = "/financial_information/investment/add_investment";
+      destroy = "/financial_information/investment/";
+    } else if (tutorial_fields.hasClass('alternative-fields')) {
+      create = "/financial_information/alternative/add_alternative";
+      destroy = "/financial_information/alternative/provider/";
     } else if (tutorial_fields.hasClass('trust-fields')) {
       create = "/trusts/";
       destroy = "/trusts/";

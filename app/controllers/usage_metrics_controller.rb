@@ -1,7 +1,7 @@
 class UsageMetricsController < AuthenticatedController
   include DateHelper
   before_action :check_privileges
-  before_action :stats, only: [:index]
+  before_action :stats, :models_with_user_set, only: [:index, :statistic_details, :update_information]
   before_action :death_traps, only: [:errors]
   before_action :set_user_death_drap, only: [:error_details]
   skip_before_action :redirect_if_free_user, :trial_check
@@ -37,6 +37,11 @@ class UsageMetricsController < AuthenticatedController
         user = User.find_by(id: params[:id])
         return "Admin User Details - #{user.name}"
     end
+  end
+  
+  def update_information
+    UserService.update_user_information(@user_models)
+    redirect_to usage_metrics_path
   end
 
   def set_edit_user_crumbs
@@ -184,85 +189,29 @@ class UsageMetricsController < AuthenticatedController
   end
 
   def site_completed(user)
-    completed_count = models_with_user.collect { |x| x.where(:user_id => user.id).any? }.count(true)
-    models_with_user_count = models_with_user.map(&:name).count
-    ((completed_count.to_f / models_with_user_count) * 100).round(2)
+    user.site_completed
   end
 
   def categories_left_to_complete(user)
-    completed = models_with_user.select { |x| x.where(:user_id => user.id).any? }
-    (models_with_user - completed).map(&:name)
+    completed = @user_models.select { |x| x.where(:user_id => user.id).any? }
+    (@user_models - completed).map(&:name)
   end
   
-  def models_with_user
+  def models_with_user_set
     update_model_list
     all_models = ActiveRecord::Base.descendants
     delete_system_models(all_models)
-    all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
+    @user_models = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
   end
   
   def categories_with_information_count(user)
-    contact_service = ContactService.new(:user => user)
-    
-    if_any_return_one(FinancialProvider.for_user(user)) + 
-      if_any_return_one(CardDocument.for_user(user)
-                                    .where(category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase))) + 
-      if_any_return_one(CardDocument.for_user(user)
-                                    .where(category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase))) +
-      if_any_return_one(Vendor.for_user(user)) +
-      if_any_return_one(TaxYearInfo.for_user(user)) +
-      if_any_return_one(FinalWishInfo.for_user(user)) +
-      if_any_return_one(contact_service.contacts_shareable)
+    user.category_count
   end
   
   def subcategories_with_information_count(user)
-    financial_information_count(user) + 
-      wills_powers_of_attorney_count(user) +
-      trusts_entities_count(user) + 
-      insurance_count(user) + 
-      taxes_count(user) + 
-      final_wishes_count(user) +
-      contacts_count(user)
+    user.subcategory_count
   end
   
-  def contacts_count(user)
-    contact_service = ContactService.new(:user => user)
-    contact_service.contacts_shareable.count
-  end
-  
-  def final_wishes_count(user)
-    FinalWishInfo.for_user(user).count
-  end
-  
-  def taxes_count(user)
-    TaxYearInfo.for_user(user).count
-  end
-  
-  def insurance_count(user)
-    Vendor.for_user(user).count
-  end
-  
-  def trusts_entities_count(user)
-    Trust.for_user(user).count + 
-      Entity.for_user(user).count
-  end
-  
-  def wills_powers_of_attorney_count(user)
-    Will.for_user(user).count +
-      PowerOfAttorneyContact.for_user(user).count
-  end
-  
-  def financial_information_count(user)
-    FinancialAccountInformation.for_user(user).count +
-      FinancialInvestment.for_user(user).count +
-      FinancialAlternative.for_user(user).count +
-      FinancialProperty.for_user(user).count
-  end
-  
-  def if_any_return_one(object)
-    object.any? ? 1 : 0
-  end
-
   def update_model_list
     Rails.application.eager_load!
   end

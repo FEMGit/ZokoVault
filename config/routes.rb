@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :final_wishes
-  resources :usage_metrics
   resources :taxes
   resources :relationships
   resources :vendor_accounts
@@ -205,6 +204,8 @@ Rails.application.routes.draw do
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Usage metrics path
+  get 'usage_metrics/update_site_completed', to: 'usage_metrics#update_information', as: :update_usage_metrics
+  resources :usage_metrics
   get 'usage_metrics/error_details/:id', to: 'usage_metrics#error_details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'

@@ -28,6 +28,7 @@ module ZokuVault
     
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'
+    config.x.UsageMetricsUpdateScheduleFormat = '1h'
     
     config.x.categories = {
       config.x.WillsPoaCategory => {

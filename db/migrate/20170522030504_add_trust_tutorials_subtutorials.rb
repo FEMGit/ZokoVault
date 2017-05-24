@@ -2,10 +2,12 @@ class AddTrustTutorialsSubtutorials < ActiveRecord::Migration
   def change
     unless column_exists? :subtutorials, :number_of_pages
       add_column :subtutorials, :number_of_pages, :integer, :default => 1
+      Subtutorial.reset_column_information
     end
     
     unless column_exists? :subtutorials, :short_name
       add_column :subtutorials, :short_name, :string
+      Subtutorial.reset_column_information
     end
     
     trust_tutorial_id = Tutorial.find_by(name: 'Trust').try(:id)

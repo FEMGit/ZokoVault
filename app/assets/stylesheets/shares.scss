@@ -41,3 +41,15 @@ $left-nav-margin-top: 10px;
     margin-top: 0;
   }
 }
+
+.shared-link {
+  @include media($tablet) {
+    border-top: 1px;
+
+    .outline-button {
+      float: left;
+    }
+  }
+
+}
+

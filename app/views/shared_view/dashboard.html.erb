@@ -4,14 +4,14 @@
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>
         <% category_instance = Category.fetch(category.downcase) %>
-        <section class="flex-boxes shared-boxes  padding-right">
+        <section class="flex-boxes shared-boxes padding-right">
           <div class="shared-name">
             <h4>
               <%= render partial: 'layouts/category_icons', locals: { category: category_instance } %> <%= category_name(category) %>
             </h4>
           </div>
           <div class="shared-link">
-            <%= link_to 'View Category', category_view_path(category_instance, @shared_user), class: 'outline-button small-button' %>
+            <%= link_to 'View Category', category_view_path(category_instance, @shared_user), class: 'outline-button category-btn small-button' %>
           </div>
         </section>
       <% end %>

@@ -17,9 +17,26 @@ class Funding < ActiveRecord::Base
   end
 
   def full?
-    method == "stripe_subscription"    ||
-    method == "stripe_onetime_payment" ||
+    stripe_subscription? || onetime_payment? || beta?
+  end
+
+  def stripe_subscription?
+    method == "stripe_subscription"
+  end
+
+  def onetime_payment?
+    method == "stripe_onetime_payment"
+  end
+
+  def beta?
     method == "beta_user_gift"
+  end
+
+  def stripe_subscription_record
+    return unless stripe_subscription?
+    ssid = details["stripe_subscription_id"]
+    return if ssid.blank?
+    StripeSubscription.where(subscription_id: ssid).last
   end
 
 end

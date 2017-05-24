@@ -2,49 +2,30 @@ class StripeSubscription < ActiveRecord::Base
   belongs_to :user
   attr_accessor :card_number
 
+  def self.map_of_plans
+    @map_of_plans ||=
+      Stripe::Plan.all.data.reduce({}) do |acc,plan|
+        acc[plan.id] = plan; acc
+      end.freeze
+  end
+
   def self.plans
-    @plans ||= Stripe::Plan.all.data
+    map_of_plans.values
   end
 
   def self.yearly_plan
-    plans.detect { |p| p["id"] == StripePlans::YEARLY_PLAN }
-  end
-
-  def self.plan(id)
-    plans.detect { |x| x.id.eql? id }
+    map_of_plans[StripePlans::YEARLY_PLAN]
   end
 
   def customer
-    @customer ||= Stripe::Customer.retrieve customer_id
+    @customer ||= Stripe::Customer.retrieve(customer_id)
   end
 
   def plan
-    @plan ||= Stripe::Plan.retrieve plan_id
+    self.class.map_of_plans[plan_id]
   end
 
-  def apply_discount(discount)
-    cust_object = Stripe::Customer.retrieve user.stripe_id
-    sub_object = cust_object.subscriptions.data[0]
-    sub_object.coupon = discount.id
-    sub_object.save
-    refresh!
-  end
-
-  private
-
-  # TODO is this being used?
-  def initialize_payment_for(customer)
-    payment_data = set_payment_data customer
-    {
-      id: payment_data.id,
-      funding: payment_data.funding,
-      last4: payment_data.last4,
-      brand: payment_data.brand,
-      country: payment_data.country,
-      exp_month: payment_data.exp_month,
-      exp_year: payment_data.exp_year,
-      cvc_check: payment_data.cvc_check,
-      fingerprint: payment_data.fingerprint
-    }
+  def fetch
+    @fetch ||= Stripe::Subscription.retrieve(subscription_id)
   end
 end

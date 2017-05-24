@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522043129) do
+ActiveRecord::Schema.define(version: 20170522212157) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -480,10 +481,7 @@ ActiveRecord::Schema.define(version: 20170522043129) do
 
   create_table "stripe_subscriptions", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "name_on_card"
-    t.string   "last4"
     t.string   "customer_id"
-    t.string   "stripe_token"
     t.string   "plan_id"
     t.string   "promo_code"
     t.datetime "created_at",      null: false
@@ -492,6 +490,7 @@ ActiveRecord::Schema.define(version: 20170522043129) do
   end
 
   add_index "stripe_subscriptions", ["subscription_id"], name: "index_stripe_subscriptions_on_subscription_id", using: :btree
+  add_index "stripe_subscriptions", ["user_id"], name: "index_stripe_subscriptions_on_user_id", using: :btree
 
   create_table "subtutorials", force: :cascade do |t|
     t.string   "name"

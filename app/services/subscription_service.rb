@@ -1,5 +1,5 @@
 class SubscriptionService
-  def self.create_from_stripe(user:, stripe_subscription_object:, grace_period: SubscriptionDuration::TRIAL)
+  def self.create_from_stripe(user:, stripe_subscription_object:, grace_period: SubscriptionDuration::GRACE)
     user_sub = UserSubscription.new
     user_sub.user = user
     user_sub.start_at = Time.at(stripe_subscription_object.start)

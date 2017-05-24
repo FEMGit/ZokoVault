@@ -13,11 +13,11 @@ class DocumentsController < AuthenticatedController
 
   # Breadcrumbs navigation
   before_action :set_previous_crumbs, only: [:new, :edit, :show, :download]
-  add_breadcrumb "Documents", :documents_path, only: [:index]
+  before_action :set_index_crumbs, only: [:index]
   before_action :set_add_crumbs, :set_first_run, only: [:new, :create]
   before_action :set_edit_crumbs, only: [:edit, :update]
   before_action :set_show_crumbs, only: [:show]
-  layout :resolve_layout, only: [:new, :edit]
+  layout :resolve_layout, only: [:new, :edit, :index, :show]
   include BreadcrumbsCacheModule
   include UserTrafficModule
 
@@ -41,9 +41,13 @@ class DocumentsController < AuthenticatedController
     @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(current_user, @shared_user)
     BreadcrumbsCacheModule.cache_temp_breadcrumbs_write(@breadcrumbs.present? ? @breadcrumbs.dup : [], resource_owner)
   end
+  
+  def set_index_crumbs
+    add_breadcrumb "Documents", documents_path if general_view?
+  end
 
   def set_add_crumbs
-    add_breadcrumb "Add Document", new_documents_path(@shared_user, @shared_user)
+    add_breadcrumb "Add Document", new_documents_path(@shared_user)
   end
 
   def set_edit_crumbs

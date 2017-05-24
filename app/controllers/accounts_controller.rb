@@ -30,10 +30,10 @@ class AccountsController < AuthenticatedController
   def setup; end
 
   def first_run
-    unless SubscriptionService.trial_was_used?(current_user)
-      SubscriptionService.activate_trial(user: current_user)
-    else
+    if SubscriptionService.trial_was_used?(current_user)
       redirect_to root_path
+    else
+      SubscriptionService.activate_trial(user: current_user)
     end
   end
 
@@ -79,7 +79,7 @@ class AccountsController < AuthenticatedController
   def terms_of_service; end
 
   def terms_of_service_update
-    current_user.update_attributes(user_params_except_subscription)
+    current_user.update_attributes(user_params)
     redirect_to phone_setup_account_path
   end
 
@@ -88,7 +88,7 @@ class AccountsController < AuthenticatedController
   end
 
   def phone_setup_update
-    current_user.update_attributes(user_params_except_subscription)
+    current_user.update_attributes(user_params)
     redirect_to login_settings_account_path
   end
 
@@ -97,7 +97,7 @@ class AccountsController < AuthenticatedController
   end
 
   def login_settings_update
-    current_user.update_attributes(user_params_except_subscription.merge(setup_complete: true))
+    current_user.update_attributes(user_params.merge(setup_complete: true))
     redirect_to user_type_account_path
   end
 
@@ -118,15 +118,14 @@ class AccountsController < AuthenticatedController
   end
 
   def update
-    update_params = free_account? ? user_params_except_subscription : user_params
-    current_user.update_attributes(update_params.merge(setup_complete: true))
+    current_user.update_attributes(user_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
   end
 
   def show; end
 
   def send_code
-    current_user.update_attributes(user_params.except(:stripe_subscription_attributes))
+    current_user.update_attributes(user_params)
     status =
       begin
         MultifactorAuthenticator.new(current_user).send_code
@@ -147,11 +146,14 @@ class AccountsController < AuthenticatedController
   end
 
   def apply_promo_code
-    coupon = Stripe::Coupon.retrieve(user_params[:stripe_subscription_attributes][:promo_code])
-    if coupon.valid
+    promo  = stripe_promo_params[:promo_code]
+    coupon = Stripe::Coupon.retrieve(promo) if promo.present?
+    if coupon && coupon.valid
       render json: coupon
-    else
+    elsif coupon
       render json: { :message => 'Coupon Exprired', :status => 500 }
+    else
+      render json: { :message => 'Coupon Not Found', :status => 500 }
     end
   end
 
@@ -188,16 +190,8 @@ class AccountsController < AuthenticatedController
     redirect_to redirect_to_path if redirect_to_path.present?
   end
 
-  def account_params
-    params.require(:user).permit(:free_account)
-  end
-
   def skip_param
     params.permit(:skip)
-  end
-
-  def user_params_except_subscription
-    user_params.except(:stripe_subscription_attributes)
   end
 
   def user_params
@@ -210,17 +204,18 @@ class AccountsController < AuthenticatedController
         :mfa_frequency,
         :phone_code,
         security_questions_attributes: [:question, :answer],
-      ],
-      stripe_subscription_attributes: [
-        :plan_id,
-        :promo_code])
+      ]
+    )
+  end
+
+  def stripe_promo_params
+    params.require(:user
+         ).require(:stripe_subscription_attributes
+         ).permit(:promo_code)
   end
 
   def questionnaire_params
     params.require(:questionnaire)
   end
 
-  def free_account?
-    account_params[:free_account].eql? 'true'
-  end
 end

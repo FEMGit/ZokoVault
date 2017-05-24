@@ -140,16 +140,57 @@ $(document).on('ready', function() {
   // Starting DynamicTutorialField only when tutorial-fields class is present.
   var tutorial_fields = $('.tutorial-fields')
   if (tutorial_fields.length) {
+    var create = ''
+    var destroy = ''
     if (tutorial_fields.hasClass('property-fields')) {
-      var create = "/financial_information/property/add_property";
-      var destroy = "/financial_information/property/";
+      create = "/financial_information/property/add_property";
+      destroy = "/financial_information/property/";
     } else if (tutorial_fields.hasClass('trust-fields')) {
-      var create = "/trusts/";
-      var destroy = "/trusts/";
+      create = "/trusts/";
+      destroy = "/trusts/";
+    } else if (tutorial_fields.hasClass('entity-fields')) {
+      var create = "/entities/";
+      var destroy = "/entities/";
+    } else if (tutorial_fields.hasClass('health-fields')) {
+      create = "/insurance/healths";
+      destroy = "/insurance/healths/provider/";
+    } else if (tutorial_fields.hasClass('property-casualty-fields')) {
+      create = "/insurance/properties";
+      destroy = "/insurance/properties/provider/";
+    } else if (tutorial_fields.hasClass('life-disability-fields')) {
+      create = "/insurance/lives";
+      destroy = "/insurance/lives/provider/";
     }
 
     var tutorial = new DynamicTutorialField(create, destroy);
 
     $('.remove-btn').each(function(){ tutorial.removeBtnListener($(this)) })
+  }
+  
+  // Subtutorials with no-page (some action only)
+  var no_page_checkboxes = $('input[class*="no-page"]')
+  var edit_form = $('form[id*="edit_tutorial"]')
+  if (no_page_checkboxes.length > 0 && edit_form.length > 0) {
+    edit_form.submit(function(e) {
+    var checkboxes = $('input[class*="no-page"]')
+    if (checkboxes.length > 0) {
+        var thisForm = this
+        e.preventDefault()
+        var ids_chosen = []
+        for (var i = 0; i < checkboxes.length; i++) {
+          ids_chosen.push(checkboxes[i].className.match(/no-page-\d+/)[0].match(/\d+/)[0])
+        }
+
+        var no_page_handle_path = $('#no_page_handle_path').val()
+        $.post(no_page_handle_path, {subtutorial_ids: ids_chosen})
+          .done(function(data) {
+            thisForm.submit()
+          })
+          .fail(function(data) {
+            $(".flash-error").text(data.responseJSON.errors)
+            $(".flash-error").show().fadeOut( 5000 );
+          })
+      }
+    })
   }
 });

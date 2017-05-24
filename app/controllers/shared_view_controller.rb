@@ -5,6 +5,7 @@ class SharedViewController < AuthenticatedController
   before_action :check_expired
   
   before_action :dashboard_breadcrumbs, only: [:dashboard]
+  before_action :documents_breadcrumbs, only: [:documents]
   before_action :insurance_breadcrumbs, only: [:insurance]
   before_action :taxes_breadcrumbs, only: [:taxes]
   before_action :final_wishes_breadcrumbs, only: [:final_wishes]
@@ -37,6 +38,10 @@ class SharedViewController < AuthenticatedController
   
   def dashboard_breadcrumbs
     add_breadcrumb "Dashboard", shared_view_dashboard_path(@shared_user)
+  end
+  
+  def documents_breadcrumbs
+    add_breadcrumb "Documents", shared_view_documents_path(@shared_user)
   end
   
   def insurance_breadcrumbs
@@ -160,9 +165,10 @@ class SharedViewController < AuthenticatedController
   end
 
   def documents
-    @document = Document.for_user(@shared_user).find(params[:id])
-    authorize @document
-    @cards = card_values(@document.category)
+    if @shared_category_names.include? Rails.application.config.x.DocumentsCategory
+      @documents = Document.for_user(shared_user).each { |d| authorize d }
+      session[:ret_url] = shared_view_documents_path
+    end
   end
 
   def card_values(category)

@@ -1,25 +1,25 @@
 <label>Plan</label>
-<p><%= @plan.try(:name) || '--' %></p>
-  
+<p><%= plan.try(:name) || '--' %></p>
+
 <label>Start Date</label>
-<p><%= date_format(@subscription.try(:created_at)) || '–' %></p>
-  
+<p><%= date_format(subscription.start_at) || '–' %></p>
+
 <label>Next Invoice</label>
-<% if @plan.present? %>
-  <p><%= "$#{@plan.amount / 100.0} - #{date_format(@next_invoice_date)} - Automatic Collection" %></p>
+<% if next_invoice_amount.present? %>
+  <p><%= "$#{next_invoice_amount / 100.0} - #{date_format(next_invoice_date)} - Automatic Collection" %></p>
 <% else %>
   <p>–</p>
 <% end %>
-  
+
 <label>Billing Info</label>
-<% if @card.present? %>
-  <p><%= "#{@card[:brand]} XXXX-#{@subscription[:last4]} exp. #{@card[:exp_month]}/#{@card[:exp_year]}" %></p>
+<% if card.present? %>
+  <p><%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %></p>
 <% else %>
   <p>–</p>
 <% end %>
-  
+
 <h3>Previous Invoices</h3>
-  
+
 <table id="documents-table">
   <thead>
     <tr>
@@ -30,7 +30,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @invoices && @invoices.each do |invoice| %>
+    <% invoices && invoices.each do |invoice| %>
       <tr>
         <td><%= invoice.lines.data.first.plan.name %></td>
         <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
@@ -40,11 +40,11 @@
     <% end %>
   </tbody>
 </table>
-  
+
 <div class="mt-30">
   <%= link_to "Update", billing_info_path, class: "button primary-button big-button" %>
 </div>
-  
+
 <script>
   $(document).ready(function(){
     $('#documents-table').DataTable( {

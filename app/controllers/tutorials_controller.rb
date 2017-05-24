@@ -24,6 +24,28 @@ class TutorialsController < AuthenticatedController
         "Guided Tutorial - Video"
     end
   end
+  
+  def tutorial_add_document
+    # Save breadcrumbs for current tutorial page
+    @page_number   = params[:page_number]
+    @tutorial_name = params[:tutorial_name]
+    if @tutorial_name.include? 'wills'
+      if @page_number.to_i.eql? 2
+        add_breadcrumb "Wills Tutorial - Digital Will", '/tutorials/wills/2'
+        cache_breadcrumbs_write
+      end
+      @category = Rails.application.config.x.WillsPoaCategory
+    end
+    if @tutorial_name.include? 'taxes'
+      if @page_number.to_i.eql? 1
+        add_breadcrumb "Taxes Tutorial - Digital Tax Records", '/tutorials/taxes/1'
+        cache_breadcrumbs_write
+      end
+      @category = Rails.application.config.x.TaxCategory
+    end
+    session[:tutorial_index] -= 1
+    redirect_to new_document_path(:first_run => true, :category => @category) and return
+  end
 
   def primary_contacts
     @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
@@ -45,7 +67,7 @@ class TutorialsController < AuthenticatedController
 
   def new
     session[:tutorials_list] ||= {}
-    @tutorial_array = Tutorial.all
+    @tutorial_array = Tutorial.all.sort_by(&:id)
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
   end
@@ -67,10 +89,34 @@ class TutorialsController < AuthenticatedController
     session[:tutorial_index] = 1
     tuto_index = session[:tutorial_index]
     tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+    tuto_page = session[:tutorial_paths][tuto_index][:current_page]
     @current_tutorial = Tutorial.find tuto_id
     current_tutorial_name = @current_tutorial.name.parameterize
 
-    redirect_to tutorial_page_path(current_tutorial_name, '1')
+    redirect_to tutorial_page_path(current_tutorial_name, tuto_page)
+  end
+  
+  def update
+    if params[:tutorial].blank?
+      if params[:next_tutorial] == 'confirmation_page'
+        redirect_to tutorials_confirmation_path and return
+      else
+        tuto_index = session[:tutorial_index]
+        tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
+        next_page = session[:tutorial_paths][tuto_index][:current_page]
+        redirect_to tutorial_page_path(tuto_name, next_page) and return
+      end
+    else
+      subtutorial_pages = params[:tutorial][:pages]
+      
+      tuto_index = session[:tutorial_index]
+      tutorial_id = session[:tutorial_paths][tuto_index - 1][:tuto_id].to_i
+      tutorial_path_update(subtutorial_pages, tutorial_id)
+      tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
+      next_page = session[:tutorial_paths][tuto_index][:current_page]
+      
+      redirect_to tutorial_page_path(tuto_name, next_page) and return
+    end
   end
 
   def show
@@ -91,8 +137,25 @@ class TutorialsController < AuthenticatedController
     @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
     @prev_page = session[:tutorial_paths][tuto_index][:current_page]
     session[:tutorial_index] = session[:tutorial_index] - 2
-
     redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
+  end
+  
+  def create_wills
+    subtutorial_id_params[:subtutorial_ids].each do |subtutorial_id|
+      short_name = Subtutorial.find_by(:id => subtutorial_id).try(:short_name)
+      return unless short_name.present?
+      begin
+        if short_name.eql? 'my-will'
+          Will.create!(title: current_user.name + ' Will', user: current_user)
+        elsif short_name.eql? 'spouse-will'
+          spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse/Domestic Partner')
+          spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
+        end
+      rescue
+        render :json => { :errors => 'Error saving a record, please try again.' }, :status => 500
+      end
+    end
+    render :json => {}, :status => 200
   end
 
   private
@@ -109,13 +172,46 @@ class TutorialsController < AuthenticatedController
     result = [{ tuto_id: 0, current_page: 0, tuto_name: 'tutorial_new' }] # tutorial / new
     list.each do |tuto|
       tutorial = Tutorial.find(tuto)
-      tutorial.number_of_pages.times do |p|
-        result << {
-          tuto_id: tuto,
-          current_page: p + 1,
-          tuto_name: tutorial.name.split(" ").join("-").downcase }
+      if tutorial.has_subtutorials?
+        result << tutorial_path(tuto, 'subtutorials_choice', tutorial)
+      else
+        tutorial.number_of_pages.times do |p|
+          result << tutorial_path(tuto, p + 1, tutorial)
+        end
       end
     end
     result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
+  end
+  
+  def tutorial_path_update(subtutorial_pages, tuto_index)
+    tutorial = Tutorial.find(tuto_index)
+    
+    subtutorials_path = []
+    subtutorial_pages.try(:each) do |number, id|
+      subtutorial = Subtutorial.find_by(:id => id)
+      next unless subtutorial.present?
+      (number.to_i ... number.to_i + subtutorial.number_of_pages).each do |page_numer|
+        subtutorials_path << page_numer
+      end
+    end
+    
+    tuto_name = tutorial.name.split(" ").join("-").downcase 
+    tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
+    
+    session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
+                               subtutorials_path.collect { |s| tutorial_path(tuto_index, s, tutorial) } +
+                               session[:tutorial_paths][tutorial_path_position + 1..-1]
+  end
+  
+  def tutorial_path(tuto, current_page, tutorial)
+    {
+      tuto_id: tuto,
+      current_page: current_page,
+      tuto_name: tutorial.name.split(" ").join("-").downcase 
+    }
+  end
+  
+  def subtutorial_id_params
+    params.permit(subtutorial_ids: [])
   end
 end

@@ -4,7 +4,9 @@
 <label>Number of Unique Documents</label>
 <p><%= @uniq_document_count %></p>
 
-<h3>ZokuVault Users</h3>
+<%= link_to 'Update Information', update_usage_metrics_path, class: 'button big-button primary-button' %>
+
+<h3 class="mt-30">ZokuVault Users</h3>
 <table id="user-statistics-table">
   <thead>
     <tr>
@@ -90,7 +92,7 @@
 
 <script>
   $(document).ready(function(){
-    DatatableUpdate('#user-statistics-table', [ [100, 200, 500], 'data', [[0, 'asc']] ])
+    DatatableUpdate('#user-statistics-table', [ [25, 50, 100, 200, 500], 'data', [[0, 'asc']] ])
     $('#user-statistics-table_wrapper').addClass('scroll')
   });
 </script>

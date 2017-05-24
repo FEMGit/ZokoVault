@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class AccountSettingsController < AuthenticatedController
   before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
                                           :verify_code, :account_users, :update_account_users,
@@ -24,28 +26,30 @@ class AccountSettingsController < AuthenticatedController
   def login_settings; end
 
   def manage_subscription
-    @subscription = StripeSubscription.find_by(user: current_user)
-    return unless @subscription.present?
-    @plan = StripeSubscription.plan(@subscription.plan_id)
-    begin
-      @customer = Stripe::Customer.retrieve @subscription.customer_id
-    rescue
-      return
+    @subscription = current_user.current_user_subscription
+    return if @subscription.blank? || !@subscription.full?
+    customer = current_user.stripe_customer
+    source = customer.try(:default_source)
+    @card = customer.sources.retrieve(source) if source.present?
+    if @subscription.funding.beta?
+      @plan = OpenStruct.new(name: 'Beta User - One Year Free')
+    else
+      upcoming = Stripe::Invoice.upcoming(customer: customer.id)
+      @next_invoice_date = DateTime.strptime(upcoming.date.to_s, '%s')
+      @next_invoice_amount = upcoming.amount_due
+      @invoices = customer.invoices.to_a
+      record = @subscription.funding.stripe_subscription_record
+      @plan = record.try(:plan)
     end
-    @card = @customer[:sources][:data].detect { |x| x[:object] == 'card' }
-    @next_invoice_date = DateTime.strptime(Stripe::Invoice.upcoming(:customer => @subscription.customer_id)[:date].to_s, '%s')
-    customer_ids = Stripe::Customer.all.select { |i| i.email.downcase == current_user.email.downcase }.map(&:id)
-    @invoices = Stripe::Invoice.all.select { |i| customer_ids.include? i[:customer] }
   end
 
   def invoice_information
     invoice = Stripe::Invoice.retrieve(params[:id])
-    customer = Stripe::Customer.retrieve(invoice.customer)
-    card = customer[:sources][:data].detect { |x| x[:object] == 'card' }
+    charge  = Stripe::Charge.retrieve(invoice.charge)
     html = render_to_string(
       layout: 'pdf_invoice',
-      locals: { invoice: invoice, card: card }
-      )
+      locals: { invoice: invoice, card: charge.source }
+    )
     kit = PDFKit.new(html)
     pdf_file = kit.to_pdf
     send_data pdf_file, filename: "#{invoice.receipt_number}_invoice.pdf", type: :pdf, disposition: 'inline'

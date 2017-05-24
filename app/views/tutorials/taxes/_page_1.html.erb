@@ -1,0 +1,61 @@
+<% session[:ret_url] = '/tutorials/taxes/1' %>
+
+<div class="card mb-30 mt-20 max-w-1000-centered">
+  <h2>Upload Your Digital Tax Records</h2>
+  <p>Do you have a digital tax records?</p>
+
+  <h3 <% if @digital_taxes.blank? %> style="display: none;" <% end %> id='important-documents-table-title'>Your Digital Taxes</h3>
+  <table id="important-documents-table" <% if @digital_taxes.blank? %> style="display: none;" <% end %>>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Modified</th>
+        <th>Tags</th>
+        <th class="fixed-cell-small">Shared With</th>
+        <th class="fixed-cell-small">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @digital_taxes.each do |digital_tax| %>
+        <tr>
+          <td>
+            <%= render :partial => "layouts/document_links", :locals => {:document => digital_tax } %>
+          </td>
+          <td>
+            <%= date_format(digital_tax.updated_at) %>
+          </td>
+          <td>
+            <%= render :partial => "layouts/document_tags", :locals => {:document => digital_tax} %>
+          </td>
+          <td>
+            <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document_shares(digital_tax)} %>
+          </td>
+          <td>
+            <%= render :partial => "layouts/document_notes", :locals => {:notes => digital_tax.description } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="flash-success-static flash important-doc static small" style="display: none;">You added a Tax! Upload another Tax, or click Continue.</div>
+
+  <%= link_to 'Upload Tax', tutorial_add_document_path(@page_number, @tutorial_name), class: 'button primary-button big-button inline-block' %>
+
+  <%= render partial: 'tutorials/buttons_section' %>
+</div>
+
+<script>
+  $(document).ready(function(){
+      $('#important-documents-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[0, 'asc']]
+    });
+    
+    if ($('.flash-success.flash').text() === 'Document was successfully created.') {
+      $('.flash.important-doc').show()
+    }
+  });
+</script>

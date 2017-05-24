@@ -1,22 +1,22 @@
 <div class="card mb-30 min-w-330">
   <h3>Subscription Details</h3>
   <section class="bb-gray-light-dashed mb-10">
-    <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', StripeSubscription.yearly_plan.try(:id) %>
-
-    <div class="h-28 overflow-hidden inline-block"><%= StripeSubscription.yearly_plan.try(:name) %></div>
-    <div class="subscription-description ml-15 d-none" id='subscription-description'></div>
-    <span class="fr" id="subscription-price"></span>
+    <% plan = StripeSubscription.yearly_plan %>
+    <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', plan.id %>
+    <div class="h-28 overflow-hidden inline-block"><%= plan.name %></div>
+    <% price = (plan.amount / 100.0).round(2) %>
+    <span class="fr" id="subscription-price">$<%= price %></span>
     <span class="clear"></span>
   </section>
 
   <section class="pb-10 mb-10" id="promo-row">
-    <span class="bold" id="promo-name">Total</span>
+    <span class="bold" id="promo-name"></span>
     <span class="fr clr-red" id="promo-price"></span>
   </section>
 
   <section class="bb-gray-light pb-10 mb-10">
     <span class="bold">Total</span>
-    <span class="fr" id="subscription-total"></span>
+    <span class="fr" id="subscription-total">$<%= price %></span>
   </section>
 
   <section>

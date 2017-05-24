@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :final_wishes
-  resources :usage_metrics
   resources :taxes
   resources :relationships
   resources :vendor_accounts
@@ -190,11 +189,13 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
   get 'tutorials/getting_started/new_document' => 'tutorials#new_document', as: :tutorial_new_document
   get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
+  get '/tutorial_add_document/:page_number/:tutorial_name', to: 'tutorials#tutorial_add_document', as: :tutorial_add_document
 
   get 'tutorials/confirmation', to: 'pages#confirmation', as: :tutorials_confirmation
   resources :tutorials, except: :destroy do
     get '/:page_id', to: 'pages#show', as: :page
     post '/destroy', to: 'tutorials#destroy'
+    post '/create_wills', to: 'tutorials#create_wills', as: :create_wills
   end
 
   resources :vault_entries, only: [:index, :new, :show, :create]
@@ -203,6 +204,8 @@ Rails.application.routes.draw do
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Usage metrics path
+  get 'usage_metrics/update_site_completed', to: 'usage_metrics#update_information', as: :update_usage_metrics
+  resources :usage_metrics
   get 'usage_metrics/error_details/:id', to: 'usage_metrics#error_details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
   get 'usage_errors', to: 'usage_metrics#errors'
@@ -265,6 +268,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
   get 'shared_view/:shared_user_id/financial_information' => 'shared_view#financial_information', as: :shared_view_financial_information
+  get 'shared_view/:shared_user_id/documents' => 'shared_view#documents', as: :shared_view_documents
 
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts

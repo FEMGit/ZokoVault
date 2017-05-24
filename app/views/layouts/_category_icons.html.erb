@@ -27,5 +27,9 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-bookmark-2"></use>
     </svg>
+  <% elsif category.name.eql? Rails.application.config.x.DocumentsCategory %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-folder-1"></use>
+    </svg>
   <% end %>
 <% end %>

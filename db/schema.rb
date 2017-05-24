@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518003442) do
+ActiveRecord::Schema.define(version: 20170522212157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -481,10 +481,7 @@ ActiveRecord::Schema.define(version: 20170518003442) do
 
   create_table "stripe_subscriptions", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "name_on_card"
-    t.string   "last4"
     t.string   "customer_id"
-    t.string   "stripe_token"
     t.string   "plan_id"
     t.string   "promo_code"
     t.datetime "created_at",      null: false
@@ -493,12 +490,16 @@ ActiveRecord::Schema.define(version: 20170518003442) do
   end
 
   add_index "stripe_subscriptions", ["subscription_id"], name: "index_stripe_subscriptions_on_subscription_id", using: :btree
+  add_index "stripe_subscriptions", ["user_id"], name: "index_stripe_subscriptions_on_user_id", using: :btree
 
   create_table "subtutorials", force: :cascade do |t|
     t.string   "name"
     t.integer  "tutorial_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "short_name"
+    t.boolean  "no_page",         default: false
+    t.integer  "number_of_pages", default: 1
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
@@ -539,6 +540,7 @@ ActiveRecord::Schema.define(version: 20170518003442) do
   end
 
   add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree
+  add_index "trusts", ["user_id"], name: "index_trusts_on_user_id", using: :btree
 
   create_table "tutorials", force: :cascade do |t|
     t.string   "name"
@@ -624,11 +626,11 @@ ActiveRecord::Schema.define(version: 20170518003442) do
   add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "",       null: false
-    t.string   "encrypted_password",     default: "",       null: false
+    t.string   "email",                                          default: "",       null: false
+    t.string   "encrypted_password",                             default: "",       null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.integer  "sign_in_count",          default: 0,        null: false
+    t.integer  "sign_in_count",                                  default: 0,        null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -637,18 +639,21 @@ ActiveRecord::Schema.define(version: 20170518003442) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",        default: 0,        null: false
+    t.integer  "failed_attempts",                                default: 0,        null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.boolean  "setup_complete",         default: false
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
+    t.boolean  "setup_complete",                                 default: false
     t.boolean  "admin"
     t.string   "stripe_id"
-    t.string   "subscription_status",    default: "unpaid"
+    t.string   "subscription_status",                            default: "unpaid"
     t.string   "subscription_type"
     t.datetime "paid_through"
-    t.boolean  "auto_resubscribe",       default: true
+    t.boolean  "auto_resubscribe",                               default: true
+    t.decimal  "site_completed",         precision: 5, scale: 2
+    t.integer  "category_count"
+    t.integer  "subcategory_count"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -734,6 +739,7 @@ ActiveRecord::Schema.define(version: 20170518003442) do
   end
 
   add_index "wills", ["category_id"], name: "index_wills_on_category_id", using: :btree
+  add_index "wills", ["user_id"], name: "index_wills_on_user_id", using: :btree
 
   create_table "words", force: :cascade do |t|
     t.string "word", null: false

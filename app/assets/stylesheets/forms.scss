@@ -93,24 +93,6 @@ input[type=radio]{
   }
 }
 
-.subscription-description {
-  font-weight: 600;
-  font-size: 12px;
-  height: 25px;
-  overflow: hidden !important;
-  padding: 0;
-  margin-bottom: 0;
-  display: inline-block;
-  @include media($ninesixty) {
-    margin: 0 !important;
-  }
-  @include media($tablet) {
-    display: block !important;
-    overflow: visible !important;
-  }
-}
-
-
 select{
   background: transparent;
   border: none;

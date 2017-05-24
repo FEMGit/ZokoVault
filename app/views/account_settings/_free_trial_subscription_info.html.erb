@@ -1,11 +1,11 @@
 <label>Plan</label>
-<p>Free Trial</p>
-  
+<p>Free Trial - <%= trial.active? ? 'Active' : 'Expired' %></p>
+
 <label>Trial Start Date</label>
-<p><%= date_format(subscription.try(:start_at)) || '–' %></p>
+<p><%= date_format(trial.start_at) || '–' %></p>
 
 <label>Trial End Date</label>
-<p><%= date_format(subscription.try(:end_at)) || '–' %></p>
+<p><%= date_format(trial.end_at) || '–' %></p>
 
 <div class="mt-30">
   <%= link_to "Upgrade", billing_info_path, class: "button primary-button big-button" %>

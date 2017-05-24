@@ -1,0 +1,36 @@
+<div class="card mb-30 mt-20 max-w-1000-centered text-center">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">You added a tax accountant. Do you want to share your Taxes Category with them?</h5>
+  <section class="max-w-600 inline-block">
+    <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
+    <p class="mb-30">When you share your Taxes Category it allows your accountant to upload documents and information directly into your vault. It also gives you a method for securely sharing files with this individual in the future. </p>
+  </section>
+  
+  <%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :page_number, @page_number %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+    
+    <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
+      <h3 class="card-label fn clr-color-primary mb-30">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Taxes Shared With
+      </h3>
+      
+      <div class="chosen-styled-select text-left max-w-340 m-0-auto">
+        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts, {}, @contacts_with_access.try(:map, &:id)) %>
+      </div>
+    </div>
+
+    <span>When you share with contacts, ZokuVault will send a <%= link_to 'message', 'javascript:void(0);', class: 'no-underline-link' %> to let them know.</span>
+  
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>
+
+<%= render partial: 'contacts/ajax_form' %>
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

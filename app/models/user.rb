@@ -10,9 +10,8 @@ class User < ActiveRecord::Base
   scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
 
   # == Validations
-  validates_format_of :email,
-                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
-                      :message => "Email should contain @ and domain like '.com'"
+  validates :email, :email_format => { :message => "Email should contain @ and domain like '.com" }
+  validate :email_is_valid?
 
   validate :password_complexity
 
@@ -151,6 +150,10 @@ class User < ActiveRecord::Base
   after_destroy :invitation_sent_clear
 
   private
+  
+  def email_is_valid?
+    MailService.email_is_valid?(email, errors)
+  end
 
   # XXX: We do not have "roles" established. I am using a weak association to
   # establish an admin. If the user has a zokuvault.com email address. Please

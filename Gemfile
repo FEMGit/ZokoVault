@@ -23,6 +23,9 @@ gem 'devise_security_extension'
 
 gem 'acts_as_tree'
 
+# Email Validation
+gem 'validates_email_format_of'
+
 # Web server
 gem 'puma'
 

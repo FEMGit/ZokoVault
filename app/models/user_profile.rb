@@ -2,10 +2,8 @@ class UserProfile < ActiveRecord::Base
   validates_with DateOfBirthValidator, fields: [:date_of_birth]
   scope :for_user, ->(user) { where(user: user).first }
  
-  validates_format_of :email,
-                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
-                      :message => "Email should contain @ and domain like '.com'",
-                      :on => :update
+  validates :email, :email_format => { :message => "Email should contain @ and domain like '.com" }, on: :update
+  validate :email_is_valid?, on: :update
 
   belongs_to :user
   has_many :employers
@@ -111,6 +109,10 @@ class UserProfile < ActiveRecord::Base
   end
 
   private
+  
+  def email_is_valid?
+    MailService.email_is_valid?(email, errors)
+  end
 
   def format_phone_number(raw_phone_number)
     tmp = raw_phone_number.gsub(/[^0-9]/, '')

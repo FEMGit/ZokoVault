@@ -10,8 +10,9 @@ class Contact < ActiveRecord::Base
 
   validates :emailaddress, presence: { :message => "Required" }
   validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
-
+  validates :emailaddress, :email_format => { :message => "Email should contain @ and domain like '.com" }
   validate :email_is_valid?
+  
   
   validates_length_of :firstname, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :lastname, :maximum => ApplicationController.helpers.get_max_length(:default)
@@ -66,17 +67,7 @@ class Contact < ActiveRecord::Base
   }
   
   def email_is_valid?
-    unless emailaddress =~ MailService.mail_regexp && check_domain(emailaddress)
-      errors.add(:emailaddress, "Email should contain @ and domain like '.com")
-    end
-  end
-  
-  def check_domain(email)
-    email_domain = MailService.email_domain(email)
-    if EmailDomains::DOMAINS.any? { |dom| email_domain =~ dom }
-      return true
-    end
-    false
+    MailService.email_is_valid?(emailaddress, errors)
   end
 
   def canonical_user

@@ -505,6 +505,8 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     unicode-display_width (1.1.3)
+    validates_email_format_of (1.6.3)
+      i18n
     warden (1.2.7)
       rack (>= 1.0)
     web-console (2.3.0)
@@ -581,6 +583,7 @@ DEPENDENCIES
   therubyracer
   twilio-ruby (~> 4.11.1)
   uglifier (>= 1.3.0)
+  validates_email_format_of
   web-console (~> 2.0)
   webmock
   wkhtmltopdf-binary

@@ -1,0 +1,12 @@
+<% @financial_investment = FinancialInvestment.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+
+<%= render partial: 'tutorials/add_remove_tutorial', 
+                     locals: { form_controller: :financial_investment,
+                               title: 'Add Your Business',
+                               form_for_object: @financial_investment,
+                               label_tag: { name: 'business_name', value: 'Business Name' },
+                               partial_path: 'tutorials/financial-information/financial_private_company_stocks',
+                               hidden_field_tag_values: [ { name: 'financial_investment[investment_type]', value: 'Private Company Stock'} ],
+                               text_field_tag: { name: 'financial_investment[name]', placeholder: 'Business Name' },
+                               fields_class: 'investment-fields'
+                             } %>

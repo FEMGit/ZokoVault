@@ -1,6 +1,7 @@
 class FinancialAlternativeController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include TutorialsHelper
   include BackPathHelper
   include SanitizeModule
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider, :set_documents]
@@ -69,6 +70,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
 
   def create
+    check_tutorial_params(provider_params[:name]) && return
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
@@ -77,9 +79,15 @@ class FinancialAlternativeController < AuthenticatedController
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
         FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
-        format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
-        format.json { render :show, status: :created, location: @financial_provider }
+        
+        if params[:tutorial_name]
+          tutorial_redirection(format, @financial_provider.as_json, 'Alternative was successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
+          format.json { render :show, status: :created, location: @financial_provider }
+        end
       else
+        tutorial_error_handle("Fill in Provider Name field to continue", "financial-information", "9") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }

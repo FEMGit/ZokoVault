@@ -79,6 +79,12 @@
   flex-direction: row;
   max-width: 500px;
 
+  &.wide {
+    max-width: 800px;
+  }
+  .inline-input-50{
+    flex: 50%;
+  }
   .inline-input{
     flex: 70%;
   }

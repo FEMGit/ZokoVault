@@ -1,6 +1,7 @@
 class FinancialInvestmentController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_financial_investment, only: [:show, :edit, :update, :destroy]
   before_action :set_provider, only: [:show, :edit, :update, :destroy, :set_documents]
@@ -68,6 +69,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
 
   def create
+    check_tutorial_params(investment_params[:name]) && return
     @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: investment_params[:name], provider_type: provider_type)
     @financial_investment = FinancialInvestment.new(investment_params.merge(user_id: resource_owner.id))
     @financial_provider.investments << @financial_investment
@@ -78,9 +80,14 @@ class FinancialInvestmentController < AuthenticatedController
         FinancialInformationService.update_investment_owners(@financial_investment, investment_owner_params)
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
 
-        format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
-        format.json { render :show, status: :created, location: @financial_investment }
+        if params[:tutorial_name]
+          tutorial_redirection(format, @financial_investment.as_json, 'Investment was successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
+          format.json { render :show, status: :created, location: @financial_investment }
+        end
       else
+        tutorial_error_handle("Fill in Investment Name field to continue", "financial-information", "4") && return
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522212157) do
+ActiveRecord::Schema.define(version: 20170524033535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,16 @@ ActiveRecord::Schema.define(version: 20170522212157) do
 
   add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
   add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
+
+  create_table "failed_email_login_attempts", force: :cascade do |t|
+    t.string   "email"
+    t.integer  "failed_attempts", default: 0
+    t.datetime "locked_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "failed_email_login_attempts", ["email"], name: "index_failed_email_login_attempts_on_email", using: :btree
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"

@@ -1,6 +1,7 @@
 class FinancialAccountController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
+  include TutorialsHelper
   include BackPathHelper
   include SanitizeModule
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider]
@@ -69,6 +70,7 @@ class FinancialAccountController < AuthenticatedController
   end
 
   def create
+    check_tutorial_params(provider_params[:name]) && return
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     FinancialInformationService.fill_accounts(account_params, @financial_provider, resource_owner.id)
@@ -78,9 +80,14 @@ class FinancialAccountController < AuthenticatedController
         FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
 
         @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
-        format.html { redirect_to @path, flash: { success: 'Account was successfully created.' } }
-        format.json { render :show, status: :created, location: @financial_provider }
+        if params[:tutorial_name]
+          tutorial_redirection(format, @financial_provider.as_json, 'Account was successfully created.')
+        else
+          format.html { redirect_to @path, flash: { success: 'Account was successfully created.' } }
+          format.json { render :show, status: :created, location: @financial_provider }
+        end
       else
+        tutorial_error_handle("Fill in Provider Name field to continue", "financial-information", "3") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }

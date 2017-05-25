@@ -1,7 +1,6 @@
 class AccountTrafficsController < AuthenticatedController
   helper_method :user_link, :resource_link
-  include UserTrafficModule
-  
+
   def page_name
     case action_name
       when 'index'
@@ -10,19 +9,25 @@ class AccountTrafficsController < AuthenticatedController
   end
   
   def index
-    personal_traffic = UserTraffic.for_user(current_user)
-    shared_traffic = UserTraffic.shared_traffic(current_user)
-    @user_traffic = (personal_traffic + shared_traffic).sort_by(&:created_at)
+    respond_to do |format|
+      format.html
+      format.json { render json: UserTrafficDatatable.new(view_context) }
+    end
   end
   
   private
-  
+
   def user_link(traffic_info)
-    traffic_info.user == current_user ? my_profile_path : 
-                                        contact_path(Contact.for_user(current_user)
-                                                            .detect { |c| c.emailaddress.downcase.eql? traffic_info.user.email.downcase })
+    return my_profile_path if traffic_info.user == current_user
+    contact = Contact.for_user(current_user).detect do |c|
+      c.emailaddress.downcase.eql? traffic_info.user.email.downcase
+    end
+    ### HARDCODED RESPONSE BECAUSE I CAN'T FIND nil CONTACT ON MY LOCALHOST
+    ### CHECK IT ON PRODUCTION IN HOMER's ACCOUNT...
+    return "#" if contact.blank?
+    contact_path(contact)
   end
-  
+
   def resource_link(traffic_info)
     return root_path if traffic_info.page_url.eql? root_url
     begin

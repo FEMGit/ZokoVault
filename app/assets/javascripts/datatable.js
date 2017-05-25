@@ -1,5 +1,5 @@
-var DatatableUpdate = function(tableId, tableSettings, desirableColspan) {
-  $(tableId).DataTable(tableSettingsGenerate(tableSettings[0], tableSettings[1], tableSettings[2]));
+var DatatableUpdate = function(tableId, tableSettings, desirableColspan, extraOptions) {
+  $(tableId).DataTable(tableSettingsGenerate(tableSettings[0], tableSettings[1], tableSettings[2], extraOptions));
   // Save all controls to variables and add listeners
   var controlsArray = prepareTableControls(tableId, desirableColspan)
 
@@ -8,8 +8,8 @@ var DatatableUpdate = function(tableId, tableSettings, desirableColspan) {
   updateTable(tableId, desirableColspan, controlsArray)
 }
 
-var tableSettingsGenerate = function(lengthMenuValues, recordName, aaSortingValues) {
-  return {
+var tableSettingsGenerate = function(lengthMenuValues, recordName, aaSortingValues, extraOptions) {
+  return $.extend({
     paging: true,
     lengthMenu: lengthMenuValues,
     searching: true,
@@ -26,15 +26,15 @@ var tableSettingsGenerate = function(lengthMenuValues, recordName, aaSortingValu
     }, {
       'bSearchable': false,
       'aTargets': ['nosearch']
-    }],
-  }
+    }]
+  }, extraOptions);
 }
 
 var prepareTableControls = function(table_id, desirableColspan) {
-  var info_global = $(table_id + '_info' + '.dataTables_info').detach()
-  var pagination_global = $(table_id + '_paginate' +'.dataTables_paginate').detach()
-  var record_select_global = $(table_id + '_length' +'.dataTables_length').detach()
-  var search_global = $(table_id + '_filter' +'.dataTables_filter').detach()
+  var info_global = $(table_id + '_info' + '.dataTables_info')//.detach()
+  var pagination_global = $(table_id + '_paginate' +'.dataTables_paginate')//.detach()
+  var record_select_global = $(table_id + '_length' +'.dataTables_length')//.detach()
+  var search_global = $(table_id + '_filter' +'.dataTables_filter')//.detach()
   var controlsArray = [info_global, pagination_global, record_select_global, search_global]
     
   controlsArray[1].on('click', function() {
@@ -62,9 +62,8 @@ var updateSearchField = function(table_id, controlsArray, recordName) {
 }
   
 var updateTable = function(table_id, desirableColspan, controlsArray) {
-  if(tableEmpty(table_id)) {
-    return
-  }
+  if(tableEmpty(table_id)) return;
+
   var colspan = []
   if (desirableColspan == null) {
     colspan[0] = getColumnCount(table_id) / 3
@@ -79,7 +78,7 @@ var updateTable = function(table_id, desirableColspan, controlsArray) {
                                              '<td colspan=' + colspan[1] + ' align="center" id="record_select_cell"></td>' + 
                                              '<td colspan=' + colspan[2] + ' align="right" id="info_cell"></td>' + '</tr>')
   }
-  
+
   // Place controls to table bottom row
   $(table_id + ' #info_cell').append(controlsArray[0])
   $(table_id + ' #pagination_cell').append(controlsArray[1])

@@ -6,7 +6,8 @@ $add-button-margin-top-title: 25px;
 }
 
 input,
-textarea{
+textarea,
+.input-form-class {
   border: 1px solid $color-gray-med-tinted;
   border-radius: 5px;
   display:block;

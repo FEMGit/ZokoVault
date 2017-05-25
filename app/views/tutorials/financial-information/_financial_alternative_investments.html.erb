@@ -4,7 +4,11 @@
   <div class="collect-fields">
     <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
     <div class="input-pair wide tutorial-fields alternative-fields">
+      
+      <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
       <%= text_field_tag "financial_provider[name]", pr.name, class: "saved-field form-control medium", placeholder: 'Investment Manager Name', :maxlength => get_max_length(:default) %>
+      
+      <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
       <div class="styled-select form-control medium repeated-field ml-15 h-34">
         <%= select_tag "financial_provider[alternative_0][alternative_type]", options_for_select(FinancialAlternative::alternative_types.keys, pr.alternatives.first.alternative_type) %>
       </div>

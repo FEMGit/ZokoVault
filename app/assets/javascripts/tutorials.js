@@ -34,7 +34,7 @@ DynamicTutorialField.prototype.showLittleError = function($btn) {
 };
 
 DynamicTutorialField.prototype.addRemoveBtn = function(id) {
-  var $btn = $('<a class="medium-button outline-button inline-button">Remove</a>');
+  var $btn = $('<a class="medium-button outline-button inline-button remove-btn">Remove</a>');
   $btn.data('id', id);
   this.removeBtnListener($btn);
   return $btn;
@@ -59,6 +59,8 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
       that.submit($btn).success(function(data) {
         $btn.closest('.repeated-field').addClass('saved-field');
         that.addRow($btn, data.id);
+        $('.tutorial-fields.add-tutorial').removeClass('add-tutorial')
+        $('.tutorial-fields:last').addClass('add-tutorial')
       }).error(function(data) {
         that.showLittleError($btn);
       });

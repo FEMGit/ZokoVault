@@ -87,7 +87,7 @@ class FinancialInvestmentController < AuthenticatedController
           format.json { render :show, status: :created, location: @financial_investment }
         end
       else
-        tutorial_error_handle("Fill in Investment Name field to continue", "financial-information", "4") && return
+        tutorial_error_handle("Fill in Investment Name field to continue") && return
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }

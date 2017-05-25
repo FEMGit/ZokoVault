@@ -1,0 +1,12 @@
+<%- @insurance_card = PropertyAndCasualty.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
+<% properties = Vendor.for_user(resource_owner).properties %>
+
+<%= render partial: 'tutorials/add_remove_tutorial', 
+                     locals: { form_controller: :property_and_casualties,
+                               title: 'Add Property Insurance',
+                               form_for_object: @insurance_card,
+                               label_tag: { name: 'insurance_provider', value: 'Insurance Provider Name' },
+                               partial_path: { resources: properties },
+                               text_field_tag: { name: 'property_and_casualty[name]', placeholder: 'Insurance Provider Name' },
+                               fields_class: 'property-casualty-fields'
+                             } %>

@@ -1,0 +1,16 @@
+<%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Family',
+                                                                   description: 'This is your spouse, partner, children, parents or trusted family memebers. These people are your dependants and beneficiares',
+                                                                   table: { table_title: 'Your Personal Contacts', 
+                                                                            contacts: @primary_contacts, 
+                                                                            table_id: 'primary-contacts-table' },
+                                                                   flash_message: 'You added a contact! Add another one of your Primary Contacts, or click Next.' ,
+                                                                   button_text: 'Add Primary Contacts' } %>
+
+<script>
+  var createContact = function() {
+    window.tableIdToUpdate = '#primary-contacts-table'
+    setProfessionalDropdown(['Family & Beneficiaries'])
+    contact_type_handle($('#contact_contact_type'), true)
+    displayContactFormModal();
+  }
+</script>

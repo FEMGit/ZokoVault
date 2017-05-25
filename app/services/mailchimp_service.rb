@@ -71,7 +71,7 @@ class MailchimpService
     rescue Exception => exception
       requested_page = 'mailchimp service'
       error = exception.message
-      user_death_trap = UserDeathTrap.new(user: self, page_terminated_on: requested_page, error_message: error)
+      user_death_trap = UserDeathTrap.new(user: user, page_terminated_on: requested_page, error_message: error)
       user_death_trap.save
     end
   end

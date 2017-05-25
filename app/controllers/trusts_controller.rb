@@ -99,7 +99,7 @@ class TrustsController < AuthenticatedController
             format.json { render :show, status: :created, location: @trust }
           end
         rescue
-          tutorial_error_handle("Fill in Trust Name field to continue", "trust", "1") && return
+          tutorial_error_handle("Fill in Trust Name field to continue") && return
           @vault_entry = Trust.new
           @old_params.try(:each) { |trust| @vault_entries << trust }
           @new_params.try(:each) { |trust| @vault_entries << trust }
@@ -109,7 +109,7 @@ class TrustsController < AuthenticatedController
           set_error_breadcrumbs
         end
       else
-        tutorial_error_handle("Fill in Trust Name field to continue", "trust", "1") && return
+        tutorial_error_handle("Fill in Trust Name field to continue") && return
         error_path(action)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }

@@ -1,20 +1,11 @@
 class PagesController < HighVoltage::PagesController
   include BreadcrumbsCacheModule
+  include TutorialsHelper
   before_action :set_cache_headers
   before_action :set_tutorial, :set_contacts, only: [:show]
   layout 'without_sidebar_layout'
 
-  def confirmation; end
-
   def show
-    # Params = {"tutorial_id"=>"insurance", "page_id"=>"1"}
-    @page_number   = params[:page_id]
-    @tutorial_name = params[:tutorial_id]
-    @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
-
-    # For Add Primary Contact view
-    @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
-    @contact = Contact.new(user: current_user)
     @show_footer = false
     tuto_index = session[:tutorial_index] + 1
     
@@ -22,18 +13,13 @@ class PagesController < HighVoltage::PagesController
       redirect_to tutorials_confirmation_path and return
     end
 
-    if @tutorial_name.eql? 'confirmation_page'
-      redirect_to tutorials_confirmation_path and return
-    end
-    
     if session[:tutorial_paths][tuto_index]
       @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     else
       redirect_to new_tutorial_path and return
     end
 
-    # @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
-    @next_tutorial = Tutorial.find_by(name: @next_tutorial_name.titleize)
+    @next_tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@next_tutorial_name)).first
     @next_page = session[:tutorial_paths][tuto_index][:current_page]
     @page_name     = "page_#{@page_number}"
 
@@ -52,7 +38,7 @@ class PagesController < HighVoltage::PagesController
     # Params = {"tutorial_id"=>"insurance", "page_id"=>"1"}
     @page_number   = params[:page_id]
     @tutorial_name = params[:tutorial_id]
-    @tutorial      = Tutorial.find_by(name: @tutorial_name.split("-").join(" ").titleize)
+    @tutorial      = Tutorial.where('name ILIKE ?', tutorial_name(@tutorial_name)).first
     if @tutorial_name != 'confirmation_page'
       @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
       clean_subtutorials
@@ -60,17 +46,17 @@ class PagesController < HighVoltage::PagesController
   end
 
   def set_contacts
-    if @tutorial_name.include? 'primary-contact'
+    if @tutorial_name.include? 'i-have-a-family'
       @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
-    elsif @tutorial_name.include? 'insurance'
+    elsif @tutorial_name.include? 'i-have-insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
-    elsif @tutorial_name.include? 'taxes'
+    elsif @tutorial_name.include? 'i-have-tax-documents'
       set_taxes_tutorial_contacts
-    elsif @tutorial_name.include? 'trust'
+    elsif @tutorial_name.include? 'i-have-a-trust'
       set_trusts_tutorial_contacts
-    elsif @tutorial_name.include? 'wills'
+    elsif @tutorial_name.include? 'i-have-a-will'
       set_wills_tutorial_contacts
-    elsif @tutorial_name.include? 'financial-information'
+    elsif @tutorial_name.include? 'i-have-financial-information'
       set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)

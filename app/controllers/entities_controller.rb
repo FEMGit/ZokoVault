@@ -81,7 +81,7 @@ class EntitiesController < AuthenticatedController
           format.json { render :show, status: :created, location: @entity }
         end
       else
-        tutorial_error_handle("Fill in Entity Name field to continue", "trust", "2") && return
+        tutorial_error_handle("Fill in Entity Name field to continue") && return
         set_account_owners
         set_agents_and_partners
         error_path(:new)

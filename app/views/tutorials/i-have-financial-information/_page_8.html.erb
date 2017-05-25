@@ -1,0 +1,13 @@
+<% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% jewelries = current_user.financial_properties.select{|p| p.property_type == 'Jewelry'} %>
+
+<%= render partial: 'tutorials/add_remove_tutorial', 
+                     locals: { form_controller: :financial_property,
+                               title: 'Add Your Jewelry Property',
+                               form_for_object: @financial_property,
+                               label_tag: { name: 'property_name', value: 'Property Name' },
+                               partial_path: { resources: jewelries },
+                               hidden_field_tag_values: [ { name: 'financial_property[property_type]', value: 'Jewelry'} ],
+                               text_field_tag: { name: 'financial_property[name]', placeholder: 'Jewelry Property' },
+                               fields_class: 'property-fields'
+                             } %>

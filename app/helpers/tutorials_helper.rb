@@ -1,28 +1,40 @@
 module TutorialsHelper
   def tutorial_icon(tutorial)
-    case tutorial_id(tutorial)
-      when 'home'
+    case tutorial_id(tutorial.try(:name))
+      when 'i-have-a-home'
         '#icon-house-large'
-      when 'add-primary-contact', 'add-tax-accountant',
-           'estate-attorney'
+      when 'i-have-a-family',
+           'i-have-a-tax-accountant',
+           'i-have-an-estate-planning-attorney'
         '#icon-woman'
-      when 'insurance', 'life-disability'
+      when 'i-have-insurance',
+           'i-have-life-or-disability-insurance'
         '#icon-document-shield'
-      when 'vehicle'
+      when 'i-own-a-vehicle'
         '#icon-car-large'
-      when 'add-financial-advisor'
+      when 'i-have-a-financial-advisor'
         '#icon-business-man-2'
-      when 'property-casualty'
+      when 'i-have-property-insurance'
         '#icon-umbrella-1'
-      when 'insurance-broker'
+      when 'i-have-an-insurance-broker'
         '#icon-business-man-1'
       else
         '#icon-activity-monitor-1'
     end
   end
   
-  def tutorial_id(tutorial)
-    tutorial.try(:short_name) || tutorial[:name].downcase.split(' ').join('-')
+  def tutorial_id(tutorial_name)
+    return '' unless tutorial_name.present?
+    tutorial_name.downcase.split('.').first.split(' ').join('-')
+  end
+  
+  def tutorial_name(tutorial_id)
+    (tutorial_id.split("-").join(" ") + '.').downcase
+  end
+  
+  def select_tag_values(resource)
+    resource.try(:alternatives).try(:first).try(:alternative_type) ||
+      resource.try(:investment_type) || ''
   end
   
   def check_tutorial_params(property_param)
@@ -50,16 +62,20 @@ module TutorialsHelper
     format.html { redirect_to path, flash: { success: success_message } }
   end
   
-  def tutorial_error_handle(message, tutorial, page)
+  def tutorial_error_handle(message)
     if params[:tutorial_name]
       flash[:alert] = message
-      redirect_to tutorial_page_path(tutorial, page) and return true
+      session[:tutorial_index] -= 1
+      current_tutorial = session[:tutorial_paths][session[:tutorial_index]]
+      current_page = current_tutorial[:current_page]
+      
+      redirect_to tutorial_page_path(params[:tutorial_name], current_page) and return true
     end
   end
 
   # Will Subtutorials
   def will_subtutorial_show?(tutorial)
-    return true unless tutorial.short_name.eql? 'spouse-will'
+    return true unless tutorial.name.eql? 'My spouse has a will.'
     Contact.for_user(current_user).any? { |c| c.relationship == 'Spouse/Domestic Partner' }
   end
 end

@@ -1,0 +1,17 @@
+<% @financial_provider = FinancialProvider.new(user: resource_owner,
+                                                  provider_type: FinancialProvider.provider_types["Account"],
+                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% mortgages = current_user.financial_account_informations.select{|p| p.account_type == 'Mortgage'} %>
+<% providers = FinancialProvider.where(id: mortgages.try(:map, &:account_provider_id)) %>
+
+<%= render partial: 'tutorials/add_remove_tutorial', 
+                     locals: { form_controller: :financial_account,
+                               title: 'Add Your Mortgage Providers',
+                               form_for_object: @financial_provider,
+                               label_tag: { name: 'provider_name', value: 'Provider Name' },
+                               partial_path: { resources: providers },
+                               hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Mortgage'},
+                                                          { name: 'financial_provider[web_address]', value: ''} ],
+                               text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
+                               fields_class: 'account-fields'
+                             } %>

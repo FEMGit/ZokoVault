@@ -1,0 +1,15 @@
+<%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Trust Planning Attorney',
+                                                                   table: { table_title: 'Your Trust Planning Attorneys', 
+                                                                            contacts: @trust_planning_attorneys, 
+                                                                            table_id: 'attorney-table' },
+                                                                   flash_message: 'You added an Attorney! Add another one of your Trust Planning Attorneys, or click Next.' ,
+                                                                   button_text: 'Add Trust Planning Attorney' } %>
+
+<script>
+  var createContact = function() {
+    window.tableIdToUpdate = '#attorney-table'
+    setProfessionalDropdown(['Advisor'])
+    setRelationshipDropdown(['Attorney'])
+    displayContactFormModal();
+  }
+</script>

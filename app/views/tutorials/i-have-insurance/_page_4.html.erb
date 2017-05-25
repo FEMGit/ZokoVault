@@ -1,0 +1,15 @@
+<%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Insurance Broker(s)',
+                                                                   table: { table_title: 'Your Insurance Broker(s)', 
+                                                                            contacts: @insurance_brokers, 
+                                                                            table_id: 'insurance-broker-table' },
+                                                                   flash_message: 'You added a contact! Add another one of your Insurance Brokers, or click Next.' ,
+                                                                   button_text: 'Add Financial Advisor' } %>
+
+<script>
+  var createContact = function() {
+    window.tableIdToUpdate = '#insurance-broker-table'
+    setProfessionalDropdown(['Advisor'])
+    setRelationshipDropdown(['Insurance Agent / Broker'])
+    displayContactFormModal();
+  }
+</script>

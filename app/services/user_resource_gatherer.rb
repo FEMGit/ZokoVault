@@ -68,7 +68,7 @@ class UserResourceGatherer < Struct.new(:user)
     when Category.fetch('wills - poa')
       gather_wills_poa(user, category)
     when Category.fetch('trusts & entities')
-      gather_trusts_entities(user)
+      gather_trusts_entities(user, category)
     when Category.fetch('insurance');
       gather_insurance(user, category)
     # when Category.fetch('contact')

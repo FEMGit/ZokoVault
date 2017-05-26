@@ -1,4 +1,4 @@
-<section class="card login-card" >
+<section class="card login-card eightfifty-align-left" >
   <h2>Change your password</h2>
 
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
@@ -12,7 +12,10 @@
     <% if errors && resource.errors.messages[:password].present? %>
       <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
     <% end %>
-    <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+    <div class="tooltip-item fixed w-100-percent">
+      <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+      <%= render partial: 'layouts/password_tooltip' %>
+    </div>
     <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>
 
     <%= f.label :password_confirmation, "Confirm new password" %>

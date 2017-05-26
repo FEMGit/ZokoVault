@@ -9,14 +9,19 @@ $(function(){
   });
   //window navigation resize reset
   $( window ).resize(function() {
-    if ($(window).width() < 800) {
-       $('.primary-nav, .slide-nav').css('display', '');
-    } else {
-       $('.primary-nav, .slide-nav').css('display', 'block');
-    }
+    toggleNavigationMenu('primary-nav', 800)
+    toggleNavigationMenu('slide-nav', 850)
   });
   //user menu
   $('#user-menu-toggle').click(function() {
      $('.user-menu').animate({height:'toggle'},150);
   });
+  
+  var toggleNavigationMenu = function(className, width) {
+    if ($(window).width() <= width) {
+       $('.' + className).css('display', '');
+    } else {
+       $('.' + className).css('display', 'block');
+    }
+  }
 });

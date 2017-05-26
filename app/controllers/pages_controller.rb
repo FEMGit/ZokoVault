@@ -47,7 +47,7 @@ class PagesController < HighVoltage::PagesController
 
   def set_contacts
     if @tutorial_name.include? 'i-have-a-family'
-      @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
+      set_primary_shared_tutorial_contacts
     elsif @tutorial_name.include? 'i-have-insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     elsif @tutorial_name.include? 'i-have-tax-documents'
@@ -60,6 +60,17 @@ class PagesController < HighVoltage::PagesController
       set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)
+  end
+  
+  def set_primary_shared_tutorial_contacts
+    @user_profile = UserProfile.for_user(current_user)
+    @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
+    
+    @primary_shared_contacts = @user_profile.primary_shared_with
+    @contacts_with_access = (@primary_contacts + @primary_shared_contacts).uniq
+    
+    contact_service = ContactService.new(:user => current_user)
+    @contacts_shareable = contact_service.contacts_shareable
   end
   
   def set_taxes_tutorial_contacts

@@ -1,10 +1,10 @@
 <%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Family',
-                                                                   description: 'This is your spouse, partner, children, parents or trusted family memebers. These people are your dependants and beneficiares',
-                                                                   table: { table_title: 'Your Personal Contacts', 
+                                                                   description: 'This is your spouse, partner, children, parents or trusted family members. These people are your dependants and beneficiaries. You are not sharing any data with users at this time.',
+                                                                   table: { table_title: 'Your Family Contacts', 
                                                                             contacts: @primary_contacts, 
                                                                             table_id: 'primary-contacts-table' },
-                                                                   flash_message: 'You added a contact! Add another one of your Primary Contacts, or click Next.' ,
-                                                                   button_text: 'Add Primary Contacts' } %>
+                                                                   flash_message: 'You added a contact! Add another one of your Family Contacts, or click Next.' ,
+                                                                   button_text: 'Add Family Contacts' } %>
 
 <script>
   var createContact = function() {

@@ -1,6 +1,7 @@
 class TutorialsController < AuthenticatedController
   include UserTrafficModule
   include BackPathHelper
+  include TutorialsHelper
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
@@ -62,12 +63,18 @@ class TutorialsController < AuthenticatedController
 
   def new_document
   end
+  
+  def confirmation
+    session[:tutorial_index] += 1
+    params[:tutorial_id] = 'confirmation_page'
+    @tutorial_name = 'confirmation_page'
+  end
 
   def video; end
 
   def new
     session[:tutorials_list] ||= {}
-    @tutorial_array = Tutorial.all.sort_by(&:id)
+    @tutorial_array = Tutorial.all.sort_by(&:position)
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
   end
@@ -76,14 +83,7 @@ class TutorialsController < AuthenticatedController
     if params["tutorial"].present?
       session[:tutorials_list] = params["tutorial"]
     else
-      flash[:error] = 'Select at least one Tutorial checkbox'
-      session[:tutorials_list] ||= {}
-      @tutorial_array = Tutorial.first(3)
-      @tutorial = Tutorial.new(name: session[:tutorials_list])
-      @tutorial.current_step = session[:order_step]
-
-      render :new
-      return
+      redirect_to tutorials_confirmation_path and return
     end
     session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
@@ -142,12 +142,12 @@ class TutorialsController < AuthenticatedController
   
   def create_wills
     subtutorial_id_params[:subtutorial_ids].each do |subtutorial_id|
-      short_name = Subtutorial.find_by(:id => subtutorial_id).try(:short_name)
-      return unless short_name.present?
+      tutorial_name = Subtutorial.find_by(:id => subtutorial_id).try(:name)
+      return unless tutorial_name.present?
       begin
-        if short_name.eql? 'my-will'
+        if tutorial_name.eql? ' I have a will.'
           Will.create!(title: current_user.name + ' Will', user: current_user)
-        elsif short_name.eql? 'spouse-will'
+        elsif tutorial_name.eql? 'My spouse has a will.'
           spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse/Domestic Partner')
           spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
         end
@@ -195,7 +195,7 @@ class TutorialsController < AuthenticatedController
       end
     end
     
-    tuto_name = tutorial.name.split(" ").join("-").downcase 
+    tuto_name = tutorial_id(tutorial.name)
     tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
     
     session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
@@ -207,7 +207,7 @@ class TutorialsController < AuthenticatedController
     {
       tuto_id: tuto,
       current_page: current_page,
-      tuto_name: tutorial.name.split(" ").join("-").downcase 
+      tuto_name: tutorial_id(tutorial.name)
     }
   end
   

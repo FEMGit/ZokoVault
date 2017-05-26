@@ -1,0 +1,36 @@
+<div class="card mb-30 mt-20 max-w-1000-centered text-center">
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">You added a spouce. Do you want to share your entire vault with them?</h5>
+  <section class="max-w-600 inline-block">
+    <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
+    <p class="mb-30">You can share your entire vault with one other person. When you share with this user they will have full access to all of your documents, data and contacts. They are not required to pay any additional fees for this access.</p>
+  </section>
+  
+  <%= form_for @user_profile, :url => url_for(action: :update_account_users, controller: :account_settings) do |f| %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :page_number, @page_number %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+    
+    <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
+      <h3 class="card-label fn clr-color-primary mb-30">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg>
+        Primary Shared With
+      </h3>
+      
+      <div class="chosen-styled-select text-left max-w-340 m-0-auto">
+        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, {}, @contacts_with_access.try(:map, &:id)) %>
+      </div>
+    </div>
+
+    <span>When you share with contacts, ZokuVault will send a <%= link_to 'message', 'javascript:void(0);', class: 'no-underline-link' %> to let them know.</span>
+  
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>
+
+<%= render partial: 'contacts/ajax_form' %>
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

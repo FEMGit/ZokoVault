@@ -81,9 +81,23 @@
 
   &.wide {
     max-width: 800px;
-  }
-  .inline-input-50{
-    flex: 50%;
+    @include media($mobile) {
+      flex-direction: column;
+      .styled-select {
+        margin-left: 0 !important;
+      }
+      .inline-button {
+        max-width: 100px;
+        margin-left: 0;
+        &.remove-btn {
+          margin-bottom: 30px;
+        }
+      }
+      &:not(.add-tutorial) {
+        border-bottom: 1px dashed $color-gray-med-shaded;
+        margin-bottom: 30px;
+      }
+    }
   }
   .inline-input{
     flex: 70%;

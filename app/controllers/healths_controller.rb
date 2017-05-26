@@ -101,7 +101,7 @@ class HealthsController < AuthenticatedController
         end
       else
         # If comes from Tutorials workflow, redirect to same Tutorial step
-        tutorial_error_handle("Fill in Insurance Provider Name field to continue", "insurance", "3") && return
+        tutorial_error_handle("Fill in Insurance Provider Name field to continue") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @insurance_card.errors, status: :unprocessable_entity }

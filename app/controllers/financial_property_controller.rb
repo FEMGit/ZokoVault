@@ -88,7 +88,7 @@ class FinancialPropertyController < AuthenticatedController
           format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }
         end
       else
-        tutorial_error_handle("Fill in Property Name field to continue", "home", "1") && return
+        tutorial_error_handle("Fill in Property Name field to continue") && return
         set_contacts
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }

@@ -290,7 +290,7 @@ a:visited.main-nav{
     }
   }
 
-  &.mobile-show{
+  &.tablet-show{
     display:none;
     @include media($tablet) {
       display:block;

@@ -1,0 +1,17 @@
+<% @financial_provider = FinancialProvider.new(user: resource_owner,
+                                                  provider_type: FinancialProvider.provider_types["Account"],
+                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% checking_accounts = current_user.financial_account_informations.select{|p| p.account_type == 'Checking'} %>
+<% providers = FinancialProvider.where(id: checking_accounts.try(:map, &:account_provider_id)) %>
+
+<%= render partial: 'tutorials/add_remove_tutorial', 
+                     locals: { form_controller: :financial_account,
+                               title: 'Add Your Checking Account Provider',
+                               form_for_object: @financial_provider,
+                               label_tag: { name: 'provider_name', value: 'Provider Name' },
+                               partial_path: { resources: providers },
+                               hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Checking'},
+                                                          { name: 'financial_provider[web_address]', value: ''} ],
+                               text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
+                               fields_class: 'account-fields'
+                             } %>

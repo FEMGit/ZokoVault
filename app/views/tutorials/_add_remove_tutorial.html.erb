@@ -9,16 +9,22 @@
     <%= hidden_field_tag :page_number, @page_number %>
 
     <% if wide %>
-      <div class="input-pair wide inline-input h-25">
-        <% label_tag.each do |tag| %>
-          <%= label_tag tag[:name], tag[:value], class: 'inline-input-50' %>
+      <div class="input-pair wide mobile-hide h-25">
+        <% label_tag.each_with_index do |tag, index| %>
+          <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : '') %>
+          <%= label_tag tag[:name], tag[:value], class: label_class %>
         <% end %>
         <%= label_tag "investment_name", '', class: 'inline-button' %>
       </div>
     <% else %>
       <%= label_tag label_tag[:name], label_tag[:value] %>
     <% end %>
-    <%= render partial: partial_path %>
+    <%= render partial: 'tutorials/tutorial_resources', locals: { partial_path: partial_path,
+                                                                  fields_class: fields_class,
+                                                                  select_tag: wide && select_tag,
+                                                                  text_field_tag: text_field_tag,
+                                                                  label_tag: label_tag,
+                                                                  wide: wide } %>
 
     <div class="collect-fields">
       <%= hidden_field_tag :tutorial_name, @tutorial_name %>
@@ -28,9 +34,13 @@
         <%= hidden_field_tag hidden_field_tag_value[:name], hidden_field_tag_value[:value] %>
       <% end %>
 
-      <div class="input-pair <% if wide %> wide <% end %> tutorial-fields <%= fields_class %>">
+      <div class="input-pair <% if wide %> wide <% end %> tutorial-fields add-tutorial <%= fields_class %>">
+        <% if wide %>
+          <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
+        <% end %>
         <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
+          <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
           <div class="styled-select form-control medium repeated-field ml-15 h-34">
             <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
           </div>

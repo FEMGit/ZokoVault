@@ -87,7 +87,7 @@ class FinancialAccountController < AuthenticatedController
           format.json { render :show, status: :created, location: @financial_provider }
         end
       else
-        tutorial_error_handle("Fill in Provider Name field to continue", "financial-information", "3") && return
+        tutorial_error_handle("Fill in Provider Name field to continue") && return
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }

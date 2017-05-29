@@ -9,7 +9,7 @@
     <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
 
     <p class="mb-30">
-      <%= link_to 'Change Two-Factor Phone Number', "javascript:showModal()", class: "button secondary-button small-button", id: "change-phone-btn"%>
+      <%= link_to 'Change Two-Factor Phone Number', account_settings_phone_setup_path, class: "button secondary-button small-button", id: "change-phone-btn"%>
     </p>
 
     <%= f.label :mfa_frequency, "Login Settings" %>
@@ -52,25 +52,6 @@
   </div>
 <% end %>
 
-<%= render :partial => "account_settings/two_factor_phone_setup" %>
-
 <script>
-  togglePhoneAuthentication = function() {
-    var check_el = $('#phone_authenticate_checkbox')
-    if (check_el.is(':checked')) {
-      $('p#two_factor_phone_label').wrap('<strike>')
-      $('#change-phone-btn').hide();
-      $('#user_profile_mfa_frequency_always').prop('disabled', true);
-      $('#user_profile_mfa_frequency_new_ip').prop('disabled', true);
-      $('#user_profile_mfa_frequency_never').prop('checked', true);
-    }
-    else {
-      $('p#two_factor_phone_label').unwrap()
-      $('#change-phone-btn').show();
-      $('#user_profile_mfa_frequency_always').prop('disabled', false);
-      $('#user_profile_mfa_frequency_new_ip').prop('disabled', false);
-    }
-  }
-  
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

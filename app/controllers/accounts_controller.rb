@@ -147,11 +147,12 @@ class AccountsController < AuthenticatedController
 
   def apply_promo_code
     promo  = stripe_promo_params[:promo_code]
-    coupon = Stripe::Coupon.retrieve(promo) if promo.present?
+    coupon = StripeHelper.safe_request { Stripe::Coupon.retrieve(promo) } if promo.present?
+    
     if coupon && coupon.valid
       render json: coupon
     elsif coupon
-      render json: { :message => 'Coupon Exprired', :status => 500 }
+      render json: { :message => 'Coupon Expired', :status => 500 }
     else
       render json: { :message => 'Coupon Not Found', :status => 500 }
     end

@@ -125,7 +125,11 @@ class AccountSettingsController < AuthenticatedController
     token = params[:stripeToken]
     if token.present?
       customer = StripeService.ensure_stripe_customer(user: current_user)
-      source = customer.sources.create(source: token)
+      
+      fn = ->(err){ flash[:error] = err.message; nil }
+      source = StripeHelper.safe_request(on_failure: fn) { customer.sources.create(source: token) }
+      (redirect_to (session[:ret_url] || root_path) and return) unless source
+      
       customer.default_source = source.id
       customer.save
       if customer.subscriptions.blank?

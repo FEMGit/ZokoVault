@@ -1,5 +1,6 @@
 class MailchimpService
   attr_reader :gibbon
+  @@api_slice = 100
 
   def initialize()
     api_key = ZokuVault::Application.config.mailchimp_secret_token
@@ -77,14 +78,27 @@ class MailchimpService
   end
   
   def member_id_by_email(list_id, email)
-    return if members_emails(list_id).blank?
-    member_email = @gibbon.lists(list_id).members.retrieve.body["members"].detect { |m| m["email_address"] == email }
+    members_list = members(list_id)
+    return if members_list.blank?
+    member_email = members_list.detect { |m| m["email_address"] == email }
     return nil unless member_email
     member_email["id"]
   end
   
   def members_emails(list_id)
-    @gibbon.lists(list_id).members.retrieve.body["members"].map { |x| x["email_address"] }
+    emails = members(list_id).map { |x| x["email_address"] }
+  end
+    
+  def members(list_id)
+    offset = 0
+    members_list = []
+    until (members_slice = @gibbon.lists(list_id).members
+                                               .retrieve(params: {"fields": "members.email_address,members.id", "count": @@api_slice.to_s, "offset": offset.to_s})
+                                               .body["members"]).blank? do
+      members_list << members_slice
+      offset += @@api_slice
+    end
+    members_list.flatten
   end
   
   def list_id_by_name(name)

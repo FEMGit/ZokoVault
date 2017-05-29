@@ -138,4 +138,5 @@ group :test do
   gem 'spring-commands-rspec'
   gem 'webmock'
   gem 'stripe-ruby-mock', '~> 2.4.0', :require => 'stripe_mock'
+  gem 'shoulda-matchers', '~> 3.1'
 end

@@ -1,7 +1,8 @@
 class Tutorial < ActiveRecord::Base
   attr_writer :current_step
 
-  validates_presence_of :name, :if => lambda { |o| o.current_step == "cicle" }
+  validates_presence_of :name
+  validates_presence_of :number_of_pages
 
   has_many :pages
   has_many :subtutorials

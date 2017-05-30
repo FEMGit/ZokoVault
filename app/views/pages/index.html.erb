@@ -4,12 +4,14 @@
     <h4 class="hero-text">ZokuVault helps families plan, organize, and share the important details of their lives.</h4>
     <br>
     <%= link_to 'Sign Up', sign_up_path, class: "button primary-button call-to-action" %>
+
+
   </article>
 </section>
 
 <section class="home-movies">
   <article>
-    <h3 class="hero-text mb-20">
+    <h4 class="hero-text">
       Watch the video to take a quick tour of ZokuVault.
     </h3>
     <div class=" m-0-auto mb-30 video-container" >
@@ -20,9 +22,10 @@
 
 <section class="security">
   <article>
-    <%= image_tag "marketing/security.svg", :class => "fl" %>
-    <h3 class="security-text">Nothing is more important than security.
-      <br>Learn how we keep your data safe.</h3>
+    <%= image_tag "marketing/security.svg" %>
+      <h2 class="security-text mb-0">Nothing is more important than security.</h2>
+      <h4 class="security-text">We securely encrypt all of your information.
+      <br>Learn how we keep your data safe.</h4>
       <br>
       <%= link_to 'Learn More', security_path, class: "button primary-button call-to-action" %>
   </article>

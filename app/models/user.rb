@@ -52,9 +52,6 @@ class User < ActiveRecord::Base
            :name, :phone_number, :phone_number_mobile, :two_factor_phone_number,
            :date_of_birth, :signed_terms_of_service?, to: :user_profile, allow_nil: true
 
-  # == Callbacks
-  after_create :add_subscriber_to_list
-
   def category_shares
     @category_shares ||= shares.categories
   end
@@ -168,30 +165,5 @@ class User < ActiveRecord::Base
 
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
-  end
-
-  # Subscribe a member to a list:
-  def add_subscriber_to_list
-    return if develop_staging?
-    begin
-      api_key = ZokuVault::Application.config.mailchimp_secret_token
-      gibbon = Gibbon::Request.new(api_key: api_key, debug: true, logger: nil)
-
-      gibbon.lists(ZokuVault::Application.config.mailchimp_listing_id).members.create(
-        body: {
-          email_address: self.email,
-          status: "subscribed",
-          merge_fields: {
-            FNAME: self.first_name,
-            LNAME: self.last_name
-          }
-        }
-      )
-    rescue Exception => exception
-      requested_page = 'users/sign_up_form'
-      error = exception.message
-      user_death_trap = UserDeathTrap.new(user: self, page_terminated_on: requested_page, error_message: error)
-      user_death_trap.save
-    end
   end
 end

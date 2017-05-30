@@ -1,0 +1,156 @@
+<div class="card mb-30 mt-20 max-w-1000-centered">
+  <h2><%= title %></h2>
+  <p><%= text.html_safe %></p>
+
+  <h3 <% if digital_resources.blank? %> style="display: none;" <% end %> id='documents-table-title'><%= table_title %></h3>
+  <table id="documents-table" <% if digital_resources.blank? %> style="display: none;" <% end %>>
+    <thead>
+      <tr>
+        <th class="w-70-percent">Name</th>
+        <th class="w-30-percent">Tags</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% digital_resources.each do |digital_res| %>
+        <tr>
+          <td>
+            <%= render :partial => "layouts/document_links", :locals => {:document => digital_res, blank: true } %>
+          </td>
+          <td>
+            <%= render :partial => "layouts/document_tags", :locals => {:document => digital_res} %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% @document = Document.new(user: current_user, category: @category.name) %>
+  
+  <%= form_for @document, html: { id: "doc-form" } do |f| %>
+    <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
+
+    <div id="file-pick-section" class=" mb-15">
+      <% policy = FilepickerService.policy %>
+      <% signature = FilepickerService.signature(policy) %>
+
+      <input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3" data-fp-button-text="<%= upload_button_text %>"
+       data-fp-maxSize="104857600" data-fp-policy=<%= policy %> data-fp-signature=<%= signature %> data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" id="select-file"/>
+    </div>
+ 
+    <%= f.hidden_field :url %>
+
+    <section id="document-information" style="display: none;">
+      <label>Document Name</label>
+      <span class="error-label name" style="display: none;"></span>
+      <%= f.text_field :name, :maxlength => get_max_length(:default) %>
+  
+      <label>Category</label>
+      <div class="chosen-styled-select">
+        <%= f.collection_select :category,
+          @category_dropdown_options, :to_s, :to_s, {},
+          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, :onchange => 'get_drop_down_options();' }
+        %>
+      </div>
+
+      <%= render partial: 'layouts/document_subcategory_dropdown', locals: { f: f } %>
+
+      <div class="mt-20">
+        <%= link_to "Add Document", 'javascript:addDocument()', class: "button primary-button big-button" %>
+        <%= link_to "Cancel", 'javascript:cleanUploadedDocument()', class: "button secondary-button big-button" %>
+      </div>
+    </section>
+  <% end %>
+
+  <%= render partial: 'tutorials/buttons_section' %>
+</div>
+
+<script>
+  var fileToPage = function(evt) {
+    setDocumentValues(evt.fpfile.filename, evt.fpfile.key)
+    $('#document-information').show()
+    $('#file-pick-section').hide()
+  }
+  
+  var cleanUploadedDocument = function() {
+    setDocumentValues('', '')
+    $('#document-information').hide()
+    $('#file-pick-section').show()
+    errorMessageHide()
+    cancelDropdownSelections()
+  }
+  
+  var setDocumentValues = function(name, url) {
+    var documentNameField = document.getElementById("document_name")
+    var documentUrl = document.getElementById("document_url")
+    documentNameField.value = name
+    documentUrl.value = url
+  }
+  
+  var addDocument = function() {
+    var serialized_data = $('#doc-form').serialize()
+
+    $.ajax({
+      url: "<%= documents_path %>",
+      type: 'POST',
+      dataType: 'json',
+      data: serialized_data
+    }).success(function(data) {
+      $('#document-information').hide()
+      $('#file-pick-section').show()
+      tableUpdate(data)
+      cancelDropdownSelections()
+      errorMessageHide()
+    }).fail(function(data) {
+      var response = JSON.parse(data.responseText)
+      if (response["name"] !== 'undefined') {
+        errorMessageShow(response["name"][0])
+      }
+    });
+  }
+  
+  var cancelDropdownSelections = function() {
+    $('#subcategory-dropdown').find('select.chosen-select').val('Select...')
+    $('#subcategory-dropdown').find('select.chosen-select').trigger("chosen:updated")
+  }
+  
+  var tableUpdate = function(data) {
+    var primary_tag = "<span class='doc-tag'>" + data['primary_tag'] + "</span>"
+    var secondary_tag = (data['secondary_tag'] !== undefined) ? ("<span class='doc-tag secondary-tag'>" + data['secondary_tag'] + "</span>") : ""
+    var document_path = '<a href="' + data['document_path'] + '" target="_blank">' + data['name'] + '</a>'
+
+    var table = $('#documents-table').DataTable();
+    table.row.add([
+      document_path,
+      primary_tag + secondary_tag
+    ]).draw(false)
+
+    $('#documents-table-title').show()
+    $('#documents-table').show()
+    $('.flash-success-static.flash').show()
+  }
+  
+  var errorMessageShow = function(message) {
+    $('.error-label.name').show()
+    $('.error-label.name').text(" - " + message)
+  }
+  
+  var errorMessageHide = function() {
+    $('.error-label.name').text("")
+    $('.error-label.name').hide()
+  }
+
+  $(document).ready(function(){
+      $('#documents-table').DataTable( {
+        paging: false,
+        searching: false,
+        info: false,
+        aaSorting: [[0, 'asc']]
+    });
+    
+    if ($('.flash-success.flash').text() === 'Document was successfully created.') {
+      $('.flash.important-doc').show()
+    }
+
+    $('.chosen-select').chosen()
+  });
+</script>

@@ -1,8 +1,11 @@
+<% blank ||= false %>
+<% target = blank ? "_blank" : "_self" %>
+
 <% if previewed?(document) %>
   <% if @shared_user.present? %>
-    <%= link_to document.name, shared_documents_path(@shared_user, document) %>
+    <%= link_to document.name, shared_documents_path(@shared_user, document), target: target %>
   <% else %>
-    <%= link_to document.name, document_path(document) %>
+    <%= link_to document.name, document_path(document), target: target %>
   <% end %>
 <% else %>
   <%= link_to document.name, download_document_path(document, @shared_user), method: :post %>

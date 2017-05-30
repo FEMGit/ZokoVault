@@ -1,12 +1,13 @@
 <% current_user = User.last %>
 
-<section class="card signup-card">
+<section class="card signup-card eightfifty-align-left">
 
-  <p class="fr">Already have a ZokuVault? <%= link_to 'Login', new_session_path(resource_name), class: 'no-underline-link'%></p>
-
-  <h3 class="confirmation-title">Sign Up</h3>
-
-  <p>Please provide some basic information about yourself to create your account. We'll never share your personal information with anyone.</p>
+  <h3>
+    <svg class="icon">lo
+      <use xlink:href="#icon-lock-large"></use>
+    </svg>
+    <span class="sign-up-title">Secure Sign Up</span>
+  </h3>
 
   <% resource.build_user_profile rescue nil if resource.user_profile.nil? %>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {novalidate: true}) do |f| %>
@@ -33,7 +34,10 @@
         <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
       <% end %>
 
-      <%= f.password_field :password, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+      <div class="tooltip-item fixed w-100-percent">
+        <%= f.password_field :password, {autocomplete: "off", class: ("input-error tooltip-item-input" if resource.errors.messages[:password].present?) } %>
+        <%= render partial: 'layouts/password_tooltip' %>
+      </div>
       <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>
 
       <%= f.label :password_confirmation, 'Confirm Password' %>
@@ -44,13 +48,17 @@
 
     <% end %>
 
-      <%= f.button "Sign Up", class: 'js-modal-close button primary-button big-button', id: "submit-button" %>
-      <%= link_to 'Cancel', '/', class: "js-modal-close button secondary-button big-button", method: :get %>
+    
+    <%= button_tag(class: "button blue-button big-button-2 form-width mt-20 mb-20", method: :get) do %>
+      <svg class="icon button-icon">
+        <use xlink:href="#icon-lock-1"></use>
+      </svg>
+      <span>Create Account</span>
+    <% end %>
 
-    <p class="mt-20 small-text">By submitting this information, I agree to the ZokuVault
+    <p class="mt-20 max-w-300 small-text mb-30 m-0-auto text-center">By submitting this information, I agree to the ZokuVault
       <%= link_to 'Terms of Service', terms_of_service_path, class: "no-underline-link" %> and
       <%= link_to 'Privacy Policy', privacy_policy_path, class: "no-underline-link" %>.
     </p>
   <% end %>
 </section>
-

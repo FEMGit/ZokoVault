@@ -37,28 +37,30 @@ var topMargin = function() {
 }
   
 $(document).ready(function(){
-  $('.tooltip-item')
-  .mouseenter(function() {
-    var tooltip = $(this).find('.tooltip');
-    if (tooltip.is(':offscreenUp')) {
-      tooltip.addClass("bottom");
-      tooltip.removeClass("top");
-    }
-    if (tooltip.is(':screenDownFree')) {
-      tooltip.addClass("bottom");
-      tooltip.removeClass("top");
-    }
-    if(tooltip.is(':offscreenDown')) {
-      tooltip.removeClass("bottom");
-      tooltip.addClass("top");
-    }
-    if (tooltip.is(':screenRightFree')) {
-      tooltip.addClass("right");
-      tooltip.removeClass("left");
-    }
-    if (tooltip.is(':offscreenRight')) {
-      tooltip.addClass("left");
-      tooltip.removeClass("right");
-    }
-  });
+  tooltipItem = $('.tooltip-item')
+  if(!tooltipItem.hasClass('fixed')) {
+    tooltipItem.mouseenter(function() {
+      var tooltip = $(this).find('.tooltip');
+      if (tooltip.is(':offscreenUp')) {
+        tooltip.addClass("bottom");
+        tooltip.removeClass("top");
+      }
+      if (tooltip.is(':screenDownFree')) {
+        tooltip.addClass("bottom");
+        tooltip.removeClass("top");
+      }
+      if(tooltip.is(':offscreenDown')) {
+        tooltip.removeClass("bottom");
+        tooltip.addClass("top");
+      }
+      if (tooltip.is(':screenRightFree')) {
+        tooltip.addClass("right");
+        tooltip.removeClass("left");
+      }
+      if (tooltip.is(':offscreenRight')) {
+        tooltip.addClass("left");
+        tooltip.removeClass("right");
+      }
+    });
+  }
 });

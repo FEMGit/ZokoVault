@@ -1,6 +1,4 @@
 class RegistrationsController < Devise::RegistrationsController
-  before_action :set_plans, only: [:new]
-
   protected
 
   def after_inactive_sign_up_path_for(resource)
@@ -29,11 +27,5 @@ class RegistrationsController < Devise::RegistrationsController
     month = date_params[0]
     day = date_params[1]
     "#{year}-#{month}-#{day}"
-  end
-
-  private
-
-  def set_plans
-    @plans = StripeSubscription.plans
   end
 end

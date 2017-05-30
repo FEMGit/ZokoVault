@@ -24,6 +24,10 @@
     z-index: 200;
   }
   
+  &.fixed {
+    line-height: inherit;
+  }
+  
   @mixin tooltip-box {
     position: absolute;
     left: 5px;
@@ -55,6 +59,13 @@
     &.left {
       position: absolute;
       left: -190px;
+    }
+    &.password-tooltip {
+      position: absolute;
+      left: 370px;
+      top: -4px;
+      width: 70%;
+      max-width: 200px;
     }
     &.right {
       position: absolute;
@@ -88,7 +99,7 @@
       min-width: $tooltip-min-width-wide;
     }
 
-    &::after {
+    &::after:not(.password-tooltip) {
       @include tooltip-box;
       content: "▼";
       bottom: $tooltip-arrow-distance-from-box-default;
@@ -110,6 +121,14 @@
     &.right::after {
       left: 4px;
     }
+    &.password-tooltip::before {
+      @include tooltip-box;
+      content: "◀";
+      left: -14px;
+      top: 0;
+      text-shadow: -2px 0 .5px $color-primary-shaded;
+    }
+    
     &.bottom::before {
       @include tooltip-box;
       content: "▲";

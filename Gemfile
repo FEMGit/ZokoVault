@@ -97,10 +97,16 @@ gem 'high_voltage', '~> 3.0'
 
 # Exception mailer
 gem 'rollbar'
+
+# Dynamic Error Handling
+gem 'rambulance', '~> 0.4'
+
+# JSON parsing
 gem 'oj', '~> 2.12.14'
 
 # Mailchimp manipulation gem
 gem 'gibbon'
+
 # Payment
 gem 'stripe'
 

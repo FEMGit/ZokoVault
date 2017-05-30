@@ -335,10 +335,6 @@ Rails.application.routes.draw do
   get '/support/new_message', to: 'email_support#index', as: :email_support
   post '/support/new_message', to: 'email_support#send_email'
 
-  # Catch 500 and 404 errors
-  match "/500", :to => "errors#internal_server_error", :via => :all
-  match "/404", to: "errors#not_found_error", via: :all
-
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

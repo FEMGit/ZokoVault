@@ -6,6 +6,7 @@ class PagesController < HighVoltage::PagesController
   layout 'without_sidebar_layout'
 
   def show
+    redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?
     @show_footer = false
     tuto_index = session[:tutorial_index] + 1
     
@@ -111,6 +112,7 @@ class PagesController < HighVoltage::PagesController
   def clean_subtutorials
     if @tutorial && @tutorial.has_subtutorials?
       tuto_index = session[:tutorial_index]
+      return if tuto_index.blank? || session[:tutorial_paths].blank?
       tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
       if session[:tutorial_paths][tuto_index][:current_page].eql? 'subtutorials_choice'
         session[:tutorial_paths].delete_if { |x| x[:tuto_id].to_s == tuto_id.to_s && x[:current_page] != 'subtutorials_choice' }

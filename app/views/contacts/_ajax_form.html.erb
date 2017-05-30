@@ -54,7 +54,13 @@ var currentSelectInput = ''; // XXX: This stores which input is selected
 
 var currentStep = 1;
 
+var contactScreenShift = function(element) {
+  var offset = $(document).scrollTop()
+  element.css("margin-top", offset + "px")
+}
+
 var displayContactFormModal = function() {
+  contactScreenShift($('#wizard-modal'))
   $("body").append("<div class='modal-overlay js-modal-close'></div>");
   $(".modal-overlay").fadeTo(500, 0.8);
   $(".js-modalbox").fadeIn(500);

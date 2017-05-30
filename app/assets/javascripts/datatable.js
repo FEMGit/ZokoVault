@@ -31,10 +31,10 @@ var tableSettingsGenerate = function(lengthMenuValues, recordName, aaSortingValu
 }
 
 var prepareTableControls = function(table_id, desirableColspan) {
-  var info_global = $(table_id + '_info' + '.dataTables_info')//.detach()
-  var pagination_global = $(table_id + '_paginate' +'.dataTables_paginate')//.detach()
-  var record_select_global = $(table_id + '_length' +'.dataTables_length')//.detach()
-  var search_global = $(table_id + '_filter' +'.dataTables_filter')//.detach()
+  var info_global = $(table_id + '_info' + '.dataTables_info').detach()
+  var pagination_global = $(table_id + '_paginate' +'.dataTables_paginate').detach()
+  var record_select_global = $(table_id + '_length' +'.dataTables_length').detach()
+  var search_global = $(table_id + '_filter' +'.dataTables_filter').detach()
   var controlsArray = [info_global, pagination_global, record_select_global, search_global]
     
   controlsArray[1].on('click', function() {

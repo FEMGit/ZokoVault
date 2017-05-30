@@ -1,49 +1,69 @@
 class MailchimpService
+  include StagingHelper
   attr_reader :gibbon
+  @@api_slice = 100
 
   def initialize()
     api_key = ZokuVault::Application.config.mailchimp_secret_token
     @gibbon = Gibbon::Request.new(api_key: api_key)
   end
   
-  def lists
-    @gibbon.lists.retrieve.body["lists"]
-  end
-  
-  def list(list_id)
-    @gibbon.lists(list_id).retrieve
+  def unsubscribe_from_all_lists
+    check_staging && return
+    unsubscribe_all(mailchimp_lists(:paid))
+    unsubscribe_all(mailchimp_lists(:trial))
+    unsubscribe_all(mailchimp_lists(:shared))
   end
   
   def subscribe_to_paid(user)
-    subscribe(mailchimp_lists[:paid], user)
+    check_staging && return
+    subscribe(mailchimp_lists(:paid), user)
     unsubscribe_from_shared(user)
     unsubscribe_from_trial(user)
   end
   
   def subscribe_to_shared(user)
-    subscribe(mailchimp_lists[:shared], user)
+    check_staging && return
+    subscribe(mailchimp_lists(:shared), user)
     unsubscribe_from_paid(user)
     unsubscribe_from_trial(user)
   end
   
   def subscribe_to_trial(user)
-    subscribe(mailchimp_lists[:trial], user)
+    check_staging && return
+    subscribe(mailchimp_lists(:trial), user)
     unsubscribe_from_shared(user)
     unsubscribe_from_paid(user)
   end
 
   private
+    
+  def check_staging
+    return true if develop_staging?
+    false
+  end
+  
+  def unsubscribe_all(list_name)
+    list_id = list_id_by_name(list_name)
+    member_emails = members_emails(list_id)
+    
+    member_emails.each do |email|
+      member_id = member_id_by_email(list_id, email)
+      next unless list_id.present? && member_id.present?
+      @gibbon.lists(list_id).members(member_id).delete
+    end
+  end
   
   def unsubscribe_from_paid(user)
-    unsubscribe(mailchimp_lists[:paid], user)
+    unsubscribe(mailchimp_lists(:paid), user)
   end
   
   def unsubscribe_from_shared(user)
-    unsubscribe(mailchimp_lists[:shared], user)
+    unsubscribe(mailchimp_lists(:shared), user)
   end
   
   def unsubscribe_from_trial(user)
-    unsubscribe(mailchimp_lists[:trial], user)
+    unsubscribe(mailchimp_lists(:trial), user)
   end
   
   def unsubscribe(list_name, user)
@@ -77,14 +97,43 @@ class MailchimpService
   end
   
   def member_id_by_email(list_id, email)
-    return if members_emails(list_id).blank?
-    member_email = @gibbon.lists(list_id).members.retrieve.body["members"].detect { |m| m["email_address"] == email }
+    members_list = members(list_id)
+    return if members_list.blank?
+    member_email = members_list.detect { |m| m["email_address"] == email }
     return nil unless member_email
     member_email["id"]
   end
   
   def members_emails(list_id)
-    @gibbon.lists(list_id).members.retrieve.body["members"].map { |x| x["email_address"] }
+    emails = members(list_id).map { |x| x["email_address"] }
+  end
+    
+  def members(list_id)
+    offset = 0
+    members_list = []
+    until (members_slice = @gibbon.lists(list_id).members
+                                               .retrieve(params: {"fields": "members.email_address,members.id", "count": @@api_slice.to_s, "offset": offset.to_s})
+                                               .body["members"]).blank? do
+      members_list << members_slice
+      offset += @@api_slice
+    end
+    members_list.flatten
+  end
+    
+  def lists
+    offset = 0
+    mailchimp_lists = []
+    until (list_slice = @gibbon.lists
+                                  .retrieve(params: {"count": @@api_slice.to_s, "offset": offset.to_s})
+                                  .body["lists"]).blank? do
+      mailchimp_lists << list_slice
+      offset += @@api_slice
+    end
+    mailchimp_lists.flatten
+  end
+  
+  def list(list_id)
+    @gibbon.lists(list_id).retrieve
   end
   
   def list_id_by_name(name)
@@ -93,8 +142,13 @@ class MailchimpService
     list_name["id"]
   end
 
-  def mailchimp_lists
-    {paid: 'Paid Subscriber', shared: 'Shared With User',
-     trial: 'Free Trial Users'}
+  def mailchimp_lists(type)
+    if ENV['STAGING_TYPE'].eql? 'production'
+      MailchimpLists::PRODUCTION[type]
+    elsif ENV['STAGING_TYPE'].eql? 'beta'
+      MailchimpLists::BETA[type]
+    else
+      nil
+    end
   end
 end

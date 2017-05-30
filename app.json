@@ -4,6 +4,9 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
+    "STAGING_TYPE" : {
+      "required": true
+    },
     "STRIPE_YEARLY_PLAN" : {
       "required": true
     },

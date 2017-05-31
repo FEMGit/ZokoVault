@@ -1,7 +1,9 @@
 <% f ||= nil %>
+<% skip_continue_equal ||= false %>
+
 <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
   <%= link_to 'Back', tutorial_destroy_path(tutorial_id: params[:tutorial_id]), method: :post, class: "big-button outline-button padded f-left" %>
-  <% if @tutorial_name != 'confirmation_page' %>
+  <% if @tutorial_name != 'confirmation_page' && !skip_continue_equal %>
     <%- if @next_tutorial_name == 'confirmation_page' %>
       <%= link_to "Skip", tutorials_confirmation_path, class: "big-button outline-button padded skip-btn" %>
     <%- else %>
@@ -17,6 +19,9 @@
     <% elsif @tutorial_name == 'confirmation_page' %>
       <%= link_to "Continue", root_path, class: "button big-button blue-button f-right submit-btn ml-0" %>
     <% else %>
+      <% if skip_continue_equal %>
+        <%= link_to "Skip", tutorial_page_path(@next_tutorial_name, @next_page), class: "big-button outline-button padded skip-btn mr-5" %>
+      <% end %>
       <%= link_to "Continue", tutorial_page_path(@next_tutorial_name, @next_page), class: "button big-button blue-button f-right submit-btn ml-0" %>
     <% end %>
   <% end %>

@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
 
   # == Validations
-  validates :email, :email_format => { :message => "Email should contain @ and domain like '.com" }
+  validates :email, :email_format => { :message => "Email should contain @ and domain like .com" }
   validate :email_is_valid?
 
   validate :password_complexity
@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
   private
   
   def email_is_valid?
-    MailService.email_is_valid?(email, errors)
+    MailService.email_is_valid?(email, errors, :email)
   end
 
   # XXX: We do not have "roles" established. I am using a weak association to

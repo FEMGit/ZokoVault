@@ -12,7 +12,7 @@ class UnlocksController < Devise::UnlocksController
         resource.errors.messages.clear
         flash[:notice] = email_sent_message
       end
-      respond_with(resource, location: unlock_path(resource_name))
+      respond_with(resource, location: after_sending_unlock_instructions_path_for(resource_name))
     end
   end
 

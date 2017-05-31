@@ -12,7 +12,7 @@ class ConfirmationsController < Devise::ConfirmationsController
         resource.errors.messages.clear
         flash[:notice] = email_sent_message
       end
-      respond_with(resource, location: confirmation_path(resource_name))
+      respond_with(resource, location: after_resending_confirmation_instructions_path_for(resource_name))
     end
   end
   

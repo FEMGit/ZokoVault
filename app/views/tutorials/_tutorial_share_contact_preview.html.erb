@@ -1,0 +1,4 @@
+<% contact = Contact.for_user(current_user).find_by(id: contact_id) %>
+<% if contact.present? %>
+  <span class="inline-block mb-10" id="share-contact-message-<%=contact.id%>">When you share with <%= contact.name %>, ZokuVault will send a <%= link_to 'message', 'javascript:displayEmailPreview(' + contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> to let them know.<br></span>
+<% end %>

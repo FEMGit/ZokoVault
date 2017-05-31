@@ -209,6 +209,28 @@ a.modal-close:hover {
   }
 }
 
+// EMAIL PREVIEW
+.email-preview-modal {
+  height: 1100px;
+  max-width: inherit;
+  width: 60%;
+  @include media($teneighty) {
+    width: 70% !important;
+  }
+  @include media($tablet) {
+    width: 90% !important;
+  }
+  padding-top: 15px;
+  & > #email-iframe {
+    height: 100%;
+    width: 100%;
+    margin-top: 15px;
+    padding-bottom: 50px;
+    border: none;
+    display: block;
+  }
+}
+
 @media screen and (max-width: 440px) {
   .modal-no-js {
     .modal-step-title {

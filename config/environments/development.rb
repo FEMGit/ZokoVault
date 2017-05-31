@@ -45,4 +45,9 @@ Rails.application.configure do
 
   # Disable assets logger
   config.assets.quiet = true
+  
+  # Mailer Preview
+  routes.append do
+    get '/email/*path/:user_id/:contact_id' => 'rails/mailers#preview'
+  end
 end

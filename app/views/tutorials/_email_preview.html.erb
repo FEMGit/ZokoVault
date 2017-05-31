@@ -1,0 +1,70 @@
+<% @resource_owner = current_user %>
+<button class="primary-button big-button email-modal hidden" data-modal-id="email-preview-modal" id="show-modal-button">
+  Email Modal
+</button>
+<div id="email-preview-modal" class="modal email-preview-modal modal-no-js">
+  <div class="fr mr-15">
+    <svg class="icon close-icon" id="close-email-modal">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </div>
+  <iframe src="" id="email-iframe"></iframe>
+</div>
+
+<script>
+
+$(document).ready(function() {
+  $('#close-email-modal').on('click', function() {
+    closeEmailPreviewModal()
+  })
+})
+
+var screenShift = function(element) {
+  var offset = $(document).scrollTop()
+  element.css("margin-top", offset + "px")
+}
+
+var displayEmailPreviewModal = function(contact_id) {
+  mailer_view_url = "/email/share_invitation_mailer_name/" + contact_id
+  $.ajax({
+    url: mailer_view_url,
+    type: "GET",
+    dataType: 'json',
+  })
+   .done(function(data){
+     $('#email-iframe').attr('src', "/email/share_invitation_mailer/" + data["name"] + "/<%=@resource_owner.id%>/" + contact_id)
+     screenShift($('#email-preview-modal'))
+     $("body").append("<div class='modal-overlay js-modal-close'></div>");
+     $(".modal-overlay").fadeTo(500, 0.8);
+     $(".js-modalbox").fadeIn(500);
+     canvasEl = $('button.email-modal[data-modal-id]');
+     var modalBox = $(canvasEl).attr('data-modal-id');
+     
+     $("#email-iframe").load(function() {
+       emailPreviewOnLoad(modalBox, canvasEl)
+     })
+   })
+   .fail(function(data) {
+   })
+}
+
+var emailPreviewOnLoad = function(modalBox, canvasEl) {
+  cleanEmailPreviewHeader('SMTP')
+  cleanEmailPreviewHeader('Date')
+  $('#' + modalBox).fadeIn($(canvasEl).data());
+}
+
+var cleanEmailPreviewHeader = function(textContained) {
+  var elementDt = $("#email-iframe").contents().find("header").find("dl > dt:contains('" + textContained + "')")
+  var elementDd = elementDt.next()
+  elementDt.remove()
+  elementDd.remove()
+}
+
+var closeEmailPreviewModal = function() {
+  $(".modal, .modal-overlay").fadeOut(500, function() {
+    $("#contact-form").trigger("reset");
+    $(".modal-overlay").remove();
+  });
+}
+</script>

@@ -61,17 +61,62 @@ class PagesController < HighVoltage::PagesController
       set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)
+    redirect_if_incorrect_url
   end
   
   def set_primary_shared_tutorial_contacts
     @user_profile = UserProfile.for_user(current_user)
-    @primary_contacts = Contact.for_user(current_user).where(relationship: Contact::CONTACT_TYPES['Family & Beneficiaries'], contact_type: 'Family & Beneficiaries')
+    @primary_contacts = Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries')
     
     @primary_shared_contacts = @user_profile.primary_shared_with
-    @contacts_with_access = (@primary_contacts + @primary_shared_contacts).uniq
+    @contacts_with_access = (@primary_contacts.select{ |pc| pc.relationship.eql? 'Spouse / Domestic Partner' } + @primary_shared_contacts).uniq
     
     contact_service = ContactService.new(:user => current_user)
     @contacts_shareable = contact_service.contacts_shareable
+    
+    # Check that 'Spouse' was added
+    if @page_number.to_i > 1 && !@primary_contacts.any? { |pc| pc.relationship.eql? 'Spouse / Domestic Partner' }
+      spouse_not_added_handle
+    elsif @page_number.to_i == 1
+      if session[:tutorial_paths][session[:tutorial_index] + 1][:tuto_id].to_s != @tutorial.id.to_s
+        restore_family_tutorial_session
+      end
+    end
+  end
+  
+  def redirect_if_incorrect_url
+    current_tutorial_path = Rails.application.routes.recognize_path(request.fullpath)
+    if current_tutorial_path[:tutorial_id] != @tutorial_name
+      redirect_to tutorial_page_path(@tutorial_name, @page_number)
+    end
+  end
+  
+  def spouse_not_added_handle
+    tuto_index = session[:tutorial_index]
+      session[:tutorial_index] += @tutorial.number_of_pages - 1
+      (1...@tutorial.number_of_pages).each do 
+        session[:tutorial_paths].delete_at(tuto_index)
+        session[:tutorial_index] -= 1
+      end
+      reset_tutorial_parameters
+  end
+  
+  def restore_family_tutorial_session
+    tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>@tutorial.id.to_s, :current_page=>@page_number.to_i, :tuto_name=> params[:tutorial_id]})
+    subtutorial_paths = []
+    (2..@tutorial.number_of_pages).each do |page_number|
+      subtutorial_paths << { tuto_id: @tutorial.id, current_page: page_number, tuto_name: params[:tutorial_id] }
+    end
+    session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
+                               subtutorial_paths + 
+                               session[:tutorial_paths][tutorial_path_position + 1..-1]
+    reset_tutorial_parameters
+  end
+  
+  def reset_tutorial_parameters
+    params[:tutorial_id] = session[:tutorial_paths][session[:tutorial_index]][:tuto_name]
+    params[:page_id] = session[:tutorial_paths][session[:tutorial_index]][:current_page]
+    set_tutorial
   end
   
   def set_taxes_tutorial_contacts

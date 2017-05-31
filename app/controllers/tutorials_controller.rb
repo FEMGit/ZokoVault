@@ -148,7 +148,7 @@ class TutorialsController < AuthenticatedController
         if tutorial_name.eql? ' I have a will.'
           Will.create!(title: current_user.name + ' Will', user: current_user)
         elsif tutorial_name.eql? 'My spouse has a will.'
-          spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse/Domestic Partner')
+          spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse / Domestic Partner')
           spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
         end
       rescue

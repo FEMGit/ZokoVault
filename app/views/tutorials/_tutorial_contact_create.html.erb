@@ -1,4 +1,5 @@
 <% description ||= nil %>
+<% skip_continue_equal ||= nil %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
   <h1 class="mb-20"><%= title %></h1>
@@ -17,7 +18,7 @@
     <button class="button primary-button big-button" onclick="createContact();"><%= button_text %></button>
   </div>
 
-  <%= render partial: 'tutorials/buttons_section' %>
+  <%= render partial: 'tutorials/buttons_section', locals: { skip_continue_equal: skip_continue_equal } %>
 </div>
 
 <%= render partial: 'contacts/ajax_form', style: 'display: none;' %>

@@ -38,7 +38,7 @@ class Contact < ActiveRecord::Base
       'Son',
       'Daughter',
       'Sibling',
-      'Spouse/Domestic Partner',
+      'Spouse / Domestic Partner',
       'Parent',
       'Grandparent',
       'Friend',

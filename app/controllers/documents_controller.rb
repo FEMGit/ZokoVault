@@ -297,7 +297,18 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render json: @document, status: :created }
+    format.json { render json: @document.as_json.merge(additinal_json_params), status: :created }
+  end
+  
+  def additinal_json_params
+    additinal_json_params = Hash.new
+    additinal_json_params["primary_tag"] = @document.category
+    secondary_tag_name = secondary_tag(@document)
+    if secondary_tag_name.present?
+      additinal_json_params["secondary_tag"] = secondary_tag_name
+    end
+    additinal_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
+    additinal_json_params
   end
 
   def handle_document_not_saved(format)

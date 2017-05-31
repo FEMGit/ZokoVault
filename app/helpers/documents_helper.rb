@@ -68,6 +68,16 @@ module DocumentsHelper
     session[:ret_url] || shared_view_dashboard_path(@shared_user)
   end
   
+  def secondary_tag(document)
+    if document_name_tag(document)
+      document_name_tag(document)
+    elsif document_group(document)
+      document_group(document)
+    else
+      nil
+    end
+  end
+  
   def document_name_tag(document)
     if document.vendor_id.present? && document.vendor_id.positive?
       Vendor.find(document.vendor_id).name

@@ -123,6 +123,7 @@ class PagesController < HighVoltage::PagesController
     @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
     
     @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+    set_documents_information(Rails.application.config.x.TaxCategory)
     set_contact_and_category_share(@tax_accountants, Rails.application.config.x.TaxCategory)
   end
   
@@ -135,12 +136,20 @@ class PagesController < HighVoltage::PagesController
     @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
     
     @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    set_documents_information(Rails.application.config.x.WillsPoaCategory)
     set_contact_and_category_share(@estate_planning_attorneys, Rails.application.config.x.WillsPoaCategory)
   end
   
   def set_financial_information_tutorial_contacts
     @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     set_contact_and_category_share(@financial_advisors, Rails.application.config.x.FinancialInformationCategory)
+  end
+  
+  def set_documents_information(category_name)
+    @category_dropdown_options = Array.wrap(category_name)
+    service = DocumentService.new(:category => category_name)
+    @card_names = service.get_card_names(current_user, current_user)
+    @cards = service.get_card_values(current_user, current_user)
   end
   
   def set_contact_and_category_share(contact_collection, category_name)

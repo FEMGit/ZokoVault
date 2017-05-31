@@ -21,12 +21,6 @@ class SessionsController < Devise::SessionsController
     user = User.find_by(email: resource.email)
     return if user.blank?
     
-    failed_attempts_count = user.failed_attempts
-    attempts_remaining = Session::FAILED_ATTEMPTS_LIMIT - failed_attempts_count
-    if attempts_remaining.eql? 0
-      flash[:alert] = ("Invalid Email or password.<br>Account locked, unlock instructions have been emailed to you.").html_safe
-    elsif failed_attempts_count > 0
-      flash[:alert] = ("Invalid Email or password.<br>#{attempts_remaining} attempts remaining.").html_safe
-    end
+    flash[:alert] = "Invalid Email or password. Please try again."
   end
 end

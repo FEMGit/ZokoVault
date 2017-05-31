@@ -1,14 +1,23 @@
 require 'securerandom'
 
 class MultifactorPhoneCode < ActiveRecord::Base
-  scope :latest, -> { order(created_at: :desc).limit(1) }
+  scope :not_expired, ->(at = Time.current) do
+    where("created_at > ?", at - 5.minutes)
+  end
 
   def self.generate_for(user)
     create!(user_id: user.id, code: random_code)
   end
 
-  def self.verify_latest(user, code)
-    latest.where(user_id: user.id).pluck(:code).first == code
+  def self.verify(user:, code:)
+    return false if user.blank? || user.id.blank? || code.blank?
+    available = not_expired.
+                where(user_id: user.id).
+                order(created_at: :desc).
+                limit(5).to_a
+    available.any?{ |mf| mf.code == code }.tap do
+      # TODO track failed login attempts
+    end
   end
 
   private

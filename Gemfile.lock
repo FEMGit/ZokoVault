@@ -407,6 +407,10 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.1)
     rake (12.0.0)
+    rambulance (0.4.0)
+      actionpack
+      activesupport
+      railties
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
@@ -570,6 +574,7 @@ DEPENDENCIES
   rack-timeout
   rails (= 4.2.7.1)
   rails_12factor
+  rambulance (~> 0.4)
   rollbar
   rspec-rails (~> 3.4)
   rubocop

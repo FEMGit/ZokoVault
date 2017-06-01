@@ -42,6 +42,7 @@ class PagesController < HighVoltage::PagesController
     @tutorial      = Tutorial.where('name ILIKE ?', tutorial_name(@tutorial_name)).first
     if @tutorial_name != 'confirmation_page'
       @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
+                                                  .try(:sort_by, &:position)
       clean_subtutorials
     end
   end

@@ -1,0 +1,38 @@
+<div class="card mb-30 mt-20 max-w-1000-centered no-pages-form">
+  <h1 class="mb-20"><%= title %></h1>
+  <%= form_for @tutorial do |f| %>
+    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+    <%= hidden_field_tag :page_number, @page_number %>
+    <%= hidden_field_tag :no_page_handle_path, no_page_handle_path %>
+
+    <% no_page_tutorials = 0 %>
+    <% tutorial_pages_counter = 1 %>
+    <ul class="tut-button-wrapper">
+      <%- @subtutorials.each_with_index do |tutorial, index|%>
+        <% if tutorial.no_page %>
+          <% no_page_tutorials += 1 %>
+        <% end %>
+        <% if tutorial_show.call(tutorial) %>
+          <li class="icon-box">
+            <label>
+              <% if tutorial.no_page %>
+                <%= check_box_tag "tutorial[no-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item no-page-#{tutorial.id}", value: tutorial.id} %>
+              <% else %>
+                <% index -= no_page_tutorials %>
+                <%= check_box_tag "tutorial[pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item", value: tutorial.id } %>
+              <% end %>
+              <%= render partial: 'tutorials/tutorial_icon', locals: { tutorial: tutorial } %>
+            </label>
+          </li>
+        <% end %>
+        <% if tutorial.number_of_pages > 1 %>
+          <% tutorial_pages_counter += tutorial.number_of_pages - 1 %>
+        <% end %>
+      <% end %>
+
+    </ul>
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>

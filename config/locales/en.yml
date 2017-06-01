@@ -29,6 +29,6 @@ en:
               confirmation: "Passwords do not match"
             email:
               blank: "Required"
-              invalid: "Email should contain @ and domain like '.com'"
+              invalid: "Email should contain @ and domain like .com"
             password:
               blank: "Required"

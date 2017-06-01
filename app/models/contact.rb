@@ -10,7 +10,7 @@ class Contact < ActiveRecord::Base
 
   validates :emailaddress, presence: { :message => "Required" }
   validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
-  validates :emailaddress, :email_format => { :message => "Email should contain @ and domain like '.com" }
+  validates :emailaddress, :email_format => { :message => "Email should contain @ and domain like .com" }
   validate :email_is_valid?
   
   
@@ -67,7 +67,7 @@ class Contact < ActiveRecord::Base
   }
   
   def email_is_valid?
-    MailService.email_is_valid?(emailaddress, errors)
+    MailService.email_is_valid?(emailaddress, errors, :emailaddress)
   end
 
   def canonical_user

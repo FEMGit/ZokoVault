@@ -5,28 +5,30 @@
   <article>
     <h1>Contact Us</h1>
     <p>Let us know how we can help you.  You can email us directly at <a href="mailto:support@zokuvault.com">support@zokuvault.com</a> or fill out the form below. A member of our team will get back to you shortly.</p>
+    <% @message ||= Message.new %>
     <%= form_for :user_message, url: url_for(contact_page_path) do |f| %>
-      <% if @message && @message.errors %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@message.errors.count, "error") %> prohibited this from being sent:</h2>
-          <ul>
-            <% @message.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
+    
+      <% if @message.errors.any? %>
+        <% errors = true %>
       <% end %>
+
       <%= f.label :name %><span class="required">(Required)</span>
-      <%= f.text_field :name %>
+      <% if errors && @message.errors.messages[:name] %>
+        <span class="error-label"> - <%= @message.errors.messages[:name].first %></span>
+      <% end %>
+      <%= f.text_field :name, { class: ("input-error" if @message.errors.messages[:name].present?), :maxlength => get_max_length(:default), value: @message.try(:name) } %>
 
       <%= f.label :email %><span class="required">(Required)</span>
-      <%= f.text_field :email %>
+      <% if errors && @message.errors.messages[:email] %>
+        <span class="error-label"> - <%= @message.errors.messages[:email].first %></span>
+      <% end %>
+      <%= f.text_field :email, { class: ("input-error" if @message.errors.messages[:email].present?), :maxlength => get_max_length(:default), value: @message.try(:email) } %>
 
       <label>Phone Number</label>
       <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
 
       <%= f.label :message_content, 'Message' %>
-      <%= f.text_area :message_content %>
+      <%= f.text_area :message_content, value: @message.try(:message_content) %>
       <%= f.button 'Submit', class: "primary-button big-button" %>
     <% end %>
 

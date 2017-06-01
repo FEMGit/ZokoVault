@@ -1,8 +1,8 @@
 module MailService
-  def self.email_is_valid?(emailaddress, errors)
+  def self.email_is_valid?(emailaddress, errors, email_field)
     unless check_domain(emailaddress) &&
         !MailService.contains_blacklisted_symbols?(emailaddress)
-      errors.add(:emailaddress, "Email should contain @ and domain like '.com")
+      errors.add(email_field, "Email should contain @ and domain like .com")
     end
   end
   

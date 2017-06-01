@@ -52,7 +52,7 @@
 </section>
 
 <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name),
-  documents_title: "Final Wish Documents"} %>
+  documents_title: "Final Wishes Documents"} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 

@@ -35,12 +35,11 @@ class Contact < ActiveRecord::Base
 
   RELATIONSHIP_TYPES = {
     personal: [
-      'Son',
-      'Daughter',
-      'Sibling',
       'Spouse / Domestic Partner',
+      'Child',
       'Parent',
       'Grandparent',
+      'Sibling',
       'Friend',
       'Other'
     ],

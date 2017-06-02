@@ -1,5 +1,7 @@
 class AccountTrafficsController < AuthenticatedController
   helper_method :user_link, :resource_link
+  include UserTrafficModule
+  skip_before_filter :save_traffic, only: [:index]
 
   def page_name
     case action_name
@@ -9,6 +11,7 @@ class AccountTrafficsController < AuthenticatedController
   end
   
   def index
+    save_traffic if params[:columns].blank?
     respond_to do |format|
       format.html
       format.json { render json: UserTrafficDatatable.new(view_context) }

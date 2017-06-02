@@ -10,7 +10,7 @@ module UserTrafficModule
         traffic_page_name << " (Shared View)"
       end
       @user_traffic_record = UserTraffic.new(:user => current_user,
-                                             :ip_address => request.env['REMOTE_ADDR'],
+                                             :ip_address => request.remote_ip,
                                              :page_url => request.url,
                                              :page_name => traffic_page_name,
                                              :shared_user_id => @shared_user.try(:id))
@@ -23,7 +23,7 @@ module UserTrafficModule
       page_name << " (Shared View)"
     end
     @user_traffic_record = UserTraffic.new(:user => current_user,
-                                           :ip_address => request.env['REMOTE_ADDR'],
+                                           :ip_address => request.remote_ip,
                                            :page_url => page_url,
                                            :page_name => page_name,
                                            :shared_user_id => @shared_user.try(:id))

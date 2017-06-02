@@ -50,8 +50,11 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
       location: 's3'
     }
   }).then(function(result) {
-    console.log(JSON.stringify(result.filesUploaded))
-    setAvatarPhoto(suffix, result.url, result.key)
-    console.log(JSON.stringify(result))
+    if (result.filesUploaded.length == 1) {
+      file = result.filesUploaded[0]
+      setAvatarPhoto(suffix, file.url, file.key)
+    } else {
+      console.log(JSON.stringify(result))
+    }
   })
 }

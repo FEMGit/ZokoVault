@@ -37,6 +37,10 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
   var client = filestack.init(api_key, policy_hash)
   client.pick({
     accept: 'image/*',
+    fromSources: [
+      'local_file_system', 'webcam', 'facebook', 'instagram',
+      'googledrive', 'dropbox', 'flickr', 'picasa', 'gmail'
+    ],
     transformations: {
       crop: { aspectRatio: 1 / 1 },
       minDimensions: [60, 60],

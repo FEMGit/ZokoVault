@@ -30,11 +30,10 @@ class AccountsController < AuthenticatedController
   def setup; end
 
   def first_run
-    if SubscriptionService.trial_was_used?(current_user)
-      redirect_to root_path
-    else
+    if !SubscriptionService.trial_was_used?(current_user)
       SubscriptionService.activate_trial(user: current_user)
     end
+    redirect_to new_tutorial_path
   end
 
   def payment
@@ -110,11 +109,12 @@ class AccountsController < AuthenticatedController
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
-      redirect_to(first_run_path) and return
+      redirect_to first_run_path and return
     elsif user_params[:user_type].eql? 'free'
       MailchimpService.new.subscribe_to_shared(current_user)
+      redirect_to first_run_path and return
     end
-    redirect_to(root_path)
+    redirect_to root_path
   end
 
   def update

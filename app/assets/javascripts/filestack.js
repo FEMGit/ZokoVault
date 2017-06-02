@@ -43,8 +43,8 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
     ],
     transformations: {
       crop: { aspectRatio: 1 / 1 },
-      minDimensions: [60, 60],
-      maxDimensions: [60, 60]
+      minDimensions: [360, 360],
+      maxDimensions: [360, 360]
     },
     storeTo: {
       location: 's3'

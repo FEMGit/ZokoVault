@@ -1,5 +1,6 @@
 class AccountsController < AuthenticatedController
   include UserTrafficModule
+  include AccountLockerHelper
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
@@ -165,6 +166,8 @@ class AccountsController < AuthenticatedController
                session[:mfa] = true
                :ok
              else
+               (failed_attempts_limit_reached? && lock_account) and
+                 (render json: { errors: 'Account locked' }, status: :unauthorized) and return
                :unauthorized
              end
     head status

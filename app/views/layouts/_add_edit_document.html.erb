@@ -26,11 +26,8 @@
         <span class="error-label"> - You should select file before saving a document</span>
       <% end %>
       <div id="file-pick-section">
-        <% policy = FilepickerService.policy %>
-        <% signature = FilepickerService.signature(policy) %>
-
-        <input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3" data-fp-button-text="Select File"
-         data-fp-maxSize="104857600" data-fp-policy=<%= policy %> data-fp-signature=<%= signature %> data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" data-buttonText="Select file" id="select-file"/>
+        <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
+        <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button">Select File</button>
       </div>
     <% end %>
     <%= f.hidden_field :folder_id %>
@@ -88,11 +85,12 @@
   $(document).ready(function() {
     categoryCheck($('#document_category.chosen-select :selected').text())
   })
-  var fileToPage = function(evt){
+
+  var fileToPage = function(file){
     var documentNameField = document.getElementById("document_name");
     var documentUrl = document.getElementById("document_url");
-    documentNameField.value = evt.fpfile.filename;
-    documentUrl.value = evt.fpfile.key;
+    documentNameField.value = file.filename;
+    documentUrl.value = file.key;
   }
 
   $('.chosen-select').chosen()

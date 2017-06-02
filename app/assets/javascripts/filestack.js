@@ -22,14 +22,23 @@ var setAvatarPhoto = function(suffix, preview, key) {
   $('.remove-button' + suffix).show();
 }
 
-var uploadDocumentWithFilestack = function(api_key, policy_hash) {
+var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
   var client = filestack.init(api_key, policy_hash)
   client.pick({
+    maxSize: 104857600,
+    fromSources: [
+      'local_file_system', 'webcam', 'googledrive', 'dropbox', 'box', 'gmail'
+    ],
     storeTo: {
       location: 's3'
     }
   }).then(function(result) {
-    console.log(JSON.stringify(result.filesUploaded))
+    if (result.filesUploaded.length == 1) {
+      file = result.filesUploaded[0]
+      callback(file)
+    } else {
+      console.log(JSON.stringify(result))
+    }
   })
 }
 

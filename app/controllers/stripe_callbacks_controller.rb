@@ -19,7 +19,7 @@ class StripeCallbacksController < ApplicationController
   end
   
   def payment_failure
-    Payment.create(payment_params)    
+    Payment.create(payment_params)
     render json: {}, status: 200
   end
   

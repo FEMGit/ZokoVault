@@ -145,7 +145,7 @@ class TutorialsController < AuthenticatedController
       tutorial_name = Subtutorial.find_by(:id => subtutorial_id).try(:name)
       return unless tutorial_name.present?
       begin
-        if tutorial_name.eql? ' I have a will.'
+        if tutorial_name.eql? 'I have a will.'
           Will.create!(title: current_user.name + ' Will', user: current_user)
         elsif tutorial_name.eql? 'My spouse has a will.'
           spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse / Domestic Partner')

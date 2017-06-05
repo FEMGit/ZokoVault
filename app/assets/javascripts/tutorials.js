@@ -3,6 +3,11 @@
  * To reuse it you need to put tutorial-fields class inside the form's elements.
  * Example in page_1 partial in tutorials/home/ folder.
  */
+var modalScreenShift = function(element) {
+  var offset = $(document).scrollTop()
+  element.css("margin-top", offset + "px")
+}
+
 var DynamicTutorialField = function(creationPath, destroyPath) {
   this.submitURL = creationPath;
   this.destroyURL = destroyPath;
@@ -98,6 +103,7 @@ DynamicTutorialField.prototype.dialogBehaviour = function(ev) {
   if ($('.collect-fields input.repeated-field').val() != '') {
     ev.preventDefault();
     $('.unsaved-changes-modal').click();
+    
 
     $(".skip-and-continue").on("click", function() {
       $('.collect-fields input.repeated-field').val('');
@@ -126,6 +132,7 @@ DynamicTutorialField.prototype.modalSettings = function() {
   $(function() {
     var appendthis =  ("<div class='modal-overlay js-modal-close'></div>");
     $('button[data-modal-id]').click(function(e) {
+      modalScreenShift($('#wizard-modal'))
       e.preventDefault();
       $("body").append(appendthis);
       $(".modal-overlay").fadeTo(500, 0.8);

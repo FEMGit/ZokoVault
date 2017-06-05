@@ -1,3 +1,15 @@
+ <button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
+ <div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+  <div class="confirmation-wrapper">
+    <h2>Unsaved changes</h2>
+    <p>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+  </div>
+  <footer class="modal-footer confirmation-footer">
+    <%= link_to 'Save and Continue', '#', class: "button primary-button big-button save-and-continue" %>
+    <%= link_to 'Skip and Continue', '#', class: "button primary-button big-button skip-and-continue" %>
+  </footer>
+</div>
+
 <% wide ||= false %>
 <% hidden_field_tag_values ||= nil %>
 

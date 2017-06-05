@@ -1,2 +1,2 @@
 <%= render partial: "layouts/category_icons", locals: { :category => category } %>
-<%= link_to category.name, category_view_path(category) %>
+<%= link_to category.name, category_view_path(category, @shared_user) %>

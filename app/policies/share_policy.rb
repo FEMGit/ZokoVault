@@ -29,12 +29,17 @@ class SharePolicy < BasicPolicy
   def financial_information?; index?; end
   def final_wishes?; index?; end
   def documents?; index?; end
+  def contacts?; index?; end
   def taxes?; index?; end
   def insurance?; index?; end
   def power_of_attorneys?; index?; end
   def trusts?; index?; end
   def wills?; index?; end
   def documents?; index?; end
+  
+  def relationship_values?
+    owned_or_shared?
+  end
 
   class Scope
     attr_reader :user, :scope

@@ -163,6 +163,15 @@ class SharedViewController < AuthenticatedController
     end
     session[:ret_url] = shared_view_trusts_entities_path
   end
+  
+  def contacts
+    if @shared_category_names.include? Rails.application.config.x.TrustsEntitiesCategory
+      shared_user_profile_contact = shared_user.user_profile.contact
+      @contacts = Contact.for_user(shared_user)
+                         .reject { |c| c == shared_user_profile_contact }
+      session[:ret_url] = shared_view_contacts_path
+    end
+  end
 
   def documents
     if @shared_category_names.include? Rails.application.config.x.DocumentsCategory

@@ -24,7 +24,7 @@ module ZokuVault
     config.x.ProfileCategory = "My Profile"
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
                                 config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
-                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.DocumentsCategory]
+                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.DocumentsCategory, config.x.ContactCategory]
 
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'

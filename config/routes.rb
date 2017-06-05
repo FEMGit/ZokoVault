@@ -115,7 +115,10 @@ Rails.application.routes.draw do
   end
 
   # contacts
-  get 'contacts/relationship_values/:contact_type', to: 'contacts#relationship_values'
+  get 'contacts/relationship_values/:contact_type(/:shared_user_id)', to: 'contacts#relationship_values'
+  get 'contacts/new(/:shared_user_id)', to: 'contacts#new', as: :contact_new
+  get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact_details
+  get 'contacts/:id/edit(/:shared_user_id)', to: 'contacts#edit', as: :edit_contact_details
 
 
   # insurance details and create new account routes
@@ -269,6 +272,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
   get 'shared_view/:shared_user_id/financial_information' => 'shared_view#financial_information', as: :shared_view_financial_information
   get 'shared_view/:shared_user_id/documents' => 'shared_view#documents', as: :shared_view_documents
+  get 'shared_view/:shared_user_id/contacts' => 'shared_view#contacts', as: :shared_view_contacts
 
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts

@@ -121,7 +121,7 @@
   var contact_type_handle = function(selectInput, first_time) {
     var selectedOption = $('option:selected:first', selectInput).val();
 
-    var url = '/contacts/relationship_values/' + selectedOption
+    var url = '/contacts/relationship_values/' + selectedOption + "/<%= @shared_user.try(:id) || '' %>"
     $.get(url, function(data) {
       relationship_dropdown = $('#relationships_select');
       relationship_dropdown.empty();

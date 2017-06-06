@@ -35,6 +35,9 @@ $state-width: 210px;
 .fsp-picker{
 	z-index: 2100000000 !important;
 }
+.fsp-dropzone-overlay{
+  z-index: 2100000001 !important;
+}
 
 .modal-header{
   padding: 15px 25px 0;

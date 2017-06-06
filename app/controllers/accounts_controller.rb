@@ -6,7 +6,7 @@ class AccountsController < AuthenticatedController
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
                                 :trial_membership_update, :trial_questionnaire, :payment,
-                                :first_run]
+                                :first_run, :zoku_vault_info]
   before_action :set_blank_layout_header_info, only: [:first_run]
   skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
@@ -79,8 +79,10 @@ class AccountsController < AuthenticatedController
 
   def terms_of_service_update
     current_user.update_attributes(user_params)
-    redirect_to phone_setup_account_path
+    redirect_to zoku_vault_info_account_path
   end
+  
+  def zoku_vault_info; end
 
   def phone_setup
     check_terms_of_service_passed

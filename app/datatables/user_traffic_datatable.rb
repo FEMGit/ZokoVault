@@ -16,6 +16,33 @@ class UserTrafficDatatable
   end
 
   private
+  
+  def sort_direction
+    params[:order]["0"][:dir] || "desc"
+  end
+  
+  def sort_column
+    case params[:order]["0"][:column]
+      when "0"
+        # User Name
+        "profiles.last_name " + sort_direction + ", profiles.first_name "
+      when "1"
+        # Time
+        "created_at "
+      when "2"
+        # Page Name
+        "page_name "
+      when "3"
+        # Url
+        "page_url "
+      when "4"
+        # Requesting IP
+        "ip_address "
+      else
+        "created_at "
+    end
+  end
+  
   def data
     paginated_records.map do |info|
       [
@@ -30,7 +57,7 @@ class UserTrafficDatatable
 
   def get_raw_records
     ## for_user + shared_traffic
-    UserTraffic.joins(join_query).where(filter).includes(user: [user_profile: :contact])
+    UserTraffic.joins(join_query).where(filter).includes(user: [user_profile: :contact]).order(sort_column + sort_direction)
   end
 
   def paginated_records

@@ -65,7 +65,7 @@ class TutorialsController < AuthenticatedController
   end
   
   def confirmation
-    session[:tutorial_index] += 1
+    session[:tutorial_index] = session[:tutorial_index].present? ? (session[:tutorial_index] + 1) : 1
     params[:tutorial_id] = 'confirmation_page'
     @tutorial_name = 'confirmation_page'
   end
@@ -74,6 +74,7 @@ class TutorialsController < AuthenticatedController
 
   def new
     session[:tutorials_list] ||= {}
+    session[:tutorial_paths] = {}
     @tutorial_array = Tutorial.all.sort_by(&:position)
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
@@ -126,6 +127,7 @@ class TutorialsController < AuthenticatedController
   def destroy
     tuto_index = session[:tutorial_index] - 2
     # Destroy element if it was created
+    redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?
     insurance_card = session[:tutorial_paths][tuto_index][:object]
     insurance_card.destroy if insurance_card
     @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]

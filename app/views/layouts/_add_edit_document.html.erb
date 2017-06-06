@@ -29,9 +29,9 @@
         <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
         <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button">Select File</button>
       </div>
+      <%= f.hidden_field :url %>
     <% end %>
     <%= f.hidden_field :folder_id %>
-    <%= f.hidden_field :url %>
 
     <label>Document Name</label>
     <% if errors && @document.errors.messages[:name] %>

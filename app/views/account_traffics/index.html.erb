@@ -36,12 +36,11 @@
           var controlsArray = prepareTableControls(tableId);
           updateSearchField(tableId, controlsArray, 'traffic');
           updateTable(tableId, null, controlsArray);
-
           $('.dataTables_filter input').focus();
         }
       };
 
-      DatatableUpdate('#traffics-table',[ [100, 200, 500], 'traffic', [[1, 'desc']] ], null, options);
+      DatatableUpdate('#traffics-table',[ [25, 50, 100, 200, 500], 'traffic', [[1, 'desc']] ], null, options);
     }
   });
 </script>

@@ -1,0 +1,84 @@
+<% wide_card ||= false %>
+<% toggle_view ||= false %>
+
+<%= form_tag form_tag_path, { method: :put, id: 'account-form' } do %>
+  <div class="settings-card <% if !wide_card %> max-w-1000-centered <% end %> mb-30 text-center">
+    <section id="send_code_section" class="<% if toggle_view %> toggle_view <% end %>" >
+      <div class="modal-header">
+        <h2>Two-Factor Authentication - Phone Setup</h2>
+
+        <p class="m-0-auto">Two-factor authentication via a cell phone provides an extra layer of security to your account. Please enter your cell phone number below.</p>
+      </div>
+    </section>
+
+    <div class="modal-content mb-30">
+
+      <section id="send_code_section" class="<% if toggle_view %> toggle_view <% end %>" >
+        <%= image_tag "marketing/phone.png", :class => "w-150 block w-50-percent m-0-auto mb-30 mt-30"%>
+        <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number', class: "mb-5 inline-block" %><br>
+        <%= render partial: 'layouts/phone_number', locals: { f: nil, phone: 'user[user_profile_attributes][two_factor_phone_number]', autofocus: true, phone_additional_classes: "m-0-auto mb-20" } %>
+
+        <button class="button blue-button big-button-2 mb-15" onClick="sendCode(); return false" id="send-code-button">Send code</button>
+        <span id='send_code_text' class="bold clr-color-primary-shaded block"></span>
+      </section>
+      <% if !toggle_view %>
+        <hr/>
+      <% end %>
+      <section id="verify_code_section" class="<% if toggle_view %> toggle_view d-none mt-15 <% end %>">
+        <h2>Enter Phone Code</h2>
+
+        <p class="m-0-auto mb-30">You should receive your phone code within the next few minutes. Please enter the code below.</p>
+
+        <%= label_tag "user_user_profile_attributes_phone_code", 'Cell Phone Code', class: "mb-5 inline-block" %><br>
+        <%= text_field_tag "user[user_profile_attributes][phone_code]", "", class: "m-0-auto" %>
+        <button class="button blue-button big-button-2 mt-20 mr-0" onClick="verifyCode(); return false" id="verify-code-button">Verify code</button>
+        <button class="button secondary-button big-button-2 mr-0 mt-20" onClick="sendCode(); return false" id="resend-code-button">Resend code</button>
+        <span id='verify_code_text' class="bold clr-color-primary-shaded block mt-20"></span>
+      </section>
+    </div>
+  </div>
+<% end %>
+
+<script>
+$(document).ready(function() {
+  $('#user_user_profile_attributes_phone_code').on('keydown', function(event) {
+    if(event.keyCode === 13) {
+      event.preventDefault()
+      verifyCode();
+    }
+  })
+})
+
+function sendCode(resend) {
+  var data = $('#account-form').serialize();
+  $.post("<%= send_code_account_path %>",
+      data,
+      function() {
+        $('#send_code_text').html('Code sent!');
+        $('#verify_code_section.toggle_view').css('cssText', 'display: block !important;')
+        $('#send_code_section.toggle_view').hide()
+        $('#user_user_profile_attributes_phone_code').focus();
+      })
+  .fail(function() {
+    $('#send_code_text').html('Error, please try again.');
+  })
+}
+
+function verifyCode() {
+  var data = $('#account-form').serialize();
+  $.post("<%= verify_code_account_path %>",
+      data,
+      function() {
+        $('#verify_code_text').html("You've been verified!");
+        submitAccount()
+      })
+  .fail(function() {
+    $('#verify_code_text').html('Error, please check that your code is correct.')
+  })
+}
+
+var submitAccount = function(){
+  var accountForm = document.getElementById("account-form");
+  accountForm.submit();
+}
+</script>

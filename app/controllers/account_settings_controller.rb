@@ -25,6 +25,13 @@ class AccountSettingsController < AuthenticatedController
   def account_users; end
 
   def login_settings; end
+  
+  def phone_setup; end
+  
+  def phone_setup_update
+    current_user.update_attributes(phone_setup_params)
+    redirect_to login_settings_path
+  end
 
   def manage_subscription
     @subscription = current_user.current_user_subscription
@@ -189,6 +196,10 @@ class AccountSettingsController < AuthenticatedController
 
   def password_change_params
     params.require(:user_profile).permit(:password, :password_confirmation)
+  end
+
+  def phone_setup_params
+    params.require(:user).permit(user_profile_attributes: [:two_factor_phone_number])
   end
 
   def stripe_subscription_params

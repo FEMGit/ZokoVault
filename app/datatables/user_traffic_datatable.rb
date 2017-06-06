@@ -39,19 +39,27 @@ class UserTrafficDatatable
 
   def filter
     filters = []
-    filters << "user_traffics.user_id = #{current_user.id}"
-    filters << "user_traffics.shared_user_id = #{current_user.id}"
+    filters << "(user_traffics.user_id = #{current_user.id} OR user_traffics.shared_user_id = #{current_user.id})"
 
-    param = "'%#{params[:search][:value]}%'"
-    columns = %w(page_name page_url ip_address profiles.last_name profiles.first_name)
-    columns = columns.map { |c| "#{c} ilike #{param}" }.join( "OR ")
-    filters << columns
+    query_params = params[:search][:value].split(' ')
+    
+    all_queries = []
+    query_params.each do |query|
+      param = "'%#{query}%'"
+      columns = %w(page_name page_url ip_address profiles.first_name profiles.last_name)
+      all_queries << columns.map { |c| "#{c} ilike #{param}" }
+    end
+    
+    if all_queries.present?
+      all_queries = all_queries.join(" OR ").prepend('(') << ')'
+      filters << all_queries
+    end
     filters.join(" AND ")
   end
-
+  
   def join_query
     "LEFT OUTER JOIN user_profiles AS profiles ON profiles.user_id = " +
-      "user_traffics.shared_user_id OR profiles.id = user_traffics.shared_user_id"
+      "user_traffics.shared_user_id OR profiles.user_id = user_traffics.user_id"
   end
 
   def page

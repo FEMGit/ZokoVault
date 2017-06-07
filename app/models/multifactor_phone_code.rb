@@ -1,8 +1,15 @@
 require 'securerandom'
 
 class MultifactorPhoneCode < ActiveRecord::Base
+  MAX_ACTIVE = 5
+
   scope :not_expired, ->(at = Time.current) do
     where("created_at > ?", at - 5.minutes)
+  end
+
+  def self.can_make_more?(user)
+    return false if user.blank? || user.id.blank?
+    not_expired.where(user_id: user.id).count < MAX_ACTIVE
   end
 
   def self.generate_for(user)
@@ -14,7 +21,7 @@ class MultifactorPhoneCode < ActiveRecord::Base
     available = not_expired.
                 where(user_id: user.id).
                 order(created_at: :desc).
-                limit(5).to_a
+                limit(MAX_ACTIVE).to_a
     available.any?{ |mf| mf.code == code }.tap do
       # TODO track failed login attempts
     end

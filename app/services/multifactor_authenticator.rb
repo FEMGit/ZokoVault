@@ -9,11 +9,13 @@ class MultifactorAuthenticator
 
   def send_code_on_number(phone_number)
     MultifactorPhoneCode.transaction do
-      code = MultifactorPhoneCode.generate_for(user)
-      client.messages.create(
-        from: TWILIO_PHONE_NUMBER,
-        to: format_phone_number(phone_number),
-        body: "ZokuVault code is: #{code.code}")
+      if MultifactorPhoneCode.can_make_more?(user)
+        code = MultifactorPhoneCode.generate_for(user)
+        client.messages.create(
+          from: TWILIO_PHONE_NUMBER,
+          to: format_phone_number(phone_number),
+          body: "ZokuVault code is: #{code.code}")
+      end
     end
   end
 

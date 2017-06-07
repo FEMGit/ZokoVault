@@ -18,11 +18,12 @@ class MultifactorPhoneCode < ActiveRecord::Base
 
   def self.verify(user:, code:)
     return false if user.blank? || user.id.blank? || code.blank?
+    code_string = code.to_s
     available = not_expired.
                 where(user_id: user.id).
                 order(created_at: :desc).
                 limit(MAX_ACTIVE).to_a
-    available.any?{ |mf| mf.code == code }
+    available.any?{ |mf| mf.code == code_string }
   end
 
   private

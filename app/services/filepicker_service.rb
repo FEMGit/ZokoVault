@@ -1,16 +1,20 @@
 class FilepickerService
-  def self.policy
-    json_policy = { :expiry => (Time.now + 10*60).to_i, call: ['pick', 'store'] }.to_json
-    Base64.urlsafe_encode64(json_policy) << '='
+  def self.pick_store_convert_read_policy(expires_in: 10.minutes)
+    ts = (Time.current + expires_in).to_i
+    { expiry: ts, call: ['pick', 'store', 'convert', 'read'] }
   end
-  
-  def self.signature(filepicker_policy)
-    OpenSSL::HMAC.hexdigest('SHA256', secret, filepicker_policy)
-  end
-  
-  private
 
-  def self.secret
-    Rails.application.secrets.filepicker_secret
+  def self.encode(policy)
+    Base64.urlsafe_encode64(policy.to_json)
+  end
+
+  def self.sign(encoded_policy, secret: Rails.application.secrets.filepicker_secret)
+    OpenSSL::HMAC.hexdigest('SHA256', secret, encoded_policy)
+  end
+
+  def self.policy_hash_string(policy: self.pick_store_convert_read_policy)
+    encoded = encode(policy)
+    signed  = sign(encoded)
+    "{ policy: '#{encoded}', signature: '#{signed}' }"
   end
 end

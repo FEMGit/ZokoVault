@@ -80,7 +80,7 @@ var new_contact_disable = function() {
       element.addClass('inactive');
       setTimeout(function() {
         element.removeClass('inactive');
-        
+
         var multiDropDowns = document.querySelectorAll('#' + id + '.chosen-container.chosen-container-multi')
         for (var i = 0; i < multiDropDowns.length; i++) {
           multiDropDowns[i].removeEventListener('mousedown', new_contact_disable)
@@ -116,7 +116,7 @@ var handleSelectOnChange = function(selectInput) {
 var closeContactFormModal = function() {
   $(".modal, .modal-overlay").fadeOut(500, function() {
     cleanErrorMessages();
-    removePhoto();
+    clearAvatarPhoto();
     $("#contact-form").trigger("reset");
     $("#error_explanation ul").empty();
     $(".modal-overlay").remove();
@@ -152,7 +152,7 @@ var addContactAndCloseModal = function(json) {
     }
     $(this).trigger("chosen:updated");
   })
-  
+
   updateAddContactableTable(json);
   closeContactFormModal();
 }

@@ -29,7 +29,14 @@ $state-width: 210px;
 .wizard-modal{
   padding: 0;
   min-width:320px;
-  z-index: 2147483628;
+  z-index: 2000000000;
+}
+
+.fsp-picker{
+	z-index: 2100000000 !important;
+}
+.fsp-dropzone-overlay{
+  z-index: 2100000001 !important;
 }
 
 .modal-header{
@@ -92,7 +99,7 @@ a.modal-close:hover {
   border-radius: 0;
   padding: 0;
   max-width: 600px;
-  
+
   header {
     text-align: center;
     background-color: $color-primary-shaded;
@@ -192,7 +199,7 @@ a.modal-close:hover {
           -moz-appearance: none;
         }
       }
-      
+
       .state-select {
         display: inline-block;
         float:left;

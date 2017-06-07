@@ -93,11 +93,12 @@ module TutorialsHelper
   end
   
   def tutorial_id(tutorial_name)
-    return '' unless tutorial_name.present?
+    return "" unless tutorial_name.present?
     tutorial_name.downcase.split('.').first.split(' ').join('-')
   end
   
   def tutorial_name(tutorial_id)
+    return "" unless tutorial_id.present?
     (tutorial_id.split("-").join(" ") + '.').downcase
   end
   
@@ -146,5 +147,46 @@ module TutorialsHelper
   def will_subtutorial_show?(tutorial)
     return true unless tutorial.name.eql? 'My spouse has a will.'
     Contact.for_user(current_user).any? { |c| c.relationship == 'Spouse / Domestic Partner' }
+  end
+
+  # Tutorial selection
+  def clean_tutorial_progress
+    TutorialSelection.where(user_id: current_user.try(:id)).destroy_all
+  end
+
+  def save_tutorial_progress
+    tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
+    tutorial_selection.tutorial_paths = session[:tutorial_paths].to_json
+    tutorial_selection.last_tutorial_index = session[:tutorial_index]
+    tutorial_selection.save
+  end
+
+  def redirect_to_last_tutorial
+    if tutorial_selection_exists? && session[:tutorial_paths].blank?
+      tutorial_selection = TutorialSelection.find_by(user: current_user)
+      tutorial_paths = tutorial_selection.tutorial_paths.map { |x| x.symbolize_keys }
+      tutorial_index = tutorial_selection.last_tutorial_index
+      return if tutorial_paths == session[:tutorial_paths]
+      session[:tutorial_paths] = tutorial_paths
+      session[:tutorial_index] = tutorial_selection.last_tutorial_index
+      redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+    end
+  end
+
+  def current_tutorial_path
+    return if session[:tutorial_paths].blank?
+    current_tutorial = session[:tutorial_paths][session[:tutorial_index]]
+    return if current_tutorial.blank?
+    if current_tutorial[:tuto_name] == 'tutorial_new'
+      return if request.fullpath.eql? new_tutorial_path
+      new_tutorial_path
+    else
+      tutorial_page_path(current_tutorial[:tuto_name], current_tutorial[:current_page])
+    end
+  end
+
+  def tutorial_selection_exists?
+    tutorial_selection = TutorialSelection.find_by(user: current_user)
+    tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
   end
 end

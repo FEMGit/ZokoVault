@@ -4,6 +4,8 @@ class PagesController < HighVoltage::PagesController
   before_action :set_cache_headers
   before_action :set_tutorial, :set_contacts, only: [:show]
   layout 'without_sidebar_layout'
+  
+  before_action :redirect_to_last_tutorial, :save_tutorial_progress, only: [:show]
 
   def show
     redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?
@@ -93,6 +95,7 @@ class PagesController < HighVoltage::PagesController
   
   def spouse_not_added_handle
     tuto_index = session[:tutorial_index]
+    return unless tuto_index
       session[:tutorial_index] += @tutorial.number_of_pages - 1
       (1...@tutorial.number_of_pages).each do 
         session[:tutorial_paths].delete_at(tuto_index)
@@ -102,7 +105,8 @@ class PagesController < HighVoltage::PagesController
   end
   
   def restore_family_tutorial_session
-    tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>@tutorial.id.to_s, :current_page=>@page_number.to_i, :tuto_name=> params[:tutorial_id]})
+    current_tutorial_params = {:tuto_id=>@tutorial.id.to_s, :current_page=>@page_number.to_i, :tuto_name=> params[:tutorial_id]}
+    tutorial_path_position = session[:tutorial_paths].index(current_tutorial_params)
     subtutorial_paths = []
     (2..@tutorial.number_of_pages).each do |page_number|
       subtutorial_paths << { tuto_id: @tutorial.id, current_page: page_number, tuto_name: params[:tutorial_id] }

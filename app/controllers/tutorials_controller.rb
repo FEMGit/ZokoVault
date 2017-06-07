@@ -9,6 +9,12 @@ class TutorialsController < AuthenticatedController
 
   before_action :set_blank_layout_header_info, only: [:primary_contacts, :trusted_advisors,
                                                       :important_documents, :video, :new_document]
+  
+  before_action :redirect_to_last_tutorial, only: [:new]
+  before_action :save_tutorial_progress, only: [:confirmation]
+  after_action only: [:create, :update, :destroy] do
+    save_tutorial_progress
+  end
 
   add_breadcrumb "Guided Tutorial - Important Documents", :tutorial_important_documents_path, only: [:important_documents]
   include BreadcrumbsCacheModule
@@ -69,6 +75,11 @@ class TutorialsController < AuthenticatedController
     params[:tutorial_id] = 'confirmation_page'
     @tutorial_name = 'confirmation_page'
   end
+  
+  def tutorials_end
+    clean_tutorial_progress
+    redirect_to root_path
+  end
 
   def video; end
 
@@ -78,6 +89,8 @@ class TutorialsController < AuthenticatedController
     @tutorial_array = Tutorial.all.sort_by(&:position)
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
+    clean_tutorial_progress
+    redirect_to current_tutorial_path if current_tutorial_path.present?
   end
 
   def create
@@ -93,7 +106,6 @@ class TutorialsController < AuthenticatedController
     tuto_page = session[:tutorial_paths][tuto_index][:current_page]
     @current_tutorial = Tutorial.find tuto_id
     current_tutorial_name = @current_tutorial.name.parameterize
-
     redirect_to tutorial_page_path(current_tutorial_name, tuto_page)
   end
   
@@ -133,6 +145,7 @@ class TutorialsController < AuthenticatedController
     @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
 
     if @prev_tutorial_name == 'tutorial_new'
+      session[:tutorial_index] = 0
       redirect_to new_tutorial_path and return
     end
 

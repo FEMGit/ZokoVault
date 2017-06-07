@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601093345) do
+ActiveRecord::Schema.define(version: 20170605031807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.datetime "updated_at",                      null: false
     t.boolean  "no_page",         default: false
     t.integer  "number_of_pages", default: 1
+    t.integer  "position",        default: 0
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
@@ -549,6 +550,16 @@ ActiveRecord::Schema.define(version: 20170601093345) do
 
   add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree
   add_index "trusts", ["user_id"], name: "index_trusts_on_user_id", using: :btree
+
+  create_table "tutorial_selections", force: :cascade do |t|
+    t.integer  "user_id"
+    t.jsonb    "tutorial_paths"
+    t.integer  "last_tutorial_index"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "tutorial_selections", ["user_id"], name: "index_tutorial_selections_on_user_id", using: :btree
 
   create_table "tutorials", force: :cascade do |t|
     t.string   "name"
@@ -769,6 +780,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
   add_foreign_key "shares", "users"
   add_foreign_key "subtutorials", "tutorials"
   add_foreign_key "tax_year_infos", "users"
+  add_foreign_key "tutorial_selections", "users"
   add_foreign_key "user_activities", "users"
   add_foreign_key "user_death_traps", "users"
   add_foreign_key "user_subscriptions", "users"

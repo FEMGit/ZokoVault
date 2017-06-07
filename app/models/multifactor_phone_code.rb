@@ -22,9 +22,7 @@ class MultifactorPhoneCode < ActiveRecord::Base
                 where(user_id: user.id).
                 order(created_at: :desc).
                 limit(MAX_ACTIVE).to_a
-    available.any?{ |mf| mf.code == code }.tap do
-      # TODO track failed login attempts
-    end
+    available.any?{ |mf| mf.code == code }
   end
 
   private

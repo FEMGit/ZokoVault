@@ -115,7 +115,6 @@ class AccountsController < AuthenticatedController
       redirect_to first_run_path and return
     elsif user_params[:user_type].eql? 'free'
       MailchimpService.new.subscribe_to_shared(current_user)
-      redirect_to first_run_path and return
     end
     redirect_to root_path
   end

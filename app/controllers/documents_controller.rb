@@ -41,7 +41,7 @@ class DocumentsController < AuthenticatedController
     @breadcrumbs = BreadcrumbsCacheModule.cache_breadcrumbs_pop(current_user, @shared_user)
     BreadcrumbsCacheModule.cache_temp_breadcrumbs_write(@breadcrumbs.present? ? @breadcrumbs.dup : [], resource_owner)
   end
-  
+
   def set_index_crumbs
     add_breadcrumb "Documents", documents_path if general_view?
   end
@@ -100,7 +100,7 @@ class DocumentsController < AuthenticatedController
     authorize @document
 
     respond_to do |format|
-      if validate_params && @document.save && @document.update(document_share_params)
+      if validate_params && @document.save && @document.update(document_changes(:create))
         save_traffic_with_params(document_path(@document), 'Uploaded New Document')
         handle_document_saved(format)
       else
@@ -113,7 +113,7 @@ class DocumentsController < AuthenticatedController
     authorize @document
     respond_to do |format|
       set_document_update_date_to_now(@document)
-      if validate_params && @document.update(document_share_params)
+      if validate_params && @document.update(document_changes(:update))
         save_traffic_with_params(document_path(@document), 'Updated Document')
         BreadcrumbsCacheModule.cache_temp_breadcrumbs_delete
         if return_url?
@@ -225,7 +225,20 @@ class DocumentsController < AuthenticatedController
     params.permit(:group, :category, :vendor_id, :financial_information_id, :card_document_id)
   end
 
-  def document_share_params
+  def document_changes(type)
+    base =
+      case type
+      when :create then document_params
+      when :update then document_update_params
+      else raise ArgumentError, "unknown document_changes type: #{mode.inspect}"
+      end
+    merges = { user_id: resource_owner.id }
+    shares = document_share_attributes
+    merges[:shares_attributes] = shares unless shares.nil?
+    base.merge(merges)
+  end
+
+  def document_share_attributes
     if @shared_user.nil?
       @document.contact_ids = params[:document][:contact_ids]
       share_service = ShareService.new(user_id: resource_owner.id, contact_ids: params[:document][:contact_ids])
@@ -236,15 +249,23 @@ class DocumentsController < AuthenticatedController
       viewable_shares = document_shares(@document).map(&:contact_id).map(&:to_s)
       share.reject! { |k, v| viewable_shares.include? v["contact_id"] }
 
-      document_params.merge(:shares_attributes => share, :user_id => resource_owner.id)
-    else
-      document_params.merge(:user_id => resource_owner.id)
+      share
     end
   end
 
+  def editable_document_attrs
+    [ :name, :description, :category, :contact_ids, :group,
+      :financial_information_id, :card_document_id, :vendor_id ]
+  end
+
   def document_params
-    params.require(:document).permit(:name, :description, :url, :category, :user_id, :contact_ids, :vendor_id, :financial_information_id, :card_document_id, :group,
-                                     shares_attributes: [:user_id, :contact_id])
+    params.require(:document).permit(
+      *editable_document_attrs, :url, :user_id, shares_attributes: [:user_id, :contact_id])
+  end
+
+  def document_update_params
+    params.require(:document).permit(
+      *editable_document_attrs, shares_attributes: [:user_id, :contact_id])
   end
 
   def return_url?
@@ -342,7 +363,7 @@ class DocumentsController < AuthenticatedController
       set_layout
     end
   end
-  
+
   def set_header_info_blank_layout
     @header_information = true
   end

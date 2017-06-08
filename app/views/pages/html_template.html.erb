@@ -1,5 +1,64 @@
-<h3 class="mt-20 mb-20">Share Your Vault</h3>
-<div class="card vault-info mb-30 text-center">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Transfer Files</h3>
+
+<% transfer_files_info = [ { title: "Accountant", rows: ["Tax Documents", "Business Accounting", "", "", "" , ""] },
+                           { title: "Financial Advisor", rows: ["Financial Statements", "Investment Statements", "", "", "" , ""] },
+                           { title: "Estate Attorney", rows: ["Wills", "Trust Information", "", "", "" , ""] } ] %>
+
+<%= render partial: "one_column_table_info_page", locals: { table_info_collection: transfer_files_info, title: "Transer Files", paragraph: "ZokuVault allows you to invite your family, advisors, attorneys and accountants to upload files directly into your vault." } %>
+
+<h3 class="mt-20 mb-20 max-w-1000-centered">Consolidate My Documents & Information</h3>
+
+<% consolidate_documents_info = [ { title: "Personal Info & Records", rows: ["Birth Certificate", "Driver's License", "Passport", "Social Security Number", "Employer Information", "Health Insurance Card"] },
+                              { title: "Debts, Bills & Taxes", rows: ["Credit Cards", "Automotive Loans", "Mortgages", "Utilities", "Subscriptions & Memberships", "Cash Loans", "Taxes"] },
+                              { title: "Assets", rows: ["Investments", "Checking & Savings Accounts", "Life Insurance Policies", "Real Estate", "Vehicle", "Valuable Goods"] },
+                              { title: "Legal", rows: ["Living Wills", "Last Will & Testament", "Trusts", "Powers of Attorney", "Misc"] },
+                              { title: "Logins & Passwords", rows: ["Online Accounts", "Email", "Software Licences", "Device Passcodes"] },
+                              { title: "Final Wishes", rows: ["Burial Plans", "Letters to Family & Friends"] } ] %>
+
+<%= render partial: "one_column_table_info_page", locals: { table_info_collection: consolidate_documents_info, title: "Consolidate My Documents & Information", paragraph: "We'll take you through this step-by-step, but generally speaking here are the typical documents you would consolidate for yourself and your family." } %>
+
+<h3 class="mt-20 mb-20 max-w-1000-centered">Protect My Family's Legacy</h3>
+<% protect_my_family_info = [ { title: "Personal Info & Records", rows: ["Birth Certificate", "Driver's License", "Passport", "Social Security Number", "Employer Information", "Health Insurance Card"] },
+                              { title: "Debts, Bills & Taxes", rows: ["Credit Cards", "Automotive Loans", "Mortgages", "Utilities", "Subscriptions & Memberships", "Cash Loans", "Taxes"] },
+                              { title: "Assets", rows: ["Investments", "Checking & Savings Accounts", "Life Insurance Policies", "Real Estate", "Vehicle", "Valuable Goods"] },
+                              { title: "Legal", rows: ["Living Wills", "Last Will & Testament", "Trusts", "Powers of Attorney", "Misc"] },
+                              { title: "Logins & Passwords", rows: ["Online Accounts", "Email", "Software Licences", "Device Passcodes"] },
+                              { title: "Final Wishes", rows: ["Burial Plans", "Letters to Family & Friends"] } ] %>
+
+<%= render partial: "one_column_table_info_page", locals: { table_info_collection: protect_my_family_info, title: "Protect My Family's Legacy", paragraph: "We'll take you through step-by-step, but generally speaking here is what your family would need should something happen to you." } %>
+
+<h3 class="mt-20 mb-20 max-w-1000-centered">Let's get started!</h3>
+<div class="card vault-info mb-30 text-center max-w-1000-centered">
+  <h1 class="mb-20">Let's get started!</h1>
+  
+  <h4 class="mb-30 lh-35 max-w-1000 clr-gray-dark inline-block fw-500">What would you like to do first?</h4>
+  
+    <div class="max-w-800 m-0-auto mb-30 pl-15 pr-15">
+      <section class="b-gray-med mb-30">
+        <%= image_tag "SVG/shield-family.svg", :class => "w-75 inline-block mt-20"%>
+        <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Protect My Family's Legacy</span><br>I want to make sure my family would have everything they need if something happened to me.</h4>
+        <span class="clear mb-20"></span>
+      </section>
+   
+     <section class="b-gray-med mb-30">
+       <%= image_tag "SVG/consolidate.svg", :class => "w-120 inline-block mt-20"%>
+       <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Consolidate My Documents & Information</span><br>I want to be able to access all of my documents and critical information whenever I need them.</h4>
+       <span class="clear mb-20"></span>
+     </section>
+   
+   
+     <section class="b-gray-med mb-30">
+       <%= image_tag "SVG/transfer.svg", :class => "w-100 inline-block mt-15"%>
+       <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Transfer Files</span><br>I want to send request files from a trusted advisor, friend or family member.</h4>
+       <span class="clear mb-20"></span>
+     </section>
+
+     <%= link_to 'Next', 'javascript:void(0);', class: 'button big-button-2 blue-button m-0-auto' %>
+   </div>
+</div>
+
+<h3 class="mt-20 mb-20 max-w-1000-centered">Share Your Vault</h3>
+<div class="card vault-info mb-30 text-center max-w-1000-centered">
   <h2 class="card-label fn clr-color-primary mb-30">
     <svg class="icon" viewBox="0 0 20 20">
       <use xlink:href="#icon-Safe"></use>
@@ -31,8 +90,8 @@
   </section>
 </div>
 
-<h3 class="mt-20 mb-20">Share Your Vault</h3>
-<div class="card mb-30 text-center">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Share Your Vault</h3>
+<div class="card mb-30 text-center max-w-1000-centered">
   <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">You added a spouce. Do you want to share your entire vault with them?</h5>
   <section class="max-w-600 inline-block">
     <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
@@ -58,15 +117,15 @@
   </section>
 </div>
 
-<h3 class="mt-20 mb-20">Email verification sent</h3>
+<h3 class="mt-20 mb-20 max-w-430 m-0-auto">Email verification sent</h3>
 <div class="card centered mb-30 max-w-430 text-center w-80-percent">
   <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Check your email.</h5>
   <%= image_tag "marketing/airplane.png", :class => "mb-30 w-50-percent" %>
   <p class="text-center mb-10">We sent you a link to verify your identity.</p>
 </div>
 
-<h3 class="mt-20 mb-20">Thanks for Being a Trial Member</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Thanks for Being a Trial Member</h3>
+<div class="card mb-30 max-w-1000-centered">
   <h3 class="mb-20">Thanks for Being a Trial Member</h3>
   <p class="mb-20">Please help us by answering a few questions.</p>
   
@@ -102,8 +161,8 @@
 <h3 class="mt-20 mb-20">Compare ZokuVault Products</h3>
 <%= render partial: 'pages/product_comparison' %>
 
-<h3 class="mt-20 mb-20">Trial Membership Ended</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Trial Membership Ended</h3>
+<div class="card mb-30 max-w-1000-centered">
   <div class="flex-boxes justify-center">
     <div class="flex-trial text-center">
       <%= image_tag "marketing/lock.png", :class => "mb-10 ml-15" %>
@@ -136,8 +195,8 @@
   </div>
 </div>
 
-<h3 class="mt-20 mb-20">Set Up Your Vault</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Set Up Your Vault</h3>
+<div class="card mb-30 max-w-1000-centered">
   <h1 class="mb-20">Password Strength</h1>
   <label>Password</label>
   <input type="text">
@@ -166,8 +225,8 @@
   <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
 
-<h3 class="mt-20 mb-20">Checkbox Icon Template</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Checkbox Icon Template</h3>
+<div class="card mb-30 max-w-1000-centered">
   <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
 
     <ul class="tut-button-wrapper mb-30">
@@ -213,17 +272,17 @@
 </div>
 
 
-<h3 class="mt-20 mb-20">Set Up Your Vault</h3>
+<h3 class="mt-20 mb-20 max-w-1000-centered">Set Up Your Vault</h3>
 
-<div class="card mb-30">
+<div class="card mb-30 max-w-1000-centered">
   <h1 class="mb-20">Template Title</h1>
   <label>Form Label</label>
   <input type="text">
   <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
 
-<h3 class="mt-20 mb-20">Checkbox Icon Template</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Checkbox Icon Template</h3>
+<div class="card mb-30 max-w-1000-centered">
   <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
 
     <ul class="tut-button-wrapper">
@@ -317,8 +376,8 @@
     <%= render :partial => 'pages/tutorial_buttons' %>
 </div>
 
-<h3 class="mt-20 mb-20">Add Another</h3>
-<div class="card mb-30">
+<h3 class="mt-20 mb-20 max-w-1000-centered">Add Another</h3>
+<div class="card mb-30 max-w-1000-centered">
     <h1 class="mb-20">Template Title</h1>
     <p>Here is some paragraph text explaining something about how this is suppose to work.</p>
 

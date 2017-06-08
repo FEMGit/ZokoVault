@@ -91,9 +91,15 @@ img.questionnaire-heart {
     margin: 0 auto;
   }
   &.vault-info {
+    .text-aligned {
+      text-align: left !important;
+    }
     @include media($tablet) {
       .description {
         width: 100% !important;
+      }
+      .text-aligned {
+        text-align: center !important;
       }
     }
   }

@@ -1,5 +1,24 @@
 $table-cell-small: 160px;
 
+table.one-column-info {
+  border-collapse: collapse;
+  th {
+    text-transform: capitalize;
+    background-color: $color-off-white-shaded;
+    padding: 15px 10px 15px 15px;
+    line-height: 12px;
+    font-size: 18px;
+    font-weight: 500;
+    color: $color-gray-dark;
+  }
+  td {
+    padding-left: 15px;
+  }
+  tr:last-child td {
+    padding-left: 15px;
+  }
+}
+
 //Product Comparison Table
 table.product-comparison {
   margin: 0;

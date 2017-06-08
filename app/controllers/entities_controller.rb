@@ -161,7 +161,7 @@ class EntitiesController < AuthenticatedController
   end
 
   def set_entity
-    @entity = Entity.find(params[:id])
+    @entity = Entity.friendly.find(params[:id])
   end
 
   def set_viewable_contacts

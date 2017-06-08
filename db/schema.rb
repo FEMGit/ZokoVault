@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608075949) do
+ActiveRecord::Schema.define(version: 20170608082308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20170608075949) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "slug"
   end
 
   add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
@@ -552,6 +553,7 @@ ActiveRecord::Schema.define(version: 20170608075949) do
     t.datetime "updated_at",  null: false
     t.string   "notes"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree

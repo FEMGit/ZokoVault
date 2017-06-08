@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'
   put 'trusts', to: 'trusts#update'
-  delete 'trusts/:id', to: 'trusts#destroy'
+  delete 'trusts/:id', to: 'trusts#destroy', as: :delete_trust
 
   # Entities
   get 'entities/new(/:shared_user_id)', to: 'entities#new', as: :new_entity
@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   patch 'entities/:id', to: 'entities#update'
   get 'entities/:id(/:shared_user_id)', to: 'entities#show', as: :entity
   post 'entities', to: 'entities#create', as: :entities
-  delete 'entities/:id', to: 'entities#destroy'
+  delete 'entities/:id', to: 'entities#destroy', as: :delete_entity
 
   resources :categories do
     member do

@@ -182,7 +182,7 @@ class TrustsController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_trust
     @group_documents = Document.for_user(resource_owner).where(:group => @group)
-    @trust = Trust.find(params[:id])
+    @trust = Trust.friendly.find(params[:id])
   end
 
   def update_share_params

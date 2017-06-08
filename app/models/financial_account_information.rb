@@ -4,7 +4,7 @@ class FinancialAccountInformation < ActiveRecord::Base
   friendly_id :slug_candidates
   
   def should_generate_new_friendly_id?
-    name_changed? || account_type_changed? || ((name.present? || account_type.present?) && slug.blank?)
+    name_changed? || account_type_changed? || slug.blank?
   end
   
   def slug_candidates

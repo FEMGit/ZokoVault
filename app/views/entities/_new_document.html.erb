@@ -44,7 +44,7 @@
     </section>
 
     <% if @entity.id && policy(@entity).destroy? %>
-      <%= link_to 'Delete', "#{yield(:delete_path)}#{@entity.id}", method: :delete,
+      <%= link_to 'Delete', delete_entity_path(@entity), method: :delete,
           data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
           class: 'button small-button secondary-button', id: 'delete-trust' %>
     <% end %>

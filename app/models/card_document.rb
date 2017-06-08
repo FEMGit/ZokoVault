@@ -31,11 +31,13 @@ class CardDocument < ActiveRecord::Base
   end
   
   def self.trust(id)
-    CardDocument.find_by(object_type: 'Trust', card_id: id)
+    trust_card = Trust.friendly.find_or_return_nil(id)
+    CardDocument.find_by(object_type: 'Trust', card_id: trust_card.try(:id))
   end
   
   def self.entity(id)
-    CardDocument.find_by(object_type: 'Entity', card_id: id)
+    entity_card = Entity.friendly.find_or_return_nil(id)
+    CardDocument.find_by(object_type: 'Entity', card_id: entity_card.try(:id))
   end
   
   def self.trusts

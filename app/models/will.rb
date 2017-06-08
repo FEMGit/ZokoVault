@@ -4,7 +4,7 @@ class Will < ActiveRecord::Base
   friendly_id :title
   
   def should_generate_new_friendly_id?
-    title_changed? || (title.present? && slug.blank?)
+    title_changed? || slug.blank?
   end
   
   include WtlBuildShares

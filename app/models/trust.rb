@@ -1,4 +1,12 @@
 class Trust < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :name
+  
+  def should_generate_new_friendly_id?
+    name_changed? || slug.blank?
+  end
+  
   include WtlBuildShares
   scope :for_user, ->(user) { where(user: user) }
 

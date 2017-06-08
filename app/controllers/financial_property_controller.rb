@@ -21,7 +21,7 @@ class FinancialPropertyController < AuthenticatedController
   include CancelPathErrorUpdateModule
 
   def page_name
-    financial_property = FinancialProperty.for_user(resource_owner).find_by(id: params[:id])
+    financial_property = FinancialProperty.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
     case action_name
       when 'new'
         return "Financial Property - Setup"
@@ -179,11 +179,11 @@ class FinancialPropertyController < AuthenticatedController
 
   def set_provider
     set_financial_property
-    @property_provider = FinancialProvider.for_user(resource_owner).find(@financial_property.empty_provider_id)
+    @property_provider = FinancialProvider.for_user(resource_owner).friendly.find(@financial_property.empty_provider_id)
   end
 
   def set_financial_property
-    @financial_property = FinancialProperty.for_user(resource_owner).find(params[:id])
+    @financial_property = FinancialProperty.for_user(resource_owner).friendly.find(params[:id])
   end
 
   def set_documents

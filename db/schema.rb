@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601093345) do
+
+ActiveRecord::Schema.define(version: 20170608053325) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -202,6 +203,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.integer  "account_provider_id"
     t.integer  "category_id"
     t.string   "name"
+    t.string   "slug"
   end
 
   add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
@@ -232,6 +234,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "financial_alternatives", ["category_id"], name: "index_financial_alternatives_on_category_id", using: :btree
@@ -255,6 +258,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
@@ -276,6 +280,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.integer  "user_id"
     t.integer  "empty_provider_id"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
@@ -297,6 +302,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.string   "type"
     t.integer  "category_id"
     t.integer  "provider_type"
+    t.string   "slug"
   end
 
   add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree

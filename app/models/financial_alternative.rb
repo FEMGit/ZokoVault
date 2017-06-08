@@ -1,4 +1,19 @@
 class FinancialAlternative < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :slug_candidates
+  
+  def should_generate_new_friendly_id?
+    name_changed? || alternative_type_changed? || ((name.present? || alternative_type.present?) && slug.blank?)
+  end
+  
+  def slug_candidates
+    [
+      :name,
+      [:name, :alternative_type]
+    ]
+  end
+  
   enum alternative_type: ["Venture Capital",
                           "Private Equity",
                           "Hedge Fund",

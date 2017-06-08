@@ -22,7 +22,7 @@ class FinancialAccountController < AuthenticatedController
   include CancelPathErrorUpdateModule
   
   def page_name
-    provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
+    provider = FinancialProvider.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
     case action_name
       when 'new'
         return "Financial Account - Setup"
@@ -116,7 +116,7 @@ class FinancialAccountController < AuthenticatedController
   end
 
   def destroy
-    financial_provider = FinancialProvider.find_by(id: @account.account_provider_id)
+    financial_provider = FinancialProvider.friendly.find_or_return_nil(@account.account_provider_id)
     authorize financial_provider
     @account.destroy
     respond_to do |format|
@@ -185,11 +185,11 @@ class FinancialAccountController < AuthenticatedController
   end
 
   def set_account
-    @account = FinancialAccountInformation.for_user(resource_owner).find(params[:id])
+    @account = FinancialAccountInformation.for_user(resource_owner).friendly.find(params[:id])
   end
 
   def set_provider
-    @financial_provider = FinancialProvider.for_user(resource_owner).find(params[:id])
+    @financial_provider = FinancialProvider.for_user(resource_owner).friendly.find(params[:id])
   end
 
   def set_documents

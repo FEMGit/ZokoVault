@@ -77,7 +77,7 @@
 
       <% if data.id && policy(@financial_provider).destroy? %>
         <span class="mt-30 mb-30">
-          <%= link_to 'Delete this account', delete_account_url(data.id), method: :delete,
+          <%= link_to 'Delete this account', delete_account_url(data), method: :delete,
               data: { confirm: "Deleting this account will permanently remove it from ZokuVault." },
               class: 'button small-button secondary-button', id: 'delete-account' %>
         </span>

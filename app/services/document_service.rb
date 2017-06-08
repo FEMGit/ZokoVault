@@ -121,6 +121,7 @@ class DocumentService
       collect_card_names(vendors, Rails.configuration.x.InsuranceCategory)
     elsif @category == Rails.configuration.x.FinancialInformationCategory
       providers = user_cards(FinancialProvider, user, current_user)
+      
       collect_card_names(providers, Rails.configuration.x.FinancialInformationCategory)
     elsif (@category == Rails.configuration.x.WillsPoaCategory)
       wills_poa = user_cards(CardDocument, user, current_user).select { |c| (c.object_type.eql? 'Will') ||
@@ -136,8 +137,9 @@ class DocumentService
   end
   
   def user_cards(model, user, current_user)
+    contact_user = Contact.for_user(user).find_by(emailaddress: current_user.try(:email))
     return model.for_user(user).where(:category => Category.fetch(@category.downcase)) if current_user.primary_shared_with_or_owner? user
-    share_categories = user.shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+    share_categories = user.shares.select(&:shareable_type).select { |sh| (sh.shareable.is_a? Category) && (sh.contact_id == contact_user.try(:id)) }.map(&:shareable).map(&:name)
     return model.for_user(user) if (share_categories.include? @category)
     
     model.for_user(user).select{ |x| user_contacts(x, current_user).present?}

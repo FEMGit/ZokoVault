@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20170608053325) do
+ActiveRecord::Schema.define(version: 20170608075949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -407,6 +406,7 @@ ActiveRecord::Schema.define(version: 20170608053325) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "slug"
   end
 
   add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
@@ -421,6 +421,7 @@ ActiveRecord::Schema.define(version: 20170608053325) do
     t.datetime "updated_at",           null: false
     t.string   "notes"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "power_of_attorneys", ["category_id"], name: "index_power_of_attorneys_on_category_id", using: :btree
@@ -749,6 +750,7 @@ ActiveRecord::Schema.define(version: 20170608053325) do
     t.string   "notes"
     t.string   "title"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "wills", ["category_id"], name: "index_wills_on_category_id", using: :btree

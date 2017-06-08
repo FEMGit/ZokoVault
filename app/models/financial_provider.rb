@@ -4,7 +4,7 @@ class FinancialProvider < ActiveRecord::Base
   friendly_id :name
   
   def should_generate_new_friendly_id?
-    name_changed? || (name.present? && slug.blank?)
+    name_changed? || slug.blank?
   end
   
   scope :for_user, ->(user) { where(user: user) }

@@ -28,7 +28,7 @@
   <p><%= f.text_area :notes, id: "attorney_notes_id_#{index}", value: data && data.notes, :maxlength => get_max_length(:notes) %></p>
 
   <% if data && data.id && policy(data).destroy? %>
-    <%= link_to 'Delete Agent', "#{yield(:delete_path)}#{data.id}", method: :delete,
+    <%= link_to 'Delete Agent', delete_power_of_attorney_agent_path(data), method: :delete,
         data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },
         class: 'button small-button secondary-button', id: 'delete-legal' %>
   <% end %>

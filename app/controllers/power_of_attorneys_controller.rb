@@ -187,11 +187,11 @@ class PowerOfAttorneysController < AuthenticatedController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_power_of_attorney
-    @power_of_attorney = PowerOfAttorney.find(params[:id])
+    @power_of_attorney = PowerOfAttorney.friendly.find(params[:id])
   end
 
   def set_power_of_attorney_contact
-    @power_of_attorney_contact = PowerOfAttorneyContact.find(params[:id])
+    @power_of_attorney_contact = PowerOfAttorneyContact.friendly.find(params[:id])
   end
 
   def update_share_params

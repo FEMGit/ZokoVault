@@ -4,7 +4,7 @@ class FinancialInvestment < ActiveRecord::Base
   friendly_id :name
   
   def should_generate_new_friendly_id?
-    name_changed? || (name.present? && slug.blank?)
+    name_changed? || slug.blank?
   end
   
   enum investment_type: ["Private Company Stock", "Private Company Debt", "Royalty",

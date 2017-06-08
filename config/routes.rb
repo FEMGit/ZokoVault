@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   get 'wills', to: 'wills#index', as: :wills
   post 'wills', to: 'wills#create'
   put 'wills', to: 'wills#update'
-  delete 'wills/:id', to: 'wills#destroy'
+  delete 'wills/:id', to: 'wills#destroy', as: :delete_will
 
   # Powers of Attorney
   get 'power_of_attorneys/new(/:shared_user_id)', to: 'power_of_attorneys#new', as: :new_power_of_attorney
@@ -83,7 +83,7 @@ Rails.application.routes.draw do
   get 'power_of_attorneys', to: 'power_of_attorneys#index', as: :power_of_attorneys
   post 'power_of_attorneys', to: 'power_of_attorneys#create'
   put 'power_of_attorneys', to: 'power_of_attorneys#update'
-  delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy'
+  delete 'power_of_attorneys/:id', to: 'power_of_attorneys#destroy', as: :delete_power_of_attorney_agent
   delete 'power_of_attorneys/powers_of_attorney_contact/:id', to: 'power_of_attorneys#destroy_power_of_attorney_contact', as: :delete_power_of_attorney
   get 'power_of_attorneys/new/get_powers_of_attorney_details', to: 'power_of_attorneys#get_powers_of_attorney_details'
 

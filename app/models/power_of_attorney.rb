@@ -1,4 +1,16 @@
 class PowerOfAttorney < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :agent_name
+  
+  def should_generate_new_friendly_id?
+    true
+  end
+  
+  def agent_name
+    agents.try(:map, &:name).try(:join, '-')
+  end
+  
   include WtlBuildShares
   scope :for_user, ->(user) { where(user: user) }
 

@@ -1,4 +1,12 @@
 class Will < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :title
+  
+  def should_generate_new_friendly_id?
+    title_changed? || (title.present? && slug.blank?)
+  end
+  
   include WtlBuildShares
   scope :for_user, ->(user) { where(user: user) }
 

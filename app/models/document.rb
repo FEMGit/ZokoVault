@@ -1,4 +1,12 @@
 class Document < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :name
+  
+  def should_generate_new_friendly_id?
+    name_changed? || slug.blank?
+  end
+  
   white_list_categories = [Rails.application.config.x.FinancialInformationCategory, 
                            Rails.application.config.x.WillsPoaCategory, 
                            Rails.application.config.x.TrustsEntityCategory,
@@ -61,5 +69,4 @@ class Document < ActiveRecord::Base
       shares.build(user_id: user_id, contact_id: contact_id)
     end
   end
-      
 end

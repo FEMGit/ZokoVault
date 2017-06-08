@@ -4,7 +4,7 @@ class FinancialAlternative < ActiveRecord::Base
   friendly_id :slug_candidates
   
   def should_generate_new_friendly_id?
-    name_changed? || alternative_type_changed? || ((name.present? || alternative_type.present?) && slug.blank?)
+    name_changed? || alternative_type_changed? || slug.blank?
   end
   
   def slug_candidates

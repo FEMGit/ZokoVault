@@ -21,11 +21,13 @@ class CardDocument < ActiveRecord::Base
   end
   
   def self.will(id)
-    CardDocument.find_by(object_type: 'Will', card_id: id)
+    will_card = Will.friendly.find_or_return_nil(id)
+    CardDocument.find_by(object_type: 'Will', card_id: will_card.try(:id))
   end
   
   def self.power_of_attorney(id)
-    CardDocument.find_by(object_type: 'PowerOfAttorneyContact', card_id: id)
+    poa_card = PowerOfAttorneyContact.friendly.find_or_return_nil(id)
+    CardDocument.find_by(object_type: 'PowerOfAttorneyContact', card_id: poa_card.try(:id))
   end
   
   def self.trust(id)

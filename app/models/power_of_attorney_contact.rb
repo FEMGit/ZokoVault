@@ -1,4 +1,16 @@
 class PowerOfAttorneyContact < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :poa_for_name
+  
+  def should_generate_new_friendly_id?
+    contact_id_changed? || slug.blank?
+  end
+  
+  def poa_for_name
+    contact.try(:name)
+  end
+
   scope :for_user, ->(user) { where(user: user) }
   
   belongs_to :contact

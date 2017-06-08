@@ -169,7 +169,7 @@ class WillsController < AuthenticatedController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_will
-    @will = Will.find(params[:id])
+    @will = Will.friendly.find(params[:id])
   end
 
   def update_share_params

@@ -3,14 +3,14 @@ module TaxesHelper
     tax_year = @taxes.detect { |tax| tax.year == year }
     return unless tax_year
     return tax_path(tax_year) unless @shared_user
-    shared_taxes_path(id: tax_year.id)
+    shared_taxes_path(@shared_user, tax_year)
   end
 
   def link_to_add_details(year)
     tax_year = @taxes.detect { |tax| tax.year == year }
     if tax_year && tax_year.taxes.any?
       return tax_path(tax_year) unless @shared_user
-      shared_taxes_path(id: tax_year.id)
+      shared_taxes_path(@shared_user, tax_year)
     else
       return new_tax_path(:year => year) unless @shared_user
       shared_new_taxes_path(:year => year)

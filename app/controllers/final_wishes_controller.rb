@@ -30,10 +30,10 @@ class FinalWishesController < AuthenticatedController
       when 'new'
         return "Final Wishes - #{params[:group]} - Setup"
       when 'edit'
-        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        final_wish_info = FinalWishInfo.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Final Wishes - #{final_wish_info.group} - Edit"
       when 'show'
-        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        final_wish_info = FinalWishInfo.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Final Wishes - #{final_wish_info.group} - Details"
     end
   end
@@ -122,7 +122,7 @@ class FinalWishesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @final_wish_info.save
         FinalWishService.update_shares(@final_wish_info, nil, resource_owner)
-        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
+        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(resource_owner, @final_wish_info))
         format.html { redirect_to @path, flash: { success: 'Final Wish was successfully created.' } }
         format.json { render :show, status: :created, location: @final_wish_info }
       else
@@ -144,7 +144,7 @@ class FinalWishesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @final_wish_info.update(final_wish_params)
         FinalWishService.update_shares(@final_wish_info, @previous_share_with, resource_owner)
-        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
+        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(resource_owner, @final_wish_info))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @final_wish_info }
       else
@@ -237,11 +237,11 @@ class FinalWishesController < AuthenticatedController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_final_wish
-    @final_wish = FinalWish.find(params[:id])
+    @final_wish = FinalWish.friendly.find(params[:id])
   end
 
   def set_final_wish_info
-    @final_wish = FinalWishInfo.find(params[:id])
+    @final_wish = FinalWishInfo.friendly.find(params[:id])
   end
 
   def set_category_and_group

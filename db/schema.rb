@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608093055) do
+ActiveRecord::Schema.define(version: 20170608100045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(version: 20170608093055) do
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "final_wish_infos", ["category_id"], name: "index_final_wish_infos_on_category_id", using: :btree
@@ -186,6 +187,7 @@ ActiveRecord::Schema.define(version: 20170608093055) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "final_wishes", ["category_id"], name: "index_final_wishes_on_category_id", using: :btree
@@ -529,6 +531,7 @@ ActiveRecord::Schema.define(version: 20170608093055) do
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "tax_year_infos", ["category_id"], name: "index_tax_year_infos_on_category_id", using: :btree
@@ -543,6 +546,7 @@ ActiveRecord::Schema.define(version: 20170608093055) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "category_id"
+    t.string   "slug"
   end
 
   add_index "taxes", ["category_id"], name: "index_taxes_on_category_id", using: :btree

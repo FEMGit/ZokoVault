@@ -96,7 +96,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
-        @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
+        @path = success_path(property_path(@insurance_card), shared_property_path(resource_owner, @insurance_card))
         
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
@@ -126,7 +126,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
-        @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
+        @path = success_path(property_path(@insurance_card), shared_property_path(resource_owner, @insurance_card))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else

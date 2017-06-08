@@ -3,14 +3,14 @@ module FinalWishesHelper
     final_wish = @final_wishes.detect { |fw| fw.group == group }
     return unless final_wish
     return final_wish_path(final_wish) unless @shared_user
-    shared_final_wishes_path(id: final_wish.id)
+    shared_final_wishes_path(@shared_user, final_wish)
   end
 
   def final_wish_add_details(group)
     final_wish = @final_wishes.detect { |fw| fw.group == group }
     if final_wish && final_wish.final_wishes.any?
       return final_wish_path(final_wish) unless @shared_user
-      shared_final_wishes_path(id: final_wish.id)
+      shared_final_wishes_path(@shared_user, final_wish)
     else
       return new_final_wish_path(:group => group) unless @shared_user
       shared_new_final_wishes_path(:group => group)

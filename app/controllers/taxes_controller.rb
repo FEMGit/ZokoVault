@@ -26,10 +26,10 @@ class TaxesController < AuthenticatedController
       when 'new'
         return "Taxes - #{params[:year]} - Setup"
       when 'edit'
-        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        tax_year_info = TaxYearInfo.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Taxes - #{tax_year_info.year} - Edit"
       when 'show'
-        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        tax_year_info = TaxYearInfo.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Taxes - #{tax_year_info.year} - Details"
     end
   end
@@ -108,7 +108,7 @@ class TaxesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @tax_year.save
         TaxesService.update_shares(@tax_year, nil, resource_owner)
-        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
+        success_path(tax_path(@tax_year), shared_taxes_path(resource_owner, @tax_year))
         format.html { redirect_to @path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }
       else
@@ -133,7 +133,7 @@ class TaxesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @tax_year.update(tax_params)
         TaxesService.update_shares(@tax_year, @previous_share_with, resource_owner)
-        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
+        success_path(tax_path(@tax_year), shared_taxes_path(resource_owner, @tax_year))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else
@@ -223,11 +223,11 @@ class TaxesController < AuthenticatedController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_tax_year
-    @tax = TaxYearInfo.for_user(resource_owner).find(params[:id])
+    @tax = TaxYearInfo.for_user(resource_owner).friendly.find(params[:id])
   end
 
   def set_tax
-    @tax = Tax.for_user(resource_owner).find(params[:id])
+    @tax = Tax.for_user(resource_owner).friendly.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

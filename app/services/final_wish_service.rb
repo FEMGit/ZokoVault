@@ -15,7 +15,7 @@ class FinalWishService
   end
   
   def self.get_wish_group_value_by_id(groups, id)
-    groups.detect { |group| group["label"] == FinalWishInfo.find_by(:id => id).group }
+    groups.detect { |group| group["label"] == FinalWishInfo.friendly.find_or_return_nil(id).try(:group) }
   end
   
   def self.get_wish_group_value_by_name(groups, name)

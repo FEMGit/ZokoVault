@@ -1,4 +1,12 @@
 class FinalWishInfo < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :group
+  
+  def should_generate_new_friendly_id?
+    group_changed? || slug.blank?
+  end
+  
   scope :for_user, ->(user) { where(user: user) }
 
   belongs_to :user

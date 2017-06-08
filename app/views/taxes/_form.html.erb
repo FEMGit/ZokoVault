@@ -23,7 +23,7 @@
   </section>
   
   <% if data && data.id && policy(data).destroy? %>
-    <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
+    <%= link_to 'Delete', tax_path(data), method: :delete,
         data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
         class: 'button small-button secondary-button', id: 'delete-tax' %>
   <% end %>

@@ -1,4 +1,12 @@
 class TaxYearInfo < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :year
+  
+  def should_generate_new_friendly_id?
+    year_changed? || slug.blank?
+  end
+  
   scope :for_user, ->(user) { where(user: user) }
 
   belongs_to :user

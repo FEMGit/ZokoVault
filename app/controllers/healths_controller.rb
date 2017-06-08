@@ -21,7 +21,7 @@ class HealthsController < AuthenticatedController
   include CancelPathErrorUpdateModule
 
   def page_name
-    vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
+    vendor = Vendor.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
     case action_name
       when 'show'
         return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
@@ -91,7 +91,7 @@ class HealthsController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
-        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
           tutorial_redirection(format, @insurance_card.as_json, 'Insurance successfully created.')
@@ -120,7 +120,7 @@ class HealthsController < AuthenticatedController
       if validate_params && @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
-        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @health }
       else
@@ -204,11 +204,11 @@ class HealthsController < AuthenticatedController
   end
 
   def set_policy
-    @policy = HealthPolicy.find(params[:id])
+    @policy = HealthPolicy.friendly.find(params[:id])
   end
 
   def set_health
-    @health = Health.find(params[:id])
+    @health = Health.friendly.find(params[:id])
   end
 
   def set_contacts

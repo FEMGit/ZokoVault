@@ -22,7 +22,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   include CancelPathErrorUpdateModule
 
   def page_name
-    vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
+    vendor = Vendor.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
     case action_name
       when 'show'
         return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
@@ -92,7 +92,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), nil, resource_owner)
         PolicyService.update_contacts(@insurance_card, policy_contact_params)
-        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
 
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
@@ -122,7 +122,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       if validate_params && @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_contacts(@insurance_card, policy_contact_params)
-        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: (@insurance_card.slug || @insurance_card.id)))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else
@@ -206,11 +206,11 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   def set_life
-    @life_and_disability = LifeAndDisability.find(params[:id])
+    @life_and_disability = LifeAndDisability.friendly.find(params[:id])
   end
 
   def set_policy
-    @policy = LifeAndDisabilityPolicy.find(params[:id])
+    @policy = LifeAndDisabilityPolicy.friendly.find(params[:id])
   end
 
   def set_contacts

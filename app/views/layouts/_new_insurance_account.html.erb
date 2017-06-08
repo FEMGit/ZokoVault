@@ -67,7 +67,7 @@
     </section>
 
     <% if params[:id] && policy(@insurance_card).destroy? %>
-      <%= link_to 'Delete this Provider', "#{yield(:delete_path)}provider/#{params[:id]}", method: :delete,
+      <%= link_to 'Delete this Provider', insurance_delete_path("#{yield(:delete_path)}provider/", @insurance_card), method: :delete,
         data: { confirm: "Deleting this '#{@insurance_card.group} provider' will permanently remove it from ZokuVault." },
         class: 'button small-button secondary-button', id: 'delete-insurance' %>
     <% end %>
@@ -84,7 +84,7 @@
 
       <% if data.id && policy(@insurance_card).destroy? %>
         <span class="mt-30 mb-30">
-          <%= link_to 'Delete this policy', "#{yield(:delete_path)}#{data.id}", method: :delete,
+          <%= link_to 'Delete this policy', insurance_delete_path("#{yield(:delete_path)}", data), method: :delete,
               data: { confirm: "Deleting this '#{@insurance_card.group} policy' will permanently remove it from ZokuVault." },
               class: 'button small-button secondary-button', id: 'delete-insurance' %>
         </span>

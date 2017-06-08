@@ -1,4 +1,13 @@
 class LifeAndDisabilityPolicy < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :empty_friendly_id
+  
+  def should_generate_new_friendly_id?
+    true
+  end
+  
+  def empty_friendly_id; end
 
   enum policy_type: [ "Term Life", "Whole Life", "Universal Life", "Short Term Disability", "Long Term Disability" ]
 

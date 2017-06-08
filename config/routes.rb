@@ -29,9 +29,9 @@ Rails.application.routes.draw do
     resources :healths
   end
 
-  delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
-  delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
-  delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
+  delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider', as: :delete_property_provider
+  delete 'insurance/healths/provider/:id' => 'healths#destroy_provider', as: :delete_health_provider
+  delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider', as: :delete_life_provider
 
   # Mailer
   post 'contact_us', to: 'messages#create'

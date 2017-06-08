@@ -1,4 +1,14 @@
 class HealthPolicy < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :empty_friendly_id
+  
+  def should_generate_new_friendly_id?
+    true
+  end
+  
+  def empty_friendly_id; end
+  
   enum policy_type: [ "Employer Health Care Plan", "Exchange Health Care Plan", "Medicare Part A", "Medicare Part B", "Medicare Part C", "Medicare Part D" ]
 
   has_one :policy_holder, as: :contactable, dependent: :destroy, :class_name => 'AccountPolicyOwner'

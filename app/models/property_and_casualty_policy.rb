@@ -1,4 +1,13 @@
 class PropertyAndCasualtyPolicy < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :empty_friendly_id
+  
+  def should_generate_new_friendly_id?
+    true
+  end
+  
+  def empty_friendly_id; end
 
   enum policy_type: %w(Home Renters Vehicle Commercial Casualty Pet Other)
 

@@ -17,10 +17,10 @@ class ContactsController < AuthenticatedController
       when 'new'
         return "Create Contact"
       when 'edit'
-        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        contact = Contact.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Contacts - #{contact.name} - Edit"
       when 'show'
-        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        contact = Contact.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "Contacts - #{contact.name} - Details"
     end
   end
@@ -37,7 +37,7 @@ class ContactsController < AuthenticatedController
     @contacts = Contact.for_user(resource_owner)
                        .reject { |c| c == my_profile_contact }
                        .each { |c| authorize c }
-    session[:ret_url] = "/contacts"
+    session[:ret_url] = contacts_path
   end
 
   # GET /contacts/1
@@ -45,7 +45,7 @@ class ContactsController < AuthenticatedController
   def show
     authorize @contact
 
-    session[:ret_url] = "/contacts/#{@contact.id}"
+    session[:ret_url] = contact_path(@contact)
   end
 
   # GET /contacts/new
@@ -124,7 +124,7 @@ class ContactsController < AuthenticatedController
     # Use callbacks to share common setup or constraints between actions.
     def set_contact
       @category = "Contact"
-      @contact = Contact.for_user(resource_owner).find(params[:id])
+      @contact = Contact.for_user(resource_owner).friendly.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

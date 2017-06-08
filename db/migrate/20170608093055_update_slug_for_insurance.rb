@@ -1,7 +1,7 @@
 class UpdateSlugForInsurance < ActiveRecord::Migration
   def change
     Vendor.find_each(:batch_size => 1000) do |vendor|
-      next unless vendor.user
+      next unless vendor.user && vendor.valid?
       vendor.save!
     end
     

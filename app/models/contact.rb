@@ -1,4 +1,12 @@
 class Contact < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :name
+  
+  def should_generate_new_friendly_id?
+    firstname_changed? || lastname_changed? || slug.blank?
+  end
+  
   belongs_to :user
 
   scope :for_user, ->(user) {where(user: user)}

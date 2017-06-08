@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608100045) do
+ActiveRecord::Schema.define(version: 20170608103535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20170608100045) do
     t.string   "business_street_address_2"
     t.integer  "user_profile_id"
     t.integer  "full_primary_shared_id"
+    t.string   "slug"
   end
 
   add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree

@@ -5,12 +5,17 @@ class WelcomeController < AuthenticatedController
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed]
   include UserTrafficModule
+  include TutorialsHelper
   
   def page_name
     case action_name
       when 'index'
         return "Dashboard"
     end
+  end
+  
+  def onboarding_back
+    redirect_to_last_tutorial
   end
 
   def index; 

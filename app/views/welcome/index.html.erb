@@ -7,6 +7,11 @@
 <% end %>
 
 <% subscription = current_user.current_user_subscription %>
+
+<% if tutorial_unfinished? %>
+  <%= render partial: "onboarding_back_card" %>
+<% end %>
+
 <% if subscription && subscription.active_trial? %>
   <%= render partial: 'dashboard_trial_header', locals: { subscription: subscription } %>
 <% end %>

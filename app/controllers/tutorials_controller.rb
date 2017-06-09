@@ -11,8 +11,7 @@ class TutorialsController < AuthenticatedController
                                                       :important_documents, :video, :new_document]
   
   before_action :redirect_to_last_tutorial, only: [:new]
-  before_action :save_tutorial_progress, only: [:confirmation]
-  after_action only: [:create, :update, :destroy] do
+  after_action only: [:create, :update, :destroy, :new, :confirmation] do
     save_tutorial_progress
   end
 
@@ -89,7 +88,8 @@ class TutorialsController < AuthenticatedController
     @tutorial_array = Tutorial.all.sort_by(&:position)
     @tutorial = Tutorial.new(name: session[:tutorials_list])
     @tutorial.current_step = session[:order_step]
-    clean_tutorial_progress
+    session[:tutorial_paths] = tutorial_path_generator []
+    session[:tutorial_index] = 0
     redirect_to current_tutorial_path if current_tutorial_path.present?
   end
 

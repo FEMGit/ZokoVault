@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
   get 'email_confirmed' => 'welcome#email_confirmed'
+  get 'onboarding_back' => 'welcome#onboarding_back', as: :onboarding_back
 
   # Default category pages ?Could probably be done better programatically?
   get 'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney'

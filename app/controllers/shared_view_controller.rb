@@ -122,6 +122,7 @@ class SharedViewController < AuthenticatedController
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @groups.sort_by { |group| group["label"] }
     sort_groups(@final_wishes.map(&:group).sort)
+    session[:ret_url] = shared_view_final_wishes_path
   end
   
   def wills_powers_of_attorney

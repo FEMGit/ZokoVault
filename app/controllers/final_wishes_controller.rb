@@ -83,7 +83,7 @@ class FinalWishesController < AuthenticatedController
     @final_wishes.each { |fw| authorize fw }
     @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
     @group_documents = Document.for_user(resource_owner).where(:category => @category, :group => @final_wish.group)
-    session[:ret_url] = @shared_user.present? ? shared_final_wishes_path(id: @final_wish.id) : final_wish_path(@final_wish)
+    session[:ret_url] = @shared_user.present? ? shared_final_wishes_path(@shared_user, @final_wish) : final_wish_path(@final_wish)
   end
 
   # GET /final_wishes/new
@@ -217,7 +217,7 @@ class FinalWishesController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @final_wish.present? ? @final_wish.user : current_user
     end

@@ -58,7 +58,7 @@
 
 <h3>Documents</h3>
 <a class="add-link fr" href="<%= new_documents_path(:category => @entity.category.name, :card_document_id => CardDocument.entity(@entity.id).id,
-  :shared_user_id => @shared_user.present? ? @shared_user.id : "") %>">
+  :shared_user_id => user_friendly_id(@shared_user)) %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>

@@ -21,7 +21,7 @@ module SharedViewModule
 
   def set_shared_user
     return unless params[:shared_user_id].present?
-    @shared_user = User.find(params[:shared_user_id])
+    @shared_user = User.friendly.find(params[:shared_user_id])
   end
 
   def shared_user

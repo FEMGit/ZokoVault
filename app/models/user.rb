@@ -1,4 +1,12 @@
 class User < ActiveRecord::Base
+  # Friendly Id
+  extend FriendlyId
+  friendly_id :email
+  
+  def should_generate_new_friendly_id?
+    email_changed? || slug.blank?
+  end
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include StagingHelper

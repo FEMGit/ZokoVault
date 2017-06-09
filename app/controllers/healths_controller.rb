@@ -59,6 +59,7 @@ class HealthsController < AuthenticatedController
     @group_label = "Health"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
     authorize @health
+    session[:ret_url] = @shared_user.present? ? shared_health_path(@shared_user, @health) : health_path(@health)
   end
 
   # GET /healths/new
@@ -197,7 +198,7 @@ class HealthsController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @health.present? ? @health.user : current_user
     end

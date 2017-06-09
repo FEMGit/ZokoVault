@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def user_friendly_id(user)
+    return (user.slug || user.id) if user
+  end
+  
   def us_states
     States::STATES
   end

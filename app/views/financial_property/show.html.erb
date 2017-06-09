@@ -80,7 +80,7 @@
   <% end %>
 </div>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :group => @group, :financial_information_id => @property_provider.id), 
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => user_friendly_id(@shared_user), :category => @category, :group => @group, :financial_information_id => @property_provider.id), 
   documents_title: 'Property Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

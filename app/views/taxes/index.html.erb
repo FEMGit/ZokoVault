@@ -2,15 +2,14 @@
 <section class="flex-boxes">
   <% TaxesLimits::YEARS[:max].downto(TaxesLimits::YEARS[:min]) do |year| %>
     <div class="flex-column">
-      <%= render :partial => 'tax_card', :locals => {:year => year} %>
+      <%= render :partial => 'taxes/tax_card', :locals => {:year => year} %>
     </div>
   <% end %>
 </section>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
-  documents_title: "Tax Documents"} %>
-
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => user_friendly_id(@shared_user), :category => @category.try(:name)), documents_title: "Tax Documents"} %>
+  
+<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents, :shareable => @shared_user.present?} %>
 
 <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.TaxCategory.downcase } %>
 

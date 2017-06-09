@@ -151,7 +151,7 @@ class WillsController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @will.present? ? @will.user : current_user
     end

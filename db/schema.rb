@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608103535) do
+ActiveRecord::Schema.define(version: 20170609032005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -678,6 +678,8 @@ ActiveRecord::Schema.define(version: 20170608103535) do
     t.decimal  "site_completed",         precision: 5, scale: 2
     t.integer  "category_count"
     t.integer  "subcategory_count"
+    t.datetime "session_expires_at"
+    t.string   "slug"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

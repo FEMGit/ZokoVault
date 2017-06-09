@@ -59,6 +59,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @group_label = "Property & Casualty"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
     authorize @property_and_casualty
+    session[:ret_url] = @shared_user.present? ? shared_property_path(@shared_user, @property_and_casualty) : property_path(@property_and_casualty)
   end
 
   # GET /properties/new
@@ -202,7 +203,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @property_and_casualty.present? ? @property_and_casualty.user : current_user
     end

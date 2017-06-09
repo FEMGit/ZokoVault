@@ -61,6 +61,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     @insurance_card = @life_and_disability
     @group_label = "Life & Disability"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
+    session[:ret_url] = @shared_user.present? ? shared_life_path(@shared_user, @life_and_disability) : life_path(@life_and_disability)
   end
 
   # GET /lives/new
@@ -195,7 +196,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @life_and_disability.present? ? @life_and_disability.user : current_user
     end

@@ -73,7 +73,7 @@ class TaxesController < AuthenticatedController
   def show
     @taxes = taxes
     @taxes.each { |t| authorize t }
-    session[:ret_url] = @shared_user.present? ? shared_taxes_path(id: @tax.id) : tax_path(@tax)
+    session[:ret_url] = @shared_user.present? ? shared_taxes_path(@shared_user, @tax) : tax_path(@tax)
   end
 
   # GET /taxes/new
@@ -209,7 +209,7 @@ class TaxesController < AuthenticatedController
 
   def resource_owner
     if shared_user_params[:shared_user_id].present?
-      User.find_by(id: params[:shared_user_id])
+      User.friendly.find_or_return_nil(params[:shared_user_id])
     else
       @tax.present? ? @tax.user : current_user
     end

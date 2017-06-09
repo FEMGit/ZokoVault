@@ -71,7 +71,7 @@
 
 <%= render yield(:partial_path) %>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id), 
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => user_friendly_id(@shared_user), :category => @insurance_card.category.try(:name), :group => @group_label, :vendor_id => @insurance_card.id), 
   documents_title: "#{@insurance_card.name} Documents"} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @group_documents} %>

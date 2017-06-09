@@ -1,6 +1,6 @@
 <div class="card cg-<%=year%> column-card mb-30">
   <% if year_exist?(@taxes, year) %>
-    <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(current_user, year.to_s, @category.name) } %>
+    <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_count(resource_owner, year.to_s, @category.name) } %>
   <% end %>
   <h3><%= year %> Taxes</h3>
 
@@ -27,9 +27,13 @@
     <% end %>
   <% end %>
 
-  <% if year_exist?(@taxes, year) %>
-    <%= link_to 'View Details', link_to_details(year), class: "small-button outline-button mt-20" %>
+  <% if @category_shared || show_add_link?(@shared_user, current_user, 'Taxes', year.to_s) %>
+    <% if year_exist?(@taxes, year) %>
+      <%= link_to 'View Details', link_to_details(year), class: "small-button outline-button mt-20" %>
+    <% else %>
+      <%= link_to 'Add Details', link_to_add_details(year), class: "small-button outline-button mt-20" %>
+    <% end %>
   <% else %>
-    <%= link_to 'Add Details', link_to_add_details(year), class: "small-button outline-button mt-20" %>
+    <p>No shared items</p>
   <% end %>
 </div>

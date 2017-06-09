@@ -181,6 +181,18 @@ button{
   }
 }
 
+.save-and-continue,
+.skip-and-continue {
+  @include media($mobile) {
+    margin-bottom: 10px !important;
+    display: inline-block;
+    float: left;
+    &.margin-bottom-20 {
+      margin-bottom: 20px !important;
+    }
+  }
+}
+
 .fixed-width {
   @include button-fixed-width(120px)
 }

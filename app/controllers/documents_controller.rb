@@ -28,10 +28,10 @@ class DocumentsController < AuthenticatedController
       when 'new'
         return "Add Document"
       when 'edit'
-        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        document = Document.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "#{document.name} - Edit"
       when 'show'
-        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        document = Document.for_user(resource_owner).friendly.find_or_return_nil(params[:id])
         return "#{document.name} - Preview"
     end
   end
@@ -150,7 +150,7 @@ class DocumentsController < AuthenticatedController
 
   def download
     return nil if download_params[:id].nil? || download_params[:id].blank?
-    document_key = Document.for_user(resource_owner).find_by(id: download_params[:id]).try(:url)
+    document_key = Document.for_user(resource_owner).friendly.find_or_return_nil(download_params[:id]).try(:url)
     data = open(download_file(document_key))
     send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
   end
@@ -213,7 +213,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def set_document
-    @document = Document.find(params[:id])
+    @document = Document.friendly.find(params[:id])
     @cards = card_values(@document.category)
   end
 

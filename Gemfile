@@ -13,6 +13,9 @@ gem 'devise', '>= 4.2.0'
 # Authorization
 gem "pundit"
 
+# Friendly Id
+gem 'friendly_id', '~> 5.1.0'
+
 # Pdf Generation
 gem 'pdfkit'
 gem 'wkhtmltopdf-binary'

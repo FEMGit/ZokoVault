@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170609032005) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -19,15 +20,11 @@ ActiveRecord::Schema.define(version: 20170609032005) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
-    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
-
-  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -121,6 +118,7 @@ ActiveRecord::Schema.define(version: 20170609032005) do
     t.integer  "card_document_id"
     t.integer  "vendor_id"
     t.integer  "financial_information_id"
+    t.string   "slug"
   end
 
   add_index "documents", ["financial_information_id"], name: "index_documents_on_financial_information_id", using: :btree
@@ -156,16 +154,6 @@ ActiveRecord::Schema.define(version: 20170609032005) do
 
   add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
   add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
-
-  create_table "failed_email_login_attempts", force: :cascade do |t|
-    t.string   "email"
-    t.integer  "failed_attempts", default: 0
-    t.datetime "locked_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "failed_email_login_attempts", ["email"], name: "index_failed_email_login_attempts_on_email", using: :btree
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
@@ -305,11 +293,23 @@ ActiveRecord::Schema.define(version: 20170609032005) do
     t.string   "type"
     t.integer  "category_id"
     t.integer  "provider_type"
-    t.string   "slug"
   end
 
   add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
+    t.string   "sluggable_type", limit: 50
+    t.string   "scope"
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "fundings", force: :cascade do |t|
     t.integer  "user_subscription_id"
@@ -520,8 +520,8 @@ ActiveRecord::Schema.define(version: 20170609032005) do
     t.integer  "tutorial_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
-    t.boolean  "no_page",         default: false
     t.integer  "number_of_pages", default: 1
+    t.boolean  "no_page",         default: false
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
@@ -678,7 +678,6 @@ ActiveRecord::Schema.define(version: 20170609032005) do
     t.decimal  "site_completed",         precision: 5, scale: 2
     t.integer  "category_count"
     t.integer  "subcategory_count"
-    t.datetime "session_expires_at"
     t.string   "slug"
   end
 
@@ -773,7 +772,6 @@ ActiveRecord::Schema.define(version: 20170609032005) do
     t.string "word", null: false
   end
 
-  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

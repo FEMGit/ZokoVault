@@ -1,0 +1,1 @@
+require "#{Rails.root}/lib/extensions/friendly_id/finder_methods"

@@ -268,6 +268,8 @@ GEM
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
+    friendly_id (5.1.0)
+      activerecord (>= 4.0.0)
     gibbon (3.0.1)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -553,6 +555,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog
+  friendly_id (~> 5.1.0)
   gibbon
   guard-rspec
   high_voltage (~> 3.0)
@@ -593,9 +596,6 @@ DEPENDENCIES
   webmock
   wkhtmltopdf-binary
   wkhtmltopdf-heroku
-
-RUBY VERSION
-   ruby 2.3.1p112
 
 BUNDLED WITH
    1.14.6

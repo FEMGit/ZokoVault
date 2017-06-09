@@ -1,3 +1,3 @@
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : ""), documents_title: "Documents", :title => true } %>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => user_friendly_id(@shared_user)), documents_title: "Documents", :title => true } %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

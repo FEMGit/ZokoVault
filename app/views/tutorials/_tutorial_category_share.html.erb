@@ -24,13 +24,25 @@
       </div>
     </div>
 
-    <span>When you share with contacts, ZokuVault will send a <%= link_to 'message', 'javascript:void(0);', class: 'no-underline-link' %> to let them know.</span>
+    <div id="email-preview-list">
+      <% @contacts_with_access.each do |contact| %>
+        <%= render partial: 'tutorials/tutorial_share_contact_preview', locals: { :contact_id => contact.id } %>
+      <% end %>
+    </div>
   
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>
 </div>
 
 <%= render partial: 'contacts/ajax_form' %>
+<%= render partial: 'layouts/email_preview_javascript' %>
+
+<div id="email-preview-section">
+</div>
+
 <script>
-  $('.chosen-select').chosen({allow_single_deselect: true});
+  $(document).ready(function() {
+    $('.chosen-select').chosen({allow_single_deselect: true});
+    setEmailPreview($('#shareable_category_share_with_contact_ids'))
+  })
 </script>

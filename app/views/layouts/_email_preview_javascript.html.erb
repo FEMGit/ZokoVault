@@ -1,0 +1,7 @@
+<script>
+  var displayEmailPreview = function(contact_id) {
+    $('#email-preview-section').empty()
+    $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')
+    displayEmailPreviewModal(contact_id)
+  }
+</script>

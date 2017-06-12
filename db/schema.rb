@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 20170601093345) do
     t.datetime "updated_at",                      null: false
     t.boolean  "no_page",         default: false
     t.integer  "number_of_pages", default: 1
+    t.integer  "position",        default: 0
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree

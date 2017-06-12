@@ -174,6 +174,7 @@ Rails.application.routes.draw do
   resource :account, only: [:update, :show] do
     collection do
       get :terms_of_service
+      get :zoku_vault_info
       get :phone_setup
       get :login_settings
       get :user_type

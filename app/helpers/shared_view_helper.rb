@@ -11,6 +11,8 @@ module SharedViewHelper
       link_to 'View Category', shared_view_wills_powers_of_attorney_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.TrustsEntitiesCategory
       link_to 'View Category', shared_view_trusts_entities_path(@shared_user), class: 'view-category'
+    when Rails.application.config.x.ContactCategory
+      link_to 'View Category', shared_view_contacts_path(@shared_user), class: 'view-category'
     end
   end
   

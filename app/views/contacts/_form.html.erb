@@ -36,7 +36,8 @@
     <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
     onclick="wizNav(currentStep+1); return false;">Next</a>
     <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close outline-button big-button margin-right", method: :get %>
-    <% if @contact.persisted? && @contact != current_user.user_profile.contact %>
+
+    <% if @contact.persisted? && @contact != current_user.user_profile.contact && policy(@contact).destroy? %>
       <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button" %>
     <% end %>
   </footer>

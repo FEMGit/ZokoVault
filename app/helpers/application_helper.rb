@@ -79,6 +79,9 @@ module ApplicationHelper
     when Rails.application.config.x.DocumentsCategory
       return shared_view_documents_path(user) if @shared_user.present?
       documents_path
+    when Rails.application.config.x.ContactCategory
+      return shared_view_contacts_path(user) if @shared_user.present?
+      contacts_path
     else
      return shared_view_dashboard_path(user) if @shared_user.present?
     end
@@ -106,27 +109,40 @@ module ApplicationHelper
   def subcategory_view_path(subcategory)
     case subcategory
       when Will
-        return will_path(subcategory)
+        return will_path(subcategory, @shared_user) if @shared_user.present?
+        will_path(subcategory)
       when Trust
-        return trust_path(subcategory)
+        return trust_path(subcategory, @shared_user) if @shared_user.present?
+        trust_path(subcategory)
+      when Entity
+        return entity_path(subcategory, @shared_user) if @shared_user.present?
+        entity_path(subcategory)
       when PowerOfAttorneyContact
-        return power_of_attorney_path(subcategory)
+        return power_of_attorney_path(subcategory, @shared_user) if @shared_user.present?
+        power_of_attorney_path(subcategory)
       when PropertyAndCasualty
-        return property_path(subcategory)
+        return shared_property_path(@shared_user, subcategory) if @shared_user.present?
+        property_path(subcategory)
       when LifeAndDisability
-        return life_path(subcategory)
+        return shared_life_path(@shared_user, subcategory) if @shared_user.present?
+        life_path(subcategory)
       when Health
-        return health_path(subcategory)
+        return shared_health_path(@shared_user, subcategory) if @shared_user.present?
+        health_path(subcategory)
       when Tax
         tax_year = TaxYearInfo.find(subcategory.tax_year_id)
-        return tax_path(tax_year)
+        return shared_taxes_path(@shared_user, tax_year) if @shared_user.present?
+        tax_path(tax_year)
       when TaxYearInfo
-        return tax_path(subcategory)
+        return shared_taxes_path(@shared_user, subcategory) if @shared_user.present?
+        tax_path(subcategory)
       when FinalWish
         final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
-        return final_wish_path(final_wish_info)
+        return shared_final_wishes_path(@shared_user, final_wish_info) if @shared_user.present?
+        final_wish_path(final_wish_info)
       when FinalWishInfo
-        return final_wish_path(subcategory)
+        return shared_final_wishes_path(@shared_user, subcategory) if @shared_user.present?
+        final_wish_path(subcategory)
       when FinancialProvider
         path_to_resource(subcategory)
       else

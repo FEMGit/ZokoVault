@@ -30,11 +30,8 @@
     <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
 
     <div id="file-pick-section" class=" mb-15">
-      <% policy = FilepickerService.policy %>
-      <% signature = FilepickerService.signature(policy) %>
-
-      <input type="filepicker" data-fp-apikey="<%= file_picker_api_key %>" data-fp-store-location="S3" data-fp-button-text="<%= upload_button_text %>"
-       data-fp-maxSize="104857600" data-fp-policy=<%= policy %> data-fp-signature=<%= signature %> data-fp-store-container="zoku-stage" onchange="fileToPage(event)" class="js-modal-close primary-button big-button" id="select-file"/>
+      <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
+      <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button"><%= upload_button_text %></button>
     </div>
  
     <%= f.hidden_field :url %>
@@ -65,8 +62,8 @@
 </div>
 
 <script>
-  var fileToPage = function(evt) {
-    setDocumentValues(evt.fpfile.filename, evt.fpfile.key)
+  var fileToPage = function(file) {
+    setDocumentValues(file.filename, file.key)
     $('#document-information').show()
     $('#file-pick-section').hide()
   }

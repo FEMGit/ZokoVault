@@ -197,6 +197,7 @@ Rails.application.routes.draw do
   get '/tutorial_add_document/:page_number/:tutorial_name', to: 'tutorials#tutorial_add_document', as: :tutorial_add_document
 
   get 'tutorials/confirmation', to: 'tutorials#confirmation', as: :tutorials_confirmation
+  get 'tutorials/tutorials_end', to: 'tutorials#tutorials_end', as: :tutorials_end
   resources :tutorials, except: :destroy do
     get '/:page_id', to: 'pages#show', as: :page
     post '/destroy', to: 'tutorials#destroy'

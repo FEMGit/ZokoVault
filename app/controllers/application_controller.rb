@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   around_filter :save_current_user
   before_action :redirect_if_user_terms_of_service_empty
+  
+  rescue_from ActionController::InvalidAuthenticityToken do
+    flash[:alert] = "Your session expired. Please sign in again to continue."
+    redirect_to new_user_session_path
+  end
 
   private
   

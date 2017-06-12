@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
   has_many :card_documents, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
+  has_one :tutorial_selection, dependent: :destroy
 
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription

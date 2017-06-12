@@ -74,7 +74,13 @@ function verifyCode() {
       function() {
         window.location.replace('<%= back_path || root_path %>' + "?mfa_submit=true")
       })
-  .fail(function() {
+  .fail(function(data) {
+    if (data.responseText) {
+      var response = JSON.parse(data.responseText)
+      if (response !== undefined && response["errors"] === "Account locked") {
+        window.location.replace('<%= root_path %>')
+      }
+    }
     var msg = "Incorrect code submitted.";
     $(".flash-alert.flash").html(msg);
     $(".flash-alert-static.flash.static").html(msg)

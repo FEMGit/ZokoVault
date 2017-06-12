@@ -1,14 +1,29 @@
 require 'securerandom'
 
 class MultifactorPhoneCode < ActiveRecord::Base
-  scope :latest, -> { order(created_at: :desc).limit(1) }
+  MAX_ACTIVE = 5
+
+  scope :not_expired, ->(at = Time.current) do
+    where("created_at > ?", at - 5.minutes)
+  end
+
+  def self.can_make_more?(user)
+    return false if user.blank? || user.id.blank?
+    not_expired.where(user_id: user.id).count < MAX_ACTIVE
+  end
 
   def self.generate_for(user)
     create!(user_id: user.id, code: random_code)
   end
 
-  def self.verify_latest(user, code)
-    latest.where(user_id: user.id).pluck(:code).first == code
+  def self.verify(user:, code:)
+    return false if user.blank? || user.id.blank? || code.blank?
+    code_string = code.to_s
+    available = not_expired.
+                where(user_id: user.id).
+                order(created_at: :desc).
+                limit(MAX_ACTIVE).to_a
+    available.any?{ |mf| mf.code == code_string }
   end
 
   private

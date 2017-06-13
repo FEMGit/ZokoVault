@@ -19,15 +19,11 @@ ActiveRecord::Schema.define(version: 20170605031807) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
-    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
-
-  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -154,16 +150,6 @@ ActiveRecord::Schema.define(version: 20170605031807) do
 
   add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
   add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
-
-  create_table "failed_email_login_attempts", force: :cascade do |t|
-    t.string   "email"
-    t.integer  "failed_attempts", default: 0
-    t.datetime "locked_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "failed_email_login_attempts", ["email"], name: "index_failed_email_login_attempts_on_email", using: :btree
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
@@ -506,9 +492,9 @@ ActiveRecord::Schema.define(version: 20170605031807) do
     t.integer  "tutorial_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
-    t.boolean  "no_page",         default: false
     t.integer  "number_of_pages", default: 1
     t.integer  "position",        default: 0
+    t.boolean  "no_page",         default: false
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree
@@ -763,7 +749,6 @@ ActiveRecord::Schema.define(version: 20170605031807) do
     t.string "word", null: false
   end
 
-  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

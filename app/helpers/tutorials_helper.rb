@@ -1,4 +1,9 @@
 module TutorialsHelper
+  def tutorial_unfinished?
+    return false unless current_user
+    TutorialSelection.for_user(current_user).present?
+  end
+  
   def tutorial_subtutorial_icon(tutorial)
     tutorial_id = tutorial_id(tutorial.try(:name))
     if tutorial.is_a? Subtutorial
@@ -162,14 +167,22 @@ module TutorialsHelper
   end
 
   def redirect_to_last_tutorial
-    if tutorial_selection_exists? && session[:tutorial_paths].blank?
+    if tutorial_selection_exists?
       tutorial_selection = TutorialSelection.find_by(user: current_user)
       tutorial_paths = tutorial_selection.tutorial_paths.map { |x| x.symbolize_keys }
       tutorial_index = tutorial_selection.last_tutorial_index
-      return if tutorial_paths == session[:tutorial_paths]
-      session[:tutorial_paths] = tutorial_paths
-      session[:tutorial_index] = tutorial_selection.last_tutorial_index
-      redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+      if session[:tutorial_paths].blank?
+        return if tutorial_paths == session[:tutorial_paths]
+        session[:tutorial_paths] = tutorial_paths
+        session[:tutorial_index] = tutorial_selection.last_tutorial_index
+        redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+      else
+        session[:tutorial_index] -= 1 if (request.fullpath == onboarding_back_path &&
+                                        session[:tutorial_index] > 0 &&
+                                        tutorial_paths.count > 2)
+        return unless current_tutorial_path
+        redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+      end
     end
   end
 

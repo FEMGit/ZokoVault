@@ -236,6 +236,18 @@
   @include media($teneighty) {
     flex:100%;
   }
+  &.onboarding {
+    flex: 30%;
+    @include media($teneighty) {
+      margin-bottom: 15px;
+      flex: 100%;
+    }
+    @include media($mobile) {
+      padding-left: 0;
+      max-width: 220px;
+      margin: 0 auto;
+    }
+  }
 }
 
 .board-text{
@@ -251,6 +263,18 @@
     flex:55%;
     padding-bottom: 12px;
   }
+  &.onboarding {
+    flex: 45%;
+    padding-top: 19px;
+    @include media($teneighty) {
+      flex: 60%;
+    }
+    @include media($mobile) {
+      flex: 100%;
+      border-top: none;
+      text-align: center;
+    }
+  }
 }
 .board-link{
   flex: 10%;
@@ -265,6 +289,20 @@
     border-top: 1px solid $color-gray-light;
     flex:45%;
     padding-bottom: 12px;
+  }
+  &.onboarding {
+    flex: 25%;
+    @include media($teneighty) {
+      flex: 40%;
+    }
+    @include media($mobile) {
+      flex: 100%;
+      padding-top: 15px;
+      padding-bototm: 0;
+      border-top: none;
+      max-width: 170px;
+      margin: 0 auto;
+    }
   }
 }
 .board-sub-title{

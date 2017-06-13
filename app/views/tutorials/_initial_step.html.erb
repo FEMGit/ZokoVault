@@ -1,10 +1,12 @@
 <ul class="tut-button-wrapper">
   <%- @tutorial_array.each do |tutorial|%>
-    <li class="icon-box">
+    <% tutorial_id = "tutorial_pages_" + tutorial[:id].to_s %>
+    <% tutorial_selector = "#" + tutorial_id %>
+    <li class="icon-box" onmouseenter="iosToggleCheckbox('<%=tutorial_selector%>')" onclick="iosClickCheckbox('<%=tutorial_selector%>')">
       <label>
-        <%= check_box_tag 'tutorial[]', tutorial[:id], false, {class: "check-list-item"} %>
+        <%= check_box_tag 'tutorial[]', tutorial[:id], false, {class: "check-list-item", id: tutorial_id } %>
         <%= render partial: 'tutorial_icon', locals: { tutorial: tutorial } %>
       </label>
     </li>
   <% end %>
- </ul>
+</ul>

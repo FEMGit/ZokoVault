@@ -4,10 +4,10 @@
     <h5 class="tut-top-label mt-10 mb-30">To get started, please select the correct type of Vault below.</h5>
 
     <ul class="tut-button-wrapper mb-30">
-        <li class="icon-box-large">
+        <li class="icon-box-large" onmouseenter="iosCheckboxFromSubmit('#free_user_account', formSubmit, 'free')">
           <label>
             <%= link_to 'javascript:formSubmit("free")' do %>
-              <input type="checkbox" name="user_type" value="free" >
+              <input type="checkbox" id="free_user_account" name="user_type" value="free">
               <span>
                 <%= image_tag "marketing/cloud-3.png", :class => "" %><br>
                 I was invited to share in someone else's Vault.
@@ -15,10 +15,10 @@
             <% end %>
           </label>
         </li>
-      <li class="icon-box-large">
+      <li class="icon-box-large" onmouseenter="iosCheckboxFromSubmit('#trial_user_account', formSubmit, 'trial')">
         <label>
           <%= link_to 'javascript:formSubmit("trial")' do %>
-            <input type="checkbox" name="user_type" value="trial">
+            <input type="checkbox" id="trial_user_account" name="user_type" value="trial">
             <span>
               <%= image_tag "marketing/safe-3.png", :class => "" %><br>
               I want to complete my own Vault.

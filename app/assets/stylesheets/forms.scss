@@ -552,6 +552,9 @@ li.icon-box{
     top: -1px;
     opacity: .5;
   }
+  span.hidden:after {
+    display: none;
+  }
 }
 
 //ICON BOX LARGE

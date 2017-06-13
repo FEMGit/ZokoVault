@@ -15,7 +15,8 @@
           <% no_page_tutorials += 1 %>
         <% end %>
         <% if tutorial_show.call(tutorial) %>
-          <li class="icon-box">
+          <% tutorial_selector = "#tutorial_pages_" + (index + tutorial_pages_counter).to_s %>
+          <li class="icon-box" onmouseenter="iosToggleCheckbox('<%=tutorial_selector%>')" onclick="iosClickCheckbox('<%=tutorial_selector%>')">
             <label>
               <% if tutorial.no_page %>
                 <%= check_box_tag "tutorial[no-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item no-page-#{tutorial.id}", value: tutorial.id} %>

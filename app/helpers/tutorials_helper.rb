@@ -175,6 +175,7 @@ module TutorialsHelper
         return if tutorial_paths == session[:tutorial_paths]
         session[:tutorial_paths] = tutorial_paths
         session[:tutorial_index] = tutorial_selection.last_tutorial_index
+        return unless current_tutorial_path
         redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
       else
         session[:tutorial_index] -= 1 if (request.fullpath == onboarding_back_path &&

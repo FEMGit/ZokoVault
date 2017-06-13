@@ -25,7 +25,7 @@
   flex-flow: row wrap;
   justify-content: space-between;
   width: 100.3%;
-  
+
   &.percent-100 {
     width: 100% !important;
   }
@@ -218,7 +218,7 @@
       padding: 0;
     }
   }
-  
+
   .flex-footer {
     position: absolute;
     bottom: 0;
@@ -235,6 +235,18 @@
   flex:40%;
   @include media($teneighty) {
     flex:100%;
+  }
+  &.trial {
+    flex: 40%;
+    @include media($teneighty) {
+      margin-bottom: 15px;
+      flex:100%;
+    }
+    @include media($mobile) {
+      padding-left: 0;
+      max-width: 330px;
+      margin: 0 auto !important;
+    }
   }
   &.onboarding {
     flex: 30%;
@@ -263,6 +275,18 @@
     flex:55%;
     padding-bottom: 12px;
   }
+  &.trial {
+   flex: 43%;
+   padding-top: 19px;
+   @include media($teneighty) {
+     flex: 60%;
+   }
+   @include media($mobile) {
+     flex: 100%;
+     border-top: none;
+     text-align: center;
+   }
+ }
   &.onboarding {
     flex: 45%;
     padding-top: 19px;
@@ -290,6 +314,20 @@
     flex:45%;
     padding-bottom: 12px;
   }
+  &.trial {
+   flex: 10%;
+   @include media($teneighty) {
+     flex: 40%;
+   }
+   @include media($mobile) {
+     flex: 100%;
+     padding-top: 15px;
+     padding-bottom: 0;
+     border-top: none;
+     max-width: 97px;
+     margin: 0 auto;
+   }
+ }
   &.onboarding {
     flex: 25%;
     @include media($teneighty) {
@@ -298,13 +336,14 @@
     @include media($mobile) {
       flex: 100%;
       padding-top: 15px;
-      padding-bototm: 0;
+      padding-bottom: 0;
       border-top: none;
       max-width: 170px;
       margin: 0 auto;
     }
   }
 }
+
 .board-sub-title{
   display:block;
   padding-top:12px;
@@ -326,7 +365,7 @@
   border-top: 1px solid $color-gray-light;
   padding: 5px 0;
   margin-top: 5px;
-  
+
   &:first-child{
     border-top: 0px solid $color-gray-light;
     padding-top: 0;

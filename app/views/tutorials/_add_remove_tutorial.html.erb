@@ -1,5 +1,5 @@
- <button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
- <div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
+<button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
+<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
   <div class="confirmation-wrapper">
     <h2>Unsaved changes</h2>
     <p class="mb-0">These items will be permanently deleted and cannot be recovered. Are you sure?</p>
@@ -57,7 +57,7 @@
             <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
           </div>
         <% end %>
-        <a class="medium-button button primary-button inline-button add-another-btn">Add Another</a>
+        <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
       </div>
     </div>
 

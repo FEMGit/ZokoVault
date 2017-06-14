@@ -1,6 +1,7 @@
-<%= render partial: 'tutorials/tutorial_document_upload', locals: { title: "Upload Your Tax Records",
-                                                                    text: "If you have a digital copies of your tax records, upload them here for future reference.  If you don't have digital copies, don't worry, they can be added later.",
-                                                                    digital_resources: @digital_taxes,
-                                                                    table_title: "Your Tax Records",
-                                                                    flash_message_success: "You added a Tax! Upload another Tax, or click Continue.",
-                                                                    upload_button_text: "Upload Tax" } %>
+<%= render  partial: 'tutorials/tutorial_document_upload',
+              locals: { title: "Upload Your Tax Records",
+              text: "If you have a digital copies of your tax records, upload them here for future reference.  If you don't have digital copies, don't worry, they can be added later.",
+              digital_resources: @digital_taxes,
+              table_title: "Your Tax Records",
+              flash_message_success: "You uploaded a tax document. Upload another document or click Continue.",
+              upload_button_text: "Upload Tax" } %>

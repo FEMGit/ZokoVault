@@ -51,6 +51,7 @@ var displayEmailPreviewModal = function(contact_id) {
 var emailPreviewOnLoad = function(modalBox, canvasEl) {
   cleanEmailPreviewHeader('SMTP')
   cleanEmailPreviewHeader('Date')
+  cleanLinks()
   $('#' + modalBox).fadeIn($(canvasEl).data());
 }
 
@@ -59,6 +60,13 @@ var cleanEmailPreviewHeader = function(textContained) {
   var elementDd = elementDt.next()
   elementDt.remove()
   elementDd.remove()
+}
+
+var cleanLinks = function() {
+  $("#email-iframe").contents().find("iframe[name=messageBody]").contents().find("a").each(function() {
+    if ($(this).parent().hasClass('mcnFollowIconContent')) { return true; }
+    $(this).attr("href", "javascript:void(0);")
+  })
 }
 
 var closeEmailPreviewModal = function() {

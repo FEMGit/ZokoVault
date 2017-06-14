@@ -139,4 +139,10 @@ class UserProfile < ActiveRecord::Base
       user_profile_id: id
     )
   end
+  
+  after_update do
+    primary_shared_with.each do |contact|
+      ShareInvitationService.send_invitation(user, contact)
+    end
+  end
 end

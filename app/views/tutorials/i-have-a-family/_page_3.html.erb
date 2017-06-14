@@ -20,12 +20,12 @@
       </h3>
       
       <div class="chosen-styled-select text-left max-w-340 m-0-auto">
-        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, {}, @contacts_with_access.try(:map, &:id)) %>
+        <%= contact_select_with_create_new(f, :primary_shared_with_ids, @contacts_shareable, {}, @primary_shared_contacts.try(:map, &:id)) %>
       </div>
     </div>
     
     <div id="email-preview-list">
-      <% @contacts_with_access.each do |contact| %>
+      <% @primary_shared_contacts.each do |contact| %>
         <%= render partial: 'tutorials/tutorial_share_contact_preview', locals: { :contact_id => contact.id } %>
       <% end %>
     </div>

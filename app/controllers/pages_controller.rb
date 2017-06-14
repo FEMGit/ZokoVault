@@ -72,7 +72,6 @@ class PagesController < HighVoltage::PagesController
     @primary_contacts = Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries')
     
     @primary_shared_contacts = @user_profile.primary_shared_with
-    @contacts_with_access = (@primary_contacts.select{ |pc| pc.relationship.eql? 'Spouse / Domestic Partner' } + @primary_shared_contacts).uniq
     
     contact_service = ContactService.new(:user => current_user)
     @contacts_shareable = contact_service.contacts_shareable
@@ -129,12 +128,12 @@ class PagesController < HighVoltage::PagesController
     
     @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
     set_documents_information(Rails.application.config.x.TaxCategory)
-    set_contact_and_category_share(@tax_accountants, Rails.application.config.x.TaxCategory)
+    set_contact_and_category_share(Rails.application.config.x.TaxCategory)
   end
   
   def set_trusts_tutorial_contacts
     @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
-    set_contact_and_category_share(@trust_planning_attorneys, Rails.application.config.x.TrustsEntitiesCategory)
+    set_contact_and_category_share(Rails.application.config.x.TrustsEntitiesCategory)
   end
   
   def set_wills_tutorial_contacts
@@ -142,12 +141,12 @@ class PagesController < HighVoltage::PagesController
     
     @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
     set_documents_information(Rails.application.config.x.WillsPoaCategory)
-    set_contact_and_category_share(@estate_planning_attorneys, Rails.application.config.x.WillsPoaCategory)
+    set_contact_and_category_share(Rails.application.config.x.WillsPoaCategory)
   end
   
   def set_financial_information_tutorial_contacts
     @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
-    set_contact_and_category_share(@financial_advisors, Rails.application.config.x.FinancialInformationCategory)
+    set_contact_and_category_share(Rails.application.config.x.FinancialInformationCategory)
   end
   
   def set_documents_information(category_name)
@@ -157,12 +156,11 @@ class PagesController < HighVoltage::PagesController
     @cards = service.get_card_values(current_user, current_user)
   end
   
-  def set_contact_and_category_share(contact_collection, category_name)
+  def set_contact_and_category_share(category_name)
     @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
     @category = Category.fetch(category_name.downcase)
 
-    @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +
-                             contact_collection).uniq
+    @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)).uniq
     @shareable_category = ShareableCategory.new(current_user,
                                                 @category.id, 
                                                 @contacts_with_access.map(&:id))

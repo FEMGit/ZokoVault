@@ -26,7 +26,11 @@ body.logged-out{
 
   article{
     margin: 0 auto;
-    padding: 30px 20px 50px;
+    padding: 75px 20px 50px;
+
+    @include media($ninesixty) {
+      padding-top: 30px;
+    }
 
     @include media($mobile) {
       padding-top: 20px;

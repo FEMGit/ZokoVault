@@ -1,9 +1,11 @@
-<%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Tax Accountant',
-                                                                   table: { table_title: 'Your Tax Accountants', 
-                                                                            contacts: @tax_accountants, 
-                                                                            table_id: 'tax-accountant-table' },
-                                                                   flash_message: 'You added a contact! Add another one of your Financial Advisors, or click Next.' ,
-                                                                   button_text: 'Add Tax Accountant' } %>
+<%= render partial: 'tutorials/tutorial_contact_create',
+           locals: { title: 'Add Your Tax Accountant',
+                     description: 'Adding your accountant helps your family know who to contact for questions about your taxes.',
+                     table: { table_title: 'Your Tax Accountants',
+                              contacts: @tax_accountants,
+                              table_id: 'tax-accountant-table' },
+                     flash_message: 'You added a contact! Add another one of your Financial Advisors, or click Next.' ,
+                     button_text: 'Add Tax Accountant' } %>
 
 <script>
   var createContact = function() {

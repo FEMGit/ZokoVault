@@ -21,6 +21,6 @@ class SessionsController < Devise::SessionsController
     user = User.find_by(email: resource.email)
     return if user.blank?
     
-    flash[:alert] = "Invalid Email or password. Please try again."
+    flash[:alert] = ErrorMessages::INVALID_EMAIL_OR_PASSWORD
   end
 end

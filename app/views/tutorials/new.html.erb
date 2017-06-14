@@ -1,8 +1,12 @@
-<div class="card mb-30 max-w-1000-centered mt-20">
-  <h5 class="tut-top-label mt-10 mb-30">Tell us about yourself so we can help you set up your vault.</h5>
+<div class="card mb-30 max-w-1000-centered mt-20 ">
+  <h5 class="tut-top-label mt-10 mb-10">Let's begin completing your Vault.</h5>
+  <p class="mb-30 tut-p">
+Please select the information you would like to add now. This will help us set up your Vault.</p>
 
   <%= form_for @tutorial do |f| %>
     <%= render "#{@tutorial.current_step}_step", :f => f %>
+
+    <p class="mt-30 mb-0 tut-p">Don't worry, you don't have to finish everything all at once.  We will help you pick up where you left off.</p>
 
     <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
       <%= f.submit "Continue", class: "button big-button blue-button f-right" %>

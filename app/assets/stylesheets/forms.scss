@@ -496,6 +496,10 @@ and (not (-moz-appearance:none)){
   color: $color-gray-dark-tinted;
   font-weight: bold;
 }
+.tut-p{
+  text-align: center;
+  max-width: 1000px;
+}
 .tut-button-wrapper{
   margin: 0 auto;
   padding: 0;

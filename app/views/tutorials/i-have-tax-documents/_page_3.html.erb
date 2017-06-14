@@ -1,8 +1,8 @@
 <% session[:ret_url] = '/tutorials/taxes/3' %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
-  <h2>Upload Your Digital Tax Records</h2>
-  <p>Do you have a digital tax records?</p>
+  <h2>Upload Your Tax Records</h2>
+  <p>If you have a digital copies of your tax records, upload them here for future reference.  If you don't have digital copies, don't worry, they can be added later.</p>
 
   <h3 <% if @digital_taxes.blank? %> style="display: none;" <% end %> id='important-documents-table-title'>Your Digital Taxes</h3>
   <table id="important-documents-table" <% if @digital_taxes.blank? %> style="display: none;" <% end %>>
@@ -53,7 +53,7 @@
         info: false,
         aaSorting: [[0, 'asc']]
     });
-    
+
     if ($('.flash-success.flash').text() === 'Document was successfully created.') {
       $('.flash.important-doc').show()
     }

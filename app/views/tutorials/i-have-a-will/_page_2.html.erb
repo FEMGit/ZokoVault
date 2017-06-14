@@ -1,6 +1,7 @@
-<%= render partial: 'tutorials/tutorial_document_upload', locals: { title: "Upload Your Digital Will",
-                                                                    text: "Do you have a digital copy of your will? if not you can #{link_to 'invite your estate planning attorney', '/tutorials/wills/3', class: 'no-underline-link'} to upload it for you.",
-                                                                    digital_resources: @digital_wills,
-                                                                    table_title: "Your Digital Wills",
-                                                                    flash_message_success: "You added a Will! Upload another Will, or click Continue.",
-                                                                    upload_button_text: "Upload Will" } %>
+<%= render partial: 'tutorials/tutorial_document_upload',
+                    locals: { title: "Upload a Digital Copy of your Will",
+                    text: "If you have a digital copy of your Will, upload them here for future reference.  If you don't have a digital copy, don't worry, it can be added later.",
+                    digital_resources: @digital_wills,
+                    table_title: "Your Digital Wills",
+                    flash_message_success: "You added a Will! Upload another Will, or click Continue.",
+                    upload_button_text: "Upload Will" } %>

@@ -102,7 +102,7 @@ img.questionnaire-heart {
         text-align: center !important;
       }
     }
-    
+
   }
 }
 
@@ -256,9 +256,8 @@ img.questionnaire-heart {
   max-width: 400px;
 
   @include media($mobile) {
-    margin: 80px 20px 0 !important;
+    margin: 80px 20px 20px !important;
     max-width: 100%;
-    margin-bottom: 20px !important;
   }
 }
 .card.terms-card{

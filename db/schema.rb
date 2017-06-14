@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170609045412) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -493,8 +494,8 @@ ActiveRecord::Schema.define(version: 20170609045412) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "number_of_pages", default: 1
-    t.integer  "position",        default: 0
     t.boolean  "no_page",         default: false
+    t.integer  "position",        default: 0
   end
 
   add_index "subtutorials", ["tutorial_id"], name: "index_subtutorials_on_tutorial_id", using: :btree

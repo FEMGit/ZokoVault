@@ -34,7 +34,7 @@ class AccountsController < AuthenticatedController
     if !SubscriptionService.trial_was_used?(current_user)
       SubscriptionService.activate_trial(user: current_user)
     end
-    redirect_to new_tutorial_path
+    redirect_to tutorials_lets_get_started_path
   end
 
   def payment

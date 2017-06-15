@@ -1,9 +1,10 @@
 <% @trust = Trust.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)) %>
 <% trusts = Trust.for_user(resource_owner) %>
 
-<%= render partial: 'tutorials/add_remove_tutorial', 
+<%= render partial: 'tutorials/add_remove_tutorial',
                      locals: { form_controller: :trusts,
                                title: 'Add Your Trust',
+                               description: 'Please add your trust name(s) below.  You will have the opportunity to add additional details (e.g. agreements, trustees, etc.) later.',
                                form_for_object: @trust,
                                label_tag: { name: 'trust_name', value: 'Trust Name' },
                                partial_path: { resources: trusts },

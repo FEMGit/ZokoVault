@@ -537,8 +537,8 @@ li.icon-box{
   input[type="checkbox"]:checked + span {
     color: black;
   }
-  input[type="checkbox"]:checked + span:after,
-  input[type="checkbox"]:checked + span:hover:after {
+  //input[type="checkbox"]:checked + span:hover:after ,
+  input[type="checkbox"]:checked + span:after{
     color: black;
     content: asset-data-url('SVG/tuts-checked-2.svg');
     font-size: 24px;
@@ -547,15 +547,15 @@ li.icon-box{
     top: -1px;
     opacity: .9;
   }
-  input[type="checkbox"] + span:hover:after  {
-    color: black;
-    content: asset-data-url('SVG/tuts-checked-2.svg');
-    font-size: 24px;
-    left: -1px;
-    position: absolute;
-    top: -1px;
-    opacity: .5;
-  }
+  // input[type="checkbox"] + span:hover:after  {
+  //   color: black;
+  //   content: asset-data-url('SVG/tuts-checked-2.svg');
+  //   font-size: 24px;
+  //   left: -1px;
+  //   position: absolute;
+  //   top: -1px;
+  //   opacity: .5;
+  // }
 }
 
 //ICON BOX LARGE
@@ -585,8 +585,8 @@ li.icon-box-large{
   input[type="checkbox"]:checked + span {
     color: black;
   }
-  input[type="checkbox"]:checked + span:after,
-  input[type="checkbox"]:checked + span:hover:after {
+  //input[type="checkbox"]:checked + span:hover:after,
+  input[type="checkbox"]:checked + span:after{
     color: black;
     content: asset-data-url('SVG/tuts-checked-3.svg');
     left: -1px;
@@ -594,12 +594,12 @@ li.icon-box-large{
     top: -1px;
     opacity: .9;
   }
-  input[type="checkbox"] + span:hover:after  {
-    color: black;
-    content: asset-data-url('SVG/tuts-checked-3.svg');
-    left: -1px;
-    position: absolute;
-    top: -1px;
-    opacity: .5;
-  }
+  // input[type="checkbox"] + span:hover:after  {
+  //   color: black;
+  //   content: asset-data-url('SVG/tuts-checked-3.svg');
+  //   left: -1px;
+  //   position: absolute;
+  //   top: -1px;
+  //   opacity: .5;
+  // }
 }

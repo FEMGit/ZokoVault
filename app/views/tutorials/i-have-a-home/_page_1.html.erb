@@ -1,9 +1,10 @@
 <% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
 <% houses = current_user.financial_properties.select{|p| p.property_type == 'House'} %>
 
-<%= render partial: 'tutorials/add_remove_tutorial', 
+<%= render partial: 'tutorials/add_remove_tutorial',
                      locals: { form_controller: :financial_property,
                                title: 'Add Your Home',
+                               description: 'Please add your home(s) or residential properties below.  You will have the opportunity to add additional details (e.g. city, state, home value, etc) later.',
                                form_for_object: @financial_property,
                                label_tag: { name: 'property_name', value: 'Street Address' },
                                partial_path: { resources: houses },

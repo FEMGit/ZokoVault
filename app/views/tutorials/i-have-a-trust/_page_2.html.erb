@@ -1,9 +1,10 @@
 <% @entity = Entity.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)) %>
 <% entities = Entity.for_user(resource_owner) %>
 
-<%= render partial: 'tutorials/add_remove_tutorial', 
+<%= render partial: 'tutorials/add_remove_tutorial',
                      locals: { form_controller: :entities,
                                title: 'Add Your Entity',
+                               description:'Please add your entity name(s) below.  You will have the opportunity to add additional details (e.g. agreements, trustees, etc) later.',
                                form_for_object: @entity,
                                label_tag: { name: 'entity_name', value: 'Entity Name' },
                                partial_path: { resources: entities },

@@ -1,9 +1,11 @@
-<%= render partial: 'tutorials/tutorial_contact_create', locals: { title: 'Add Your Financial Advisor',
-                                                                   table: { table_title: 'Your Financial Advisors', 
-                                                                            contacts: @financial_advisors, 
-                                                                            table_id: 'financial-advisor-table' },
-                                                                   flash_message: 'You added a contact! Add another one of your Financial Advisors, or click Next.' ,
-                                                                   button_text: 'Add Financial Advisor' } %>
+<%= render partial: 'tutorials/tutorial_contact_create',
+           locals: { title: 'Add Your Financial Advisor',
+                     description: "Adding your advisor helps your family know who to contact for questions about your finances. ",
+                     table: { table_title: 'Your Financial Advisors',
+                              contacts: @financial_advisors,
+                              table_id: 'financial-advisor-table' },
+                     flash_message: 'You added a contact! Add another one of your Financial Advisors, or click Continue.' ,
+                     button_text: 'Add Financial Advisor' } %>
 
 <script>
   var createContact = function() {

@@ -2,7 +2,7 @@
 <% toggle_view ||= false %>
 
 <%= form_tag form_tag_path, { method: :put, id: 'account-form' } do %>
-  <div class="settings-card <% if !wide_card %> max-w-1000-centered <% end %> mb-30 text-center">
+  <div class="settings-card <% if !wide_card %> max-w-1000-centered <% end %> mb-20 text-center">
     <section id="send_code_section" class="<% if toggle_view %> toggle_view <% end %>" >
       <div class="modal-header">
         <h2>Two-Factor Authentication - Phone Setup</h2>
@@ -14,7 +14,7 @@
     <div class="modal-content mb-30">
 
       <section id="send_code_section" class="<% if toggle_view %> toggle_view <% end %>" >
-        <%= image_tag "marketing/phone.png", :class => "w-150 block w-50-percent m-0-auto mb-30 mt-30"%>
+        <%= image_tag "marketing/phone.png", :class => "w-100 block w-50-percent m-0-auto mb-20 mt-20"%>
         <%= label_tag "user_user_profile_attributes_two_factor_phone_number", 'Cell Phone Number', class: "mb-5 inline-block" %><br>
         <%= render partial: 'layouts/phone_number', locals: { f: nil, phone: 'user[user_profile_attributes][two_factor_phone_number]', autofocus: true, phone_additional_classes: "m-0-auto mb-20" } %>
 

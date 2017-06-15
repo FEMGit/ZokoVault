@@ -19,35 +19,6 @@ $(document).ready(function() {
   })
 })
 
-var screenShift = function(element) {
-  var offset = $(document).scrollTop()
-  element.css("margin-top", offset + "px")
-}
-
-var displayEmailPreviewModal = function(contact_id) {
-  mailer_view_url = "/email/share_invitation_mailer_name/" + contact_id
-  $.ajax({
-    url: mailer_view_url,
-    type: "GET",
-    dataType: 'json',
-  })
-   .done(function(data){
-     $('#email-iframe').attr('src', "/email/share_invitation_mailer/" + data["name"] + "/<%=@resource_owner.id%>/" + contact_id)
-     screenShift($('#email-preview-modal'))
-     $("body").append("<div class='modal-overlay js-modal-close'></div>");
-     $(".modal-overlay").fadeTo(500, 0.8);
-     $(".js-modalbox").fadeIn(500);
-     canvasEl = $('button.email-modal[data-modal-id]');
-     var modalBox = $(canvasEl).attr('data-modal-id');
-     
-     $("#email-iframe").load(function() {
-       emailPreviewOnLoad(modalBox, canvasEl)
-     })
-   })
-   .fail(function(data) {
-   })
-}
-
 var emailPreviewOnLoad = function(modalBox, canvasEl) {
   cleanEmailPreviewHeader('SMTP')
   cleanEmailPreviewHeader('Date')

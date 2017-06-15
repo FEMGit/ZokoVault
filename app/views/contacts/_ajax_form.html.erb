@@ -50,7 +50,7 @@
 <%#= link_to 'Back', contacts_path #%>
 <script>
 
-var currentSelectInput = ''; // XXX: This stores which input is selected
+var currentSelectedInput = ''; // XXX: This stores which input is selected
 
 var currentStep = 1;
 
@@ -155,7 +155,12 @@ var addContactAndCloseModal = function(json) {
 
   updateAddContactableTable(json);
   addRemoveShareInfoLine(null, {"selected": json['id']})
+  toggleCoOwnerView(json['id'])
   closeContactFormModal();
+}
+
+if (typeof window.toggleCoOwnerView === 'undefined') {
+  var toggleCoOwnerView = function(){}
 }
 
 var updateAddContactableTable = function(json) {

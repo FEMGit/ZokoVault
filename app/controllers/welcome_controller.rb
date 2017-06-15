@@ -15,7 +15,8 @@ class WelcomeController < AuthenticatedController
   end
   
   def onboarding_back
-    redirect_to_last_tutorial
+    redirect_result = redirect_to_last_tutorial
+    redirect_to new_tutorial_path if redirect_result.blank?
   end
 
   def index; 

@@ -1,0 +1,47 @@
+<div class="card mt-20 mb-30 text-center max-w-1000-centered">
+  <h1>Add Vault Co-Owner</h1>
+
+  <h5 class="mb-20 clr-gray-dark fw-600">
+    Would you like to provide full Vault access to a spouse, partner, or trusted family member at this time?
+  </h5>
+
+  <p class="m-0-auto mb-30">This ensures that both of you have access to your entire Vault.</p>
+
+  <section id="yes-no-section">
+    <%= render partial: 'co_owner_yes_no' %>
+  </section>
+
+  <section id="share-section" style="display: none;">
+    <%= render partial: 'co_owner_share' %>
+  </section>
+</div>
+
+<%= render partial: 'contacts/ajax_form', style: 'display: none;' %>
+<%= render partial: 'layouts/email_preview_javascript' %>
+
+<script>
+  var submitForm = function() {
+    var form = $('#edit_user_profile_' + "<%=@user_profile.id%>")
+    form.submit()
+  }
+
+  var toggleCoOwnerView = function(id) {
+    $("#share-section").toggle()
+    $("#yes-no-section").toggle()
+
+    if (id !== undefined) {
+      $("#user_profile_primary_shared_with_ids").val(id)
+    } else {
+      $("#user_profile_primary_shared_with_ids").val()
+      $("#email-preview-list").find("span").remove()
+    }
+    $("#user_profile_primary_shared_with_ids").trigger('chosen:updated')
+  }
+
+  var createContact = function() {
+    window.tableIdToUpdate = '#primary-contacts-table'
+    setProfessionalDropdown(['Family & Beneficiaries'])
+    contact_type_handle($('#contact_contact_type'), true)
+    displayContactFormModal();
+  }
+</script>

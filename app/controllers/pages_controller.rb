@@ -14,6 +14,8 @@ class PagesController < HighVoltage::PagesController
     
     if @tutorial_name.eql? 'confirmation_page'
       redirect_to tutorials_confirmation_path and return
+    elsif @tutorial_name.eql? 'vault_co_owners'
+      redirect_to tutorials_vault_co_owners_path and return
     end
 
     if session[:tutorial_paths][tuto_index]

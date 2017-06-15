@@ -70,11 +70,16 @@ class TutorialsController < AuthenticatedController
   end
   
   def lets_get_started
-    tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
-    session[:tutorial_paths] = {}
-    tutorial_selection.tutorial_paths = [{ tuto_id: 0, current_page: 0, tuto_name: 'lets_get_started' }]
-    tutorial_selection.last_tutorial_index = 0
-    tutorial_selection.save!
+    tutorial_progress_save('lets_get_started')
+  end
+  
+  def vault_co_owners
+    @user_profile = UserProfile.for_user(current_user)
+    @contact = Contact.new(user: current_user)
+    @primary_contacts = Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries')
+    @tutorial_name = "account_co_owner"
+    @page_number = 0
+    tutorial_progress_save('vault_co_owners')
   end
   
   def confirmation
@@ -91,13 +96,7 @@ class TutorialsController < AuthenticatedController
   def video; end
 
   def new
-    session[:tutorials_list] ||= {}
-    session[:tutorial_paths] = {}
-    @tutorial_array = Tutorial.all.sort_by(&:position)
-    @tutorial = Tutorial.new(name: session[:tutorials_list])
-    @tutorial.current_step = session[:order_step]
-    session[:tutorial_paths] = tutorial_path_generator []
-    session[:tutorial_index] = 0
+    tutorials_initialization
     redirect_to current_tutorial_path if current_tutorial_path.present?
   end
 
@@ -146,6 +145,7 @@ class TutorialsController < AuthenticatedController
 
   def destroy
     tuto_index = session[:tutorial_index] - 2
+    tuto_index = tuto_index < 0 ? 0 : tuto_index
     # Destroy element if it was created
     redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?
     insurance_card = session[:tutorial_paths][tuto_index][:object]
@@ -182,6 +182,24 @@ class TutorialsController < AuthenticatedController
   end
 
   private
+  
+  def tutorial_progress_save(tuto_name)
+    tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
+    session[:tutorial_paths] = {}
+    tutorial_selection.tutorial_paths = [{ tuto_id: 0, current_page: 0, tuto_name: tuto_name }]
+    tutorial_selection.last_tutorial_index = 0
+    tutorial_selection.save!
+  end
+  
+  def tutorials_initialization
+    session[:tutorials_list] ||= {}
+    session[:tutorial_paths] = {}
+    @tutorial_array = Tutorial.all.sort_by(&:position)
+    @tutorial = Tutorial.new(name: session[:tutorials_list])
+    @tutorial.current_step = session[:order_step]
+    session[:tutorial_paths] = tutorial_path_generator []
+    session[:tutorial_index] = 0
+  end
 
   def set_blank_layout_header_info
     @header_information = true

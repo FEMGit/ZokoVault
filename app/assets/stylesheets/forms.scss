@@ -537,8 +537,11 @@ li.icon-box{
   input[type="checkbox"]:checked + span {
     color: black;
   }
+  input[type="checkbox"]:checked + span.checked-hide:after {
+    content: none;
+  }
   //input[type="checkbox"]:checked + span:hover:after ,
-  input[type="checkbox"]:checked + span:after{
+  input[type="checkbox"]:checked + span:not(.checked-hide):after{
     color: black;
     content: asset-data-url('SVG/tuts-checked-2.svg');
     font-size: 24px;

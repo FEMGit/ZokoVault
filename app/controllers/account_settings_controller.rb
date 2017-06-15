@@ -6,6 +6,7 @@ class AccountSettingsController < AuthenticatedController
                                           :login_settings, :update_login_settings]
   before_action :set_contacts_shareable, only: [:account_users]
   before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_account_users]
+  before_action :update_account_users_params, only: [:update_account_users]
   include TutorialsHelper
   include UserTrafficModule
 
@@ -90,7 +91,7 @@ class AccountSettingsController < AuthenticatedController
   def update_account_users
     respond_to do |format|
       if @user_profile.update_attributes(account_users_params)
-        if tutorial_params[:tutorial_name]
+        if tutorial_params[:tutorial_name].present?
           tutorial_redirection(format, @user_profile.as_json, 'Primary shared with contacts were successfully updated.' )
         else
           format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
@@ -176,6 +177,10 @@ class AccountSettingsController < AuthenticatedController
     @user = User.find(current_user.id)
     return nil if @user.update(password_change_params)
     @user.errors
+  end
+
+  def update_account_users_params
+    params[:user_profile][:primary_shared_with_ids] = Array.wrap(params[:user_profile][:primary_shared_with_ids])
   end
 
   def tutorial_params

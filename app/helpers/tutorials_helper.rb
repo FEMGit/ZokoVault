@@ -127,11 +127,18 @@ module TutorialsHelper
   def tutorial_redirection(format, json_object, success_message)
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
-    next_page = session[:tutorial_paths][tuto_index][:current_page]
-    path = if next_tuto[:tuto_name] == 'confirmation_page'
-      tutorials_confirmation_path
+    if session[:tutorial_paths].present? &&
+         session[:tutorial_paths][tuto_undex].present?
+      next_page = session[:tutorial_paths][tuto_index][:current_page]
+      path = if next_tuto[:tuto_name] == 'confirmation_page'
+        tutorials_confirmation_path
+      elsif next_tuto[:tuto_name] == 'tutorial_new'
+        new_tutorial_path
+      else
+        tutorial_page_path(next_tuto[:tuto_name], next_page)
+      end
     else
-       tutorial_page_path(next_tuto[:tuto_name], next_page)
+      path = new_tutorial_path
     end
     format.json { render json: json_object }
     format.html { redirect_to path, flash: { success: success_message } }
@@ -176,13 +183,13 @@ module TutorialsHelper
         session[:tutorial_paths] = tutorial_paths
         session[:tutorial_index] = tutorial_selection.last_tutorial_index
         return unless current_tutorial_path
-        redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+        redirect_to current_tutorial_path and return true if current_tutorial_path != request.fullpath
       else
         session[:tutorial_index] -= 1 if (request.fullpath == onboarding_back_path &&
                                         session[:tutorial_index] > 0 &&
                                         tutorial_paths.count > 2)
         return unless current_tutorial_path
-        redirect_to current_tutorial_path and return if current_tutorial_path != request.fullpath
+        redirect_to current_tutorial_path and return true if current_tutorial_path != request.fullpath
       end
     end
   end
@@ -204,6 +211,11 @@ module TutorialsHelper
 
   def tutorial_selection_exists?
     tutorial_selection = TutorialSelection.find_by(user: current_user)
-    tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
+    current_tutorial = tutorial_selection.tutorial_paths[tutorial_selection.last_tutorial_index]
+    if !current_tutorial["tuto_name"].eql? 'vault_co_owners'
+      return tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
+    else
+      return (request.fullpath == onboarding_back_path)
+    end
   end
 end

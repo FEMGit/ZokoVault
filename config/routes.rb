@@ -200,6 +200,7 @@ Rails.application.routes.draw do
 
   get 'tutorials/confirmation', to: 'tutorials#confirmation', as: :tutorials_confirmation
   get 'tutorials/lets_get_started', to: 'tutorials#lets_get_started', as: :tutorials_lets_get_started
+  get 'tutorials/vault_co_owners', to: 'tutorials#vault_co_owners', as: :tutorials_vault_co_owners
   get 'tutorials/tutorials_end', to: 'tutorials#tutorials_end', as: :tutorials_end
   resources :tutorials, except: :destroy do
     get '/:page_id', to: 'pages#show', as: :page

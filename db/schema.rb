@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170609045412) do
+ActiveRecord::Schema.define(version: 20170615231347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
@@ -64,8 +65,8 @@ ActiveRecord::Schema.define(version: 20170609045412) do
     t.string   "businesswebaddress"
     t.string   "businessphone"
     t.string   "businessfax"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.integer  "user_id"
     t.integer  "relationship_id"
     t.string   "city"
@@ -73,12 +74,14 @@ ActiveRecord::Schema.define(version: 20170609045412) do
     t.string   "business_street_address_2"
     t.integer  "user_profile_id"
     t.integer  "full_primary_shared_id"
+    t.uuid     "uuid",                      default: "uuid_generate_v4()", null: false
   end
 
   add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
   add_index "contacts", ["full_primary_shared_id"], name: "index_contacts_on_full_primary_shared_id", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
+  add_index "contacts", ["uuid"], name: "index_contacts_on_uuid", unique: true, using: :btree
 
   create_table "current_user_subscription_markers", id: false, force: :cascade do |t|
     t.integer "user_id",              null: false
@@ -107,21 +110,23 @@ ActiveRecord::Schema.define(version: 20170609045412) do
   create_table "documents", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "folder_id"
-    t.string   "name",                     null: false
+    t.string   "name",                                                    null: false
     t.text     "description"
-    t.string   "url",                      null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "url",                                                     null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.string   "category"
     t.string   "group"
     t.integer  "card_document_id"
     t.integer  "vendor_id"
     t.integer  "financial_information_id"
+    t.uuid     "uuid",                     default: "uuid_generate_v4()", null: false
   end
 
   add_index "documents", ["financial_information_id"], name: "index_documents_on_financial_information_id", using: :btree
   add_index "documents", ["folder_id"], name: "index_documents_on_folder_id", using: :btree
   add_index "documents", ["user_id"], name: "index_documents_on_user_id", using: :btree
+  add_index "documents", ["uuid"], name: "index_documents_on_uuid", unique: true, using: :btree
   add_index "documents", ["vendor_id"], name: "index_documents_on_vendor_id", using: :btree
 
   create_table "employers", force: :cascade do |t|
@@ -631,11 +636,11 @@ ActiveRecord::Schema.define(version: 20170609045412) do
   add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                          default: "",       null: false
-    t.string   "encrypted_password",                             default: "",       null: false
+    t.string   "email",                                          default: "",                   null: false
+    t.string   "encrypted_password",                             default: "",                   null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.integer  "sign_in_count",                                  default: 0,        null: false
+    t.integer  "sign_in_count",                                  default: 0,                    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -644,11 +649,11 @@ ActiveRecord::Schema.define(version: 20170609045412) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",                                default: 0,        null: false
+    t.integer  "failed_attempts",                                default: 0,                    null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
     t.boolean  "setup_complete",                                 default: false
     t.boolean  "admin"
     t.string   "stripe_id"
@@ -659,11 +664,13 @@ ActiveRecord::Schema.define(version: 20170609045412) do
     t.decimal  "site_completed",         precision: 5, scale: 2
     t.integer  "category_count"
     t.integer  "subcategory_count"
+    t.uuid     "uuid",                                           default: "uuid_generate_v4()", null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+  add_index "users", ["uuid"], name: "index_users_on_uuid", unique: true, using: :btree
 
   create_table "vault_entry_beneficiaries", force: :cascade do |t|
     t.integer  "will_id"

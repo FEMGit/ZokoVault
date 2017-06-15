@@ -194,6 +194,9 @@ module TutorialsHelper
     if current_tutorial[:tuto_name] == 'tutorial_new'
       return if request.fullpath.eql? new_tutorial_path
       new_tutorial_path
+    elsif current_tutorial[:tuto_name] == 'lets_get_started'
+      return if request.fullpath.eql? new_tutorial_path
+      tutorials_lets_get_started_path
     else
       tutorial_page_path(current_tutorial[:tuto_name], current_tutorial[:current_page])
     end

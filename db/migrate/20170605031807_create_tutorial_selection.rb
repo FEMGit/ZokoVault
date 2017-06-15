@@ -1,4 +1,4 @@
-class TutorialSelection < ActiveRecord::Migration
+class CreateTutorialSelection < ActiveRecord::Migration
   def change
     create_table :tutorial_selections do |t|
       t.references :user, index: true, foreign_key: true

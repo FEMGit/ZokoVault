@@ -69,6 +69,14 @@ class TutorialsController < AuthenticatedController
   def new_document
   end
   
+  def lets_get_started
+    tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
+    session[:tutorial_paths] = {}
+    tutorial_selection.tutorial_paths = [{ tuto_id: 0, current_page: 0, tuto_name: 'lets_get_started' }]
+    tutorial_selection.last_tutorial_index = 0
+    tutorial_selection.save!
+  end
+  
   def confirmation
     session[:tutorial_index] = session[:tutorial_index].present? ? (session[:tutorial_index] + 1) : 1
     params[:tutorial_id] = 'confirmation_page'

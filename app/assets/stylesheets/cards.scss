@@ -94,11 +94,11 @@ img.questionnaire-heart {
     .text-aligned {
       text-align: left !important;
     }
-    .card-height-120 {
-      height: 120px;
+    .get-started {
+      padding-bottom: 10px;
     }
     @include media($tablet) {
-      .card-height-120 {
+      .get-started {
         height: auto;
         padding: 20px !important;
       }

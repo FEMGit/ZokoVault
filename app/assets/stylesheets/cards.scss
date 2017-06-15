@@ -94,8 +94,16 @@ img.questionnaire-heart {
     .text-aligned {
       text-align: left !important;
     }
+    .card-height-120 {
+      height: 120px;
+    }
     @include media($tablet) {
+      .card-height-120 {
+        height: auto;
+        padding: 20px !important;
+      }
       .description {
+        text-align: center !important;
         width: 100% !important;
       }
       .text-aligned {

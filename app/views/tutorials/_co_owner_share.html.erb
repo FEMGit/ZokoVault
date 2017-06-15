@@ -1,25 +1,25 @@
 <%= form_for @user_profile, :url => url_for(action: :update_account_users, controller: :account_settings) do |f| %>
   <%= hidden_field_tag :tutorial_name, @tutorial_name %>
   <%= hidden_field_tag :page_number, @page_number %>
-    
+
   <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
     <h3 class="card-label fn clr-color-primary mb-30">
       <svg class="icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
       </svg>
-      Primary Shared With
+      Vault Co-Owner
     </h3>
-      
+
     <div class="chosen-styled-select text-left max-w-340 m-0-auto">
       <%= contact_select_with_create_new(f, :primary_shared_with_ids, @primary_contacts, multiple: false) %>
     </div>
   </div>
-    
+
   <div id="email-preview-list">
   </div>
 <% end %>
 
-<section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+<section class="mt-30 bt-gray-light pt-20 mb-10 flex-button">
   <%= link_to 'Back', 'javascript:toggleCoOwnerView();', class: "big-button outline-button padded f-left" %>
   <%= link_to "Continue", 'javascript:submitForm();', class: "button big-button blue-button f-right submit-btn ml-0" %>
 </section>
@@ -27,7 +27,7 @@
 <div id="email-preview-section">
 </div>
 
-  
+
 <script>
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

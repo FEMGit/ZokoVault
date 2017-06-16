@@ -2,8 +2,8 @@ class TutorialsController < AuthenticatedController
   include UserTrafficModule
   include BackPathHelper
   include TutorialsHelper
+  before_action :save_return_to_path, only: [:new, :confirmation, :show]
   skip_before_filter :complete_setup!, except: :show
-  skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
   layout 'without_sidebar_layout'
 

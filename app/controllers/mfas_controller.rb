@@ -1,5 +1,5 @@
 class MfasController < AuthenticatedController
-  skip_before_filter :mfa_verify!, :redirect_if_free_user
+  skip_before_filter :mfa_verify!, :save_return_to_path, :redirect_if_free_user
   before_filter :not_verified!
   layout "blank_layout", only: [:show]
 

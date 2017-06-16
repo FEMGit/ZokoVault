@@ -8,9 +8,9 @@
     <p><%= description %></p>
   <% end %>
 
-  <div class="modal-content">
-    <%= render partial: 'tutorials/contact_tutorial_table', locals: { table_title: table[:table_title], 
-                                                                    contacts: table[:contacts], 
+  <div class="">
+    <%= render partial: 'tutorials/contact_tutorial_table', locals: { table_title: table[:table_title],
+                                                                    contacts: table[:contacts],
                                                                     table_id: table[:table_id] } %>
 
   <div class="flash-success-static flash add-contactable static small" style="display: none;">

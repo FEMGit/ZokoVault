@@ -341,11 +341,12 @@ Rails.application.routes.draw do
   get "/setup", to: "pages#setup", as: :setup
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
+  get "/product_video", to: "pages#product_video"
   get "/html_template", to: "pages#html_template", as: :html_template
 
   get '/support/new_message', to: 'email_support#index', as: :email_support
   post '/support/new_message', to: 'email_support#send_email'
-  
+
   # Email helper
   get '/email/share_invitation_mailer_name/:contact_id', to: 'email#share_invitation_mailer_name'
   get 'email/email_preview_line/:contact_id', to: 'email#email_preview_line'

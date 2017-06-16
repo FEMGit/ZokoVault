@@ -1,16 +1,14 @@
-<% @financial_investment = FinancialInvestment.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-<% investments = current_user.financial_investments %>
+<% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% valuables = current_user.financial_properties.select{|p| p.property_type == 'Valuable'} %>
 
 <%= render partial: 'tutorials/add_remove_tutorial',
-                     locals: { wide: true,
-                               form_controller: :financial_investment,
-                               title: 'Add Your Personal Investments & Debt',
-                               description: 'Please add your personal investment(s) & debt(s) below.  You will have the opportunity to add additional details (e.g. account numbers, values, etc) later.',
-                               form_for_object: @financial_investment,
-                               label_tag: [ { name: 'investment_name', value: 'Investment or Debt Name' },
-                                            { name: 'investment_type', value: 'Investment Type' } ],
-                               partial_path: { resources: investments, wide: true },
-                               text_field_tag: { name: 'financial_investment[name]', placeholder: 'Investment or Debt Name' },
-                               select_tag: { name: 'financial_investment[investment_type]', value: FinancialInvestment::investment_types.keys },
-                               fields_class: 'investment-fields'
-                             } %>
+           locals: { form_controller: :financial_property,
+                     title: 'Add Your Valuable Property',
+                     description: 'Please add your valuable property below.  This is your jewelry, artwork, antiques, etc.  You will have the opportunity to add additional details about your property (e.g. value, location, etc) later.',
+                     form_for_object: @financial_property,
+                     label_tag: { name: 'property_name', value: 'Property Name' },
+                     partial_path: { resources: valuables },
+                     hidden_field_tag_values: [ { name: 'financial_property[property_type]', value: 'Valuable'} ],
+                     text_field_tag: { name: 'financial_property[name]', placeholder: 'Valuable Property' },
+                     fields_class: 'property-fields'
+                   } %>

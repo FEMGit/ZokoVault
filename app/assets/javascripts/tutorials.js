@@ -194,7 +194,7 @@ $(document).on('ready', function() {
   var edit_form = $('form[id*="edit_tutorial"]')
   if (no_page_checkboxes.length > 0 && edit_form.length > 0) {
     edit_form.submit(function(e) {
-    var checkboxes = $('input[class*="no-page"]')
+    var checkboxes = $('input[class*="no-page"]:checked')
     if (checkboxes.length > 0) {
         var thisForm = this
         e.preventDefault()

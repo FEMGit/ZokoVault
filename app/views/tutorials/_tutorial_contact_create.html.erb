@@ -1,12 +1,9 @@
-<% description ||= nil %>
+<% description ||= "" %>
 <% skip_continue_equal ||= nil %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
-  <h1 class="mb-20"><%= title %></h1>
-
-  <% if description.present? %>
-    <p><%= description %></p>
-  <% end %>
+  <h1><%= title %></h1>
+  <p><%= description %></p>
 
   <div class="">
     <%= render partial: 'tutorials/contact_tutorial_table', locals: { table_title: table[:table_title],

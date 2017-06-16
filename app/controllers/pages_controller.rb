@@ -55,17 +55,17 @@ class PagesController < HighVoltage::PagesController
 
   def set_contacts
     return unless current_user
-    if @tutorial_name.include? 'i-have-a-family'
+    if @tutorial_name.include? 'my-family'
       set_primary_shared_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-insurance'
+    elsif @tutorial_name.include? 'my-insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
-    elsif @tutorial_name.include? 'i-have-tax-documents'
+    elsif @tutorial_name.include? 'my-taxes'
       set_taxes_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-a-trust'
+    elsif @tutorial_name.include? 'my-trust(s)'
       set_trusts_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-a-will'
+    elsif @tutorial_name.include? 'my-will(s)'
       set_wills_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-financial-information'
+    elsif @tutorial_name.include? 'my-financial-information'
       set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)

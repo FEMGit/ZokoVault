@@ -82,7 +82,8 @@ class TutorialsController < AuthenticatedController
     if params["tutorial"].present?
       session[:tutorials_list] = params["tutorial"]
     else
-      redirect_to tutorials_confirmation_path and return
+      session[:tutorial_index] += 1
+      redirect_to tutorial_page_path('shares', 1) and return
     end
     session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
@@ -192,13 +193,14 @@ class TutorialsController < AuthenticatedController
     list.each do |tuto|
       tutorial = Tutorial.find(tuto)
       if tutorial.has_subtutorials?
-        result << tutorial_path(tuto, 'subtutorials_choice', tutorial)
+        result << tutorial_path_hash(tuto, 'subtutorials_choice', tutorial)
       else
         tutorial.number_of_pages.times do |p|
-          result << tutorial_path(tuto, p + 1, tutorial)
+          result << tutorial_path_hash(tuto, p + 1, tutorial)
         end
       end
     end
+    result << { tuto_id: -1, current_page: 1, tuto_name: 'shares' } # tutorial / shares main page
     result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
   end
   
@@ -218,16 +220,8 @@ class TutorialsController < AuthenticatedController
     tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
     
     session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
-                               subtutorials_path.collect { |s| tutorial_path(tuto_index, s, tutorial) } +
+                               subtutorials_path.collect { |s| tutorial_path_hash(tuto_index, s, tutorial) } +
                                session[:tutorial_paths][tutorial_path_position + 1..-1]
-  end
-  
-  def tutorial_path(tuto, current_page, tutorial)
-    {
-      tuto_id: tuto,
-      current_page: current_page,
-      tuto_name: tutorial_id(tutorial.name)
-    }
   end
   
   def subtutorial_id_params

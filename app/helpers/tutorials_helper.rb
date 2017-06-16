@@ -66,18 +66,12 @@ module TutorialsHelper
       # Financial Information
       when 'my-financial-advisor'
         '#icon-business-man-2'
-      when 'my-checking-account'
+      when 'my-bank-accounts'
         '#icon-check'
-      when 'my-investments'
+      when 'my-other-investments'
         '#icon-graph-3'
-      when 'my-mortgage'
-        '#icon-house-large'
       when 'my-valuable-property'
         '#icon-gold'
-      when 'my-credit-cards'
-        '#icon-credit-card-1'
-      when 'my-jewelry'
-        '#icon-ring'
       when 'my-alternative-investments'
         '#icon-document-financial'
       when 'my-business'
@@ -128,7 +122,7 @@ module TutorialsHelper
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
     if session[:tutorial_paths].present? &&
-         session[:tutorial_paths][tuto_undex].present?
+         session[:tutorial_paths][tuto_index].present?
       next_page = session[:tutorial_paths][tuto_index][:current_page]
       path = if next_tuto[:tuto_name] == 'confirmation_page'
         tutorials_confirmation_path
@@ -217,6 +211,24 @@ module TutorialsHelper
       return tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
     else
       return (request.fullpath == onboarding_back_path)
+    end
+  end
+
+  # Tutorial Path Generation
+  def tutorial_path_hash(tuto, current_page, tutorial)
+    {
+      tuto_id: tuto,
+      current_page: current_page,
+      tuto_name: tutorial_id(tutorial.name)
+    }
+  end
+
+  # Tutorial Buttons
+  def skip_button_path
+    if @next_tutorial_name == 'confirmation_page'
+      tutorials_confirmation_path
+    else
+      tutorial_page_path(@next_tutorial_name, @next_page)
     end
   end
 end

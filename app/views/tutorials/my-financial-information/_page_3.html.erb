@@ -1,18 +1,14 @@
-<% @financial_provider = FinancialProvider.new(user: resource_owner,
-                                                  provider_type: FinancialProvider.provider_types["Account"],
-                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-<% checking_accounts = current_user.financial_account_informations.select{|p| p.account_type == 'Checking'} %>
-<% providers = FinancialProvider.where(id: checking_accounts.try(:map, &:account_provider_id)) %>
+<% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% valuables = current_user.financial_properties.select{|p| p.property_type == 'Valuable'} %>
 
 <%= render partial: 'tutorials/add_remove_tutorial',
-           locals: { form_controller: :financial_account,
-                     title: 'Add Your Institutional Account Providers',
-                     description: ["Adding your accounts helps your family know where everything is located. You will have the opportunity to add additional details (e.g. account numbers, account values, etc) later.", "These are your providers of checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc."],
-                     form_for_object: @financial_provider,
-                     label_tag: { name: 'provider_name', value: 'Provider Name' },
-                     partial_path: { resources: providers },
-                     hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Checking'},
-                                                { name: 'financial_provider[web_address]', value: ''} ],
-                     text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
-                     fields_class: 'account-fields'
+           locals: { form_controller: :financial_property,
+                     title: 'Add Your Valuable Property',
+                     description: 'Please add your valuable property below.  This is your jewelry, artwork, antiques, etc.  You will have the opportunity to add additional details about your property (e.g. value, location, etc) later.',
+                     form_for_object: @financial_property,
+                     label_tag: { name: 'property_name', value: 'Property Name' },
+                     partial_path: { resources: valuables },
+                     hidden_field_tag_values: [ { name: 'financial_property[property_type]', value: 'Valuable'} ],
+                     text_field_tag: { name: 'financial_property[name]', placeholder: 'Valuable Property' },
+                     fields_class: 'property-fields'
                    } %>

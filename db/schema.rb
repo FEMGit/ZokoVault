@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616025155) do
+ActiveRecord::Schema.define(version: 20170616091635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,15 +20,11 @@ ActiveRecord::Schema.define(version: 20170616025155) do
   create_table "account_policy_owners", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "card_document_id"
-    t.integer  "user_id"
     t.integer  "contactable_id"
     t.string   "contactable_type"
-    t.integer  "category_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
-
-  add_index "account_policy_owners", ["user_id"], name: "index_account_policy_owners_on_user_id", using: :btree
 
   create_table "card_documents", force: :cascade do |t|
     t.integer  "card_id"
@@ -77,7 +73,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.string   "business_street_address_2"
     t.integer  "user_profile_id"
     t.integer  "full_primary_shared_id"
-    t.string   "slug"
   end
 
   add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
@@ -122,7 +117,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "card_document_id"
     t.integer  "vendor_id"
     t.integer  "financial_information_id"
-    t.string   "slug"
   end
 
   add_index "documents", ["financial_information_id"], name: "index_documents_on_financial_information_id", using: :btree
@@ -153,21 +147,10 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.string   "slug"
   end
 
   add_index "entities", ["category_id"], name: "index_entities_on_category_id", using: :btree
   add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
-
-  create_table "failed_email_login_attempts", force: :cascade do |t|
-    t.string   "email"
-    t.integer  "failed_attempts", default: 0
-    t.datetime "locked_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "failed_email_login_attempts", ["email"], name: "index_failed_email_login_attempts_on_email", using: :btree
 
   create_table "final_wish_infos", force: :cascade do |t|
     t.string   "group"
@@ -175,7 +158,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "final_wish_infos", ["category_id"], name: "index_final_wish_infos_on_category_id", using: :btree
@@ -190,7 +172,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "final_wishes", ["category_id"], name: "index_final_wishes_on_category_id", using: :btree
@@ -208,7 +189,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "account_provider_id"
     t.integer  "category_id"
     t.string   "name"
-    t.string   "slug"
   end
 
   add_index "financial_account_informations", ["category_id"], name: "index_financial_account_informations_on_category_id", using: :btree
@@ -239,7 +219,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "financial_alternatives", ["category_id"], name: "index_financial_alternatives_on_category_id", using: :btree
@@ -263,7 +242,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "updated_at",         null: false
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "financial_investments", ["category_id"], name: "index_financial_investments_on_category_id", using: :btree
@@ -285,7 +263,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "user_id"
     t.integer  "empty_provider_id"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "financial_properties", ["category_id"], name: "index_financial_properties_on_category_id", using: :btree
@@ -307,24 +284,10 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.string   "type"
     t.integer  "category_id"
     t.integer  "provider_type"
-    t.string   "slug"
   end
 
   add_index "financial_providers", ["category_id"], name: "index_financial_providers_on_category_id", using: :btree
   add_index "financial_providers", ["user_id"], name: "index_financial_providers_on_user_id", using: :btree
-
-  create_table "friendly_id_slugs", force: :cascade do |t|
-    t.string   "slug",                      null: false
-    t.integer  "sluggable_id",              null: false
-    t.string   "sluggable_type", limit: 50
-    t.string   "scope"
-    t.datetime "created_at"
-  end
-
-  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
-  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
-  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
-  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "fundings", force: :cascade do |t|
     t.integer  "user_subscription_id"
@@ -347,7 +310,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.string   "group_id"
-    t.string   "slug"
   end
 
   create_table "health_policies_insured_members", force: :cascade do |t|
@@ -374,7 +336,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "vendor_id"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
-    t.string   "slug"
   end
 
   create_table "life_and_disability_policies_primary_beneficiaries", force: :cascade do |t|
@@ -427,7 +388,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.string   "slug"
   end
 
   add_index "power_of_attorney_contacts", ["category_id"], name: "index_power_of_attorney_contacts_on_category_id", using: :btree
@@ -442,7 +402,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "updated_at",           null: false
     t.string   "notes"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "power_of_attorneys", ["category_id"], name: "index_power_of_attorneys_on_category_id", using: :btree
@@ -466,7 +425,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "vendor_id"
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
-    t.string   "slug"
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -535,8 +493,8 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.integer  "tutorial_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
-    t.boolean  "no_page",         default: false
     t.integer  "number_of_pages", default: 1
+    t.boolean  "no_page",         default: false
     t.integer  "position",        default: 0
   end
 
@@ -548,7 +506,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "tax_year_infos", ["category_id"], name: "index_tax_year_infos_on_category_id", using: :btree
@@ -563,7 +520,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "taxes", ["category_id"], name: "index_taxes_on_category_id", using: :btree
@@ -577,7 +533,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.datetime "updated_at",  null: false
     t.string   "notes"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "trusts", ["category_id"], name: "index_trusts_on_category_id", using: :btree
@@ -595,10 +550,11 @@ ActiveRecord::Schema.define(version: 20170616025155) do
 
   create_table "tutorials", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "number_of_pages"
     t.integer  "position"
+    t.boolean  "checkbox_present", default: true
   end
 
   create_table "user_activities", force: :cascade do |t|
@@ -704,8 +660,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.decimal  "site_completed",         precision: 5, scale: 2
     t.integer  "category_count"
     t.integer  "subcategory_count"
-    t.datetime "session_expires_at"
-    t.string   "slug"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -773,7 +727,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.string   "zip"
     t.string   "type"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "vendors", ["category_id"], name: "index_vendors_on_category_id", using: :btree
@@ -789,7 +742,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.string   "notes"
     t.string   "title"
     t.integer  "category_id"
-    t.string   "slug"
   end
 
   add_index "wills", ["category_id"], name: "index_wills_on_category_id", using: :btree
@@ -799,7 +751,6 @@ ActiveRecord::Schema.define(version: 20170616025155) do
     t.string "word", null: false
   end
 
-  add_foreign_key "account_policy_owners", "users"
   add_foreign_key "card_documents", "users"
   add_foreign_key "contacts", "user_profiles", column: "full_primary_shared_id"
   add_foreign_key "contacts", "users"

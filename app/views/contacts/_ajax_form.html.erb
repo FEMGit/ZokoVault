@@ -26,7 +26,7 @@
     <h2><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
   </div>
   <div class="modal-content">
-    <%= form_for @contact, remote: true, :html => {:id => "contact-form"} do |f| %>
+    <%= form_for @contact, remote: true, :html => {:id => "contact-form", 'data-type' => 'json'} do |f| %>
       <div id="error_explanation">
         <ul>
         </ul>
@@ -91,7 +91,7 @@ var new_contact_disable = function() {
 };
 
 document.body.addEventListener('mouseover', function(event) {
-  if (event.target.closest('.chosen-container-multi') === null) {
+  if ($(event.target).closest('.chosen-container-multi') === null) {
     event.stopPropagation();
     var multiDropDowns = document.querySelectorAll('.chosen-container.chosen-container-multi')
     for (var i = 0; i < multiDropDowns.length; i++) {
@@ -128,7 +128,7 @@ var addContactAndCloseModal = function(json) {
     position_to_insert_after = json['position'];
     shared_after_id = json['shared_position'];
     var id_value = json['id'];
-    if (obj.className.includes('account-owner')) {
+    if (obj.className.indexOf('account-owner') >= 0) {
       id_value += '_contact'
       if (position_to_insert_after !== 'create_new_contact') {
         position_to_insert_after += '_contact'

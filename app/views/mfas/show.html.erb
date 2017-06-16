@@ -72,7 +72,7 @@ function verifyCode() {
   $.post("<%= verify_code_account_path %>",
       data,
       function() {
-        window.location.replace('<%= back_path || root_path %>' + "?mfa_submit=true")
+        window.location.replace('<%= return_to_path || root_path %>' + "?mfa_submit=true")
       })
   .fail(function(data) {
     if (data.responseText) {

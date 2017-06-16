@@ -1,9 +1,11 @@
 class AuthenticatedController < ApplicationController
+  include BackPathHelper
   before_action :authenticate_user!, :complete_setup!, :mfa_verify!
   before_action :redirect_if_free_user, :trial_check
+  before_action :save_return_to_path
 
-private
-
+  private
+  
   def trial_check
     return unless is_expired_trial_user?
     if !trial_whitelist_page? && !permitted_page_free_user?

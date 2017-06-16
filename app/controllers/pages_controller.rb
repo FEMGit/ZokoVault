@@ -1,6 +1,8 @@
 class PagesController < HighVoltage::PagesController
   include BreadcrumbsCacheModule
+  include BackPathHelper
   include TutorialsHelper
+  before_action :save_return_to_path, only: [:show]
   before_action :set_cache_headers
   before_action :set_tutorial, :set_contacts, only: [:show]
   layout 'without_sidebar_layout'
@@ -52,6 +54,7 @@ class PagesController < HighVoltage::PagesController
   end
 
   def set_contacts
+    return unless current_user
     if @tutorial_name.include? 'i-have-a-family'
       set_primary_shared_tutorial_contacts
     elsif @tutorial_name.include? 'i-have-insurance'

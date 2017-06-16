@@ -1,17 +1,14 @@
-<% @financial_provider = FinancialProvider.new(user: resource_owner,
-                                                  provider_type: FinancialProvider.provider_types["Account"],
-                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-<% mortgages = current_user.financial_account_informations.select{|p| p.account_type == 'Mortgage'} %>
-<% providers = FinancialProvider.where(id: mortgages.try(:map, &:account_provider_id)) %>
+<% @financial_investment = FinancialInvestment.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% businesses = current_user.financial_investments.select{|p| p.investment_type == 'Private Company Stock'} %>
 
-<%= render partial: 'tutorials/add_remove_tutorial', 
-                     locals: { form_controller: :financial_account,
-                               title: 'Add Your Mortgage Providers',
-                               form_for_object: @financial_provider,
-                               label_tag: { name: 'provider_name', value: 'Provider Name' },
-                               partial_path: { resources: providers },
-                               hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Mortgage'},
-                                                          { name: 'financial_provider[web_address]', value: ''} ],
-                               text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
-                               fields_class: 'account-fields'
+<%= render partial: 'tutorials/add_remove_tutorial',
+                     locals: { form_controller: :financial_investment,
+                               title: 'Add Your Business',
+                               description: 'Please add your Business name below.  You will have the opportunity to add additional details (e.g. ownership percentage, business value, etc) later.',
+                               form_for_object: @financial_investment,
+                               label_tag: { name: 'business_name', value: 'Business Name' },
+                               partial_path: { resources: businesses },
+                               hidden_field_tag_values: [ { name: 'financial_investment[investment_type]', value: 'Private Company Stock'} ],
+                               text_field_tag: { name: 'financial_investment[name]', placeholder: 'Business Name' },
+                               fields_class: 'investment-fields'
                              } %>

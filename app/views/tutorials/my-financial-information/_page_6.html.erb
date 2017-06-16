@@ -1,17 +1,16 @@
-<% @financial_provider = FinancialProvider.new(user: resource_owner,
-                                                  provider_type: FinancialProvider.provider_types["Account"],
-                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-<% credit_cards = current_user.financial_account_informations.select{|p| p.account_type == 'Credit Card'} %>
-<% providers = FinancialProvider.where(id: credit_cards.try(:map, &:account_provider_id)) %>
+<% @financial_investment = FinancialInvestment.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% investments = current_user.financial_investments %>
 
 <%= render partial: 'tutorials/add_remove_tutorial',
-           locals: { form_controller: :financial_account,
-                     title: 'Add Your Credit Card Providers',
-                     form_for_object: @financial_provider,
-                     label_tag: { name: 'provider_name', value: 'Provider Name' },
-                     partial_path: { resources: providers },
-                     hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Credit Card'},
-                                                { name: 'financial_provider[web_address]', value: ''}],
-                     text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
-                     fields_class: 'account-fields'
-                   } %>
+                     locals: { wide: true,
+                               form_controller: :financial_investment,
+                               title: 'Add Your Personal Investments & Debt',
+                               description: 'Please add your personal investment(s) & debt(s) below.  You will have the opportunity to add additional details (e.g. account numbers, values, etc) later.',
+                               form_for_object: @financial_investment,
+                               label_tag: [ { name: 'investment_name', value: 'Investment or Debt Name' },
+                                            { name: 'investment_type', value: 'Investment Type' } ],
+                               partial_path: { resources: investments, wide: true },
+                               text_field_tag: { name: 'financial_investment[name]', placeholder: 'Investment or Debt Name' },
+                               select_tag: { name: 'financial_investment[investment_type]', value: FinancialInvestment::investment_types.keys },
+                               fields_class: 'investment-fields'
+                             } %>

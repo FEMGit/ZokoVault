@@ -70,6 +70,7 @@ class FinancialAccountController < AuthenticatedController
   end
 
   def create
+    byebug
     check_tutorial_params(provider_params[:name]) && return
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider

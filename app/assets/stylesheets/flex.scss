@@ -83,7 +83,7 @@
     max-width: 800px;
     @include media($mobile) {
       flex-direction: column;
-      .styled-select {
+      .styled-select{
         margin-left: 0 !important;
       }
       .inline-button {

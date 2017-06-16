@@ -58,13 +58,15 @@
         <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field h-34", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
           <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
-          <div class="chosen-styled-select form-control medium repeated-field ml-15">
-           <% if select_tag[:multiple] == true %>
-             <%= collection_select select_tag[:name], "", select_tag[:value] || [], :to_s, :to_s, {}, { class: "chosen-select", multiple: true } %>
-           <% else %>
-             <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
-           <% end %>
-          </div>
+          <% if select_tag[:multiple] == true %>
+            <div class="chosen-styled-select form-control medium repeated-field ml-15">
+              <%= collection_select 'tutorial_account_types', "[account_0][account_type]", select_tag[:value], :to_s, :to_s, {}, { class: "chosen-select", multiple: true } %>
+            </div>
+          <% else %>
+            <div class="styled-select form-control medium repeated-field ml-15">
+              <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+            </div>
+          <% end %>
         <% end %>
         <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
       </div>

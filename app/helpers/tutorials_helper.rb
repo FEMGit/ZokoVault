@@ -219,4 +219,22 @@ module TutorialsHelper
       return (request.fullpath == onboarding_back_path)
     end
   end
+
+  # Tutorial Path Generation
+  def tutorial_path_hash(tuto, current_page, tutorial)
+    {
+      tuto_id: tuto,
+      current_page: current_page,
+      tuto_name: tutorial_id(tutorial.name)
+    }
+  end
+
+  # Tutorial Buttons
+  def skip_button_path
+    if @next_tutorial_name == 'confirmation_page'
+      tutorials_confirmation_path
+    else
+      tutorial_page_path(@next_tutorial_name, @next_page)
+    end
+  end
 end

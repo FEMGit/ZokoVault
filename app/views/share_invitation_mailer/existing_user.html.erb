@@ -625,8 +625,8 @@
 
         <p>Dear, <%= @user.first_name %>.</p>
 
-        <p><%= @resource_owner.name %> has invited you to share information from their online vault.  As a User of ZokuVault, we would like to remind you that accepting this invitation will allow you to view and edit important documents, contacts and notes from <%= @resource_owner.first_name %>. Please click <%= link_to 'here', shared_view_dashboard_url(@resource_owner.id) %> to view this shared information.</p>
-        <p><%= @resource_owner.first_name %> thanks you in advance for your participation in his/her important planning. Please visit <%= link_to 'www.zokuvault.com', root_url %> for more information.</p>
+        <p><%= @resource_owner.name %> has invited you to share information from their online vault.  As a User of ZokuVault, we would like to remind you that accepting this invitation will allow you to securely view and upload information specified by<%= @resource_owner.first_name %>. Please click <%= link_to 'here', shared_view_dashboard_url(@resource_owner.id) %> to view this shared information.</p>
+        <p><%= @resource_owner.first_name %> thanks you in advance for your participation in their important planning. Please visit <%= link_to 'www.zokuvault.com', root_url %> for more information.</p>
 
         <p>P.S. It’s important to only accept invitations from people you know and recognize. When in doubt, please reach out to them directly to confirm before accepting any digital requests.</p>
 

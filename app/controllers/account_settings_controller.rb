@@ -26,9 +26,9 @@ class AccountSettingsController < AuthenticatedController
   def account_users; end
 
   def login_settings; end
-  
+
   def phone_setup; end
-  
+
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
     redirect_to login_settings_path
@@ -92,13 +92,13 @@ class AccountSettingsController < AuthenticatedController
     respond_to do |format|
       if @user_profile.update_attributes(account_users_params)
         if tutorial_params[:tutorial_name].present?
-          tutorial_redirection(format, @user_profile.as_json, 'Primary shared with contacts were successfully updated.' )
+          tutorial_redirection(format, @user_profile.as_json, 'Vault Co-Owner was successfully updated.' )
         else
           format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
           format.json { render :account_users, status: :updated, location: @user_profile }
         end
       else
-        tutorial_error_handle("Error saving primary shared with contacts") && return
+        tutorial_error_handle("Error saving Vault Co-Owner") && return
         format.html { render :account_users }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end
@@ -133,11 +133,11 @@ class AccountSettingsController < AuthenticatedController
     token = params[:stripeToken]
     if token.present?
       customer = StripeService.ensure_stripe_customer(user: current_user)
-      
+
       fn = ->(err){ flash[:error] = err.message; nil }
       source = StripeHelper.safe_request(on_failure: fn) { customer.sources.create(source: token) }
       (redirect_to (session[:ret_url] || root_path) and return) unless source
-      
+
       customer.default_source = source.id
       customer.save
       if customer.subscriptions.blank?

@@ -1,14 +1,17 @@
-<% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
-<% valuables = current_user.financial_properties.select{|p| p.property_type == 'Valuable'} %>
+<% @financial_provider = FinancialProvider.new(user: resource_owner,
+                                                  provider_type: FinancialProvider.provider_types["Account"],
+                                                  category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
+<% credit_cards = current_user.financial_account_informations.select{|p| p.account_type == 'Credit Card'} %>
+<% providers = FinancialProvider.where(id: credit_cards.try(:map, &:account_provider_id)) %>
 
 <%= render partial: 'tutorials/add_remove_tutorial',
-           locals: { form_controller: :financial_property,
-                     title: 'Add Your Valuable Property',
-                     description: 'Please add your valuable property below.  This is your jewelry, artwork, antiques, etc.  You will have the opportunity to add additional details about your property (e.g. value, location, etc) later.',
-                     form_for_object: @financial_property,
-                     label_tag: { name: 'property_name', value: 'Property Name' },
-                     partial_path: { resources: valuables },
-                     hidden_field_tag_values: [ { name: 'financial_property[property_type]', value: 'Valuable'} ],
-                     text_field_tag: { name: 'financial_property[name]', placeholder: 'Valuable Property' },
-                     fields_class: 'property-fields'
+           locals: { form_controller: :financial_account,
+                     title: 'Add Your Credit Card Providers',
+                     form_for_object: @financial_provider,
+                     label_tag: { name: 'provider_name', value: 'Provider Name' },
+                     partial_path: { resources: providers },
+                     hidden_field_tag_values: [ { name: 'financial_provider[account_0][account_type]', value: 'Credit Card'},
+                                                { name: 'financial_provider[web_address]', value: ''}],
+                     text_field_tag: { name: 'financial_provider[name]', placeholder: 'Provider Name' },
+                     fields_class: 'account-fields'
                    } %>

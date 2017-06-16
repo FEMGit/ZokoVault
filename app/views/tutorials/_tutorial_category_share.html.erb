@@ -1,37 +1,23 @@
-<div class="card mb-30 mt-20 max-w-1000-centered text-center">
-  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">You added <%= you_added %>. Do you want to share your <%= category_name %> Category with them?</h5>
-  <section class="max-w-600 inline-block">
-    <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
-    <p class="mb-30">When you share your <%= category_name %> Category it allows your <%= allows_your %> to upload documents and information directly into your vault. It also gives you a method for securely sharing files with this individual in the future. </p>
-  </section>
-  
-  <%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
-    <%= hidden_field_tag :next_page_number, @next_page %>
-    <%= hidden_field_tag :page_number, @page_number %>
-    <%= hidden_field_tag :tutorial_name, @tutorial_name %>
-    <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
-    
-    <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
-      <h3 class="card-label fn clr-color-primary mb-30">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg>
-        <%= category_name %> Shared With
-      </h3>
-      
-      <div class="chosen-styled-select text-left max-w-340 m-0-auto">
-        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts, {}, @contacts_with_access.try(:map, &:id)) %>
-      </div>
-    </div>
+<div class="card mt-20 mb-30 text-center max-w-1000-centered">
+  <h1 class="card-label fn clr-color-primary mb-30">
+    <svg class="icon" viewBox="0 0 20 20">
+      <use xlink:href="#icon-Safe"></use>
+    </svg> Shared With
+  </h1>
 
-    <div id="email-preview-list">
-      <% @contacts_with_access.each do |contact| %>
-        <%= render partial: 'tutorials/tutorial_share_contact_preview', locals: { :contact_id => contact.id } %>
-      <% end %>
-    </div>
-  
-    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
-  <% end %>
+  <h5 class="mb-20 clr-gray-dark fw-600">
+    <%= h5_title %>
+  </h5>
+
+  <p class="m-0-auto mb-30"><%= description %></p>
+
+  <section id="yes-no-section">
+    <%= render partial: 'tutorials/tutorial_yes_no', locals: { no_path: skip_button_path } %>
+  </section>
+
+  <section id="share-section" style="display: none;">
+    <%= render partial: 'tutorials/shares/category_share', locals: { category_name: category_name } %>
+  </section>
 </div>
 
 <%= render partial: 'contacts/ajax_form' %>
@@ -45,4 +31,13 @@
     $('.chosen-select').chosen({allow_single_deselect: true});
     setEmailPreview($('#shareable_category_share_with_contact_ids'))
   })
+  
+  var toggleView = function() {
+    $("#share-section").toggle()
+    $("#yes-no-section").toggle()
+  }
+  
+  var yesOnclick = function() {
+    toggleView()
+  }
 </script>

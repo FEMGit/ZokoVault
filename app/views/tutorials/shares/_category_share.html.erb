@@ -1,0 +1,27 @@
+<%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
+  <%= hidden_field_tag :next_page_number, @next_page %>
+  <%= hidden_field_tag :page_number, @page_number %>
+  <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+  <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+    
+  <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
+    <h3 class="card-label fn clr-color-primary mb-30">
+      <svg class="icon" viewBox="0 0 20 20">
+        <use xlink:href="#icon-Safe"></use>
+      </svg>
+      <%= category_name %> Shared With
+    </h3>
+      
+    <div class="chosen-styled-select text-left max-w-340 m-0-auto">
+      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts, {}, @contacts_with_access.try(:map, &:id)) %>
+    </div>
+  </div>
+
+  <div id="email-preview-list">
+    <% @contacts_with_access.each do |contact| %>
+      <%= render partial: 'tutorials/tutorial_share_contact_preview', locals: { :contact_id => contact.id } %>
+    <% end %>
+  </div>
+  
+  <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+<% end %>

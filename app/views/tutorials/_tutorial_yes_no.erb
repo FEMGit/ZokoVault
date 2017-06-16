@@ -1,15 +1,17 @@
+<% no_path ||= "" %>
+
 <ul class="tut-button-wrapper">
   <li class="icon-box">
     <label>
       <input type="checkbox" name="co-owner" value="yes">
-      <span class="checked-hide" onclick="createContact();">
+      <span class="checked-hide" onclick="yesOnclick()">
         <h1 class="mt-35">Yes</h1>
       </span>
     </label>
   </li>
   <li class="icon-box">
     <label>
-      <%= link_to new_tutorial_path, class: 'no-underline-link' do %>
+      <%= link_to no_path, class: 'no-underline-link' do %>
         <input type="checkbox" name="co-owner" value="no">
         <span class="checked-hide">
           <h1 class="mt-35">No</h1>

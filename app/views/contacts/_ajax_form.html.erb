@@ -26,7 +26,7 @@
     <h2><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
   </div>
   <div class="modal-content">
-    <%= form_for @contact, remote: true, :html => {:id => "contact-form"} do |f| %>
+    <%= form_for @contact, remote: true, :html => {:id => "contact-form", :'data-type' => 'json'} do |f| %>
       <div id="error_explanation">
         <ul>
         </ul>

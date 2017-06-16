@@ -1,4 +1,5 @@
 <% description ||= "" %>
+<% description_bottom ||= "" %>
 <% title ||= "" %>
 
 <button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
@@ -18,9 +19,7 @@
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
   <h1><%= title %></h1>
-  <% Array.wrap(description).each do |descr| %>
-    <p><%= descr %></p>
-  <% end %>
+  <p class="mb-30"><%= description %></p>
 
   <%= form_for form_for_object, url: url_for(action: :create, controller: form_controller) do |f| %>
     <%= hidden_field_tag :next_page_number, @next_page %>
@@ -56,17 +55,30 @@
         <% if wide %>
           <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
         <% end %>
-        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field h-34", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
           <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
-          <div class="styled-select form-control medium repeated-field ml-15 h-34">
-            <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+          <div class="chosen-styled-select form-control medium repeated-field ml-15">
+           <% if select_tag[:multiple] == true %>
+             <%= collection_select select_tag[:name], "", select_tag[:value] || [], :to_s, :to_s, {}, { class: "chosen-select", multiple: true } %>
+           <% else %>
+             <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+           <% end %>
           </div>
         <% end %>
         <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
       </div>
     </div>
+    <span class="clear"></span>
+    
+    <% if description_bottom.present? %>
+      <p class="mt-30 mb-0"><%= description_bottom %></p>
+    <% end %>
 
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>
 </div>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

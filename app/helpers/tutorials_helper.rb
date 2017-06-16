@@ -128,7 +128,7 @@ module TutorialsHelper
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
     if session[:tutorial_paths].present? &&
-         session[:tutorial_paths][tuto_undex].present?
+         session[:tutorial_paths][tuto_index].present?
       next_page = session[:tutorial_paths][tuto_index][:current_page]
       path = if next_tuto[:tuto_name] == 'confirmation_page'
         tutorials_confirmation_path

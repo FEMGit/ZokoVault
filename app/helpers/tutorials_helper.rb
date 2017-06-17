@@ -103,7 +103,8 @@ module TutorialsHelper
   
   def select_tag_values(resource)
     resource.try(:alternatives).try(:first).try(:alternative_type) ||
-      resource.try(:investment_type) || ''
+      resource.try(:investment_type) ||
+      resource.try(:accounts).map(&:account_type) || ''
   end
   
   def check_tutorial_params(property_param)

@@ -1,4 +1,6 @@
 <% description ||= "" %>
+<% bottom_description ||= "" %>
+<% multiple ||= false %>
 <% title ||= "" %>
 
 <button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
@@ -18,9 +20,7 @@
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
   <h1><%= title %></h1>
-  <% Array.wrap(description).each do |descr| %>
-    <p><%= descr %></p>
-  <% end %>
+  <p><%= description %></p>
 
   <%= form_for form_for_object, url: url_for(action: :create, controller: form_controller) do |f| %>
     <%= hidden_field_tag :next_page_number, @next_page %>
@@ -29,7 +29,11 @@
     <% if wide %>
       <div class="input-pair wide mobile-hide h-25">
         <% label_tag.each_with_index do |tag, index| %>
-          <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : '') %>
+          <% if multiple %>
+            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-3 min-w-250' : 'max-w-300 min-w-225 flex-47 ') %>
+          <% else %>
+            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : '') %>
+          <% end %>
           <%= label_tag tag[:name], tag[:value], class: label_class %>
         <% end %>
         <%= label_tag "investment_name", '', class: 'inline-button' %>
@@ -42,7 +46,8 @@
                                                                   select_tag: wide && select_tag,
                                                                   text_field_tag: text_field_tag,
                                                                   label_tag: label_tag,
-                                                                  wide: wide } %>
+                                                                  wide: wide,
+                                                                  multiple: multiple } %>
 
     <div class="collect-fields">
       <%= hidden_field_tag :tutorial_name, @tutorial_name %>
@@ -56,17 +61,30 @@
         <% if wide %>
           <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
         <% end %>
-        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+        <% additional_classes = multiple ? ' h-34' : '' %>
+        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field" + additional_classes, placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
           <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
-          <div class="styled-select form-control medium repeated-field ml-15 h-34">
-            <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
-          </div>
+          <% if multiple %>
+            <div class="chosen-styled-select form-control medium repeated-field ml-15 w-290 min-h-30">
+              <%= collection_select 'tutorial_multiple_types', "[types]", select_tag[:value], :to_s, :to_s, { }, { class: "chosen-select", multiple: true, :'data-placeholder' => "Select all that apply" } %>
+            </div>
+          <% else %>
+            <div class="styled-select form-control medium repeated-field ml-15 h-34">
+              <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+            </div>
+          <% end %>
         <% end %>
         <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
       </div>
     </div>
+    
+    <p class="mt-30 mb-0"><%= bottom_description %></p>
 
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
   <% end %>
 </div>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

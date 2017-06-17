@@ -20,8 +20,9 @@ class SharesController < AuthenticatedController
       @shares_by_user = policy_scope(Share)
                            .each { |s| authorize s }
                            .group_by(&:user)
+      append_primary_shares
     end
-
+    
     def show; end
 
     def new
@@ -70,6 +71,18 @@ class SharesController < AuthenticatedController
     end
 
     private
+    
+    def append_primary_shares
+      user_share_ids = @shares_by_user.map(&:first).flatten.compact.map(&:id)
+      current_user_contact_ids = Contact.where("emailaddress ilike ?", current_user.email).map(&:id)
+      users_primary_share = UserProfile.select { |x| !(x.primary_shared_with_ids & current_user_contact_ids).empty? }
+                                       .reject { |x| user_share_ids.include? x.user_id }
+                                       .map(&:user)
+      @shares_by_user[:primary_shared_user] = []
+      users_primary_share.each do |primary_share|
+        @shares_by_user[:primary_shared_user] << primary_share
+      end
+    end
     
     def shared_category_count(shares, user)
       return Rails.application.config.x.ShareCategories.count if current_user.primary_shared_with? user

@@ -96,11 +96,11 @@ module FinancialInformationHelper
   # Sum count section
   
   def property_provider_id(user, property)
-    FinancialProvider.for_user(user).find(property.empty_provider_id)
+    FinancialProvider.for_user(user).find_by(id: property.empty_provider_id)
   end
   
   def investment_provider_id(user, investment)
-    FinancialProvider.for_user(user).find(investment.empty_provider_id)
+    FinancialProvider.for_user(user).find_by(id: investment.empty_provider_id)
   end
   
   def alternatives_sum

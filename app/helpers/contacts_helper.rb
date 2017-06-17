@@ -29,4 +29,15 @@ module ContactsHelper
   def empty_image
     asset_url('blank.png')
   end
+  
+  def contact_status(contact)
+    return nil unless current_user
+    if current_user.user_profile.primary_shared_with
+                   .map { |sh| sh.emailaddress.downcase }
+                   .include? contact.emailaddress.downcase
+      'Co-Owner'
+    else
+      nil
+    end
+  end
 end

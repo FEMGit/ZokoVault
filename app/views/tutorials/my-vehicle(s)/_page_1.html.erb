@@ -4,7 +4,7 @@
 <%= render partial: 'tutorials/add_remove_tutorial',
                      locals: { form_controller: :financial_property,
                                title: 'Add a Vehicle',
-                               description: 'Please add your vehicle(s) below.  These are your automobiles, boats, and trailers (anything with a title). You will have the opportunity to add additional details (e.g. registration, titles, etc.) later.',
+                               description: 'Please add your vehicle(s) below.  These are your cars, boats, and motorcycles (anything with a title). You will have the opportunity to add additional details (e.g. registration, titles, etc.) later.',
                                form_for_object: @financial_property,
                                label_tag: { name: 'property_name', value: 'Make and Model' },
                                partial_path: { resources: vehicles },

@@ -10,6 +10,29 @@ $arrow-dropdown-margin-right: 30px;
 
 .chosen-styled-select{
   margin-bottom: 10px;
+  &.min-h-30 {
+    input[type="text"] {
+      min-height: 30px !important;
+    }
+  }
+  &.w-290 {
+    select,
+    .chosen-container,
+    .chosen-choices,
+    .chosen-results,
+    .chosen-drop {
+      width: 290px !important;
+      @include media($mobile) {
+        width: 100% !important;
+      }
+    }
+    input {
+      max-width: 290px !important;
+      @include media($mobile) {
+        max-width: 100% !important;
+      }
+    }
+  }
 }
 
 .chosen-container-multi .chosen-choices li.search-field input[type=text]{

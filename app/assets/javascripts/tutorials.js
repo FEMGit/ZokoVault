@@ -66,6 +66,11 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
         that.addRow($btn, data.id);
         $('.tutorial-fields.add-tutorial').removeClass('add-tutorial')
         $('.tutorial-fields:last').addClass('add-tutorial')
+        
+        // In case of multiselect dropdown
+        $('.chosen-select').chosen({allow_single_deselect: true});
+        $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+        $("[id^='tutorial_multiple_types_']").last().remove()
       }).error(function(data) {
         that.showLittleError($btn);
       });
@@ -76,9 +81,8 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
 
 DynamicTutorialField.prototype.submit = function($btn) {
   var that = this;
-  var select_serialized = $('.collect-fields select').not('.saved-field').serialize()
+  var select_serialized = $('.collect-fields select').last().not('.saved-field').serialize()
   var input_serialized = $('.collect-fields input').not('.saved-field').serialize()
-  
   var serialized_data = input_serialized + '&' + select_serialized
 
   return $.ajax({

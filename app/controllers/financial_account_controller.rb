@@ -68,9 +68,31 @@ class FinancialAccountController < AuthenticatedController
     authorize @financial_provider
     set_viewable_contacts
   end
+  
+  def tutorial_multiple_type_create
+    return false unless tutorial_multiple_types_params.present?
+    account_types = tutorial_multiple_types_params[:types].reject(&:blank?)
+    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
+    authorize @financial_provider
+    account_types.collect! { |x| [account_type: x] }.flatten!
+    account_types.each do |account_type|
+      FinancialInformationService.fill_accounts({ account_type: account_type }, @financial_provider, resource_owner.id)
+    end
+    respond_to do |format|
+      if @financial_provider.save
+        if params[:tutorial_name]
+          tutorial_redirection(format, @financial_provider.as_json, 'Account was successfully created.')
+        end
+      else
+        tutorial_error_handle("Fill in Provider Name field to continue") && return
+      end
+    end
+    true
+  end
 
   def create
     check_tutorial_params(provider_params[:name]) && return
+    tutorial_multiple_type_create && return
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     FinancialInformationService.fill_accounts(account_params, @financial_provider, resource_owner.id)
@@ -194,6 +216,11 @@ class FinancialAccountController < AuthenticatedController
 
   def set_documents
     @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @financial_provider.id)
+  end
+  
+  def tutorial_multiple_types_params
+    return nil if params[:tutorial_multiple_types].blank?
+    params.require(:tutorial_multiple_types).permit(types: [])
   end
 
   def provider_params

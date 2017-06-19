@@ -1,4 +1,5 @@
 <% wide ||= false %>
+<% multiple ||= false %>
 
 <% partial_path[:resources].each do |res| %>
   <div class="collect-fields">
@@ -8,15 +9,26 @@
       <% if wide %>
         <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
       <% end %>
-      <%= text_field_tag text_field_tag[:name], res.name, class: "saved-field form-control medium", placeholder: text_field_tag[:placeholder], :maxlength => get_max_length(:default) %>
+      <% additional_classes = multiple ? ' h-34' : '' %>
+      <%= text_field_tag text_field_tag[:name], res.name, class: "saved-field form-control medium " + additional_classes, placeholder: text_field_tag[:placeholder], :maxlength => get_max_length(:default) %>
       
       <% if wide %>
         <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
-        <div class="styled-select form-control medium repeated-field ml-15 h-34">
-          <%= select_tag select_tag[:name], options_for_select(select_tag[:value], select_tag_values(res)) %>
-        </div>
+        <% if multiple %>
+          <div class="chosen-styled-select form-control medium repeated-field ml-15 w-290 min-h-30">
+            <%= collection_select 'tutorial_multiple_types', "[existing_account][types]", select_tag[:value], :to_s, :to_s, { selected: select_tag_values(res) }, { class: "chosen-select", multiple: true, :'data-placeholder' => "Select all that apply" } %>
+          </div>
+        <% else %>
+          <div class="styled-select form-control medium repeated-field ml-15 h-34">
+            <%= select_tag select_tag[:name], options_for_select(select_tag[:value], select_tag_values(res)) %>
+          </div>
+        <% end %>
       <% end %>
       <a data-id=<%= res.id %> class="medium-button outline-button inline-button remove-btn">Remove</a>
     </div>
   </div>
 <% end %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

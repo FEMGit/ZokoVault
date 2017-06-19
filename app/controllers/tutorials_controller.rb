@@ -11,7 +11,8 @@ class TutorialsController < AuthenticatedController
                                                       :important_documents, :video, :new_document]
   
   before_action :redirect_to_last_tutorial, only: [:new]
-  after_action only: [:create, :update, :destroy, :new, :confirmation] do
+  before_action :save_tutorial_progress, only: [:confirmation]
+  after_action only: [:create, :update, :destroy, :new] do
     save_tutorial_progress
   end
 

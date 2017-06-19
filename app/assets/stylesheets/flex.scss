@@ -57,6 +57,7 @@
 
 //TUTORIAL BUTTONS
 .flex-button{
+  position: relative;
   @include display(flex);
   flex-direction: row;
   justify-content: flex-end;

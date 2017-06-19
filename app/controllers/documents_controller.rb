@@ -99,8 +99,12 @@ class DocumentsController < AuthenticatedController
 
     authorize @document
 
+    saved = validate_params && @document.save &&
+                               @document.reload &&
+                               @document.update(document_changes(:create))
+
     respond_to do |format|
-      if validate_params && @document.save && @document.update(document_changes(:create))
+      if saved
         save_traffic_with_params(document_path(@document), 'Uploaded New Document')
         handle_document_saved(format)
       else

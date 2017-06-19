@@ -28,10 +28,10 @@ class DocumentsController < AuthenticatedController
       when 'new'
         return "Add Document"
       when 'edit'
-        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
         return "#{document.name} - Edit"
       when 'show'
-        document = Document.for_user(resource_owner).find_by(id: params[:id])
+        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
         return "#{document.name} - Preview"
     end
   end
@@ -99,8 +99,12 @@ class DocumentsController < AuthenticatedController
 
     authorize @document
 
+    saved = validate_params && @document.save &&
+                               @document.reload &&
+                               @document.update(document_changes(:create))
+
     respond_to do |format|
-      if validate_params && @document.save && @document.update(document_changes(:create))
+      if saved
         save_traffic_with_params(document_path(@document), 'Uploaded New Document')
         handle_document_saved(format)
       else
@@ -149,8 +153,9 @@ class DocumentsController < AuthenticatedController
   end
 
   def download
-    return nil if download_params[:id].nil? || download_params[:id].blank?
-    document_key = Document.for_user(resource_owner).find_by(id: download_params[:id]).try(:url)
+    return if download_params[:uuid].blank?
+    doc = Document.for_user(resource_owner).find_by(uuid: download_params[:uuid])
+    document_key = doc.try(:url)
     data = open(download_file(document_key))
     send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
   end
@@ -213,12 +218,12 @@ class DocumentsController < AuthenticatedController
   end
 
   def set_document
-    @document = Document.find(params[:id])
+    @document = Document.find_by!(uuid: params[:uuid])
     @cards = card_values(@document.category)
   end
 
   def download_params
-    params.permit(:id)
+    params.permit(:uuid)
   end
 
   def base_params
@@ -320,7 +325,7 @@ class DocumentsController < AuthenticatedController
     end
     format.json { render json: @document.as_json.merge(additinal_json_params), status: :created }
   end
-  
+
   def additinal_json_params
     additinal_json_params = Hash.new
     additinal_json_params["primary_tag"] = @document.category

@@ -131,13 +131,13 @@ Rails.application.routes.draw do
   get 'shares' => 'shares#index'
   get 'shares/new/:document' => 'shares#new'
 
-  resources :documents
+  resources :documents, param: :uuid
   get 'documents/get_drop_down_options/:category(/:shared_user_id)', to: 'documents#get_drop_down_options'
   get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
-  get 'documents/edit/:id(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
-  post 'documents/download/:id(/:shared_user_id)', to: 'documents#download', as: :download_document
-  get 'shared_view/:shared_user_id/documents/:id', to: 'documents#show', as: :shared_document
+  get 'documents/edit/:uuid(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
+  post 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document
+  get 'shared_view/:shared_user_id/documents/:uuid', to: 'documents#show', as: :shared_document
 
   get 'account_settings', to: 'account_settings#index', as: :account_settings
   get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users
@@ -285,7 +285,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
 
   # Documents
-  get 'shared_view/:shared_user_id/documents/:id' => 'documents#show', as: :shared_documents
+  get 'shared_view/:shared_user_id/documents/:uuid' => 'documents#show', as: :shared_documents
 
   # Search
   get "/search", to: "search#index", as: :search

@@ -11,7 +11,7 @@
   </div>
   <footer class="modal-footer confirmation-footer">
     <%= link_to 'Save and Continue', '#', class: "button primary-button big-button save-and-continue" %>
-    <%= link_to 'Skip and Continue', '#', class: "button primary-button big-button skip-and-continue margin-bottom-20" %>
+    <%= link_to 'Skip and Continue', '#', class: "button secondary-button big-button skip-and-continue margin-bottom-20" %>
   </footer>
 </div>
 
@@ -78,7 +78,7 @@
         <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
       </div>
     </div>
-    
+
     <p class="mt-30 mb-0"><%= bottom_description %></p>
 
     <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>

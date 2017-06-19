@@ -28,7 +28,7 @@
   </table>
 
   <% @document = Document.new(user: current_user, category: @category.name) %>
-  
+
   <%= form_for @document, html: { id: "doc-form" } do |f| %>
     <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
 
@@ -36,56 +36,70 @@
       <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
       <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button"><%= upload_button_text %></button>
     </div>
- 
+
     <%= f.hidden_field :url %>
 
-    <section id="document-information" style="display: none;">
-      <label>Document Name</label>
-      <span class="error-label name" style="display: none;"></span>
-      <%= f.text_field :name, :maxlength => get_max_length(:default) %>
-  
-      <label>Category</label>
-      <div class="chosen-styled-select">
-        <%= f.collection_select :category,
-          @category_dropdown_options, :to_s, :to_s, {},
-          { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, :onchange => 'get_drop_down_options();' }
-        %>
-      </div>
 
-      <%= render partial: 'layouts/document_subcategory_dropdown', locals: { f: f } %>
-
-      <div class="mt-20">
-        <%= link_to "Add Document", 'javascript:addDocument()', class: "button primary-button big-button" %>
-        <%= link_to "Cancel", 'javascript:cleanUploadedDocument()', class: "button secondary-button big-button" %>
-      </div>
-    </section>
-  <% end %>
 
   <%= render partial: 'tutorials/buttons_section' %>
 </div>
 
+<div id="document-information" class="modal medium-modal card pb-20 tuts-doc-modal" style="display: none;">
+  <h3>Complete Document Upload</h3>
+  <label>Document Name</label>
+  <span class="error-label name" style="display: none;"></span>
+  <%= f.text_field :name, :maxlength => get_max_length(:default) %>
+
+  <label>Category</label>
+  <div class="chosen-styled-select">
+    <%= f.collection_select :category,
+      @category_dropdown_options, :to_s, :to_s, {},
+      { 'data-placeholder' => 'Select...', class: "chosen-select", multiple: false, :onchange => 'get_drop_down_options();' }
+    %>
+  </div>
+
+  <%= render partial: 'layouts/document_subcategory_dropdown', locals: { f: f } %>
+
+  <div class="mt-20">
+    <%= link_to "Complete Document Upload", 'javascript:addDocument()', class: "button primary-button big-button" %>
+    <%= link_to "Cancel", 'javascript:cleanUploadedDocument()', class: "button secondary-button big-button" %>
+  </div>
+</div>
+<% end %>
+
 <script>
+
   var fileToPage = function(file) {
+
     setDocumentValues(file.filename, file.key)
     $('#document-information').show()
     $('#file-pick-section').hide()
+    $("body").append("<div class='modal-overlay js-modal-close'></div>");
+    $(".modal-overlay").fadeTo(500, 0.8);
+    $(".js-modalbox").fadeIn(500);
+    var modalBox = $(this).attr('data-modal-id');
+    $('#'+modalBox).fadeIn($(this).data());
+    $('.chosen-container').css({"width": "100%"});
   }
-  
+
   var cleanUploadedDocument = function() {
     setDocumentValues('', '')
     $('#document-information').hide()
     $('#file-pick-section').show()
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+        $(".modal-overlay").remove();
+    });
     errorMessageHide()
     cancelDropdownSelections()
   }
-  
+
   var setDocumentValues = function(name, url) {
     var documentNameField = document.getElementById("document_name")
     var documentUrl = document.getElementById("document_url")
     documentNameField.value = name
     documentUrl.value = url
   }
-  
+
   var addDocument = function() {
     var serialized_data = $('#doc-form').serialize()
 
@@ -97,6 +111,9 @@
     }).success(function(data) {
       $('#document-information').hide()
       $('#file-pick-section').show()
+      $(".modal, .modal-overlay").fadeOut(500, function() {
+          $(".modal-overlay").remove();
+      });
       tableUpdate(data)
       cancelDropdownSelections()
       errorMessageHide()
@@ -107,12 +124,12 @@
       }
     });
   }
-  
+
   var cancelDropdownSelections = function() {
     $('#subcategory-dropdown').find('select.chosen-select').val('Select...')
     $('#subcategory-dropdown').find('select.chosen-select').trigger("chosen:updated")
   }
-  
+
   var tableUpdate = function(data) {
     var primary_tag = "<span class='doc-tag'>" + data['primary_tag'] + "</span>"
     var secondary_tag = (data['secondary_tag'] !== undefined) ? ("<span class='doc-tag secondary-tag'>" + data['secondary_tag'] + "</span>") : ""
@@ -128,12 +145,12 @@
     $('#documents-table').show()
     $('.flash-success-static.flash').show()
   }
-  
+
   var errorMessageShow = function(message) {
     $('.error-label.name').show()
     $('.error-label.name').text(" - " + message)
   }
-  
+
   var errorMessageHide = function() {
     $('.error-label.name').text("")
     $('.error-label.name').hide()
@@ -146,11 +163,19 @@
         info: false,
         aaSorting: [[0, 'asc']]
     });
-    
+
     if ($('.flash-success.flash').text() === 'Document was successfully created.') {
       $('.flash.important-doc').show()
+      $(".modal-overlay").remove();
     }
 
     $('.chosen-select').chosen()
   });
+  $(window).resize(function() {
+    $(".medium-modal").css({
+      top: ($(window).height() - $(".modal").outerHeight()) / 2,
+      left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+    });
+  });
+  $(window).resize();
 </script>

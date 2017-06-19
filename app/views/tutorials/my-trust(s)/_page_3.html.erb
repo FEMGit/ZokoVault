@@ -1,11 +1,11 @@
 <%= render  partial: 'tutorials/tutorial_contact_create',
             locals: { title: 'Add Your Attorney',
                       description: 'Adding your attorney helps your family know who to contact for questions about your trusts and family entities.',
-                      table: { table_title: 'Your Trust Planning Attorneys',
+                      table: { table_title: 'Your Attorneys',
                                contacts: @trust_planning_attorneys,
                                table_id: 'attorney-table' },
                       flash_message: 'You added an Attorney! Add another one of your Trust Planning Attorneys, or click Next.' ,
-                      button_text: 'Add Trust Planning Attorney' } %>
+                      button_text: 'Add Attorney' } %>
 
 <script>
   var createContact = function() {

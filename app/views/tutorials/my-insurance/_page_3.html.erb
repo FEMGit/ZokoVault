@@ -4,7 +4,7 @@
 <%= render partial: 'tutorials/add_remove_tutorial',
                      locals: { form_controller: :healths,
                                title: 'Add Health Insurance',
-                               description: 'Please add your insurance provider name(s) below.  You will have the opportunity to add additional details (e.g. policy numbers, insured members, coverage amounts, etc) later.',
+                               description: 'Add your insurance provider(s).  You will have the opportunity to add additional details (e.g. policy numbers, insured members, coverage amounts, etc.) later.',
                                form_for_object: @insurance_card,
                                label_tag: { name: 'insurance_provider', value: 'Insurance Provider Name' },
                                partial_path: { resources: healths },

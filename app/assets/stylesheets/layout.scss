@@ -428,3 +428,13 @@ body.logged-out{
     max-width: 80%;
   }
 }
+
+// IE Edge Fix
+@supports (-ms-ime-align:auto) {
+  .ie-edge-bottom {
+    margin-bottom: 100px;
+    &.shared {
+      margin-bottom: 140px;
+    }
+  }
+}

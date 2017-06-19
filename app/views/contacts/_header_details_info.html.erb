@@ -40,7 +40,7 @@
 
     <% if @contact.relationship.present? %>
       <label>Relationship</label>
-      <p><%= @contact.relationship %></p>
+      <p><span class="fw-600 clr-color-primary-shaded"><%= contact_status(@contact) %></span> <%= @contact.relationship %></p>
     <% end %>
 
     <% if @contact.personal_relationship? %>

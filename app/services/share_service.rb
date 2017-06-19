@@ -26,7 +26,21 @@ class ShareService
     end
   end
   
+  def self.get_all_cards(owner, contact)
+    return [] unless (owner.primary_shared_with_by_contact? contact)
+    resource = 
+      FinancialProvider.for_user(owner) + 
+      Will.for_user(owner) +
+      PowerOfAttorneyContact.for_user(owner) +
+      Entity.for_user(owner) +
+      Trust.for_user(owner) +
+      Vendor.for_user(owner) +
+      Tax.for_user(owner) +
+      FinalWish.for_user(owner)
+  end
+  
   def self.shared_documents_by_contact(resource_owner, contact)
+    return Document.for_user(resource_owner) if (resource_owner.primary_shared_with_by_contact? contact)
     shareables = SharedViewService.shares_by_contact(resource_owner, contact).select(&:shareable_type).map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
     
@@ -56,6 +70,9 @@ class ShareService
   end
   
   def self.shared_cards(owner, user = nil, contact = nil)
+    if (contact.present? && (owner.primary_shared_with_by_contact? contact))
+      return get_all_cards(owner, contact)
+    end
     shareables =
       if contact.present?
         SharedViewService.shares_by_contact(owner, contact).select(&:shareable_type).map(&:shareable)
@@ -75,9 +92,11 @@ class ShareService
   
   def self.shared_categories(owner, user = nil, contact = nil)
     if contact.present?
+      return Rails.application.config.x.ShareCategories.dup if (owner.primary_shared_with_by_contact? contact)
       SharedViewService.shares_by_contact(owner, contact).select(&:shareable_type)
                                                          .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     elsif user.present?
+      return Rails.application.config.x.ShareCategories.dup if (owner.primary_shared_with? user)
       SharedViewService.shares(owner, user).select(&:shareable_type)
                                            .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     end

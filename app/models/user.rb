@@ -65,6 +65,13 @@ class User < ActiveRecord::Base
                .include? email.downcase
   end
   
+  def primary_shared_with_by_contact?(contact)
+    return false unless contact.present?
+    user_profile.primary_shared_with
+                .map { |sh| sh.emailaddress.downcase }
+                .include? contact.emailaddress.downcase
+  end
+  
   def primary_shared_with_or_owner?(shared_user)
     return false unless shared_user.present?
     return true if shared_user == self

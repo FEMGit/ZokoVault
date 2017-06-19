@@ -32,7 +32,7 @@ class WelcomeController < AuthenticatedController
       end
     end
     @shared_resources = @shared_resources.compact.flatten
-    @shared_users = @shares.map(&:user).compact.uniq
+    @shared_users = (@shares.map(&:user).compact + current_user.user_profile.primary_shared_with).uniq
 
     @new_shares = @new_shares.compact.flatten.uniq(&:user_id)
     

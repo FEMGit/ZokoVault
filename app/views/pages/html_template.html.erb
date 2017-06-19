@@ -30,23 +30,23 @@
 <h3 class="mt-20 mb-20 max-w-1000-centered">Let's get started!</h3>
 <div class="card vault-info mb-30 text-center max-w-1000-centered">
   <h1 class="mb-20">Let's get started!</h1>
-  
+
   <h4 class="mb-30 lh-35 max-w-1000 clr-gray-dark inline-block fw-500">What would you like to do first?</h4>
-  
+
     <div class="max-w-800 m-0-auto mb-30 pl-15 pr-15">
       <section class="b-gray-med mb-30">
         <%= image_tag "SVG/shield-family.svg", :class => "w-75 inline-block mt-20"%>
         <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Protect My Family's Legacy</span><br>I want to make sure my family would have everything they need if something happened to me.</h4>
         <span class="clear mb-20"></span>
       </section>
-   
+
      <section class="b-gray-med mb-30">
        <%= image_tag "SVG/consolidate.svg", :class => "w-120 inline-block mt-20"%>
        <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Consolidate My Documents & Information</span><br>I want to be able to access all of my documents and critical information whenever I need them.</h4>
        <span class="clear mb-20"></span>
      </section>
-   
-   
+
+
      <section class="b-gray-med mb-30">
        <%= image_tag "SVG/transfer.svg", :class => "w-100 inline-block mt-15"%>
        <h4 class="description lh-30 clr-gray-dark-tinted w-80-percent text-aligned fr mt-10"><span class="inline-block mb-10 fw-600">Transfer Files</span><br>I want to send request files from a trusted advisor, friend or family member.</h4>
@@ -64,25 +64,25 @@
       <use xlink:href="#icon-Safe"></use>
     </svg> Shared With
   </h2>
-  
+
   <span class="mb-30 inline-block">ZokuVault lets you securely share your vault with family members and professional advisors.<br>
      Here are some examples of how people share with ZokuVault.
   </span>
-  
+
    <div class="max-w-600 m-0-auto mb-30">
      <%= image_tag "marketing/lock.png", :class => "w-120 inline-block w-30-percent"%>
      <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share your entire vault with your spouse/domestic partner.</h4>
      <span class="clear mb-30"></span>
-   
+
      <%= image_tag "marketing/files.png", :class => "w-120 inline-block w-30-percent"%>
      <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share documents with your estate planning attorney.</h4>
      <span class="clear mb-30"></span>
-   
+
      <%= image_tag "marketing/rocket.png", :class => "w-120 inline-block w-30-percent"%>
      <h4 class="description lh-30 clr-gray-dark-tinted w-70-percent fr mt-10">You can share your kids insurance cards with your parents.</h4>
      <span class="clear mb-30"></span>
    </div>
-  
+
   <section class="mt-30 bt-gray-light pt-20 mb-10 flex-button">
     <a class="big-button outline-button padded f-left">Back</a>
     <a class="big-button outline-button padded">Skip</a>
@@ -97,19 +97,19 @@
     <%= image_tag "marketing/lock.png", :class => "w-120 mb-30" %><br>
     <p class="mb-30">You can share your entire vault with one other person. When you share with this user they will have full access to all of your documents, data and contacts. They are not required to pay any additional freed for this access.</p>
   </section>
-  
+
   <div class="card shared-with shared-bottom-border b-radius-0 bl-none mb-30">
     <h3 class="card-label fn clr-color-primary mb-30">
       <svg class="icon" viewBox="0 0 20 20">
         <use xlink:href="#icon-Safe"></use>
       </svg>
-      Primary Shared With
+      Vault Co-Owner
     </h3>
     <%= render partial: 'layouts/static_chosen_select', locals: { field_multiple: true, field_name: 'primary_shared_with', field_id: 'primary_shared_with_id' } %>
   </div>
-  
+
   <span>When you share with Contact Name, ZokuVault will send a <%= link_to 'message', 'javascript:void(0);', class: 'no-underline-link' %> to let them know.</span>
-  
+
   <section class="mt-30 bt-gray-light pt-20 mb-10 flex-button">
     <a class="big-button outline-button padded f-left">Back</a>
     <a class="big-button outline-button padded">Skip</a>
@@ -128,7 +128,7 @@
 <div class="card mb-30 max-w-1000-centered">
   <h3 class="mb-20">Thanks for Being a Trial Member</h3>
   <p class="mb-20">Please help us by answering a few questions.</p>
-  
+
   <p>1. Why did you quit your account?</p>
   <ul class="check-list ml-15">
     <li class="check-list">
@@ -147,10 +147,10 @@
       </label>
     </li>
   </ul>
-  
+
   <p>2. Do you have feedback you would like to leave our team?</p>
   <%= text_area_tag 'feedback', nil, class: 'max-w-430 h-100' %>
-  
+
   <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
     <a class="big-button outline-button padded f-left">Back</a>
     <a class="big-button outline-button padded">Skip</a>
@@ -171,7 +171,7 @@
       <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Your trial membership has ended!</h5>
       <span class="text-center mb-30">You have started your journey to securing your life's important details.
       <% if account_data_any? %> You have stored: <% end %></span>
-      
+
       <ul class="membership-stats text-center list-style-type-none">
         <% if (count = family_members_count) > 0 %>
           <li><%= count %> family members</li>
@@ -186,7 +186,7 @@
           <li><%= count %> documents</li>
         <% end %>
       </ul>
-      
+
       <div class="text-center flex-footer">
         <span class="mb-0"><%= link_to 'Continue Subscription', 'javascript:void(0);', class: 'button big-button blue-button mr-0' %></span>
         <span class="mb-30"><%= link_to 'No Thanks', 'javascript:void(0);', class: 'no-underline-link block' %></span>

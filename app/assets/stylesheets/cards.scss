@@ -96,6 +96,7 @@ img.questionnaire-heart {
     }
     .get-started {
       padding-bottom: 10px;
+      padding-right: 10px;
     }
     @include media($tablet) {
       .get-started {
@@ -105,6 +106,7 @@ img.questionnaire-heart {
       .description {
         text-align: center !important;
         width: 100% !important;
+        margin-top: 10px !important;
       }
       .text-aligned {
         text-align: center !important;

@@ -2,8 +2,8 @@ class TutorialsController < AuthenticatedController
   include UserTrafficModule
   include BackPathHelper
   include TutorialsHelper
+  before_action :save_return_to_path, only: [:new, :confirmation, :show]
   skip_before_filter :complete_setup!, except: :show
-  skip_before_filter :mfa_verify!
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
   layout 'without_sidebar_layout'
 
@@ -11,7 +11,8 @@ class TutorialsController < AuthenticatedController
                                                       :important_documents, :video, :new_document]
   
   before_action :redirect_to_last_tutorial, only: [:new]
-  after_action only: [:create, :update, :destroy, :new, :confirmation] do
+  before_action :save_tutorial_progress, only: [:confirmation]
+  after_action only: [:create, :update, :destroy, :new] do
     save_tutorial_progress
   end
 
@@ -29,28 +30,6 @@ class TutorialsController < AuthenticatedController
       when 'Video'
         "Guided Tutorial - Video"
     end
-  end
-  
-  def tutorial_add_document
-    # Save breadcrumbs for current tutorial page
-    @page_number   = params[:page_number]
-    @tutorial_name = params[:tutorial_name]
-    if @tutorial_name.include? 'wills'
-      if @page_number.to_i.eql? 2
-        add_breadcrumb "Wills Tutorial - Digital Will", '/tutorials/wills/2'
-        cache_breadcrumbs_write
-      end
-      @category = Rails.application.config.x.WillsPoaCategory
-    end
-    if @tutorial_name.include? 'taxes'
-      if @page_number.to_i.eql? 1
-        add_breadcrumb "Taxes Tutorial - Digital Tax Records", '/tutorials/taxes/1'
-        cache_breadcrumbs_write
-      end
-      @category = Rails.application.config.x.TaxCategory
-    end
-    session[:tutorial_index] -= 1
-    redirect_to new_document_path(:first_run => true, :category => @category) and return
   end
 
   def primary_contacts
@@ -104,7 +83,8 @@ class TutorialsController < AuthenticatedController
     if params["tutorial"].present?
       session[:tutorials_list] = params["tutorial"]
     else
-      redirect_to tutorials_confirmation_path and return
+      session[:tutorial_index] += 1
+      redirect_to tutorial_page_path('shares', 1) and return
     end
     session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1
@@ -168,9 +148,9 @@ class TutorialsController < AuthenticatedController
       tutorial_name = Subtutorial.find_by(:id => subtutorial_id).try(:name)
       return unless tutorial_name.present?
       begin
-        if tutorial_name.eql? 'I have a will.'
+        if tutorial_name.eql? 'My will.'
           Will.create!(title: current_user.name + ' Will', user: current_user)
-        elsif tutorial_name.eql? 'My spouse has a will.'
+        elsif tutorial_name.eql? "My spouse's will."
           spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse / Domestic Partner')
           spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
         end
@@ -214,13 +194,14 @@ class TutorialsController < AuthenticatedController
     list.each do |tuto|
       tutorial = Tutorial.find(tuto)
       if tutorial.has_subtutorials?
-        result << tutorial_path(tuto, 'subtutorials_choice', tutorial)
+        result << tutorial_path_hash(tuto, 'subtutorials_choice', tutorial)
       else
         tutorial.number_of_pages.times do |p|
-          result << tutorial_path(tuto, p + 1, tutorial)
+          result << tutorial_path_hash(tuto, p + 1, tutorial)
         end
       end
     end
+    result << { tuto_id: -1, current_page: 1, tuto_name: 'shares' } # tutorial / shares main page
     result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
   end
   
@@ -240,16 +221,8 @@ class TutorialsController < AuthenticatedController
     tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>tuto_index.to_s, :current_page=>"subtutorials_choice", :tuto_name=> tuto_name})
     
     session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
-                               subtutorials_path.collect { |s| tutorial_path(tuto_index, s, tutorial) } +
+                               subtutorials_path.collect { |s| tutorial_path_hash(tuto_index, s, tutorial) } +
                                session[:tutorial_paths][tutorial_path_position + 1..-1]
-  end
-  
-  def tutorial_path(tuto, current_page, tutorial)
-    {
-      tuto_id: tuto,
-      current_page: current_page,
-      tuto_name: tutorial_id(tutorial.name)
-    }
   end
   
   def subtutorial_id_params

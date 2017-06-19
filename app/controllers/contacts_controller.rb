@@ -180,7 +180,6 @@ class ContactsController < AuthenticatedController
   def handle_contact_saved(format)
     UpdateDocumentService.new(:user => resource_owner, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
     format.html { redirect_to success_path(contact_details_path(@contact), contact_details_path(@contact, @shared_user)), flash: { success: 'Contact was successfully created.' } }
-    format.json { render :show, status: :created, location: @contact }
 
     contact_ids = Contact.for_user(resource_owner).sort_by { |s| s.lastname.downcase }.map(&:id)
     contact_position = contact_ids.find_index(@contact.id)
@@ -191,7 +190,7 @@ class ContactsController < AuthenticatedController
       shared_after_id = share_contact_after_id(contact_ids, contact_position)
     end
 
-    format.js { render json: @contact.slice(:id, :firstname, :lastname, :relationship, :emailaddress).merge(:position => general_after_id, shared_position: shared_after_id), status: :ok }
+    format.json { render json: @contact.slice(:id, :firstname, :lastname, :relationship, :emailaddress).merge(:position => general_after_id, shared_position: shared_after_id), status: :ok }
   end
   
   def general_after_id(contact_ids, contact_position)

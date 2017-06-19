@@ -1,8 +1,10 @@
 class PagesController < HighVoltage::PagesController
   include BreadcrumbsCacheModule
+  include BackPathHelper
   include TutorialsHelper
+  before_action :save_return_to_path, only: [:show]
   before_action :set_cache_headers
-  before_action :set_tutorial, :set_contacts, only: [:show]
+  before_action :set_tutorial, :set_contacts, :set_shares_information, only: [:show]
   layout 'without_sidebar_layout'
   
   before_action :redirect_to_last_tutorial, :save_tutorial_progress, only: [:show]
@@ -52,21 +54,76 @@ class PagesController < HighVoltage::PagesController
   end
 
   def set_contacts
-    if @tutorial_name.include? 'i-have-a-family'
+    return unless current_user
+    if @tutorial_name.include? 'my-family'
       set_primary_shared_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-insurance'
+    elsif @tutorial_name.include? 'my-insurance'
       @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
-    elsif @tutorial_name.include? 'i-have-tax-documents'
+    elsif @tutorial_name.include? 'my-taxes'
       set_taxes_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-a-trust'
+    elsif @tutorial_name.include? 'my-trust(s)'
       set_trusts_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-a-will'
+    elsif @tutorial_name.include? 'my-will(s)'
       set_wills_tutorial_contacts
-    elsif @tutorial_name.include? 'i-have-financial-information'
+    elsif @tutorial_name.include? 'my-financial-information'
       set_financial_information_tutorial_contacts
     end
     @contact = Contact.new(user: current_user)
     redirect_if_incorrect_url
+  end
+  
+  def set_shares_information
+    if @tutorial_name.eql? 'shares'
+      case @page_number.to_i
+        when 1
+          update_shares_tutorial_path
+        when 2
+          set_taxes_tutorial_contacts
+        when 3
+          set_financial_information_tutorial_contacts
+        when 4
+          set_wills_tutorial_contacts
+        when 5
+          set_trusts_tutorial_contacts
+      end
+    end
+  end
+  
+  def update_shares_tutorial_path
+    @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+    @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    if @tax_accountants.blank? && @financial_advisors.blank? && 
+        @estate_planning_attorneys.blank? && @trust_planning_attorneys.blank?
+      redirect_to tutorials_confirmation_path and return;
+    else
+      add_shares_tutorials
+    end
+  end
+  
+  def shares_tutorial_clear
+    shares_tutorial_params = { name: 'shares', tuto_id: -1}
+    shares_tutorial = Tutorial.where("name ilike ?", shares_tutorial_params[:name].downcase).first
+    (2..5).each do |tutorial_index|
+      session[:tutorial_paths].delete(tutorial_path_hash(shares_tutorial_params[:tuto_id], tutorial_index, shares_tutorial))
+    end
+  end
+  
+  def add_shares_tutorials
+    shares_tutorial_clear
+    shares_tutorial_params = { name: 'shares', tuto_id: -1}
+    shares_tutorial = Tutorial.where("name ilike ?", shares_tutorial_params[:name].downcase).first
+    subtutorials_path = []
+    subtutorials_path << tutorial_path_hash(shares_tutorial_params[:tuto_id], 2, shares_tutorial) if @tax_accountants.present?
+    subtutorials_path << tutorial_path_hash(shares_tutorial_params[:tuto_id], 3, shares_tutorial) if @financial_advisors.present?
+    subtutorials_path << tutorial_path_hash(shares_tutorial_params[:tuto_id], 4, shares_tutorial) if @estate_planning_attorneys.present?
+    subtutorials_path << tutorial_path_hash(shares_tutorial_params[:tuto_id], 5, shares_tutorial) if @trust_planning_attorneys.present?
+
+    tutorial_path_position = session[:tutorial_paths].index({:tuto_id=>shares_tutorial_params[:tuto_id], :current_page=>1, :tuto_name=> shares_tutorial_params[:name]})
+    session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
+                               subtutorials_path +
+                               session[:tutorial_paths][tutorial_path_position + 1..-1]
   end
   
   def set_primary_shared_tutorial_contacts

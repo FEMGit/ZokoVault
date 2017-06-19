@@ -196,7 +196,6 @@ Rails.application.routes.draw do
   get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
   get 'tutorials/getting_started/new_document' => 'tutorials#new_document', as: :tutorial_new_document
   get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
-  get '/tutorial_add_document/:page_number/:tutorial_name', to: 'tutorials#tutorial_add_document', as: :tutorial_add_document
 
   get 'tutorials/confirmation', to: 'tutorials#confirmation', as: :tutorials_confirmation
   get 'tutorials/lets_get_started', to: 'tutorials#lets_get_started', as: :tutorials_lets_get_started
@@ -341,6 +340,7 @@ Rails.application.routes.draw do
   get "/setup", to: "pages#setup", as: :setup
   get "/styleguide", to: "pages#styleguide"
   get "/terms_of_service", to: "pages#terms_of_service", as: :terms_of_service
+  get "/product_video", to: "pages#product_video"
   get "/html_template", to: "pages#html_template", as: :html_template
 
   get '/support/new_message', to: 'email_support#index', as: :email_support

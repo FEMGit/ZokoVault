@@ -1,4 +1,4 @@
-<h1>Contacts and Permissions</h1>
+<h1>Contacts & Permissions</h1>
 
 <%= link_to contact_new_path(@shared_user), class: "add-link fr" do %>
   <span class="circle-button">
@@ -29,7 +29,10 @@
         <td><%= contact.lastname %></td>
         <td><%= contact.firstname %></td>
         <td><%= contact.emailaddress %></td>
-        <td><%= contact.relationship %></td>
+        <td>
+          <span class="fw-600 clr-color-primary-shaded"><%= contact_status(contact) %></span>
+          <%= contact.relationship %>
+        </td>
         <td class="details-col"><%= link_to 'Details', contact_details_path(contact, @shared_user), class: "outline-button small-button" %></td>
       </tr>
     <% end %>

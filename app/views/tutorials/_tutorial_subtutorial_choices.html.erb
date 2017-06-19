@@ -1,5 +1,9 @@
-<div class="card mb-30 mt-20 max-w-1000-centered no-pages-form">
-  <h1 class="mb-20"><%= title %></h1>
+<% description ||= "" %>
+<% title ||= "" %>
+
+<div class="card mb-30 mt-20 max-w-1000-centered no-pages-form text-center">
+  <h1><%= title %></h1>
+  <p class="inline-block"><%= description %></p>
   <%= form_for @tutorial do |f| %>
     <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
     <%= hidden_field_tag :next_page_number, @next_page %>

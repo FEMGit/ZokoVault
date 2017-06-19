@@ -12,7 +12,7 @@ class UsageMetricsController < AuthenticatedController
                 :shares_per_user, :user_invitations_count, :user_invitations_emails,
                 :user_traffic, :categories_with_information_count,
                 :subcategories_with_information_count, :user_type
-  
+
   before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial, :create_trial]
   before_action :set_user_traffic, only: [:statistic_details]
 
@@ -38,7 +38,7 @@ class UsageMetricsController < AuthenticatedController
         return "Admin User Details - #{user.name}"
     end
   end
-  
+
   def update_information
     UserService.update_user_information(@user_models)
     redirect_to usage_metrics_path
@@ -63,7 +63,7 @@ class UsageMetricsController < AuthenticatedController
   def edit_user
     @subscription_info = subscription_info
   end
-  
+
   def create_trial
     SubscriptionService.activate_trial(user: @user)
     redirect_to admin_edit_user_path(@user)
@@ -196,26 +196,26 @@ class UsageMetricsController < AuthenticatedController
     completed = @user_models.select { |x| x.where(:user_id => user.id).any? }
     (@user_models - completed).map(&:name)
   end
-  
+
   def models_with_user_set
     update_model_list
     all_models = ActiveRecord::Base.descendants
     delete_system_models(all_models)
     @user_models = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
   end
-  
+
   def categories_with_information_count(user)
     user.category_count
   end
-  
+
   def subcategories_with_information_count(user)
     user.subcategory_count
   end
-  
+
   def update_model_list
     Rails.application.eager_load!
   end
-  
+
   def user_type(user)
     if user.current_user_subscription
       if user.current_user_subscription.active_trial?
@@ -230,14 +230,14 @@ class UsageMetricsController < AuthenticatedController
         "Invalid User Type"
       end
     elsif user.primary_shared_of_paid?
-      "Primary Shared of Paid"
+      "Vault Co-Owner of Paid"
     elsif user.paid?
       "Paid"
     elsif user.free?
       "Free"
     end
   end
-  
+
   def death_traps
     @user_errors = UserDeathTrap.last(1000)
   end

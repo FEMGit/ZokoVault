@@ -19,6 +19,8 @@ module SharedViewHelper
   def category_name(category)
     if category.eql? Rails.application.config.x.WillsPoaCategory
       "Wills & Powers of Attorney"
+    elsif category.eql? Rails.application.config.x.ContactCategory
+      "Contacts"
     else
       category
     end

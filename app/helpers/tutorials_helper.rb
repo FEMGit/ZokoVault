@@ -17,21 +17,21 @@ module TutorialsHelper
   
   def tutorial_icon(tutorial_id)
     case tutorial_id
-      when 'i-have-a-will'
+      when 'my-will(s)'
         '#icon-ribbon'
-      when 'i-have-insurance'
+      when 'my-insurance'
         '#icon-document-shield'
-      when 'i-have-tax-documents'
+      when 'my-taxes'
         '#icon-document-3'
-      when 'i-have-a-trust'
+      when 'my-trust(s)'
         '#icon-shield-check'
-      when 'i-have-financial-information'
+      when 'my-financial-information'
         '#icon-piggy-bank'
-      when 'i-own-a-vehicle'
+      when 'my-vehicle(s)'
         '#icon-car-large'
-      when 'i-have-a-home'
+      when 'my-home'
         '#icon-house-large'
-      when 'i-have-a-family'
+      when 'my-family'
         '#icon-woman'
       else
         '#icon-activity-monitor-1'
@@ -41,56 +41,50 @@ module TutorialsHelper
   def subtutorial_icon(tutorial_id)
     case tutorial_id
       # Will
-      when 'i-have-a-will',
-           'my-spouse-has-a-will'
+      when 'my-will',
+           "my-spouse's-will"
         '#icon-ribbon'
-      when 'i-have-an-estate-planning-attorney'
+      when 'my-estate-planning-attorney'
         '#icon-woman'
   
       # Taxes
       when 'i-have-tax-documents'
         '#icon-document-3'
-      when 'i-want-to-store-my-digital-tax-files'
+      when 'my-digital-tax-files'
         '#icon-document-3'
-      when'i-have-a-tax-accountant'
+      when'my-tax-accountant'
         '#icon-calculator'
     
       # Trusts
-      when 'i-have-a-trust'
+      when 'my-trust'
         '#icon-trust'
-      when 'i-have-a-family-entity'
+      when 'my-family-entity'
         '#icon-family'
-      when 'i-have-a-trust-or-entity-attorney'
+      when 'my-attorney'
         '#icon-business-man-2'
      
       # Financial Information
-      when 'i-have-a-financial-advisor'
+      when 'my-financial-advisor'
         '#icon-business-man-2'
-      when 'i-have-a-checking-account'
+      when 'my-bank-accounts'
         '#icon-check'
-      when 'i-have-investments'
+      when 'my-other-investments'
         '#icon-graph-3'
-      when 'i-have-mortgage'
-        '#icon-house-large'
-      when 'i-have-valuable-property'
+      when 'my-valuable-property'
         '#icon-gold'
-      when 'i-have-credit-cards'
-        '#icon-credit-card-1'
-      when 'i-have-jewelry'
-        '#icon-ring'
-      when 'i-have-alternative-investments'
+      when 'my-alternative-investments'
         '#icon-document-financial'
-      when 'i-own-a-business'
+      when 'my-business'
         '#icon-building'
       
       # Insurance
-      when 'i-have-life-or-disability-insurance'
+      when 'my-life-or-disability-insurance'
         '#icon-document-shield'
-      when 'i-have-property-insurance'
+      when 'my-property-insurance'
         '#icon-umbrella-1'
-      when 'i-have-health-insurance'
+      when 'my-health-insurance'
         '#icon-shield-health'
-      when 'i-have-an-insurance-broker'
+      when 'my-insurance-broker(s)'
         '#icon-business-man-2'
       else
         '#icon-activity-monitor-1'
@@ -104,7 +98,7 @@ module TutorialsHelper
   
   def tutorial_name(tutorial_id)
     return "" unless tutorial_id.present?
-    (tutorial_id.split("-").join(" ") + '.').downcase
+    (tutorial_id.split("-").join(" ")).downcase
   end
   
   def select_tag_values(resource)
@@ -128,7 +122,7 @@ module TutorialsHelper
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
     if session[:tutorial_paths].present? &&
-         session[:tutorial_paths][tuto_undex].present?
+         session[:tutorial_paths][tuto_index].present?
       next_page = session[:tutorial_paths][tuto_index][:current_page]
       path = if next_tuto[:tuto_name] == 'confirmation_page'
         tutorials_confirmation_path
@@ -157,7 +151,7 @@ module TutorialsHelper
 
   # Will Subtutorials
   def will_subtutorial_show?(tutorial)
-    return true unless tutorial.name.eql? 'My spouse has a will.'
+    return true unless tutorial.name.eql? "My spouse's will."
     Contact.for_user(current_user).any? { |c| c.relationship == 'Spouse / Domestic Partner' }
   end
 
@@ -211,11 +205,30 @@ module TutorialsHelper
 
   def tutorial_selection_exists?
     tutorial_selection = TutorialSelection.find_by(user: current_user)
+    return false unless tutorial_selection
     current_tutorial = tutorial_selection.tutorial_paths[tutorial_selection.last_tutorial_index]
     if !current_tutorial["tuto_name"].eql? 'vault_co_owners'
       return tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
     else
       return (request.fullpath == onboarding_back_path)
+    end
+  end
+
+  # Tutorial Path Generation
+  def tutorial_path_hash(tuto, current_page, tutorial)
+    {
+      tuto_id: tuto,
+      current_page: current_page,
+      tuto_name: tutorial_id(tutorial.name)
+    }
+  end
+
+  # Tutorial Buttons
+  def skip_button_path
+    if @next_tutorial_name == 'confirmation_page'
+      tutorials_confirmation_path
+    else
+      tutorial_page_path(@next_tutorial_name, @next_page)
     end
   end
 end

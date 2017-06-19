@@ -2,6 +2,6 @@
 <% if contact.present? %>
   <p class="max-w-1000" id="share-contact-message-<%=contact.id%>">
     <%= link_to 'Preview invitation email.', 'javascript:displayEmailPreview(' + contact.try(:id).try(:to_s) + ')' %><br>
-    This message is sent to <%= contact.name %> when you Continue.
+    This message will be sent to <%= contact.name %> when you Continue.
   </p>
 <% end %>

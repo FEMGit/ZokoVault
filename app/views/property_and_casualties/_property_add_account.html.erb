@@ -17,9 +17,9 @@
   </div>
   
   <label>Coverage Amount</label>
-  <%= ff.text_field :coverage_amount, id: "property_coverage_id_#{index}", maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
-  :value => ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "$") %>
-
+  <%= render partial: 'layouts/currency_field', locals: { f: ff, field_name: :coverage_amount, field_id: "property_coverage_id_#{index}",
+                                                          value: ff.object && number_to_currency(ff.object.coverage_amount, precision: 0, unit: "$") } %>
+                                                          
   <label>Policy Number</label>
   <%= ff.text_field :policy_number, id: "property_policy_number_id_#{index}", :maxlength => get_max_length(:default) %>
 

@@ -29,8 +29,8 @@
   </div>
 
   <%= f.label :value, 'Value' %>
-  <%= f.text_field :value, maxLength: 9, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
-  :value => f.object && number_to_currency(f.object.value, precision: 0, unit: "$") %>
+  <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: :value, field_id: "financial_investment_value",
+                                                          value: f.object && number_to_currency(f.object.value, precision: 0, unit: "$") } %>
 
   <%= f.label :primary_contact_id, 'Primary Contact' %>
   <div class="chosen-styled-select">

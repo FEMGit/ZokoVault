@@ -1,0 +1,8 @@
+<% negative ||= false %>
+<% if negative%>
+  <%= f.text_field field_name, id: field_id, maxLength: 13, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "-$"} },
+      :value => value, style: "color: red;" %>
+<% else %>
+  <%= f.text_field field_name, id: field_id, maxLength: 13, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
+      :value => value %>
+<% end %>

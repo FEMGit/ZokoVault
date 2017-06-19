@@ -17,6 +17,25 @@
   font-weight: normal;
 }
 
+@mixin chosen-width($width) {
+  select,
+  .chosen-container,
+  .chosen-choices,
+  .chosen-results,
+  .chosen-drop {
+    width: $width;
+    @include media($mobile) {
+      width: 100% !important;
+    }
+  }
+  input {
+    max-width: $width;
+    @include media($mobile) {
+      max-width: 100% !important;
+    }
+  }
+}
+
 @mixin avatar-circle($radius) {
   width: $radius;
   height: $radius;

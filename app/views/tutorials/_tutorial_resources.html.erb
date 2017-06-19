@@ -4,7 +4,7 @@
 <% partial_path[:resources].each do |res| %>
   <div class="collect-fields">
     <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
-    <div class="input-pair <% if wide %> wide <% end %> tutorial-fields <%= fields_class %>">
+    <div class="input-pair <% if wide %> wide <% end %> <% if multiple %> multiple-edge <% end %> tutorial-fields <%= fields_class %>">
       
       <% if wide %>
         <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>

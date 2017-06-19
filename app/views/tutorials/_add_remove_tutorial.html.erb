@@ -30,9 +30,9 @@
       <div class="input-pair wide mobile-hide h-25">
         <% label_tag.each_with_index do |tag, index| %>
           <% if multiple %>
-            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-3 min-w-250' : 'max-w-300 min-w-225 flex-47 ') %>
+            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-3 min-w-250' : 'max-w-300 min-w-225 flex-47 multiple-edge-label') %>
           <% else %>
-            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : '') %>
+            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : ' max-w-270-edge min-w-270-edge') %>
           <% end %>
           <%= label_tag tag[:name], tag[:value], class: label_class %>
         <% end %>
@@ -57,11 +57,11 @@
         <%= hidden_field_tag hidden_field_tag_value[:name], hidden_field_tag_value[:value] %>
       <% end %>
 
-      <div class="input-pair <% if wide %> wide <% end %> tutorial-fields add-tutorial <%= fields_class %>">
+      <div class="input-pair <% if wide %> wide <% end %> <% if multiple %> multiple-edge <% end %> tutorial-fields add-tutorial <%= fields_class %>">
         <% if wide %>
           <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
         <% end %>
-        <% additional_classes = multiple ? ' h-34' : '' %>
+        <% additional_classes = multiple ? ' h-34 ' : '' %>
         <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field" + additional_classes, placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
           <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>

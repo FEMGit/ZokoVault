@@ -70,24 +70,7 @@ class FinancialAccountController < AuthenticatedController
   end
   
   def tutorial_multiple_type_create
-    return false unless tutorial_multiple_types_params.present?
-    account_types = tutorial_multiple_types_params[:types].reject(&:blank?)
-    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
-    authorize @financial_provider
-    account_types.collect! { |x| [account_type: x] }.flatten!
-    account_types.each do |account_type|
-      FinancialInformationService.fill_accounts({ account_type: account_type }, @financial_provider, resource_owner.id)
-    end
-    respond_to do |format|
-      if @financial_provider.save
-        if params[:tutorial_name]
-          tutorial_redirection(format, @financial_provider.as_json, 'Account was successfully created.')
-        end
-      else
-        tutorial_error_handle("Fill in Provider Name field to continue") && return
-      end
-    end
-    true
+    multiple_types_create(tutorial_multiple_types_params, :account_type, resource_owner, 'Account was successfully created.')
   end
 
   def create
@@ -115,6 +98,11 @@ class FinancialAccountController < AuthenticatedController
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def update_all
+    TutorialService.update_tutorial_with_multiple_dropdown(update_all_params, FinancialAccountInformation, resource_owner, :account_type)
+    render :nothing => true
   end
 
   def update
@@ -168,7 +156,7 @@ class FinancialAccountController < AuthenticatedController
     return unless contacts.present?
     @financial_provider.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
-
+  
   def prepare_share_params
     return unless provider_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)

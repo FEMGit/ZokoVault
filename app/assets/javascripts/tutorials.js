@@ -8,15 +8,56 @@ var modalScreenShift = function(element) {
   element.css("margin-top", offset + "px")
 }
 
-var DynamicTutorialField = function(creationPath, destroyPath) {
+var DynamicTutorialField = function(creationPath, destroyPath, updatePath) {
   this.submitURL = creationPath;
   this.destroyURL = destroyPath;
+  this.updateURL = updatePath;
   this.fields = '.tutorial-fields';
   this.addBtn = '.tutorial-fields .add-another-btn';
   this.savedClass = '.saved-field';
   this.addAnotherBtnListener();
   this.listenUnsavedChanges();
 };
+
+DynamicTutorialField.prototype.updateAll = function () {
+  var that = this
+  var request = '{ "update_fields": [ '
+  var tutorialFields = $(".tutorial-fields").not('.add-tutorial')
+  $.each(tutorialFields, function(index, value) {
+    var id = $(value).find('a').last().attr('data-id')
+    var name = $(value).find("input[type='text']").val()
+    var select = $(value).find('select').val()
+    if (select == null) {
+      request += '{ ' + ' "id" : ' + id + ', "name" :"' + name + '"}'
+    } else {
+      request += '{ ' + ' "id" : ' + id + ', "name" :"' + name + '",' + '"types": [' 
+      
+      if (select instanceof Array) {
+        for(var i = 0; i < select.length; i++) {
+          request += '"' + select[i] + '"'
+          if (i < select.length - 1) {
+            request += ","
+          }
+        }
+      } else {
+        request += '"' + select + '"'
+      }
+      request += '] }'
+    }
+    
+    if (index < tutorialFields.length - 1) {
+      request += ','
+    }
+  })
+  request += ' ] }'
+  
+  return $.ajax({
+    url: that.updateURL,
+    type: 'POST',
+    dataType: 'json',
+    data: JSON.parse(request)
+  });
+}
 
 DynamicTutorialField.prototype.addRow = function($btn, id) {
   var html = $btn.closest(this.fields).clone();
@@ -62,6 +103,9 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
 
     if (that.fieldIsEmpty($btn))
       that.submit($btn).success(function(data) {
+        // Add hidden field with record id
+        $('<a data-id="' + data.id + '">').attr('type', 'hidden').appendTo($('.input-pair.tutorial-fields').last())
+        
         $btn.closest('.repeated-field').addClass('saved-field');
         that.addRow($btn, data.id);
         $('.tutorial-fields.add-tutorial').removeClass('add-tutorial')
@@ -159,38 +203,49 @@ $(document).on('ready', function() {
   if (tutorial_fields.length) {
     var create = ''
     var destroy = ''
+    var update = ''
     if (tutorial_fields.hasClass('property-fields')) {
       create = "/financial_information/property/add_property";
       destroy = "/financial_information/property/";
+      update = "/financial_information/property/update_all";
     } else if (tutorial_fields.hasClass('account-fields')) {
       create = "/financial_information/account/add_account";
       destroy = "/financial_information/account/provider/";
+      update = "/financial_information/account/update_all"
     } else if (tutorial_fields.hasClass('investment-fields')) {
       create = "/financial_information/investment/add_investment";
       destroy = "/financial_information/investment/";
+      update = "/financial_information/investment/update_all"
     } else if (tutorial_fields.hasClass('alternative-fields')) {
       create = "/financial_information/alternative/add_alternative";
       destroy = "/financial_information/alternative/provider/";
+      update = "/financial_information/alternative/update_all"
     } else if (tutorial_fields.hasClass('trust-fields')) {
       create = "/trusts/";
       destroy = "/trusts/";
+      update = "/trusts/update_all";
     } else if (tutorial_fields.hasClass('entity-fields')) {
-      var create = "/entities/";
-      var destroy = "/entities/";
+      create = "/entities/";
+      destroy = "/entities/";
+      update = "/entities/update_all";
     } else if (tutorial_fields.hasClass('health-fields')) {
       create = "/insurance/healths";
       destroy = "/insurance/healths/provider/";
+      update = "/insurance/healths/update_all";
     } else if (tutorial_fields.hasClass('property-casualty-fields')) {
       create = "/insurance/properties";
       destroy = "/insurance/properties/provider/";
+      update = "/insurance/properties/update_all";
     } else if (tutorial_fields.hasClass('life-disability-fields')) {
       create = "/insurance/lives";
       destroy = "/insurance/lives/provider/";
+      update = "/insurance/lives/update_all";
     }
 
-    var tutorial = new DynamicTutorialField(create, destroy);
+    var tutorial = new DynamicTutorialField(create, destroy, update);
 
     $('.remove-btn').each(function(){ tutorial.removeBtnListener($(this)) })
+    $("input[type='submit']").on('click', function(){ tutorial.updateAll() })
   }
   
   // Subtutorials with no-page (some action only)

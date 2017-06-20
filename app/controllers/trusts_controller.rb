@@ -77,6 +77,11 @@ class TrustsController < AuthenticatedController
     check_tutorial_params(params[:vault_entry_0][:name]) && return
     save_or_update_trust(:new)
   end
+  
+  def update_all
+    TutorialService.update_tutorial_without_dropdown(update_all_params, Trust, resource_owner)
+    render :nothing => true
+  end
 
   def update
     save_or_update_trust(:edit)
@@ -193,7 +198,7 @@ class TrustsController < AuthenticatedController
       end
     end
   end
-
+  
   def tutorial_params
     params.permit(:tutorial_name)
   end

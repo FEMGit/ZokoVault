@@ -102,9 +102,9 @@ module TutorialsHelper
   end
   
   def select_tag_values(resource)
-    resource.try(:alternatives).try(:first).try(:alternative_type) ||
-      resource.try(:investment_type) ||
-      resource.try(:accounts).map(&:account_type) || ''
+    return resource.try(:accounts).map(&:account_type) if resource.try(:provider_type) == "Account"
+    return resource.try(:alternatives).map(&:alternative_type) if resource.try(:provider_type) == "Alternative"
+    resource.try(:investment_type) || ''
   end
   
   def check_tutorial_params(property_param)
@@ -232,5 +232,35 @@ module TutorialsHelper
     else
       tutorial_page_path(@next_tutorial_name, @next_page)
     end
+  end
+
+  # Tutorial Update
+  def update_all_params
+    params.require('update_fields')
+  end
+
+  def multiple_types_create(tutorial_multiple_types_params, key, resource_owner, error_message)
+    return false unless tutorial_multiple_types_params.present?
+    types = tutorial_multiple_types_params[:types].reject(&:blank?)
+    @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
+    authorize @financial_provider
+    types.collect! { |x| [key => x] }.flatten!
+    types.each do |type|
+      if key.eql? :account_type
+        FinancialInformationService.fill_accounts({ key => type }, @financial_provider, resource_owner.id)
+      elsif key.eql? :alternative_type
+        FinancialInformationService.fill_alternatives({ key => type }, @financial_provider, resource_owner.id)
+      end
+    end
+    respond_to do |format|
+      if @financial_provider.save
+        if params[:tutorial_name]
+          tutorial_redirection(format, @financial_provider.as_json, error_message)
+        end
+      else
+        tutorial_error_handle("Fill in Provider Name field to continue") && return
+      end
+    end
+    true
   end
 end

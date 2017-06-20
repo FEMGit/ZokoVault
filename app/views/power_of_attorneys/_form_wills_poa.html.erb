@@ -1,14 +1,22 @@
 <div class="card attorney mb-30">
 
   <%= f.hidden_field :id, id: "attorney_id_#{index}" %>
+  <% errors = data.try(:errors) %>
+  
   <h3 class="card-label">Legal Details</h3>
 
-  <label>Agent</label>
+  <label>Agent</label><span class="required">Required</span>
+  <% if errors && errors.messages[:agents].present? %>
+    <span class="error-label"> - <%= errors.messages[:agents].first %></span>
+  <% end %>
   <div class="chosen-styled-select">
     <%= contact_select_with_create_new(f, :agent_ids, @contacts, id: "attorney_agent_id_#{index}", multiple: false, value: data && data.agent_ids) %>
   </div>
 
   <label>This Agent's powers are (please choose all that apply):</label>
+  <% if errors && errors.messages[:powers].present? %>
+    <span class="error-label"> - <%= errors.messages[:powers].first %></span>
+  <% end %>
   <ul class="check-list">
     <% PowerOfAttorney::POWERS.each do |option| %>
       <li class="check-list">
@@ -56,5 +64,6 @@
     });
     
     $newWtlForm.find("#delete-legal").remove();
+    $newWtlForm.find(".error-label").hide();
   }
 </script>

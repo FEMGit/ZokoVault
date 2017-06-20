@@ -3,9 +3,13 @@
 <h1><%= yield(:title) + ' - Setup' %></h1>
   <%= form_for(@power_of_attorney_contact, url: "#{yield(:url_path)}") do |f| %>
   <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
+  <% errors = @power_of_attorney_contact.errors %>
 
   <div class="card attorney mb-30">
-    <%= f.label :contact_id, 'Power of Attorney For' %>
+    <%= f.label :contact_id, 'Power of Attorney For' %><span class="required">Required</span>
+    <% if errors && errors.messages[:contact].present? %>
+      <span class="error-label"> - <%= errors.messages[:contact].first %></span>
+    <% end %>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(f, :contact_id, @contacts, id: "power_of_attorney_for_id", multiple: false) %>
     </div>

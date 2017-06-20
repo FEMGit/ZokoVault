@@ -16,6 +16,14 @@ module BreadcrumbsErrorModule
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
+  
+  def poa_error_breadcrumb_update
+    breadcrumbs.clear
+    add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path if general_view?
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(shared_user_id: @shared_user.id) if shared_view?
+    set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
 
   def entities_breadcrumb_update
     breadcrumbs.clear

@@ -27,6 +27,8 @@ class PowerOfAttorneyContact < ActiveRecord::Base
 
   attr_writer :share_with_contact_ids
   
+  validates :contact, presence: { message: 'Required' }
+  
   private
   
   def build_shares

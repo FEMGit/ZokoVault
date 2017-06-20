@@ -16,6 +16,7 @@ class PowerOfAttorneysController < AuthenticatedController
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
   
@@ -88,11 +89,11 @@ class PowerOfAttorneysController < AuthenticatedController
         WtlService.fill_agents(@power_of_attorney_contact, power_of_attorney_params)
         @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
         format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully created.' } }
-        format.json { render :show, status: :created, location: @insurance_card }
+        format.json { render :show, status: :created, location: @power_of_attorney_contact }
       else
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
-        format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
+        format.json { render json: @power_of_attorney_contact.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -104,16 +105,24 @@ class PowerOfAttorneysController < AuthenticatedController
       if @power_of_attorney_contact.update(power_of_attorney_contact_params)
         WtlService.update_shares(@power_of_attorney_contact.id, @power_of_attorney_contact.share_with_contact_ids, resource_owner.id, PowerOfAttorneyContact)
         WtlService.fill_agents(@power_of_attorney_contact, power_of_attorney_params)
-        will_poa_id = CardDocument.find_by(card_id: @power_of_attorney_contact.id, object_type: 'PowerOfAttorneyContact').id
-        ShareInheritanceService.update_document_shares(resource_owner, @power_of_attorney_contact.share_with_contact_ids,
-                                                       @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
-        @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
-        format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully updated.' } }
-        format.json { render :show, status: :created, location: @insurance_card }
+        if @power_of_attorney_contact.power_of_attorneys.any? { |poa| !poa.valid? }
+          @power_of_attorney_contact.valid?
+          @power_of_attorney_contact.power_of_attorneys.map(&:valid?)
+          error_path(:edit)
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
+          format.json { render json: @power_of_attorney_contact.errors, status: :unprocessable_entity }
+        else
+          will_poa_id = CardDocument.find_by(card_id: @power_of_attorney_contact.id, object_type: 'PowerOfAttorneyContact').id
+          ShareInheritanceService.update_document_shares(resource_owner, @power_of_attorney_contact.share_with_contact_ids,
+                                                         @previous_shared_with, Rails.application.config.x.WillsPoaCategory, nil, nil, nil, will_poa_id)
+          @path = success_path(power_of_attorney_path(@power_of_attorney_contact), power_of_attorney_path(@power_of_attorney_contact, resource_owner))
+          format.html { redirect_to @path, flash: { success: 'Power of Attorney successfully updated.' } }
+          format.json { render :show, status: :created, location: @power_of_attorney_contact }
+        end
       else
         error_path(:edit)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
-        format.json { render json: @insurance_card.errors, status: :unprocessable_entity }
+        format.json { render json: @power_of_attorney_contact.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -157,10 +166,10 @@ class PowerOfAttorneysController < AuthenticatedController
   end
 
   def error_path(action)
-    breadcrumbs.clear
     @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
     @shared_user = ReturnPathService.shared_user(@path)
     @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    poa_error_breadcrumb_update
   end
 
   def success_path(common_path, shared_view_path)
@@ -220,7 +229,7 @@ class PowerOfAttorneysController < AuthenticatedController
     attorneys.keys.each do |attorney|
       permitted_params[attorney] = [:id, :agent_ids, :notes, :document_id, powers: PowerOfAttorney::POWERS]
     end
-    attorneys.values.map { |p| p["powers"] }.each { |p| p.reject! { |_k, v| v.blank? } }
+    attorneys.values.map { |p| p["powers"] }.each { |p| p && p.reject! { |_k, v| v.blank? } }
     attorneys.permit(permitted_params)
   end
 

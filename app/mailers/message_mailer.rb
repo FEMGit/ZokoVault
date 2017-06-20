@@ -1,6 +1,6 @@
 class MessageMailer < ApplicationMailer
   layout 'mailer'
-    
+
   def membership_ended(message)
     @message = message
     mail subject: "Membership ended #{message.name}"

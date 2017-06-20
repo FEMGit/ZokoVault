@@ -1,6 +1,6 @@
 class ShareInvitationMailer < ApplicationMailer
   layout 'mailer'
-  
+
   def new_user(contact, resource_owner)
     @contact = contact
     @resource_owner = resource_owner

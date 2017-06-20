@@ -21,14 +21,14 @@ class TutorialsController < AuthenticatedController
 
   def page_name
     case action_name
-      when 'primary_contacts'
-        "Guided Tutorial - Primary Contacts"
-      when 'trusted_advisors'
-        "Guided Tutorial - Trusted Advisors"
-      when 'important_documents'
-        "Guided Tutorial - Important Documents"
-      when 'Video'
-        "Guided Tutorial - Video"
+      when 'lets_get_started'
+        "Guided Tutorial - Lets Get Started"
+      when 'vault_co_owners'
+        "Guided Tutorial - Vault Co-Owner"
+      when 'confirmation'
+        "Guided Tutorial - Confirmation"
+      when 'new'
+        "Guided Tutorial - Start"
     end
   end
 

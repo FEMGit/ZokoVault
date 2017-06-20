@@ -208,6 +208,7 @@ module TutorialsHelper
     tutorial_selection = TutorialSelection.find_by(user: current_user)
     return false unless tutorial_selection
     current_tutorial = tutorial_selection.tutorial_paths[tutorial_selection.last_tutorial_index]
+    return false unless current_tutorial
     if !current_tutorial["tuto_name"].eql? 'vault_co_owners'
       return tutorial_selection.present? && tutorial_selection.tutorial_paths.present?
     else

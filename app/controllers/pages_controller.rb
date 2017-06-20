@@ -1,4 +1,5 @@
 class PagesController < HighVoltage::PagesController
+  include UserTrafficModule
   include BreadcrumbsCacheModule
   include BackPathHelper
   include TutorialsHelper
@@ -8,6 +9,17 @@ class PagesController < HighVoltage::PagesController
   layout 'without_sidebar_layout'
   
   before_action :redirect_to_last_tutorial, :save_tutorial_progress, only: [:show]
+  
+  def page_name
+    return unless current_user.present? &&
+                  params[:tutorial_id].present?
+    case action_name
+      when 'show'
+        @tutorial_name = params[:tutorial_id]
+        @tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@tutorial_name)).first
+        "Guided Tutorial - #{@tutorial.try(:name)}" 
+    end
+  end
 
   def show
     redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?

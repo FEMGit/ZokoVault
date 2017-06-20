@@ -1,5 +1,5 @@
 <% if @shared_user.present? %>
-  <%= link_to 'Edit', edit_documents_path(id: document.id, shared_user_id: @shared_user.id), class: "outline-button small-button" %>
+  <%= link_to 'Edit', edit_documents_path(document, @shared_user), class: "outline-button small-button" %>
 <% else %>
   <%= link_to 'Edit', edit_documents_path(document), class: "outline-button small-button" %>
   <%= link_to 'Delete', document_path(document), method: :delete, data: {confirm: 'Are you sure?'}, class: "outline-button small-button" %>

@@ -110,6 +110,11 @@ class LifeAndDisabilitiesController < AuthenticatedController
       end
     end
   end
+  
+  def update_all
+    TutorialService.update_tutorial_without_dropdown(update_all_params, Vendor, resource_owner)
+    render :nothing => true
+  end
 
   # PATCH/PUT /lives/1
   # PATCH/PUT /lives/1.json
@@ -157,7 +162,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   end
 
   private
-
+  
   def tutorial_params
     params.permit(:tutorial_name)
   end

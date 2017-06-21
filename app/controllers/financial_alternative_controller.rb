@@ -68,9 +68,14 @@ class FinancialAlternativeController < AuthenticatedController
     authorize @financial_provider
     set_viewable_contacts
   end
+  
+  def tutorial_multiple_type_create
+    multiple_types_create(tutorial_multiple_types_params, :alternative_type, resource_owner, 'Alternative was successfully created.')
+  end
 
   def create
     check_tutorial_params(provider_params[:name]) && return
+    tutorial_multiple_type_create && return
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
@@ -93,6 +98,11 @@ class FinancialAlternativeController < AuthenticatedController
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def update_all
+    TutorialService.update_tutorial_with_multiple_dropdown(update_all_params, FinancialAlternative, resource_owner, :alternative_type)
+    render :nothing => true
   end
 
   def update
@@ -146,7 +156,7 @@ class FinancialAlternativeController < AuthenticatedController
     return unless contacts.present?
     @financial_provider.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
-
+  
   def prepare_share_params
     return unless provider_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
@@ -196,6 +206,10 @@ class FinancialAlternativeController < AuthenticatedController
     @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @financial_provider.id)
   end
 
+  def tutorial_multiple_types_params
+    return nil if params[:tutorial_multiple_types].blank?
+    params.require(:tutorial_multiple_types).permit(types: [])
+  end
 
   def provider_params
     params.require(:financial_provider).permit(:id, :name, :web_address, :street_address, :city, :state, :zip, :phone_number, :fax_number, :primary_contact_id, :category_id,

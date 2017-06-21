@@ -32,6 +32,11 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
+  
+  # Insurance Update All
+  post 'insurance/lives/update_all' => 'life_and_disabilities#update_all'
+  post 'insurance/healths/update_all' => 'healths#update_all'
+  post 'insurance/properties/update_all' => 'property_and_casualties#update_all'
 
   # Mailer
   post 'contact_us', to: 'messages#create'
@@ -96,6 +101,7 @@ Rails.application.routes.draw do
   patch 'trusts/:id', to: 'trusts#update'
   get 'trusts', to: 'trusts#index', as: :trusts
   post 'trusts', to: 'trusts#create'
+  post 'trusts/update_all', to: 'trusts#update_all'
   put 'trusts', to: 'trusts#update'
   delete 'trusts/:id', to: 'trusts#destroy'
 
@@ -105,6 +111,7 @@ Rails.application.routes.draw do
   patch 'entities/:id', to: 'entities#update'
   get 'entities/:id(/:shared_user_id)', to: 'entities#show', as: :entity
   post 'entities', to: 'entities#create', as: :entities
+  post 'entities/update_all', to: 'entities#update_all'
   delete 'entities/:id', to: 'entities#destroy'
 
   resources :categories do
@@ -233,6 +240,7 @@ Rails.application.routes.draw do
   get 'financial_information/alternative/:id/edit(/:shared_user_id)', to: 'financial_alternative#edit', as: :edit_alternative
   get 'financial_information/alternative/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :account_alternative
   post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :create_alternative
+  post 'financial_information/alternative/update_all', to: 'financial_alternative#update_all'
   put 'financial_information/alternative/add_alternative', to: 'financial_alternative#update'
   delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :delete_provider_alternative
   delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy', as: :delete_alternative
@@ -243,6 +251,7 @@ Rails.application.routes.draw do
   get 'financial_information/account/:id/edit(/:shared_user_id)', to: 'financial_account#edit', as: :edit_account
   get 'financial_information/account/:id(/:shared_user_id)', to: 'financial_account#show', as: :account_details
   post 'financial_information/account/add_account', to: 'financial_account#create', as: :create_account
+  post 'financial_information/account/update_all', to: 'financial_account#update_all'
   put 'financial_information/account/add_account', to: 'financial_account#update'
   delete 'financial_information/account/provider/:id', to: 'financial_account#destroy_provider', as: :delete_provider_account
   delete 'financial_information/account/:id', to: 'financial_account#destroy', as: :delete_account
@@ -253,6 +262,7 @@ Rails.application.routes.draw do
   get 'financial_information/property/:id/edit(/:shared_user_id)', to: 'financial_property#edit', as: :edit_financial_property
   get 'financial_information/property/:id(/:shared_user_id)', to: 'financial_property#show', as: :property_details
   post 'financial_information/property/add_property', to: 'financial_property#create', as: :create_property
+  post 'financial_information/property/update_all', to: 'financial_property#update_all', as: :update_all
   delete 'financial_information/property/:id', to: 'financial_property#destroy', as: :delete_property
 
   # Financial Investment
@@ -261,6 +271,7 @@ Rails.application.routes.draw do
   get 'financial_information/investment/:id/edit(/:shared_user_id)', to: 'financial_investment#edit', as: :edit_investment
   get 'financial_information/investment/:id(/:shared_user_id)', to: 'financial_investment#show', as: :investment_details
   post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :create_investment
+  post 'financial_information/investment/update_all', to: 'financial_investment#update_all'
   put 'financial_information/investment/add_investment', to: 'financial_investment#update'
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy', as: :delete_investment
 

@@ -96,6 +96,11 @@ class FinancialPropertyController < AuthenticatedController
       end
     end
   end
+  
+  def update_all
+    TutorialService.update_tutorial_without_dropdown(update_all_params, FinancialProperty, resource_owner)
+    render :nothing => true
+  end
 
   def update
     authorize @financial_property
@@ -144,7 +149,7 @@ class FinancialPropertyController < AuthenticatedController
     return unless contacts.present?
     @financial_property.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
-
+  
   def prepare_share_params
     return unless property_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)

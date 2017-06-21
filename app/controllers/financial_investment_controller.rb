@@ -95,6 +95,11 @@ class FinancialInvestmentController < AuthenticatedController
       end
     end
   end
+  
+  def update_all
+    TutorialService.update_tutorial_with_single_dropdown(update_all_params, FinancialInvestment, resource_owner, :investment_type)
+    render :nothing => true
+  end
 
   def update
     authorize @financial_investment
@@ -128,7 +133,7 @@ class FinancialInvestmentController < AuthenticatedController
   end
 
   private
-
+  
   def provider_type
     FinancialProvider::provider_types["Investment"]
   end
@@ -143,7 +148,7 @@ class FinancialInvestmentController < AuthenticatedController
     return unless contacts.present?
     @financial_investment.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
-
+  
   def prepare_share_params
     return unless investment_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)

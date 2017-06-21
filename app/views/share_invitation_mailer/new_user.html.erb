@@ -625,7 +625,7 @@
 
         <p>Dear <%= @contact.firstname %>,</p>
 
-        <p><%= @resource_owner.name %> has invited you to join ZokuVault.  Accepting this invitation will allow you to securely view information specified by <%= @resource_owner.first_name %>. and upload requested information into their Vault.  Signing up is easy, and only takes a few minutes.  Please follow the link below to open your free account and begin collaborating with <%= @resource_owner.first_name %>.<p>
+        <p><%= @resource_owner.name %> has invited you to join ZokuVault.  Accepting this invitation will allow you to securely view information specified by <%= @resource_owner.first_name %> and upload requested information into their Vault.  Signing up is easy, and only takes a few minutes.  Please follow the link below to open your free account and begin collaborating with <%= @resource_owner.first_name %>.<p>
         <p><%= link_to 'Secure Sign Up', sign_up_url %></p>
 
         <p><%= @resource_owner.first_name %> thanks you in advance for your participation in their important planning. Please visit <%= link_to 'www.zokuvault.com', root_url %> for more information.</p>

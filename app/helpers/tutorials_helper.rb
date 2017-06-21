@@ -86,6 +86,8 @@ module TutorialsHelper
         '#icon-shield-health'
       when 'my-insurance-broker(s)'
         '#icon-business-man-2'
+      when 'upload-my-policies'
+        '#icon-document-3'
       else
         '#icon-activity-monitor-1'
     end

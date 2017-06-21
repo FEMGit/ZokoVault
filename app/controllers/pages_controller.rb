@@ -70,7 +70,7 @@ class PagesController < HighVoltage::PagesController
     if @tutorial_name.include? 'my-family'
       set_primary_shared_tutorial_contacts
     elsif @tutorial_name.include? 'my-insurance'
-      @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+      set_insurance_tutorial_contacts
     elsif @tutorial_name.include? 'my-taxes'
       set_taxes_tutorial_contacts
     elsif @tutorial_name.include? 'my-trust(s)'
@@ -195,6 +195,12 @@ class PagesController < HighVoltage::PagesController
     set_tutorial
   end
   
+  def set_insurance_tutorial_contacts
+    @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+    @insurance_policies = Document.for_user(current_user).where(category: Rails.application.config.x.InsuranceCategory)
+    set_documents_information(Rails.application.config.x.InsuranceCategory)
+  end
+  
   def set_taxes_tutorial_contacts
     @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
     
@@ -222,6 +228,7 @@ class PagesController < HighVoltage::PagesController
   end
   
   def set_documents_information(category_name)
+    @category = Category.fetch(category_name.downcase)
     @category_dropdown_options = Array.wrap(category_name)
     service = DocumentService.new(:category => category_name)
     @card_names = service.get_card_names(current_user, current_user)

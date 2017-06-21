@@ -8,7 +8,7 @@ class AuthenticatedController < ApplicationController
   
   def trial_check
     return unless is_expired_trial_user?
-    if !trial_whitelist_page? && !permitted_page_free_user?
+    if !trial_whitelist_page? && !permitted_page_trial_expired_user?
       redirect_to trial_ended_path
     end
   end
@@ -60,12 +60,18 @@ class AuthenticatedController < ApplicationController
       payment_path,
       subscriptions_account_path,
       apply_promo_code_account_path,
-      account_path
+      account_path,
+      mfa_path,
+      verify_code_account_path
     ].include?(request.path_info)
   end
 
   def permitted_page_free_user?
-    !!(controller_name && UserPageAccess::FREE.include?(controller_name))
+    controller_name && UserPageAccess::FREE.include?(controller_name)
+  end
+  
+  def permitted_page_trial_expired_user?
+    controller_name && UserPageAccess::TRIAL_EXPIRED.include?(controller_name)
   end
 
   def missing_mfa?

@@ -362,6 +362,9 @@ Rails.application.routes.draw do
   # Email helper
   get '/email/share_invitation_mailer_name/:contact_id', to: 'email#share_invitation_mailer_name'
   get 'email/email_preview_line/:contact_id', to: 'email#email_preview_line'
+  
+  # Corporate Account
+  get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

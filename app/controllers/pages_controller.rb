@@ -150,15 +150,6 @@ class PagesController < HighVoltage::PagesController
     
     @family_records = Document.for_user(current_user).where(category: Rails.application.config.x.ContactCategory)
     set_documents_information(Rails.application.config.x.ContactCategory)
-    
-    # Check that 'Spouse' was added
-    if @page_number.to_i > 1 && !@primary_contacts.any? { |pc| pc.relationship.eql? 'Spouse / Domestic Partner' }
-      spouse_not_added_handle
-    elsif @page_number.to_i == 1
-      if session[:tutorial_paths][session[:tutorial_index] + 1][:tuto_id].to_s != @tutorial.id.to_s
-        restore_family_tutorial_session
-      end
-    end
   end
   
   def redirect_if_incorrect_url
@@ -168,28 +159,37 @@ class PagesController < HighVoltage::PagesController
     end
   end
   
-  def spouse_not_added_handle
+  def contact_not_added_handle(from, number_of_pages)
     tuto_index = session[:tutorial_index]
     return unless tuto_index
-      session[:tutorial_index] += @tutorial.number_of_pages - 1
-      (1...@tutorial.number_of_pages).each do 
-        session[:tutorial_paths].delete_at(tuto_index)
-        session[:tutorial_index] -= 1
-      end
-      reset_tutorial_parameters
+    session[:tutorial_index] += number_of_pages - 1
+    (from..number_of_pages).each do
+      session[:tutorial_paths].delete_at(tuto_index)
+      session[:tutorial_index] -= 1
+    end
+    reset_tutorial_parameters
   end
   
-  def restore_family_tutorial_session
-    current_tutorial_params = {:tuto_id=>@tutorial.id.to_s, :current_page=>@page_number.to_i, :tuto_name=> params[:tutorial_id]}
+  def restore_tutorial_session(from_page_number, number_of_pages)
+    current_tutorial_params = {:tuto_id => @tutorial.id, :current_page => @page_number.to_i, :tuto_name => params[:tutorial_id]}
     tutorial_path_position = session[:tutorial_paths].index(current_tutorial_params)
     subtutorial_paths = []
-    (2..@tutorial.number_of_pages).each do |page_number|
+    (from_page_number..number_of_pages).each do |page_number|
+      tutorial_to_add = { tuto_id: @tutorial.id, current_page: page_number, tuto_name: params[:tutorial_id] }
+      next if session[:tutorial_paths].index(tutorial_to_add).present?
       subtutorial_paths << { tuto_id: @tutorial.id, current_page: page_number, tuto_name: params[:tutorial_id] }
     end
     session[:tutorial_paths] = session[:tutorial_paths][0..tutorial_path_position] +
                                subtutorial_paths + 
                                session[:tutorial_paths][tutorial_path_position + 1..-1]
     reset_tutorial_parameters
+  end
+  
+  def redirect_if_incorrect_url
+    current_tutorial_path = Rails.application.routes.recognize_path(request.fullpath)
+    if current_tutorial_path[:tutorial_id] != @tutorial_name
+      redirect_to tutorial_page_path(@tutorial_name, @page_number)
+    end
   end
   
   def reset_tutorial_parameters
@@ -210,6 +210,13 @@ class PagesController < HighVoltage::PagesController
     @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
     set_documents_information(Rails.application.config.x.TaxCategory)
     set_contact_and_category_share(@tax_accountants, Rails.application.config.x.TaxCategory)
+    
+    # Check that 'Attorney' was added
+    if @page_number.to_i == 2 && !@tax_accountants.any? { |pc| (pc.relationship.eql? 'Accountant') && (pc.contact_type.eql? 'Advisor') }
+      contact_not_added_handle(2, 2)
+    elsif @page_number.to_i == 1
+      restore_tutorial_session(2, 2)
+    end
   end
   
   def set_trusts_tutorial_contacts

@@ -1,0 +1,15 @@
+<% table_info_collection ||= [] %>
+
+<div class="card vault-info mb-30 text-center max-w-1000-centered">
+  <h1 class="mb-20"><%= title %></h1>
+  <p class="inline-block mb-30"><%= paragraph %></p>
+  <div class="flex-boxes text-left percent-100 justify-content-center">
+    <% table_info_collection.each do |table_info| %>
+      <div class="flex-column">
+        <%= render partial: "tutorials/tutorial_one_column_table", locals: { title: table_info[:title], rows: table_info[:rows] } %>
+      </div>
+    <% end %>
+  </div>
+  
+  <%= render partial: 'tutorials/buttons_section' %>
+</div>

@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170622051804) do
-
+ActiveRecord::Schema.define(version: 20170622091829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -82,6 +81,15 @@ ActiveRecord::Schema.define(version: 20170622051804) do
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
   add_index "contacts", ["uuid"], name: "index_contacts_on_uuid", unique: true, using: :btree
+
+  create_table "corporate_admin_account_users", id: false, force: :cascade do |t|
+    t.integer  "corporate_admin_id"
+    t.integer  "user_account_id"
+    t.datetime "confirmation_sent_at"
+  end
+
+  add_index "corporate_admin_account_users", ["corporate_admin_id"], name: "index_corporate_admin_account_users_on_corporate_admin_id", using: :btree
+  add_index "corporate_admin_account_users", ["user_account_id"], name: "index_corporate_admin_account_users_on_user_account_id", using: :btree
 
   create_table "current_user_subscription_markers", id: false, force: :cascade do |t|
     t.integer "user_id",              null: false

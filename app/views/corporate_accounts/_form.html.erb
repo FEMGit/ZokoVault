@@ -1,0 +1,59 @@
+<h1>Add User Account</h1>
+
+  <%= form_for @user_account, url: create_corporate_account_path, method: :post do |f| %>
+    <% if @user_account.errors.any? %>
+      <% errors = @user_account.errors %>
+    <% else %>
+      <% errors = nil %>
+    <% end %>
+
+    <div class="card mb-30">
+      <h3 class="card-label">Personal Information</h3>
+
+      <%= f.fields_for :user_profile do |user_profile_form| %>
+        <%= user_profile_form.label :first_name, 'First Name' %>
+        <% if errors && errors.messages[:"user_profile.first_name"] %>
+          <span class="error-label"> - <%= errors.messages[:"user_profile.first_name"].first %></span>
+        <% end %>
+        <%= user_profile_form.text_field :first_name, { class: ("input-error" if errors && errors.messages[:"user_profile.first_name"].present?), :maxlength => get_max_length(:default) } %>
+
+        <%= user_profile_form.label :last_name, 'Last Name' %>
+        <% if errors && errors.messages[:"user_profile.last_name"] %>
+          <span class="error-label"> - <%= errors.messages[:"user_profile.last_name"].first %></span>
+        <% end %>
+        <%= user_profile_form.text_field :last_name, { class: ("input-error" if errors && errors.messages[:"user_profile.last_name"].present?), :maxlength => get_max_length(:default) } %>
+      <% end %>
+
+      <%= f.label :email, 'Email Address' %>
+      <% if errors && errors.messages[:email] %>
+        <span class="error-label"> - <%= errors.messages[:email].first %></span>
+      <% end %>
+      <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
+
+      <%= f.fields_for :user_profile do |user_profile_form| %>
+        <%= user_profile_form.label :two_factor_phone_number, 'Cell Phone Number' %>
+        <%= render partial: 'layouts/phone_number', locals: { f: user_profile_form, phone: :two_factor_phone_number } %>
+
+        <%= user_profile_form.label :phone_number, 'Home Phone Number' %>
+        <%= render partial: 'layouts/phone_number', locals: { f: user_profile_form, phone: :phone_number } %>
+
+        <%= user_profile_form.label :street_address_1, 'Street Address' %>
+        <%= user_profile_form.text_field :street_address_1, { :maxlength => get_max_length(:default) } %>
+
+        <%= user_profile_form.label :city %>
+        <%= user_profile_form.text_field :city, { :maxlength => get_max_length(:default) } %>
+
+        <span class="state-input">
+          <%= user_profile_form.label :state %>
+          <div class="styled-select">
+            <%= user_profile_form.select :state, options_for_select(us_states, user_profile_form.object.state), :include_blank => "Select..." %>
+          </div>
+        </span>
+        <span class="zip-input">
+          <%= user_profile_form.label :zip, 'Zip Code' %>
+          <%= render partial: 'layouts/zip_code', locals: { f: user_profile_form, zip: :zip } %>
+        </span>
+      <% end %>
+    </div>
+    <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: corporate_accounts_path, f: f } %>
+<% end %>

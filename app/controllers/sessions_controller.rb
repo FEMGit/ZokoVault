@@ -10,17 +10,28 @@ class SessionsController < Devise::SessionsController
   end
 
   def create
+    try_set_failed_attempts_to_zero
     super
     flash.delete(:notice)
   end
 
   private
   
+  def try_set_failed_attempts_to_zero
+    user = User.find_by(email: login_params[:email])
+    if user.present? && user.corporate_user? && !user.corporate_invitation_sent?
+      user.update(:failed_attempts => 0)
+    end
+  end
+  
+  def login_params
+    params.require(:user)
+  end
+  
   def set_alert_message
     return if resource.blank? || resource.email.blank?
     user = User.find_by(email: resource.email)
     return if user.blank?
-    
     flash[:alert] = ErrorMessages::INVALID_EMAIL_OR_PASSWORD
   end
 end

@@ -363,6 +363,8 @@ Rails.application.routes.draw do
   
   # Corporate Account
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
+  post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account
+  resources :corporate_accounts
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

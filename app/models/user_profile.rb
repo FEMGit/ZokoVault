@@ -59,6 +59,9 @@ class UserProfile < ActiveRecord::Base
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
   
+  validates :first_name, :presence => { :message => "Required" }
+  validates :last_name, :presence => { :message => "Required" }
+  
   after_save :create_or_update_contact_card
 
   def name

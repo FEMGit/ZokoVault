@@ -229,6 +229,7 @@ Rails.application.routes.draw do
   get 'usage_metrics/error_details/:id/extend_trial', to: 'usage_metrics#extend_trial', as: :admin_extend_trial
   get 'usage_metrics/error_details/:id/create_trial', to: 'usage_metrics#create_trial', as: :admin_create_trial
   get 'usage_metrics/error_details/:id/cancel_trial', to: 'usage_metrics#cancel_trial', as: :admin_cancel_trial
+  post 'usage_metrics/statistic_details/update_user/:id', to: 'usage_metrics#update_user', as: :usage_metrics_update_user
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'

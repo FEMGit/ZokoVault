@@ -148,6 +148,9 @@ class PagesController < HighVoltage::PagesController
     contact_service = ContactService.new(:user => current_user)
     @contacts_shareable = contact_service.contacts_shareable
     
+    @family_records = Document.for_user(current_user).where(category: Rails.application.config.x.ContactCategory)
+    set_documents_information(Rails.application.config.x.ContactCategory)
+    
     # Check that 'Spouse' was added
     if @page_number.to_i > 1 && !@primary_contacts.any? { |pc| pc.relationship.eql? 'Spouse / Domestic Partner' }
       spouse_not_added_handle

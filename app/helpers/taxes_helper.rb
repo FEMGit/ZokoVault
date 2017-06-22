@@ -39,4 +39,9 @@ module TaxesHelper
   def tax_present?(tax)
     tax.tax_preparer.present? || tax.notes.present? || category_subcategory_shares(tax, tax.user).present?
   end
+  
+  def tax_accountant_years(tax_accountant)
+    tax_year_info_ids = Tax.for_user(resource_owner).where(tax_preparer: tax_accountant).map(&:tax_year_id)
+    TaxYearInfo.for_user(resource_owner).where(id: tax_year_info_ids).map(&:year)
+  end
 end

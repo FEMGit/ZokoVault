@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   post 'users/sign_up_form', as: :sign_up
 
   # Taxes
+  post 'taxes/update_tax_preparers', to: 'taxes#update_tax_preparers', as: :tax_update_preparers
   get 'taxes/:tax', to: 'taxes#show', as: :show_tax
   get 'taxes/new/:year', to: 'taxes#create'
 

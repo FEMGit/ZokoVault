@@ -2,6 +2,7 @@ class TaxesController < AuthenticatedController
   include SharedViewModule
   include SharedViewHelper
   include BackPathHelper
+  include TutorialsHelper
   include SanitizeModule
   before_action :set_tax_year, only: [:show, :edit, :update]
   before_action :set_tax, only: [:destroy]
@@ -38,7 +39,6 @@ class TaxesController < AuthenticatedController
     add_breadcrumb "Taxes", taxes_path if general_view?
     add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user) if shared_view?
   end
-
 
   def set_details_crumbs
     return unless @tax.taxes.any?
@@ -97,6 +97,28 @@ class TaxesController < AuthenticatedController
     @taxes = taxes
     @taxes.each { |t| authorize t }
     set_viewable_contacts
+  end
+  
+  def update_tax_preparers
+    tax_accountant_ids = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor').map(&:id)
+    parameter_contact_ids = tax_accountant_params.try(:keys).try(:map, &:to_i) || []
+    (tax_accountant_ids - parameter_contact_ids).each do |contact_id|
+      clean_unchecked_taxes([], contact_id)
+    end
+      
+    tax_accountant_params.try(:each) do |contact_id, accountant_years|
+      tax_accountant = Contact.for_user(resource_owner).find_by(id: contact_id)
+      next unless tax_accountant.present?
+      years_for_accountant = accountant_years[:years].keys
+      user_tax_years = TaxYearInfo.for_user(resource_owner).map(&:year).uniq
+
+      clean_unchecked_taxes(years_for_accountant, contact_id)
+      create_checked_taxes(years_for_accountant, user_tax_years, contact_id)
+    end
+
+    respond_to do |format|
+      tutorial_redirection(format, nil, '')
+    end
   end
 
   # POST /taxes
@@ -170,6 +192,11 @@ class TaxesController < AuthenticatedController
     @taxes.each do |tax|
       tax.share_with_contact_ids |= category_subcategory_shares(tax, resource_owner).map(&:contact_id)
     end
+  end
+  
+  def tax_accountant_params
+    return nil unless params[:tax_accountants]
+    params.require(:tax_accountants)
   end
 
   def prepare_share_params
@@ -259,5 +286,29 @@ class TaxesController < AuthenticatedController
       permitted_params[tax_key] = [:id, :tax_preparer_id, :notes, share_with_contact_ids: []]
     end
     taxes.permit(permitted_params)
+  end
+  
+  # Tax Accountants Tutorial Update
+  def clean_unchecked_taxes(years_for_accountant, contact_id)
+    (TaxesLimits::YEARS[:min]..TaxesLimits::YEARS[:max]).each do |year|
+      next if years_for_accountant.include? year.to_s
+      tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(:year => year.to_i)
+      next unless tax_year_info.present?
+      tax_year_info.taxes.where(tax_preparer_id: contact_id).destroy_all
+    end
+  end
+  
+  def create_checked_taxes(years_for_accountant, user_tax_years, contact_id) 
+    years_for_accountant.each do |year|
+      if user_tax_years.include? year.to_i
+        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(:year => year.to_i)
+        next if tax_year_info.taxes.map(&:tax_preparer_id).include? contact_id.to_i
+        tax_year_info.taxes << Tax.create(user: resource_owner, tax_preparer_id: contact_id)
+      else
+        tax_year_info = TaxYearInfo.new(user: resource_owner, year: year.to_i)
+        tax_year_info.taxes << Tax.new(user: resource_owner, tax_preparer_id: contact_id)
+        tax_year_info.save
+      end
+    end
   end
 end

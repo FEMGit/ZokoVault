@@ -1,7 +1,29 @@
-<%= render  partial: 'tutorials/tutorial_document_upload',
-              locals: { title: "Upload Your Tax Records",
-              description: "If you have a digital copies of your tax records, upload them here for future reference.  If you don't have digital copies, don't worry, they can be added later.",
-              digital_resources: @digital_taxes,
-              table_title: "Your Tax Records",
-              flash_message_success: "You uploaded a tax document. Upload another document or click Continue.",
-              upload_button_text: "Upload Tax" } %>
+<% @tax_year_info = TaxYearInfo.new(user: resource_owner) %>
+
+<div class="card mb-30 mt-20 max-w-1000-centered">
+  <h1>Your Tax Accountant</h1>
+  <%= form_for @tax_year_info, url: tax_update_preparers_path, method: :post do |f| %>
+    <%= hidden_field_tag :next_page_number, @next_page %>
+    <%= hidden_field_tag :page_number, @page_number %>
+  
+    <% @tax_accountants.each_with_index do |tax_accountant, index| %>
+      <p><%= index + 1 %>. What years did <%= tax_accountant.name %> prepare your taxes. Please check all that apply.</p>
+    
+      <ul class="check-list mb-30">
+        <% TaxesLimits::YEARS[:max].downto(TaxesLimits::YEARS[:min]) do |year| %>
+          <li class="check-list">
+            <label>
+              <%= check_box_tag "tax_accountants[#{tax_accountant.id}][years][#{year}]",
+                year,
+                (tax_accountant_years(tax_accountant).include? year.to_i) ? true : false, {}
+              %>
+              <span></span> <%= year %>
+            </label>
+          </li>
+        <% end %>
+     </ul>
+    <% end %>
+
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+  <% end %>
+</div>

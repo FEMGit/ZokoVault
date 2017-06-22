@@ -258,6 +258,14 @@ a:visited.main-nav{
       bottom: 20px;
     }
   }
+  
+  @include media($nav-height-corporate) {
+    &.bottom-nav-corporate {
+      position: fixed;
+      width: inherit;
+      bottom: 20px;
+    }
+  }
 
   @include media($tablet) {
     &.bottom-nav {

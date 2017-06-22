@@ -87,6 +87,14 @@
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
   <% end %>
+  <% if corporate? %>
+    <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(:corporate_accounts_path) %>
+    <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-key-1"></use>
+      </svg>Corporate Account
+    <% end %>
+  <% end %>
   <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
   <%= link_to account_users_path, class: "main-nav tablet-show #{account_settings_current}" do %>
     <svg class="icon nav-icon">
@@ -94,7 +102,7 @@
     </svg>Account Settings
   <% end %>
   <% zoku_support_current = 'active' if current_page?(email_support_url) %>
-  <%= link_to email_support_path, class: "main-nav #{zoku_support_current} bottom-nav" do %>
+  <%= link_to email_support_path, class: "main-nav #{zoku_support_current} bottom-nav#{corporate? ? "-corporate" : ""}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-mail-2"></use>
     </svg>ZokuVault Support

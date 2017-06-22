@@ -1,3 +1,170 @@
+
+<% new_user_account = User.new %>
+<div class="mt-20 mb-30 max-w-1000-centered">
+  <h1>Add User Account</h1>
+  
+  <div class="card mb-30">
+    <h3 class="card-label">Personal Information</h3>
+    <%= form_for new_user_account do |f| %>
+      <%= f.label :first_name, 'First Name' %>
+      <%= f.text_field :first_name, { :maxlength => get_max_length(:default) } %>
+
+      <%= f.label :last_name, 'Last Name' %>
+      <%= f.text_field :last_name, { :maxlength => get_max_length(:default) } %>
+
+      <%= f.label :email, 'Email Address' %>
+      <%= f.email_field :email, { :maxlength => get_max_length(:default) } %>
+
+      <%= f.label :two_factor_phone_number, 'Cell Phone Number' %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :two_factor_phone_number } %>
+
+      <%= f.label :phone_number, 'Home Phone Number' %>
+      <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number } %>
+
+      <%= f.label :street_address_1, 'Street Address' %>
+      <%= f.text_field :street_address_1, { :maxlength => get_max_length(:default) } %>
+
+      <%= f.label :city %>
+      <%= f.text_field :city, { :maxlength => get_max_length(:default) } %>
+
+      <span class="state-input">
+        <%= f.label :state %>
+        <div class="styled-select">
+          <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
+        </div>
+      </span>
+      <span class="zip-input">
+        <%= f.label :zip, 'Zip Code' %>
+        <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip } %>
+      </span>
+    <% end %>
+  </div>
+</div>
+
+<% user_account_details = { name: 'Bruno Jerome Mars', emailaddress: 'bruno.mars@gmail.com', phone: { home: '630-337-2334', mobile: '630-542-1274' },
+                            birth_date: '08-03-1981', address: { street: '1234 Street Way', zip: '60506', city: 'Chicago', state: 'IL' } } %>
+<div class="mb-30 max-w-1000-centered">
+  <%= link_to 'javascript:void(0);', class: "edit-link mrg-top pr-10" do %>
+    <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-pencil-1"></use>
+    </svg>
+    </span>Edit
+  <% end %>
+  <h1>User Details</h1>
+
+  <div class="card mb-30">
+    <h3 class="card-label">Personal Information</h3>
+
+    <label>Name</label>
+    <p><%= user_account_details[:name] %></p>
+
+    <label>Email Address</label>
+    <p><%= user_account_details[:emailaddress] %></p>
+
+    <label>Phone</label>
+    <p class="mb-0"><%= user_account_details[:phone][:home] %><span class="phone-type">home</span></p>
+    <p><%= user_account_details[:phone][:mobile] %><span class="phone-type">mobile</span></p>
+
+    <label>Date of Birth</label>
+    <p><%= user_account_details[:birth_date] %></p>
+
+    <label>Address</label>
+    <p class="mb-0"><%= user_account_details[:address][:street] %></p>
+    <p><%= "#{user_account_details[:address][:city]}, 
+            #{user_account_details[:address][:state]}
+            #{user_account_details[:address][:zip]}" %></p>
+  </div>
+  
+  <h1>User Actions</h1>
+  <div class="card">
+    <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+      <div class="user-account-title">
+        <h3>Manage User Account</h3>
+        <p>Upload and manage information for this user.</p>
+      </div>
+      <div class="user-account-link mt-10">
+        <%= link_to 'Manage Account', 'javascript:void(0)', class: 'button big-button blue-button' %>
+      </div>
+    </section>
+
+    <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+      <div class="user-account-title">
+        <h3>Send Invitation</h3>
+        <p>Bruno Mars has not been sent an invitation to the site yet</p>
+      </div>
+      <div class="user-account-link mt-10">
+        <%= link_to 'Send Invitation', 'javascript:void(0)', class: 'button big-button blue-button' %>
+      </div>
+    </section>
+
+    <section class="flex-boxes percent-100">
+      <div class="user-account-title">
+        <h3>Stop Managin User</h3>
+      <p>This will remove the user from</p>
+      </div>
+      <div class="user-account-link mt-10">
+        <%= link_to 'Stop Managing User', 'javascript:void(0)', class: 'button big-button blue-button' %>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+<% user_accounts = [ {initials: 'AK', lastname: 'Kedis', firstname: 'Anthony', emailaddress: 'rhcp1@gmail.com'},
+                     {initials: 'PF', lastname: 'Ferrel', firstname: 'Perry', emailaddress: 'drrockstar@gmail.com'},
+                     {initials: 'JK', lastname: 'Knight', firstname: 'Jordan', emailaddress: 'jknight@gmail.com'},
+                     {initials: 'CD', lastname: 'Dion', firstname: 'Ceiline', emailaddress: 'cdion@gmail.com'},
+                     {initials: 'HS', lastname: 'Styles', firstname: 'Harry', emailaddress: 'harrystyles@gmail.com'} ] %>
+<div class="mb-30 max-w-1000-centered">
+  <h1>User Accounts</h1>
+  <%= link_to 'javascript:void(0);', class: "add-link fr" do %>
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Account
+  <% end %>
+
+  <table id="user-accounts-table">
+    <thead>
+      <tr>
+        <th class="nosort w-60 pt-15 pr-10 pb-15 pl-10">Avatar</th>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Email</th>
+        <th class="nosort nosearch">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% user_accounts.each do |contact| %>
+        <tr>
+          <td class="pl-10">
+            <div class="tooltip-item">
+              <p class="avatar-initials"><%= contact[:initials] %></p>
+              <%= image_tag(empty_image, class: "avatar-small", alt: contact[:initials]) %>
+            </div>
+          </td>
+          <td><%= contact[:lastname] %></td>
+          <td><%= contact[:firstname] %></td>
+          <td><%= contact[:emailaddress] %></td>
+          <td class="details-col">
+            <%= link_to 'Manage', 'javascript:void(0);', class: "outline-button small-button" %>
+            <%= link_to 'Details', 'javascript:void(0);', class: "outline-button small-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[1, 'asc']] ], [1, 3, 1])
+  });
+</script>
+
 <h3 class="mt-20 mb-20 max-w-1000-centered">Transfer Files</h3>
 
 <% transfer_files_info = [ { title: "Accountant", rows: ["Tax Documents", "Business Accounting", "", "", "" , ""] },

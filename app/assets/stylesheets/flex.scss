@@ -445,3 +445,33 @@
     margin-right: 1px;
   }
 }
+
+// User Account Card
+.flex-boxes {
+  &.bb-gray-light-padding {
+    border-bottom: 1px solid $color-gray-light;
+    @include media($mobile) {
+      padding-bottom: 20px;
+    }
+    &.user-account-link {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.user-account-title {
+  flex: 70%;
+  @include media($mobile) {
+    flex: 100%;
+  }
+}
+
+.user-account-link {
+  flex: 30%;
+  text-align: right;
+  @include media($mobile) {
+    flex: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+}

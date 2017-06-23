@@ -124,11 +124,11 @@ class UserProfile < ActiveRecord::Base
 
   def create_or_update_contact_card
     contact = Contact.for_user(user).find_or_initialize_by(emailaddress: email)
-    contact.update_attributes(
+    contact.update(
       firstname: first_name,
       lastname: last_name,
       emailaddress: user.email,
-      phone: phone_number_mobile,
+      phone: two_factor_phone_number,
       contact_type: nil,
       relationship: 'Account Owner',
       beneficiarytype: nil,

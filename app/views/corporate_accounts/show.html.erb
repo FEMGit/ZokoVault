@@ -1,0 +1,80 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<%= link_to edit_corporate_account_path, class: "edit-link mrg-top pr-10" do %>
+  <span class="circle-button">
+  <svg class="icon circle-icon">
+    <use xlink:href="#icon-pencil-1"></use>
+  </svg>
+  </span>Edit
+<% end %>
+<h1>User Details</h1>
+
+<div class="card mb-30">
+  <h3 class="card-label">Personal Information</h3>
+
+  <label>Name</label>
+  <p><%= @corporate_contact.user_profile.name %></p>
+
+  <label>Email Address</label>
+  <p><%= @corporate_contact.emailaddress %></p>
+
+  <% if @corporate_contact.user_profile.phone_number.present? ||
+        @corporate_contact.user_profile.two_factor_phone_number.present? %>
+    <label>Phone</label>
+    <% if @corporate_contact.user_profile.phone_number.present? %>
+      <p class="mb-0"><%= @corporate_contact.user_profile.phone_number %><span class="phone-type">home</span></p>
+    <% end %>
+
+    <% if @corporate_contact.user_profile.two_factor_phone_number.present? %>
+      <p><%= @corporate_contact.user_profile.two_factor_phone_number %><span class="phone-type">mobile</span></p>
+    <% end %>
+  <% end %>
+
+  <% if @corporate_contact.user_profile.date_of_birth.present? %>
+    <label>Date of Birth</label>
+    <p><%= @corporate_contact.user_profile.date_of_birth %></p>
+  <% end %>
+
+  <% if show_street?(@corporate_contact.user_profile) %>
+    <label>Address</label>
+    <p>
+      <%= @corporate_contact.user_profile.street_address_1 %><br>
+      <%= @corporate_contact.user_profile.city %>,
+      <%= @corporate_contact.user_profile.state %>
+      <%= @corporate_contact.user_profile.zip %><br>
+    </p>
+  <% end %>
+</div>
+
+<h1>User Actions</h1>
+<div class="card">
+  <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+    <div class="user-account-title">
+      <h3>Manage User Account</h3>
+      <p>Upload and manage information for this user.</p>
+    </div>
+    <div class="user-account-link mt-10">
+      <%= link_to 'Manage Account', 'javascript:void(0)', class: 'button big-button blue-button' %>
+    </div>
+  </section>
+
+  <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+    <div class="user-account-title">
+      <h3>Send Invitation</h3>
+      <p>Bruno Mars has not been sent an invitation to the site yet</p>
+    </div>
+    <div class="user-account-link mt-10">
+      <%= link_to 'Send Invitation', 'javascript:void(0)', class: 'button big-button blue-button' %>
+    </div>
+  </section>
+
+  <section class="flex-boxes percent-100">
+    <div class="user-account-title">
+      <h3>Stop Managin User</h3>
+    <p>This will remove the user from</p>
+    </div>
+    <div class="user-account-link mt-10">
+      <%= link_to 'Stop Managing User', 'javascript:void(0)', class: 'button big-button blue-button' %>
+    </div>
+  </section>
+</div>

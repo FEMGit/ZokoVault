@@ -54,6 +54,9 @@ module BreadcrumbsErrorModule
   
   def corporate_account_error_breadcrumb_update
     breadcrumbs.clear
+    if @path[:action].eql? :edit
+      set_corporate_contact_by_user_profile 
+    end
     add_breadcrumb "Corporate Account", :corporate_accounts_path
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set

@@ -181,7 +181,7 @@ class User < ActiveRecord::Base
   end
 
   before_create { set_as_admin }
-  after_destroy :invitation_sent_clear
+  after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
   
   protected
   
@@ -209,5 +209,10 @@ class User < ActiveRecord::Base
 
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
+  end
+  
+  def corporate_admin_accounts_clear
+    CorporateAdminAccountUser.where(user_account_id: id).delete_all
+    CorporateAdminAccountUser.where(corporate_admin_id: id).delete_all
   end
 end

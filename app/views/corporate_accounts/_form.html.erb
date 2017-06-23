@@ -1,6 +1,7 @@
 <h1>Add User Account</h1>
 
-  <%= form_for @user_account, url: create_corporate_account_path, method: :post do |f| %>
+  <%= form_for @user_account, url: yield(:save_update_url), method: yield(:method) do |f| %>
+    <%= hidden_field_tag :id, @user_account.user_profile.try(:id) %>
     <% if @user_account.errors.any? %>
       <% errors = @user_account.errors %>
     <% else %>
@@ -55,5 +56,5 @@
         </span>
       <% end %>
     </div>
-    <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: corporate_accounts_path, f: f } %>
+    <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_accounts_path, f: f } %>
 <% end %>

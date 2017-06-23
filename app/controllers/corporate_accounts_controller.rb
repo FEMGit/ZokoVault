@@ -23,7 +23,9 @@ class CorporateAccountsController < AuthenticatedController
     end
   end
   
-  def index; end
+  def index
+    @corporate_users = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user }.map(&:user_account)
+  end
   
   def new
     @user_account = User.new(user_profile: UserProfile.new)
@@ -62,8 +64,7 @@ class CorporateAccountsController < AuthenticatedController
   end
 
   def success_path
-    ReturnPathService.success_path(current_user, current_user, corporate_accounts_path,
-      corporate_accounts_path, current_user)
+    ReturnPathService.success_path(current_user, current_user, corporate_accounts_path, corporate_accounts_path)
   end
   
   def redirect_unless_corporate_admin

@@ -57,6 +57,7 @@ class CorporateAccountsController < AuthenticatedController
       if @user_account.save
         CorporateAdminAccountUser.create(corporate_admin: current_user, user_account: @user_account)
         create_associated_contact
+        CorporateAdminService.add_categories_to_user(current_user, @user_account)
         format.html { redirect_to success_path(corporate_accounts_path), flash: { success: 'User Account successfully created.' } }
         format.json { render :show, status: :created, location: @user_account }
       else

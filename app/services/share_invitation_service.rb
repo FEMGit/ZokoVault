@@ -4,9 +4,11 @@ module ShareInvitationService
         contact.emailaddress =~ MailService.mail_regexp
       previously_invited = ShareInvitationSent.exists?(user_id: user.id,
                                                        contact_email: contact.emailaddress)
+      shared_with_user = User.find_by(email: contact.emailaddress)
+      return if shared_with_user.corporate_user?
       unless previously_invited
         invitation_args =
-          if (shared_with_user = User.find_by(email: contact.emailaddress))
+          if shared_with_user.present?
             [:existing_user, shared_with_user, user]
           else
             [:new_user, contact, user]

@@ -45,9 +45,9 @@
         <% Rails.application.config.x.CorporateCategories.each do |option| %>
           <li class="check-list">
             <label>
-              <%= check_box_tag "",
+              <%= check_box_tag "corporate_account[corporate_categories][#{option}]",
                 option,
-                false, {}
+                (@user.corporate_categories.map(&:name).include? option ), {}
               %>
               <span></span> <%= option %>
             </label>

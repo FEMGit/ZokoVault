@@ -238,7 +238,8 @@ module TutorialsHelper
 
   # Tutorial Update
   def update_all_params
-    params.require('update_fields')
+    return nil unless params[:update_fields]
+    params.require(:update_fields)
   end
 
   def multiple_types_create(tutorial_multiple_types_params, key, resource_owner, error_message)

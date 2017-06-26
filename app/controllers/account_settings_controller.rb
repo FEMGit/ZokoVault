@@ -169,7 +169,7 @@ class AccountSettingsController < AuthenticatedController
       beneficiarytype: nil,
       user_id: current_user.id,
       user_profile_id: @user_profile.id,
-      photourl: account_settings_params[:photourl]
+      photourl: account_settings_params && account_settings_params[:photourl]
     )
   end
 
@@ -188,6 +188,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def account_settings_params
+    return nil unless params[:user_profile].present?
     params.require(:user_profile).permit(:photourl, :phone_code)
   end
 

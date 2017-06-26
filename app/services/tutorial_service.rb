@@ -1,5 +1,6 @@
 class TutorialService
   def self.update_tutorial_without_dropdown(update_all_params, model, resource_owner)
+    return unless update_all_params.present?
     update_all_params.values.each do |update_value|
       object_to_update = model.for_user(resource_owner).find_by(id: update_value[:id])
       next unless trust
@@ -8,6 +9,7 @@ class TutorialService
   end
   
   def self.update_tutorial_with_single_dropdown(update_all_params, model, resource_owner, key)
+    return unless update_all_params.present?
     update_all_params.values.each do |update_value|
       object_to_update = model.for_user(resource_owner).find_by(id: update_value[:id])
       next unless object_to_update
@@ -18,6 +20,7 @@ class TutorialService
   end
   
   def self.update_tutorial_with_multiple_dropdown(update_all_params, model, resource_owner, key)
+    return unless update_all_params.present?
     update_all_params.values.each do |update_value|
       financial_provider = FinancialProvider.for_user(resource_owner).find_by(id: update_value[:id])
       next unless financial_provider

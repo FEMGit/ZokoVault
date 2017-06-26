@@ -1,7 +1,7 @@
 class ShareInvitationMailerPreview < ActionMailer::Preview
   def new_user
-    return unless new_user_parameters.present?
-    ShareInvitationMailer.new_user(new_user_parameters[:contact], new_user_parameters[:user])
+    return unless user_contact_parameters.present?
+    ShareInvitationMailer.new_user(user_contact_parameters[:contact], user_contact_parameters[:user])
   end
   
   def existing_user
@@ -9,9 +9,14 @@ class ShareInvitationMailerPreview < ActionMailer::Preview
     ShareInvitationMailer.existing_user(existing_user_parameters[:contact], existing_user_parameters[:user])
   end
   
+  def corporate_user
+    return unless user_contact_parameters.present?
+    ShareInvitationMailer.corporate_user(user_contact_parameters[:contact], user_contact_parameters[:user])
+  end
+  
   private
   
-  def new_user_parameters
+  def user_contact_parameters
     return nil unless path_recognized
     user = path_user(path_recognized)
     contact = path_contact(user, path_recognized)

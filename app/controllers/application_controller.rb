@@ -20,7 +20,13 @@ class ApplicationController < ActionController::Base
   def redirect_if_user_terms_of_service_empty
     return if (user_signed_in? && current_user.signed_terms_of_service?) ||
                !user_signed_in?
-    current_path = Rails.application.routes.recognize_path(request.fullpath)
+    
+    current_path = 
+      if (request.fullpath.eql? root_path)
+        root_path
+      else
+        Rails.application.routes.recognize_path(request.fullpath)
+      end
     terms_of_service_path = Rails.application.routes.recognize_path(terms_of_service_account_path)
     if current_path != terms_of_service_path
       redirect_to terms_of_service_account_path

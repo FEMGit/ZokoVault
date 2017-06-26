@@ -5,9 +5,29 @@
     displayEmailPreviewModal(contact_id)
   }
   
+  var displayEmailPreviewCorporate = function(contact_id) {
+    $('#email-preview-section').empty()
+    $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')
+    createEmailIframeByName("corporate_user", contact_id)
+  }
+  
   var screenShift = function(element) {
     var offset = $(document).scrollTop()
     element.css("margin-top", offset + "px")
+  }
+  
+  var createEmailIframeByName = function(name, contact_id) {
+    $('#email-iframe').attr('src', "/email/share_invitation_mailer/" + name + "/<%=@resource_owner.id%>/" + contact_id)
+     screenShift($('#email-preview-modal'))
+     $("body").append("<div class='modal-overlay js-modal-close'></div>");
+     $(".modal-overlay").fadeTo(500, 0.8);
+     $(".js-modalbox").fadeIn(500);
+     canvasEl = $('button.email-modal[data-modal-id]');
+     var modalBox = $(canvasEl).attr('data-modal-id');
+
+     $("#email-iframe").load(function() {
+       emailPreviewOnLoad(modalBox, canvasEl)
+     })
   }
 
   var displayEmailPreviewModal = function(contact_id) {
@@ -18,17 +38,7 @@
       dataType: 'json',
     })
      .done(function(data){
-       $('#email-iframe').attr('src', "/email/share_invitation_mailer/" + data["name"] + "/<%=@resource_owner.id%>/" + contact_id)
-       screenShift($('#email-preview-modal'))
-       $("body").append("<div class='modal-overlay js-modal-close'></div>");
-       $(".modal-overlay").fadeTo(500, 0.8);
-       $(".js-modalbox").fadeIn(500);
-       canvasEl = $('button.email-modal[data-modal-id]');
-       var modalBox = $(canvasEl).attr('data-modal-id');
-
-       $("#email-iframe").load(function() {
-         emailPreviewOnLoad(modalBox, canvasEl)
-       })
+       createEmailIframeByName(data["name"], contact_id)
      })
      .fail(function(data) {
      })

@@ -8,7 +8,10 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations', confirmations: 'confirmations', passwords: 'passwords', sessions: 'sessions',
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
 
-
+  devise_scope :user do
+    get 'users/password/corporate_edit/:uuid', to: 'passwords#corporate_edit', as: :corporate_edit_password
+  end
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -365,6 +368,7 @@ Rails.application.routes.draw do
   
   # Corporate Account
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
+  post '/corporate/send_invitation/:contact_id', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account
   put '/corporate', to: 'corporate_accounts#update', as: :update_corporate_account
   resources :corporate_accounts

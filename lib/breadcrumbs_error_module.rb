@@ -51,6 +51,16 @@ module BreadcrumbsErrorModule
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
+  
+  def corporate_account_error_breadcrumb_update
+    breadcrumbs.clear
+    if @path[:action].eql? :edit
+      set_corporate_contact_by_user_profile 
+    end
+    add_breadcrumb "Corporate Account", :corporate_accounts_path
+    set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
 
   private
 
@@ -62,5 +72,6 @@ module BreadcrumbsErrorModule
   end
 
   module_function :wills_error_breadcrumb_update, :entities_breadcrumb_update,
-                  :insurance_breadcrumb_update, :financial_error_breadcrumb_update
+                  :insurance_breadcrumb_update, :financial_error_breadcrumb_update,
+                  :corporate_account_error_breadcrumb_update
 end

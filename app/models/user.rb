@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include StagingHelper
+  attr_accessor :skip_password_validation
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable,
          :password_archivable
@@ -86,6 +87,15 @@ class User < ActiveRecord::Base
   def free?
     !paid? && !primary_shared_of_paid?
   end
+  
+  def corporate_user?
+    CorporateAdminAccountUser.find_by(user_account_id: id).present?
+  end
+  
+  def corporate_invitation_sent?
+    corporate_record = CorporateAdminAccountUser.find_by(user_account_id: id)
+    corporate_record.present? && corporate_record.confirmation_sent_at.present?
+  end
 
   def primary_shared_of_paid?
     # TODO: after migrating data for PrimarySharedUser, switch to:
@@ -165,9 +175,20 @@ class User < ActiveRecord::Base
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
     [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.downcase.include?(x.downcase) }
   end
+  
+  def skip_password_validation!
+    @skip_password_validation = true
+  end
 
   before_create { set_as_admin }
-  after_destroy :invitation_sent_clear
+  after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
+  
+  protected
+  
+  def password_required?
+    return false if skip_password_validation
+    super
+  end
 
   private
   
@@ -188,5 +209,10 @@ class User < ActiveRecord::Base
 
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
+  end
+  
+  def corporate_admin_accounts_clear
+    CorporateAdminAccountUser.where(user_account_id: id).delete_all
+    CorporateAdminAccountUser.where(corporate_admin_id: id).delete_all
   end
 end

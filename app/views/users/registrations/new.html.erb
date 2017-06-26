@@ -18,10 +18,16 @@
     <%= f.fields_for :user_profile do |user_profile_form| %>
 
       <%= user_profile_form.label :first_name, 'First Name', autofocus: true %>
-      <%= user_profile_form.text_field :first_name %>
+      <% if errors && resource.errors.messages[:"user_profile.first_name"] %>
+        <span class="error-label"> - <%= resource.errors.messages[:"user_profile.first_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :first_name, { class: ("input-error" if resource.errors.messages[:"user_profile.first_name"].present?) } %>
 
       <%= user_profile_form.label :last_name, 'Last Name' %>
-      <%= user_profile_form.text_field :last_name %>
+      <% if errors && resource.errors.messages[:"user_profile.last_name"] %>
+        <span class="error-label"> - <%= resource.errors.messages[:"user_profile.last_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :last_name, { class: ("input-error" if resource.errors.messages[:"user_profile.last_name"].present?) } %>
 
       <%= f.label :email %>
       <% if errors && resource.errors.messages[:email] %>

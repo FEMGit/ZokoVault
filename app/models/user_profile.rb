@@ -59,6 +59,9 @@ class UserProfile < ActiveRecord::Base
   validates_length_of :zip, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
   
+  validates :first_name, :presence => { :message => "Required" }
+  validates :last_name, :presence => { :message => "Required" }
+  
   after_save :create_or_update_contact_card
 
   def name
@@ -121,11 +124,11 @@ class UserProfile < ActiveRecord::Base
 
   def create_or_update_contact_card
     contact = Contact.for_user(user).find_or_initialize_by(emailaddress: email)
-    contact.update_attributes(
+    contact.update(
       firstname: first_name,
       lastname: last_name,
       emailaddress: user.email,
-      phone: phone_number_mobile,
+      phone: two_factor_phone_number,
       contact_type: nil,
       relationship: 'Account Owner',
       beneficiarytype: nil,

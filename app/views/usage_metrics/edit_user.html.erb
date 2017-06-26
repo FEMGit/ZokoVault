@@ -15,15 +15,69 @@
   <label><%= @subscription_info[:label] %></label>
   <p><%= @subscription_info[:text] %></p>
   <% if @subscription_info[:status] == :trial %>
-    <%= link_to 'Extend Trial Period', admin_extend_trial_path(@user), class: "button secondary-button medium-button"%>
-    <% if @subscription_info[:active] %>
-      <%= link_to 'End Trial Period', admin_cancel_trial_path(@user), class: "button secondary-button medium-button"%>
-    <% end %>
+    <div class="mb-20">
+      <%= link_to 'Extend Trial Period', admin_extend_trial_path(@user), class: "button secondary-button medium-button"%>
+      <% if @subscription_info[:active] %>
+        <%= link_to 'End Trial Period', admin_cancel_trial_path(@user), class: "button secondary-button medium-button"%>
+      <% end %>
+    </div>
   <% elsif @subscription_info[:status] == :unknown %>
-    <%= link_to 'Create Trial', admin_create_trial_path(@user), class: "button secondary-button medium-button"%>
+    <%= link_to 'Create Trial', admin_create_trial_path(@user), class: "button secondary-button medium-button mb-20"%>
+  <% end %>
+  
+  <%= form_for @user, url: usage_metrics_update_user_path, method: :post do |f| %>
+    <%= f.label :corporate_admin, 'Corporate Admin' %>
+    <ul class="check-list mb-20">
+      <li class="check-list">
+        <label>
+          <%= check_box_tag "corporate_account[corporate_admin]",
+            true,
+            @user.corporate_admin, { onchange: 'toggleCategoryCheckbox(this)'}
+          %>
+          <span></span>Corporate Admin turned on
+        </label>
+      </li>
+    </ul>
+    
+    <div id="corporate-category-access" style="display: none;">
+      <label>Corporate Admin Category Access</label>
+      <ul class="check-list">
+        <% Rails.application.config.x.CorporateCategories.each do |option| %>
+          <li class="check-list">
+            <label>
+              <%= check_box_tag "",
+                option,
+                false, {}
+              %>
+              <span></span> <%= option %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
 </div>
 
-<%= link_to 'Save', 'javascript:void(0);', class: "button primary-button big-button" %>
+<%= link_to 'Save', 'javascript:submitForm()', class: "button primary-button big-button" %>
 <%= link_to 'Cancel', back_path || usage_metrics_path, class: "button secondary-button big-button"%>
 <%= link_to 'Delete', @user, method: :delete, data: { confirm: 'are you sure?' }, class: "button secondary-button big-button" %>
+
+<script>
+  $(document).ready(function() {
+    toggleCategoryCheckbox("#corporate_account_corporate_admin")
+  })
+  
+  var toggleCategoryCheckbox = function(checkbox) {
+    var categoryCheckboxes = $("#corporate-category-access")
+    if ($(checkbox).is(":checked")) {
+      categoryCheckboxes.show()
+    } else {
+      categoryCheckboxes.hide()
+    }
+  }
+  
+  var submitForm = function() {
+    var form_id = "edit_user_" + "<%= @user.id %>"
+    $("#" + form_id).submit()
+  }
+</script>

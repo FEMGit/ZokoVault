@@ -43,6 +43,21 @@ class UsageMetricsController < AuthenticatedController
     UserService.update_user_information(@user_models)
     redirect_to usage_metrics_path
   end
+  
+  def update_user
+    corporate_admin_value = 
+      if corporate_account_params.present?
+        (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
+      else
+        false
+      end
+    User.find_by(id: params[:id]).try(:update, { corporate_admin: corporate_admin_value })
+    
+    respond_to do |format|
+      format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
+      format.json { head :no_content }
+    end
+  end
 
   def set_edit_user_crumbs
     return unless @user.present?
@@ -268,5 +283,12 @@ class UsageMetricsController < AuthenticatedController
     else
       redirect_to statistic_details_path
     end
+  end
+  
+  # Corporate Account
+  
+  def corporate_account_params
+    return nil unless params[:corporate_account].present?
+    params.require(:corporate_account)
   end
 end

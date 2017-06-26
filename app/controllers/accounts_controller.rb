@@ -163,16 +163,14 @@ class AccountsController < AuthenticatedController
       render json: { :message => 'Coupon Not Found', :status => 500 }
     end
   end
-
-  def verify_code
-    current_user.attributes = user_params
-    phone_code = current_user.user_profile.phone_code
-    verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
-    status = if verified
+  
+  def mfa_verify_code
+    status = if code_verified?
                session[:mfa] = true
+               current_user.update(:mfa_failed_attempts => 0)
                :ok
              else
-               (failed_attempts_limit_reached? && lock_account) and
+               mfa_failed_attempts_limit_reached? && lock_account &&
                  (render json: { errors: 'Account locked' }, status: :unauthorized) and return
                :unauthorized
              end
@@ -180,6 +178,12 @@ class AccountsController < AuthenticatedController
   end
 
   private
+
+  def code_verified?
+    current_user.attributes = user_params
+    phone_code = current_user.user_profile.phone_code
+    MultifactorAuthenticator.new(current_user).verify_code(phone_code)
+  end
 
   def set_blank_layout_header_info
     @header_information = true

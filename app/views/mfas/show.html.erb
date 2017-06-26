@@ -69,7 +69,7 @@ function sendCode() {
 
 function verifyCode() {
   var data = $('#user_user_profile_attributes_phone_code').serialize();
-  $.post("<%= verify_code_account_path %>",
+  $.post("<%= mfa_verify_code_account_path %>",
       data,
       function() {
         window.location.replace('<%= return_to_path || root_path %>' + "?mfa_submit=true")

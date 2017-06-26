@@ -22,6 +22,7 @@ class UnlocksController < Devise::UnlocksController
 
     if resource.errors.empty?
       set_flash_message :notice, :unlocked
+      resource.update(:mfa_failed_attempts => 0)
       respond_with_navigational(resource) { redirect_to after_unlock_path_for(resource) }
     else
       resource.errors.messages.clear

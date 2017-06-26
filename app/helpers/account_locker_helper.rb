@@ -1,11 +1,10 @@
 module AccountLockerHelper
-  def failed_attempts_limit_reached?
-    failed_attempts_count = current_user.failed_attempts
-    attempts_remaining = (Session::FAILED_ATTEMPTS_LIMIT - 1) - failed_attempts_count
+  def mfa_failed_attempts_limit_reached?
+    attempts_remaining = (Session::FAILED_ATTEMPTS_LIMIT - 1) - current_user.mfa_failed_attempts
     if attempts_remaining <= 0
       return true
     elsif
-      current_user.increment!(:failed_attempts)
+      current_user.increment!(:mfa_failed_attempts)
     end
     false
   end

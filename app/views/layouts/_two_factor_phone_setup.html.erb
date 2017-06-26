@@ -66,13 +66,19 @@ function sendCode(resend) {
 
 function verifyCode() {
   var data = $('#account-form').serialize();
-  $.post("<%= verify_code_account_path %>",
+  $.post("<%= mfa_verify_code_account_path %>",
       data,
       function() {
         $('#verify_code_text').html("You've been verified!");
         submitAccount()
       })
-  .fail(function() {
+  .fail(function(data) {
+    if (data.responseText) {
+      var response = JSON.parse(data.responseText)
+      if (response !== undefined && response["errors"] === "Account locked") {
+        window.location.replace('<%= root_path %>')
+      }
+    }
     $('#verify_code_text').html('Error, please check that your code is correct.')
   })
 }

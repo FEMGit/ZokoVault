@@ -155,6 +155,7 @@ class DocumentsController < AuthenticatedController
   def download
     return if download_params[:uuid].blank?
     doc = Document.for_user(resource_owner).find_by(uuid: download_params[:uuid])
+    authorize doc
     document_key = doc.try(:url)
     data = open(download_file(document_key))
     send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last

@@ -148,8 +148,9 @@ class PagesController < HighVoltage::PagesController
     contact_service = ContactService.new(:user => current_user)
     @contacts_shareable = contact_service.contacts_shareable
     
-    @family_records = Document.for_user(current_user).where(category: Rails.application.config.x.ContactCategory)
-    set_documents_information(Rails.application.config.x.ContactCategory)
+    @family_records = Document.for_user(current_user).where(category: [Rails.application.config.x.ContactCategory, Rails.application.config.x.ProfileCategory])
+    set_documents_information(Rails.application.config.x.ContactCategory, [Rails.application.config.x.ContactCategory,
+                                                                           Rails.application.config.x.ProfileCategory])
   end
   
   def redirect_if_incorrect_url
@@ -237,9 +238,9 @@ class PagesController < HighVoltage::PagesController
     set_contact_and_category_share(@financial_advisors, Rails.application.config.x.FinancialInformationCategory)
   end
   
-  def set_documents_information(category_name)
+  def set_documents_information(category_name, dropdown_option_names = nil)
     @category = Category.fetch(category_name.downcase)
-    @category_dropdown_options = Array.wrap(category_name)
+    @category_dropdown_options = dropdown_option_names.blank? ? Array.wrap(category_name) : dropdown_option_names
     service = DocumentService.new(:category => category_name)
     @card_names = service.get_card_names(current_user, current_user)
     @cards = service.get_card_values(current_user, current_user)

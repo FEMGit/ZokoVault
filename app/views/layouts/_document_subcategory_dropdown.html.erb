@@ -32,3 +32,112 @@
     %>
   </div>
 </section>
+
+<script>
+  function get_drop_down_options() {
+    update_category($('#document_category.chosen-select :selected').text())
+  }
+
+  $("#document_category_groups.chosen-select").change(function(e, params){
+    $("#group").val(params.selected)
+  });
+
+  //get ajax request to update card drop down info based on chosen category
+  var update_category = function(category_selected){
+    categoryCheck(category_selected)
+    shared_user_id = $("#shared_user_id").val();
+    var url = '/documents/get_drop_down_options/' + category_selected.replace('...', '') + '/' + shared_user_id;
+    $.get(url, function(data) {
+      card_values = $('#document_category_groups');
+      card_values.empty();
+      data.forEach(function(group){
+        card_values.append("<option value='" + group.id + "'>" + group.name + "</option>");
+      });
+      card_values.trigger('chosen:updated');
+      updateCardNames()
+    });
+  }
+
+  var categoryCheck = function(category) {
+    if (category === '<%= Rails.application.config.x.ProfileCategory %>') {
+      $('#subcategory-dropdown').hide();
+    } else {
+      $('#subcategory-dropdown').show();
+    }
+  }
+
+  //get ajax request to update card names drop down if its insurance or financial category
+  var updateCardNames = function(){
+    shared_user_id = $("#shared_user_id").val();
+    var category = $("#document_category.chosen-select :selected").text().replace('...', '');
+    var url = '/documents/get_card_names/' + category + '/' + shared_user_id
+    $.get(url, function(data) {
+      if(data.length > 0) {
+        card_names = $('#document_subcategory' + idPostFixShow(data));
+        card_names.empty();
+        data.forEach(function(group){
+          var shortSubCat = group.name;
+          if (group.name.length > 25) { shortSubCat = group.name.substring(0, 24) + '...' };
+          card_names.append("<option value='" + group.id + "'>" + shortSubCat + "</option>");
+        });
+        card_names.trigger('chosen:updated');
+      }
+    }).done(function(data) {
+      if (data.length > 0) {
+        $("#category_groups").hide();
+        $("#subcategory_names" + idPostFixShow(data)).show();
+        idPostFixHide(data)
+      } else {
+        $("#category_groups").show();
+
+        $("#subcategory_names_insurance").hide();
+        $("#subcategory_names_financial").hide();
+        $("#subcategory_names_card_documents").hide();
+        $("#document_category_groups").find('option:selected').removeAttr('selected')
+        $("#document_subcategory_financial").find('option:selected').removeAttr('selected')
+      }
+    });
+  }
+
+  var idPostFixShow = function(data) {
+    var data_id = data[0].id.replace(/&/g, '&amp;')
+    if (data_id === "<%= Rails.configuration.x.InsuranceCategory %>") {
+      return "_insurance"
+    }
+    if (data_id === "<%= Rails.configuration.x.FinancialInformationCategory %>") {
+      return "_financial"
+    }
+    if (data_id === "<%= Rails.configuration.x.WillsPoaCategory %>" ||
+        data_id === "<%= Rails.configuration.x.TrustsEntitiesCategory %>") {
+      return "_card_documents"
+    }
+  }
+
+  var idPostFixHide = function(data) {
+    var data_id = data[0].id.replace(/&amp;/g, '&')
+    if (data_id === "<%= Rails.configuration.x.InsuranceCategory %>") {
+      $("#subcategory_names_financial").hide();
+      $("#document_subcategory_financial").find('option:selected').removeAttr('selected')
+
+      $("#subcategory_names_card_documents").hide();
+      $("#document_subcategory_card_documents").find('option:selected').removeAttr('selected')
+    }
+    if (data_id === "<%= Rails.configuration.x.FinancialInformationCategory %>") {
+      $("#subcategory_names_insurance").hide();
+      $("#document_subcategory_insurace").find('option:selected').removeAttr('selected')
+
+      $("#subcategory_names_card_documents").hide();
+      $("#document_subcategory_card_documents").find('option:selected').removeAttr('selected')
+    }
+    if (data_id === "<%= Rails.configuration.x.WillsPoaCategory %>" ||
+        data_id === "<%= Rails.configuration.x.TrustsEntitiesCategory %>") {
+      $("#subcategory_names_insurance").hide();
+      $("#document_subcategory_insurace").find('option:selected').removeAttr('selected')
+
+      $("#subcategory_names_financial").hide();
+      $("#document_subcategory_financial").find('option:selected').removeAttr('selected')
+    }
+  }
+
+  $("#document_group.chosen-select").chosen().change(updateCardNames)
+</script>

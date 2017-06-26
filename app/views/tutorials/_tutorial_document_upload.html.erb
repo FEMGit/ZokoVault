@@ -30,6 +30,7 @@
   <% @document = Document.new(user: current_user, category: @category.name) %>
 
   <%= form_for @document, html: { id: "doc-form" } do |f| %>
+    <%= hidden_field_tag :shared_user_id, "" %>
     <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
 
     <div id="file-pick-section" class=" mb-15">
@@ -68,7 +69,6 @@
 <% end %>
 
 <script>
-
   var fileToPage = function(file) {
 
     setDocumentValues(file.filename, file.key)

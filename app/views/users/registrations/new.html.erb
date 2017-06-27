@@ -30,10 +30,12 @@
       <%= user_profile_form.text_field :last_name, { class: ("input-error" if resource.errors.messages[:"user_profile.last_name"].present?) } %>
 
       <%= f.label :email %>
-      <% if errors && resource.errors.messages[:email] %>
-        <span class="error-label"> - <%= resource.errors.messages[:email].first %></span>
+      <% if @email_error %>
+        <span class="error-label"> - <%= @email_error %></span>
+        <%= f.email_field :email, { class: "input-error" } %>
+      <% else %>
+        <%= f.email_field :email %>
       <% end %>
-      <%= f.email_field :email, { class: ("input-error" if resource.errors.messages[:email].present?) } %>
 
       <%= f.label :password %>
       <% if errors && resource.errors.messages[:password] %>
@@ -54,7 +56,7 @@
 
     <% end %>
 
-    
+
     <%= button_tag(class: "button blue-button big-button-2 form-width mt-20 mb-20", method: :get) do %>
       <svg class="icon button-icon">
         <use xlink:href="#icon-lock-1"></use>

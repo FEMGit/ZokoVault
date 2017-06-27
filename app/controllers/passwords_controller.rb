@@ -43,7 +43,8 @@ class PasswordsController < Devise::PasswordsController
     else
       set_minimum_password_length
       respond_with resource do |format|
-        if resource.corporate_user? && resource.encrypted_password.blank?
+        if resource.corporate_user? && corporate_password_update? &&
+             reset_token_params[:reset_password_token].present?
           format.html { render :action => :corporate_edit}
         else
           format.html { render :action => :edit}
@@ -62,5 +63,10 @@ class PasswordsController < Devise::PasswordsController
     
   def reset_token_params
     params.require(:user).permit(:reset_password_token)
+  end
+  
+  def corporate_password_update?
+    params[:corporate_password].present? &&
+      (params[:corporate_password].eql? 'true')
   end
 end

@@ -41,6 +41,7 @@ class CorporateAccountsController < AuthenticatedController
     corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user }
                                                       .map(&:user_account).map(&:email).map(&:downcase)
     @corporate_contacts = Contact.for_user(current_user).select { |c| corporate_users_emails.include? c.emailaddress.downcase }
+    @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
   end
   
   def show; end
@@ -50,6 +51,25 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   def edit; end
+  
+  def edit_account_settings
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: current_user)
+    @corporate_profile.save
+  end
+  
+  def update_account_settings
+    @corporate_profile = CorporateAccountProfile.find_by(id: params[:id])
+    respond_to do |format|
+      if @corporate_profile.update(corporate_settings_params)
+        format.html { redirect_to success_path(corporate_accounts_path), flash: { success: 'Corporate Settings successfully updated.' } }
+        format.json { render :index, status: :created, location: @corporate_profile }
+      else
+        error_path(:edit_account_settings)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
+        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
   
   def create
     @user_account = User.new(user_account_params)
@@ -107,6 +127,11 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   private
+  
+  def corporate_settings_params
+    params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
+                                              :zip, :state, :phone_number, :fax_number, :company_logo)
+  end
   
   def create_associated_contact
     admin_contact = Contact.new(emailaddress: @user_account.email,

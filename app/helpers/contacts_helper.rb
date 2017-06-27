@@ -13,6 +13,11 @@ module ContactsHelper
     contact.business_street_address_1.present? && contact.city.present? &&
       contact.state.present?
   end
+  
+  def show_corporate_address?(corporate_profile)
+    corporate_profile.street_address.present? && corporate_profile.city.present? &&
+      corporate_profile.state.present?
+  end
 
   def show_web_address(web_address)
     if web_address.blank? || web_address.nil?

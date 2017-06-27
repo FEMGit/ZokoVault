@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170623023764) do
+ActiveRecord::Schema.define(version: 20170627081710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,23 @@ ActiveRecord::Schema.define(version: 20170623023764) do
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
   add_index "contacts", ["user_profile_id"], name: "index_contacts_on_user_profile_id", using: :btree
   add_index "contacts", ["uuid"], name: "index_contacts_on_uuid", unique: true, using: :btree
+
+  create_table "corporate_account_profiles", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "business_name"
+    t.string   "web_address"
+    t.string   "street_address"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "state"
+    t.string   "phone_number"
+    t.string   "fax_number"
+    t.string   "company_logo"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "corporate_account_profiles", ["user_id"], name: "index_corporate_account_profiles_on_user_id", using: :btree
 
   create_table "corporate_admin_account_users", id: false, force: :cascade do |t|
     t.integer  "corporate_admin_id"
@@ -684,6 +701,7 @@ ActiveRecord::Schema.define(version: 20170623023764) do
     t.integer  "subcategory_count"
     t.uuid     "uuid",                                           default: "uuid_generate_v4()", null: false
     t.boolean  "corporate_admin",                                default: false
+    t.integer  "mfa_failed_attempts",                            default: 0,                    null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

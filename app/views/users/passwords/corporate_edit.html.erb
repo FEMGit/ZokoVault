@@ -1,11 +1,17 @@
 <section class="card login-card eightfifty-align-left" >
-  <h2>Setup your password</h2>
+  <h2>
+    <svg class="icon">
+      <use xlink:href="#icon-lock-large"></use>
+    </svg>
+    <span class="lock-title">Setup Your Password</span>
+  </h2>
 
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
     <% if resource.errors.any? %>
       <% errors = true %>
     <% end %>
     <%= f.hidden_field :reset_password_token %>
+    <%= hidden_field_tag :corporate_password, true %>
 
     <%= f.label :password, "Password" %>
     
@@ -23,10 +29,8 @@
       <span class="error-label"> - <%= resource.errors.messages[:password_confirmation].first %></span>
     <% end %>
     <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password_confirmation].present?) } %>
-    <%= f.button "Change my password", class: "big-button primary-button" %>
+    <%= f.button "Submit", class: "big-button primary-button" %>
   <% end %>
-  <br>
-  <%= render "users/shared/links" %>
 </section>
 
 <script>

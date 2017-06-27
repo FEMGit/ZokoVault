@@ -5,7 +5,7 @@ module ShareInvitationService
       previously_invited = ShareInvitationSent.exists?(user_id: user.id,
                                                        contact_email: contact.emailaddress)
       shared_with_user = User.find_by(email: contact.emailaddress)
-      return if shared_with_user.corporate_user?
+      return if shared_with_user && shared_with_user.corporate_user?
       unless previously_invited
         invitation_args =
           if shared_with_user.present?

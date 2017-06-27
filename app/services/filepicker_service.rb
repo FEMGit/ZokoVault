@@ -1,7 +1,12 @@
 class FilepickerService
-  def self.pick_store_convert_read_policy(expires_in: 10.minutes)
+  def self.pick_avatar_policy(expires_in: 10.minutes)
     ts = (Time.current + expires_in).to_i
-    { expiry: ts, call: ['pick', 'store', 'convert', 'read'] }
+    { expiry: ts, call: ['pick'], path: '/avatars/' }
+  end
+
+  def self.pick_document_policy(expires_in: 10.minutes)
+    ts = (Time.current + expires_in).to_i
+    { expiry: ts, call: ['pick'], path: '/documents/' }
   end
 
   def self.encode(policy)
@@ -12,9 +17,19 @@ class FilepickerService
     OpenSSL::HMAC.hexdigest('SHA256', secret, encoded_policy)
   end
 
-  def self.policy_hash_string(policy: self.pick_store_convert_read_policy)
+  def self.policy_hash_string(policy:)
     encoded = encode(policy)
     signed  = sign(encoded)
     "{ policy: '#{encoded}', signature: '#{signed}' }"
+  end
+
+  def self.fetch_policy(key)
+    policy =
+      case key
+      when :avatar   then pick_avatar_policy
+      when :document then pick_document_policy
+      end
+    return policy_hash_string(policy: policy) if policy
+    raise ArgumentError, "unknown filestack policy key: #{key.inspect}"
   end
 end

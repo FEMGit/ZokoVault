@@ -35,7 +35,7 @@
 
     <%= f.label :company_logo, 'Copmany Logo' %>
     <p></p>
-    
+
     <% if @corporate_profile.company_logo.blank? %>
       <% no_logo = true %>
     <% end %>
@@ -51,12 +51,12 @@
       <% end %>
     </div>
 
-    <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, '_account'" %>
+    <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account'" %>
 
     <a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="no-underline-link" id="action-avatar-link">Update Logo</a>
     <a onclick="clearAvatarPhoto('_account')" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link"
     <% if no_logo %> style="display: none;" <% end %>>Remove Logo</a>
-    
+
     <%= f.text_field :company_logo, id: "photo_url_account", style: "display: none;" %>
   </div>
   <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_accounts_path, f: f } %>

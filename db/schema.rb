@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627081710) do
+ActiveRecord::Schema.define(version: 20170628041039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20170627081710) do
     t.integer  "user_profile_id"
     t.integer  "full_primary_shared_id"
     t.uuid     "uuid",                      default: "uuid_generate_v4()", null: false
+    t.boolean  "corporate_contact",         default: false
   end
 
   add_index "contacts", ["emailaddress"], name: "index_contacts_on_emailaddress", using: :btree
@@ -96,6 +97,8 @@ ActiveRecord::Schema.define(version: 20170627081710) do
     t.string   "company_logo"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "contact_type"
+    t.string   "relationship"
   end
 
   add_index "corporate_account_profiles", ["user_id"], name: "index_corporate_account_profiles_on_user_id", using: :btree

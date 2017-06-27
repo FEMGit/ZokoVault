@@ -82,6 +82,11 @@
         <% end %>
       </p>
     <% end %>
+    
+    <% if @corporate_profile.relationship.present? %>
+      <label>Advisor Relationship</label>
+      <p><%= @corporate_profile.relationship %></p>
+    <% end %>
 
     <% if @corporate_profile.company_logo.present? %>
       <label>Company Logo</label>

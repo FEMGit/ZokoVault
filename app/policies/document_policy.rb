@@ -3,6 +3,10 @@ class DocumentPolicy < BasicPolicy
   def index?
     user_owned?
   end
+  
+  def download?
+    owned_or_shared?
+  end
 
   def create?
     owned_or_shared?

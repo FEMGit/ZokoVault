@@ -33,15 +33,32 @@
     <%= hidden_field_tag :shared_user_id, "" %>
     <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
 
-    <div id="file-pick-section" class=" mb-15">
+    <div id="file-pick-section" class=" mb-30 mt-30">
       <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
       <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button"><%= upload_button_text %></button>
     </div>
 
     <%= f.hidden_field :url %>
 
+    <a id="camera-deets" class="mt-30">
+      <svg class="camera-icon">
+        <use xlink:href="#icon-camera-phone"></use>
+      </svg>
+      Camera Phone Instructions
+    </a>
 
-
+    <div class="deets mt-20" style="display:none">
+      <p>You can login to ZokuVault simultaneously with your phone or tablet and use the devise camera to upload photos and documents directly into your vault.</p>
+      <ol>
+        <li>Go to www.zokuvault.com on your device</li>
+        <li>Click the menu button and login</li>
+        <li>You will be taken  to the dashboard where you will see a "Back to Onboarding" button</li>
+        <li>Click the Upload Document link on this page</li>
+        <li>Select "My Device" and access your camera</li>
+        <li>Complete the upload process for you file or document</li>
+        <li>Repeat the steps 4-6 as necessary for additional documents</li>
+     </ol>
+    </div>
   <%= render partial: 'tutorials/buttons_section' %>
 </div>
 
@@ -170,6 +187,11 @@
     }
 
     $('.chosen-select').chosen()
+
+    $('#camera-deets').click(function() {
+      $( ".deets" ).toggle();
+    });
+
   });
   $(window).resize(function() {
     $(".medium-modal").css({

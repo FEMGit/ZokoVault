@@ -253,6 +253,7 @@ class SharedViewController < AuthenticatedController
   end
   
   def check_expired
+    return if @shared_user.corporate_user_by_admin?(current_user)
     if @shared_user.free? || 
         (@shared_user.current_user_subscription &&
           (@shared_user.current_user_subscription.expired_trial? ||

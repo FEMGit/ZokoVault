@@ -21,6 +21,7 @@ class SharesController < AuthenticatedController
                            .each { |s| authorize s }
                            .group_by(&:user)
       append_primary_shares
+      @shares_by_user.reject! { |sh| (sh.is_a? User) && sh.corporate_user_by_admin?(current_user) }
     end
     
     def show; end

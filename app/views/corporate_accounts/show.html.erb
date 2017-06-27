@@ -54,7 +54,7 @@
       <p>Upload and manage information for this user.</p>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Manage Account', 'javascript:void(0)', class: 'button big-button blue-button' %>
+      <%= link_to 'Manage Account', shared_view_dashboard_path(@corporate_contact.user_profile.user_id), class: 'button big-button blue-button' %>
     </div>
   </section>
 

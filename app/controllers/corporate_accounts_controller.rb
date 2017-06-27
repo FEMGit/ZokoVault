@@ -7,6 +7,8 @@ class CorporateAccountsController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
+  helper_method :invitation_sent?
+  
   include BreadcrumbsErrorModule
   include UserTrafficModule
   
@@ -81,6 +83,27 @@ class CorporateAccountsController < AuthenticatedController
         format.json { render json: @user_accounts.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def send_invitation
+    contact_id = params[:contact_id]
+    return unless contact_id.present? &&
+           (corporate_contact = Contact.find_by(id: contact_id)).present?
+    corporate_profile = corporate_contact.user_profile
+    respond_to do |format|
+      if ShareInvitationService.send_corporate_invitation(corporate_contact, current_user)
+        format.html { redirect_to corporate_account_path(corporate_profile), flash: { success: 'Invitation has been successfully sent.' } }
+      else
+        format.html { redirect_to corporate_account_path(corporate_profile), flash: { error: 'Error sending an invitation, please try again later.' } }
+      end
+    end
+  end
+  
+  def invitation_sent?(contact)
+    account_user = User.find_by(email: contact.emailaddress)
+    corporate_admin_record = CorporateAdminAccountUser.find_by(corporate_admin_id: current_user.id, user_account_id: account_user.id)
+    return nil unless corporate_admin_record.present?
+    corporate_admin_record.confirmation_sent_at.present?
   end
   
   private

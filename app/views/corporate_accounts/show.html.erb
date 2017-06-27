@@ -58,23 +58,23 @@
     </div>
   </section>
 
-  <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+  <section class="flex-boxes percent-100">
+    <% invitation_sent = invitation_sent?(@corporate_contact) %>
     <div class="user-account-title">
       <h3>Send Invitation</h3>
-      <p>Bruno Mars has not been sent an invitation to the site yet</p>
+      <% if invitation_sent %>
+        <p>The <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> has already been sent.</p>
+      <% else %>
+        <p>Send <%= @corporate_contact.name %> an <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> to ZokuVault. </p>
+      <% end %>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Send Invitation', 'javascript:void(0)', class: 'button big-button blue-button' %>
+      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact), method: :post, class: 'button big-button blue-button' %>
     </div>
   </section>
+</div>
 
-  <section class="flex-boxes percent-100">
-    <div class="user-account-title">
-      <h3>Stop Managin User</h3>
-    <p>This will remove the user from</p>
-    </div>
-    <div class="user-account-link mt-10">
-      <%= link_to 'Stop Managing User', 'javascript:void(0)', class: 'button big-button blue-button' %>
-    </div>
-  </section>
+<%= render partial: 'layouts/email_preview_javascript' %>
+
+<div id="email-preview-section">
 </div>

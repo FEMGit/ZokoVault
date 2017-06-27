@@ -45,13 +45,16 @@ class UsageMetricsController < AuthenticatedController
   end
   
   def update_user
-    corporate_admin_value = 
-      if corporate_account_params.present?
-        (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
-      else
-        false
-      end
-    User.find_by(id: params[:id]).try(:update, { corporate_admin: corporate_admin_value })
+    corporate_admin = User.find_by(id: params[:id])
+    CorporateAdminService.clean_categories(corporate_admin)
+    if corporate_account_params.present?
+      corporate_admin_value = (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
+      corporate_account_params[:corporate_categories] = [] unless corporate_admin_value
+      CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories])
+    else
+      corporate_admin_value = false
+    end
+    corporate_admin.try(:update, { corporate_admin: corporate_admin_value })
     
     respond_to do |format|
       format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }

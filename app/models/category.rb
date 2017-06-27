@@ -1,4 +1,6 @@
 class Category < ActiveRecord::Base
+  has_many :corporate_admins, class_name: 'CorporateAdminCategory', foreign_key: 'user_id', dependent: :destroy
+  
   after_save { self.class.identity_map(:bust_cache) }
   after_destroy { self.class.identity_map(:bust_cache) }
 

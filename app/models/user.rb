@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
   has_many :user_traffics, dependent: :destroy
   has_many :payments
   has_one :tutorial_selection, dependent: :destroy
+  has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
 
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription
@@ -86,6 +87,16 @@ class User < ActiveRecord::Base
 
   def free?
     !paid? && !primary_shared_of_paid?
+  end
+  
+  def corporate_categories
+    return [] unless categories.present?
+    Category.all.select { |c| categories.map(&:category_id).include? c.id }
+  end
+  
+  def corporate_users
+    return [] unless corporate_admin
+    CorporateAdminAccountUser.select { |ca| ca.corporate_admin == self }.map(&:user_account)
   end
   
   def corporate_user?

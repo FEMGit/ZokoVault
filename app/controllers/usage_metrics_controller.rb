@@ -49,8 +49,8 @@ class UsageMetricsController < AuthenticatedController
     CorporateAdminService.clean_categories(corporate_admin)
     if corporate_account_params.present?
       corporate_admin_value = (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
-      corporate_account_params[:corporate_categories] = [] unless corporate_admin_value
-      CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories])
+      corporate_account_params[:corporate_categories] = [] unless (corporate_admin_value.eql? true)
+      CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories], corporate_admin_value)
     else
       corporate_admin_value = false
     end

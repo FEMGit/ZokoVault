@@ -12,8 +12,8 @@ class CorporateAdminService
     end
   end
   
-  def self.add_categories(corporate_admin, category_names)
-    return unless corporate_admin.present? && corporate_admin.corporate_admin
+  def self.add_categories(corporate_admin, category_names, corporate_admin_state = false)
+    return unless corporate_admin.present? && corporate_admin_state
     if category_names.blank?
       category_ids = Share.for_user(corporate_admin).select { |sh| sh.shareable.is_a? Category }.map(&:shareable_id)
       remove_category_shares(contact_ids(corporate_admin))

@@ -63,7 +63,8 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
   }).then(function(result) {
     if (result.filesUploaded.length == 1) {
       file = result.filesUploaded[0]
-      setAvatarPhoto(suffix, file.url, file.key)
+      preview = file.url + '?signature=' + policy_hash.signature + '&policy=' + policy_hash.policy
+      setAvatarPhoto(suffix, preview, file.key)
     } else {
       console.log(JSON.stringify(result))
     }

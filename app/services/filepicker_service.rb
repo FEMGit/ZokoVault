@@ -1,7 +1,7 @@
 class FilepickerService
   def self.pick_avatar_policy(expires_in: 10.minutes)
     ts = (Time.current + expires_in).to_i
-    { expiry: ts, call: ['pick'], path: '/avatars/' }
+    { expiry: ts, call: ['pick','store','convert'], path: '/avatars/' }
   end
 
   def self.pick_document_policy(expires_in: 10.minutes)

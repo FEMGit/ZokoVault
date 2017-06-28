@@ -158,9 +158,9 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   def create_associated_contact
-    admin_contact = Contact.new(emailaddress: @user_account.email,
-                                user_id: current_user.id,
-                                user_profile: @user_account.user_profile)
+    admin_contact = Contact.find_or_initialize_by(emailaddress: @user_account.email,
+                                                  user_id: current_user.id)
+    admin_contact.update(user_profile: @user_account.user_profile)
     admin_contact.save
     user_profile = admin_contact.user_profile
     update_contact_attributes(admin_contact, user_profile)

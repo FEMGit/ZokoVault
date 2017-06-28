@@ -6,7 +6,7 @@ class FilepickerService
 
   def self.pick_document_policy(expires_in: 10.minutes)
     ts = (Time.current + expires_in).to_i
-    { expiry: ts, call: ['pick'], path: '/documents/' }
+    { expiry: ts, call: ['pick','store'], path: '/documents/' }
   end
 
   def self.encode(policy)

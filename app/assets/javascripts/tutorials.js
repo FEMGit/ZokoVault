@@ -96,6 +96,22 @@ DynamicTutorialField.prototype.removeBtnListener = function($btn) {
   });
 };
 
+var update_dropdown_attributes = function(form_id) {
+  var multiple_select = $("#" + form_id).find('.tutorial-fields.add-tutorial').last()
+                                                    .find('.chosen-styled-select')
+                                                    .find("select")
+  if (multiple_select.length === 0) {
+    return
+  }
+  var old_id = multiple_select.attr('id').match(/\d+/)
+  var new_id = old_id == null ? 1 : parseInt(old_id[0]) + 1
+  multiple_select.attr({
+    id: "tutorial_multiple_types_" + new_id + "_[types]",
+    name: "tutorial_multiple_types_" + new_id + "[[types]][]",
+    value: ""
+  });
+}
+
 DynamicTutorialField.prototype.addAnotherBtnListener = function() {
   var that = this;
   $(document).on('click', this.addBtn, function() {
@@ -115,6 +131,7 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
         $('.chosen-select').chosen({allow_single_deselect: true});
         $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
         $("[id^='tutorial_multiple_types_']").last().remove()
+        update_dropdown_attributes($('form').attr('id'))
       }).error(function(data) {
         that.showLittleError($btn);
       });

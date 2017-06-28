@@ -206,11 +206,6 @@ class FinancialAlternativeController < AuthenticatedController
     @documents = Document.for_user(resource_owner).where(category: @category, financial_information_id: @financial_provider.id)
   end
 
-  def tutorial_multiple_types_params
-    return nil if params[:tutorial_multiple_types].blank?
-    params.require(:tutorial_multiple_types).permit(types: [])
-  end
-
   def provider_params
     params.require(:financial_provider).permit(:id, :name, :web_address, :street_address, :city, :state, :zip, :phone_number, :fax_number, :primary_contact_id, :category_id,
                                                share_with_contact_ids: [])

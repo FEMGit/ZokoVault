@@ -704,7 +704,6 @@ ActiveRecord::Schema.define(version: 20170628041039) do
     t.integer  "subcategory_count"
     t.uuid     "uuid",                                           default: "uuid_generate_v4()", null: false
     t.boolean  "corporate_admin",                                default: false
-    t.integer  "mfa_failed_attempts",                            default: 0,                    null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

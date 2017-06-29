@@ -35,6 +35,11 @@ module ContactsHelper
     asset_url('blank.png')
   end
   
+  def associated_user_logged_in?(contact)
+    return 'No' if contact.blank? || contact.user_profile.blank?
+    contact.user_profile.user.logged_in_at_least_once? ? 'Yes' : 'No'
+  end
+  
   def contact_status(contact)
     return nil unless current_user
     if current_user.user_profile.primary_shared_with

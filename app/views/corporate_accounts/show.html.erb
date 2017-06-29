@@ -44,6 +44,9 @@
       <%= @corporate_contact.user_profile.zip %><br>
     </p>
   <% end %>
+  
+  <label>Has User Logged In</label>
+  <p><%= associated_user_logged_in?(@corporate_contact) %></p>
 </div>
 
 <h1>User Actions</h1>

@@ -14,6 +14,7 @@
       <th>Last Name</th>
       <th>First Name</th>
       <th>Email</th>
+      <th>Logged In</th>
       <th class="nosort nosearch">Actions</th>
     </tr>
   </thead>
@@ -27,8 +28,9 @@
         <td><%= user.lastname %></td>
         <td><%= user.firstname %></td>
         <td><%= user.emailaddress %></td>
+        <td><%= associated_user_logged_in?(user) %></td>
         <td class="details-col">
-          <%= link_to 'Manage', 'javascript:void(0);', class: "outline-button small-button" %>
+          <%= link_to 'Manage', shared_view_dashboard_path(user.user_profile.user_id), class: "outline-button small-button" %>
           <%= link_to 'Details', corporate_account_path(user.user_profile_id), class: "outline-button small-button" %>
         </td>
       </tr>
@@ -36,8 +38,67 @@
   </tbody>
 </table>
 
+<%= link_to edit_corporate_settings_path, class: "edit-link" do %>
+  <span class="circle-button">
+  <svg class="icon circle-icon">
+    <use xlink:href="#icon-pencil-1"></use>
+  </svg>
+  </span>Edit
+<% end %>
+<h3>Corporate Account Settings</h3>
+
+<div class="card">
+  <h3 class="card-label">Corporate Details</h3>
+  <% if @corporate_profile.blank? %>
+    <label>There is on information about Corporate Account</label>
+  <% else %>
+    <% if @corporate_profile.business_name.present? %>
+      <label>Business Name</label>
+      <p><%= @corporate_profile.business_name %></p>
+    <% end %>
+
+    <% if @corporate_profile.web_address.present? %>
+      <label>Web Address</label>
+      <p><%= sanitize link_to @corporate_profile.web_address, @corporate_profile.web_address, target: '_blank' %></p>
+    <% end %>
+
+    <% if show_corporate_address?(@corporate_profile) %>
+      <label>Address</label>
+      <p>
+        <%= @corporate_profile.street_address %><br>
+        <%= @corporate_profile.city %>,
+        <%= @corporate_profile.state %>
+        <%= @corporate_profile.zip %><br>
+      </p>
+    <% end %>
+
+    <% if @corporate_profile.phone_number.present? ||
+          @corporate_profile.fax_number.present? %>
+      <label>Phone</label>
+      <p>
+        <% if @corporate_profile.phone_number.present? %>
+          <%= @corporate_profile.phone_number %><br>
+        <% end %>
+        <% if @corporate_profile.fax_number.present? %>
+          <%= @corporate_profile.fax_number %><span class="phone-type">fax</span>
+        <% end %>
+      </p>
+    <% end %>
+    
+    <% if @corporate_profile.relationship.present? %>
+      <label>Advisor Relationship</label>
+      <p><%= @corporate_profile.relationship %></p>
+    <% end %>
+
+    <% if @corporate_profile.company_logo.present? %>
+      <label>Company Logo</label>
+      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-80", alt: @corporate_profile.business_name) %></p>
+    <% end %>
+  <% end %>
+</div>
+
 <script>
   $(document).ready(function(){
-    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[1, 'asc']] ], [1, 3, 1])
+    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[1, 'asc']] ])
   });
 </script>

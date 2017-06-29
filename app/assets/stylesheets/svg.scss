@@ -73,7 +73,15 @@
   height:60px;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.75);
 }
-
+.camera-icon{
+  width: 48px;
+  height: 1.4em;
+  stroke: currentColor;
+  fill: currentColor;
+  stroke-width: 0;
+  float: left;
+  margin-right: 8px;
+}
 
 /* =======================================================================================
 Example showing how to change the color/size of the icons:

@@ -12,24 +12,32 @@
       <h3 class="card-label">Personal Information</h3>
 
       <%= f.fields_for :user_profile do |user_profile_form| %>
-        <%= user_profile_form.label :first_name, 'First Name' %>
+        <%= user_profile_form.label :first_name, 'First Name' %><span class="required">Required</span>
         <% if errors && errors.messages[:"user_profile.first_name"] %>
           <span class="error-label"> - <%= errors.messages[:"user_profile.first_name"].first %></span>
         <% end %>
         <%= user_profile_form.text_field :first_name, { class: ("input-error" if errors && errors.messages[:"user_profile.first_name"].present?), :maxlength => get_max_length(:default) } %>
 
-        <%= user_profile_form.label :last_name, 'Last Name' %>
+        <%= user_profile_form.label :last_name, 'Last Name' %><span class="required">Required</span>
         <% if errors && errors.messages[:"user_profile.last_name"] %>
           <span class="error-label"> - <%= errors.messages[:"user_profile.last_name"].first %></span>
         <% end %>
         <%= user_profile_form.text_field :last_name, { class: ("input-error" if errors && errors.messages[:"user_profile.last_name"].present?), :maxlength => get_max_length(:default) } %>
       <% end %>
 
-      <%= f.label :email, 'Email Address' %>
-      <% if errors && errors.messages[:email] %>
+      <%= f.label :email, 'Email Address' %><span class="required">Required</span>
+      <% if errors && errors.messages[:email].first %>
         <span class="error-label"> - <%= errors.messages[:email].first %></span>
       <% end %>
       <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
+      
+      <% if @user_account.confirm_email %>
+        <%= f.label :email, 'Verify Email Address' %><span class="required">Required</span>
+        <% if errors && errors.messages[:email_confirmation] %>
+          <span class="error-label"> - <%= errors.messages[:email_confirmation].first %></span>
+        <% end %>
+        <%= f.email_field :email_confirmation, { class: ("input-error" if errors && errors.messages[:email_confirmation].present?), :maxlength => get_max_length(:default) } %>
+      <% end %>
 
       <%= f.fields_for :user_profile do |user_profile_form| %>
         <%= user_profile_form.label :two_factor_phone_number, 'Cell Phone Number' %>

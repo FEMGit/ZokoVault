@@ -25,13 +25,14 @@ class TutorialService
       financial_provider = FinancialProvider.for_user(resource_owner).find_by(id: update_value[:id])
       next unless financial_provider
       
-      objects_to_update = 
-        case model.name
-          when FinancialAlternative.to_s
-            financial_provider.alternatives
-          when FinancialAccountInformation.to_s
-            financial_provider.accounts
-        end
+      case model.name
+        when FinancialAlternative.to_s
+          objects_to_update = financial_provider.alternatives
+          types_collection = FinancialAlternative::alternative_types
+        when FinancialAccountInformation.to_s
+          objects_to_update = financial_provider.accounts
+          types_collection = FinancialAccountInformation::account_types
+      end
       
       return unless objects_to_update.present?
       
@@ -42,7 +43,7 @@ class TutorialService
       end
       
       update_value[:types].each do |type|
-        next if (objects_to_update.map { |x| x[key] } .include? type)
+        next if (objects_to_update.map { |x| x[key] }.include? types_collection[type])
         objects_to_update << model.new(:user => resource_owner, key => type)
       end
       financial_provider.update(id: update_value[:id], name: update_value[:name])

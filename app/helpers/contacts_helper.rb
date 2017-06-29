@@ -13,6 +13,11 @@ module ContactsHelper
     contact.business_street_address_1.present? && contact.city.present? &&
       contact.state.present?
   end
+  
+  def show_corporate_address?(corporate_profile)
+    corporate_profile.street_address.present? && corporate_profile.city.present? &&
+      corporate_profile.state.present?
+  end
 
   def show_web_address(web_address)
     if web_address.blank? || web_address.nil?
@@ -28,6 +33,11 @@ module ContactsHelper
   
   def empty_image
     asset_url('blank.png')
+  end
+  
+  def associated_user_logged_in?(contact)
+    return 'No' if contact.blank? || contact.user_profile.blank?
+    contact.user_profile.user.logged_in_at_least_once? ? 'Yes' : 'No'
   end
   
   def contact_status(contact)

@@ -266,4 +266,10 @@ module TutorialsHelper
     end
     true
   end
+
+  def tutorial_multiple_types_params
+    last_tutorial_multiple_params = params.select { |k, _v| k.include? 'tutorial_multiple_types' }.to_a.last
+    return nil if last_tutorial_multiple_params.blank?
+    params.require(last_tutorial_multiple_params[0]).permit(types: [])
+  end
 end

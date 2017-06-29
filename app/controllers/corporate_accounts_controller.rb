@@ -40,26 +40,51 @@ class CorporateAccountsController < AuthenticatedController
   def index
     corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user }
                                                       .map(&:user_account).map(&:email).map(&:downcase)
-    @corporate_contacts = Contact.for_user(current_user).select { |c| corporate_users_emails.include? c.emailaddress.downcase }
+    @corporate_contacts = Contact.for_user(current_user)
+                                 .select { |c| corporate_users_emails.include? c.emailaddress.downcase }
+    @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
   end
   
   def show; end
   
   def new
     @user_account = User.new(user_profile: UserProfile.new)
+    @user_account.confirm_email!
   end
   
   def edit; end
+  
+  def edit_account_settings
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: current_user)
+    @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
+    @corporate_profile.save
+  end
+  
+  def update_account_settings
+    @corporate_profile = CorporateAccountProfile.find_by(id: params[:id])
+    respond_to do |format|
+      if @corporate_profile.update(corporate_settings_params)
+        format.html { redirect_to success_path(corporate_accounts_path), flash: { success: 'Corporate Settings successfully updated.' } }
+        format.json { render :index, status: :created, location: @corporate_profile }
+      else
+        error_path(:edit_account_settings)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
+        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
   
   def create
     @user_account = User.new(user_account_params)
     @user_account.skip_password_validation!
     @user_account.skip_confirmation_notification!
+    @user_account.confirm_email!
     respond_to do |format|
       if @user_account.save
         CorporateAdminAccountUser.create(corporate_admin: current_user, user_account: @user_account)
         create_associated_contact
-        CorporateAdminService.add_categories_to_user(current_user, @user_account)
+        corporate_admin_contact = create_corporate_admin_contact_for_user_account
+        CorporateAdminService.add_category_share_for_corporate_admin(current_user, corporate_admin_contact, @user_account)
         format.html { redirect_to success_path(corporate_accounts_path), flash: { success: 'User Account successfully created.' } }
         format.json { render :show, status: :created, location: @user_account }
       else
@@ -108,10 +133,36 @@ class CorporateAccountsController < AuthenticatedController
   
   private
   
+  def create_corporate_admin_contact_for_user_account
+    account_profile = CorporateAccountProfile.find_by(user: current_user)
+    Contact.create(user_id: @user_account.id,
+                   businessname: account_profile.try(:business_name),
+                   businesswebaddress: account_profile.try(:web_address),
+                   business_street_address_1: account_profile.try(:street_address),
+                   city: account_profile.try(:city),
+                   state: account_profile.try(:state),
+                   zipcode: account_profile.try(:zip),
+                   businessphone: account_profile.try(:phone_number),
+                   businessfax: account_profile.try(:fax_number),
+                   photourl: account_profile.try(:company_logo),
+                   emailaddress: current_user.email,
+                   firstname: current_user.first_name,
+                   lastname: current_user.last_name,
+                   contact_type: account_profile.try(:contact_type),
+                   relationship: account_profile.try(:relationship),
+                   corporate_contact: true
+    )
+  end
+  
+  def corporate_settings_params
+    params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
+                                              :zip, :state, :phone_number, :fax_number, :company_logo, :relationship)
+  end
+  
   def create_associated_contact
-    admin_contact = Contact.new(emailaddress: @user_account.email,
-                                user_id: current_user.id,
-                                user_profile: @user_account.user_profile)
+    admin_contact = Contact.find_or_initialize_by(emailaddress: @user_account.email,
+                                                  user_id: current_user.id)
+    admin_contact.update(user_profile: @user_account.user_profile)
     admin_contact.save
     user_profile = admin_contact.user_profile
     update_contact_attributes(admin_contact, user_profile)
@@ -159,7 +210,7 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   def user_account_params
-    params.require(:user).permit(:email,
+    params.require(:user).permit(:email, :email_confirmation,
                                  user_profile_attributes: [ :first_name, :last_name,
                                                             :two_factor_phone_number,
                                                             :phone_number, :street_address_1,

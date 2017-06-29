@@ -8,6 +8,8 @@ class RegistrationsController < Devise::RegistrationsController
         alert_existing_user_by_email(resource)
         redirect_to thank_you_path
         return
+      elsif !resource.persisted?
+        @email_error = email_error_to_display(resource)
       end
     end
   end
@@ -52,6 +54,12 @@ class RegistrationsController < Devise::RegistrationsController
     existing = User.find_by(email: attempted.email)
     message  = SecurityMailer.duplicate_sign_up(existing)
     message.deliver if message
+  end
+
+  def email_error_to_display(user)
+    all = user.errors.messages[:email]
+    return if all.blank?
+    all.find{ |msg| msg != "has already been taken" }
   end
 
 end

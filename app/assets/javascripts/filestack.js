@@ -1,6 +1,7 @@
 var clearAvatarPhoto = function(suffix) {
   suffix = suffix || ""
   $('#photo_url' + suffix).val("");
+  $('#company_logo' + suffix).val("");
   $('#image_view' + suffix).attr('src', "");
   $('#image_preview' + suffix).attr('src', "");
   $('#new-avatar' + suffix).hide();
@@ -13,6 +14,7 @@ var clearAvatarPhoto = function(suffix) {
 var setAvatarPhoto = function(suffix, preview, key) {
   suffix = suffix || ""
   $('#photo_url' + suffix).val(key)
+  $('#company_logo' + suffix).val(key);
   $('#image_view' + suffix).attr('src', preview);
   $('#image_preview' + suffix).attr('src', preview);
   $('#new-avatar' + suffix).show();

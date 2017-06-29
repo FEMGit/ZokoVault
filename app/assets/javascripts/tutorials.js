@@ -96,6 +96,22 @@ DynamicTutorialField.prototype.removeBtnListener = function($btn) {
   });
 };
 
+var update_dropdown_attributes = function(form_id) {
+  var multiple_select = $("#" + form_id).find('.tutorial-fields.add-tutorial').last()
+                                                    .find('.chosen-styled-select')
+                                                    .find("select")
+  if (multiple_select.length === 0) {
+    return
+  }
+  var old_id = multiple_select.attr('id').match(/\d+/)
+  var new_id = old_id == null ? 1 : parseInt(old_id[0]) + 1
+  multiple_select.attr({
+    id: "tutorial_multiple_types_" + new_id + "_[types]",
+    name: "tutorial_multiple_types_" + new_id + "[[types]][]",
+    value: ""
+  });
+}
+
 DynamicTutorialField.prototype.addAnotherBtnListener = function() {
   var that = this;
   $(document).on('click', this.addBtn, function() {
@@ -115,6 +131,7 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
         $('.chosen-select').chosen({allow_single_deselect: true});
         $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
         $("[id^='tutorial_multiple_types_']").last().remove()
+        update_dropdown_attributes($('form').attr('id'))
       }).error(function(data) {
         that.showLittleError($btn);
       });
@@ -248,22 +265,22 @@ $(document).on('ready', function() {
     $("input[type='submit']").on('click', function(){ tutorial.updateAll() })
   }
   
-  // Subtutorials with no-page (some action only)
-  var no_page_checkboxes = $('input[class*="no-page"]')
+  // Subtutorials with ajax-page (some action only)
+  var ajax_page_checkboxes = $('input[class*="ajax-page"]')
   var edit_form = $('form[id*="edit_tutorial"]')
-  if (no_page_checkboxes.length > 0 && edit_form.length > 0) {
+  if (ajax_page_checkboxes.length > 0 && edit_form.length > 0) {
     edit_form.submit(function(e) {
-    var checkboxes = $('input[class*="no-page"]:checked')
+    var checkboxes = $('input[class*="ajax-page"]:checked')
     if (checkboxes.length > 0) {
         var thisForm = this
         e.preventDefault()
         var ids_chosen = []
         for (var i = 0; i < checkboxes.length; i++) {
-          ids_chosen.push(checkboxes[i].className.match(/no-page-\d+/)[0].match(/\d+/)[0])
+          ids_chosen.push(checkboxes[i].className.match(/ajax-page-\d+/)[0].match(/\d+/)[0])
         }
 
-        var no_page_handle_path = $('#no_page_handle_path').val()
-        $.post(no_page_handle_path, {subtutorial_ids: ids_chosen})
+        var ajax_page_handle_path = $('#ajax_page_handle_path').val()
+        $.post(ajax_page_handle_path, {subtutorial_ids: ids_chosen})
           .done(function(data) {
             thisForm.submit()
           })

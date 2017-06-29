@@ -1,32 +1,12 @@
 <%= form_tag :account_user_type, { method: :put, id: 'account-form' } do %>
-  <div class="card mb-30 max-w-1000-centered">
+  <div class="card mb-30 max-w-1000-centered text-center">
     <%= hidden_field_tag "user[user_type]" %>
-    <h5 class="tut-top-label mt-10 mb-30">To get started, please choose one of the Vault options.</h5>
-
-    <ul class="tut-button-wrapper mb-30">
-        <li class="icon-box-large">
-          <label>
-            <%= link_to 'javascript:formSubmit("free")' do %>
-              <input type="checkbox" name="user_type" value="free" >
-              <span>
-                <%= image_tag "marketing/cloud-3.png", :class => "" %><br>
-                I was invited to share in someone else's Vault.
-              </span>
-            <% end %>
-          </label>
-        </li>
-      <li class="icon-box-large">
-        <label>
-          <%= link_to 'javascript:formSubmit("trial")' do %>
-            <input type="checkbox" name="user_type" value="trial">
-            <span>
-              <%= image_tag "marketing/safe-3.png", :class => "" %><br>
-              I want to complete my own Vault.
-            </span>
-          <% end %>
-        </label>
-      </li>
-    </ul>
+    <% if current_user.corporate_user? %>
+      <%= render partial: 'corporate_user_type' %>
+    <% else %>
+      <%= render partial: 'common_user_type' %>
+    <% end %>
+    
   </div>
 <% end %>
 

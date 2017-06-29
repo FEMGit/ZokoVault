@@ -265,22 +265,22 @@ $(document).on('ready', function() {
     $("input[type='submit']").on('click', function(){ tutorial.updateAll() })
   }
   
-  // Subtutorials with no-page (some action only)
-  var no_page_checkboxes = $('input[class*="no-page"]')
+  // Subtutorials with ajax-page (some action only)
+  var ajax_page_checkboxes = $('input[class*="ajax-page"]')
   var edit_form = $('form[id*="edit_tutorial"]')
-  if (no_page_checkboxes.length > 0 && edit_form.length > 0) {
+  if (ajax_page_checkboxes.length > 0 && edit_form.length > 0) {
     edit_form.submit(function(e) {
-    var checkboxes = $('input[class*="no-page"]:checked')
+    var checkboxes = $('input[class*="ajax-page"]:checked')
     if (checkboxes.length > 0) {
         var thisForm = this
         e.preventDefault()
         var ids_chosen = []
         for (var i = 0; i < checkboxes.length; i++) {
-          ids_chosen.push(checkboxes[i].className.match(/no-page-\d+/)[0].match(/\d+/)[0])
+          ids_chosen.push(checkboxes[i].className.match(/ajax-page-\d+/)[0].match(/\d+/)[0])
         }
 
-        var no_page_handle_path = $('#no_page_handle_path').val()
-        $.post(no_page_handle_path, {subtutorial_ids: ids_chosen})
+        var ajax_page_handle_path = $('#ajax_page_handle_path').val()
+        $.post(ajax_page_handle_path, {subtutorial_ids: ids_chosen})
           .done(function(data) {
             thisForm.submit()
           })

@@ -53,7 +53,7 @@ class DocumentDatatable
   end
 
   def get_raw_records
-    DocumentPolicy::Scope.new(current_user, Document).resolve.where(filter).order(sort_column + sort_direction)
+    DocumentPolicy::Scope.new(current_user, Document).resolve.joins(join_query).where(filter).order(sort_column + sort_direction)
   end
 
   def paginated_records
@@ -68,7 +68,7 @@ class DocumentDatatable
     all_queries = []
     query_params.each do |query|
       param = "'%#{query}%'"
-      columns = %w(name category description)
+      columns = %w(name category description contacts.firstname contacts.lastname)
       all_queries << columns.map { |c| "#{c} ilike #{param}" }
       all_queries << " to_char(updated_at, 'MM/DD/YYYY') ilike #{param}"
     end
@@ -81,7 +81,8 @@ class DocumentDatatable
   end
   
   def join_query
-    
+     "LEFT OUTER JOIN shares on shares.shareable_type='Document' AND shares.shareable_id=documents.id
+      LEFT OUTER JOIN contacts on shares.contact_id = contacts.id"
   end
   
   def page

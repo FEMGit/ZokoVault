@@ -18,6 +18,10 @@ $(function(){
   });
   
   var toggleNavigationMenu = function(className, width) {
+    if ($('.' + className).hasClass('no-side-bar')) {
+      $('.' + className).css('display', 'none');
+      return;
+    }
     if ($(window).width() <= width) {
        $('.' + className).css('display', '');
     } else {

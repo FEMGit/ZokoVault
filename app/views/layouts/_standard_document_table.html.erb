@@ -26,9 +26,9 @@
           dataType: 'json'
         },
         fnDrawCallback: function() {
-          var tableId = '#traffics-table';
+          var tableId = '#documents-table';
           var controlsArray = prepareTableControls(tableId);
-          updateSearchField(tableId, controlsArray, 'traffic');
+          updateSearchField(tableId, controlsArray, 'document');
           updateTable(tableId, null, controlsArray);
           $('.dataTables_filter input').focus();
         }

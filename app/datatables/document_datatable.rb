@@ -2,7 +2,6 @@ class DocumentDatatable
   include Rails.application.routes.url_helpers
   include DocumentsHelper
   include SharedViewHelper
-  include ActionView::Helpers::TagHelper
   delegate :root_url, :params, :link_to, :current_user, to: :@view
 
   def initialize(view)
@@ -27,20 +26,15 @@ class DocumentDatatable
   def sort_column
     case params[:order]["0"][:column]
       when "0"
-        # Name
         "name "
       when "1"
-        # Time
         "updated_at "
       when "2"
-        # Page Name
         "category "
-      when "3"
-        # Url
-        "shared_with "
+      #when "3"
+      #  "shared_with_contacts "
       when "4"
-        # Requesting IP
-        "notes "
+        "description "
     end
   end
   
@@ -49,7 +43,10 @@ class DocumentDatatable
       [
         document_link(document),
         document.updated_at,
-        document_tag(document)
+        document_tag(document),
+        document_shared_with(document),
+        document_notes(document),
+        document_actions(document)
       ]
     end
   end
@@ -70,7 +67,7 @@ class DocumentDatatable
     all_queries = []
     query_params.each do |query|
       param = "'%#{query}%'"
-      columns = %w(name updated_at category shared_with notes)
+      columns = %w(name category description)
       all_queries << columns.map { |c| "#{c} ilike #{param}" }
     end
     
@@ -79,6 +76,10 @@ class DocumentDatatable
       filters << all_queries
     end
     filters.join(" AND ")
+  end
+  
+  def join_query
+    
   end
   
   def page
@@ -97,7 +98,15 @@ class DocumentDatatable
     @view.render(:partial => 'layouts/document_tags', :formats => [:html], locals: { document: document })
   end
   
-  def document_shares(document)
+  def document_shared_with(document)
     @view.render(:partial => 'layouts/share_with_contacts', locals: { shares: document_shares(document) })
+  end
+  
+  def document_notes(document)
+    @view.render(:partial => 'layouts/document_notes', locals: { notes: document.description })
+  end
+  
+  def document_actions(document)
+    @view.render(:partial => 'layouts/document_actions', locals: { document: document })
   end
 end

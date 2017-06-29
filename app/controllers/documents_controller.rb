@@ -68,8 +68,16 @@ class DocumentsController < AuthenticatedController
 
   def show
     authorize @document
-    s3_object = S3Service.get_object_by_key(@document.url)
+    document_key = @document.url
+    s3_object = S3Service.get_object_by_key(document_key)
     return unless s3_object.exists?
+    
+    # Download in case if file can't be previewed
+    if !Document.previewed?(s3_object.content_type) 
+      data = open(download_file(document_key))
+      send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last and return
+    end
+    
     @image = Document.image?(s3_object.content_type)
     @pdf = Document.pdf?(s3_object.content_type)
   end
@@ -150,15 +158,6 @@ class DocumentsController < AuthenticatedController
 
   def get_card_names
     render :json => card_names(base_params[:category]).flatten
-  end
-
-  def download
-    return if download_params[:uuid].blank?
-    doc = Document.for_user(resource_owner).find_by(uuid: download_params[:uuid])
-    authorize doc
-    document_key = doc.try(:url)
-    data = open(download_file(document_key))
-    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
   end
 
   private
@@ -324,18 +323,18 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render json: @document.as_json.merge(additinal_json_params), status: :created }
+    format.json { render json: @document.as_json.merge(additional_json_params), status: :created }
   end
 
-  def additinal_json_params
-    additinal_json_params = Hash.new
-    additinal_json_params["primary_tag"] = @document.category
+  def additional_json_params
+    additional_json_params = Hash.new
+    additional_json_params["primary_tag"] = @document.category
     secondary_tag_name = secondary_tag(@document)
     if secondary_tag_name.present?
-      additinal_json_params["secondary_tag"] = secondary_tag_name
+      additional_json_params["secondary_tag"] = secondary_tag_name
     end
-    additinal_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
-    additinal_json_params
+    additional_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
+    additional_json_params
   end
 
   def handle_document_not_saved(format)

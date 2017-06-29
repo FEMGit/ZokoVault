@@ -2,6 +2,7 @@ class DocumentDatatable
   include Rails.application.routes.url_helpers
   include DocumentsHelper
   include SharedViewHelper
+  include DateHelper
   delegate :root_url, :params, :link_to, :current_user, to: :@view
 
   def initialize(view)
@@ -42,7 +43,7 @@ class DocumentDatatable
     paginated_records.map do |document|
       [
         document_link(document),
-        document.updated_at,
+        date_format(document.updated_at),
         document_tag(document),
         document_shared_with(document),
         document_notes(document),
@@ -69,6 +70,7 @@ class DocumentDatatable
       param = "'%#{query}%'"
       columns = %w(name category description)
       all_queries << columns.map { |c| "#{c} ilike #{param}" }
+      all_queries << " to_char(updated_at, 'MM/DD/YYYY') ilike #{param}"
     end
     
     if all_queries.present?

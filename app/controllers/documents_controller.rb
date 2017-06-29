@@ -60,15 +60,14 @@ class DocumentsController < AuthenticatedController
   end
 
   @after_new_user_created = ""
-
+  
   def index
     @documents = policy_scope(Document).each { |d| authorize d }
-    session[:ret_url] = "/documents"
-    
     respond_to do |format|
       format.html
       format.json { render json: DocumentDatatable.new(view_context) }
     end
+    session[:ret_url] = "/documents"
   end
 
   def show

@@ -1,7 +1,5 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<p id="notice"><%= notice %></p>
-
 <% if @image %>
   <img src=<%= get_file_url(@document.url) %> class="image-preview" >
 <% else %>

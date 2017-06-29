@@ -1,9 +1,11 @@
+class ActionView::Base attr_accessor :documents end
+
 class DocumentDatatable
   include Rails.application.routes.url_helpers
   include DocumentsHelper
   include SharedViewHelper
   include DateHelper
-  delegate :root_url, :params, :link_to, :current_user, to: :@view
+  delegate :root_url, :params, :link_to, :current_user, :documents, to: :@view
 
   def initialize(view)
     @view = view
@@ -29,11 +31,11 @@ class DocumentDatatable
       when "0"
         "name "
       when "1"
-        "updated_at "
+        "documents.updated_at "
       when "2"
         "category "
-      #when "3"
-      #  "shared_with_contacts "
+      when "3"
+        "contacts.lastname "
       when "4"
         "description "
     end
@@ -53,7 +55,17 @@ class DocumentDatatable
   end
 
   def get_raw_records
-    DocumentPolicy::Scope.new(current_user, Document).resolve.joins(join_query).where(filter).order(sort_column + sort_direction)
+    #DocumentPolicy::Scope.new(current_user, Document).resolve.joins(join_query).where(filter).order(sort_column + sort_direction)
+    document_ids_query = []
+    documents.each do |document|
+      document_ids_query << "documents.id = #{document.id} "
+    end
+  
+    if document_ids_query.present?
+      document_ids_query = document_ids_query.join(" OR ").prepend('(') << ')'
+    end
+    
+    DocumentPolicy::Scope.new(current_user, Document).resolve.joins(join_query).where(document_ids_query).where(filter).order(sort_column + sort_direction)
   end
 
   def paginated_records
@@ -70,7 +82,7 @@ class DocumentDatatable
       param = "'%#{query}%'"
       columns = %w(name category description contacts.firstname contacts.lastname)
       all_queries << columns.map { |c| "#{c} ilike #{param}" }
-      all_queries << " to_char(updated_at, 'MM/DD/YYYY') ilike #{param}"
+      all_queries << " to_char(documents.updated_at, 'MM/DD/YYYY') ilike #{param}"
     end
     
     if all_queries.present?

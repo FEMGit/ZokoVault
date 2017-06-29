@@ -47,10 +47,15 @@ class CategoriesController < AuthenticatedController
 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
-    @insurance_documents = Document.for_user(current_user).where(category: @category.name)
+    @documents = @insurance_documents = Document.for_user(current_user).where(category: @category.name)
+    respond_to do |format|
+      format.html
+      format.json { render json: DocumentDatatable.new(view_context) }
+    end
+    
     session[:ret_url] = "/insurance"
   end
-
+  
   def redirect_path(category)
     case category.name
     when Rails.application.config.x.InsuranceCategory

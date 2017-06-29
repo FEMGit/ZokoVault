@@ -1,7 +1,7 @@
 <% description ||= "" %>
 <% title ||= "" %>
 
-<div class="card mb-30 mt-20 max-w-1000-centered no-pages-form text-center">
+<div class="card mb-30 mt-20 max-w-1000-centered ajax-pages-form text-center">
   <h1><%= title %></h1>
   <p class="inline-block"><%= description %></p>
   <%= form_for @tutorial do |f| %>
@@ -9,22 +9,22 @@
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :tutorial_name, @tutorial_name %>
     <%= hidden_field_tag :page_number, @page_number %>
-    <%= hidden_field_tag :no_page_handle_path, no_page_handle_path %>
+    <%= hidden_field_tag :ajax_page_handle_path, ajax_page_handle_path %>
 
-    <% no_page_tutorials = 0 %>
+    <% ajax_page_tutorials = 0 %>
     <% tutorial_pages_counter = 1 %>
     <ul class="tut-button-wrapper">
       <%- @subtutorials.each_with_index do |tutorial, index|%>
-        <% if tutorial.no_page %>
-          <% no_page_tutorials += 1 %>
+        <% if tutorial.ajax_page %>
+          <% ajax_page_tutorials += 1 %>
         <% end %>
         <% if tutorial_show.call(tutorial) %>
           <li class="icon-box">
             <label>
-              <% if tutorial.no_page %>
-                <%= check_box_tag "tutorial[no-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item no-page-#{tutorial.id}", value: tutorial.id} %>
+              <% if tutorial.ajax_page %>
+                <%= check_box_tag "tutorial[ajax-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item ajax-page-#{tutorial.id}", value: tutorial.id} %>
               <% else %>
-                <% index -= no_page_tutorials %>
+                <% index -= ajax_page_tutorials %>
                 <%= check_box_tag "tutorial[pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item", value: tutorial.id } %>
               <% end %>
               <%= render partial: 'tutorials/tutorial_icon', locals: { tutorial: tutorial } %>

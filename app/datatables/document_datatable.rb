@@ -90,31 +90,14 @@ class DocumentDatatable
   end
   
   def document_link(document)
-    if @shared_user.present?
-      link_to document.name, shared_documents_path(@shared_user, document)
-    else
-      link_to document.name, document_path(document)
-    end
+    @view.render(:partial => 'layouts/document_links', :formats => [:html], locals: { document: document })
   end
   
   def document_tag(document)
-    if document.is_a? Document
-      if document_category(document).nil?
-        content_tag(:span, empty_group_category, class: 'doc-tag')
-      else
-        primary_tag = content_tag(:span, document_category(document), class: 'doc-tag')
-        secondary_tag = 
-          if subcategory_shared?(document.user, current_user, document)
-            if document_name_tag(document)
-              content_tag(:span, document_name_tag(document), class: 'doc-tag secondary-tag')
-            elsif document_group(document)
-              content_tag(:span, document_group(document), class: 'doc-tag secondary-tag')
-            else
-              nil
-            end
-          end
-        primary_tag + secondary_tag
-      end
-    end
+    @view.render(:partial => 'layouts/document_tags', :formats => [:html], locals: { document: document })
+  end
+  
+  def document_shares(document)
+    @view.render(:partial => 'layouts/share_with_contacts', locals: { shares: document_shares(document) })
   end
 end

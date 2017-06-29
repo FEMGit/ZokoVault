@@ -10,7 +10,7 @@ class DocumentsController < AuthenticatedController
   before_action :prepare_document_params, only: [:create, :update]
   before_action :set_dropdown_options, only: [:new, :edit]
   before_action :prepare_shares, only: [:update]
-
+ 
   # Breadcrumbs navigation
   before_action :set_previous_crumbs, only: [:new, :edit, :show, :download]
   before_action :set_index_crumbs, only: [:index]

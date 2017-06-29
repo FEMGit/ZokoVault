@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170628041039) do
+ActiveRecord::Schema.define(version: 20170629025219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -536,7 +536,7 @@ ActiveRecord::Schema.define(version: 20170628041039) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "number_of_pages", default: 1
-    t.boolean  "no_page",         default: false
+    t.boolean  "ajax_page",       default: false
     t.integer  "position",        default: 0
   end
 

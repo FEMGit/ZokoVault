@@ -158,10 +158,19 @@ class TutorialsController < AuthenticatedController
         render :json => { :errors => 'Error saving a record, please try again.' }, :status => 500
       end
     end
+    add_digital_wills_subtutorial
     render :json => {}, :status => 200
   end
 
   private
+  
+  def add_digital_wills_subtutorial
+    if subtutorial_id_params[:subtutorial_ids].present?
+      tuto_index = session[:tutorial_index]
+      tutorial_id = session[:tutorial_paths][tuto_index - 1][:tuto_id].to_i
+      tutorial_path_update({"2" => params[:subtutorial_ids].first }, tutorial_id)
+    end
+  end
   
   def tutorial_progress_save(tuto_name)
     tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))

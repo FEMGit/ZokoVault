@@ -4,20 +4,21 @@ class DocumentsController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   before_action :set_header_info_blank_layout, only: [:new]
-  before_action :set_document, only: [:show, :edit, :update, :destroy]
+  before_action :set_document, only: [:show, :edit, :update, :destroy, :download, :preview]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_viewable_contacts, only: [:update, :edit]
   before_action :prepare_document_params, only: [:create, :update]
   before_action :set_dropdown_options, only: [:new, :edit]
   before_action :prepare_shares, only: [:update]
-
+  before_action :set_document_content_type, only: [:show, :preview]
+ 
   # Breadcrumbs navigation
-  before_action :set_previous_crumbs, only: [:new, :edit, :show, :download]
+  before_action :set_previous_crumbs, only: [:new, :edit, :show, :preview, :download]
   before_action :set_index_crumbs, only: [:index]
   before_action :set_add_crumbs, :set_first_run, only: [:new, :create]
   before_action :set_edit_crumbs, only: [:edit, :update]
-  before_action :set_show_crumbs, only: [:show]
-  layout :resolve_layout, only: [:new, :edit, :index, :show]
+  before_action :set_show_crumbs, only: [:preview]
+  layout :resolve_layout, only: [:new, :edit, :index, :preview]
   include BreadcrumbsCacheModule
   include UserTrafficModule
 
@@ -30,9 +31,12 @@ class DocumentsController < AuthenticatedController
       when 'edit'
         document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
         return "#{document.name} - Edit"
-      when 'show'
+      when 'preview'
         document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
         return "#{document.name} - Preview"
+      when 'download'
+        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
+        return "#{document.name} - Download"
     end
   end
 
@@ -55,8 +59,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def set_show_crumbs
-    add_breadcrumb "Document Preview", document_path(@document) if general_view?
-    add_breadcrumb "Document Preview", shared_document_path(@shared_user, @document) if shared_view?
+    add_breadcrumb "Document Preview", preview_document_path(@document, @shared_user)
   end
 
   @after_new_user_created = ""
@@ -68,10 +71,24 @@ class DocumentsController < AuthenticatedController
 
   def show
     authorize @document
-    s3_object = S3Service.get_object_by_key(@document.url)
-    return unless s3_object.exists?
-    @image = Document.image?(s3_object.content_type)
-    @pdf = Document.pdf?(s3_object.content_type)
+    if Document.previewed?(@document_content_type) 
+      redirect_to preview_document_path(@document, @shared_user) and return
+    else
+      redirect_to download_document_path(@document, @shared_user) and return
+    end
+  end
+  
+  def download
+    authorize @document
+    document_key = @document.url
+    data = open(download_file(document_key))
+    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
+  end
+  
+  def preview
+    authorize @document
+    @image = Document.image?(@document_content_type)
+    @pdf = Document.pdf?(@document_content_type)
   end
 
   def new
@@ -152,16 +169,13 @@ class DocumentsController < AuthenticatedController
     render :json => card_names(base_params[:category]).flatten
   end
 
-  def download
-    return if download_params[:uuid].blank?
-    doc = Document.for_user(resource_owner).find_by(uuid: download_params[:uuid])
-    authorize doc
-    document_key = doc.try(:url)
-    data = open(download_file(document_key))
-    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
-  end
-
   private
+  
+  def set_document_content_type
+    s3_object = S3Service.get_object_by_key(@document.url)
+    return nil unless s3_object.exists?
+    @document_content_type = s3_object.content_type
+  end
 
   def validate_params
     category_name = document_params[:category]
@@ -324,18 +338,18 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render json: @document.as_json.merge(additinal_json_params), status: :created }
+    format.json { render json: @document.as_json.merge(additional_json_params), status: :created }
   end
 
-  def additinal_json_params
-    additinal_json_params = Hash.new
-    additinal_json_params["primary_tag"] = @document.category
+  def additional_json_params
+    additional_json_params = Hash.new
+    additional_json_params["primary_tag"] = @document.category
     secondary_tag_name = secondary_tag(@document)
     if secondary_tag_name.present?
-      additinal_json_params["secondary_tag"] = secondary_tag_name
+      additional_json_params["secondary_tag"] = secondary_tag_name
     end
-    additinal_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
-    additinal_json_params
+    additional_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
+    additional_json_params
   end
 
   def handle_document_not_saved(format)

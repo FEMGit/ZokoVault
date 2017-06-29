@@ -7,6 +7,10 @@ class SharePolicy < BasicPolicy
   def download?
     owned_or_shared?
   end
+  
+  def preview?
+    owned_or_shared?
+  end
 
   def create?
     owned_or_shared?

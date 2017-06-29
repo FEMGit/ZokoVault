@@ -4,16 +4,20 @@ class DocumentPolicy < BasicPolicy
     user_owned?
   end
   
-  def download?
-    owned_or_shared?
-  end
-
   def create?
     owned_or_shared?
   end
 
   def documents?
     edit?
+  end
+  
+  def download?
+    owned_or_shared?
+  end
+  
+  def preview?
+    owned_or_shared?
   end
 
   def owner_shared_category_with_user?

@@ -28,14 +28,17 @@ class Document < ActiveRecord::Base
   DOCUMENT_PREVIEW_FILES = %w(image pdf).freeze
 
   def self.previewed?(extension)
+    return false unless extension.present?
     DOCUMENT_PREVIEW_FILES.any? { |x| extension.include?(x) }
   end
 
   def self.image?(extension)
+    return false unless extension.present?
     %w(image).any? { |x| extension.include?(x) }
   end
 
   def self.pdf?(extension)
+    return false unless extension.present?
     extension.include?('pdf')
   end
 

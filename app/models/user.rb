@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   include StagingHelper
-  attr_accessor :skip_password_validation
+  attr_accessor :skip_password_validation, :confirm_email
+
   devise :database_authenticatable, :confirmable, :lockable, :registerable,
          :recoverable, :timeoutable, :trackable, :validatable,
          :password_archivable
@@ -13,6 +14,8 @@ class User < ActiveRecord::Base
   # == Validations
   validates :email, :email_format => { :message => "Email should contain @ and domain like .com" }
   validate :email_is_valid?
+  validates_confirmation_of :email, message: "Emails do not match", if: :confirm_email?
+  validates_presence_of :email_confirmation, message: 'Required', if: :confirm_email?
 
   validate :password_complexity
 
@@ -195,6 +198,10 @@ class User < ActiveRecord::Base
   def skip_password_validation!
     @skip_password_validation = true
   end
+  
+  def confirm_email!
+    @confirm_email = true
+  end
 
   before_create { set_as_admin }
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
@@ -204,6 +211,10 @@ class User < ActiveRecord::Base
   def password_required?
     return false if skip_password_validation
     super
+  end
+  
+  def confirm_email?
+    @confirm_email == true
   end
 
   private

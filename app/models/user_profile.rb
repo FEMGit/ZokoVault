@@ -110,7 +110,7 @@ class UserProfile < ActiveRecord::Base
   def mfa_new_ip?
     self.mfa_frequency == "new_ip"
   end
-
+  
   private
   
   def email_is_valid?

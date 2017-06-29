@@ -49,6 +49,7 @@ class CorporateAccountsController < AuthenticatedController
   
   def new
     @user_account = User.new(user_profile: UserProfile.new)
+    @user_account.confirm_email!
   end
   
   def edit; end
@@ -77,6 +78,7 @@ class CorporateAccountsController < AuthenticatedController
     @user_account = User.new(user_account_params)
     @user_account.skip_password_validation!
     @user_account.skip_confirmation_notification!
+    @user_account.confirm_email!
     respond_to do |format|
       if @user_account.save
         CorporateAdminAccountUser.create(corporate_admin: current_user, user_account: @user_account)
@@ -208,7 +210,7 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   def user_account_params
-    params.require(:user).permit(:email,
+    params.require(:user).permit(:email, :email_confirmation,
                                  user_profile_attributes: [ :first_name, :last_name,
                                                             :two_factor_phone_number,
                                                             :phone_number, :street_address_1,

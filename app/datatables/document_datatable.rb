@@ -1,10 +1,8 @@
-class UserTrafficDatatable
-  delegate :user_link, :resource_link, :root_url, :params, :link_to,
-    :params, :current_user, to: :@view
+class DocumentDatatable
+  delegate :root_url, :params, :link_to, :current_user, to: :@view
 
   def initialize(view)
     @view = view
-    byebug
   end
 
   def as_json(options = {})
@@ -25,22 +23,20 @@ class UserTrafficDatatable
   def sort_column
     case params[:order]["0"][:column]
       when "0"
-        # User Name
-        "profiles.last_name " + sort_direction + ", profiles.first_name "
+        # Name
+        "name "
       when "1"
         # Time
-        "created_at "
+        "updated_at "
       when "2"
         # Page Name
-        "page_name "
+        "category "
       when "3"
         # Url
-        "page_url "
+        "shared_with "
       when "4"
         # Requesting IP
-        "ip_address "
-      else
-        "created_at "
+        "notes "
     end
   end
   
@@ -57,8 +53,7 @@ class UserTrafficDatatable
   end
 
   def get_raw_records
-    ## for_user + shared_traffic
-    UserTraffic.joins(join_query).where(filter).includes(user: [user_profile: :contact]).order(sort_column + sort_direction)
+    Document.for_user(current_user).where(filter).each { |d| authorize d }.order(sort_column + sort_direction)
   end
 
   def paginated_records
@@ -67,14 +62,13 @@ class UserTrafficDatatable
 
   def filter
     filters = []
-    filters << "(user_traffics.user_id = #{current_user.id} OR user_traffics.shared_user_id = #{current_user.id})"
 
     query_params = params[:search][:value].split(' ')
     
     all_queries = []
     query_params.each do |query|
       param = "'%#{query}%'"
-      columns = %w(page_name page_url ip_address profiles.first_name profiles.last_name)
+      columns = %w(name updated_at category shared_with notes)
       all_queries << columns.map { |c| "#{c} ilike #{param}" }
     end
     
@@ -96,18 +90,5 @@ class UserTrafficDatatable
 
   def per_page
     params[:length].to_i > 0 ? params[:length].to_i : 10
-  end
-
-  def traffic_user(info)
-    link_to info.user.name, user_link(info), class: 'no-underline-link'
-  end
-
-  def traffic_page(info)
-    link_to info.page_name, resource_link(info), class: 'no-underline-link'
-  end
-
-  def traffic_url(info)
-    link_name = resource_link(info).remove(root_url).blank? ? "/" : resource_link(info).remove(root_url)
-    link_to link_name, resource_link(info), class: 'no-underline-link'
   end
 end

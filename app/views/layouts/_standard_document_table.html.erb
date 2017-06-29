@@ -10,33 +10,31 @@
     </tr>
   </thead>
   <tbody>
-    <% documents && documents.each do |document| %>
-      <% if exists?(document) %>
-        <tr>
-          <td>
-            <%= render :partial => "layouts/document_links", :locals => {:document => document } %>
-          </td>
-          <td><%= date_format(document.updated_at) %></td>
-          <td>
-            <%= render :partial => "layouts/document_tags", :locals => {:document => document} %>
-          </td>
-          <td>
-            <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => document_shares(document)} %>
-          </td>
-          <td>
-            <%= render :partial => "layouts/document_notes", :locals => {:notes => document.description } %>
-          </td>
-          <td>
-            <%= render :partial => "layouts/document_actions", :locals => {:document => document } %>
-          </td>
-        </tr>
-      <% end %>
-    <% end %>
+    <!-- Datatable content goes here! -->
   </tbody>
 </table>
 
 <script>
-  $(document).ready(function(){
-    DatatableUpdate('#documents-table', [ [5, 10, 15, 25, 50, 100], 'documents', [[0, 'asc']] ])
+  $(document).ready(function() {
+    if ($('#documents-table').length) {
+      var options = {
+        processing: true,
+        serverSide: true,
+        ajax: {
+          url: "<%= documents_path %>",
+          method: 'GET',
+          dataType: 'json'
+        },
+        fnDrawCallback: function() {
+          var tableId = '#traffics-table';
+          var controlsArray = prepareTableControls(tableId);
+          updateSearchField(tableId, controlsArray, 'traffic');
+          updateTable(tableId, null, controlsArray);
+          $('.dataTables_filter input').focus();
+        }
+      };
+
+      DatatableUpdate('#documents-table', [ [5, 10, 15, 25, 50, 100], 'documents', [[0, 'asc']] ], null, options)
+    }
   });
 </script>

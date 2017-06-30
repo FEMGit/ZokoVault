@@ -148,12 +148,19 @@
         margin-bottom: 30px;
       }
     }
+    
+    .inline-input{
+      flex: 70%;
+    }
+    .inline-button{
+      flex: 30%;
+    }
   }
   .inline-input{
-    flex: 70%;
+    flex: 60%;
   }
   .inline-button{
-    flex: 30%;
+    flex: 40%;
     margin-left: 10px;
     margin-right: 0;
     text-align: center;

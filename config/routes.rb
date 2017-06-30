@@ -196,8 +196,8 @@ Rails.application.routes.draw do
       get :subscriptions
       get :yearly_subscription
       put :send_code
-      post :verify_code
-      put :verify_code
+      post :mfa_verify_code
+      put :mfa_verify_code
     end
   end
 

@@ -187,7 +187,7 @@ class ContactsController < AuthenticatedController
     general_after_id = general_after_id(contact_ids, contact_position)
     after_contact = Contact.find_by(id: general_after_id)
 
-    if after_contact && after_contact.account_owner?
+    if after_contact && after_contact.account_owner?(resource_owner)
       shared_after_id = share_contact_after_id(contact_ids, contact_position)
     end
 

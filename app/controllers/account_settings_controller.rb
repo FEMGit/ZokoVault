@@ -180,6 +180,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def update_account_users_params
+    return if params[:user_profile].blank?
     params[:user_profile][:primary_shared_with_ids] = Array.wrap(params[:user_profile][:primary_shared_with_ids])
   end
 
@@ -193,6 +194,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def account_users_params
+    return {} if params[:user_profile].blank?
     params.require(:user_profile).permit(full_primary_shared_with_ids: [], primary_shared_with_ids: [])
   end
 

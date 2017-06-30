@@ -33,7 +33,7 @@ class AccountSettingsController < AuthenticatedController
     current_user.update_attributes(phone_setup_params)
     redirect_to login_settings_path
   end
-
+  
   def manage_subscription
     @subscription = current_user.current_user_subscription
     return if @subscription.blank? || !@subscription.full?

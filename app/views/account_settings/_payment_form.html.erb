@@ -18,5 +18,5 @@
 <%= javascript_include_tag "stripe_elements_card" %>
 
 <script>
-  setupStripeCardEntryForm('<%= ENV["STRIPE_PUBLIC_KEY"] %>')
+  setupStripeCardEntryForm('<%= Rails.configuration.stripe[:publishable_key] %>')
 </script>

@@ -18,6 +18,10 @@ module ContactsHelper
     corporate_profile.street_address.present? && corporate_profile.city.present? &&
       corporate_profile.state.present?
   end
+  
+  def show_delete_button?(contact)
+    contact.persisted? && contact != current_user.user_profile.contact && policy(contact).destroy?
+  end
 
   def show_web_address(web_address)
     if web_address.blank? || web_address.nil?

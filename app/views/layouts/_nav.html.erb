@@ -14,44 +14,47 @@
     </svg>Dashboard
   </a>
   <% financial_information_current = 'active' if current_page?(financial_information_url) || controller?('financial_account', 'financial_property', 'financial_investment', 'financial_alternative') ||
-      breadcrumb?(:financial_information_path) %>
+      breadcrumb?(financial_information_path) || breadcrumb?(:financial_information_path) %>
   <%= link_to financial_information_path, class: "main-nav #{financial_information_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-activity-monitor-1"></use>
     </svg>Financial Information
   <% end %>
-  <% wills_powers_of_attorney = 'active' if current_page?(wills_powers_of_attorney_url) || controller?('wills', 'power_of_attorneys') %>
+  <% wills_powers_of_attorney = 'active' if current_page?(wills_powers_of_attorney_url) || controller?('wills', 'power_of_attorneys') ||
+      breadcrumb?(wills_powers_of_attorney_path) || breadcrumb?(:wills_powers_of_attorney_path) %>
   <%= link_to wills_powers_of_attorney_path, class: "main-nav #{wills_powers_of_attorney}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-document-3"></use>
     </svg>Wills & Powers of Attorney
   <% end %>
-  <% trusts_entities = 'active' if current_page?(trusts_entities_url) || controller?('trusts', 'entities') %>
+  <% trusts_entities = 'active' if current_page?(trusts_entities_url) || controller?('trusts', 'entities') ||
+      breadcrumb?(trusts_entities_path) || breadcrumb?(:trusts_entities_path) %>
   <%= link_to trusts_entities_path, class: "main-nav #{trusts_entities}" do%>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-trust"></use>
     </svg>Trusts &amp; Entities
   <% end %>
   <% insurance_current = 'active' if current_page?(insurance_url) || controller?('life_and_disabilities', 'healths', 'property_and_casualties') ||
-      breadcrumb?(:insurance_path) %>
+      breadcrumb?(insurance_path) || breadcrumb?(:insurance_path) %>
   <%= link_to insurance_path, class: "main-nav #{insurance_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-umbrella-1"></use>
     </svg>Insurance
   <% end %>
-  <% taxes_current = 'active' if current_page?(taxes_url) || controller?('taxes') || breadcrumb?(:taxes_path) %>
+  <% taxes_current = 'active' if current_page?(taxes_url) || controller?('taxes') || breadcrumb?(taxes_path) || breadcrumb?(:taxes_path) %>
   <%= link_to taxes_path, class: "main-nav #{taxes_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-book-6"></use>
     </svg>Taxes
   <% end %>
-<!--  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) || breadcrumb?(:healthcare_choices_path) %>
+<!--  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) || breadcrumb?(healthcare_choices_path) %>
   <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices
   <% end %> -->
-  <% final_wishes_current = 'active' if current_page?(final_wishes_url) || controller?('final_wishes') || breadcrumb?(:final_wishes_path) %>
+  <% final_wishes_current = 'active' if current_page?(final_wishes_url) || controller?('final_wishes') || breadcrumb?(final_wishes_path) ||
+      breadcrumb?(:final_wishes_path) %>
   <%= link_to final_wishes_path, class: "main-nav #{final_wishes_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-bookmark-2"></use>
@@ -69,7 +72,7 @@
       <use xlink:href="#icon-folder-1"></use>
     </svg>Documents
   <% end %>
-  <% contacts_current = 'active' if current_page?(contacts_url) || controller?('contacts') || breadcrumb?(:contacts_path) %>
+  <% contacts_current = 'active' if current_page?(contacts_url) || controller?('contacts') || breadcrumb?(contacts_path) || breadcrumb?(:contacts_path) %>
   <%= link_to contacts_path, class: "main-nav #{contacts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-share-3"></use>
@@ -81,7 +84,8 @@
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me
   <% end %>
-  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(:my_profile_path) %>
+  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(my_profile_path) ||
+       breadcrumb?(:my_profile_path) %>
   <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
@@ -100,7 +104,7 @@
     </svg>Account Settings
   <% end %>
   <% if corporate? %>
-    <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(:corporate_accounts_path) %>
+    <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path) %>
     <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-key-1"></use>

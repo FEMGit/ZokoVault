@@ -89,8 +89,9 @@ class Contact < ActiveRecord::Base
     [firstname, lastname].compact.map(&:first).join
   end
   
-  def account_owner?
-    relationship.eql? 'Account Owner'
+  def account_owner?(resource_owner)
+    (relationship.eql? 'Account Owner') &&
+      (emailaddress.downcase.eql? resource_owner.email.downcase)
   end
 
   def name(biblio = false)

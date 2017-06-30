@@ -131,10 +131,9 @@ class AccountsController < AuthenticatedController
   def show; end
 
   def send_code
-    current_user.update_attributes(user_params)
     status =
       begin
-        MultifactorAuthenticator.new(current_user).send_code
+        MultifactorAuthenticator.new(current_user).send_code_on_number(two_factor_phone_params[:two_factor_phone_number])
         :ok
       rescue
         :bad_request
@@ -201,6 +200,10 @@ class AccountsController < AuthenticatedController
 
   def skip_param
     params.permit(:skip)
+  end
+
+  def two_factor_phone_params
+    params.require(:user).require(:user_profile_attributes).permit(:two_factor_phone_number)
   end
 
   def user_params

@@ -22,6 +22,8 @@ class PasswordsController < Devise::PasswordsController
       end
       respond_with(resource, location: after_sending_reset_password_instructions_path_for(resource_name))
     end
+    
+    sleep(0.075 + SecureRandom.random_number(175) / 1000.0) if user.blank?
   end
   
   

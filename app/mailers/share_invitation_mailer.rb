@@ -22,6 +22,6 @@ class ShareInvitationMailer < ApplicationMailer
     @user.confirmed_at = Time.now
     @user.save(validate: false)
     @corporate_admin = corporate_admin
-    mail(to: @contact.emailaddress, subject: "#{corporate_admin.name} created an account for you on ZokuVault!", :cc => corporate_admin.email)
+    mail(to: @contact.emailaddress, subject: "#{corporate_admin.name} created an account for you on ZokuVault!")
   end
 end

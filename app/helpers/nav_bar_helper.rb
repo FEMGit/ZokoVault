@@ -14,6 +14,6 @@ module NavBarHelper
     # 1 - we get add/edit document page by url
     # 2 - we get to add/edit document page from documents main page
     paths.count == 1 || 
-      paths.count == 2 && paths.any? { |path| path == :documents_path }
+      paths.count == 2 && paths.any? { |path| (path == :documents_path) || (path == documents_path) }
   end
 end

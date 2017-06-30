@@ -208,7 +208,7 @@ class User < ActiveRecord::Base
   end
 
   before_create { set_as_admin }
-  before_destroy :corporate_contacts_clear
+  before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
   
   protected
@@ -250,5 +250,9 @@ class User < ActiveRecord::Base
   
   def corporate_contacts_clear
     Contact.where(emailaddress: email, relationship: 'Account Owner').destroy_all
+  end
+
+  def clear_user_traffics_shared_user
+    UserTraffic.where(shared_user_id: id).destroy_all
   end
 end

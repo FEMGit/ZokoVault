@@ -18,13 +18,13 @@
     <%= f.fields_for :user_profile do |user_profile_form| %>
 
       <%= user_profile_form.label :first_name, 'First Name', autofocus: true %>
-      <% if errors && resource.errors.messages[:"user_profile.first_name"] %>
+      <% if errors && resource.errors.messages[:"user_profile.first_name"].try(:first) %>
         <span class="error-label"> - <%= resource.errors.messages[:"user_profile.first_name"].first %></span>
       <% end %>
       <%= user_profile_form.text_field :first_name, { class: ("input-error" if resource.errors.messages[:"user_profile.first_name"].present?) } %>
 
       <%= user_profile_form.label :last_name, 'Last Name' %>
-      <% if errors && resource.errors.messages[:"user_profile.last_name"] %>
+      <% if errors && resource.errors.messages[:"user_profile.last_name"].try(:first) %>
         <span class="error-label"> - <%= resource.errors.messages[:"user_profile.last_name"].first %></span>
       <% end %>
       <%= user_profile_form.text_field :last_name, { class: ("input-error" if resource.errors.messages[:"user_profile.last_name"].present?) } %>
@@ -38,7 +38,7 @@
       <% end %>
 
       <%= f.label :password %>
-      <% if errors && resource.errors.messages[:password] %>
+      <% if errors && resource.errors.messages[:password].try(:first) %>
         <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
       <% end %>
 
@@ -49,7 +49,7 @@
       <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>
 
       <%= f.label :password_confirmation, 'Confirm Password' %>
-      <% if errors && resource.errors.messages[:password_confirmation] %>
+      <% if errors && resource.errors.messages[:password_confirmation].try(:first) %>
         <span class="error-label"> - <%= resource.errors.messages[:password_confirmation].first %></span>
       <% end %>
       <%= f.password_field :password_confirmation, {autocomplete: "off", class: ("input-error" if resource.errors.messages[:password_confirmation].present?) } %>

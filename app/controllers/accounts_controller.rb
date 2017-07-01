@@ -105,6 +105,10 @@ class AccountsController < AuthenticatedController
 
   def user_type
     check_phone_setup_passed
+    if current_user.corporate_user?
+      @corporate_admin = CorporateAdminAccountUser.find_by(user_account: current_user).corporate_admin
+      @corporate_profile = @corporate_admin.corporate_account_profile
+    end
   end
 
   def user_type_update
@@ -127,10 +131,9 @@ class AccountsController < AuthenticatedController
   def show; end
 
   def send_code
-    current_user.update_attributes(user_params)
     status =
       begin
-        MultifactorAuthenticator.new(current_user).send_code
+        MultifactorAuthenticator.new(current_user).send_code_on_number(two_factor_phone_params[:two_factor_phone_number])
         :ok
       rescue
         :bad_request
@@ -159,16 +162,14 @@ class AccountsController < AuthenticatedController
       render json: { :message => 'Coupon Not Found', :status => 500 }
     end
   end
-
-  def verify_code
-    current_user.attributes = user_params
-    phone_code = current_user.user_profile.phone_code
-    verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
-    status = if verified
+  
+  def mfa_verify_code
+    status = if code_verified?
                session[:mfa] = true
+               current_user.update(:mfa_failed_attempts => 0)
                :ok
              else
-               (failed_attempts_limit_reached? && lock_account) and
+               mfa_failed_attempts_limit_reached? && lock_account &&
                  (render json: { errors: 'Account locked' }, status: :unauthorized) and return
                :unauthorized
              end
@@ -176,6 +177,12 @@ class AccountsController < AuthenticatedController
   end
 
   private
+
+  def code_verified?
+    current_user.attributes = user_params
+    phone_code = current_user.user_profile.phone_code
+    MultifactorAuthenticator.new(current_user).verify_code(phone_code)
+  end
 
   def set_blank_layout_header_info
     @header_information = true
@@ -197,6 +204,10 @@ class AccountsController < AuthenticatedController
 
   def skip_param
     params.permit(:skip)
+  end
+
+  def two_factor_phone_params
+    params.require(:user).require(:user_profile_attributes).permit(:two_factor_phone_number)
   end
 
   def user_params

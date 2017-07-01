@@ -20,6 +20,9 @@
 <%= render partial: 'layouts/email_preview_javascript' %>
 
 <script>
+  $(document).ready(function() {
+    setEmailPreview($('#user_profile_primary_shared_with_ids'))
+  })
   var submitForm = function() {
     var form = $('#edit_user_profile_' + "<%=@user_profile.id%>")
     form.submit()
@@ -33,7 +36,7 @@
       $("#user_profile_primary_shared_with_ids").val(id)
     } else {
       $("#user_profile_primary_shared_with_ids").val()
-      $("#email-preview-list").find("span").remove()
+      $("#email-preview-list").find("p").remove()
     }
     $("#user_profile_primary_shared_with_ids").trigger('chosen:updated')
   }

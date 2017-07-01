@@ -6,8 +6,8 @@ class UserProfilesController < AuthenticatedController
   skip_before_action :redirect_if_free_user
 
   # Breadcrumbs navigation
-  add_breadcrumb "My Profile", :user_profile_path
-  add_breadcrumb "Edit My Profile", :edit_user_profile_path
+  add_breadcrumb "My Profile", :my_profile_path
+  add_breadcrumb "Edit My Profile", :edit_user_profile_path, only: [:edit]
   include BreadcrumbsCacheModule
   include UserTrafficModule
 
@@ -31,7 +31,7 @@ class UserProfilesController < AuthenticatedController
   def show
     @category = "My Profile"
     @my_profile_documents = Document.for_user(current_user).where(category: @category)
-    session[:ret_url] = user_profile_path
+    session[:ret_url] = my_profile_path
   end
 
   # GET /user_profiles/new
@@ -55,7 +55,7 @@ class UserProfilesController < AuthenticatedController
     authorize @user_profile
     respond_to do |format|
       if @user_profile.save
-        format.html { redirect_to user_profile_path, flash: { success: 'User profile was successfully created.' } }
+        format.html { redirect_to my_profile_path, flash: { success: 'User profile was successfully created.' } }
         format.json { render :show, status: :created, location: @user_profile }
       else
         format.html { render :new }
@@ -70,7 +70,7 @@ class UserProfilesController < AuthenticatedController
     params[:user_profile][:date_of_birth] = date_format
     respond_to do |format|
       if @user_profile.update(user_profile_params)
-        format.html { redirect_to user_profile_path, flash: { success: 'User profile was successfully updated.' } }
+        format.html { redirect_to my_profile_path, flash: { success: 'User profile was successfully updated.' } }
         format.json { render :show, status: :ok, location: @user_profile }
       else
         format.html { render :edit }

@@ -138,9 +138,10 @@ var addContactAndCloseModal = function(json) {
       }
     }
     var account_owner_contact_count = $(this).find('option[value=' + position_to_insert_after + ']').length
-    if (account_owner_contact_count == 0) {
+    if (account_owner_contact_count == 0 && shared_after_id !== null) {
       position_to_insert_after = shared_after_id
     }
+    
     ($('<option>', {
       value: id_value,
       text: json['firstname'] + ' ' + json['lastname']
@@ -150,6 +151,7 @@ var addContactAndCloseModal = function(json) {
     if (!!currentSelectedInput) {
       currentSelectedInput.find("[value='"+id_value+"']").prop('selected', true);
     }
+    
     $(this).trigger("chosen:updated");
   })
 

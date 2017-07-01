@@ -40,9 +40,9 @@ class ContactsController < AuthenticatedController
   # GET /contacts
   # GET /contacts.json
   def index
-    my_profile_contact = resource_owner.user_profile.contact
+    my_profile_contacts = Contact.select { |x| x.user_profile_id == resource_owner.user_profile.id }
     @contacts = Contact.for_user(resource_owner)
-                       .reject { |c| c == my_profile_contact }
+                       .reject { |c| my_profile_contacts.include? c }
                        .each { |c| authorize c }
     session[:ret_url] = contacts_path
   end
@@ -168,7 +168,8 @@ class ContactsController < AuthenticatedController
   end
 
   def my_profile_contact?
-    #redirect_to contacts_path if @contact == resource_owner.user_profile.contact
+    my_profile_contacts = Contact.select { |x| x.user_profile_id == resource_owner.user_profile.id }
+    redirect_to contacts_path if my_profile_contacts.include? @contact
   end
 
   def handle_contact_not_saved(format)
@@ -186,7 +187,7 @@ class ContactsController < AuthenticatedController
     general_after_id = general_after_id(contact_ids, contact_position)
     after_contact = Contact.find_by(id: general_after_id)
 
-    if after_contact && after_contact.account_owner?
+    if after_contact && after_contact.account_owner?(resource_owner)
       shared_after_id = share_contact_after_id(contact_ids, contact_position)
     end
 

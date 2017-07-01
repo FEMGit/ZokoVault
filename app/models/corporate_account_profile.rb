@@ -23,4 +23,7 @@ class CorporateAccountProfile < ActiveRecord::Base
                       :with => Validation::WEB_ADDRESS_URL,
                       :message => "Please enter a valid url (starts with 'http://' or 'https://')",
                       :allow_blank => true
+  
+  validates :relationship, inclusion: { in: Contact::RELATIONSHIP_TYPES.values.flatten, allow_blank: true }
+  validates :contact_type, inclusion: { in: Contact::CONTACT_TYPES.keys.flatten, allow_blank: true }
 end

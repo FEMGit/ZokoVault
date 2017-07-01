@@ -5,7 +5,10 @@ var setEmailPreview = function(chosen_selector) {
 }
 
 var addRemoveShareInfoLine = function(e, params) {
-  if(params["deselected"] !== undefined) {
+  if (params === undefined) {
+    $("#email-preview-list").find("p").remove()
+  }
+  else if(params["deselected"] !== undefined) {
     $("#share-contact-message-" + params["deselected"]).remove()
   } else if (params["selected"] !== undefined) {
     $.get('/email/email_preview_line/' + params["selected"])

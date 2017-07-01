@@ -208,7 +208,7 @@ module TutorialsHelper
 
   def tutorial_selection_exists?
     tutorial_selection = TutorialSelection.find_by(user: current_user)
-    return false unless tutorial_selection
+    return false unless (tutorial_selection && tutorial_selection.tutorial_paths)
     current_tutorial = tutorial_selection.tutorial_paths[tutorial_selection.last_tutorial_index]
     return false unless current_tutorial
     if !current_tutorial["tuto_name"].eql? 'vault_co_owners'
@@ -265,5 +265,11 @@ module TutorialsHelper
       end
     end
     true
+  end
+
+  def tutorial_multiple_types_params
+    last_tutorial_multiple_params = params.select { |k, _v| k.include? 'tutorial_multiple_types' }.to_a.last
+    return nil if last_tutorial_multiple_params.blank?
+    params.require(last_tutorial_multiple_params[0]).permit(types: [])
   end
 end

@@ -62,7 +62,7 @@ class AuthenticatedController < ApplicationController
       apply_promo_code_account_path,
       account_path,
       mfa_path,
-      verify_code_account_path
+      mfa_verify_code_account_path
     ].include?(request.path_info)
   end
 

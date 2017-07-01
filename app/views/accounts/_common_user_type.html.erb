@@ -1,0 +1,26 @@
+<h5 class="clr-gray-dark-tinted mt-10 mb-30 text-center fw-600">To get started, please choose one of the Vault options.</h5>
+
+<ul class="tut-button-wrapper mb-30">
+  <li class="icon-box-large">
+    <label>
+      <%= link_to 'javascript:formSubmit("free")' do %>
+        <input type="checkbox" name="user_type" value="free" >
+        <span>
+          <%= image_tag "marketing/cloud-3.png", :class => "" %><br>
+          I was invited to share in someone else's Vault.
+        </span>
+      <% end %>
+    </label>
+  </li>
+  <li class="icon-box-large">
+    <label>
+       <%= link_to 'javascript:formSubmit("trial")' do %>
+        <input type="checkbox" name="user_type" value="trial">
+         <span>
+          <%= image_tag "marketing/safe-3.png", :class => "" %><br>
+          I want to complete my own Vault.
+        </span>
+      <% end %>
+    </label>
+  </li>
+</ul>

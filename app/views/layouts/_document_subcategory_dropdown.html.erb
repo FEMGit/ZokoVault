@@ -114,7 +114,7 @@
   }
 
   var idPostFixHide = function(data) {
-    var data_id = data[0].id.replace(/&amp;/g, '&')
+    var data_id = data[0].id.replace(/&/g, '&amp;')
     if (data_id === "<%= Rails.configuration.x.InsuranceCategory %>") {
       $("#subcategory_names_financial").hide();
       $("#document_subcategory_financial").find('option:selected').removeAttr('selected')

@@ -23,7 +23,10 @@
     </div>
   </div>
   <div class="modal-header">
-    <h2><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
+    <h2 class="inline-block"><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
+    <% if show_delete_button?(@contact) %>
+      <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button mobile-show fr" %>
+    <% end %>
   </div>
   <div class="modal-content">
     <%= form_for @contact, :html => {:id => "contact-form"} do |f| %>
@@ -33,12 +36,12 @@
   </div>
   <footer class="modal-footer">
     <button id="save-btn" class="js-modal-close primary-button big-button" onclick="submitContact(event)">Save</button>
-    <a href="javascript:;" id='next-step' class=" button secondary-button big-button"
+    <a href="javascript:;" id='next-step' class=" button secondary-button big-button mr-10"
     onclick="wizNav(currentStep+1); return false;">Next</a>
     <%= link_to 'Cancel', session[:ret_url] || contacts_path, class: "js-modal-close outline-button big-button margin-right", method: :get %>
 
-    <% if @contact.persisted? && @contact != current_user.user_profile.contact && policy(@contact).destroy? %>
-      <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button" %>
+    <% if show_delete_button?(@contact) %>
+      <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button mobile-hide" %>
     <% end %>
   </footer>
 </div>

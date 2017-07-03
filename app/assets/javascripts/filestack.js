@@ -32,7 +32,7 @@ var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
       'local_file_system', 'webcam', 'googledrive', 'dropbox', 'box', 'gmail'
     ],
     storeTo: {
-      location: 's3'
+      location: 's3', path: '/documents/'
     }
   }).then(function(result) {
     if (result.filesUploaded.length == 1) {
@@ -58,12 +58,13 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
       maxDimensions: [360, 360]
     },
     storeTo: {
-      location: 's3'
+      location: 's3', path: '/avatars/'
     }
   }).then(function(result) {
     if (result.filesUploaded.length == 1) {
       file = result.filesUploaded[0]
-      setAvatarPhoto(suffix, file.url, file.key)
+      preview = file.url + '?signature=' + policy_hash.signature + '&policy=' + policy_hash.policy
+      setAvatarPhoto(suffix, preview, file.key)
     } else {
       console.log(JSON.stringify(result))
     }

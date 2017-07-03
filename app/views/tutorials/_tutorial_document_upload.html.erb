@@ -34,7 +34,7 @@
     <div class="flash-success-static flash static small" style="display: none;"><%= flash_message_success %></div>
 
     <div id="file-pick-section" class=" mb-30 mt-30">
-      <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.policy_hash_string}, fileToPage" %>
+      <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, fileToPage" %>
       <button id="select-file" type="button" onclick="uploadDocumentWithFilestack(<%= upload_args %>);" class="js-modal-close primary-button big-button"><%= upload_button_text %></button>
     </div>
 

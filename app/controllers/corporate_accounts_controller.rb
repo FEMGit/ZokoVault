@@ -54,26 +54,6 @@ class CorporateAccountsController < AuthenticatedController
   
   def edit; end
   
-  def edit_account_settings
-    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: current_user)
-    @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
-    @corporate_profile.save
-  end
-  
-  def update_account_settings
-    @corporate_profile = CorporateAccountProfile.find_by(id: params[:id])
-    respond_to do |format|
-      if @corporate_profile.update(corporate_settings_params)
-        format.html { redirect_to success_path(corporate_accounts_path), flash: { success: 'Corporate Settings successfully updated.' } }
-        format.json { render :index, status: :created, location: @corporate_profile }
-      else
-        error_path(:edit_account_settings)
-        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
-        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-  
   def create
     @user_account = User.new(user_account_params)
     @user_account.skip_password_validation!
@@ -152,11 +132,6 @@ class CorporateAccountsController < AuthenticatedController
                    relationship: account_profile.try(:relationship),
                    corporate_contact: true
     )
-  end
-  
-  def corporate_settings_params
-    params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
-                                              :zip, :state, :phone_number, :fax_number, :company_logo, :relationship)
   end
   
   def create_associated_contact

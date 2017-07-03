@@ -40,15 +40,6 @@
   </tbody>
 </table>
 
-<%= link_to edit_corporate_settings_path, class: "edit-link" do %>
-  <span class="circle-button">
-  <svg class="icon circle-icon">
-    <use xlink:href="#icon-pencil-1"></use>
-  </svg>
-  </span>Edit
-<% end %>
-<h3>Corporate Account Settings</h3>
-
 <div class="card">
   <h3 class="card-label">Corporate Details</h3>
   <% if @corporate_profile.blank? %>

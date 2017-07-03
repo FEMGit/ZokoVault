@@ -1,19 +1,35 @@
-var setEmailPreview = function(chosen_selector) {
-  chosen_selector.on('change', function(e, params) {
-    addRemoveShareInfoLine(e, params)
+var setEmailPreviewSingleDropdown = function(chosenSelector) {
+  chosenSelector.on('change', function(e, params) {
+    addRemoveShareInfoLineSingleDropdown(e, params)
   })
 }
 
-var addRemoveShareInfoLine = function(e, params) {
+var setEmailPreviewMultipleDropdown = function(chosenSelector) {
+  chosenSelector.on('change', function(e, params) {
+    addRemoveShareInfoLineMultipleDropdown(e, params)
+  })
+}
+
+var addRemoveShareInfoLineSingleDropdown = function(e, params) {
+  $("#email-preview-list").find("p").remove()
   if (params === undefined) {
-    $("#email-preview-list").find("p").remove()
+    return
+  } else if (params["selected"] !== undefined) {
+    appendNewEmailPreviewLine(params["selected"])
   }
-  else if(params["deselected"] !== undefined) {
+}
+
+var addRemoveShareInfoLineMultipleDropdown = function(e, params) {
+  if(params["deselected"] !== undefined) {
     $("#share-contact-message-" + params["deselected"]).remove()
   } else if (params["selected"] !== undefined) {
-    $.get('/email/email_preview_line/' + params["selected"])
-    .done(function(data) {
-      $('#email-preview-list').append(data)
-    })
- }
+    appendNewEmailPreviewLine(params["selected"])
+  }
+}
+
+var appendNewEmailPreviewLine = function(selectedContact){
+  $.get('/email/email_preview_line/' + selectedContact)
+  .done(function(data) {
+    $('#email-preview-list').append(data)
+  })
 }

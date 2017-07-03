@@ -34,10 +34,14 @@ module ApplicationHelper
                            :first, :second, {selected: selected_items}, local_options)
   end
 
-  def contact_select_with_create_new(form, name, contacts, html_options = {}, selected_items = [])
+  def contact_select_with_create_new(form, name, contacts, html_options = {}, selected_items = [], include_create_new_contact = true)
     initialize_new_contact_form
     select_options = contacts ? contacts.sort_by { |s| s.lastname.downcase }.collect { |s| [s.id, s.name, class: "contact-item"] } : []
-    select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
+    if include_create_new_contact
+      select_options.prepend([ "create_new_contact", "Create New Contact", class: "create-new"]).prepend([])
+    else
+      select_options.prepend([ "create_new_contact", "", class: "create-new d-none", disabled: 'disabled']).prepend([])
+    end
 
     local_options = {
       'data-placeholder': 'Choose Contacts...',

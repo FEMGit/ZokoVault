@@ -625,8 +625,9 @@
 
         <p>Dear <%= @contact.firstname %>,</p>
 
-        <p><%= @corporate_admin.name %> has created an account for you on ZokuVault. Accepting this invitation will allow you to securely collaborate with <%= @corporate_admin.first_name %> on your important information within ZokuVault. Signing up is easy, and only takes a few minutes. Please follow the link below to open your account!.<p>
-        <p><%= link_to 'Secure Sign Up', corporate_edit_password_url(@user.uuid, reset_password_token: @token_raw) %></p>
+        <p><%= @corporate_admin.name %> at <%= @corporate_profile.business_name %> has created a ZokuVault account for you.  ZokuVault will allow for you and <%= @corporate_admin.first_name %> to securely collaborate on your most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
+
+        <p><%= link_to 'Create Password', corporate_edit_password_url(@user.uuid, reset_password_token: @token_raw) %></p>
 
         <p><%= @corporate_admin.first_name %> thanks you in advance for your participation. Additionally, please visit <%= link_to 'www.zokuvault.com', root_path, class: 'no-underline-link' %> for more information.</p>
 

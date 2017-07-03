@@ -55,10 +55,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
   # GET /properties/1
   # GET /properties/1.json
   def show
+    authorize @property_and_casualty
     @insurance_card = @property_and_casualty
     @group_label = "Property & Casualty"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
-    authorize @property_and_casualty
+    session[:ret_url] = general_view? ? property_path(@property_and_casualty) : shared_property_path(@shared_user, @property_and_casualty)
   end
 
   # GET /properties/new

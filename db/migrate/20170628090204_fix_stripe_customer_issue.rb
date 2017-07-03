@@ -9,7 +9,7 @@ class FixStripeCustomerIssue < ActiveRecord::Migration
       user = User.find_by(email: customer.email)
       if user && user.paid? && user.stripe_customer.blank?
         customer_id = customer.try(:id)
-        if customer_id.present?
+        if customer_id.present? && StripeCustomer.find_by(stripe_customer_id: customer_id).blank?
           StripeCustomer.create(user_id: user.id, stripe_customer_id: customer_id)
         end
       end

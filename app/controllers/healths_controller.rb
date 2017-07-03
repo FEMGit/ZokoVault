@@ -55,10 +55,11 @@ class HealthsController < AuthenticatedController
   # GET /healths/1
   # GET /healths/1.json
   def show
+    authorize @health
     @insurance_card = @health
     @group_label = "Health"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
-    authorize @health
+    session[:ret_url] = general_view? ? health_path(@health) : shared_health_path(@shared_user, @health)
   end
 
   # GET /healths/new

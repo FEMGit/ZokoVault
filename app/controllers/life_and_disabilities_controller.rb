@@ -61,6 +61,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     @insurance_card = @life_and_disability
     @group_label = "Life & Disability"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
+    session[:ret_url] = general_view? ? life_path(@life_and_disability) : shared_life_path(@shared_user, @life_and_disability)
   end
 
   # GET /lives/new

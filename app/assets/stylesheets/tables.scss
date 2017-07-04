@@ -100,6 +100,11 @@ table.product-comparison {
   }
 }
 
+#user-accounts-table_wrapper {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
 .dataTables_wrapper {
   &.scroll {
     overflow-x: scroll;

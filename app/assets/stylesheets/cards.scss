@@ -520,6 +520,13 @@ img.questionnaire-heart {
   &.mrg-top {
     margin-top: $edit-button-margin-top;
   }
+  &.mobile-view {
+    @include media($eightfifty) {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
 }
 
 .details-card-info {

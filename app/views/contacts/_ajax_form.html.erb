@@ -141,11 +141,18 @@ var addContactAndCloseModal = function(json) {
     if (account_owner_contact_count == 0 && shared_after_id !== null) {
       position_to_insert_after = shared_after_id
     }
-    
-    ($('<option>', {
-      value: id_value,
-      text: json['firstname'] + ' ' + json['lastname']
-    })).insertAfter($(this).children('option[value=' + position_to_insert_after + ']'))
+
+    var element_to_insert_after = ($(this).children('option[value=' + position_to_insert_after + ']'))
+    var new_element = $('<option>', {
+                        value: id_value,
+                        text: json['firstname'] + ' ' + json['lastname']
+                      })
+
+    if (element_to_insert_after.length === 0) {
+      $(this).append(new_element)
+    } else {
+      new_element.insertAfter($(this).children('option[value=' + position_to_insert_after + ']'))
+    }
 
     // XXX: This is a hack to select the new value
     if (!!currentSelectedInput) {
@@ -156,7 +163,7 @@ var addContactAndCloseModal = function(json) {
   })
 
   updateAddContactableTable(json);
-  addRemoveShareInfoLine(null, {"selected": json['id']})
+  addRemoveShareInfoLineMultipleDropdown(null, {"selected": json['id']})
   toggleCoOwnerView(json['id'])
   closeContactFormModal();
 }

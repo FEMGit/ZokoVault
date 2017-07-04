@@ -11,7 +11,7 @@
     </h3>
 
     <div class="chosen-styled-select text-left max-w-340 m-0-auto">
-      <%= contact_select_with_create_new(f, :primary_shared_with_ids, @primary_contacts, multiple: false) %>
+      <%= contact_select_with_create_new(f, :primary_shared_with_ids, @primary_contacts, { multiple: false }, [], false) %>
     </div>
   </div>
 
@@ -26,8 +26,3 @@
 
 <div id="email-preview-section">
 </div>
-
-
-<script>
-  $('.chosen-select').chosen({allow_single_deselect: true});
-</script>

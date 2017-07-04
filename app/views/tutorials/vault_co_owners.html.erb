@@ -21,7 +21,7 @@
 
 <script>
   $(document).ready(function() {
-    setEmailPreview($('#user_profile_primary_shared_with_ids'))
+    setEmailPreviewSingleDropdown($('#user_profile_primary_shared_with_ids'))
   })
   var submitForm = function() {
     var form = $('#edit_user_profile_' + "<%=@user_profile.id%>")
@@ -38,6 +38,7 @@
       $("#user_profile_primary_shared_with_ids").val()
       $("#email-preview-list").find("p").remove()
     }
+    $('.chosen-select').chosen({allow_single_deselect: true});
     $("#user_profile_primary_shared_with_ids").trigger('chosen:updated')
   }
 

@@ -208,6 +208,7 @@ class User < ActiveRecord::Base
   end
 
   before_create { set_as_admin }
+  before_destroy :corporate_contacts_clear
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
   
   protected
@@ -245,5 +246,9 @@ class User < ActiveRecord::Base
   def corporate_admin_accounts_clear
     CorporateAdminAccountUser.where(user_account_id: id).delete_all
     CorporateAdminAccountUser.where(corporate_admin_id: id).delete_all
+  end
+  
+  def corporate_contacts_clear
+    Contact.where(emailaddress: email, relationship: 'Account Owner').destroy_all
   end
 end

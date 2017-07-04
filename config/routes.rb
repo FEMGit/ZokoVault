@@ -147,7 +147,8 @@ Rails.application.routes.draw do
   get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
   get 'documents/edit/:uuid(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
-  post 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document
+  get 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document
+  get 'documents/preview/:uuid(/:shared_user_id)', to: 'documents#preview', as: :preview_document
   get 'shared_view/:shared_user_id/documents/:uuid', to: 'documents#show', as: :shared_document
 
   get 'account_settings', to: 'account_settings#index', as: :account_settings
@@ -299,7 +300,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
-
+  
   # Documents
   get 'shared_view/:shared_user_id/documents/:uuid' => 'documents#show', as: :shared_documents
 

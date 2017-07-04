@@ -1,5 +1,5 @@
 <h1>User Accounts</h1>
-<%= link_to new_corporate_account_path, class: "edit-link" do %>
+<%= link_to new_corporate_account_path, class: "edit-link mobile-view" do %>
   <span class="circle-button">
   <svg class="icon circle-icon">
     <use xlink:href="#icon-plus-1"></use>
@@ -7,7 +7,7 @@
   </span>Add Account
 <% end %>
 
-<table id="user-accounts-table">
+<table id="user-accounts-table" class="mb-0">
   <thead>
     <tr>
       <th class="nosort w-60 pt-15 pr-10 pb-15 pl-10">Avatar</th>
@@ -40,7 +40,7 @@
   </tbody>
 </table>
 
-<div class="card">
+<div class="card mt-20">
   <h3 class="card-label">Corporate Details</h3>
   <% if @corporate_profile.blank? %>
     <label>There is on information about Corporate Account</label>

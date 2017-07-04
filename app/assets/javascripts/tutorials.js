@@ -168,27 +168,28 @@ DynamicTutorialField.prototype.dialogBehaviour = function(ev) {
   if ($('.collect-fields input.repeated-field').val() != '') {
     ev.preventDefault();
     $('.unsaved-changes-modal').click();
-    
-
-    $(".skip-and-continue").on("click", function() {
-      $('.collect-fields input.repeated-field').val('');
-      $(".modal, .modal-overlay").fadeOut(500, function() {
-        $(".modal-overlay").remove();
-        $('form').submit();
-      });
-    });
-
-    $(".save-and-continue").on("click", function() {
-      $(".modal, .modal-overlay").fadeOut(500, function() {
-        $(".modal-overlay").remove();
-        $('form').unbind('submit').submit();
-      });
-    });
   };
 };
 
 DynamicTutorialField.prototype.listenUnsavedChanges = function() {
-  this.modalSettings();
+  var that = this
+  that.modalSettings();
+  
+  $(".skip-and-continue").on("click", function() {
+    $('.collect-fields input.repeated-field').val('');
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+      $('form').submit();
+    });
+  });
+
+  $(".save-and-continue").on("click", function() {
+    $(".modal, .modal-overlay").fadeOut(500, function() {
+      $(".modal-overlay").remove();
+      that.updateAll()
+      $('form').unbind('submit').submit();
+    });
+  });
 
   $('.skip-btn').on('click', this.dialogBehaviour);
 };

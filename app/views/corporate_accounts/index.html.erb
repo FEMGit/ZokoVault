@@ -85,7 +85,7 @@
 
     <% if @corporate_profile.company_logo.present? %>
       <label>Company Logo</label>
-      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-80", alt: @corporate_profile.business_name) %></p>
+      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130", alt: @corporate_profile.business_name) %></p>
     <% end %>
   <% end %>
 </div>

@@ -44,7 +44,8 @@ var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
   })
 }
 
-var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
+var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix, transformationNames) {
+  transformationNames = transformationNames || []
   var client = filestack.init(api_key, policy_hash)
   client.pick({
     accept: 'image/*',
@@ -52,11 +53,7 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
       'local_file_system', 'webcam', 'facebook', 'instagram',
       'googledrive', 'dropbox', 'flickr', 'picasa', 'gmail'
     ],
-    transformations: {
-      crop: { aspectRatio: 1 / 1 },
-      minDimensions: [360, 360],
-      maxDimensions: [360, 360]
-    },
+    transformations: transformationsHash(transformationNames),
     storeTo: {
       location: 's3', path: '/avatars/'
     }
@@ -69,4 +66,16 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix) {
       console.log(JSON.stringify(result))
     }
   })
+}
+
+var transformationsHash = function(transformationNames) {
+  transformationNames = transformationNames || []
+  var transformations = {}
+  if (transformationNames.includes('crop')) {
+    transformations['crop'] = { aspectRatio: 1 / 1 }
+    transformations['minDimensions'] = [360, 360]
+    transformations['maxDimensions'] = [360, 360]
+  }
+  
+  return transformations
 }

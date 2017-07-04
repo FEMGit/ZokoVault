@@ -101,11 +101,11 @@
         <div class="avatar-wrapper">
           <% if @corporate_profile.company_logo.present? %>
             <div id="new-avatar_account">
-              <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-80", id: "image_view_account", alt: 'company logo') %>
+              <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130", id: "image_view_account", alt: 'company logo') %>
             </div>
           <% else %>
             <div id="new-avatar_account" style="display: none;">
-              <%= image_tag('', class: "max-w-80", id: "image_view_account", alt: 'company logo') %>
+              <%= image_tag('', class: "max-w-130", id: "image_view_account", alt: 'company logo') %>
             </div>
           <% end %>
         </div>

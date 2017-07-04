@@ -54,8 +54,7 @@ class DocumentService
 
     card_values = 
       if contact_category?
-        Contact.for_user(user).reject { |u| u.emailaddress.downcase == user.email.downcase }
-                              .collect{|x| [id: x.id, name: x.name]}
+        ContactService.new(:user => user).contacts_shareable.collect{|x| [id: x.id, name: x.name]}
       else
         if user == current_user
           @all_groups.detect{|x| x[:label] == @category}[:groups].collect{ |x| [id: x["label"], name: x["label"]] }

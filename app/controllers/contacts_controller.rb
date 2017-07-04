@@ -1,6 +1,6 @@
 class ContactsController < AuthenticatedController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
-  before_action :my_profile_contact?, only: [:show, :edit]
+  before_action :contact_rejected?, only: [:show, :edit]
   before_action :set_contact_shares, only: [:show]
   include SanitizeModule
   include SharedViewModule
@@ -40,13 +40,12 @@ class ContactsController < AuthenticatedController
   # GET /contacts
   # GET /contacts.json
   def index
-    my_profile_contacts = Contact.select { |x| x.user_profile_id == resource_owner.user_profile.id }
     @contacts = Contact.for_user(resource_owner)
-                       .reject { |c| my_profile_contacts.include? c }
+                       .reject { |c| contact_emails_rejected.include? c.emailaddress.downcase }
                        .each { |c| authorize c }
     session[:ret_url] = contacts_path
   end
-
+  
   # GET /contacts/1
   # GET /contacts/1.json
   def show
@@ -166,10 +165,13 @@ class ContactsController < AuthenticatedController
       @contact.present? ? @contact.user : current_user
     end
   end
+  
+  def contact_emails_rejected
+    ContactService.new(:user => resource_owner).contact_all_emails_rejected
+  end
 
-  def my_profile_contact?
-    my_profile_contacts = Contact.select { |x| x.user_profile_id == resource_owner.user_profile.id }
-    redirect_to contacts_path if my_profile_contacts.include? @contact
+  def contact_rejected?
+    redirect_to contacts_path if contact_emails_rejected.include? @contact.emailaddress.downcase
   end
 
   def handle_contact_not_saved(format)

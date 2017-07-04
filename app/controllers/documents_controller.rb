@@ -348,7 +348,7 @@ class DocumentsController < AuthenticatedController
     if secondary_tag_name.present?
       additional_json_params["secondary_tag"] = secondary_tag_name
     end
-    additional_json_params["document_path"] = previewed?(@document) ? document_path(@document) : download_document_path(@document)
+    additional_json_params["document_path"] = document_path(@document)
     additional_json_params
   end
 

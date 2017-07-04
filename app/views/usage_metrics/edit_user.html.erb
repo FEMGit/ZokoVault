@@ -39,7 +39,7 @@
       </li>
     </ul>
     
-    <div id="corporate-category-access" style="display: none;">
+    <div id="corporate-account-settings" style="display: none;">
       <label>Corporate Admin Category Access</label>
       <ul class="check-list">
         <% Rails.application.config.x.CorporateCategories.each do |option| %>
@@ -54,6 +54,70 @@
           </li>
         <% end %>
       </ul>
+    
+      <%= f.fields_for @corporate_profile do |corporate_profile_form| %>
+
+        <%= corporate_profile_form.label :business_name, 'Company Name' %>
+        <%= corporate_profile_form.text_field :business_name, :maxlength => get_max_length(:default) %>
+
+        <%= corporate_profile_form.label :web_address, 'Web Address' %>
+        <%= corporate_profile_form.text_field :web_address, { type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
+
+        <%= corporate_profile_form.label :street_address, 'Street Addess' %>
+        <%= corporate_profile_form.text_field :street_address, :maxlength => get_max_length(:default) %>
+
+        <%= corporate_profile_form.label :city, 'City' %>
+        <%= corporate_profile_form.text_field :city, :maxlength => get_max_length(:default) %>
+
+       <span class="state-input">
+          <%= corporate_profile_form.label :state %>
+          <div class="styled-select">
+            <%= corporate_profile_form.select :state, options_for_select(us_states, corporate_profile_form.object.try(:state)), :include_blank => "Select..." %>
+          </div>
+        </span>
+        <span class="zip-input">
+          <%= corporate_profile_form.label :zip, 'Zip Code' %>
+          <%= render partial: 'layouts/zip_code', locals: { f: corporate_profile_form, zip: :zip } %>
+        </span>
+
+        <%= corporate_profile_form.label :phone_number, 'Phone Number' %>
+        <%= render partial: 'layouts/phone_number', locals: { f: corporate_profile_form, phone: :phone_number } %>
+
+        <%= corporate_profile_form.label :fax_number, 'Fax Number' %>
+        <%= render partial: 'layouts/phone_number', locals: { f: corporate_profile_form, phone: :fax_number } %>
+
+        <%= corporate_profile_form.label :relationship, 'Advisor Relationship' %>
+        <div class="styled-select">
+          <%= corporate_profile_form.select :relationship,
+            options_for_select(Contact::RELATIONSHIP_TYPES[:professional], corporate_profile_form.object.try(:relationship)), {} %>
+        </div>
+
+        <%= corporate_profile_form.label :company_logo, 'Company Logo' %>
+        <p></p>
+
+        <% if @corporate_profile.company_logo.blank? %>
+          <% no_logo = true %>
+        <% end %>
+        <div class="avatar-wrapper">
+          <% if @corporate_profile.company_logo.present? %>
+            <div id="new-avatar_account">
+              <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-80", id: "image_view_account", alt: 'company logo') %>
+            </div>
+          <% else %>
+            <div id="new-avatar_account" style="display: none;">
+              <%= image_tag('', class: "max-w-80", id: "image_view_account", alt: 'company logo') %>
+            </div>
+          <% end %>
+        </div>
+
+        <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account'" %>
+
+        <a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="no-underline-link" id="action-avatar-link">Update Logo</a>
+        <a onclick="clearAvatarPhoto('_account')" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link"
+        <% if no_logo %> style="display: none;" <% end %>>Remove Logo</a>
+
+        <%= corporate_profile_form.text_field :company_logo, id: "photo_url_account", style: "display: none;" %>
+      <% end %>
     </div>
   <% end %>
 </div>
@@ -62,17 +126,18 @@
 <%= link_to 'Cancel', back_path || usage_metrics_path, class: "button secondary-button big-button"%>
 <%= link_to 'Delete', @user, method: :delete, data: { confirm: 'are you sure?' }, class: "button secondary-button big-button" %>
 
+<%= javascript_include_tag 'url_validation' %>
 <script>
   $(document).ready(function() {
     toggleCategoryCheckbox("#corporate_account_corporate_admin")
   })
   
   var toggleCategoryCheckbox = function(checkbox) {
-    var categoryCheckboxes = $("#corporate-category-access")
+    var corporateAccountSettings = $("#corporate-account-settings")
     if ($(checkbox).is(":checked")) {
-      categoryCheckboxes.show()
+      corporateAccountSettings.show()
     } else {
-      categoryCheckboxes.hide()
+      corporateAccountSettings.hide()
     }
   }
   

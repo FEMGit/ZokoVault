@@ -369,8 +369,6 @@ Rails.application.routes.draw do
   
   # Corporate Account
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
-  get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings
-  post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_corporate_settings
   post '/corporate/send_invitation/:contact_id', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account
   put '/corporate', to: 'corporate_accounts#update', as: :update_corporate_account

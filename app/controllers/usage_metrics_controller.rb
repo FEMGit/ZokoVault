@@ -15,6 +15,7 @@ class UsageMetricsController < AuthenticatedController
 
   before_action :set_user, only: [:edit_user, :statistic_details, :extend_trial, :cancel_trial, :create_trial]
   before_action :set_user_traffic, only: [:statistic_details]
+  before_action :set_corporate_profile, only: [:edit_user, :update_user]
 
   # Breadcrumbs navigation
   add_breadcrumb "Usage Metrics", :usage_metrics_path, only: [:statistic_details, :error_details, :edit_user]
@@ -55,10 +56,20 @@ class UsageMetricsController < AuthenticatedController
       corporate_admin_value = false
     end
     corporate_admin.try(:update, { corporate_admin: corporate_admin_value })
+    update_corporate_account_settings(corporate_admin, corporate_admin_value)
     
     respond_to do |format|
       format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
       format.json { head :no_content }
+    end
+  end
+  
+  def update_corporate_account_settings(corporate_admin, corporate_admin_value)
+    if corporate_admin_value.eql? false
+      @corporate_profile.destroy
+    else
+      return if corporate_settings_params.blank?
+      @corporate_profile.update(corporate_settings_params)
     end
   end
 
@@ -293,5 +304,18 @@ class UsageMetricsController < AuthenticatedController
   def corporate_account_params
     return nil unless params[:corporate_account].present?
     params.require(:corporate_account)
+  end
+  
+  def corporate_settings_params
+    return {} unless params[:user].present? && params[:user][:corporate_account_profile].present?
+    params.require(:user).require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
+                                              :zip, :state, :phone_number, :fax_number, :company_logo, :relationship)
+  end
+  
+  def set_corporate_profile
+    corporate_admin = User.find_by(id: params[:id])
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+    @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
+    @corporate_profile.save
   end
 end

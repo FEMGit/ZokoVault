@@ -41,7 +41,7 @@ class CorporateAccountsController < AuthenticatedController
     corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user }
                                                       .map(&:user_account).map(&:email).map(&:downcase)
     @corporate_contacts = Contact.for_user(current_user)
-                                 .select { |c| corporate_users_emails.include? c.emailaddress.downcase }
+                                 .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
     @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
   end
   

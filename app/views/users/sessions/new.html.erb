@@ -1,5 +1,10 @@
 <section class="card login-card" >
-  <h2>Login</h2>
+  <h2>
+    <svg class="icon">lo
+      <use xlink:href="#icon-lock-large"></use>
+    </svg>
+    <span class="sign-up-title">Secure Login</span>
+  </h2>
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <% if flash[:alert].present? %>

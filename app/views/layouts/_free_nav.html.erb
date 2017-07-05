@@ -20,6 +20,15 @@
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
   <% end %>
+  
+  <% if corporate? %>
+    <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path) %>
+    <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-key-1"></use>
+      </svg>Corporate Account
+    <% end %>
+  <% end %>
 
   <%= link_to account_upgrade_path, class: "main-nav blocked" do %>
     <svg class="icon nav-icon">

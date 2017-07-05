@@ -1,4 +1,4 @@
-<h1>Add User Account</h1>
+<h1><%= yield(:action) %> Client User</h1>
 
   <%= form_for @user_account, url: yield(:save_update_url), method: yield(:method) do |f| %>
     <%= hidden_field_tag :id, @user_account.user_profile.try(:id) %>

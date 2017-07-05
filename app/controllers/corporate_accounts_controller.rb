@@ -17,7 +17,7 @@ class CorporateAccountsController < AuthenticatedController
   end
 
   def set_new_crumbs
-    add_breadcrumb "Add Account", new_corporate_account_path
+    add_breadcrumb "Add Client User", new_corporate_account_path
   end
   
   def set_details_crumbs
@@ -25,7 +25,7 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   def set_edit_crumbs
-    add_breadcrumb "Add User Account", edit_corporate_account_path(@corporate_contact.user_profile_id)
+    add_breadcrumb "Edit Client User", edit_corporate_account_path(@corporate_contact.user_profile_id)
   end
   
   def page_name

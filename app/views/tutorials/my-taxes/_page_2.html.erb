@@ -6,8 +6,8 @@
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :page_number, @page_number %>
   
-    <% @tax_accountants.each_with_index do |tax_accountant, index| %>
-      <p><%= index + 1 %>. What years did <%= tax_accountant.name %> prepare your taxes. Please check all that apply.</p>
+    <% @tax_accountants.each do |tax_accountant| %>
+      <p>What years did <%= tax_accountant.name %> prepare your taxes. Please check all that apply.</p>
     
       <ul class="check-list mb-30">
         <% TaxesLimits::YEARS[:max].downto(TaxesLimits::YEARS[:min]) do |year| %>

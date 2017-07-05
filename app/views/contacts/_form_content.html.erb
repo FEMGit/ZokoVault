@@ -67,7 +67,6 @@
       <%= f.select :state, options_for_select(us_states, f.object.state), :include_blank => "Select..." %>
     </div>
   </span>
-  <span class="clear"></span>
   <span class="zip-input">
     <%= f.label :zip, 'Zip Code' %>
     <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zipcode } %>

@@ -150,8 +150,15 @@ label{
     float: none;
   }
 }
-.zip-input input{
-  width: $short-form-width;
+.zip-input{ 
+  input {
+    width: $short-form-width;
+  }
+  @include media($mobile) {
+    label {
+      float: left;
+    }
+  }
 }
 
 //MONTH YEAR COMBO

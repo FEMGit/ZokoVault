@@ -1,3 +1,7 @@
-<% protect_my_family_info = [ { title: "Info & Records", rows: ["Birth Certificate", "Driver's License", "Passport", "Social Security Number", "Employer Information", "Health Insurance Card"] } ] %>
+<% protect_my_family_info = [ { title: "Info & Records",
+                                rows: ["Birth Certificate", "Driver's License", "Passport", "Social Security Number", "Employer Information", "Health Insurance Card"] } ] %>
 
-<%= render partial: "tutorials/one_column_table_info_page", locals: { table_info_collection: protect_my_family_info, title: "Your Family's Info & Records", paragraph: "Having digital access to your family's following information is important if you are travelling or there is an emergency situation." } %>
+<%= render partial: "tutorials/one_column_table_info_page",
+           locals: {  table_info_collection: protect_my_family_info,
+                      title: "Your Family's Info & Records",
+                      paragraph: "Having digital access to your family's important information is helpful in several circumstances including emergencies and for reference. Below are several examples of helpful documents." } %>

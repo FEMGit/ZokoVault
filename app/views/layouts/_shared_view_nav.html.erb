@@ -7,7 +7,7 @@
     </svg>
   </a>
 
-  <a class="main-nav <%= 'active' if current_page?(shared_view_dashboard_path(@shared_user)) || breadcrumb?(shared_view_dashboard_path) || breadcrumb?(:shared_view_dashboard_path) %>"
+  <a class="main-nav <%= 'active' if current_page?(shared_view_dashboard_path(@shared_user)) || breadcrumb?(shared_view_dashboard_path(@shared_user)) || breadcrumb?(:shared_view_dashboard_path) %>"
      href=<%= shared_view_dashboard_path(@shared_user) %> >
     <svg class="icon nav-icon">
       <use xlink:href="#icon-dashboard"></use>
@@ -16,7 +16,7 @@
   <! -- Financial Information -- >
   <% if show_navigation_link?('Financial Information') %>
     <% shared_view_financial_information = 'active' if current_page?(shared_view_financial_information_path(@shared_user)) ||
-    controller?('financial_account', 'financial_property', 'financial_investment', 'financial_alternative') || breadcrumb?(:shared_view_financial_information_path) || breadcrumb?(shared_view_financial_information_path) %>
+    controller?('financial_account', 'financial_property', 'financial_investment', 'financial_alternative') || breadcrumb?(:shared_view_financial_information_path) || breadcrumb?(shared_view_financial_information_path(@shared_user)) %>
     <%= link_to shared_view_financial_information_path(@shared_user), class: "main-nav #{shared_view_financial_information}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-activity-monitor-1"></use>
@@ -26,7 +26,7 @@
   <! -- Wills - Powers of Attorney -->
   <% if show_navigation_link?('Wills - POA') %>
     <% shared_view_wills_powers_of_attorney = 'active' if current_page?(shared_view_wills_powers_of_attorney_path(@shared_user)) ||
-    controller?('wills', 'power_of_attorneys') || breadcrumb?(:shared_view_wills_powers_of_attorney_path) || breadcrumb?(shared_view_wills_powers_of_attorney_path) %>
+    controller?('wills', 'power_of_attorneys') || breadcrumb?(:shared_view_wills_powers_of_attorney_path) || breadcrumb?(shared_view_wills_powers_of_attorney_path(@shared_user)) %>
     <%= link_to shared_view_wills_powers_of_attorney_path(@shared_user), class: "main-nav #{shared_view_wills_powers_of_attorney}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-document-3"></use>
@@ -36,7 +36,7 @@
   <! -- Trusts & Entities -- >
   <% if show_navigation_link?('Trusts & Entities') %>
     <% shared_view_trusts_entities = 'active' if current_page?(shared_view_trusts_entities_path(@shared_user)) ||
-    controller?('trusts', 'entities') || breadcrumb?(:shared_view_trusts_entities_path) || breadcrumb?(shared_view_trusts_entities_path) %>
+    controller?('trusts', 'entities') || breadcrumb?(:shared_view_trusts_entities_path) || breadcrumb?(shared_view_trusts_entities_path(@shared_user)) %>
     <%= link_to shared_view_trusts_entities_path(@shared_user), class: "main-nav #{shared_view_trusts_entities}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-trust"></use>
@@ -46,7 +46,7 @@
   <! -- Insurance -->
   <% if show_navigation_link?('Insurance') %>
     <% shared_view_insurance = 'active' if current_page?(shared_view_insurance_path(@shared_user)) ||
-      controller?('life_and_disabilities', 'healths', 'property_and_casualties') || breadcrumb?(:shared_view_insurance_path) || breadcrumb?(shared_view_insurance_path) %>
+      controller?('life_and_disabilities', 'healths', 'property_and_casualties') || breadcrumb?(:shared_view_insurance_path) || breadcrumb?(shared_view_insurance_path(@shared_user)) %>
     <%= link_to shared_view_insurance_path(@shared_user), class: "main-nav #{shared_view_insurance}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-umbrella-1"></use>
@@ -55,7 +55,7 @@
   <% end %>
   <! -- Taxes -->
   <% if show_navigation_link?('Taxes') %>
-    <% shared_view_taxes = 'active' if current_page?(shared_view_taxes_path(@shared_user)) || controller?('taxes') || breadcrumb?(:shared_view_taxes_path) || breadcrumb?(shared_view_taxes_path) %>
+    <% shared_view_taxes = 'active' if current_page?(shared_view_taxes_path(@shared_user)) || controller?('taxes') || breadcrumb?(:shared_view_taxes_path) || breadcrumb?(shared_view_taxes_path(@shared_user)) %>
     <%= link_to shared_view_taxes_path(@shared_user), class: "main-nav #{shared_view_taxes}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-book-6"></use>
@@ -65,7 +65,7 @@
   <! -- Final Wishes -->
   <% if show_navigation_link?('Final Wishes') %>
     <% shared_view_final_wishes = 'active' if current_page?(shared_view_final_wishes_path(@shared_user)) || controller?('final_wishes') ||
-       breadcrumb?(:shared_view_final_wishes_path) || breadcrumb?(shared_view_final_wishes_path) %>
+       breadcrumb?(:shared_view_final_wishes_path) || breadcrumb?(shared_view_final_wishes_path(@shared_user)) %>
     <%= link_to shared_view_final_wishes_path(@shared_user), class: "main-nav #{shared_view_final_wishes}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-bookmark-2"></use>
@@ -75,7 +75,7 @@
   <! -- Documents -->
   <% if show_navigation_link?('Documents') %>
     <% shared_view_documents = 'active' if current_page?(shared_view_documents_path(@shared_user)) ||
-       breadcrumb?(:shared_view_documents_path) || breadcrumb?(shared_view_documents_path)  %>
+       breadcrumb?(:shared_view_documents_path) || breadcrumb?(shared_view_documents_path(@shared_user))  %>
     <%= link_to shared_view_documents_path(@shared_user), class: "main-nav #{shared_view_documents}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-folder-1"></use>
@@ -85,7 +85,7 @@
   <! -- Contacts & Permissions -->
   <% if show_navigation_link?('Contact') %>
     <% shared_view_contacts = 'active' if current_page?(shared_view_contacts_path(@shared_user)) || controller?('contacts') ||
-       breadcrumb?(:shared_view_contacts_path) || breadcrumb?(shared_view_contacts_path) %>
+       breadcrumb?(:shared_view_contacts_path) || breadcrumb?(shared_view_contacts_path(@shared_user)) %>
     <%= link_to shared_view_contacts_path(@shared_user), class: "main-nav #{shared_view_contacts}" do %>
       <svg class="icon nav-icon">
       <use xlink:href="#icon-share-3"></use>

@@ -7,7 +7,7 @@
   </svg>
   </span>Edit
 <% end %>
-<h1>User Details</h1>
+<h1>Client Details</h1>
 
 <div class="card mb-30">
   <h3 class="card-label">Personal Information</h3>
@@ -49,15 +49,15 @@
   <p><%= associated_user_logged_in?(@corporate_contact) %></p>
 </div>
 
-<h1>User Actions</h1>
+<h1>Admin Actions</h1>
 <div class="card">
   <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
     <div class="user-account-title">
-      <h3>Manage User Account</h3>
-      <p>Upload and manage information for this user.</p>
+      <h3>Access Shared Vault</h3>
+      <p>Upload and update information in the User's Vault.</p>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Manage Account', shared_view_dashboard_path(@corporate_contact.user_profile.user_id), class: 'button big-button blue-button' %>
+      <%= link_to 'View Client Vault', shared_view_dashboard_path(@corporate_contact.user_profile.user_id), class: 'button big-button blue-button' %>
     </div>
   </section>
 

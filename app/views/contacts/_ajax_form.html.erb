@@ -163,7 +163,7 @@ var addContactAndCloseModal = function(json) {
   })
 
   updateAddContactableTable(json);
-  addRemoveShareInfoLineMultipleDropdown(null, {"selected": json['id']})
+  appendNewEmailPreviewLine(json['id'])
   toggleCoOwnerView(json['id'])
   closeContactFormModal();
 }

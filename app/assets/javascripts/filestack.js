@@ -71,7 +71,7 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix, transf
 var transformationsHash = function(transformationNames) {
   transformationNames = transformationNames || []
   var transformations = {}
-  if (transformationNames.includes('crop')) {
+  if (transformationNames.indexOf('crop') >= 0) {
     transformations['crop'] = { aspectRatio: 1 / 1 }
     transformations['minDimensions'] = [360, 360]
     transformations['maxDimensions'] = [360, 360]

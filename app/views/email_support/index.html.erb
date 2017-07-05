@@ -3,7 +3,7 @@
 <%= form_tag email_support_path do %>
   <div class="card cg-3 mb-30">
     <h3 class="card-label">ZokuVault Support</h3>
-    <p>Please let us know how we can help you. Send us your questions, concerns or feedback</p>
+    <p>Please let us know how we can help you. Send us your questions, concerns or feedback.</p>
     <p>
       <%= label_tag :first_name, 'First Name' %>
       <% if @message.errors && @message.errors[:name].present? %>

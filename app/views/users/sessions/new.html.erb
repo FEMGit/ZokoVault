@@ -1,11 +1,16 @@
 <section class="card login-card" >
-  <h2>Log In</h2>
-  
+  <h2>
+    <svg class="icon">
+      <use xlink:href="#icon-lock-large"></use>
+    </svg>
+    <span class="sign-up-title">Secure Login</span>
+  </h2>
+
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <% if flash[:alert].present? %>
       <div class="flash-alert-static flash static"><%= alert %></div>
     <% end %>
-    
+
     <div class="field">
       <%= f.label :email %><br />
       <%= f.email_field :email, autofocus: true %>

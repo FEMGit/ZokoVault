@@ -1,9 +1,12 @@
 <% phone_additional_classes ||= '' %>
 <% autofocus ||= false %>
+<% value ||= '' %>
+<% f ||= nil %>
+
 <% if f.present? %>
   <%= f.text_field phone, class: "form-control phone-mask-field " + phone_additional_classes, autofocus: autofocus, type: "tel" %>
 <% else %>
-  <%= text_field_tag phone, "", class: "form-control phone-mask-field " + phone_additional_classes, autofocus: autofocus, type: "tel" %>
+  <%= text_field_tag phone, "", class: "form-control phone-mask-field " + phone_additional_classes, autofocus: autofocus, type: "tel", value: value %>
 <% end %>
 
 <%= javascript_include_tag 'phone_mask' %>

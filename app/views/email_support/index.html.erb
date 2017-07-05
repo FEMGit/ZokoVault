@@ -26,8 +26,8 @@
       <%= text_field_tag :email, params[:email] || current_user.email, { class: ("input-error" if @message.errors && @message.errors[:email].present? ) } %>
     </p>
     <p>
-      <%= label_tag :phone_number, 'Phone Number' %>
-      <%= text_field_tag :phone_number, current_user.user_profile.phone_number %>
+      <%= label_tag :two_factor_phone_number, 'Phone Number' %>
+      <%= render partial: 'layouts/phone_number', locals: { phone: :two_factor_phone_number, value: current_user.two_factor_phone_number } %>
     </p>
 
     <p>
@@ -35,10 +35,10 @@
     </p>
     <p>
       <%= radio_button("user", "connect_by", "email", options = { checked: true }) %>
-      <%= label_tag :email, 'Email' %>
+      <%= label_tag :user_connect_by_email, 'Email' %>
       <br>
       <%= radio_button("user", "connect_by", "phone") %>
-      <%= label_tag :phone, 'Phone' %>
+      <%= label_tag :user_connect_by_phone, 'Phone' %>
     </p>
     <p>
       <label>Message</label>

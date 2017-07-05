@@ -215,6 +215,10 @@ nav.primary-nav{
     right: 0;
     z-index: 2147483628;
     overflow-y:scroll;
+    height: calc(100% + 10px);
+    height: -moz-calc(100% + 10px);
+    height: -webkit-calc(100% + 10px);
+    height: -o-calc(100% + 10px);
   }
 }
 

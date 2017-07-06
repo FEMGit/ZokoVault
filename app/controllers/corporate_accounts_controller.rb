@@ -124,7 +124,7 @@ class CorporateAccountsController < AuthenticatedController
                    zipcode: account_profile.try(:zip),
                    businessphone: account_profile.try(:phone_number),
                    businessfax: account_profile.try(:fax_number),
-                   photourl: account_profile.try(:company_logo),
+                   photourl: current_user.user_profile.photourl,
                    emailaddress: current_user.email,
                    firstname: current_user.first_name,
                    lastname: current_user.last_name,

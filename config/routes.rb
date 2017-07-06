@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'users/password/corporate_edit/:uuid', to: 'passwords#corporate_edit', as: :corporate_edit_password
   end
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   delete 'insurance/properties/provider/:id' => 'property_and_casualties#destroy_provider'
   delete 'insurance/healths/provider/:id' => 'healths#destroy_provider'
   delete 'insurance/lives/provider/:id' => 'life_and_disabilities#destroy_provider'
-  
+
   # Insurance Update All
   post 'insurance/lives/update_all' => 'life_and_disabilities#update_all'
   post 'insurance/healths/update_all' => 'healths#update_all'
@@ -300,7 +300,7 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
   get 'shared_view/:shared_user_id/power_of_attorneys' => 'shared_view#power_of_attorneys', as: :shared_view_power_of_attorneys
-  
+
   # Documents
   get 'shared_view/:shared_user_id/documents/:uuid' => 'documents#show', as: :shared_documents
 
@@ -348,7 +348,7 @@ Rails.application.routes.draw do
   get "/about", to: "pages#about", as: :about
   get "/careers", to: "pages#careers", as: :careers
   get "/contact_us", to: "pages#contact_us", as: :contact_page
-  get "/enterprise", to: "pages#enterprise", as: :enterprise
+  get "/corporate_details", to: "pages#corporate_details", as: :corporate_details
   get "/mailing_list", to: "pages#mailing_list", as: :mailing_list_page
   get "/pricing", to: "pages#pricing", as: :pricing
   get "/privacy_policy", to: "pages#privacy_policy", as: :privacy_policy
@@ -366,7 +366,7 @@ Rails.application.routes.draw do
   # Email helper
   get '/email/share_invitation_mailer_name/:contact_id', to: 'email#share_invitation_mailer_name'
   get 'email/email_preview_line/:contact_id', to: 'email#email_preview_line'
-  
+
   # Corporate Account
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
   post '/corporate/send_invitation/:contact_id', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation

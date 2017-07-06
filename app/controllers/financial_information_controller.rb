@@ -1,6 +1,7 @@
 class FinancialInformationController < AuthenticatedController
   include SharedViewModule
   include FinancialInformationHelper
+  include TutorialsHelper
   
   add_breadcrumb "Financial Information", :financial_information_path, only: [:index], if: :general_view?
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:index], if: :shared_view?
@@ -31,6 +32,17 @@ class FinancialInformationController < AuthenticatedController
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? Category.fetch(@category.downcase) }.map(&:contact) 
   end
   
+  def update_balance_sheet
+    update_value(:account, FinancialAccountInformation, :value)
+    update_value(:alternative, FinancialAlternative, :current_value)
+    update_value(:property, FinancialProperty, :value)
+    update_value(:investment, FinancialInvestment, :value)
+    
+    respond_to do |format|
+      tutorial_redirection(format, @financial_provider.as_json)
+    end
+  end
+  
   def value_negative
     return false unless params[:type].present?
     type = params[:type]
@@ -44,5 +56,18 @@ class FinancialInformationController < AuthenticatedController
   
   def investment_provider_id(user, investment)
     FinancialProvider.for_user(user).find(investment.empty_provider_id)
+  end
+  
+  private
+  
+  def balance_sheet_params(type)
+    params[:financial_provider].select { |k, _v| k.include? "#{type.to_s}_" }.collect { |k, v| [k[/\d+/], v] }
+  end
+  
+  def update_value(type, model, value_name)
+    balance_sheet_params(type).each do |id, value|
+      next unless (account = model.find_by(id: id)).present?
+      account.update_attribute(value_name, value)
+    end
   end
 end

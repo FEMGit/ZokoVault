@@ -2,8 +2,10 @@
     $(typeDropDownSelector).change(updateValues(typeDropDownSelector, valueFieldSelector));
   }
 
-  var updateValues = function(typeDropDownSelector, valueFieldSelector) {
-    var type = $(typeDropDownSelector).val()
+  var updateValues = function(typeDropDownSelector, valueFieldSelector, type) {
+    if (type === undefined) {
+      var type = $(typeDropDownSelector).val()
+    }
     var url = '/financial_information/value_negative/' + type;
     
     $.get(url, function(data) {

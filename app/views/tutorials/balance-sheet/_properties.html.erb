@@ -1,0 +1,26 @@
+<% properties.each do |property| %>
+  <tr>
+    <td>
+      <label class="mobile-show"><%= column_name %></label>
+      <p><%= property.name %></p>
+    </td>
+    <td>
+      <label class="mobile-show"><%= column_type %></label>
+      <p><%= property.property_type %></p>
+    </td>
+    <td>
+      <label class="mobile-show"><%= column_value %></label>
+      <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: "property_value_#{property.id}", field_id: "property_value_#{property.id}",
+                                                value: number_to_currency(property.value, precision: 0, unit: "$"), additional_classes: 'max-w-300' } %>
+    </td>
+  </tr>
+<% end %>
+
+<%= javascript_include_tag 'autonumeric' %>
+<script>
+    var properties = <%= raw properties.compact.flatten.collect { |x| [x.id, x.property_type] } %>
+    for(var i = 0; i < properties.length; i++ ) {
+      setValue($('#property_value_' + properties[i][0]), $('#property_value_' + properties[i][0]).val())
+      updateValues(null, $('#property_value_' + properties[i][0]), properties[i][1]);
+    }
+</script>

@@ -1,0 +1,28 @@
+<% account_providers.each do |account_provider| %>
+  <% account_provider.accounts.each do |account| %>
+    <tr>
+      <td>
+        <label class="mobile-show"><%= column_name %></label>
+        <p><%= account_provider.name %></p>
+      </td>
+      <td>
+        <label class="mobile-show"><%= column_type %></label>
+        <p><%= account.account_type %></p>
+      </td>
+      <td>
+        <label class="mobile-show"><%= column_value %></label>
+        <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: "account_value_#{account.id}", field_id: "account_value_#{account.id}",
+                                                  value: number_to_currency(account.value, precision: 0, unit: "$"), additional_classes: 'max-w-300' } %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+
+<%= javascript_include_tag 'autonumeric' %>
+<script>
+    var accounts = <%= raw account_providers.map(&:accounts).compact.flatten.collect { |x| [x.id, x.account_type] } %>
+    for(var i = 0; i < accounts.length; i++ ) {
+      setValue($('#account_value_' + accounts[i][0]), $('#account_value_' + accounts[i][0]).val())
+      updateValues(null, $('#account_value_' + accounts[i][0]), accounts[i][1]);
+    }
+</script>

@@ -1,8 +1,10 @@
 <% negative ||= false %>
+<% additional_classes ||= '' %>
+
 <% if negative %>
   <%= f.text_field field_name, id: field_id, maxLength: 12, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "-$"} },
-      :value => value, style: "color: red;" %>
+      :value => value, style: "color: red;", class: additional_classes %>
 <% else %>
   <%= f.text_field field_name, id: field_id, maxLength: 12, :data => {autonumeric: {vMin: '0', vMax: '999999999', aSign: "$"} },
-      :value => value %>
+      :value => value, class: additional_classes %>
 <% end %>

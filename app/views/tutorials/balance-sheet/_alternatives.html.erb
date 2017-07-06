@@ -1,0 +1,28 @@
+<% alternative_managers.each do |alternative_manager| %>
+  <% alternative_manager.alternatives.each do |alternative| %>
+    <tr>
+      <td>
+        <label class="mobile-show"><%= column_name %></label>
+        <p><%= alternative_manager.name %></p>
+      </td>
+      <td>
+        <label class="mobile-show"><%= column_type %></label>
+        <p><%= alternative.alternative_type %></p>
+      </td>
+      <td>
+        <label class="mobile-show"><%= column_value %></label>
+        <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: "alternative_value_#{alternative.id}", field_id: "alternative_value_#{alternative.id}",
+                                                  value: number_to_currency(alternative.current_value, precision: 0, unit: "$"), additional_classes: 'max-w-300' } %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+
+<%= javascript_include_tag 'autonumeric' %>
+<script>
+    var alternatives = <%= raw alternative_managers.map(&:alternatives).compact.flatten.collect { |x| [x.id, x.alternative_type] } %>
+    for(var i = 0; i < alternatives.length; i++ ) {
+      setValue($('#alternative_value_' + alternatives[i][0]), $('#alternative_value_' + alternatives[i][0]).val())
+      updateValues(null, $('#alternative_value_' + alternatives[i][0]), alternatives[i][1]);
+    }
+</script>

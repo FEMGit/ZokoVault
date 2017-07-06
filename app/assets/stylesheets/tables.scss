@@ -148,3 +148,47 @@ th {
     @include fixed-cell-size($table-cell-small)
   }
 }
+
+// Tutorial Balance Sheet Table
+table.balance-sheet {
+  margin: 0;
+  padding:0;
+  outline: 0;
+  font-size: 100%;
+  border: 0;
+  vertical-align: baseline;
+  background: transparent;
+  width: 100%;
+  td {
+    border-bottom: 1px dashed $color-gray-med-shaded;
+  }
+  th {
+    border: 0;
+    background: transparent;
+    text-transform: none;
+  }
+  
+  @include media($mobile) {
+    width: 100%;
+    
+    td {
+      display: block;
+      width: 100%;
+      border: 0;
+      margin-bottom: 15px;
+    }
+    
+    tr {
+      display: block;
+      td:last-child {
+        margin-bottom: 45px;
+        width: auto !important;
+      }
+      border-bottom: 1px dashed $color-gray-med-shaded;
+      margin-bottom: 15px;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}

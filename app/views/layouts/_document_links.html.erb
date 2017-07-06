@@ -1,8 +1,13 @@
 <% blank ||= false %>
 <% target = blank ? "_blank" : "_self" %>
+<% name_only ||= false %>
 
-<% if @shared_user.present? %>
-  <%= link_to document.name, shared_documents_path(@shared_user, document), target: target %>
+<% if name_only %>
+  <%= document.name %>
 <% else %>
-  <%= link_to document.name, document_path(document), target: target %>
+  <% if @shared_user.present? %>
+    <%= link_to document.name, shared_documents_path(@shared_user, document), target: target %>
+  <% else %>
+    <%= link_to document.name, document_path(document), target: target %>
+  <% end %>
 <% end %>

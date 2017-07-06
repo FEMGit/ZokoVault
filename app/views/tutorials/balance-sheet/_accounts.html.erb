@@ -11,8 +11,13 @@
       </td>
       <td>
         <label class="mobile-show"><%= column_value %></label>
-        <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: "account_value_#{account.id}", field_id: "account_value_#{account.id}",
-                                                  value: number_to_currency(account.value, precision: 0, unit: "$"), additional_classes: 'max-w-300' } %>
+        <%= render partial: 'layouts/currency_field',
+                  locals: {   f: f,
+                              field_name: "account_value_#{account.id}",
+                              field_id: "account_value_#{account.id}",
+                              value: number_to_currency(account.value,
+                              precision: 0, unit: "$"),
+                              additional_classes: 'tutorial-value' } %>
       </td>
     </tr>
   <% end %>

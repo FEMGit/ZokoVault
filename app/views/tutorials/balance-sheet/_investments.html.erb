@@ -10,8 +10,13 @@
     </td>
     <td>
       <label class="mobile-show"><%= column_value %></label>
-      <%= render partial: 'layouts/currency_field', locals: { f: f, field_name: "investment_value_#{investment.id}", field_id: "investment_value_#{investment.id}",
-                                                value: number_to_currency(investment.value, precision: 0, unit: "$"), additional_classes: 'max-w-300' } %>
+      <%= render partial: 'layouts/currency_field',
+                 locals: { f: f,
+                           field_name: "investment_value_#{investment.id}",
+                           field_id: "investment_value_#{investment.id}",
+                           value: number_to_currency(investment.value,
+                           precision: 0, unit: "$"),
+                           additional_classes: 'tutorial-value' } %>
     </td>
   </tr>
 <% end %>

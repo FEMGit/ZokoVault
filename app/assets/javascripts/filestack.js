@@ -28,6 +28,7 @@ var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
   var client = filestack.init(api_key, policy_hash)
   client.pick({
     maxSize: 104857600,
+    disableTransformer: true,
     fromSources: [
       'local_file_system', 'webcam', 'googledrive', 'dropbox', 'box', 'gmail'
     ],
@@ -76,6 +77,6 @@ var transformationsHash = function(transformationNames) {
     transformations['minDimensions'] = [360, 360]
     transformations['maxDimensions'] = [360, 360]
   }
-  
+
   return transformations
 }

@@ -101,7 +101,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
         
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
-          tutorial_redirection(format, @insurance_card.as_json, 'Insurance successfully created.')
+          tutorial_redirection(format, @insurance_card.as_json)
         else
           format.html { redirect_to @path, flash: { success: 'Insurance successfully created.' } }
           format.json { render :show, status: :created, location: @insurance_card }

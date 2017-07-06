@@ -121,7 +121,7 @@ module TutorialsHelper
     end
   end
   
-  def tutorial_redirection(format, json_object, success_message)
+  def tutorial_redirection(format, json_object)
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
     if session[:tutorial_paths].present? &&
@@ -138,7 +138,7 @@ module TutorialsHelper
       path = new_tutorial_path
     end
     format.json { render json: json_object }
-    format.html { redirect_to path, flash: { success: success_message } }
+    format.html { redirect_to path }
   end
   
   def tutorial_error_handle(message)
@@ -242,7 +242,7 @@ module TutorialsHelper
     params.require(:update_fields)
   end
 
-  def multiple_types_create(tutorial_multiple_types_params, key, resource_owner, error_message)
+  def multiple_types_create(tutorial_multiple_types_params, key, resource_owner)
     return false unless tutorial_multiple_types_params.present?
     types = tutorial_multiple_types_params[:types].reject(&:blank?)
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
@@ -258,7 +258,7 @@ module TutorialsHelper
     respond_to do |format|
       if @financial_provider.save
         if params[:tutorial_name]
-          tutorial_redirection(format, @financial_provider.as_json, error_message)
+          tutorial_redirection(format, @financial_provider.as_json)
         end
       else
         tutorial_error_handle("Fill in Provider Name field to continue") && return

@@ -82,7 +82,7 @@ class FinancialPropertyController < AuthenticatedController
         @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
-          tutorial_redirection(format, @financial_property.as_json, 'Property was successfully created.')
+          tutorial_redirection(format, @financial_property.as_json)
         else
           format.json { render :show, status: :created, location: @financial_property }
           format.html { redirect_to @path, flash: { success: 'Property was successfully created.' } }

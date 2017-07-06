@@ -75,7 +75,7 @@ class EntitiesController < AuthenticatedController
         WtlService.update_shares(@entity.id, @entity.share_with_contact_ids, resource_owner.id, Entity)
         WtlService.update_entity(@entity, entity_params_multi[:agent_ids], entity_params_multi[:partner_ids])
         if tutorial_params[:tutorial_name]
-          tutorial_redirection(format, @entity.as_json, 'Entity successfully created.')
+          tutorial_redirection(format, @entity.as_json)
         else
           format.html { redirect_to success_path, flash: { success: 'Entity successfully created.' } }
           format.json { render :show, status: :created, location: @entity }

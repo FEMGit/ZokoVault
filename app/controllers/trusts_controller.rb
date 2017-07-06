@@ -98,7 +98,7 @@ class TrustsController < AuthenticatedController
           update_trusts(new_trusts, old_trusts)
           
           if tutorial_params[:tutorial_name]
-            tutorial_redirection(format, @new_vault_entries.as_json, success_message(old_trusts))
+            tutorial_redirection(format, @new_vault_entries.as_json)
           else
             format.html { redirect_to success_path, flash: { success: success_message(old_trusts) } }
             format.json { render :show, status: :created, location: @trust }

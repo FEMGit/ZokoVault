@@ -117,7 +117,7 @@ class TaxesController < AuthenticatedController
     end
 
     respond_to do |format|
-      tutorial_redirection(format, nil, '')
+      tutorial_redirection(format, nil)
     end
   end
 

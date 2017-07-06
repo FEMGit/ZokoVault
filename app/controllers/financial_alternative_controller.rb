@@ -70,7 +70,7 @@ class FinancialAlternativeController < AuthenticatedController
   end
   
   def tutorial_multiple_type_create
-    multiple_types_create(tutorial_multiple_types_params, :alternative_type, resource_owner, 'Alternative was successfully created.')
+    multiple_types_create(tutorial_multiple_types_params, :alternative_type, resource_owner)
   end
 
   def create
@@ -86,7 +86,7 @@ class FinancialAlternativeController < AuthenticatedController
         @path = success_path(show_alternative_url(@financial_provider), show_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         
         if params[:tutorial_name]
-          tutorial_redirection(format, @financial_provider.as_json, 'Alternative was successfully created.')
+          tutorial_redirection(format, @financial_provider.as_json)
         else
           format.html { redirect_to @path, flash: { success: 'Alternative was successfully created.' } }
           format.json { render :show, status: :created, location: @financial_provider }

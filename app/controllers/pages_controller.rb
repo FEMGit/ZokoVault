@@ -6,7 +6,7 @@ class PagesController < HighVoltage::PagesController
   before_action :save_return_to_path, only: [:show]
   before_action :set_cache_headers
   before_action :set_tutorial, :set_contacts, :set_shares_information, only: [:show]
-  layout 'without_sidebar_layout'
+  layout 'without_sidebar_layout', only: [:show]
   
   before_action :redirect_to_last_tutorial, :save_tutorial_progress, only: [:show]
   

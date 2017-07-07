@@ -92,11 +92,7 @@ class EntitiesController < AuthenticatedController
   end
   
   def update_all
-    update_all_params.values.each do |update_value|
-      entity = Entity.for_user(resource_owner).find_by(id: update_value[:id])
-      next unless entity
-      entity.update(update_value)
-    end
+    TutorialService.update_tutorial_without_dropdown(update_all_params, Entity, resource_owner)
     render :nothing => true
   end
 

@@ -83,7 +83,8 @@ class CategoriesController < AuthenticatedController
   end
   
   def share_category
-    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    contact_service = ContactService.new(:user => current_user)
+    @contacts = contact_service.contacts_shareable
     @category = Category.fetch(params[:id])
 
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 

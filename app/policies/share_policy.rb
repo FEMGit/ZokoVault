@@ -20,6 +20,14 @@ class SharePolicy < BasicPolicy
   def get_drop_down_options?
     owned_or_shared?
   end
+  
+  def document_category_share_contacts?
+    owned_or_shared?
+  end
+  
+  def document_subcategory_share_contacts?
+    owned_or_shared?
+  end
 
   def get_card_names?
     owned_or_shared?

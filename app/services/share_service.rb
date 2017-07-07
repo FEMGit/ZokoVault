@@ -1,5 +1,4 @@
 class ShareService
-
   attr_accessor :contact_ids, :user_id
 
   def initialize(params)
@@ -104,5 +103,55 @@ class ShareService
 
   def self.shared_resource(shares, resource_type)
     shares.select(&:shareable_type).map(&:shareable).select { |resource| resource.is_a? resource_type }
+  end
+  
+  def self.category_contacts_shared_with(owner, category_name)
+    category_id = Category.fetch(category_name.downcase).try(:id)
+    return [] unless category_id.present?
+    owner.shares.select { |sh| (sh.shareable_type.eql? 'Category') && (sh.shareable_id.eql? category_id) }.map(&:contact_id)
+  end
+  
+  def self.subcategory_contacts_shared_with(owner, category_name, subcategory)
+    category = Category.fetch(category_name.downcase)
+    return [] unless category.present?
+    category_shares = category_contacts_shared_with(owner, category_name)
+    return category_shares if subcategory.eql? DocumentService.empty_value
+    shareable_types = CategoryShareableTypes::SHAREABLE_TYPE[category.name]
+    
+    if category.name.eql? Rails.application.config.x.FinancialInformationCategory
+      category_shares += resources_shared(owner, shareable_types, Array.wrap(subcategory.to_i)).map(&:contact_id).uniq
+    elsif [Rails.application.config.x.WillsPoaCategory, Rails.application.config.x.TrustsEntitiesCategory].include? category.name
+      card_document = CardDocument.find_by(id: subcategory)
+      return category_shares unless card_document.present?
+      object_type = card_document.object_type
+      card_id = card_document.card_id
+      category_shares += resources_shared(owner, shareable_types, Array.wrap(card_id), object_type).map(&:contact_id).uniq
+    elsif category.name.eql? Rails.application.config.x.InsuranceCategory
+      category_shares += resources_shared(owner, shareable_types, Array.wrap(subcategory.to_i)).map(&:contact_id).uniq
+    elsif category.name.eql? Rails.application.config.x.TaxCategory
+      category_shares += resources_shared(owner, shareable_types, TaxesService.tax_ids_by_year(subcategory, owner)).map(&:contact_id).uniq
+    elsif category.name.eql? Rails.application.config.x.FinalWishesCategory
+      category_shares += resources_shared(owner, shareable_types, FinalWishService.final_wish_ids_by_group(subcategory, owner)).map(&:contact_id).uniq
+    end
+  end
+  
+  private
+  
+  def self.resource_shared?(share, shareable_type_name, ids, object_type = nil)
+    return false unless ids.present?
+    if object_type.blank?
+      (share.shareable_type.eql? shareable_type_name) && (ids.include? share.shareable_id)
+    else
+      (share.shareable_type.eql? shareable_type_name) && (ids.include? share.shareable_id) &&
+      (object_type.eql? shareable_type_name)
+    end
+  end
+  
+  def self.resources_shared(owner, shareable_types, ids, object_type = nil)
+    resources = []
+    shareable_types.each do |shareable_type_name|
+      resources += owner.shares.select { |sh| resource_shared?(sh, shareable_type_name, ids, object_type) }
+    end
+    return resources
   end
 end

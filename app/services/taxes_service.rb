@@ -19,4 +19,10 @@ class TaxesService
     ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_with_contact_ids.flatten,
                                                    Rails.application.config.x.TaxCategory, tax_year_info.year.to_s)
   end
+  
+  def self.tax_ids_by_year(year, user)
+    tax_year_info = TaxYearInfo.for_user(user).find_by(:year => year)
+    return nil unless tax_year_info.present?
+    tax_year_info.taxes.map(&:id)
+  end
 end

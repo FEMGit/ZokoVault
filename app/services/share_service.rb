@@ -1,35 +1,35 @@
 class ShareService
-  
+
   attr_accessor :contact_ids, :user_id
-  
+
   def initialize(params)
     @user_id = params[:user_id]
     @contact_ids = params[:contact_ids]
   end
-  
+
   def fill_document_share
     # remove empty values if is't inside
     doc_shares = {}
     if @contact_ids.present?
       @contact_ids.reject!(&:empty?)
-      @contact_ids.each_with_index do |contact_id, index| 
+      @contact_ids.each_with_index do |contact_id, index|
         doc_shares[index] = { "user_id" => @user_id, "contact_id" => contact_id }
       end
     end
 
     doc_shares
   end
-  
+
   def clear_shares(document)
     if document.shares.present?
       document.shares.clear
     end
   end
-  
+
   def self.get_all_cards(owner, contact)
     return [] unless (owner.primary_shared_with_by_contact? contact)
-    resource = 
-      FinancialProvider.for_user(owner) + 
+    resource =
+      FinancialProvider.for_user(owner) +
       Will.for_user(owner) +
       PowerOfAttorneyContact.for_user(owner) +
       Entity.for_user(owner) +
@@ -38,26 +38,26 @@ class ShareService
       Tax.for_user(owner) +
       FinalWish.for_user(owner)
   end
-  
+
   def self.shared_documents_by_contact(resource_owner, contact)
     return Document.for_user(resource_owner) if (resource_owner.primary_shared_with_by_contact? contact)
     shareables = SharedViewService.shares_by_contact(resource_owner, contact).select(&:shareable_type).map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
-    
+
     shared_group_names = shared_groups(resource_owner, nil, contact)
     shared_category_names = shared_categories(resource_owner, nil, contact)
     all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
   end
-  
+
   def self.shared_documents(resource_owner, user)
     shareables = SharedViewService.shares(resource_owner, user).select(&:shareable_type).map(&:shareable)
     direct_document_share = shareables.select { |res| res.is_a? Document }
-    
+
     shared_group_names = shared_groups(resource_owner, user)
     shared_category_names = shared_categories(resource_owner, user)
     all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
   end
-  
+
   def self.all_documents_shared(resource_owner, shared_group_names, shared_category_names, direct_document_share)
     group_docs = Document.for_user(resource_owner).select { |x| (shared_group_names["Tax"].include? x.group) ||
                                                                 (shared_group_names["FinalWish"].include? x.group) }
@@ -68,7 +68,7 @@ class ShareService
     category_docs = Document.for_user(resource_owner).select { |x| shared_category_names.include? x.category }
     (group_docs + direct_document_share + category_docs + vendor_docs + financial_docs + card_document_docs).uniq
   end
-  
+
   def self.shared_cards(owner, user = nil, contact = nil)
     if (contact.present? && (owner.primary_shared_with_by_contact? contact))
       return get_all_cards(owner, contact)
@@ -81,7 +81,7 @@ class ShareService
       end
     shareables.compact.reject { |res| (res.is_a? Document) || (res.is_a? Category) }
   end
-  
+
   def self.shared_groups(owner, user = nil, contact = nil)
     if contact.present?
       SharedViewService.shared_group_names(owner, nil, nil, contact)
@@ -89,19 +89,19 @@ class ShareService
       SharedViewService.shared_group_names(owner, user)
     end
   end
-  
+
   def self.shared_categories(owner, user = nil, contact = nil)
     if contact.present?
       return Rails.application.config.x.ShareCategories.dup if (owner.primary_shared_with_by_contact? contact)
       SharedViewService.shares_by_contact(owner, contact).select(&:shareable_type)
                                                          .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     elsif user.present?
-      return Rails.application.config.x.ShareCategories.dup if (owner.primary_shared_with? user)
+      return Rails.application.config.x.ShareCategories.dup if user.primary_shared_with?(owner)
       SharedViewService.shares(owner, user).select(&:shareable_type)
                                            .select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
     end
   end
-  
+
   def self.shared_resource(shares, resource_type)
     shares.select(&:shareable_type).map(&:shareable).select { |resource| resource.is_a? resource_type }
   end

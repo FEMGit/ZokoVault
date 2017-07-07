@@ -17,7 +17,7 @@
       <% digital_resources.each do |digital_res| %>
         <tr>
           <td>
-            <%= render :partial => "layouts/document_links", :locals => {:document => digital_res, blank: true } %>
+            <%= render :partial => "layouts/document_links", :locals => {:document => digital_res, :name_only => true  } %>
           </td>
           <td>
             <%= render :partial => "layouts/document_tags", :locals => {:document => digital_res} %>
@@ -150,7 +150,7 @@
   var tableUpdate = function(data) {
     var primary_tag = "<span class='doc-tag'>" + data['primary_tag'] + "</span>"
     var secondary_tag = (data['secondary_tag'] !== undefined) ? ("<span class='doc-tag secondary-tag'>" + data['secondary_tag'] + "</span>") : ""
-    var document_path = '<a href="' + data['document_path'] + '" target="_blank">' + data['name'] + '</a>'
+    var document_path = data['name']
 
     var table = $('#documents-table').DataTable();
     table.row.add([

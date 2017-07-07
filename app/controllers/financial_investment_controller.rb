@@ -81,7 +81,7 @@ class FinancialInvestmentController < AuthenticatedController
         @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
-          tutorial_redirection(format, @financial_investment.as_json, 'Investment was successfully created.')
+          tutorial_redirection(format, @financial_investment.as_json)
         else
           format.html { redirect_to @path, flash: { success: 'Investment was successfully created.' } }
           format.json { render :show, status: :created, location: @financial_investment }

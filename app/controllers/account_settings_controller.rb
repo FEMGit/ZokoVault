@@ -92,7 +92,7 @@ class AccountSettingsController < AuthenticatedController
     respond_to do |format|
       if @user_profile.update_attributes(account_users_params)
         if tutorial_params[:tutorial_name].present?
-          tutorial_redirection(format, @user_profile.as_json, 'Vault Co-Owner was successfully updated.' )
+          tutorial_redirection(format, @user_profile.as_json)
         else
           format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
           format.json { render :account_users, status: :updated, location: @user_profile }

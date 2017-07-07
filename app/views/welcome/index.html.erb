@@ -16,6 +16,10 @@
   <%= render partial: 'dashboard_trial_header', locals: { subscription: subscription } %>
 <% end %>
 
+<% if current_user.corporate_user? %>
+  <%= render partial: "corporate_information_card" %>
+<% end %>
+
 <%= render "financial_information_card" %>
 
 <%= render "wills_powers_of_attorney_card" %>

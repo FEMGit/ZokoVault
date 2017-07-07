@@ -24,7 +24,7 @@
   <% elsif @subscription_info[:status] == :unknown %>
     <%= link_to 'Create Trial', admin_create_trial_path(@user), class: "button secondary-button medium-button mb-20"%>
   <% end %>
-  
+
   <%= form_for @user, url: usage_metrics_update_user_path, method: :post do |f| %>
     <%= f.label :corporate_admin, 'Corporate Admin' %>
     <ul class="check-list mb-20">
@@ -38,7 +38,7 @@
         </label>
       </li>
     </ul>
-    
+
     <div id="corporate-account-settings" style="display: none;">
       <label>Corporate Admin Category Access</label>
       <ul class="check-list">
@@ -54,7 +54,7 @@
           </li>
         <% end %>
       </ul>
-    
+
       <%= f.fields_for @corporate_profile do |corporate_profile_form| %>
 
         <%= corporate_profile_form.label :business_name, 'Company Name' %>
@@ -110,7 +110,7 @@
           <% end %>
         </div>
 
-        <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account'" %>
+        <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account', false" %>
 
         <a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="no-underline-link" id="action-avatar-link">Update Logo</a>
         <a onclick="clearAvatarPhoto('_account')" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link"
@@ -131,7 +131,7 @@
   $(document).ready(function() {
     toggleCategoryCheckbox("#corporate_account_corporate_admin")
   })
-  
+
   var toggleCategoryCheckbox = function(checkbox) {
     var corporateAccountSettings = $("#corporate-account-settings")
     if ($(checkbox).is(":checked")) {
@@ -140,7 +140,7 @@
       corporateAccountSettings.hide()
     }
   }
-  
+
   var submitForm = function() {
     var form_id = "edit_user_" + "<%= @user.id %>"
     $("#" + form_id).submit()

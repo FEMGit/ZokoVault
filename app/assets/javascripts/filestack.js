@@ -27,6 +27,7 @@ var setAvatarPhoto = function(suffix, preview, key) {
 var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
   var client = filestack.init(api_key, policy_hash)
   client.pick({
+    cache: false,
     maxSize: 104857600,
     disableTransformer: true,
     fromSources: [
@@ -54,6 +55,7 @@ var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix, square
   var client = filestack.init(api_key, policy_hash)
   client.pick({
     accept: 'image/*',
+    cache: false,
     fromSources: [
       'local_file_system', 'webcam', 'facebook', 'instagram',
       'googledrive', 'dropbox', 'flickr', 'picasa', 'gmail'

@@ -624,8 +624,10 @@
   <tbody>
     <tr>
       <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right: 0; padding-bottom:9px; padding-left:33px !important;">
-	    <span class="label">Card:</span>
-        <span> <%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %> </span>
+	    <% if card.present? %>
+	      <span class="label">Card:</span>
+          <span> <%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %> </span>
+        <% end %>
       </td>
 	</tr>
 	<tr <% if invoice.receipt_number.blank? %> style="display: none;" <% end %> >

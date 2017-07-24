@@ -43,9 +43,14 @@ class AccountSettingsController < AuthenticatedController
     if @subscription.funding.beta?
       @plan = OpenStruct.new(name: 'Beta User - One Year Free')
     else
-      upcoming = Stripe::Invoice.upcoming(customer: customer.id)
-      @next_invoice_date = DateTime.strptime(upcoming.date.to_s, '%s')
-      @next_invoice_amount = upcoming.amount_due
+      begin
+        upcoming = Stripe::Invoice.upcoming(customer: customer.id)
+        @next_invoice_date = DateTime.strptime(upcoming.date.to_s, '%s')
+        @next_invoice_amount = upcoming.amount_due
+      rescue Stripe::InvalidRequestError
+        @next_invoice_date = nil
+        @next_invoice_amount = nil
+      end
       @invoices = customer.invoices.to_a
       record = @subscription.funding.stripe_subscription_record
       @plan = record.try(:plan)
@@ -53,11 +58,16 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def invoice_information
+    if params[:id].blank?
+      flash[:error] = "Error occured while receiving an invoice."
+      redirect_to back_path
+      return
+    end
     invoice = Stripe::Invoice.retrieve(params[:id])
-    charge  = Stripe::Charge.retrieve(invoice.charge)
+    charge  = Stripe::Charge.retrieve(invoice.charge) if invoice.try(:charge).present?
     html = render_to_string(
       layout: 'pdf_invoice',
-      locals: { invoice: invoice, card: charge.source }
+      locals: { invoice: invoice, card: charge.try(:source) }
     )
     kit = PDFKit.new(html)
     pdf_file = kit.to_pdf

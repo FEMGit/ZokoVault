@@ -1,2 +1,3 @@
-<%= zip_code_form(f, zip) %>
+<% errors ||= nil %>
+<%= zip_code_form(f, zip, errors) %>
 <%= javascript_include_tag 'zipcode_mask' %>

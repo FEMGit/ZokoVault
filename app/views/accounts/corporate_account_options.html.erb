@@ -1,0 +1,69 @@
+<div class="card max-w-1000-centered">
+  <%= form_tag :corporate_account_options_update, { method: :post, id: 'corporate-account-form' } do %>
+    <h1>Corporate Account Options</h1>
+
+    <p class="fw-600">Would you like to provide ZokuVault to your clients, employees or both?</p>
+
+    <ul class="radio-list">
+      <li class="radio-list">
+        <label for="clients">
+        <%= radio_button_tag "corporate_account_options[provide_to]", "Clients", false, id: 'clients' %>
+        Clients</label>
+        <div class="check"></div>
+      </li>
+
+      <li class="radio-list">
+        <label for="employees">
+        <%= radio_button_tag "corporate_account_options[provide_to]", "Employees", false, id: 'employees' %>
+        Employees</label>
+        <div class="check"></div>
+      </li>
+
+      <li class="radio-list">
+        <label for="clients_employees">
+        <%= radio_button_tag "corporate_account_options[provide_to]", "Clients and Employees", false, id: 'clients_employees' %>
+        Clients and Employees</label>
+        <div class="check"></div>
+      </li>
+    </ul>
+
+    <div class="services-offer" style="display: none;">
+      <p class="mt-30 fw-600">What services does your company offer?</p>
+      <ul class="check-list">
+        <% ["Legal", "Financial", "Tax", "Accounting", "Insurance Brokerage", "Other"].each do |option| %>
+          <li class="check-list">
+            <label>
+              <%= check_box_tag "corporate_account_options[services][]", option, false, {} %>
+              <span></span> <%= option %>
+            </label>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="back-continue-buttons" style="display: none;">
+      <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+        <%= link_to 'Back', corporate_user_type_path, class:"big-button outline-button padded f-left" %>
+        <%= link_to 'Continue', 'javascript:void(0)', class: 'button big-button blue-button f-right', onclick: "submitForm()" %>
+      </section>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  $(".radio-list input[type=radio]").change(function() {
+    var checkedId = $(this).attr('id')
+    if (checkedId === "employees") {
+      $(".back-continue-buttons").show()
+      $(".services-offer").hide()
+      $("[name='corporate_account_options[services][]']").attr('checked', false)
+    } else if (checkedId === "clients" || checkedId === "clients_employees") {
+      $(".services-offer").show()
+      $(".back-continue-buttons").show()
+    }
+  })
+  
+  var submitForm = function() {
+    document.getElementById("corporate-account-form").submit()
+  }
+</script>

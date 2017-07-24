@@ -19,7 +19,7 @@ class WelcomeController < AuthenticatedController
     redirect_to new_tutorial_path if redirect_result.blank?
   end
 
-  def index; 
+  def index
     user_resource_gatherer = UserResourceGatherer.new(current_user)
     @shares = user_resource_gatherer.shares
     @new_shares = @shares.select { |share| share.created_at > current_user.last_sign_in_at }

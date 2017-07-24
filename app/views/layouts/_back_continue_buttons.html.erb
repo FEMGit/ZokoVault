@@ -1,0 +1,12 @@
+<% continue_path_method ||= nil %>
+<% form ||= nil %>
+<% path_method = continue_path_method.present? ? continue_path_method : :get %>
+
+<section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+  <%= link_to 'Back', back_path, class:"big-button outline-button padded f-left" %>
+  <% if form.present? %>
+    <%= form.submit 'Continue', class: "button big-button blue-button f-right" %>
+  <% else %>
+    <%= link_to 'Continue', continue_path, method: path_method, class: 'button big-button blue-button f-right' %>
+  <% end %>
+</section>

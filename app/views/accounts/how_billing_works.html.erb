@@ -1,0 +1,10 @@
+<div class="card max-w-1000-centered text-center">
+  <h4 class="fw-600 mb-30 clr-gray-dark-tinted">How Billing Works</h4>
+  
+  <p class="inline-block mb-30">ZokuVault is a subscription-based service that is billed monthly, annually, or provides a lifetime membership for its users.</p>
+  <p class="inline-block mb-30">As a Corporate Admin user, your account is free, however your clients or employees will need to have a paid subscription to use the platform. You can choose whether the subscription is paid for by you or by them.</p>
+  
+  <p class="inline-block mb-0">Continue to manage the billing options for your clients and/or employees.</p>
+  <%= render partial: 'layouts/back_continue_buttons', locals: { back_path: corporate_account_options_path,
+                                                                 continue_path: billing_types_path } %>
+</div>

@@ -1,0 +1,75 @@
+<div class="card mb-30 max-w-1000-centered">
+  <h1>Tell us about your company.</h1>
+  <%= form_for @corporate_profile, url: corporate_user_type_update_path, method: :post do |f| %>
+    <% if @corporate_profile.errors.any? %>
+      <% errors = true %>
+      <% error_messages = @corporate_profile.errors.messages %>
+    <% end %>
+
+    <%= f.label :business_name, 'Company Name' %>
+    <% if errors && error_messages[:business_name].present? %>
+      <span class="error-label"> - <%= error_messages[:business_name].first %></span>
+    <% end %>
+    <%= f.text_field :business_name, { class: ("input-error" if errors && error_messages[:business_name].present?),
+                                       :maxlength => get_max_length(:default) } %>
+
+    <%= f.label :web_address, 'Web Address' %>
+    <% if errors && error_messages[:web_address].present? %>
+      <span class="error-label"> - <%= error_messages[:web_address].first %></span>
+    <% end %>
+    <%= f.text_field :web_address, { class: ("input-error" if errors && error_messages[:web_address].present?),
+                                     type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)",
+                                     :maxlength => get_max_length(:web) } %>
+
+    <%= f.label :street_address, 'Street Addess' %>
+    <% if errors && error_messages[:street_address].present? %>
+      <span class="error-label"> - <%= error_messages[:street_address].first %></span>
+    <% end %>
+    <%= f.text_field :street_address, { class: ("input-error" if errors && error_messages[:street_address].present?),
+                                        :maxlength => get_max_length(:default) } %>
+
+    <%= f.label :city, 'City' %>
+    <% if errors && error_messages[:city].present? %>
+      <span class="error-label"> - <%= error_messages[:city].first %></span>
+    <% end %>
+    <%= f.text_field :city, { class: ("input-error" if errors && error_messages[:city].present?),
+                              :maxlength => get_max_length(:default) } %>
+
+    <span class="state-input">
+      <% state_error = errors && error_messages[:state].present? %>
+      <% state_class = state_error ? "styled-select input-error" : "styled-select" %>
+      <%= f.label :state %>
+      <% if errors && error_messages[:state].present? %>
+        <span class="error-label"> - <%= error_messages[:state].first %></span>
+      <% end %>
+      
+      <div class= "<%= state_class %>" >
+        <%= f.select :state, options_for_select(us_states, f.object.try(:state)), :include_blank => "Select...", 
+            class: ("input-error" if errors && error_messages[:state].present?) %>
+      </div>
+    </span>
+    <span class="zip-input">
+      <%= f.label :zip, 'Zip Code' %>
+      <% if errors && error_messages[:zip].present? %>
+        <span class="error-label"> - <%= error_messages[:zip].first %></span>
+      <% end %>
+      <%= render partial: 'layouts/zip_code', locals: { f: f, zip: :zip, errors: errors && error_messages[:zip].present? } %>
+    </span>
+
+    <%= f.label :phone_number, 'Phone Number' %>
+    <% if errors && error_messages[:phone_number].present? %>
+      <span class="error-label"> - <%= error_messages[:phone_number].first %></span>
+    <% end %>
+    <% phone_additional_classes = errors && error_messages[:phone_number].present? ? " input-error" : "" %>
+    <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :phone_number, phone_additional_classes: phone_additional_classes } %>
+
+    <%= f.label :fax_number, 'Fax Number' %>
+    <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
+
+    <%= render partial: 'layouts/back_continue_buttons', locals: { back_path: user_type_account_path,
+                                                                   form: f } %>
+                                                                 
+  <% end %>
+</div>
+
+<%= javascript_include_tag 'url_validation' %>

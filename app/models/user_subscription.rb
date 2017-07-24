@@ -38,5 +38,10 @@ class UserSubscription < ActiveRecord::Base
   def expired_full?
     full? && !active?
   end
-
+  
+  def subscription_id
+    return nil unless funding && funding.details &&
+                      funding.details["stripe_subscription_id"]
+    funding.details["stripe_subscription_id"]
+  end
 end

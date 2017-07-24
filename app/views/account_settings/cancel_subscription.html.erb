@@ -1,0 +1,6 @@
+<div class="card">
+  <h2>Cancel ZokuVault Subscription</h2>
+  
+  <p>Your subscription will be available until your next invoice date of <%= date_format @next_invoice_date %>, at which point you will no longer have access to the information you have stored inside of ZokuVault. ZokuVault will keep your data for a period of one year following your subscription ending in case you change your mind and want to renew. Once the one year grace period is over, we will delete your information from our site and it will not be recoverable.</p>
+  <%= link_to 'Cancel Subscription', cancel_subscription_update_path, method: :patch, class: 'button secondary-button big-button inline-block mt-10 mb-10' %>
+</div>

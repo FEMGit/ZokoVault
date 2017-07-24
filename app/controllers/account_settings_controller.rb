@@ -28,6 +28,22 @@ class AccountSettingsController < AuthenticatedController
   def login_settings; end
 
   def phone_setup; end
+  
+  def cancel_subscription
+    customer = current_user.stripe_customer
+    @next_invoice_date = next_invoice(customer).first
+    redirect_to manage_subscription_path unless @next_invoice_date.present?
+  end
+  
+  def cancel_subscription_update
+    @subscription = current_user.current_user_subscription
+    return if @subscription.blank? || !@subscription.full? ||
+              @subscription.subscription_id.blank?
+    stripe_subscription = Stripe::Subscription.retrieve(@subscription.subscription_id)
+    stripe_subscription.delete(:at_period_end => true)
+    flash[:success] = "ZokuVault subscription was successfully canceled."
+    redirect_to manage_subscription_path
+  end
 
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
@@ -43,20 +59,22 @@ class AccountSettingsController < AuthenticatedController
     if @subscription.funding.beta?
       @plan = OpenStruct.new(name: 'Beta User - One Year Free')
     else
-      begin
-        upcoming = Stripe::Invoice.upcoming(customer: customer.id)
-        @next_invoice_date = DateTime.strptime(upcoming.date.to_s, '%s')
-        @next_invoice_amount = upcoming.amount_due
-      rescue Stripe::InvalidRequestError
-        @next_invoice_date = nil
-        @next_invoice_amount = nil
-      end
+      @next_invoice_date, @next_invoice_amount = next_invoice(customer)
       @invoices = customer.invoices.to_a
       record = @subscription.funding.stripe_subscription_record
+      begin
+        stripe_subscription = Stripe::Subscription.retrieve(record.try(:subscription_id))
+        if stripe_subscription.cancel_at_period_end == true
+          @subscription_end_time = DateTime.strptime(stripe_subscription.current_period_end.to_s, '%s')
+          @subscription_calceled = true
+        end
+      rescue Stripe::InvalidRequestError
+        @subscription_calceled = false
+      end
       @plan = record.try(:plan)
     end
   end
-
+  
   def invoice_information
     if params[:id].blank?
       flash[:error] = "Error occured while receiving an invoice."
@@ -167,6 +185,15 @@ class AccountSettingsController < AuthenticatedController
   end
 
   private
+
+  def next_invoice(customer)
+    begin
+      upcoming = Stripe::Invoice.upcoming(customer: customer.id)
+      [DateTime.strptime(upcoming.date.to_s, '%s'), upcoming.amount_due]
+    rescue Stripe::InvalidRequestError
+      [nil, nil]
+    end
+  end
 
   def create_contact_if_not_exists
     contact = Contact.for_user(current_user).find_or_initialize_by(emailaddress: current_user.email)

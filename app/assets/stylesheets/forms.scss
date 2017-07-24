@@ -207,11 +207,17 @@ button{
 }
 
 .fixed-width {
-  @include button-fixed-width(120px)
+  @include button-fixed-width(120px);
+  &.p-10 {
+    padding: 10px !important;
+  }
 }
 
 .fixed-width-big {
-  @include button-fixed-width(170px)
+  @include button-fixed-width(170px);
+  &.p-10 {
+    padding: 10px !important;
+  }
 }
 
 .float-right {

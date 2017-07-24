@@ -8,7 +8,11 @@
 <% if next_invoice_amount.present? %>
   <p><%= "$#{next_invoice_amount / 100.0} - #{date_format(next_invoice_date)} - Automatic Collection" %></p>
 <% else %>
-  <p>–</p>
+  <% if @subscription_calceled == true %>
+    <p>Subscription was canceled. It will be available until <%= date_format @subscription_end_time %></p>
+  <% else %>
+    <p>–</p>
+  <% end %>
 <% end %>
 
 <label>Billing Info</label>
@@ -41,8 +45,11 @@
   </tbody>
 </table>
 
-<div class="mt-30">
-  <%= link_to "Update", billing_info_path, class: "button primary-button big-button" %>
+<div class="mt-20">
+  <%= link_to "Update Subscription", billing_info_path, class: "button primary-button big-button mt-10 inline-block fixed-width-big p-10" %>
+  <% if @next_invoice_date.present? %>
+    <%= link_to "Cancel Subscription", cancel_subscription_path, class: "button secondary-button big-button mt-10 inline-block fixed-width-big p-10" %>
+  <% end %>
 </div>
 
 <script>

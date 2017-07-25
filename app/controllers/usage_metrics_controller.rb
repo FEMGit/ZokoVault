@@ -57,6 +57,7 @@ class UsageMetricsController < AuthenticatedController
     end
     corporate_admin.try(:update, { corporate_admin: corporate_admin_value })
     update_corporate_account_settings(corporate_admin, corporate_admin_value)
+    corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
     
     respond_to do |format|
       format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
@@ -65,9 +66,7 @@ class UsageMetricsController < AuthenticatedController
   end
   
   def update_corporate_account_settings(corporate_admin, corporate_admin_value)
-    if corporate_admin_value.eql? false
-      @corporate_profile.destroy
-    else
+    if corporate_admin_value.eql? true
       return if corporate_settings_params.blank?
       @corporate_profile.update(corporate_settings_params)
     end

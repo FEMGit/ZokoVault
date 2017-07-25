@@ -426,6 +426,9 @@
 .no-underline-link {
   text-decoration: none;
 }
+.inline {
+  display: inline !important;
+}
 .inline-block {
   display: inline-block !important;
 }
@@ -463,6 +466,10 @@
 
 .list-style-type-none {
   list-style-type: none;
+}
+
+.opacity-half {
+  opacity: .5;
 }
 
 // IE Edge

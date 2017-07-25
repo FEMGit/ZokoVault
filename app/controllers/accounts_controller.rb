@@ -136,9 +136,11 @@ class AccountsController < AuthenticatedController
   def corporate_account_options; end
   
   def corporate_account_options_update
-    # ZV-546 Will send an email here
     current_user.update_attributes(:corporate_admin => true)
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
     current_user.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always])
+    MessageMailer.corporate_account_information(corporate_profile, corporate_options_params).deliver
     redirect_to how_billing_works_path
   end
   
@@ -248,7 +250,7 @@ class AccountsController < AuthenticatedController
   end
 
   def corporate_options_params
-    params.require(:corporate_account_options).permit(:provide_to, :services)
+    params.require(:corporate_account_options).permit(:provide_to, services: [])
   end
 
   def skip_param

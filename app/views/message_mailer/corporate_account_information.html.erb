@@ -1,0 +1,36 @@
+<p><b>User Name: </b><%= @user.name %></p>
+
+<p><b>User Email: </b><%= mail_to @user.email %></p>
+
+<p><b>User Phone Number: </b><%= @user.two_factor_phone_number %></p>
+
+<p><b>Company Name: </b><%= @corporate_profile.business_name %></p>
+
+<p><b>Web Address: </b><%= link_to @corporate_profile.web_address, @corporate_profile.web_address, target: '_blank' %></p>
+
+<p><b>Street Address: </b><%= @corporate_profile.street_address %></p>
+
+<p><b>City: </b><%= @corporate_profile.city %></p>
+
+<p><b>State: </b><%= @corporate_profile.state %></p>
+
+<p><b>Zip: </b><%= @corporate_profile.zip %></p>
+
+<p><b>Phone: </b><%= @corporate_profile.phone_number %></p>
+
+<p><b>Fax: </b><%= @corporate_profile.fax_number || '--' %></p>
+
+<p><b>Would you like to provide ZokuVault to your clients, employees or both? </b><br><%= @provided_choice %></p>
+
+<p>
+  <b>What services does your company offer?</b>
+  <% if @services.present? %>
+    <ul>
+      <% @services.each do |service| %>
+        <li><%= service %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <br>--
+  <% end %>
+</p>

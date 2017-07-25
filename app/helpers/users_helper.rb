@@ -7,4 +7,10 @@ module UsersHelper
     return false unless current_user.present?
     current_user.present? && current_user.corporate_admin
   end
+  
+  def corporate_active?
+    return false unless current_user.present?
+    current_user.present? && current_user.corporate_admin &&
+      current_user.corporate_activated
+  end
 end

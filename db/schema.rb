@@ -706,6 +706,7 @@ ActiveRecord::Schema.define(version: 20170726025600) do
     t.uuid     "uuid",                                           default: "uuid_generate_v4()", null: false
     t.boolean  "corporate_admin",                                default: false
     t.integer  "mfa_failed_attempts",                            default: 0,                    null: false
+    t.boolean  "corporate_activated",                            default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

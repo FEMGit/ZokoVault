@@ -52,10 +52,12 @@ class UsageMetricsController < AuthenticatedController
       corporate_admin_value = (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
       corporate_account_params[:corporate_categories] = [] unless (corporate_admin_value.eql? true)
       CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories], corporate_admin_value)
+      corporate_activated = corporate_admin_value && ((corporate_account_params[:corporate_activated].eql? 'true') ? true : false)
     else
       corporate_admin_value = false
+      corporate_activated = false
     end
-    corporate_admin.try(:update, { corporate_admin: corporate_admin_value })
+    corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
     update_corporate_account_settings(corporate_admin, corporate_admin_value)
     corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
     

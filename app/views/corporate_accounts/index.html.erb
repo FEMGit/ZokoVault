@@ -1,47 +1,5 @@
-<h1>Client Accounts</h1>
-<%= link_to new_corporate_account_path, class: "edit-link mobile-view" do %>
-  <span class="circle-button">
-  <svg class="icon circle-icon">
-    <use xlink:href="#icon-plus-1"></use>
-  </svg>
-  </span>Add Client
+<% if corporate_active? %>
+  <%= render partial: 'activated_dashboard' %>
+<% elsif corporate? %>
+  <%= render partial: 'not_activated_dashboard' %>
 <% end %>
-
-<table id="user-accounts-table" class="mb-0">
-  <thead>
-    <tr>
-      <th class="nosort w-60 pt-15 pr-10 pb-15 pl-10">Avatar</th>
-      <th>Last Name</th>
-      <th>First Name</th>
-      <th>Email</th>
-      <th>Email Sent</th>
-      <th>Ever Logged In</th>
-      <th class="nosort nosearch">Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @corporate_contacts.each do |user| %>
-      <tr>
-        <td class="pl-10">
-          <%= render partial: "layouts/avatar_circle", locals: { :with_name => false, :contact => user } %>
-        </td>
-        <td><%= user.lastname %></td>
-        <td><%= user.firstname %></td>
-        <td><%= user.emailaddress %></td>
-        <td><%= associated_user_invitation_sent?(user) %></td>
-        <td><%= associated_user_logged_in?(user) %></td>
-        <td class="details-col">
-          <%= link_to 'View', shared_view_dashboard_path(user.user_profile.user_id), class: "outline-button small-button" %>
-          <%= link_to 'Details', corporate_account_path(user.user_profile_id), class: "outline-button small-button" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<script>
-  $(document).ready(function(){
-    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[1, 'asc']] ], [1, 5, 1])
-  });
-</script>

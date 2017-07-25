@@ -1,7 +1,8 @@
 class AuthenticatedController < ApplicationController
   include BackPathHelper
+  include UsersHelper
   before_action :authenticate_user!, :complete_setup!, :mfa_verify!
-  before_action :redirect_if_free_user, :trial_check
+  before_action :redirect_if_corporate_user, :redirect_if_free_user, :trial_check
   before_action :save_return_to_path
   before_action :force_refresh_after_session_timeout
 
@@ -19,6 +20,11 @@ class AuthenticatedController < ApplicationController
     if !permitted_page_free_user? && params[:shared_user_id].blank?
       redirect_to shares_path
     end
+  end
+  
+  def redirect_if_corporate_user
+    return unless corporate?
+    redirect_to corporate_accounts_path if !permitted_page_corporate_user?
   end
 
   def complete_setup!
@@ -72,6 +78,10 @@ class AuthenticatedController < ApplicationController
 
   def permitted_page_trial_expired_user?
     controller_name && UserPageAccess::TRIAL_EXPIRED.include?(controller_name)
+  end
+  
+  def permitted_page_corporate_user?
+    controller_name && UserPageAccess::CORPORATE.include?(controller_name)
   end
 
   def missing_mfa?

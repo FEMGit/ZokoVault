@@ -11,7 +11,9 @@
   <%= render :partial => 'layouts/svgdefs' %>
   <%= render :partial => 'layouts/alerts' %>
   <% if user_signed_in? %>
-    <% if current_user.free? %>
+    <% if corporate? %>
+      <%= render :partial => 'layouts/corporate_nav' %>
+    <% elsif current_user.free? %>
       <%= render :partial => 'layouts/free_nav' %>
     <% else %>
       <%= render :partial => 'layouts/nav' %>

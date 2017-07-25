@@ -21,6 +21,20 @@
     </svg>My Profile
   <% end %>
   
+  <% account_traffic_current = 'active' if (current_page?(user_account_traffics_path))%>
+  <%= link_to user_account_traffics_path, class: "main-nav tablet-show #{account_traffic_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-user-1"></use>
+    </svg>Account Traffic
+  <% end %>
+  
+  <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
+  <%= link_to account_users_path, class: "main-nav tablet-show #{account_settings_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-settings-1"></use>
+    </svg>Account Settings
+  <% end %>
+  
   <% if corporate? %>
     <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path) %>
     <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
@@ -82,13 +96,6 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-lock-1"></use>
     </svg>Documents
-  <% end %>
-
-  <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
-  <%= link_to account_users_path, class: "main-nav tablet-show #{account_settings_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-settings-1"></use>
-    </svg>Account Settings
   <% end %>
 
   <% zoku_support_current = 'active' if current_page?(email_support_url) %>

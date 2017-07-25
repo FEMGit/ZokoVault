@@ -1,0 +1,47 @@
+<div class="card mb-30">
+  <h3 class="card-label">
+    <% if @corporate_profile.company_logo.present? %>
+      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-300 w-100-percent", alt: @corporate_profile.business_name) %></p>
+    <% end %>
+  </h3>
+  <% if @corporate_profile.blank? %>
+    <label>There is on information about Corporate Account</label>
+  <% else %>
+    <p>Your ZokuVault account is provided by: <%= @corporate_profile.business_name %> </p>
+    <% if @corporate_profile.web_address.present? %>
+      <label>Web Address</label>
+      <p><%= sanitize link_to @corporate_profile.web_address, @corporate_profile.web_address, target: '_blank' %></p>
+    <% end %>
+
+    <% if show_corporate_address?(@corporate_profile) %>
+      <label>Address</label>
+      <p>
+        <%= @corporate_profile.street_address %><br>
+        <%= @corporate_profile.city %>,
+        <%= @corporate_profile.state %>
+        <%= @corporate_profile.zip %><br>
+      </p>
+    <% end %>
+
+    <% if @corporate_profile.phone_number.present? ||
+          @corporate_profile.fax_number.present? %>
+      <label>Phone</label>
+      <p>
+        <% if @corporate_profile.phone_number.present? %>
+          <%= @corporate_profile.phone_number %><br>
+        <% end %>
+        <% if @corporate_profile.fax_number.present? %>
+          <%= @corporate_profile.fax_number %><span class="phone-type">fax</span>
+        <% end %>
+      </p>
+    <% end %>
+    
+    <label>Primary Contact - Account Admin</label>
+    <p>
+      <%= @corporate_profile.user.name %><br>
+      <%= @corporate_profile.user.email %><br>
+      <%= @corporate_profile.user.two_factor_phone_number %>
+    </p>
+  <% end %>
+  <span class="clear"></span>
+</div>

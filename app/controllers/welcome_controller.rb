@@ -4,6 +4,7 @@ class WelcomeController < AuthenticatedController
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed]
+  before_action :set_corporate_profile, only: [:index]
   include UserTrafficModule
   include TutorialsHelper
   
@@ -91,6 +92,12 @@ class WelcomeController < AuthenticatedController
   def email_confirmed; end
   
   private
+  
+  def set_corporate_profile
+    corporate_admin = current_user.corporate_admin_by_user
+    return unless corporate_admin.present?
+    @corporate_profile = CorporateAccountProfile.find_by(user: corporate_admin)
+  end
   
   def redirect_if_signed_in
     redirect_to root_path if user_signed_in?

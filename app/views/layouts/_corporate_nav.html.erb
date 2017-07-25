@@ -7,12 +7,20 @@
     </svg>
   </a>
 
-  <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path) %>
+  <% corporate_account_current = 'active' if (current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path)) && !action?('account_settings', 'edit_account_settings', 'update_account_settings') %>
   <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-key-1"></use>
     </svg>Corporate Dashboard
   <% end %>
+  
+  <% corporate_account_settings_current = 'active' if current_page?(corporate_account_settings_url) || (controller?('corporate_accounts') && action?('account_settings', 'edit_account_settings', 'update_account_settings')) || breadcrumb?(corporate_account_settings_path) || breadcrumb?(:corporate_account_settings_path) %>
+  <%= link_to corporate_account_settings_path, class: "main-nav #{corporate_account_settings_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-settings-1"></use>
+    </svg>Corporate Account Settings
+  <% end %>
+  
 
   <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(:my_profile_path) %>
   <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>

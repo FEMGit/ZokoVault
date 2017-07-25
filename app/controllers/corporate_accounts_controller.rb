@@ -7,6 +7,8 @@ class CorporateAccountsController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
+  before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
+  before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
   helper_method :invitation_sent?
   
   include BreadcrumbsErrorModule
@@ -28,6 +30,14 @@ class CorporateAccountsController < AuthenticatedController
     add_breadcrumb "Edit Client User", edit_corporate_account_path(@corporate_contact.user_profile_id)
   end
   
+  def set_account_settings_crumbs
+    add_breadcrumb "Corporate Account Settings", corporate_account_settings_path
+  end
+  
+  def set_edit_corporate_details_crumbs
+    add_breadcrumb "Edit Client User", edit_corporate_settings_path
+  end
+  
   def page_name
     case action_name
       when 'index'
@@ -45,11 +55,35 @@ class CorporateAccountsController < AuthenticatedController
     @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
   end
   
+  def account_settings
+    @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
+  end
+  
   def show; end
   
   def new
     @user_account = User.new(user_profile: UserProfile.new)
     @user_account.confirm_email!
+  end
+  
+  def edit_account_settings
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: current_user)
+    @corporate_profile.save
+  end
+  
+  def update_account_settings
+    @corporate_profile = CorporateAccountProfile.find_by(id: params[:id])
+    @corporate_profile.company_information_required!
+    respond_to do |format|
+      if @corporate_profile.update(corporate_settings_params)
+        format.html { redirect_to success_path(corporate_account_settings_path), flash: { success: 'Corporate Settings successfully updated.' } }
+        format.json { render :index, status: :created, location: @corporate_profile }
+      else
+        error_path(:edit_account_settings)
+        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
+        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
+      end
+    end
   end
   
   def edit; end
@@ -112,6 +146,11 @@ class CorporateAccountsController < AuthenticatedController
   end
   
   private
+  
+  def corporate_settings_params
+    params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
+                                              :zip, :state, :phone_number, :fax_number, :company_logo)
+  end
   
   def create_corporate_admin_contact_for_user_account
     account_profile = CorporateAccountProfile.find_by(user: current_user)

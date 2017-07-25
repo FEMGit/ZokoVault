@@ -57,8 +57,13 @@ module BreadcrumbsErrorModule
     if @path[:action].eql? :edit
       set_corporate_contact_by_user_profile 
     end
-    add_breadcrumb "Corporate Account", :corporate_accounts_path
+    add_breadcrumb "Corporate Account", :corporate_accounts_path if ([:new, :edit, :index].include? @path[:action])
     set_new_crumbs && return if @path[:action].eql? :new
+    if @path[:action].eql? :edit_account_settings
+      set_account_settings_crumbs
+      set_edit_corporate_details_crumbs
+      return
+    end
     edit_crumbs_set
   end
 

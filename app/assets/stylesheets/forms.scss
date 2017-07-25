@@ -43,7 +43,13 @@ input[type=radio]{
     content: "$";
   }
 }
-
+.tutorial-value{
+  max-width: 300px;
+  @include media($tablet) {
+    width: 100%;
+    min-width: 200px;
+  }
+}
 
 .width-250 {
   width: $form-width-250;
@@ -150,7 +156,7 @@ label{
     float: none;
   }
 }
-.zip-input{ 
+.zip-input{
   input {
     width: $short-form-width;
   }

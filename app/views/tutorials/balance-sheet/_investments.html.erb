@@ -1,0 +1,31 @@
+<% investments.each do |investment| %>
+  <tr>
+    <td>
+      <label class="mobile-show"><%= column_name %></label>
+      <p><%= investment.name %></p>
+    </td>
+    <td>
+      <label class="mobile-show"><%= column_type %></label>
+      <p><%= investment.investment_type %></p>
+    </td>
+    <td>
+      <label class="mobile-show"><%= column_value %></label>
+      <%= render partial: 'layouts/currency_field',
+                 locals: { f: f,
+                           field_name: "investment_value_#{investment.id}",
+                           field_id: "investment_value_#{investment.id}",
+                           value: number_to_currency(investment.value,
+                           precision: 0, unit: "$"),
+                           additional_classes: 'tutorial-value' } %>
+    </td>
+  </tr>
+<% end %>
+
+<%= javascript_include_tag 'autonumeric' %>
+<script>
+    var investments = <%= raw investments.compact.flatten.collect { |x| [x.id, x.investment_type] } %>
+    for(var i = 0; i < investments.length; i++ ) {
+      setValue($('#investment_value_' + investments[i][0]), $('#investment_value_' + investments[i][0]).val())
+      updateValues(null, $('#investment_value_' + investments[i][0]), investments[i][1]);
+    }
+</script>

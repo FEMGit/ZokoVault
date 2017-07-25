@@ -2,6 +2,7 @@ class TutorialsController < AuthenticatedController
   include UserTrafficModule
   include BackPathHelper
   include TutorialsHelper
+  include FinancialInformationHelper
   before_action :save_return_to_path, only: [:new, :confirmation, :show]
   skip_before_filter :complete_setup!, except: :show
   before_action :set_new_contact, only: [:primary_contacts, :trusted_advisors]
@@ -135,6 +136,11 @@ class TutorialsController < AuthenticatedController
     if @prev_tutorial_name == 'tutorial_new'
       session[:tutorial_index] = 0
       redirect_to new_tutorial_path and return
+    elsif @prev_tutorial_name == 'balance-sheet' && !financial_information_any?
+      tuto_index -= 1
+      session[:tutorial_index] -= 1
+      redirect_to new_tutorial_path and return if session[:tutorial_index] <= 0
+      @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     end
 
     @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
@@ -210,6 +216,7 @@ class TutorialsController < AuthenticatedController
         end
       end
     end
+    result << { tuto_id: -1, current_page: 1, tuto_name: 'balance-sheet' } # tutorial / balance-sheet page
     result << { tuto_id: -1, current_page: 1, tuto_name: 'shares' } # tutorial / shares main page
     result << { tuto_id: -1, current_page: 1, tuto_name: 'confirmation_page' } # tutorial / confirmation page
   end

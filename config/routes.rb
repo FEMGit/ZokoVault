@@ -163,6 +163,7 @@ Rails.application.routes.draw do
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment', to: 'account_settings#update_payment', as: :update_payment_account_settings
+  post 'account_settings/store_corporate_payment', to: 'account_settings#store_corporate_payment', as: :store_corporate_payment
 
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
@@ -181,6 +182,7 @@ Rails.application.routes.draw do
   get 'account/corporate_account_options' => 'accounts#corporate_account_options', as: :corporate_account_options
   get 'account/how_billing_works' => 'accounts#how_billing_works', as: :how_billing_works
   get 'account/billing_types' => 'accounts#billing_types', as: :billing_types
+  get 'account/corporate_credit_card' => 'accounts#corporate_credit_card', as: :corporate_credit_card
   post 'account/corporate_user_type_update' => 'accounts#corporate_user_type_update', as: :corporate_user_type_update
   post 'account/corporate_account_options_update' => 'accounts#corporate_account_options_update', as: :corporate_account_options_update
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service

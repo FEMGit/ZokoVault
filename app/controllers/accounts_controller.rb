@@ -8,7 +8,8 @@ class AccountsController < AuthenticatedController
                                 :login_settings, :user_type, :trial_membership_ended,
                                 :trial_membership_update, :trial_questionnaire, :payment,
                                 :first_run, :zoku_vault_info, :corporate_user_type,
-                                :corporate_account_options, :how_billing_works, :billing_types]
+                                :corporate_account_options, :how_billing_works, :billing_types,
+                                :corporate_credit_card]
   before_action :set_blank_layout_header_info, only: [:first_run]
   skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
@@ -144,11 +145,11 @@ class AccountsController < AuthenticatedController
     redirect_to how_billing_works_path
   end
   
-  def how_billing_works
-  end
+  def how_billing_works; end
   
-  def billing_types
-  end
+  def billing_types; end
+  
+  def corporate_credit_card; end
 
   def user_type_update
     if user_params[:user_type].eql? 'trial'

@@ -1,6 +1,4 @@
 HighVoltage.configure do |config|
-  config.route_drawer = HighVoltage::RouteDrawers::Root
-end
-HighVoltage.configure do |config|
+  config.routes = false
   config.home_page = 'index'
 end

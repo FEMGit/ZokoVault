@@ -14,7 +14,11 @@ class StripeSubscription < ActiveRecord::Base
   end
 
   def self.yearly_plan
-    map_of_plans[StripePlans::YEARLY_PLAN]
+    map_of_plans[StripeConfig.yearly_plan_id]
+  end
+
+  def self.monthly_plan
+    map_of_plans[StripeConfig.monthly_plan_id]
   end
 
   def customer

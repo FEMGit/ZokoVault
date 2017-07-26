@@ -46,7 +46,6 @@ Rails.application.routes.draw do
   get 'taxes/new/:year', to: 'taxes#create'
 
   get 'files' => 'welcome#files'
-  get 'filestacktest' => 'welcome#filestacktest'
   get 'cards' => 'welcome#cards'
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'

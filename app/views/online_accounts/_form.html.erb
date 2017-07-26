@@ -1,0 +1,64 @@
+<h1><%= @online_account.new_record? ? "Add " : "Edit " %>Online Account</h1>
+
+<%= form_for @online_account, url: "#{yield(:url_path)}" do |f| %>
+  <%= hidden_field_tag :shared_user_id, @shared_user.present? ? @shared_user.id : "" %>
+  
+  <% if @online_account.errors.any? %>
+    <% errors = true %>
+  <% end %>
+  
+  <div class="card online-account mb-30">
+    <%= f.label :website, 'Account Web Address' %>
+    <% if errors && @online_account.errors.messages[:website].first %>
+      <span class="error-label"> - <%= @online_account.errors.messages[:website].first %></span>
+    <% end %>
+    <%= f.text_field :website, { class: ("input-error" if @online_account.errors.messages[:website].first.present?), type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
+    
+    <%= f.label :username %>
+    <%= f.text_field :username, :maxlength => get_max_length(:default) %>
+
+    <div class="password-block">
+      <%= f.label :password, class: 'block' %>
+      <%= f.password_field :password, :maxlength => get_max_length(:default), class: 'inline-block max-w-295', :autocomplete => 'new-password', value: @online_account.persisted? ? @password : '' %>
+    
+      <%= link_to 'Show', 'javascript:togglePassword()', class: "button small-button blue-button inline-block text-center p-8", id: 'toggle-button' %>
+    </div>
+
+    <%= f.label :notes, class: 'block' %>
+    <p><%= f.text_area :notes, :maxlength => get_max_length(:notes) %></p>
+
+    <section class="shared-with edit-shared">
+      <h3 class="card-label shared-label">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="#icon-Safe"></use>
+        </svg> Shared With
+      </h3>
+      <label>Shared With</label><br>
+      <div class="chosen-styled-select">
+        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, {}, @selected_shareables) %>
+      </div>
+    </section>
+  </div>
+
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || online_accounts_path, f: f } %>
+  <% if @online_account.persisted? && policy(@online_account).destroy? %>
+    <%= link_to 'Delete', online_account_path(@online_account), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button fr"%>
+  <% end %>
+<% end %>
+
+<%= javascript_include_tag 'url_validation' %>
+<script>
+  var togglePassword = function() {
+    var passwordField = $('#online_account_password').get(0)
+    var toggleButton = $('#toggle-button')
+    var passwordType = passwordField.type
+    if (passwordType === "text") {
+      passwordField.type = 'password'
+      toggleButton.text('Show')
+    } else if (passwordType === "password") {
+      passwordField.type = 'text'
+      toggleButton.text('Hide')
+    }
+  }
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

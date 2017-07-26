@@ -60,12 +60,12 @@
       <use xlink:href="#icon-bookmark-2"></use>
     </svg>Final Wishes
   <% end %>
-<!--  <% web_accounts_current = 'active' if current_page?(web_accounts_url) %>
-  <%= link_to web_accounts_path, class: "main-nav #{web_accounts_current}" do %>
+  <% online_accounts_current = 'active' if current_page?(online_accounts_url) || controller?('online_accounts') || breadcrumb?(online_accounts_path) || breadcrumb?(:online_accounts_path) %>
+  <%= link_to online_accounts_path, class: "main-nav #{online_accounts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>
-    </svg>Web Accounts
-  <% end %> -->
+    </svg>Online Accounts
+  <% end %>
   <% documents_current = 'active' if current_page?(documents_url) || controller?('documents') && document_breadcrumb_free? %>
   <%= link_to documents_path, class: "main-nav #{documents_current}" do %>
     <svg class="icon nav-icon">

@@ -18,8 +18,12 @@ gem 'pdfkit'
 gem 'wkhtmltopdf-binary'
 gem 'wkhtmltopdf-heroku'
 
-# 'To store old user passwords'
+# To store old user passwords
 gem 'devise_security_extension'
+
+# Password secure storage
+gem 'rbnacl-libsodium'
+gem 'rbnacl'
 
 gem 'acts_as_tree'
 

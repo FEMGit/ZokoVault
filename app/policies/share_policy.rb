@@ -15,6 +15,11 @@ class SharePolicy < BasicPolicy
   def create?
     owned_or_shared?
   end
+  
+  # Online account password reveal
+  def reveal_password?
+    owned_or_shared?
+  end
 
   # Document add/edit update dropdowns access
   def get_drop_down_options?
@@ -47,6 +52,7 @@ class SharePolicy < BasicPolicy
   def power_of_attorneys?; index?; end
   def trusts?; index?; end
   def wills?; index?; end
+  def online_accounts?; index?; end
   def documents?; index?; end
   
   def mass_document_upload?

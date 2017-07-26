@@ -4,6 +4,9 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
+    "ONLINE_ACCOUNTS_SECRET_KEY" : {
+      "required": true
+    },
     "STAGING_TYPE" : {
       "required": true
     },

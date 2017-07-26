@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   has_many :card_documents, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
+  has_many :online_accounts, dependent: :destroy
   has_one :tutorial_selection, dependent: :destroy
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy

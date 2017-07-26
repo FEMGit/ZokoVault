@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+
+  # always declare root path(s) first
+  authenticated :user do
+    root 'welcome#index', as: :authenticated_root
+  end
+  root to: 'high_voltage/pages#show', id: 'index'
+  get '/index', to: redirect('/')
+
   resources :final_wishes
   resources :taxes
   resources :relationships
@@ -12,20 +20,6 @@ Rails.application.routes.draw do
     get 'users/password/corporate_edit/:uuid', to: 'passwords#corporate_edit', as: :corporate_edit_password
   end
 
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  authenticated :user do
-    root 'welcome#index', as: :authenticated_root
-  end
-
-  #root "index"
-  #root "public#index"
-
-  #public
-  # get "/:page" => "public#show"
-  #
   scope 'insurance' do
     resources :lives, controller: :life_and_disabilities
     resources :properties, controller: :property_and_casualties

@@ -3,9 +3,10 @@ class AuthenticatedController < ApplicationController
   before_action :authenticate_user!, :complete_setup!, :mfa_verify!
   before_action :redirect_if_free_user, :trial_check
   before_action :save_return_to_path
+  before_action :force_refresh_after_session_timeout
 
   private
-  
+
   def trial_check
     return unless is_expired_trial_user?
     if !trial_whitelist_page? && !permitted_page_trial_expired_user?
@@ -38,8 +39,6 @@ class AuthenticatedController < ApplicationController
     end
   end
 
-  private
-
   def is_free_user?
     current_user && current_user.setup_complete? && current_user.free?
   end
@@ -69,7 +68,7 @@ class AuthenticatedController < ApplicationController
   def permitted_page_free_user?
     controller_name && UserPageAccess::FREE.include?(controller_name)
   end
-  
+
   def permitted_page_trial_expired_user?
     controller_name && UserPageAccess::TRIAL_EXPIRED.include?(controller_name)
   end
@@ -80,5 +79,9 @@ class AuthenticatedController < ApplicationController
     else
       false
     end
+  end
+
+  def force_refresh_after_session_timeout
+    response.headers['Refresh'] = (1.25 * Session::TIMEOUT_LIMIT).to_i.to_s
   end
 end

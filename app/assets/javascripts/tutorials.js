@@ -163,7 +163,7 @@ DynamicTutorialField.prototype.showLittleError = function($btn) {
 };
 
 DynamicTutorialField.prototype.addRemoveBtn = function(id) {
-  var $btn = $('<a class="medium-button outline-button inline-button remove-btn">Remove</a>');
+  var $btn = $('<a class="medium-button outline-button inline-button remove-btn h-34 min-w-80">Remove</a>');
   $btn.data('id', id);
   this.removeBtnListener($btn);
   return $btn;
@@ -214,7 +214,11 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
     if (that.fieldIsEmpty($btn))
       that.submit($btn).success(function(data) {
         // Add hidden field with record id
-        $('<a data-id="' + data.id + '">').attr('type', 'hidden').appendTo($('.input-pair.tutorial-fields').last())
+        if ($('tr.tutorial-fields').length > 0) {
+          $('<a data-id="' + data.id + '">').attr('type', 'hidden').appendTo($('tr.tutorial-fields td').last())
+        } else if ($('.input-pair.tutorial-fields').length > 0) {
+          $('<a data-id="' + data.id + '">').attr('type', 'hidden').appendTo($('.input-pair.tutorial-fields').last())
+        }
         
         $btn.closest('.repeated-field').addClass('saved-field');
         that.addRow($btn, data.id);

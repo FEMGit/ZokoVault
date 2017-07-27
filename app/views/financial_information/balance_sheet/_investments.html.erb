@@ -1,8 +1,8 @@
 <% investments.each do |investment| %>
   <tr>
-    <td>
+    <td class="financial-name-cell">
       <label class="mobile-show"><%= column_name %></label>
-      <p><%= investment.name %></p>
+      <p class="financial-name-text"><%= investment.name %></p>
     </td>
     <td>
       <label class="mobile-show"><%= column_type %></label>
@@ -16,7 +16,7 @@
                            field_id: "investment_value_#{investment.id}",
                            value: number_to_currency(investment.value,
                            precision: 0, unit: "$"),
-                           additional_classes: 'tutorial-value' } %>
+                           additional_classes: 'tutorial-value small' } %>
     </td>
   </tr>
 <% end %>

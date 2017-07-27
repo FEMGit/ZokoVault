@@ -1,7 +1,8 @@
 <% f ||= nil %>
 <% skip_continue_equal ||= false %>
+<% margin_top ||= "mt-60" %>
 
-<section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+<section class="<%= margin_top %> bt-gray-light pt-20 mb-10 flex-button">
   <%= link_to 'Back', tutorial_destroy_path(tutorial_id: params[:tutorial_id]), method: :post, class: "big-button outline-button padded left-0 ps-absolute" %>
   <% if @tutorial_name != 'confirmation_page' && !skip_continue_equal %>
     <%- if @next_tutorial_name == 'confirmation_page' %>

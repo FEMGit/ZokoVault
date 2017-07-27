@@ -149,6 +149,86 @@ th {
   }
 }
 
+// Tutorial With multiple dropdown
+table.tutorial-multiple-dropdown {
+  margin: 0;
+  padding:0;
+  outline: 0;
+  font-size: 100%;
+  border: 0;
+  vertical-align: baseline;
+  background: transparent;
+  border-spacing: 0;
+  width: 85%;
+  @include media($ninesixty) {
+    width: 100%;
+  }
+  td {
+    &:first-child {
+      padding-left: 0;
+    }
+    white-space: normal;
+    vertical-align: top;
+    height: 100%;
+    border: 0;
+    padding-bottom: 0;
+    a {
+      display: block;
+      text-align: center;
+      height: 100%;
+      vertical-align: middle;
+      line-height: 21px;
+      min-width: 100px;
+      &.remove-btn {
+        margin-right: 10px;
+      }
+    }
+  }
+  th {
+    &:first-child {
+      padding-left: 0;
+    }
+    border: 0;
+    background: transparent;
+    text-transform: none;
+    padding-bottom: 0;
+  }
+
+  @include media($mobile) {
+    td {
+      display: block;
+      width: 100%;
+      border: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      padding-left: 0 !important;
+      input {
+        max-width: 100% !important;
+      }
+      a {
+        max-width: 100px;
+        height: auto;
+        margin-top: 10px;
+      }
+    }
+    
+    th {
+      padding-left: 0;
+    }
+
+    tr {
+      display: block;
+      td:last-child {
+        width: auto !important;
+      }
+      border-bottom: 1px dashed $color-gray-med-shaded;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
 // Tutorial Balance Sheet Table
 table.balance-sheet {
   margin: 0;
@@ -162,6 +242,22 @@ table.balance-sheet {
   td {
     border-bottom: 1px dashed $color-gray-med-shaded;
     white-space: normal;
+    &.financial-name-cell {
+      max-width: 120px;
+      @include media($mobile) {
+        max-width: 250px;
+        line-height: 17px;
+      }
+    }
+    .financial-name-text {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      @include media($mobile) {
+        overflow: visible;
+        white-space: normal;
+      }
+    }
   }
   th {
     border: 0;

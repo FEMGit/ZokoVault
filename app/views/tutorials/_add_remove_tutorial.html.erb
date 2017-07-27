@@ -1,21 +1,10 @@
 <% description ||= "" %>
 <% bottom_description ||= "" %>
-<% multiple ||= false %>
 <% title ||= "" %>
 <% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
-<button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
-<div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
-  <div class="confirmation-wrapper">
-    <h2>Unsaved changes</h2>
-    <p class="mb-0">These items will be permanently deleted and cannot be recovered. Are you sure?</p>
-  </div>
-  <footer class="modal-footer confirmation-footer">
-    <%= link_to 'Save and Continue', '#', class: "button primary-button big-button save-and-continue" %>
-    <%= link_to 'Skip and Continue', '#', class: "button secondary-button big-button skip-and-continue margin-bottom-20" %>
-  </footer>
-</div>
+<%= render partial: 'tutorials/skip_tutorial_modal' %>
 
 <% wide ||= false %>
 <% hidden_field_tag_values ||= nil %>
@@ -32,11 +21,7 @@
     <% if wide %>
       <div class="input-pair wide mobile-hide h-25">
         <% label_tag.each_with_index do |tag, index| %>
-          <% if multiple %>
-            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-3 min-w-250' : 'max-w-300 min-w-225 flex-47 multiple-edge-label') %>
-          <% else %>
-            <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : ' max-w-270-edge min-w-270-edge') %>
-          <% end %>
+          <% label_class = 'input-form-class pl-0 b-color-transparent ' + (index > 0 ? 'ml-15' : ' max-w-270-edge min-w-270-edge') %>
           <%= label_tag tag[:name], tag[:value], class: label_class %>
         <% end %>
         <%= label_tag "investment_name", '', class: 'inline-button' %>
@@ -49,8 +34,7 @@
                                                                   select_tag: wide && select_tag,
                                                                   text_field_tag: text_field_tag,
                                                                   label_tag: label_tag,
-                                                                  wide: wide,
-                                                                  multiple: multiple } %>
+                                                                  wide: wide } %>
 
     <div class="collect-fields">
       <%= hidden_field_tag :tutorial_name, @tutorial_name %>
@@ -60,25 +44,18 @@
         <%= hidden_field_tag hidden_field_tag_value[:name], hidden_field_tag_value[:value] %>
       <% end %>
 
-      <div class="input-pair <% if wide %> wide <% end %> <% if multiple %> multiple-edge <% end %> tutorial-fields add-tutorial <%= fields_class %>">
+      <div class="input-pair <% if wide %> wide <% end %> tutorial-fields add-tutorial <%= fields_class %>">
         <% if wide %>
           <%= label_tag label_tag[0][:name], label_tag[0][:value], class: 'mobile-show' %>
         <% end %>
-        <% additional_classes = multiple ? ' h-34 ' : '' %>
-        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field" + additional_classes, placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+        <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
         <% if wide %>
           <%= label_tag label_tag[1][:name], label_tag[1][:value], class: 'mobile-show' %>
-          <% if multiple %>
-            <div class="chosen-styled-select form-control medium repeated-field ml-15 w-290 min-h-30">
-              <%= collection_select 'tutorial_multiple_types', "[types]", select_tag[:value], :to_s, :to_s, { }, { class: "chosen-select", multiple: true, :'data-placeholder' => "Select all that apply" } %>
-            </div>
-          <% else %>
-            <div class="styled-select form-control medium repeated-field ml-15 h-34">
-              <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
-            </div>
-          <% end %>
+          <div class="styled-select form-control medium repeated-field ml-15 h-34">
+            <%= select_tag select_tag[:name], options_for_select(select_tag[:value], "") %>
+          </div>
         <% end %>
-        <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn"%>
+        <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button inline-button add-another-btn min-w-80"%>
       </div>
     </div>
 

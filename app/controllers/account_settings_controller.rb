@@ -45,6 +45,10 @@ class AccountSettingsController < AuthenticatedController
     redirect_to manage_subscription_path
   end
 
+  def update_subscription_information
+    @card = customer_card
+  end
+
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
     redirect_to login_settings_path
@@ -54,8 +58,7 @@ class AccountSettingsController < AuthenticatedController
     @subscription = current_user.current_user_subscription
     return if @subscription.blank? || !@subscription.full?
     customer = current_user.stripe_customer
-    source = customer.try(:default_source)
-    @card = customer.sources.retrieve(source) if source.present?
+    @card = customer_card
     if @subscription.funding.beta?
       @plan = OpenStruct.new(name: 'Beta User - One Year Free')
     else
@@ -73,6 +76,14 @@ class AccountSettingsController < AuthenticatedController
       end
       @plan = record.try(:plan)
     end
+    session[:ret_url] = manage_subscription_path
+  end
+  
+  def customer_card
+    return nil unless current_user.stripe_customer.present?
+    customer = current_user.stripe_customer
+    source = customer.try(:default_source)
+    customer.sources.retrieve(source) if source.present?
   end
   
   def invoice_information

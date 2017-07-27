@@ -57,6 +57,7 @@ class AuthenticatedController < ApplicationController
       trial_membership_update_path,
       trial_questionnaire_path,
       payment_path,
+      update_payment_account_settings_path,
       subscriptions_account_path,
       apply_promo_code_account_path,
       account_path,

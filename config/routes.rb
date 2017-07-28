@@ -151,10 +151,12 @@ Rails.application.routes.draw do
   get 'account_settings/phone_setup', to: 'account_settings#phone_setup', as: :account_settings_phone_setup
   put 'account_settings/phone_setup_update', to: 'account_settings#phone_setup_update', as: :account_settings_phone_update
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
+  get 'account_settings/cancel_subscription', to: 'account_settings#cancel_subscription', as: :cancel_subscription
   get 'account_settings/invoice_information/:id', to: 'account_settings#invoice_information', as: :invoice_information
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
+  patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment', to: 'account_settings#update_payment', as: :update_payment_account_settings

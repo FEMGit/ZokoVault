@@ -15,18 +15,18 @@
     <%= f.label :mfa_frequency, "Login Settings" %>
     <ul class="radio-list mb-30">
       <li class="radio-list">
-        <%= radio_button_tag "user_profile[mfa_frequency]", "always", radio_button_checked?("always", @user_profile.mfa_frequency) %>
-        <label for="user_profile_mfa_frequency_always">Verify login using my phone every time<span class="recommended">(recommended)</span></label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "always", radio_button_checked?("always", @user_profile.mfa_frequency) || current_user.corporate_admin %>
+        <label for="user_profile_mfa_frequency_always">Verify login using my phone every time<span class="recommended"><%= always_mfa_phone_text %></span></label>
         <div class="check"></div>
       </li>
       <li class="radio-list">
-        <%= radio_button_tag "user_profile[mfa_frequency]", "new_ip", radio_button_checked?("new_ip", @user_profile.mfa_frequency) %>
-        <label for="user_profile_mfa_frequency_new_ip">Verify login using my phone when logging in from a new device</label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "new_ip", radio_button_checked?("new_ip", @user_profile.mfa_frequency) && !current_user.corporate_admin, disabled: current_user.corporate_admin %>
+        <label for="user_profile_mfa_frequency_new_ip"><div class="inline <%= mfa_options_classes %>">Verify login using my phone when logging in from a new device</div></label>
         <div class="check"></div>
       </li>
       <li class="radio-list">
-        <%= radio_button_tag "user_profile[mfa_frequency]", "never", radio_button_checked?("never", @user_profile.mfa_frequency) %>
-        <label for="user_profile_mfa_frequency_never">Do not use my phone for login</label>
+        <%= radio_button_tag "user_profile[mfa_frequency]", "never", radio_button_checked?("never", @user_profile.mfa_frequency) && !current_user.corporate_admin, disabled: current_user.corporate_admin %>
+        <label for="user_profile_mfa_frequency_never"><div class="inline <%= mfa_options_classes %>">Do not use my phone for login</div></label>
         <div class="check"></div>
       </li>
     </ul>

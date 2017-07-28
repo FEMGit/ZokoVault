@@ -1,6 +1,6 @@
 module AccountsHelper
   def radio_button_checked?(value, mfa_frequency)
-    return "checked" if mfa_frequency == value
+    return true if mfa_frequency == value
   end
   
   def family_members_count

@@ -1,3 +1,5 @@
+<button class="primary-button big-button d-none" data-modal-id="medium-modal" id="medium-modal-btn"></button>
+
 <h1>Client Accounts</h1>
 <%= link_to new_corporate_account_path, class: "edit-link mobile-view" do %>
   <span class="circle-button">
@@ -10,7 +12,6 @@
 <table id="user-accounts-table" class="mb-0">
   <thead>
     <tr>
-      <th class="nosort w-60 pt-15 pr-10 pb-15 pl-10">Avatar</th>
       <th>Last Name</th>
       <th>First Name</th>
       <th>Email</th>
@@ -21,11 +22,9 @@
   </thead>
 
   <tbody>
+    <!-- Corporate Accounts -->
     <% @corporate_contacts.each do |user| %>
       <tr>
-        <td class="pl-10">
-          <%= render partial: "layouts/avatar_circle", locals: { :with_name => false, :contact => user } %>
-        </td>
         <td><%= user.lastname %></td>
         <td><%= user.firstname %></td>
         <td><%= user.emailaddress %></td>
@@ -37,61 +36,47 @@
         </td>
       </tr>
     <% end %>
+    
+    <!-- Shared with me users -->
+    <% @shares_by_user.each do |user, shares| %>
+      <tr>
+        <td><%= user.last_name %></td>
+        <td><%= user.first_name %></td>
+        <td><%= user.email %></td>
+        <td>–</td>
+        <td>–</td>
+        <td class="details-col">
+          <%= link_to 'View', shared_view_dashboard_path(user.id), class: "outline-button small-button" %>
+          <%= link_to 'Details', 'javascript:void(0);', class: "outline-button small-button", onclick: 'detailsModalShow()' %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
 
-<div class="card mt-20">
-  <h3 class="card-label">Corporate Details</h3>
-  <% if @corporate_profile.blank? %>
-    <label>There is on information about Corporate Account</label>
-  <% else %>
-    <% if @corporate_profile.business_name.present? %>
-      <label>Business Name</label>
-      <p><%= @corporate_profile.business_name %></p>
-    <% end %>
-
-    <% if @corporate_profile.web_address.present? %>
-      <label>Web Address</label>
-      <p><%= sanitize link_to @corporate_profile.web_address, @corporate_profile.web_address, target: '_blank' %></p>
-    <% end %>
-
-    <% if show_corporate_address?(@corporate_profile) %>
-      <label>Address</label>
-      <p>
-        <%= @corporate_profile.street_address %><br>
-        <%= @corporate_profile.city %>,
-        <%= @corporate_profile.state %>
-        <%= @corporate_profile.zip %><br>
-      </p>
-    <% end %>
-
-    <% if @corporate_profile.phone_number.present? ||
-          @corporate_profile.fax_number.present? %>
-      <label>Phone</label>
-      <p>
-        <% if @corporate_profile.phone_number.present? %>
-          <%= @corporate_profile.phone_number %><br>
-        <% end %>
-        <% if @corporate_profile.fax_number.present? %>
-          <%= @corporate_profile.fax_number %><span class="phone-type">fax</span>
-        <% end %>
-      </p>
-    <% end %>
-    
-    <% if @corporate_profile.relationship.present? %>
-      <label>Advisor Relationship</label>
-      <p><%= @corporate_profile.relationship %></p>
-    <% end %>
-
-    <% if @corporate_profile.company_logo.present? %>
-      <label>Company Logo</label>
-      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130", alt: @corporate_profile.business_name) %></p>
-    <% end %>
-  <% end %>
+<div id="medium-modal" class="modal medium-modal">
+  <a href="javascript:void(null)" class="js-modal-close modal-close">
+    <svg class="icon">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+  <div class="modal-header">
+    <h2>Client Details</h2>
+  </div>
+  <div class="modal-content">
+    <p>
+      This user created their own ZokuVault account and are voluntarily sharing access with you. You do not have access to any user management tools.
+    </p>
+  </div>
 </div>
 
+<%= javascript_include_tag 'modal' %>
 <script>
+  var detailsModalShow = function() {
+    $("#medium-modal-btn").click()
+  }
+  
   $(document).ready(function(){
-    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[1, 'asc']] ], [1, 5, 1])
+    DatatableUpdate('#user-accounts-table', [ [25, 50, 100], 'accounts', [[0, 'asc']] ])
   });
 </script>

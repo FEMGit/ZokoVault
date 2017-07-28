@@ -99,7 +99,7 @@
       min-width: $tooltip-min-width-wide;
     }
 
-    &::after:not(.password-tooltip) {
+    &:not(.password-tooltip)::after {
       @include tooltip-box;
       content: "▼";
       bottom: $tooltip-arrow-distance-from-box-default;

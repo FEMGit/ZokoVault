@@ -106,7 +106,7 @@
 
       <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
       <h3>Add Property</h3>
-      <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiquities, etc.</p>
+      <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiques, etc.</p>
       <div class="sum-line"></div>
 
       <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
@@ -139,7 +139,7 @@
 
 </section>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category), 
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category),
   documents_title: 'Financial Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

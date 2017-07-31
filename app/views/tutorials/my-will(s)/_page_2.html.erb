@@ -1,7 +1,12 @@
+<% continue_button_only ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%= render partial: 'tutorials/tutorial_document_upload',
                     locals: { title: "Upload a Digital Copy of your Will",
                     description: "If you have digital copies of your or family members' Will(s) handy, upload them here for future reference. If you don't have digital copies at this time, don't worry, they can easily be added later.",
                     digital_resources: @digital_wills,
                     table_title: "Your Digital Wills",
                     flash_message_success: "You uploaded a Will. Upload another or click Continue.",
-                    upload_button_text: "Upload Will" } %>
+                    upload_button_text: "Upload Will",
+                    continue_button_only: continue_button_only,
+                    next_tutorial_path: next_tutorial_path } %>

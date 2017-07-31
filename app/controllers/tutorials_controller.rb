@@ -99,7 +99,11 @@ class TutorialsController < AuthenticatedController
   
   def update
     if params[:tutorial].blank?
-      if params[:next_tutorial] == 'confirmation_page'
+      if params[:next_tutorial_path].present?
+        recognized_path = Rails.application.routes.recognize_path(params[:next_tutorial_path]) rescue nil
+        redirect_to root_path if recognized_path.nil? and return
+        redirect_to recognized_path
+      elsif params[:next_tutorial] == 'confirmation_page'
         redirect_to tutorials_confirmation_path and return
       else
         tuto_index = session[:tutorial_index]
@@ -115,7 +119,10 @@ class TutorialsController < AuthenticatedController
       tutorial_path_update(subtutorial_pages, tutorial_id)
       tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
       next_page = session[:tutorial_paths][tuto_index][:current_page]
-      
+      if params[:next_tutorial_path].present? &&
+         (Rails.application.routes.recognize_path(params[:next_tutorial_path]) rescue nil).present?
+        redirect_to params[:next_tutorial_path] and return
+      end
       redirect_to tutorial_page_path(tuto_name, next_page) and return
     end
   end

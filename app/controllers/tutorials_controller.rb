@@ -240,7 +240,12 @@ class TutorialsController < AuthenticatedController
     
     subtutorials_path = []
     subtutorial_pages.try(:each) do |number, id|
-      subtutorial = Subtutorial.find_by(:id => id)
+      subtutorial = 
+        if id.include? 'tutorial_'
+          Tutorial.find_by(:id => id.scan(/\d+/).first)
+        else
+          Subtutorial.find_by(:id => id)
+        end
       next unless subtutorial.present?
       (number.to_i ... number.to_i + subtutorial.number_of_pages).each do |page_numer|
         subtutorials_path << page_numer

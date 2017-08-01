@@ -23,4 +23,16 @@ module CategoriesHelper
       Document.for_user(current_user).where(category: category_name).blank? &&
       Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor').blank?
   end
+
+  def financial_information_empty?
+    return false unless current_user.present?
+    category_name = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase).name
+    FinancialAccountInformation.for_user(resource_owner).blank? &&
+      FinancialInvestment.for_user(resource_owner).blank? &&
+      FinancialAlternative.for_user(resource_owner).blank? &&
+      FinancialProperty.for_user(resource_owner).blank? &&
+      FinancialProvider.for_user(resource_owner).blank? &&
+      Document.for_user(current_user).where(category: category_name).blank? &&
+      Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor').blank?
+  end
 end

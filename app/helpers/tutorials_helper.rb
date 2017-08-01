@@ -294,11 +294,67 @@ module TutorialsHelper
     params.require(last_tutorial_multiple_params[0]).permit(types: [])
   end
 
+  # Balance Sheet Tutorial
+  def set_balance_sheet_information(tutorial_id)
+    if tutorial_id.eql? 'balance-sheet'
+      if financial_information_any?
+        @financial_provider = FinancialProvider.new(:user => current_user)
+        @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
+        @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
+        @investments = FinancialInvestment.for_user(current_user)
+        @properties = FinancialProperty.for_user(current_user)
+      else
+        tuto_index = session[:tutorial_index] + 1
+        if session[:category_tutorial_in_progress] == true
+          session[:tutorial_index] += 1
+          redirect_to financial_information_path(tutorial_in_progress: true) and return if session[:tutorial_paths][tuto_index].blank?
+        end
+        @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
+        @next_tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@next_tutorial_name)).first
+        @next_page = session[:tutorial_paths][tuto_index][:current_page]
+        @page_name     = "page_#{@page_number}"
+
+        session[:tutorial_index] = session[:tutorial_index] + 1
+        if session[:category_tutorial_in_progress] == true
+          redirect_to financial_information_path(tutorial_in_progress: true) and return
+        else
+          redirect_to tutorial_page_path(@next_tutorial, @next_page) and return
+        end
+      end
+    end
+  end
+
   # Tutorial Category Integration
+  def empty_category_tutorial_id(category)
+    case category.name.downcase
+      when Rails.application.config.x.FinancialInformationCategory.downcase
+        'my-financial-information'
+      else
+        ''
+    end
+  end
+  
+  def empty_category_additional_tutorials(category)
+    return [] unless category.present?
+    case category.name.downcase
+      when Rails.application.config.x.FinancialInformationCategory.downcase
+        ['my vehicle(s)', 'my home']
+      else
+        []
+    end
+  end
+  
+  def empty_category_add_routes
+    if @category.name.eql? Rails.application.config.x.FinancialInformationCategory
+      session[:tutorial_paths] << { tuto_id: -1, current_page: 1, tuto_name: 'balance-sheet' }
+    end
+  end
+
   def tutorial_set_session(tutorial_id)
     tutorial = Tutorial.find_by(name: tutorial_name(tutorial_id).split.map(&:capitalize).join(' '))
     session[:tutorial_paths] = [{ tuto_id: 0, current_page: 0, tuto_name: 'tutorial_new' },
                                 { tuto_id: tutorial.id.to_s, current_page: "subtutorials_choice", tuto_name: tutorial_id}]
+    empty_category_add_routes
     session[:tutorial_index] = 1
   end
 
@@ -325,17 +381,26 @@ module TutorialsHelper
     session[:tutorial_paths].uniq!
 
     tuto_index = session[:tutorial_index]
-    @tutorial_id = session[:tutorial_paths].last[:tuto_name]
     if session[:tutorial_paths][tuto_index].blank?
+      @tutorial_id = session[:tutorial_paths][session[:tutorial_paths].count - 2][:tuto_name]
       @tutorial_in_progress = false
       tutorial_set_session(@tutorial_id)
       tuto_index = session[:tutorial_index]
+    else
+      @tutorial_id = session[:tutorial_paths][tuto_index][:tuto_name]
     end
 
     tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
     @tuto_page = session[:tutorial_paths][tuto_index][:current_page]
     @tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@tutorial_id)).first
+    set_balance_sheet_information(@tutorial_id)
     @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
                                                 .try(:sort_by, &:position)
+
+    empty_category_additional_tutorials(@category).each do |tutorial|
+      tutorial = Tutorial.where('name ILIKE ?', tutorial).first
+      next unless tutorial.present?
+      @subtutorials << tutorial
+    end
   end
 end

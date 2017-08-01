@@ -2,6 +2,7 @@ class FinancialInformationController < AuthenticatedController
   include SharedViewModule
   include FinancialInformationHelper
   include TutorialsHelper
+  include CategoriesHelper
   
   add_breadcrumb "Financial Information", :financial_information_path, only: [:index], if: :general_view?
   add_breadcrumb "Financial Information", :shared_view_financial_information_path, only: [:index], if: :shared_view?
@@ -17,8 +18,9 @@ class FinancialInformationController < AuthenticatedController
   
   def index
     session[:ret_url] = financial_information_path
-    @category = Rails.application.config.x.FinancialInformationCategory
-    @documents = Document.for_user(current_user).where(category: @category)
+    @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
+    set_tutorial_in_progress(financial_information_empty?)
+    @documents = Document.for_user(current_user).where(category: @category.name)
     
     @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
     
@@ -29,7 +31,7 @@ class FinancialInformationController < AuthenticatedController
     
     @all_cards = (@account_providers + @alternative_managers +
                  @investments + @properties).sort_by!(&:name)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? Category.fetch(@category.downcase) }.map(&:contact) 
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
   end
   
   def update_balance_sheet
@@ -69,5 +71,12 @@ class FinancialInformationController < AuthenticatedController
       next unless (account = model.find_by(id: id)).present?
       account.update_attribute(value_name, value)
     end
+  end
+  
+  # Tutorial workflow integrated
+  
+  def set_tutorial_resources
+    @financial_advisors = Contact.for_user(resource_owner).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    @contact = Contact.new(user: resource_owner)
   end
 end

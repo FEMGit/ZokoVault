@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <% @financial_property = FinancialProperty.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
 <% vehicles = current_user.financial_properties.select{|p| p.property_type == 'Vehicle'} %>
 
@@ -10,5 +13,7 @@
                                partial_path: { resources: vehicles },
                                hidden_field_tag_values: [ { name: 'financial_property[property_type]', value: 'Vehicle'} ],
                                text_field_tag: { name: 'financial_property[name]', placeholder: 'Toyota Camry' },
-                               fields_class: 'property-fields'
+                               fields_class: 'property-fields',
+                               category_empty: category_empty,
+                               next_tutorial_path: next_tutorial_path
                              } %>

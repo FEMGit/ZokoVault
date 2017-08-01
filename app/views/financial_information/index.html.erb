@@ -1,149 +1,153 @@
-<% if category_shared?(resource_owner, @category) %>
-  <% if financial_information_any? %>
-    <a class="edit-link mrg-top" id="toggle">
-      <span class="fin-overview">
-        <span class="circle-button">
-          <svg class="icon circle-icon">
-            <use xlink:href="#icon-pencil-1"></use>
-          </svg>
-        </span>Add Financial Information
-      </span>
-      <span class="fin-options" style="display:none;">
-        <span class="circle-button">
-          <svg class="icon circle-icon">
-            <use xlink:href="#icon-left-1"></use>
-          </svg>
-        </span>Back to Overview
-      </span>
-    </a>
-  <% end %>
-<% end %>
-
-<h1>Financial Information</h1>
-
-<% if category_shared?(resource_owner, @category) %>
-  <div class="card cg-3 mb-30 fin-toggle" data-toggle="true" >
-
-    <section class="fin-overview" <% if !financial_information_any? %> style="display:none;" <% end %>>
-      <div id="asset" class="pie-chart"></div>
-      <div id="debt" class="pie-chart"></div>
-      <div class="pie-legend">
-
-        <ul class="data-summary">
-          <li class="data-pair">
-            <h4>Cash</h4>
-            <h4 class="data-right">
-              <%= number_to_currency(cash_sum, unit: "$", precision: 0) %>
-            </h4>
-          </li>
-          <li class="data-pair">
-            <h4>Investments</h4>
-            <h4 class="data-right">
-              <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
-            </h4>
-          </li>
-          <% if @properties.any? %>
-            <li class="data-pair">
-              <h4>Property</h4>
-              <h4 class="data-right">
-                <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
-              </h4>
-            </li>
-          <% end %>
-          <% if @alternative_managers.any? %>
-            <li class="data-pair">
-              <h4>Alternatives</h4>
-              <h4 class="data-right">
-                <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
-              </h4>
-            </li>
-          <% end %>
-          <% if credit_card_show? %>
-            <li class="data-pair">
-              <h4>Credit Cards</h4>
-              <h4 class="data-right">
-                <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
-              </h4>
-            </li>
-          <% end %>
-          <li class="data-pair">
-            <h4>Loans</h4>
-            <h4 class="data-right">
-              <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
-            </h4>
-          </li>
-
-          <div class="sum-line"></div>
-
-          <li class="data-pair">
-            <h4>Net Worth</h4>
-            <h4 class="data-right">
-              <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
-                <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
-              </span>
-            </h4>
-          </li>
-          <% if commitments_show? %>
-            <div class="sum-line no-margin"></div>
-            <div class="sum-line"></div>
-            <li class="data-pair">
-              <h4>Commitments</h4>
-              <h4 class="data-right">
-                <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
-              </h4>
-            </li>
-          <% end %>
-      </ul>
-      </div>
-      <span class="clear"></span>
-    </section>
-
-    <section class="fin-options" <% if financial_information_any? %> style="display:none;" <% end %> >
-      <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path(@shared_user) %>">Add Account</a>
-      <h3>Add Institutional Account</h3>
-      <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
-      <div class="sum-line"></div>
-
-      <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
-      <h3>Add Property</h3>
-      <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiques, etc.</p>
-      <div class="sum-line"></div>
-
-      <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
-      <h3>Add Other Investment or Debt</h3>
-      <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
-      <div class="sum-line"></div>
-
-      <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path(@shared_user) %>">Add Alternative</a>
-      <h3>Add Alternative</h3>
-      <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
-    </section>
-  </div>
-<% end %>
-
-<section class="flex-boxes ">
-  <% @all_cards.each do |financial_card| %>
-    <% case financial_card %>
-    <% when FinancialProvider %>
-      <% if financial_provider_account?(financial_card) %>
-        <%= render :partial => 'financial_information/accounts', locals: {account_providers: Array.wrap(financial_card)} %>
-      <% elsif financial_provider_alternative?(financial_card) %>
-        <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: Array.wrap(financial_card)} %>
-      <% end %>
-    <% when FinancialInvestment %>
-      <%= render :partial => 'financial_information/investments', locals: {investments: Array.wrap(financial_card)} %>
-    <% when FinancialProperty %>
-      <%= render :partial => 'financial_information/properties', locals: {properties: Array.wrap(financial_card)} %>
+<% if financial_information_empty? || @tutorial_in_progress %>
+  <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: financial_information_path(tutorial_in_progress: true) } %>
+<% else %>
+  <% if category_shared?(resource_owner, @category.name) %>
+    <% if financial_information_any? %>
+      <a class="edit-link mrg-top" id="toggle">
+        <span class="fin-overview">
+          <span class="circle-button">
+            <svg class="icon circle-icon">
+              <use xlink:href="#icon-pencil-1"></use>
+            </svg>
+          </span>Add Financial Information
+        </span>
+        <span class="fin-options" style="display:none;">
+          <span class="circle-button">
+            <svg class="icon circle-icon">
+              <use xlink:href="#icon-left-1"></use>
+            </svg>
+          </span>Back to Overview
+        </span>
+      </a>
     <% end %>
   <% end %>
 
-</section>
+  <h1>Financial Information</h1>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category),
-  documents_title: 'Financial Documents'} %>
+  <% if category_shared?(resource_owner, @category.name) %>
+    <div class="card cg-3 mb-30 fin-toggle" data-toggle="true" >
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+      <section class="fin-overview" <% if !financial_information_any? %> style="display:none;" <% end %>>
+        <div id="asset" class="pie-chart"></div>
+        <div id="debt" class="pie-chart"></div>
+        <div class="pie-legend">
 
-<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.FinancialInformationCategory.downcase } %>
+          <ul class="data-summary">
+            <li class="data-pair">
+              <h4>Cash</h4>
+              <h4 class="data-right">
+                <%= number_to_currency(cash_sum, unit: "$", precision: 0) %>
+              </h4>
+            </li>
+            <li class="data-pair">
+              <h4>Investments</h4>
+              <h4 class="data-right">
+                <%= number_to_currency(investments_sum, unit: "$", precision: 0) %>
+              </h4>
+            </li>
+            <% if @properties.any? %>
+              <li class="data-pair">
+                <h4>Property</h4>
+                <h4 class="data-right">
+                  <%= number_to_currency(properties_sum, unit: "$", precision: 0) %>
+                </h4>
+              </li>
+            <% end %>
+            <% if @alternative_managers.any? %>
+              <li class="data-pair">
+                <h4>Alternatives</h4>
+                <h4 class="data-right">
+                  <%= number_to_currency(alternatives_sum, unit: "$", precision: 0) %>
+                </h4>
+              </li>
+            <% end %>
+            <% if credit_card_show? %>
+              <li class="data-pair">
+                <h4>Credit Cards</h4>
+                <h4 class="data-right">
+                  <%= render :partial => 'financial_information/negative_value', locals: {value: credit_cards_sum} %>
+                </h4>
+              </li>
+            <% end %>
+            <li class="data-pair">
+              <h4>Loans</h4>
+              <h4 class="data-right">
+                <%= render :partial => 'financial_information/negative_value', locals: {value: loans_sum} %>
+              </h4>
+            </li>
 
-<%= render :partial => 'financial_information/financial_javascript' %>
+            <div class="sum-line"></div>
+
+            <li class="data-pair">
+              <h4>Net Worth</h4>
+              <h4 class="data-right">
+                <span <% if net_worth.to_i < 0 %> class="negative-value" <% end %> >
+                  <%= number_to_currency(net_worth, unit: "$", precision: 0) %>
+                </span>
+              </h4>
+            </li>
+            <% if commitments_show? %>
+              <div class="sum-line no-margin"></div>
+              <div class="sum-line"></div>
+              <li class="data-pair">
+                <h4>Commitments</h4>
+                <h4 class="data-right">
+                  <%= render :partial => 'financial_information/value', locals: {value: uncalled_commitments_sum} %>
+                </h4>
+              </li>
+            <% end %>
+        </ul>
+        </div>
+        <span class="clear"></span>
+      </section>
+
+      <section class="fin-options" <% if financial_information_any? %> style="display:none;" <% end %> >
+        <a class="fr button fixed-width big-button primary-button" href="<%= add_account_path(@shared_user) %>">Add Account</a>
+        <h3>Add Institutional Account</h3>
+        <p>Accounts include checking, savings, brokerage, stocks, bonds, derivatives, government securities, mutual funds, IRA's, 401K's, 403B's, 529's, alternative investments, credit cards, mortgages, loans, lines of credit, undrawn commitments, etc.</p>
+        <div class="sum-line"></div>
+
+        <a class="fr button fixed-width big-button primary-button" href="<%= add_property_path(@shared_user) %>">Add Property</a>
+        <h3>Add Property</h3>
+        <p>Property includes, but is not limited to, houses, vacant land, vehicles, artwork, furniture, jewelry, heirlooms, antiques, etc.</p>
+        <div class="sum-line"></div>
+
+        <a class="fr button fixed-width big-button primary-button" href="<%= add_investment_path(@shared_user) %>">Add Other</a>
+        <h3>Add Other Investment or Debt</h3>
+        <p>Private company stocks or bonds, royalty streams, personal loans, and miscellaneous situations, etc.</p>
+        <div class="sum-line"></div>
+
+        <a class="fr button fixed-width big-button primary-button" href="<%= add_alternative_path(@shared_user) %>">Add Alternative</a>
+        <h3>Add Alternative</h3>
+        <p>Venture Capital, Private Equity, Hedge Funds, Fund of Funds, Seed, Angel</p>
+      </section>
+    </div>
+  <% end %>
+
+  <section class="flex-boxes ">
+    <% @all_cards.each do |financial_card| %>
+      <% case financial_card %>
+      <% when FinancialProvider %>
+        <% if financial_provider_account?(financial_card) %>
+          <%= render :partial => 'financial_information/accounts', locals: {account_providers: Array.wrap(financial_card)} %>
+        <% elsif financial_provider_alternative?(financial_card) %>
+          <%= render :partial => 'financial_information/alternatives', locals: {alternative_managers: Array.wrap(financial_card)} %>
+        <% end %>
+      <% when FinancialInvestment %>
+        <%= render :partial => 'financial_information/investments', locals: {investments: Array.wrap(financial_card)} %>
+      <% when FinancialProperty %>
+        <%= render :partial => 'financial_information/properties', locals: {properties: Array.wrap(financial_card)} %>
+      <% end %>
+    <% end %>
+
+  </section>
+
+  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name),
+    documents_title: 'Financial Documents'} %>
+
+  <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+  <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.FinancialInformationCategory.downcase } %>
+
+  <%= render :partial => 'financial_information/financial_javascript' %>
+<% end %>

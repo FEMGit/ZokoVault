@@ -31,8 +31,9 @@ module ContactsHelper
     end
   end
   
-  def zip_code_form(form, name)
-    form.text_field(name, class: "form-control zipcode-mask-field", :maxlength => get_max_length(:zipcode), placeholder: '90210', type: 'tel')
+  def zip_code_form(form, name, errors = false)
+    error_class = (errors.eql? true) ? " input-error" : ""
+    form.text_field(name, class: "form-control zipcode-mask-field" + error_class, :maxlength => get_max_length(:zipcode), placeholder: '90210', type: 'tel')
   end
   
   def empty_image

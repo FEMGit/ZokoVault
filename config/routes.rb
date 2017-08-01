@@ -174,6 +174,12 @@ Rails.application.routes.draw do
   get 'account/first_run' => 'accounts#first_run', as: :first_run
   get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   get 'account/payment' => 'accounts#payment', as: :payment
+  get 'account/corporate_user_type' => 'accounts#corporate_user_type', as: :corporate_user_type
+  get 'account/corporate_account_options' => 'accounts#corporate_account_options', as: :corporate_account_options
+  get 'account/how_billing_works' => 'accounts#how_billing_works', as: :how_billing_works
+  get 'account/billing_types' => 'accounts#billing_types', as: :billing_types
+  post 'account/corporate_user_type_update' => 'accounts#corporate_user_type_update', as: :corporate_user_type_update
+  post 'account/corporate_account_options_update' => 'accounts#corporate_account_options_update', as: :corporate_account_options_update
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup
   put 'account/login_settings_update' => 'accounts#login_settings_update', as: :account_login_settings

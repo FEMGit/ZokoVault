@@ -15,4 +15,12 @@ class MessageMailer < ApplicationMailer
     @message = message
     mail subject: "Email Support - #{message.name}", to: to
   end
+  
+  def corporate_account_information(corporate_profile, corporate_options_params)
+    @corporate_profile = corporate_profile
+    @provided_choice = corporate_options_params[:provide_to]
+    @services = corporate_options_params[:services]
+    @user = corporate_profile.user
+    mail subject: "Corporate Account Options - #{@corporate_profile.business_name}", to: EmailSupport::ADMIN_EMAILS
+  end
 end

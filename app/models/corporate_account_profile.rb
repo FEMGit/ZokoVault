@@ -1,4 +1,5 @@
 class CorporateAccountProfile < ActiveRecord::Base
+  attr_accessor :company_information_required
   scope :for_user, ->(user) { where(user: user) }
   
   belongs_to :user
@@ -26,4 +27,12 @@ class CorporateAccountProfile < ActiveRecord::Base
   
   validates :relationship, inclusion: { in: Contact::RELATIONSHIP_TYPES.values.flatten, allow_blank: true }
   validates :contact_type, inclusion: { in: Contact::CONTACT_TYPES.keys.flatten, allow_blank: true }
+  
+  validates :business_name, :web_address, :street_address, :zip,
+            :state, :phone_number, :city, :presence => true,
+            :if => Proc.new { |profile| profile.company_information_required.eql? true }
+  
+  def company_information_required!
+    @company_information_required = true
+  end
 end

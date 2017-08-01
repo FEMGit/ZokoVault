@@ -7,7 +7,8 @@ class AccountsController < AuthenticatedController
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
                                 :trial_membership_update, :trial_questionnaire, :payment,
-                                :first_run, :zoku_vault_info]
+                                :first_run, :zoku_vault_info, :corporate_user_type,
+                                :corporate_account_options, :how_billing_works, :billing_types]
   before_action :set_blank_layout_header_info, only: [:first_run]
   skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
@@ -110,6 +111,44 @@ class AccountsController < AuthenticatedController
       @corporate_profile = @corporate_admin.corporate_account_profile
     end
   end
+  
+  def corporate_user_type
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+    @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
+    @corporate_profile.save
+  end
+  
+  def corporate_user_type_update
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+    @corporate_profile.company_information_required!
+    respond_to do |format|
+      if @corporate_profile.update(company_information_params)
+        format.html { redirect_to corporate_account_options_path }
+      else
+        format.html { render :corporate_user_type, layout: 'blank_layout' }
+        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def corporate_account_options; end
+  
+  def corporate_account_options_update
+    current_user.update_attributes(:corporate_admin => true)
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+    current_user.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always])
+    MessageMailer.corporate_account_information(corporate_profile, corporate_options_params).deliver
+    redirect_to how_billing_works_path
+  end
+  
+  def how_billing_works
+  end
+  
+  def billing_types
+  end
 
   def user_type_update
     if user_params[:user_type].eql? 'trial'
@@ -118,11 +157,14 @@ class AccountsController < AuthenticatedController
       end
       redirect_to first_run_path and return
     elsif user_params[:user_type].eql? 'free'
-      MailchimpService.new.subscribe_to_shared(current_user)
+      MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+    elsif user_params[:user_type].eql? 'corporate'
+      MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+      redirect_to corporate_user_type_path and return
     end
     redirect_to root_path
   end
-
+  
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path
@@ -200,6 +242,15 @@ class AccountsController < AuthenticatedController
         phone_setup_account_path
       end
     redirect_to redirect_to_path if redirect_to_path.present?
+  end
+
+  def company_information_params
+    params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
+                                              :zip, :state, :phone_number, :fax_number)
+  end
+
+  def corporate_options_params
+    params.require(:corporate_account_options).permit(:provide_to, services: [])
   end
 
   def skip_param

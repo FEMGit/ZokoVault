@@ -41,7 +41,7 @@ class AuthenticatedController < ApplicationController
 
   def mfa_verify!
     if missing_mfa?
-      redirect_to mfa_path
+      redirect_to mfa_path(shared_user_id: params[:shared_user_id])
     end
   end
 
@@ -85,7 +85,9 @@ class AuthenticatedController < ApplicationController
   end
 
   def missing_mfa?
-    if current_user.mfa_verify?
+    if params[:shared_user_id].present? && !current_user.mfa_verify?
+      !session[:mfa_shared]
+    elsif current_user.mfa_verify?
       !session[:mfa]
     else
       false

@@ -138,6 +138,8 @@ Rails.application.routes.draw do
   resources :documents, param: :uuid
   get 'documents/get_drop_down_options/:category(/:shared_user_id)', to: 'documents#get_drop_down_options'
   get 'documents/get_card_names/:category(/:shared_user_id)', to: 'documents#get_card_names'
+  get 'documents/document_category_share_contacts/:category(/:shared_user_id)', to: 'documents#document_category_share_contacts'
+  get 'documents/document_subcategory_share_contacts/:category/:subcategory(/:shared_user_id)', to: 'documents#document_subcategory_share_contacts'
   get 'documents/new(/:shared_user_id)', to: 'documents#new', as: :new_documents
   get 'documents/edit/:uuid(/:shared_user_id)', to: 'documents#edit', as: :edit_documents
   get 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document

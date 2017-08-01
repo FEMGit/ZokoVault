@@ -37,10 +37,47 @@
   function get_drop_down_options() {
     update_category($('#document_category.chosen-select :selected').text())
   }
+  
+  $("#document_category.chosen-select").change(function(e, params) {
+    var shared_user_id = $("#shared_user_id").val();
+    var category_selected = $('#document_category.chosen-select :selected').text()
+    var url = "/documents/document_category_share_contacts/" + category_selected.replace('...', '') + "/" + shared_user_id
+    $.get(url, function(data) {
+      $("#document_contact_ids").val(data)
+      $("#document_contact_ids").trigger('chosen:updated');
+    })
+  })
+  
+  $("#document_subcategory_financial.chosen-select").change(function(e, params) {
+    var subcategory_selected = $('#document_subcategory_financial :selected').val()
+    update_shared_with(subcategory_selected)
+  })
+  
+  $("#document_subcategory_insurance.chosen-select").change(function(e, params) {
+    var subcategory_selected = $('#document_subcategory_insurance :selected').val()
+    update_shared_with(subcategory_selected)
+  })
+  
+  $("#document_subcategory_card_documents.chosen-select").change(function(e, params) {
+    var subcategory_selected = $('#document_subcategory_card_documents :selected').val()
+    update_shared_with(subcategory_selected)
+  })
 
   $("#document_category_groups.chosen-select").change(function(e, params){
     $("#group").val(params.selected)
+    var subcategory_selected = $('#document_category_groups :selected').val()
+    update_shared_with(subcategory_selected)
   });
+  
+  var update_shared_with = function(subcategory_selected) {
+    var shared_user_id = $("#shared_user_id").val();
+    var category_selected = $('#document_category.chosen-select :selected').text()
+    var url = "/documents/document_subcategory_share_contacts/" + category_selected + "/" + subcategory_selected.replace('...', '') + "/" + shared_user_id
+    $.get(url, function(data) {
+      $("#document_contact_ids").val(data)
+      $("#document_contact_ids").trigger('chosen:updated');
+    })
+  }
 
   //get ajax request to update card drop down info based on chosen category
   var update_category = function(category_selected){

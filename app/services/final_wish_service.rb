@@ -28,4 +28,10 @@ class FinalWishService
     ShareInheritanceService.update_document_shares(user, share_contact_ids, previous_share_with_contact_ids.flatten,
                                                    Rails.application.config.x.FinalWishesCategory, final_wish_info.group)
   end
+  
+  def self.final_wish_ids_by_group(group, user)
+    final_wish_info = FinalWishInfo.for_user(user).find_by(:group => group)
+    return nil unless final_wish_info.present?
+    final_wish_info.final_wishes.map(&:id)
+  end
 end

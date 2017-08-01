@@ -168,6 +168,14 @@ class DocumentsController < AuthenticatedController
   def get_card_names
     render :json => card_names(base_params[:category]).flatten
   end
+  
+  def document_category_share_contacts
+    render :json => ShareService.category_contacts_shared_with(resource_owner, base_params[:category])
+  end
+  
+  def document_subcategory_share_contacts
+    render :json => ShareService.subcategory_contacts_shared_with(resource_owner, base_params[:category], base_params[:subcategory])
+  end
 
   private
   
@@ -242,7 +250,7 @@ class DocumentsController < AuthenticatedController
   end
 
   def base_params
-    params.permit(:group, :category, :vendor_id, :financial_information_id, :card_document_id)
+    params.permit(:group, :category, :vendor_id, :financial_information_id, :card_document_id, :subcategory)
   end
 
   def document_changes(type)

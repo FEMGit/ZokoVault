@@ -135,24 +135,31 @@ class TutorialsController < AuthenticatedController
     tuto_index = session[:tutorial_index] - 2
     tuto_index = tuto_index < 0 ? 0 : tuto_index
     # Destroy element if it was created
-    redirect_to new_tutorial_path and return if session[:tutorial_paths].blank?
+    return_path = 
+      if session[:category_tutorial_in_progress].eql?(true)
+        params[:return_path]
+      else
+        new_tutorial_path
+      end
+    redirect_to return_path and return if session[:tutorial_paths].blank?
     insurance_card = session[:tutorial_paths][tuto_index][:object]
     insurance_card.destroy if insurance_card
     @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
 
     if @prev_tutorial_name == 'tutorial_new'
       session[:tutorial_index] = 0
-      redirect_to new_tutorial_path and return
+      redirect_to return_path and return
     elsif @prev_tutorial_name == 'balance-sheet' && !financial_information_any?
       tuto_index -= 1
       session[:tutorial_index] -= 1
-      redirect_to new_tutorial_path and return if session[:tutorial_index] <= 0
+      redirect_to return_path and return if session[:tutorial_index] <= 0
       @prev_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
     end
 
     @prev_tutorial = Tutorial.find_by(name: @prev_tutorial_name.titleize)
     @prev_page = session[:tutorial_paths][tuto_index][:current_page]
     session[:tutorial_index] = session[:tutorial_index] - 2
+    redirect_to return_path and return if session[:category_tutorial_in_progress].eql?(true)
     redirect_to tutorial_page_path(@prev_tutorial_name, @prev_page)
   end
   

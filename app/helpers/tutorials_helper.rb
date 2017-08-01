@@ -3,6 +3,8 @@ module TutorialsHelper
     case category.name.downcase
       when Rails.application.config.x.WillsPoaCategory.downcase
         'my-will(s)'
+      when Rails.application.config.x.TrustsEntitiesCategory.downcase
+        'my-trust(s)'
       else
         ''
     end
@@ -120,7 +122,10 @@ module TutorialsHelper
   
   def check_tutorial_params(property_param)
     if params[:tutorial_name] && property_param.empty?
-      if params[:next_tutorial] == 'confirmation_page'
+      if params[:next_tutorial_path].present? &&
+         (Rails.application.routes.recognize_path(params[:next_tutorial_path]) rescue nil).present?
+        redirect_to params[:next_tutorial_path] and return true
+      elsif params[:next_tutorial] == 'confirmation_page'
         redirect_to tutorials_confirmation_path and return true
       else
         tuto_index = session[:tutorial_index]
@@ -133,7 +138,10 @@ module TutorialsHelper
   def tutorial_redirection(format, json_object)
     tuto_index = session[:tutorial_index]
     next_tuto = session[:tutorial_paths][tuto_index]
-    if session[:tutorial_paths].present? &&
+    if params[:next_tutorial_path].present? &&
+       (Rails.application.routes.recognize_path(params[:next_tutorial_path]) rescue nil).present?
+      path = params[:next_tutorial_path]
+    elsif session[:tutorial_paths].present? &&
          session[:tutorial_paths][tuto_index].present?
       next_page = session[:tutorial_paths][tuto_index][:current_page]
       path = if next_tuto[:tuto_name] == 'confirmation_page'
@@ -173,7 +181,7 @@ module TutorialsHelper
   end
 
   def save_tutorial_progress
-    return if params[:next_tutorial_path].present?
+    return if params[:next_tutorial_path].present? || params[:return_path].present?
     tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
     tutorial_selection.tutorial_paths = session[:tutorial_paths].to_json
     tutorial_selection.last_tutorial_index = session[:tutorial_index]

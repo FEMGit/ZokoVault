@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <% @trust = Trust.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)) %>
 <% trusts = Trust.for_user(resource_owner) %>
 
@@ -9,5 +12,7 @@
                                label_tag: { name: 'trust_name', value: 'Trust Name' },
                                partial_path: { resources: trusts },
                                text_field_tag: { name: 'vault_entry_0[name]', placeholder: 'Trust Name', max_length: get_max_length(:wtl_name) },
-                               fields_class: 'trust-fields'
+                               fields_class: 'trust-fields',
+                               category_empty: category_empty,
+                               next_tutorial_path: next_tutorial_path
                              } %>

@@ -1,121 +1,125 @@
-<h1>Trusts & Entities</h1>
+<% if trusts_entities_empty? || @tutorial_in_progress %>
+  <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: trusts_entities_path(tutorial_in_progress: true) } %>
+<% else %>
 
+  <h1>Trusts & Entities</h1>
 
-<div class="card trusts wide">
-  <h3>Trusts</h3>
-  <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button" %>
-  <% end %>
-</div>
-
-<div class="card cg-3 wide">
-  <h3>Entities and Corporations</h3>
-  <% if category_shared?(resource_owner, @category.name) %>
-    <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button" %>
-  <% end %>
-</div>
-
-<section class="flex-boxes">
-  <% @trusts.each do |trust| %>
-    <% wills_poa = CardDocument.trust(trust.id) %>
-    <% if wills_poa.blank? %>
-      <% next %>
+  <div class="card trusts wide">
+    <h3>Trusts</h3>
+    <% if category_shared?(resource_owner, @category.name) %>
+      <%= link_to 'Add Trust', new_trust_path(@shared_user), class: "small-button outline-button" %>
     <% end %>
-    <div class="flex-column">
-      <div class="card trusts column-card">
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
+  </div>
 
-        <h3><%= trust.name %></h3>
-
-        <% if !trust_present?(trust) %>
-          <label>There is no information about this Trust</label>
-        <% end %>
-
-        <% if trust.agents.any? %>
-          <label>Advisor</label>
-        <% end %>
-        <ul class="data-list">
-          <% trust.agents.each do |agent| %>
-            <li class="contact-pair">
-              <%= agent.name %><br>
-              <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
-              <%= agent.phone %>
-            </li>
-          <% end %>
-        </ul>
-
-        <% if category_subcategory_shares(trust, resource_owner).present? %>
-          <label>Shared With</label>
-          <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(trust, resource_owner) } %>
-          </section>
-        <% end %>
-        <br>
-        <%= link_to 'View Details', trust_path(trust, @shared_user), class: "small-button outline-button mt-20" %>
-      </div>
-    </div>
-  <% end %>
-
-  <% @entities.each do |entity| %>
-    <% wills_poa = CardDocument.entity(entity.id) %>
-    <% if wills_poa.blank? %>
-      <% next %>
+  <div class="card cg-3 wide">
+    <h3>Entities and Corporations</h3>
+    <% if category_shared?(resource_owner, @category.name) %>
+      <%= link_to 'Add Entity', new_entity_path(@shared_user), class: "small-button outline-button" %>
     <% end %>
-    <div class="flex-column">
-      <div class="card cg-3 column-card">
-        <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
+  </div>
 
-        <h3><%= entity.name %></h3>
+  <section class="flex-boxes">
+    <% @trusts.each do |trust| %>
+      <% wills_poa = CardDocument.trust(trust.id) %>
+      <% if wills_poa.blank? %>
+        <% next %>
+      <% end %>
+      <div class="flex-column">
+        <div class="card trusts column-card">
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
-        <% if !entity_present?(entity) %>
-          <label>There is no information about this Entity</label>
-        <% end %>
+          <h3><%= trust.name %></h3>
 
-        <% if entity.partners.any? %>
-          <label>Owner</label>
-        <% end %>
-        <ul class="data-list">
-          <% entity.partners.each do |partner| %>
-            <li class="contact-pair mb-10">
-              <%= partner.name %>
-              <% if partner.name.present? %><br><% end %>
-              <% if partner.try(:emailaddress) %>
-                <a href="mailto:<%= partner.emailaddress %>"><%= partner.emailaddress %></a>
-                <br>
-              <% end %>
-              <% if partner.try(:phone) %>
-                <%= partner.phone %>
-              <% end %>
-            </li>
+          <% if !trust_present?(trust) %>
+            <label>There is no information about this Trust</label>
           <% end %>
-        </ul>
 
-        <% if category_subcategory_shares(entity, resource_owner).present? %>
-          <label>Shared With</label>
-          <section class="shared-list">
-            <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(entity, resource_owner) } %>
-          </section>
-        <% end %>
-        <br>
-        <%= link_to 'View Details', entity_path(entity, @shared_user), class: "small-button outline-button mt-20" %>
+          <% if trust.agents.any? %>
+            <label>Advisor</label>
+          <% end %>
+          <ul class="data-list">
+            <% trust.agents.each do |agent| %>
+              <li class="contact-pair">
+                <%= agent.name %><br>
+                <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
+                <%= agent.phone %>
+              </li>
+            <% end %>
+          </ul>
+
+          <% if category_subcategory_shares(trust, resource_owner).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(trust, resource_owner) } %>
+            </section>
+          <% end %>
+          <br>
+          <%= link_to 'View Details', trust_path(trust, @shared_user), class: "small-button outline-button mt-20" %>
+        </div>
       </div>
-    </div>
-  <% end %>
-</section>
+    <% end %>
 
-<h3>Trusts & Entities Documents</h3>
+    <% @entities.each do |entity| %>
+      <% wills_poa = CardDocument.entity(entity.id) %>
+      <% if wills_poa.blank? %>
+        <% next %>
+      <% end %>
+      <div class="flex-column">
+        <div class="card cg-3 column-card">
+          <%= render :partial => "layouts/documents_count_icon", :locals => { :count => document_card_count(resource_owner, wills_poa.category.name, wills_poa.id) } %>
 
-<a class="add-link fr" href="<%= new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name) %>">
-  <span class="circle-button">
-    <svg class="icon circle-icon">
-      <use xlink:href="#icon-plus-1"></use>
-    </svg>
-  </span>Add Document
-</a>
+          <h3><%= entity.name %></h3>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+          <% if !entity_present?(entity) %>
+            <label>There is no information about this Entity</label>
+          <% end %>
 
-<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.TrustsEntitiesCategory.downcase } %>
+          <% if entity.partners.any? %>
+            <label>Owner</label>
+          <% end %>
+          <ul class="data-list">
+            <% entity.partners.each do |partner| %>
+              <li class="contact-pair mb-10">
+                <%= partner.name %>
+                <% if partner.name.present? %><br><% end %>
+                <% if partner.try(:emailaddress) %>
+                  <a href="mailto:<%= partner.emailaddress %>"><%= partner.emailaddress %></a>
+                  <br>
+                <% end %>
+                <% if partner.try(:phone) %>
+                  <%= partner.phone %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+
+          <% if category_subcategory_shares(entity, resource_owner).present? %>
+            <label>Shared With</label>
+            <section class="shared-list">
+              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(entity, resource_owner) } %>
+            </section>
+          <% end %>
+          <br>
+          <%= link_to 'View Details', entity_path(entity, @shared_user), class: "small-button outline-button mt-20" %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <h3>Trusts & Entities Documents</h3>
+
+  <a class="add-link fr" href="<%= new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name) %>">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+
+  <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+
+  <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.TrustsEntitiesCategory.downcase } %>
+<% end %>
 
 <%= javascript_include_tag 'flex_boxes' %>
 <script>

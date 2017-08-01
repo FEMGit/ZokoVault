@@ -1,10 +1,10 @@
-<% continue_button_only ||= false %>
+<% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
 <%= render partial: 'tutorials/tutorial_subtutorial_choices',
     locals: { title: "Will Information",
               description: 'Select the information you would like to add regarding your Will(s).',
               ajax_page_handle_path: tutorial_create_wills_path('my-will(s)'),
-              continue_button_only: continue_button_only,
+              category_empty: category_empty,
               tutorial_show: Proc.new { |tutorial| will_subtutorial_show?(tutorial)},
               next_tutorial_path: next_tutorial_path } %>

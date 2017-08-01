@@ -1,9 +1,0 @@
-<% f ||= nil %>
-
-<section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
-  <% if f.present? %>
-    <%= f.submit "Continue", class: "button big-button blue-button f-right submit-btn" %>
-  <% else %>
-    <%= link_to "Continue", next_tutorial_path, class: "button big-button blue-button f-right submit-btn ml-0" %>
-  <% end %>
-</section>

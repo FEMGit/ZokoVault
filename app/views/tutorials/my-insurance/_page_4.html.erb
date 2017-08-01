@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%= render partial: 'tutorials/tutorial_contact_create',
            locals: { title: 'Add Your Insurance Broker(s)',
                      description: 'Adding your insurance broker helps your family know who to contact for questions about your insurance.',
@@ -5,7 +8,9 @@
                               contacts: @insurance_brokers,
                               table_id: 'insurance-broker-table' },
                      flash_message: 'You added a contact! Add another one of your Insurance Brokers, or click Continue.' ,
-                     button_text: 'Add Insurance Broker' } %>
+                     button_text: 'Add Insurance Broker',
+                     category_empty: category_empty,
+                     next_tutorial_path: next_tutorial_path } %>
 
 <script>
   var createContact = function() {

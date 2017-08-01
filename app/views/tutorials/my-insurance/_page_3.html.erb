@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%- @insurance_card = Health.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
 <% healths = Vendor.for_user(resource_owner).healths %>
 
@@ -9,5 +12,7 @@
                                label_tag: { name: 'insurance_provider', value: 'Insurance Provider Name' },
                                partial_path: { resources: healths },
                                text_field_tag: { name: 'health[name]', placeholder: 'Insurance Provider Name' },
-                               fields_class: 'health-fields'
+                               fields_class: 'health-fields',
+                               category_empty: category_empty,
+                               next_tutorial_path: next_tutorial_path
                              } %>

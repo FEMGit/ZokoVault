@@ -44,6 +44,7 @@ class CategoriesController < AuthenticatedController
   def insurance
     #TODO: fix bug in padding out groups if missing
     @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
+    set_tutorial_in_progress(insurance_empty?)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
@@ -246,5 +247,8 @@ class CategoriesController < AuthenticatedController
     @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
   end
   
-  def set_insurance_tutorial_resources; end
+  def set_insurance_tutorial_resources
+    @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+    @insurance_policies = Document.for_user(current_user).where(category: Rails.application.config.x.InsuranceCategory)
+  end
 end

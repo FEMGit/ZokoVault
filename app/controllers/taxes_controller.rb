@@ -4,6 +4,8 @@ class TaxesController < AuthenticatedController
   include BackPathHelper
   include TutorialsHelper
   include SanitizeModule
+  include CategoriesHelper
+  
   before_action :set_tax_year, only: [:show, :edit, :update]
   before_action :set_tax, only: [:destroy]
   before_action :set_category, only: [:index, :show]
@@ -61,6 +63,7 @@ class TaxesController < AuthenticatedController
   # GET /taxes.json
   def index
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
+    set_tutorial_in_progress(taxes_empty?)
     @contacts_with_access = resource_owner.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
 
     @taxes = TaxYearInfo.for_user(resource_owner)
@@ -310,5 +313,13 @@ class TaxesController < AuthenticatedController
         tax_year_info.save
       end
     end
+  end
+  
+  # Tutorial workflow integrated
+  def set_tutorial_resources
+    @digital_taxes = Document.for_user(resource_owner).where(category: Rails.application.config.x.TaxCategory)
+    @tax_accountants = Contact.for_user(resource_owner).where(relationship: 'Accountant', contact_type: 'Advisor')
+    @category_dropdown_options, @card_names, @cards = TutorialService.set_documents_information(@category.name, resource_owner)
+    @contact = Contact.new(user: resource_owner)
   end
 end

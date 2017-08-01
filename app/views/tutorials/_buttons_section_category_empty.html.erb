@@ -2,7 +2,7 @@
 
 <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
   <% if !@tuto_page.eql? "subtutorials_choice" %>
-    <%= link_to 'Back', tutorial_destroy_path(tutorial_id: @tutorial_id, return_path: next_tutorial_path), method: :post, class: "big-button outline-button padded left-0 ps-absolute" %>
+    <%= link_to 'Back', tutorial_destroy_path(tutorial_id: @tutorial_id, return_path: next_tutorial_path + "&back=true"), method: :post, class: "big-button outline-button padded left-0 ps-absolute" %>
     <%= link_to "Skip", next_tutorial_path, class: "big-button outline-button padded skip-btn mr-5" %>
   <% end %>
   <% if f.present? %>

@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%= render partial: 'tutorials/tutorial_contact_create',
            locals: { title: 'Add Your Tax Accountant',
                      description: 'Adding your accountant helps your family know who to contact for questions about your taxes.',
@@ -6,7 +9,9 @@
                               table_id: 'tax-accountant-table' },
                      flash_message: 'You added an accoutant! Add another one of your Tax Accountants, or click Continue.' ,
                      button_text: 'Add Tax Accountant',
-                     skip_continue_equal: true} %>
+                     skip_continue_equal: true,
+                     category_empty: category_empty,
+                     next_tutorial_path: next_tutorial_path } %>
 
 <script>
   var createContact = function() {

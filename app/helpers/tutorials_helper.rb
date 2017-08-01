@@ -1,17 +1,4 @@
 module TutorialsHelper
-  def empty_category_tutorial_id(category)
-    case category.name.downcase
-      when Rails.application.config.x.WillsPoaCategory.downcase
-        'my-will(s)'
-      when Rails.application.config.x.TrustsEntitiesCategory.downcase
-        'my-trust(s)'
-      when Rails.application.config.x.InsuranceCategory.downcase
-        'my-insurance'
-      else
-        ''
-    end
-  end
-  
   def tutorial_unfinished?
     return false unless current_user
     TutorialSelection.for_user(current_user).present?
@@ -294,7 +281,7 @@ module TutorialsHelper
     params.require(last_tutorial_multiple_params[0]).permit(types: [])
   end
 
-  # Balance Sheet Tutorial
+  # Balance Sheet Tutorial Check
   def set_balance_sheet_information(tutorial_id)
     if tutorial_id.eql? 'balance-sheet'
       if financial_information_any?
@@ -324,11 +311,35 @@ module TutorialsHelper
     end
   end
 
+  def set_taxes_configuration(tutorial_id, tutorial_page)
+    if tutorial_id.eql?('my-taxes')
+      if tutorial_page == 2 && !@tax_accountants.any? { |pc| (pc.relationship.eql? 'Accountant') && (pc.contact_type.eql? 'Advisor') }
+        if from_back_button?
+          session[:tutorial_index] -= 1
+        else
+          session[:tutorial_index] += 1
+        end
+      end
+    end
+  end
+
   # Tutorial Category Integration
+  def from_back_button?
+    params[:back].present? && params[:back] == 'true'
+  end
+
   def empty_category_tutorial_id(category)
     case category.name.downcase
+      when Rails.application.config.x.WillsPoaCategory.downcase
+        'my-will(s)'
+      when Rails.application.config.x.TrustsEntitiesCategory.downcase
+        'my-trust(s)'
+      when Rails.application.config.x.InsuranceCategory.downcase
+        'my-insurance'
       when Rails.application.config.x.FinancialInformationCategory.downcase
         'my-financial-information'
+      when Rails.application.config.x.TaxCategory.downcase
+        'my-taxes'
       else
         ''
     end
@@ -371,24 +382,37 @@ module TutorialsHelper
     end
     
     if @tutorial_in_progress.eql? true
-      category_tutorial_step
       set_tutorial_resources
+      category_tutorial_step
     end
+  end
+
+  def tutorial_index_name
+    tuto_index = session[:tutorial_index]
+
+    if session[:tutorial_paths][tuto_index].present?
+      tutorial_id = session[:tutorial_paths][tuto_index][:tuto_name]
+      tutorial_page = session[:tutorial_paths][tuto_index][:current_page]
+      set_taxes_configuration(tutorial_id, tutorial_page)
+      tuto_index = session[:tutorial_index]
+    end
+    
+    if session[:tutorial_paths][tuto_index].blank?
+      tutorial_id = session[:tutorial_paths][session[:tutorial_paths].count - 2][:tuto_name]
+      @tutorial_in_progress = false
+      tutorial_set_session(tutorial_id)
+      tuto_index = session[:tutorial_index]
+    else
+      @tutorial_id = session[:tutorial_paths][tuto_index][:tuto_name]
+    end
+    [tuto_index, tutorial_id]
   end
 
   def category_tutorial_step
     session[:category_tutorial_in_progress] = true
     session[:tutorial_paths].uniq!
 
-    tuto_index = session[:tutorial_index]
-    if session[:tutorial_paths][tuto_index].blank?
-      @tutorial_id = session[:tutorial_paths][session[:tutorial_paths].count - 2][:tuto_name]
-      @tutorial_in_progress = false
-      tutorial_set_session(@tutorial_id)
-      tuto_index = session[:tutorial_index]
-    else
-      @tutorial_id = session[:tutorial_paths][tuto_index][:tuto_name]
-    end
+    tuto_index, @tutorial_id = tutorial_index_name
 
     tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
     @tuto_page = session[:tutorial_paths][tuto_index][:current_page]

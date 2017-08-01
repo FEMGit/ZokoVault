@@ -35,4 +35,12 @@ module CategoriesHelper
       Document.for_user(current_user).where(category: category_name).blank? &&
       Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor').blank?
   end
+
+  def taxes_empty?
+    return false unless current_user.present?
+    category_name = Category.fetch(Rails.application.config.x.TaxCategory.downcase).name
+    Tax.for_user(resource_owner).blank? &&
+      Document.for_user(current_user).where(category: category_name).blank? &&
+      Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor').blank?
+  end
 end

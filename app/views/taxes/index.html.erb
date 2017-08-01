@@ -1,18 +1,22 @@
-<h1>Taxes</h1>
-<section class="flex-boxes">
-  <% TaxesLimits::YEARS[:max].downto(TaxesLimits::YEARS[:min]) do |year| %>
-    <div class="flex-column">
-      <%= render :partial => 'tax_card', :locals => {:year => year} %>
-    </div>
-  <% end %>
-</section>
+<% if taxes_empty? || @tutorial_in_progress %>
+  <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: taxes_path(tutorial_in_progress: true) } %>
+<% else %>
+  <h1>Taxes</h1>
+  <section class="flex-boxes">
+    <% TaxesLimits::YEARS[:max].downto(TaxesLimits::YEARS[:min]) do |year| %>
+      <div class="flex-column">
+        <%= render :partial => 'tax_card', :locals => {:year => year} %>
+      </div>
+    <% end %>
+  </section>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
-  documents_title: "Tax Documents"} %>
+  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
+    documents_title: "Tax Documents"} %>
 
-<%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
+  <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
-<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.TaxCategory.downcase } %>
+  <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.TaxCategory.downcase } %>
+<% end %>
 
 <%= javascript_include_tag 'flex_boxes' %>
 <script>

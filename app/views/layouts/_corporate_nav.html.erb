@@ -1,0 +1,46 @@
+<nav class="primary-nav">
+
+  <a id="close-mobile-app-menu" class="main-nav close-primary-nav">
+    Close Menu
+    <svg class="icon close-icon fr">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+
+  <% corporate_account_current = 'active' if current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path) %>
+  <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-key-1"></use>
+    </svg>Corporate Dashboard
+  <% end %>
+
+  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(:my_profile_path) %>
+  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-contacts-2"></use>
+    </svg>My Profile
+  <% end %>
+  
+  <% account_traffic_current = 'active' if (current_page?(user_account_traffics_path))%>
+  <%= link_to user_account_traffics_path, class: "main-nav tablet-show #{account_traffic_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-user-1"></use>
+    </svg>Account Traffic
+  <% end %>
+  
+  <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
+  <%= link_to account_users_path, class: "main-nav tablet-show #{account_settings_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-settings-1"></use>
+    </svg>Account Settings
+  <% end %>
+
+  <% zoku_support_current = 'active' if current_page?(email_support_url) %>
+  <%= link_to email_support_path, class: "main-nav #{zoku_support_current} bottom-nav#{corporate? ? "-corporate" : ""}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-mail-2"></use>
+    </svg>ZokuVault Support
+  <% end %>
+
+  <%= link_to('Logout', destroy_user_session_path, :method => :delete, :class=>"main-nav tablet-show") %>
+</nav>

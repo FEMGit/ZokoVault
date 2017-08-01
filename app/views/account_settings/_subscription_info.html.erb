@@ -17,7 +17,10 @@
 
 <label>Billing Info</label>
 <% if card.present? %>
-  <p><%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %></p>
+  <p>
+    <%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %>
+    <%= link_to 'Update', update_subscription_information_path, class: 'no-underline-link' %>
+  </p>
 <% else %>
   <p>–</p>
 <% end %>

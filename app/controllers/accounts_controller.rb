@@ -82,7 +82,7 @@ class AccountsController < AuthenticatedController
     current_user.update_attributes(user_params)
     redirect_to zoku_vault_info_account_path
   end
-  
+
   def zoku_vault_info; end
 
   def phone_setup
@@ -143,7 +143,7 @@ class AccountsController < AuthenticatedController
   end
 
   def subscriptions
-    render json: StripeSubscription.plans.to_json.html_safe
+    render json: StripeSubscription.active_plans.to_json.html_safe
   end
 
   def yearly_subscription
@@ -153,7 +153,7 @@ class AccountsController < AuthenticatedController
   def apply_promo_code
     promo  = stripe_promo_params[:promo_code]
     coupon = StripeHelper.safe_request { Stripe::Coupon.retrieve(promo) } if promo.present?
-    
+
     if coupon && coupon.valid
       render json: coupon
     elsif coupon
@@ -162,7 +162,7 @@ class AccountsController < AuthenticatedController
       render json: { :message => 'Coupon Not Found', :status => 500 }
     end
   end
-  
+
   def mfa_verify_code
     status = if code_verified?
                session[:mfa] = true

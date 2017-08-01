@@ -9,8 +9,8 @@ class StripeSubscription < ActiveRecord::Base
       end.freeze
   end
 
-  def self.plans
-    map_of_plans.values
+  def self.active_plans
+    [yearly_plan, monthly_plan]
   end
 
   def self.yearly_plan

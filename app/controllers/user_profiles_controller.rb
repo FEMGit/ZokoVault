@@ -43,7 +43,6 @@ class UserProfilesController < AuthenticatedController
 
   # GET /user_profiles/1/edit
   def edit
-    @plans = StripeSubscription.plans
     @user_profile.employers.first_or_initialize
   end
 

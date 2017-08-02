@@ -1,0 +1,10 @@
+<% update_subscription_path ||= update_subscription_information_path %>
+
+<% if card.present? %>
+  <p>
+    <%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %>
+    <%= link_to 'Update', update_subscription_path, class: 'no-underline-link' %>
+  </p>
+<% else %>
+  <p>– <%= link_to 'Update', update_subscription_path, class: 'no-underline-link' %></p>
+<% end %>

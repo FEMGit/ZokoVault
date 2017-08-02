@@ -155,14 +155,14 @@ Rails.application.routes.draw do
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
   get 'account_settings/cancel_subscription', to: 'account_settings#cancel_subscription', as: :cancel_subscription
   get 'account_settings/invoice_information/:id', to: 'account_settings#invoice_information', as: :invoice_information
-  get 'account_settings/update_subscription_information', to: 'account_settings#update_subscription_information', as: :update_subscription_information
+  get 'account_settings/update_subscription_information(/:corporate)', to: 'account_settings#update_subscription_information', as: :update_subscription_information
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users'
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
-  post 'account_settings/update_payment', to: 'account_settings#update_payment', as: :update_payment_account_settings
+  post 'account_settings/update_payment(/:corporate)', to: 'account_settings#update_payment', as: :update_payment_account_settings
   post 'account_settings/store_corporate_payment', to: 'account_settings#store_corporate_payment', as: :store_corporate_payment
 
   resources :account_traffics
@@ -378,6 +378,7 @@ Rails.application.routes.draw do
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
   get '/corporate/account_settings', to: 'corporate_accounts#account_settings', as: :corporate_account_settings
   get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings
+  get '/corporate/billing_information', to: 'corporate_accounts#billing_information', as: :corporate_billing_information
   post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_corporate_settings
   post '/corporate/send_invitation/:contact_id', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account

@@ -12,7 +12,7 @@
     <p>–</p>
   <% end %>
   
-  <%= form_tag update_payment_account_settings_path, { id: 'payment-form' } do %>
+  <%= form_tag update_payment_account_settings_path(@corporate_update), { id: 'payment-form' } do %>
     <div class="form-row mb-30 m-0-auto">
       <label for="card-element">
         Enter card details
@@ -22,7 +22,7 @@
     </div>
     
     <%= submit_tag 'Submit', class: 'button big-button primary-button' %>
-    <%= link_to 'Cancel', manage_subscription_path, class:"button big-button secondary-button" %>
+    <%= link_to 'Cancel', @corporate_update.eql?('corporate') ? corporate_billing_information_path : manage_subscription_path, class:"button big-button secondary-button" %>
   <% end %>
 </div>
 

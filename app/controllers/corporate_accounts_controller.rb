@@ -1,5 +1,6 @@
 class CorporateAccountsController < AuthenticatedController
   before_action :redirect_unless_corporate_admin
+  before_action :corporate_activated?, except: [:index]
   before_action :set_corporate_contact_by_user_profile, only: [:edit, :show]
   before_action :set_corporate_user_by_user_profile, only: [:edit, :update]
 
@@ -238,6 +239,11 @@ class CorporateAccountsController < AuthenticatedController
 
   def success_path(path)
     ReturnPathService.success_path(current_user, current_user, path, path)
+  end
+  
+  def corporate_activated?
+    redirect_to corporate_accounts_path unless current_user.present? && current_user.corporate_admin &&
+                                               current_user.corporate_activated
   end
   
   def redirect_unless_corporate_admin

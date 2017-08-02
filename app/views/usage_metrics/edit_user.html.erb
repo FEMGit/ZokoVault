@@ -37,6 +37,15 @@
           <span></span>Corporate Admin turned on
         </label>
       </li>
+      <li class="check-list" id="corporate-activated">
+        <label>
+          <%= check_box_tag "corporate_account[corporate_activated]",
+            true,
+            @user.corporate_activated, { }
+          %>
+          <span></span>Corporate Admin is activated
+        </label>
+      </li>
     </ul>
 
     <div id="corporate-account-settings" style="display: none;">
@@ -134,10 +143,13 @@
 
   var toggleCategoryCheckbox = function(checkbox) {
     var corporateAccountSettings = $("#corporate-account-settings")
+    var activateCorporateCheckbox = $("#corporate-activated")
     if ($(checkbox).is(":checked")) {
       corporateAccountSettings.show()
+      activateCorporateCheckbox.show()
     } else {
       corporateAccountSettings.hide()
+      activateCorporateCheckbox.hide()
     }
   }
 

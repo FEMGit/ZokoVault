@@ -3,7 +3,7 @@ class CorporateBaseController < AuthenticatedController
   before_action :corporate_activated?, except: [:index]
   before_action :set_corporate_contact_by_user_profile, only: [:edit, :show]
   before_action :set_corporate_user_by_user_profile, :set_corporate_profile_by_user_account, only: [:edit, :update]
-  
+
   before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
@@ -62,11 +62,12 @@ class CorporateBaseController < AuthenticatedController
   end
   
   def send_invitation
+    account_type = params[:account_type] || "client"
     corporate_contact = corporate_contact_by_contact_id(params[:contact_id])
     corporate_profile = corporate_contact.try(:user_profile)
     corporate_type = corporate_profile.user.corporate_type
     respond_to do |format|
-      if ShareInvitationService.send_corporate_invitation(corporate_contact, corporate_owner)
+      if ShareInvitationService.send_corporate_invitation(corporate_contact, corporate_owner, account_type)
         format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { success: 'Invitation has been successfully sent.' } }
       else
         format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { error: 'Error sending an invitation, please try again later.' } }
@@ -116,6 +117,7 @@ class CorporateBaseController < AuthenticatedController
   
   def create_corporate_admin_contact_for_user_account
     account_profile = CorporateAccountProfile.find_by(user: corporate_owner)
+
     Contact.create(user_id: @user_account.id,
                    businessname: account_profile.try(:business_name),
                    businesswebaddress: account_profile.try(:web_address),
@@ -198,6 +200,12 @@ class CorporateBaseController < AuthenticatedController
   
   def set_corporate_profile_by_user_account
     @corporate_profile = Contact.for_user(corporate_owner).find_by(emailaddress: @user_account.email).user_profile
+  end
+  
+  def corporate_contact_by_contact_id(contact_id)
+    return nil unless contact_id.present? &&
+           (corporate_contact = Contact.find_by(id: contact_id)).present?
+    corporate_contact
   end
   
   def corporate_contact_by_contact_id(contact_id)

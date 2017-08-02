@@ -49,13 +49,13 @@
     <div class="user-account-title">
       <h3>Send Invitation</h3>
       <% if invitation_sent %>
-        <p>The <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> has already been sent.</p>
+        <p>The <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporateEmployee(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> has already been sent.</p>
       <% else %>
-        <p><%= @corporate_contact.name %> has not been sent an <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> to the site yet. </p>
+        <p><%= @corporate_contact.name %> has not been sent an <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporateEmployee(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> to the site yet. </p>
       <% end %>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact), method: :post, class: 'button big-button primary-button' %>
+      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact, "employee"), method: :post, class: 'button big-button primary-button' %>
     </div>
   </section>
   

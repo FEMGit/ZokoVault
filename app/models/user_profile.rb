@@ -116,7 +116,7 @@ class UserProfile < ActiveRecord::Base
   def email_is_valid?
     MailService.email_is_valid?(email, errors, :email)
   end
-
+  
   def format_phone_number(raw_phone_number)
     tmp = raw_phone_number.gsub(/[^0-9]/, '')
     "#{tmp[0..2]}-#{tmp[3..5]}-#{tmp[6..10]}"

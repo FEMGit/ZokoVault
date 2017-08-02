@@ -625,7 +625,11 @@
 
         <p>Dear <%= @contact.firstname %>,</p>
 
-        <p><%= @corporate_admin.name %> at <%= @corporate_profile.business_name %> has created a ZokuVault account for you.  ZokuVault will allow for you and <%= @corporate_admin.first_name %> to securely collaborate on your most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
+        <% if @account_type.eql? 'employee' %>
+          <p><%= @corporate_admin.name %> at <%= @corporate_profile.business_name %> has created a Corporate Employee ZokuVault account for you. ZokuVault will allow for you and <%= @corporate_admin.first_name %> to securely collaborate on your client's most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
+        <% else %>
+          <p><%= @corporate_admin.name %> at <%= @corporate_profile.business_name %> has created a ZokuVault account for you.  ZokuVault will allow for you and <%= @corporate_admin.first_name %> to securely collaborate on your most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
+        <% end %>
 
         <p><%= link_to 'Create Password', corporate_edit_password_url(@user.uuid, reset_password_token: @token_raw) %></p>
 

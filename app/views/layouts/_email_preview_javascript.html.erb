@@ -1,14 +1,22 @@
 <script>
   var displayEmailPreview = function(contact_id) {
-    $('#email-preview-section').empty()
-    $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')
+    emailPreviewSectionPrepare()
     displayEmailPreviewModal(contact_id)
   }
   
   var displayEmailPreviewCorporate = function(contact_id) {
+    emailPreviewSectionPrepare()
+    createEmailIframeByName("corporate_user", contact_id)
+  }
+  
+  var displayEmailPreviewCorporateEmployee = function(contact_id) {
+    emailPreviewSectionPrepare()
+    createEmailIframeByName("corporate_employee", contact_id)
+  }
+  
+  var emailPreviewSectionPrepare = function() {
     $('#email-preview-section').empty()
     $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')
-    createEmailIframeByName("corporate_user", contact_id)
   }
   
   var screenShift = function(element) {

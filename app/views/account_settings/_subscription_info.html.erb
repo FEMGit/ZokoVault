@@ -16,37 +16,10 @@
 <% end %>
 
 <label>Billing Info</label>
-<% if card.present? %>
-  <p>
-    <%= "#{card[:brand]} XXXX-#{card[:last4]} exp. #{card[:exp_month]}/#{card[:exp_year]}" %>
-    <%= link_to 'Update', update_subscription_information_path, class: 'no-underline-link' %>
-  </p>
-<% else %>
-  <p>–</p>
-<% end %>
+<%= render partial: 'account_settings/stripe_card_information', locals: { card: card, update_payment_path: update_subscription_information_path } %>
 
 <h3>Previous Invoices</h3>
-
-<table id="documents-table">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Paid on</th>
-      <th>Payment Amount</th>
-      <th>Invoice</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% invoices && invoices.each do |invoice| %>
-      <tr>
-        <td><%= invoice.lines.data.first.plan.name %></td>
-        <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
-        <td><%= "$#{invoice.total / 100.0}" %></td>
-        <td><%= link_to 'Invoice', invoice_information_path(invoice.id), class: 'no-underline-link', target: :_blank %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render partial: 'account_settings/previous_invoices', locals: { invoices: invoices } %>
 
 <div class="mt-20">
   <%= link_to "Update Subscription", billing_info_path, class: "button primary-button big-button mt-10 inline-block fixed-width-big p-10" %>

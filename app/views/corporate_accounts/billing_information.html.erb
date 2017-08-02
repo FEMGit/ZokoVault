@@ -1,0 +1,9 @@
+<h3>Billing Information</h3>
+
+<div class="card">
+  <label>Billing Info</label>
+  <%= render partial: 'account_settings/stripe_card_information', locals: { card: @card, update_subscription_path: update_subscription_information_path(:corporate => 'corporate') } %>
+  
+  <h3>Previous Invoices</h3>
+  <%= render partial: 'account_settings/previous_invoices', locals: { invoices: @invoices } %>
+</div>

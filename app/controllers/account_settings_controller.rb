@@ -47,8 +47,9 @@ class AccountSettingsController < AuthenticatedController
 
   def update_subscription_information
     @card = customer_card
+    @corporate_update = corporate_update? ? params[:corporate] : nil
   end
-
+  
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
     redirect_to login_settings_path
@@ -80,10 +81,14 @@ class AccountSettingsController < AuthenticatedController
   end
   
   def customer_card
-    return nil unless current_user.stripe_customer.present?
-    customer = current_user.stripe_customer
-    source = customer.try(:default_source)
-    customer.sources.retrieve(source) if source.present?
+    customer =
+      if corporate_update?
+        current_user.corporate_admin ? StripeService.ensure_corporate_stripe_customer(user: current_user) : nil
+      else
+        current_user.stripe_customer.present? ? current_user.stripe_customer : nil
+      end
+    return nil unless customer.present?
+    StripeService.customer_card(customer: customer)
   end
   
   def invoice_information
@@ -190,9 +195,10 @@ class AccountSettingsController < AuthenticatedController
   def update_payment
     token = params[:stripeToken]
     if token.present?
-      customer = StripeService.ensure_stripe_customer(user: current_user)
+      customer = StripeService.stripe_customer(user: current_user, corporate_update: corporate_update?)
       (redirect_to (session[:ret_url] || root_path) and return) unless update_customer_information(customer, token)
-      if customer.subscriptions.blank?
+      if customer.subscriptions.blank? && stripe_subscription_params.present? &&
+          stripe_subscription_params[:plan_id].present?
         plan = stripe_subscription_params[:plan_id]
         promo = stripe_subscription_params[:promo_code]
         stripe_obj = StripeService.subscribe(
@@ -209,6 +215,11 @@ class AccountSettingsController < AuthenticatedController
   end
 
   private
+
+  def corporate_update?
+    return nil unless params[:corporate].present?
+    params[:corporate].eql? 'corporate'
+  end
 
   def next_invoice(customer)
     begin
@@ -272,6 +283,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def stripe_subscription_params
+    return nil unless params[:user] && params[:user][:stripe_subscription_attributes]
     params.require(:user
          ).require(:stripe_subscription_attributes
          ).permit(:plan_id, :promo_code)

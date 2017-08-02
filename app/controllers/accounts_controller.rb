@@ -7,7 +7,7 @@ class AccountsController < AuthenticatedController
   layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
                                 :trial_membership_update, :trial_questionnaire, :payment,
-                                :first_run, :zoku_vault_info, :corporate_user_type,
+                                :first_run, :zoku_vault_info, :corporate_user_type, :corporate_logo,
                                 :corporate_account_options, :how_billing_works, :billing_types,
                                 :corporate_credit_card]
   before_action :set_blank_layout_header_info, only: [:first_run]
@@ -126,9 +126,27 @@ class AccountsController < AuthenticatedController
     @corporate_profile.company_information_required!
     respond_to do |format|
       if @corporate_profile.update(company_information_params)
-        format.html { redirect_to corporate_account_options_path }
+        format.html { redirect_to corporate_logo_path }
       else
         format.html { render :corporate_user_type, layout: 'blank_layout' }
+        format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def corporate_logo
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+  end
+  
+  def corporate_logo_update
+    corporate_admin = User.find_by(id: current_user.try(:id))
+    @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
+    respond_to do |format|
+      if @corporate_profile.update(company_information_params)
+        format.html { redirect_to corporate_account_options_path }
+      else
+        format.html { render :corporate_logo, layout: 'blank_layout' }
         format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
       end
     end
@@ -247,7 +265,7 @@ class AccountsController < AuthenticatedController
 
   def company_information_params
     params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
-                                              :zip, :state, :phone_number, :fax_number)
+                                              :zip, :state, :phone_number, :fax_number, :company_logo)
   end
 
   def corporate_options_params

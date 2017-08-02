@@ -179,11 +179,13 @@ Rails.application.routes.draw do
   get 'account/upgrade' => 'accounts#upgrade', as: :account_upgrade
   get 'account/payment' => 'accounts#payment', as: :payment
   get 'account/corporate_user_type' => 'accounts#corporate_user_type', as: :corporate_user_type
+  get 'account/corporate_logo' => 'accounts#corporate_logo', as: :corporate_logo
   get 'account/corporate_account_options' => 'accounts#corporate_account_options', as: :corporate_account_options
   get 'account/how_billing_works' => 'accounts#how_billing_works', as: :how_billing_works
   get 'account/billing_types' => 'accounts#billing_types', as: :billing_types
   get 'account/corporate_credit_card' => 'accounts#corporate_credit_card', as: :corporate_credit_card
   post 'account/corporate_user_type_update' => 'accounts#corporate_user_type_update', as: :corporate_user_type_update
+  post 'account/corporate_logo_update' => 'accounts#corporate_logo_update', as: :corporate_logo_update
   post 'account/corporate_account_options_update' => 'accounts#corporate_account_options_update', as: :corporate_account_options_update
   put 'account/terms_of_service_update' => 'accounts#terms_of_service_update', as: :account_term_of_service
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :account_phone_setup

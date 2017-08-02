@@ -1,0 +1,25 @@
+<% upload_button ||= false %>
+<% upload_button_class = (upload_button == true && @corporate_profile.company_logo.blank?) ? 'button blue-button big-button' : 'no-underline-link' %>
+
+<% if @corporate_profile.company_logo.blank? %>
+  <% no_logo = true %>
+<% end %>
+<div class="avatar-wrapper">
+  <% if @corporate_profile.company_logo.present? %>
+    <div id="new-avatar_account">
+      <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130", id: "image_view_account", alt: 'company logo') %>
+    </div>
+  <% else %>
+    <div id="new-avatar_account" style="display: none;">
+      <%= image_tag('', class: "max-w-130", id: "image_view_account", alt: 'company logo') %>
+    </div>
+  <% end %>
+</div>
+
+<% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account', false, #{upload_button}" %>
+
+<a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="<%= upload_button_class %>" id="action-avatar-link">Update Logo</a>
+<a onclick="clearAvatarPhoto('_account', <%= upload_button %>)" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link"
+<% if no_logo %> style="display: none;" <% end %>>Remove Logo</a>
+
+<%= f.text_field :company_logo, id: "company_logo_account", style: "display: none;" %>

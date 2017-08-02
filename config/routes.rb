@@ -386,5 +386,9 @@ Rails.application.routes.draw do
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account
   put '/corporate', to: 'corporate_accounts#update', as: :update_corporate_account
   resources :corporate_accounts
-
+  
+  # Corporate Employee Accounts
+  post '/corporate_employee', to: 'corporate_employees#create', as: :create_corporate_employee
+  put '/corporate_employee', to: 'corporate_employees#update', as: :update_corporate_employee
+  resources :corporate_employees
 end

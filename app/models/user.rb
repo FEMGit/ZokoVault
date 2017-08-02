@@ -210,7 +210,7 @@ class User < ActiveRecord::Base
   def confirm_email!
     @confirm_email = true
   end
-
+  
   before_create { set_as_admin }
   before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
@@ -225,7 +225,7 @@ class User < ActiveRecord::Base
   def confirm_email?
     @confirm_email == true
   end
-
+  
   private
   
   def email_is_valid?

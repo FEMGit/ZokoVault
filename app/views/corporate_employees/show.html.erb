@@ -1,0 +1,23 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<%= link_to edit_corporate_employee_path, class: "edit-link mrg-top pr-10" do %>
+  <span class="circle-button">
+  <svg class="icon circle-icon">
+    <use xlink:href="#icon-pencil-1"></use>
+  </svg>
+  </span>Edit
+<% end %>
+<h1>Employee Information</h1>
+
+<div class="card mb-30">
+  <label>Name</label>
+  <p><%= @corporate_contact.user_profile.name %></p>
+
+  <label>Email Address</label>
+  <p><%= @corporate_contact.emailaddress %></p>
+
+  <% if @corporate_contact.user_profile.two_factor_phone_number.present? %>
+    <label>Phone</label>
+    <p><%= @corporate_contact.user_profile.two_factor_phone_number %><span class="phone-type">mobile</span></p>
+  <% end %>
+</div>

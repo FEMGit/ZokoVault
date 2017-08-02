@@ -1,0 +1,40 @@
+<h1>Employee Accounts</h1>
+<%= link_to new_corporate_employee_path, class: "edit-link mobile-view" do %>
+  <span class="circle-button">
+  <svg class="icon circle-icon">
+    <use xlink:href="#icon-plus-1"></use>
+  </svg>
+  </span>Add Account
+<% end %>
+
+<table id="employee-accounts-table" class="mb-0">
+  <thead>
+    <tr>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Email</th>
+      <th>Accounts Managed</th>
+      <th class="nosort nosearch">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @corporate_contacts.each do |user| %>
+      <tr>
+        <td><%= user.lastname %></td>
+        <td><%= user.firstname %></td>
+        <td><%= mail_to user.emailaddress, user.emailaddress, class: 'no-underline-link' %></td>
+        <td><%= accounts_managed(user) %></td>
+        <td class="details-col">
+          <%= link_to 'Details', corporate_employee_path(user.user_profile_id), class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#employee-accounts-table', [ [25, 50, 100], 'employees', [[1, 'asc']] ], [1, 3, 1])
+  });
+</script>

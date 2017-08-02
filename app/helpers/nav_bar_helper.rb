@@ -3,6 +3,10 @@ module NavBarHelper
     controller_names.any? { |controller_name| params[:controller] == controller_name }
   end
   
+  def action?(*action_names)
+    action_names.any? { |action_name| params[:action] == action_name }
+  end
+  
   def breadcrumb?(path)
     return false unless @breadcrumbs.present?
     @breadcrumbs.any? { |breadcrumb| breadcrumb.path == path }

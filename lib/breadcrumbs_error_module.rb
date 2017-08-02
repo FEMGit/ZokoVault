@@ -66,6 +66,14 @@ module BreadcrumbsErrorModule
     end
     edit_crumbs_set
   end
+  
+  def corporate_employee_error_breadcrumb_update
+    breadcrumbs.clear
+    set_corporate_contact_by_user_profile if @path[:action].eql? :edit
+    add_breadcrumb "Employee Accounts", :corporate_employees_path if ([:new, :edit, :index].include? @path[:action])
+    set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
 
   private
 

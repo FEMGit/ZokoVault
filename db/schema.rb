@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170726025600) do
+ActiveRecord::Schema.define(version: 20170802090626) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -108,6 +109,7 @@ ActiveRecord::Schema.define(version: 20170726025600) do
     t.integer  "corporate_admin_id"
     t.integer  "user_account_id"
     t.datetime "confirmation_sent_at"
+    t.integer  "account_type"
   end
 
   add_index "corporate_admin_account_users", ["corporate_admin_id"], name: "index_corporate_admin_account_users_on_corporate_admin_id", using: :btree

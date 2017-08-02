@@ -1,11 +1,23 @@
 <div class="card mb-30 min-w-330">
   <h3>Subscription Details</h3>
   <section class="bb-gray-light-dashed mb-10">
-    <% plan = StripeSubscription.yearly_plan %>
-    <%= hidden_field_tag 'user[stripe_subscription_attributes][plan_id]', plan.id %>
-    <div class="h-28 overflow-hidden inline-block"><%= plan.name %></div>
-    <% price = (plan.amount / 100.0).round(2) %>
-    <span class="fr" id="subscription-price">$<%= price %></span>
+    <%
+      plans = StripeSubscription.active_plans.map do |plan|
+        price = (plan.amount / 100.0).round(2)
+        [plan.name, plan.id, {:"data-price" => price}]
+      end
+      selected_id = plans[0][1]
+      start_price = plans[0][2][:"data-price"]
+    %>
+    <div class='styled-select inline-block'>
+      <%= select_tag(
+            "user[stripe_subscription_attributes][plan_id]",
+            options_for_select(plans, selected_id),
+            onchange: "updateSubscription(this)"
+          )
+      %>
+    </div>
+    <span class="fr" id="subscription-price">$<%= start_price %></span>
     <span class="clear"></span>
   </section>
 
@@ -16,7 +28,7 @@
 
   <section class="bb-gray-light pb-10 mb-10">
     <span class="bold">Total</span>
-    <span class="fr" id="subscription-total">$<%= price %></span>
+    <span class="fr" id="subscription-total">$<%= start_price %></span>
   </section>
 
   <section>

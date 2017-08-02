@@ -168,17 +168,30 @@ class AccountSettingsController < AuthenticatedController
     head status
   end
 
+  def store_corporate_payment
+    token = params[:stripeToken]
+    if token.present?
+      customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
+      (redirect_to (session[:ret_url] || root_path) and return) unless update_customer_information(customer, token)
+    end
+    redirect_to corporate_accounts_path
+  end
+
+  def update_customer_information(customer, token)
+    return nil unless customer.present?
+    fn = ->(err){ flash[:error] = err.message; nil }
+    source = StripeHelper.safe_request(on_failure: fn) { customer.sources.create(source: token) }
+    return nil unless source
+
+    customer.default_source = source.id
+    customer.save
+  end
+
   def update_payment
     token = params[:stripeToken]
     if token.present?
       customer = StripeService.ensure_stripe_customer(user: current_user)
-
-      fn = ->(err){ flash[:error] = err.message; nil }
-      source = StripeHelper.safe_request(on_failure: fn) { customer.sources.create(source: token) }
-      (redirect_to (session[:ret_url] || root_path) and return) unless source
-
-      customer.default_source = source.id
-      customer.save
+      (redirect_to (session[:ret_url] || root_path) and return) unless update_customer_information(customer, token)
       if customer.subscriptions.blank?
         plan = stripe_subscription_params[:plan_id]
         promo = stripe_subscription_params[:promo_code]

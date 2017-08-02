@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725044807) do
+ActiveRecord::Schema.define(version: 20170726025600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -94,12 +94,14 @@ ActiveRecord::Schema.define(version: 20170725044807) do
     t.string   "phone_number"
     t.string   "fax_number"
     t.string   "company_logo"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "contact_type"
     t.string   "relationship"
+    t.string   "stripe_customer_id"
   end
 
+  add_index "corporate_account_profiles", ["stripe_customer_id"], name: "index_corporate_account_profiles_on_stripe_customer_id", using: :btree
   add_index "corporate_account_profiles", ["user_id"], name: "index_corporate_account_profiles_on_user_id", using: :btree
 
   create_table "corporate_admin_account_users", id: false, force: :cascade do |t|

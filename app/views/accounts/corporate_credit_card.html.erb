@@ -1,0 +1,29 @@
+<div class="card max-w-1000-centered">
+  <div class="text-center">
+    <h4 class="fw-600 mb-30 clr-gray-dark-tinted">Enter Credit Card Information</h4>
+  
+    <p class="m-0-auto">Corporate accounts require a credit card on file. You will not be billed anything at this time.</p>
+  </div>
+  
+  <%= form_tag store_corporate_payment_path, { id: 'payment-form' } do %>
+    <div class="form-row mt-50 max-w-800 m-0-auto">
+      <label for="card-element">
+        Enter card details
+      </label>
+      <div id="card-element"></div>
+      <div id="card-errors" style="color: #E4584C"></div>
+    </div>
+    
+    <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+      <%= link_to 'Back', billing_types_path, class:"big-button outline-button padded f-left" %>
+      <%= submit_tag 'Continue', class: 'button big-button blue-button f-right' %>
+    </section>
+  <% end %>
+</div>
+
+<%= javascript_include_tag "https://js.stripe.com/v3/" %>
+<%= javascript_include_tag "stripe_elements_card" %>
+
+<script>
+  setupStripeCardEntryForm('<%= Rails.configuration.stripe[:publishable_key] %>')
+</script>

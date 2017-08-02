@@ -1,5 +1,12 @@
 class StripeService
-
+  def self.ensure_corporate_stripe_customer(user:)
+    return nil unless user.corporate_admin
+    customer = Stripe::Customer.create(
+      email: user.email, description: user.name, metadata: { user_id: user.id })
+    user.corporate_account_profile.update_attributes(:stripe_customer_id => customer.id)
+    customer
+  end
+  
   def self.ensure_stripe_customer(user:)
     return user.stripe_customer if user.stripe_customer
     customer = Stripe::Customer.create(

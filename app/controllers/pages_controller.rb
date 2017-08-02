@@ -262,10 +262,7 @@ class PagesController < HighVoltage::PagesController
   
   def set_documents_information(category_name, dropdown_option_names = nil)
     @category = Category.fetch(category_name.downcase)
-    @category_dropdown_options = dropdown_option_names.blank? ? Array.wrap(category_name) : dropdown_option_names
-    service = DocumentService.new(:category => category_name)
-    @card_names = service.get_card_names(current_user, current_user)
-    @cards = service.get_card_values(current_user, current_user)
+    @category_dropdown_options, @card_names, @cards = TutorialService.set_documents_information(category_name, current_user, dropdown_option_names)
   end
   
   def set_contact_and_category_share(contact_collection, category_name)

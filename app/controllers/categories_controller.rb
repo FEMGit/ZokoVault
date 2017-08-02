@@ -1,5 +1,6 @@
 class CategoriesController < AuthenticatedController
   include BackPathHelper
+  include CategoriesHelper
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   layout "shared_view", only: [:shared_view_dashboard]
   
@@ -95,14 +96,16 @@ class CategoriesController < AuthenticatedController
   
   def wills_powers_of_attorney
     @category = Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)
-    
+    set_tutorial_in_progress(wills_poa_empty?)
+
     @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @wills = Will.for_user(current_user)
     @wtl_documents = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
+
     session[:ret_url] = "/wills_powers_of_attorney"
   end
-
+  
   def trusts_entities
     @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
@@ -216,4 +219,29 @@ class CategoriesController < AuthenticatedController
     Document.for_user(current_user).where(category: @category.name)
             .where.not(id: vault_documents.compact.map(&:id))
   end
+  
+  # Tutorial workflow integrated
+  
+  def set_tutorial_resources
+    @category_dropdown_options, @card_names, @cards = TutorialService.set_documents_information(@category.name, current_user)
+    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    @contact = Contact.new(user: current_user)
+    case @category.name
+      when Rails.application.config.x.WillsPoaCategory
+        set_will_tutorial_resources
+      when Rails.application.config.x.TrustsEntitiesCategory
+        set_trust_tutorial_resources
+      when Rails.application.config.x.InsuranceCategory
+        set_insurance_tutorial_resources
+    end
+  end
+  
+  def set_will_tutorial_resources
+    @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
+    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+  end
+  
+  def set_trust_tutorial_resources; end
+  
+  def set_insurance_tutorial_resources; end
 end

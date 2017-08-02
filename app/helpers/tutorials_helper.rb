@@ -1,4 +1,13 @@
 module TutorialsHelper
+  def empty_category_tutorial_id(category)
+    case category.name.downcase
+      when Rails.application.config.x.WillsPoaCategory.downcase
+        'my-will(s)'
+      else
+        ''
+    end
+  end
+  
   def tutorial_unfinished?
     return false unless current_user
     TutorialSelection.for_user(current_user).present?
@@ -164,6 +173,7 @@ module TutorialsHelper
   end
 
   def save_tutorial_progress
+    return if params[:next_tutorial_path].present?
     tutorial_selection = TutorialSelection.find_or_create_by(user_id: current_user.try(:id))
     tutorial_selection.tutorial_paths = session[:tutorial_paths].to_json
     tutorial_selection.last_tutorial_index = session[:tutorial_index]
@@ -175,7 +185,8 @@ module TutorialsHelper
       tutorial_selection = TutorialSelection.find_by(user: current_user)
       tutorial_paths = tutorial_selection.tutorial_paths.map { |x| x.symbolize_keys }
       tutorial_index = tutorial_selection.last_tutorial_index
-      if session[:tutorial_paths].blank?
+      if session[:tutorial_paths].blank? || session[:category_tutorial_in_progress].eql?(true)
+        session[:category_tutorial_in_progress] = false
         return if tutorial_paths == session[:tutorial_paths]
         session[:tutorial_paths] = tutorial_paths
         session[:tutorial_index] = tutorial_selection.last_tutorial_index
@@ -271,5 +282,50 @@ module TutorialsHelper
     last_tutorial_multiple_params = params.select { |k, _v| k.include? 'tutorial_multiple_types' }.to_a.last
     return nil if last_tutorial_multiple_params.blank?
     params.require(last_tutorial_multiple_params[0]).permit(types: [])
+  end
+
+  # Tutorial Category Integration
+  def tutorial_set_session(tutorial_id)
+    tutorial = Tutorial.find_by(name: tutorial_name(tutorial_id).split.map(&:capitalize).join(' '))
+    session[:tutorial_paths] = [{ tuto_id: 0, current_page: 0, tuto_name: 'tutorial_new' },
+                                { tuto_id: tutorial.id.to_s, current_page: "subtutorials_choice", tuto_name: tutorial_id}]
+    session[:tutorial_index] = 1
+  end
+
+  def set_tutorial_in_progress(empty_category_status)
+    if params[:tutorial_in_progress].present?
+      @tutorial_in_progress = params[:tutorial_in_progress].eql?('true') ? true : false
+    else
+      @tutorial_in_progress = false
+    end
+    
+    if empty_category_status && !@tutorial_in_progress.eql?(true)
+      tutorial_set_session(empty_category_tutorial_id(@category))
+      @tutorial_in_progress = true
+    end
+    
+    if @tutorial_in_progress.eql? true
+      category_tutorial_step
+      set_tutorial_resources
+    end
+  end
+
+  def category_tutorial_step
+    session[:category_tutorial_in_progress] = true
+    session[:tutorial_paths].uniq!
+
+    tuto_index = session[:tutorial_index]
+    @tutorial_id = session[:tutorial_paths].last[:tuto_name]
+    if session[:tutorial_paths][tuto_index].blank?
+      @tutorial_in_progress = false
+      tutorial_set_session(@tutorial_id)
+      tuto_index = session[:tutorial_index]
+    end
+
+    tuto_id = session[:tutorial_paths][tuto_index][:tuto_id]
+    @tuto_page = session[:tutorial_paths][tuto_index][:current_page]
+    @tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@tutorial_id)).first
+    @subtutorials = @tutorial.try(:subtutorials).try(:sort_by, &:id)
+                                                .try(:sort_by, &:position)
   end
 end

@@ -1,0 +1,10 @@
+<% continue_button_only ||= false %>
+<% f ||= nil %>
+<% skip_continue_equal ||= false %>
+<% next_tutorial_path ||= nil %>
+
+<% if continue_button_only.eql? true %>
+  <%= render partial: 'tutorials/buttons_section_continue', locals: { f: f, next_tutorial_path: next_tutorial_path } %>
+<% else %>
+  <%= render partial: 'tutorials/buttons_section', locals: { f: f, skip_continue_equal: skip_continue_equal } %>
+<% end %>

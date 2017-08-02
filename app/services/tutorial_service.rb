@@ -49,4 +49,12 @@ class TutorialService
       financial_provider.update(id: update_value[:id], name: update_value[:name])
     end
   end
+  
+  def self.set_documents_information(category_name, user, dropdown_option_names = nil)
+    @category_dropdown_options = dropdown_option_names.blank? ? Array.wrap(category_name) : dropdown_option_names
+    service = DocumentService.new(:category => category_name)
+    @card_names = service.get_card_names(user, user)
+    @cards = service.get_card_values(user, user)
+    [@category_dropdown_options, @card_names, @cards]
+  end
 end

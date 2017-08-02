@@ -1,0 +1,5 @@
+<% continue_button_only ||= false %>
+<% next_tutorial_path ||= root_path %>
+
+<%= render partial: "tutorials/#{@tutorial_id}/page_#{@tuto_page}", locals: { continue_button_only: true, next_tutorial_path: next_tutorial_path } %>
+<% session[:tutorial_index] += 1 %>

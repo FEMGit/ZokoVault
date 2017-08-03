@@ -154,4 +154,16 @@ class ShareService
     end
     return resources
   end
+
+  def self.append_primary_shares(user, shares_by_user)
+    user_share_ids = shares_by_user.map(&:first).flatten.compact.map(&:id)
+    current_user_contact_ids = Contact.where("emailaddress ilike ?", user.email).map(&:id)
+    users_primary_share = UserProfile.select { |x| !(x.primary_shared_with_ids & current_user_contact_ids).empty? }
+                                     .reject { |x| user_share_ids.include? x.user_id }
+                                     .map(&:user)
+    shares_by_user[:primary_shared_user] = []
+    users_primary_share.each do |primary_share|
+      shares_by_user[:primary_shared_user] << primary_share
+    end
+  end
 end

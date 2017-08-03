@@ -54,6 +54,10 @@ class CorporateAccountsController < AuthenticatedController
     @corporate_contacts = Contact.for_user(current_user)
                                  .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
     @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
+    
+    shares_by_user = policy_scope(Share).each { |s| authorize s }.group_by(&:user)
+    ShareService.append_primary_shares(current_user, shares_by_user)
+    @shares_by_user = (shares_by_user[:primary_shared_user] + shares_by_user.keys.select { |x| x.is_a? User }).uniq.reject { |sh| corporate_users_emails.include? sh.email.downcase }
   end
   
   def account_settings

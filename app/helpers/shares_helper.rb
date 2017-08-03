@@ -5,7 +5,7 @@ module SharesHelper
   
   def exit_shares_path
     return rooth_path if @shared_user.blank?
-    if @shared_user.corporate_user_by_admin?(current_user)
+    if current_user.corporate_admin
       corporate_accounts_path
     else
       shares_path

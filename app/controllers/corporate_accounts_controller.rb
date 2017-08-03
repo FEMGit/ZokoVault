@@ -47,7 +47,7 @@ class CorporateAccountsController < CorporateBaseController
   
   def index
     super(account_type: CorporateAdminAccountUser.client_type)
-    corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user }
+    corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == corporate_owner }
                                                       .map(&:user_account).map(&:email).map(&:downcase)
     shares_by_user = policy_scope(Share).each { |s| authorize s }.group_by(&:user)
     ShareService.append_primary_shares(current_user, shares_by_user)
@@ -72,7 +72,9 @@ class CorporateAccountsController < CorporateBaseController
     @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
   end
   
-  def show; end
+  def show
+    authorize @corporate_contact
+  end
   
   def new
     @user_account = User.new(user_profile: UserProfile.new)
@@ -99,7 +101,9 @@ class CorporateAccountsController < CorporateBaseController
     end
   end
   
-  def edit; end
+  def edit
+    authorize @corporate_contact
+  end
   
   def create
     @user_account = User.new(user_account_params)
@@ -110,11 +114,19 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def update
+    @corporate_contact = Contact.where(user_profile_id: @corporate_profile.id, user_id: corporate_owner.id).first
+    authorize @corporate_contact
     super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_account_path(@corporate_profile) || corporate_accounts_path,
           params_to_update: user_account_params.except(:email))
   end
   
   private
+  
+  def add_account_user_to_employee(user)
+    CorporateEmployeeAccountUser.create!(:corporate_employee => current_user, :user_account => user)
+    corporate_emplooyee_contact = create_corporate_employee_contact_for_user_account(corporate_employee: current_user, user_account: user)
+    CorporateAdminService.add_category_share_for_corporate_employee(corporate_employee_contact: corporate_emplooyee_contact, corporate_admin: corporate_owner, user: user)
+  end
   
   def corporate_settings_params
     params.require(:corporate_account_profile).permit(:business_name, :web_address, :street_address, :city,
@@ -122,7 +134,7 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def user_accounts
-    CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user && x.account_type == CorporateAdminAccountUser.client_type }.map(&:user_account)
+    CorporateAdminAccountUser.select { |x| x.corporate_admin == corporate_owner && x.account_type == CorporateAdminAccountUser.client_type }.map(&:user_account)
   end
   
   def user_account_params
@@ -134,11 +146,11 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def error_path(action)
-    @path = ReturnPathService.error_path(current_user, current_user, params[:controller], action)
+    @path = ReturnPathService.error_path(corporate_owner, corporate_owner, params[:controller], action)
     corporate_account_error_breadcrumb_update
   end
 
   def success_path(path)
-    ReturnPathService.success_path(current_user, current_user, path, path)
+    ReturnPathService.success_path(corporate_owner, corporate_owner, path, path)
   end
 end

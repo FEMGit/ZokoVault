@@ -22,6 +22,26 @@
   <% end %>
 </div>
 
+<h1>Accounts Managed By User</h1>
+<table id="account-managed-table">
+  <thead>
+    <tr>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th width="50%;">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employee_accounts.each do |account| %>
+      <tr>
+        <td><%= account.first_name %></td>
+        <td><%= account.last_name %></td>
+        <td><%= mail_to account.email, account.email, class: 'no-underline-link' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <h1>Team User Actions</h1>
 <div class="card">
   <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
@@ -54,3 +74,9 @@
 
 <div id="email-preview-section">
 </div>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#account-managed-table', [ [25, 50, 100], 'accounts', [[0, 'asc']] ])
+  });
+</script>

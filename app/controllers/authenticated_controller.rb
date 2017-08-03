@@ -74,14 +74,18 @@ class AuthenticatedController < ApplicationController
   def permitted_page_trial_expired_user?
     controller_name && UserPageAccess::CONTROLLERS[:trial_expired].include?(controller_name)
   end
-  
-  def permitted_page_corporate_admin_user?
-    controller_name && UserPageAccess::CONTROLLERS[:corporate].include?(controller_name)
-  end
-  
+
   def permitted_page_corporate_employee_user?
-    controller_name && (UserPageAccess::CONTROLLERS[:corporate_employee].include?(controller_name) &&
-                        !contains_paths?(black_listed(type: :corporate_employee), request.path_info))
+    shared_user_id = params[:shared_user_id]
+    ((controller_name && shared_user_id.blank? && UserPageAccess::CONTROLLERS[:corporate_employee][:general_view].include?(controller_name)) ||
+     (controller_name && shared_user_id.present? && UserPageAccess::CONTROLLERS[:corporate_employee][:shared_view].include?(controller_name))) &&
+       !contains_paths?(black_listed(type: :corporate_employee), request.path_info)
+  end
+
+  def permitted_page_corporate_admin_user?
+    shared_user_id = params[:shared_user_id]
+    (controller_name && shared_user_id.blank? && UserPageAccess::CONTROLLERS[:corporate][:general_view].include?(controller_name)) ||
+      (controller_name && shared_user_id.present? && UserPageAccess::CONTROLLERS[:corporate][:shared_view].include?(controller_name))
   end
 
   def missing_mfa?

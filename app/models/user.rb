@@ -103,6 +103,11 @@ class User < ActiveRecord::Base
     CorporateAdminAccountUser.select { |ca| ca.corporate_admin == self }.map(&:user_account)
   end
   
+  def employee_users
+    return [] unless corporate_employee?
+    CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account)
+  end
+  
   def corporate_employee?
     corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
     corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)

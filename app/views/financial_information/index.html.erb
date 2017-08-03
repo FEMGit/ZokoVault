@@ -1,4 +1,4 @@
-<% if financial_information_empty? || @tutorial_in_progress %>
+<% if (financial_information_empty? && @shared_user.blank?) || @tutorial_in_progress %>
   <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: financial_information_path(tutorial_in_progress: true) } %>
 <% else %>
   <% if category_shared?(resource_owner, @category.name) %>

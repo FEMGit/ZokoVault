@@ -1,11 +1,9 @@
 class UserProfile < ActiveRecord::Base
   validates_with DateOfBirthValidator, fields: [:date_of_birth]
   scope :for_user, ->(user) { where(user: user).first }
-  attr_accessor :validate_two_factor_phone_presence
  
   validates :email, :email_format => { :message => "Email should contain @ and domain like .com" }, on: :update
   validate :email_is_valid?, on: :update
-  validates_presence_of :two_factor_phone_number, message: 'Required', if: :validate_two_factor_phone_presence?
 
   belongs_to :user
   has_many :employers
@@ -113,18 +111,10 @@ class UserProfile < ActiveRecord::Base
     self.mfa_frequency == "new_ip"
   end
   
-  def validate_two_factor_phone_presence!
-    @validate_two_factor_phone_presence = true
-  end
-  
   private
   
   def email_is_valid?
     MailService.email_is_valid?(email, errors, :email)
-  end
-  
-  def validate_two_factor_phone_presence?
-    @validate_two_factor_phone_presence == true
   end
 
   def format_phone_number(raw_phone_number)

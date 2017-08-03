@@ -30,17 +30,44 @@
       <% end %>
       <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
       
-      <%= f.fields_for :user_profile do |user_profile_form| %>
-        <%= user_profile_form.label :two_factor_phone_number, 'Cell Phone Number' %><span class="required">Required</span>
-        <% phone_error = errors ? errors.messages[:"user_profile.two_factor_phone_number"] : "" %>
-        <% if errors && phone_error.present? && phone_error.first %>
-          <span class="error-label"> - <%= errors.messages[:"user_profile.two_factor_phone_number"].first %></span>
-          <% phone_additional_classes = "input-error" %>
-        <% else %>
-          <% phone_additional_classes = "" %>
+      <% if @user_account.confirm_email %>
+        <%= f.label :email, 'Verify Email Address' %><span class="required">Required</span>
+        <% if errors && errors.messages[:email_confirmation] %>
+          <span class="error-label"> - <%= errors.messages[:email_confirmation].first %></span>
         <% end %>
-        <%= render partial: 'layouts/phone_number', locals: { f: user_profile_form, phone: :two_factor_phone_number, phone_additional_classes: phone_additional_classes } %>
+        <%= f.email_field :email_confirmation, { class: ("input-error" if errors && errors.messages[:email_confirmation].present?), :maxlength => get_max_length(:default) } %>
       <% end %>
     </div>
+    
+    <h1>Accounts Managed By User</h1>
+    <table>
+      <tr>
+        <th class="w-10"></th>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Email</th>
+      </tr>
+      <% @corporate_contacts.each do |contact| %>
+        <tr>
+          <td class="w-10">
+            <ul class="check-list">
+              <li class="check-list">
+                <label>
+                  <%= check_box_tag "corporate_employee[user_accounts][#{contact.emailaddress}]",
+                    contact.emailaddress,
+                    @employee_account_user_emails.include?(contact.emailaddress.downcase), {}
+                  %>
+                <span class="mb-10"></span>
+              </label>
+              </li>
+            </ul>
+          </td>
+          <td><%= contact.firstname %></td>
+          <td><%= contact.lastname %></td>
+          <td><%= mail_to contact.emailaddress, contact.emailaddress, class: 'no-underline-link' %></td>
+        </tr>
+      <% end %>
+    </table>
+    
     <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_employees_path, f: f } %>
 <% end %>

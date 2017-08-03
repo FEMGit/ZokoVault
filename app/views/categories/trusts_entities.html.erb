@@ -1,4 +1,4 @@
-<% if trusts_entities_empty? || @tutorial_in_progress %>
+<% if (trusts_entities_empty? && @shared_user.blank?) || @tutorial_in_progress %>
   <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: trusts_entities_path(tutorial_in_progress: true) } %>
 <% else %>
 

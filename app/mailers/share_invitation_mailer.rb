@@ -13,7 +13,7 @@ class ShareInvitationMailer < ApplicationMailer
     mail(to: @user.email, subject: "#{resource_owner.name} shared with you on ZokuVault!", :cc => resource_owner.email)
   end
   
-  def corporate_user(corporate_contact, corporate_admin)
+  def corporate_user(corporate_contact, corporate_user)
     @contact = corporate_contact
     @user = User.find_by(email: corporate_contact.emailaddress)
     @token_raw, token_enc = Devise.token_generator.generate(User, :reset_password_token)
@@ -21,6 +21,13 @@ class ShareInvitationMailer < ApplicationMailer
     @user.reset_password_sent_at = Time.now
     @user.confirmed_at = Time.now
     @user.save(validate: false)
+    corporate_admin =
+      if corporate_user.corporate_employee?
+        corporate_user.corporate_admin_by_user
+      elsif corporate_user.corporate_admin
+        corporate_user
+      end
+    
     @corporate_admin = corporate_admin
     @corporate_profile = corporate_admin.corporate_account_profile
     mail(to: @contact.emailaddress, subject: "#{corporate_admin.name} created an account for you on ZokuVault!")

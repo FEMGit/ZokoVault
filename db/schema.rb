@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802090626) do
+ActiveRecord::Schema.define(version: 20170804035427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,14 @@ ActiveRecord::Schema.define(version: 20170802090626) do
 
   add_index "corporate_admin_categories", ["category_id"], name: "index_corporate_admin_categories_on_category_id", using: :btree
   add_index "corporate_admin_categories", ["user_id"], name: "index_corporate_admin_categories_on_user_id", using: :btree
+
+  create_table "corporate_employee_account_users", force: :cascade do |t|
+    t.integer "corporate_employee_id"
+    t.integer "user_account_id"
+  end
+
+  add_index "corporate_employee_account_users", ["corporate_employee_id"], name: "index_corporate_employee_account_users_on_corporate_employee_id", using: :btree
+  add_index "corporate_employee_account_users", ["user_account_id"], name: "index_corporate_employee_account_users_on_user_account_id", using: :btree
 
   create_table "current_user_subscription_markers", id: false, force: :cascade do |t|
     t.integer "user_id",              null: false
@@ -413,6 +421,20 @@ ActiveRecord::Schema.define(version: 20170802090626) do
   end
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
+  create_table "online_accounts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "website"
+    t.string   "username"
+    t.binary   "password"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "category_id"
+  end
+
+  add_index "online_accounts", ["category_id"], name: "index_online_accounts_on_category_id", using: :btree
+  add_index "online_accounts", ["user_id"], name: "index_online_accounts_on_user_id", using: :btree
 
   create_table "payments", force: :cascade do |t|
     t.integer  "user_id"
@@ -811,6 +833,7 @@ ActiveRecord::Schema.define(version: 20170802090626) do
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "fundings", "user_subscriptions"
+  add_foreign_key "online_accounts", "users"
   add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"

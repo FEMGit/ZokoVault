@@ -389,6 +389,7 @@ Rails.application.routes.draw do
   
   # Corporate Employee Accounts
   post '/corporate_employee', to: 'corporate_employees#create', as: :create_corporate_employee
+  post '/corporate_employee/remove_employee/:contact_id', to: 'corporate_employees#remove_employee', as: :corporate_employee_remove
   put '/corporate_employee', to: 'corporate_employees#update', as: :update_corporate_employee
   resources :corporate_employees
 end

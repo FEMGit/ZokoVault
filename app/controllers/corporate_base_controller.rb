@@ -1,5 +1,5 @@
 class CorporateBaseController < AuthenticatedController
-  before_action :redirect_unless_corporate_admin
+  before_action :redirect_unless_corporate
   before_action :corporate_activated?, except: [:index]
   before_action :set_corporate_contact_by_user_profile, only: [:edit, :show]
   before_action :set_corporate_user_by_user_profile, :set_corporate_profile, only: [:edit, :update]
@@ -19,7 +19,12 @@ class CorporateBaseController < AuthenticatedController
                                                       .map(&:user_account).map(&:email).map(&:downcase)
     @corporate_contacts = Contact.for_user(current_user)
                                  .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
-    @corporate_profile = CorporateAccountProfile.find_by(user: current_user)
+    @corporate_profile =
+      if current_user.corporate_admin
+        CorporateAccountProfile.find_by(user: current_user)
+      elsif current_user.corporate_employee?
+        CorporateAccountProfile.find_by(user: current_user.corporate_admin_by_user)
+      end
   end
   
   def create(account_type:, success_return_path:)
@@ -56,15 +61,14 @@ class CorporateBaseController < AuthenticatedController
   end
   
   def send_invitation
-    contact_id = params[:contact_id]
-    return unless contact_id.present? &&
-           (corporate_contact = Contact.find_by(id: contact_id)).present?
-    corporate_profile = corporate_contact.user_profile
+    corporate_contact = corporate_contact_by_contact_id(params[:contact_id])
+    corporate_profile = corporate_contact.try(:user_profile)
+    corporate_type = corporate_profile.user.corporate_type
     respond_to do |format|
       if ShareInvitationService.send_corporate_invitation(corporate_contact, current_user)
-        format.html { redirect_to corporate_account_path(corporate_profile), flash: { success: 'Invitation has been successfully sent.' } }
+        format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { success: 'Invitation has been successfully sent.' } }
       else
-        format.html { redirect_to corporate_account_path(corporate_profile), flash: { error: 'Error sending an invitation, please try again later.' } }
+        format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { error: 'Error sending an invitation, please try again later.' } }
       end
     end
   end
@@ -78,13 +82,23 @@ class CorporateBaseController < AuthenticatedController
   
   private
   
-  def redirect_unless_corporate_admin
-    redirect_to root_path unless current_user.present? && current_user.corporate_admin
+  def redirect_unless_corporate
+    redirect_to root_path unless current_user.present? && (current_user.corporate_admin || current_user.corporate_employee?)
   end
   
   def corporate_activated?
+    return true if current_user.present? && current_user.corporate_employee?
     redirect_to corporate_accounts_path unless current_user.present? && current_user.corporate_admin &&
                                                current_user.corporate_activated
+  end
+  
+  def details_path(account_type, corporate_profile)
+    case account_type
+      when CorporateAdminAccountUser.employee_type
+        corporate_employee_path(corporate_profile)
+      when CorporateAdminAccountUser.client_type
+        corporate_account_path(corporate_profile)
+    end
   end
   
   def create_corporate_admin_contact_for_user_account
@@ -156,5 +170,11 @@ class CorporateBaseController < AuthenticatedController
   
   def set_corporate_profile
     @corporate_profile = Contact.for_user(current_user).find_by(emailaddress: @user_account.email).user_profile
+  end
+  
+  def corporate_contact_by_contact_id(contact_id)
+    return nil unless contact_id.present? &&
+           (corporate_contact = Contact.find_by(id: contact_id)).present?
+    corporate_contact
   end
 end

@@ -5,11 +5,12 @@ module UsersHelper
   
   def corporate?
     return false unless current_user.present?
-    current_user.present? && current_user.corporate_admin
+    current_user.present? && (current_user.corporate_admin || current_user.corporate_employee?)
   end
   
   def corporate_active?
     return false unless current_user.present?
+    return true if current_user.corporate_employee?
     current_user.present? && current_user.corporate_admin &&
       current_user.corporate_activated
   end

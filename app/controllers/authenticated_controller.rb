@@ -46,7 +46,7 @@ class AuthenticatedController < ApplicationController
   end
 
   def is_free_user?
-    current_user && current_user.setup_complete? && current_user.free?
+    current_user && current_user.setup_complete? && current_user.free? && !corporate?
   end
 
   def is_trial_user?

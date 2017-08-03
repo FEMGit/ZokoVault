@@ -103,8 +103,18 @@ class User < ActiveRecord::Base
     CorporateAdminAccountUser.select { |ca| ca.corporate_admin == self }.map(&:user_account)
   end
   
+  def corporate_employee?
+    corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
+    corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
+  end
+  
   def corporate_user?
     CorporateAdminAccountUser.find_by(user_account_id: id).present?
+  end
+  
+  def corporate_type
+    corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
+    CorporateAdminAccountUser.find_by(user_account_id: id).try(:account_type)
   end
   
   def logged_in_at_least_once?

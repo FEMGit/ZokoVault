@@ -14,18 +14,27 @@
     </svg>Corporate Dashboard
   <% end %>
   
-  <% employee_account_current = 'active' if (current_page?(corporate_employees_url) || controller?('corporate_employees') || breadcrumb?(corporate_employees_path) || breadcrumb?(:corporate_employees_path)) %>
-  <%= link_to corporate_employees_path, class: "main-nav #{employee_account_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-share-3"></use>
-    </svg>Employee Accounts
-  <% end %>
-  
-  <% corporate_account_settings_current = 'active' if current_page?(corporate_account_settings_url) || (controller?('corporate_accounts') && action?('account_settings', 'edit_account_settings', 'update_account_settings')) || breadcrumb?(corporate_account_settings_path) || breadcrumb?(:corporate_account_settings_path) %>
-  <%= link_to corporate_account_settings_path, class: "main-nav #{corporate_account_settings_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-settings-1"></use>
-    </svg>Corporate Account Settings
+  <% if current_user.corporate_admin? %>
+    <% employee_account_current = 'active' if (current_page?(corporate_employees_url) || controller?('corporate_employees') || breadcrumb?(corporate_employees_path) || breadcrumb?(:corporate_employees_path)) %>
+    <%= link_to corporate_employees_path, class: "main-nav #{employee_account_current}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-share-3"></use>
+      </svg>Employee Accounts
+    <% end %>
+
+    <% corporate_account_settings_current = 'active' if current_page?(corporate_account_settings_url) || (controller?('corporate_accounts') && action?('account_settings', 'edit_account_settings', 'update_account_settings')) || breadcrumb?(corporate_account_settings_path) || breadcrumb?(:corporate_account_settings_path) %>
+    <%= link_to corporate_account_settings_path, class: "main-nav #{corporate_account_settings_current}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-settings-1"></use>
+      </svg>Corporate Account Settings
+    <% end %>
+    
+    <% billing_information_current = 'active' if current_page?(corporate_billing_information_url) || (controller?('corporate_accounts') && action?('billing_information')) || breadcrumb?(:corporate_billing_information_url) %>
+    <%= link_to corporate_billing_information_path, class: "main-nav #{billing_information_current}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-money-1"></use>
+      </svg>Billing Information
+    <% end %>
   <% end %>
   
 
@@ -34,13 +43,6 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
-  <% end %>
-  
-  <% billing_information_current = 'active' if current_page?(corporate_billing_information_url) || (controller?('corporate_accounts') && action?('billing_information')) || breadcrumb?(:corporate_billing_information_url) %>
-  <%= link_to corporate_billing_information_path, class: "main-nav #{billing_information_current}" do %>
-    <svg class="icon nav-icon">
-      <use xlink:href="#icon-money-1"></use>
-    </svg>Billing Information
   <% end %>
   
   <% account_traffic_current = 'active' if (current_page?(user_account_traffics_path))%>

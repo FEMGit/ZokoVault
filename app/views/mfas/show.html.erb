@@ -1,6 +1,10 @@
 <section class="card login-card" >
   <%= form_tag mfa_path, id: 'mfa-form' do %>
+    <%= hidden_field_tag :shared_user_id, @shared_user_id, id: 'shared-user-id' %>
     <h2>Two-Factor Authentication</h2>
+    <% if @shared_user_id.present? && !current_user.mfa_verify? %>
+      <p>Two-factor authentication is required to access shared materials on ZokuVault. A code has been sent to your mobile device.</p>
+    <% end %>
     <div class="flash-alert-static flash static" style="display:none;"><%= alert %></div>
     <% if @phone_number_error %>
       <div class="mb-10" >
@@ -69,10 +73,12 @@ function sendCode() {
 
 function verifyCode() {
   var data = $('#user_user_profile_attributes_phone_code').serialize();
+  var sharedUser = $("#shared-user-id").serialize()
+  var serializedData = data + "&" + sharedUser
   $.post("<%= mfa_verify_code_account_path %>",
-      data,
+      serializedData,
       function() {
-        window.location.replace('<%= return_to_path || root_path %>' + "?mfa_submit=true")
+        window.location.replace('<%= @shared_user_id.present? ? shared_view_dashboard_path(@shared_user_id) : (return_to_path || root_path) %>' + "?mfa_submit=true")
       })
   .fail(function(data) {
     if (data.responseText) {

@@ -5,6 +5,7 @@ class MfasController < AuthenticatedController
 
   def show
     MultifactorAuthenticator.new(current_user).send_code
+    @shared_user_id = params[:shared_user_id]
   rescue
     @phone_number_error = true
   end
@@ -31,7 +32,9 @@ class MfasController < AuthenticatedController
   end
 
   def not_verified!
-    if session[:mfa]
+    if params[:shared_user_id].present? && session[:mfa_shared]
+      redirect_to shared_view_dashboard_path(params[:shared_user_id])
+    elsif params[:shared_user_id].blank? && session[:mfa]
       redirect_to root_path
     end
   end

@@ -208,7 +208,11 @@ class AccountsController < AuthenticatedController
 
   def mfa_verify_code
     status = if code_verified?
-               session[:mfa] = true
+               if shared_user_params.present?
+                 session[:mfa_shared] = true
+               else
+                 session[:mfa] = true
+               end
                current_user.update(:mfa_failed_attempts => 0)
                :ok
              else
@@ -252,6 +256,11 @@ class AccountsController < AuthenticatedController
 
   def corporate_options_params
     params.require(:corporate_account_options).permit(:provide_to, services: [])
+  end
+
+  def shared_user_params
+    return nil unless params[:shared_user_id].present?
+    params[:shared_user_id]
   end
 
   def skip_param

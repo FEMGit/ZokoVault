@@ -7,7 +7,7 @@
     </svg>
   </a>
 
-  <% corporate_account_current = 'active' if (current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path)) && !action?('account_settings', 'edit_account_settings', 'update_account_settings') %>
+  <% corporate_account_current = 'active' if (current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path)) && !action?('account_settings', 'edit_account_settings', 'update_account_settings', 'billing_information') %>
   <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-key-1"></use>
@@ -27,6 +27,13 @@
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
+  <% end %>
+  
+  <% billing_information_current = 'active' if current_page?(corporate_billing_information_url) || (controller?('corporate_accounts') && action?('billing_information')) || breadcrumb?(:corporate_billing_information_url) %>
+  <%= link_to corporate_billing_information_path, class: "main-nav #{billing_information_current}" do %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-money-1"></use>
+    </svg>Billing Information
   <% end %>
   
   <% account_traffic_current = 'active' if (current_page?(user_account_traffics_path))%>

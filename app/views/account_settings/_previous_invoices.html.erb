@@ -1,0 +1,24 @@
+<% if invoices.any? %>
+  <table id="documents-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Paid on</th>
+        <th>Payment Amount</th>
+        <th>Invoice</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% invoices && invoices.each do |invoice| %>
+        <tr>
+          <td><%= invoice.lines.data.first.plan.name %></td>
+          <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
+          <td><%= "$#{invoice.total / 100.0}" %></td>
+          <td><%= link_to 'Invoice', invoice_information_path(invoice.id), class: 'no-underline-link', target: :_blank %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>There are no invoices for your account.</p>
+<% end %>

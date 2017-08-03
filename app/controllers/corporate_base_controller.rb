@@ -82,6 +82,10 @@ class CorporateBaseController < AuthenticatedController
   
   private
   
+  def redirect_if_corporate_employee
+    redirect_to root_path if current_user.present? && current_user.corporate_employee?
+  end
+  
   def redirect_unless_corporate
     redirect_to root_path unless current_user.present? && (current_user.corporate_admin || current_user.corporate_employee?)
   end

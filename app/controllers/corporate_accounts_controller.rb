@@ -1,4 +1,6 @@
 class CorporateAccountsController < CorporateBaseController
+  before_action :redirect_if_corporate_employee, only: [:account_settings, :edit_account_settings, :update_account_settings,
+                                                        :billing_information]
   before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
   

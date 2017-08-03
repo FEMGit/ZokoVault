@@ -108,6 +108,7 @@ class CategoriesController < AuthenticatedController
   
   def trusts_entities
     @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
+    set_tutorial_in_progress(trusts_entities_empty?)
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     
     @trusts = Trust.for_user(current_user)
@@ -241,7 +242,9 @@ class CategoriesController < AuthenticatedController
     @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
   end
   
-  def set_trust_tutorial_resources; end
+  def set_trust_tutorial_resources
+    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+  end
   
   def set_insurance_tutorial_resources; end
 end

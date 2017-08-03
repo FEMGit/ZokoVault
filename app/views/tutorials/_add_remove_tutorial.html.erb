@@ -2,6 +2,8 @@
 <% bottom_description ||= "" %>
 <% multiple ||= false %>
 <% title ||= "" %>
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
 
 <button class="primary-button big-button hidden unsaved-changes-modal" data-modal-id="wizard-modal"></button>
 <div id="wizard-modal" class="modal wizard-modal modal-no-js confirmation-modal">
@@ -25,6 +27,7 @@
   <%= form_for form_for_object, url: url_for(action: :create, controller: form_controller) do |f| %>
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :page_number, @page_number %>
+    <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
 
     <% if wide %>
       <div class="input-pair wide mobile-hide h-25">
@@ -81,7 +84,7 @@
 
     <p class="mt-30 mb-0"><%= bottom_description %></p>
 
-    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+    <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path, f: f } %>
   <% end %>
 </div>
 

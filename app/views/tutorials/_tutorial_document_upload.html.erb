@@ -1,6 +1,6 @@
 <% title ||= "" %>
 <% description ||= "" %>
-<% continue_button_only ||= false %>
+<% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
@@ -62,7 +62,7 @@
      </ol>
     </div>
     
-    <%= render partial: 'tutorials/buttons', locals: { continue_button_only: continue_button_only, next_tutorial_path: next_tutorial_path } %>
+    <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path } %>
 </div>
 
 <div id="document-information" class="modal medium-modal card pb-20 tuts-doc-modal" style="display: none;">

@@ -1,6 +1,6 @@
 <% description ||= "" %>
 <% title ||= "" %>
-<% continue_button_only ||= false %>
+<% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered ajax-pages-form text-center">
@@ -40,6 +40,6 @@
       <% end %>
 
     </ul>
-    <%= render partial: 'tutorials/buttons', locals: { f: f, continue_button_only: continue_button_only } %>
+    <%= render partial: 'tutorials/buttons', locals: { f: f, category_empty: category_empty } %>
   <% end %>
 </div>

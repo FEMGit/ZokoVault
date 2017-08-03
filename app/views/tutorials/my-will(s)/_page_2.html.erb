@@ -1,4 +1,4 @@
-<% continue_button_only ||= false %>
+<% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
 <%= render partial: 'tutorials/tutorial_document_upload',
@@ -8,5 +8,5 @@
                     table_title: "Your Digital Wills",
                     flash_message_success: "You uploaded a Will. Upload another or click Continue.",
                     upload_button_text: "Upload Will",
-                    continue_button_only: continue_button_only,
+                    category_empty: category_empty,
                     next_tutorial_path: next_tutorial_path } %>

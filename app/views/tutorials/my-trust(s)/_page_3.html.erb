@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%= render  partial: 'tutorials/tutorial_contact_create',
             locals: { title: 'Add Your Attorney',
                       description: 'Adding your attorney helps your family know who to contact for questions about your trusts and family entities.',
@@ -5,7 +8,9 @@
                                contacts: @trust_planning_attorneys,
                                table_id: 'attorney-table' },
                       flash_message: 'You added an Attorney! Add another one of your Trust Planning Attorneys, or click Next.' ,
-                      button_text: 'Add Attorney' } %>
+                      button_text: 'Add Attorney',
+                      category_empty: category_empty,
+                      next_tutorial_path: next_tutorial_path } %>
 
 <script>
   var createContact = function() {

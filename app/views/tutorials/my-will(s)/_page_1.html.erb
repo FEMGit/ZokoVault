@@ -1,4 +1,4 @@
-<% continue_button_only ||= false %>
+<% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
 <%= render partial: 'tutorials/tutorial_contact_create',
@@ -9,7 +9,7 @@
                      table_id: 'attorney-table' },
             flash_message: 'You added an Attorney! Add another one of your Estate Planning Attorneys, or click Continue.' ,
             button_text: 'Add Attorney',
-            continue_button_only: continue_button_only,
+            category_empty: category_empty,
             next_tutorial_path: next_tutorial_path } %>
 
 <script>

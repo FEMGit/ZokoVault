@@ -44,7 +44,7 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def index
-    super(account_type: "Client")
+    super(account_type: CorporateAdminAccountUser.client_type)
   end
   
   def account_settings
@@ -85,11 +85,11 @@ class CorporateAccountsController < CorporateBaseController
     @user_account.skip_password_validation!
     @user_account.skip_confirmation_notification!
     @user_account.confirm_email!
-    super(account_type: "Client", success_return_path: corporate_accounts_path)
+    super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_accounts_path)
   end
   
   def update
-    super(account_type: "Client", success_return_path: corporate_account_path(@corporate_profile) || corporate_accounts_path,
+    super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_account_path(@corporate_profile) || corporate_accounts_path,
           params_to_update: user_account_params.except(:email))
   end
   
@@ -101,7 +101,7 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def user_accounts
-    CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user && x.account_type == "Client" }.map(&:user_account)
+    CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user && x.account_type == CorporateAdminAccountUser.client_type }.map(&:user_account)
   end
   
   def user_account_params

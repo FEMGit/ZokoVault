@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <% @financial_provider = FinancialProvider.new(user: resource_owner,
                                                provider_type: FinancialProvider.provider_types["Account"],
                                                category: Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)) %>
@@ -18,5 +21,7 @@
                      hidden_field_tag_values: [ { name: 'financial_provider[web_address]', value: ''} ],
                      text_field_tag: { name: 'financial_provider[name]', placeholder: 'Company Name' },
                      select_tag: { name: 'financial_provider[account_0][account_type][]', value: FinancialAccountInformation::account_types.keys },
-                     fields_class: 'account-fields'
+                     fields_class: 'account-fields',
+                     category_empty: category_empty,
+                     next_tutorial_path: next_tutorial_path
                    } %>

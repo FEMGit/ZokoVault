@@ -18,17 +18,17 @@
     <% tutorial_pages_counter = 1 %>
     <ul class="tut-button-wrapper">
       <%- @subtutorials.each_with_index do |tutorial, index|%>
-        <% if tutorial.ajax_page %>
+        <% if tutorial.try(:ajax_page) %>
           <% ajax_page_tutorials += 1 %>
         <% end %>
         <% if tutorial_show.call(tutorial) %>
           <li class="icon-box">
             <label>
-              <% if tutorial.ajax_page %>
+              <% if tutorial.try(:ajax_page) %>
                 <%= check_box_tag "tutorial[ajax-pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item ajax-page-#{tutorial.id}", value: tutorial.id} %>
               <% else %>
                 <% index -= ajax_page_tutorials %>
-                <%= check_box_tag "tutorial[pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item", value: tutorial.id } %>
+                <%= check_box_tag "tutorial[pages][#{index + tutorial_pages_counter}]", index, false, {class: "check-list-item", value: tutorial.is_a?(Tutorial) ? "tutorial_#{tutorial.id}" : tutorial.id} %>
               <% end %>
               <%= render partial: 'tutorials/tutorial_icon', locals: { tutorial: tutorial } %>
             </label>

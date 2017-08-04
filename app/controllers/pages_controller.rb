@@ -6,7 +6,7 @@ class PagesController < HighVoltage::PagesController
   include FinancialInformationHelper
   before_action :save_return_to_path, only: [:show]
   before_action :set_cache_headers
-  before_action :set_tutorial, :set_contacts, :set_balance_sheet_information, :set_shares_information, only: [:show]
+  before_action :set_tutorial, :set_contacts, :set_balance_sheet, :set_shares_information, only: [:show]
   layout 'without_sidebar_layout', only: [:show]
   
   before_action :redirect_to_last_tutorial, :save_tutorial_progress, only: [:show]
@@ -85,25 +85,8 @@ class PagesController < HighVoltage::PagesController
     redirect_if_incorrect_url
   end
   
-  def set_balance_sheet_information
-    if @tutorial_name.eql? 'balance-sheet'
-      if financial_information_any?
-        @financial_provider = FinancialProvider.new(:user => current_user)
-        @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
-        @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
-        @investments = FinancialInvestment.for_user(current_user)
-        @properties = FinancialProperty.for_user(current_user)
-      else
-        tuto_index = session[:tutorial_index] + 1
-        @next_tutorial_name = session[:tutorial_paths][tuto_index][:tuto_name]
-        @next_tutorial = Tutorial.where('name ILIKE ?', tutorial_name(@next_tutorial_name)).first
-        @next_page = session[:tutorial_paths][tuto_index][:current_page]
-        @page_name     = "page_#{@page_number}"
-
-        session[:tutorial_index] = session[:tutorial_index] + 1
-        redirect_to tutorial_page_path(@next_tutorial, @next_page) and return
-      end
-    end
+  def set_balance_sheet
+    set_balance_sheet_information(@tutorial_name)
   end
   
   def set_shares_information

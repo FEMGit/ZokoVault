@@ -93,11 +93,18 @@ class AccountsController < AuthenticatedController
 
   def phone_setup_update
     current_user.update_attributes(user_params)
-    redirect_to login_settings_account_path
+    if current_user.corporate_employee?
+      current_user.user_profile.update_attributes(mfa_frequency: 'always')
+      current_user.update_attributes(setup_complete: true)
+      redirect_to user_type_account_path 
+    else
+      redirect_to login_settings_account_path
+    end
   end
 
   def login_settings
     check_phone_setup_passed
+    redirect_to user_type_account_path if current_user.corporate_employee?
   end
 
   def login_settings_update
@@ -175,6 +182,7 @@ class AccountsController < AuthenticatedController
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
+      redirect_to corporate_accounts_path and return if current_user.corporate_employee?
       redirect_to first_run_path and return
     elsif user_params[:user_type].eql? 'free'
       MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?

@@ -12,21 +12,21 @@
          <label for="f-option">
          
          <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "always", !current_user.setup_complete ||
-                                                                                      current_user.user_profile.mfa_always? || current_user.corporate_admin, id: 'f-option' %>
+                                                                                      current_user.user_profile.mfa_always? || corporate?, id: 'f-option' %>
          Verify using my phone every time. <span class="recommended"><%= always_mfa_phone_text %></span></label>
          <div class="check"></div>
        </li>
 
        <li class="radio-list">
          <label for="s-option">
-         <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "new_ip", current_user.user_profile.mfa_new_ip? && !current_user.corporate_admin, id: 's-option', disabled: current_user.corporate_admin %>
+         <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "new_ip", current_user.user_profile.mfa_new_ip? && !corporate?, id: 's-option', disabled: corporate? %>
          <div class="inline <%= mfa_options_classes %>">Verify using my phone when logging in from a new device.</div></label>
          <div class="check"></div>
        </li>
 
        <li class="radio-list">
          <label for="t-option">
-         <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "never", current_user.user_profile.mfa_never? && !current_user.corporate_admin, id: 't-option', disabled: current_user.corporate_admin %>
+         <%= radio_button_tag "user[user_profile_attributes][mfa_frequency]", "never", current_user.user_profile.mfa_never? && !corporate?, id: 't-option', disabled: corporate? %>
          <div class="inline <%= mfa_options_classes %>">Do not use my phone for login.</div></label>
          <div class="check"></div>
        </li>

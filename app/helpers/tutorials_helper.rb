@@ -5,6 +5,8 @@ module TutorialsHelper
         'my-will(s)'
       when Rails.application.config.x.TrustsEntitiesCategory.downcase
         'my-trust(s)'
+      when Rails.application.config.x.InsuranceCategory.downcase
+        'my-insurance'
       else
         ''
     end

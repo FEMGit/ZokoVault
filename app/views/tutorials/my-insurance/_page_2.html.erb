@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <%- @insurance_card = PropertyAndCasualty.new(user: current_user, category: Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)) %>
 <% properties = Vendor.for_user(resource_owner).properties %>
 
@@ -9,5 +12,7 @@
                                label_tag: { name: 'insurance_provider', value: 'Insurance Provider Name' },
                                partial_path: { resources: properties },
                                text_field_tag: { name: 'property_and_casualty[name]', placeholder: 'Insurance Provider Name' },
-                               fields_class: 'property-casualty-fields'
+                               fields_class: 'property-casualty-fields',
+                               category_empty: category_empty,
+                               next_tutorial_path: next_tutorial_path
                              } %>

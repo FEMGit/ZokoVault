@@ -81,7 +81,9 @@ class AuthenticatedController < ApplicationController
   end
   
   def permitted_page_corporate_user?
-    controller_name && UserPageAccess::CORPORATE.include?(controller_name)
+    shared_user_id = params[:shared_user_id]
+    (controller_name && shared_user_id.blank? && UserPageAccess::CORPORATE[:general_view].include?(controller_name)) ||
+      (controller_name && shared_user_id.present? && UserPageAccess::CORPORATE[:shared_view].include?(controller_name))
   end
 
   def missing_mfa?

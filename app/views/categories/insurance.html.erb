@@ -1,4 +1,4 @@
-<% if insurance_empty? || @tutorial_in_progress %>
+<% if (insurance_empty? && @shared_user.blank?) || @tutorial_in_progress %>
   <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: insurance_path(tutorial_in_progress: true) } %>
 <% else %>
   <h1>Insurance</h1>

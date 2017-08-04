@@ -1,3 +1,6 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
 <% @tax_year_info = TaxYearInfo.new(user: resource_owner) %>
 
 <div class="card mb-30 mt-20 max-w-1000-centered">
@@ -5,6 +8,7 @@
   <%= form_for @tax_year_info, url: tax_update_preparers_path, method: :post do |f| %>
     <%= hidden_field_tag :next_page_number, @next_page %>
     <%= hidden_field_tag :page_number, @page_number %>
+    <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
   
     <% @tax_accountants.each do |tax_accountant| %>
       <p>What years did <%= tax_accountant.name %> prepare your taxes. Please check all that apply.</p>
@@ -24,6 +28,6 @@
      </ul>
     <% end %>
 
-    <%= render partial: 'tutorials/buttons_section', locals: { f: f } %>
+    <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path, f: f } %>
   <% end %>
 </div>

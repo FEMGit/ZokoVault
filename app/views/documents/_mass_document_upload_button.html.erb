@@ -1,0 +1,48 @@
+<% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, #{FilepickerService.multiple_document_upload_limit}, fileToPage" %>
+<a class="add-link bottom-link fr", onclick = "uploadMultipleDocumentsWithFilestack(<%= upload_args %>);">
+  <span class="circle-button small">
+    <svg class="icon circle-icon point-seven-em-size">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Mass Document Upload
+</a>
+
+<script>
+  var fileToPage = function(files){
+    $.ajax({
+      url: "<%= mass_document_upload_path %>",
+      type: "POST",
+      dataType: 'json',
+      data: { "mass_upload_files": JSON.stringify(files) },
+      success: function(data) {
+        showAlertMessage(data["message"], 'success')
+        tableUpdate(data.documents)
+      },
+      error: function(data) {
+        showAlertMessage(data.responseJSON["error"], 'error')
+      }
+    })
+  }
+  
+  var tableUpdate = function(documents) {
+    var table = $('#documents-table').DataTable();
+    for(var i = 0; i < documents.length; i++) {
+      var data = documents[i]
+      var primary_tag = "<span class='doc-tag'>" + data.primary_tag + "</span>"
+      var secondary_tag = (data.secondary_tag !== undefined) ? ("<span class='doc-tag secondary-tag'>" + data.secondary_tag + "</span>") : ""
+      var document_path = "<a href='" + data.document_path + "'>" + data.name + "</a>"
+      var actions = "<a class='outline-button small-button' href='/documents/edit/" + data.uuid + "'>Edit</a>" +
+      "<a data-confirm='Are you sure?' class='outline-button small-button ml-4' rel='nofollow' data-method='delete' href='/documents/" + data.uuid + "'>Delete</a>"
+      table.row.add([
+        document_path,
+        data.modified_date,
+        primary_tag + secondary_tag,
+        '',
+        '',
+        actions
+      ]).draw(false)
+    }
+    // This is a hack to redraw table with all changes saved
+    $(".nosort").click()
+  }
+</script>

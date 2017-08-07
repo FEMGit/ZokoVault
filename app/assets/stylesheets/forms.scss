@@ -351,6 +351,9 @@ input[type=button].button{
     }
   }
   @include media($eightfifty) {
+    &.bottom-link {
+      margin-top: 15px;
+    }
     display: block;
     margin-bottom: 15px;
     width: 100%;
@@ -374,6 +377,9 @@ input[type=button].button{
   display: inline-block;
 
   &.small{
+    width: 20px;
+    height: 20px;
+    top: 3px;
     padding: 2px 1px 1px 4px;
   }
 }

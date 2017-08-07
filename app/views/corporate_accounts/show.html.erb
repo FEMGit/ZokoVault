@@ -47,6 +47,11 @@
   
   <label>Has User Logged In</label>
   <p><%= associated_user_logged_in?(@corporate_contact) %></p>
+  
+  <label>Managed By</label></br>
+  <% managed_by_contacts(@corporate_contact).each do |manager_contact| %>
+    <%= render partial: "layouts/avatar_circle", locals: { :contact => manager_contact } %>
+  <% end %>
 </div>
 
 <h1>Admin Actions</h1>

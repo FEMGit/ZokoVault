@@ -35,6 +35,7 @@
     <label>Property Value</label>
     <p>
       <%= render partial: "financial_information/value_show", locals: { value: @financial_property.value, type: @financial_property.property_type } %>
+      <span class="value-as-of"><%= "value as of #{date_format(@financial_property.updated_at)}" %></span>
     </p>
   <% end %>
 

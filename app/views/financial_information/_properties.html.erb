@@ -19,6 +19,9 @@
         <label><%= property.property_type %></label>
         <%= render partial: "financial_information/value_show", locals: { value: property.value, type: property.property_type } %>
       </li>
+      <% if property.value.present? %>
+        <span class="fr value-as-of"><%= "value as of #{date_format(property.updated_at)}" %></span>
+      <% end %>
     </ul>
 
     <% provider = financial_provider(property) %>

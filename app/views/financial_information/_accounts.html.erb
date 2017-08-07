@@ -19,16 +19,19 @@
     <% end %>
 
     <ul class="data-list mb-20">
-      <% provider.accounts.each do |account| %>
-        <li class="data-pair">
-          <label>
-            <%= account.account_type %>
-            <% if account.name.present? %>
-              - <%= account.name %>
-            <% end %>
-          </label>
-          <%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %>
-        </li>
+      <% if provider.accounts.any? %>
+        <% provider.accounts.each do |account| %>
+          <li class="data-pair">
+            <label>
+              <%= account.account_type %>
+              <% if account.name.present? %>
+                - <%= account.name %>
+              <% end %>
+            </label>
+            <%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %>
+          </li>
+        <% end %>
+        <span class="fr value-as-of"><%= "value as of #{date_format(financial_account_last_update_date(provider))}" %></span>
       <% end %>
     </ul>
 

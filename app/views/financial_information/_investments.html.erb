@@ -19,6 +19,9 @@
         <label><%= investment.investment_type %></label>
         <%= render partial: "financial_information/value_show", locals: { value: investment.value, type: investment.investment_type } %>
       </li>
+      <% if investment.value.present? %>
+        <span class="fr value-as-of"><%= "value as of #{date_format(investment.updated_at)}" %></span>
+      <% end %>
     </ul>
 
     <% provider = financial_provider(investment) %>

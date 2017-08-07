@@ -105,8 +105,10 @@
     
     <% if alternative.current_value.present? %>
       <label>Current Value</label>
-      <p><%= render partial: "financial_information/value_show",
-        locals: { value: alternative.current_value, type: alternative.alternative_type } %></p>
+      <p>
+        <%= render partial: "financial_information/value_show", locals: { value: alternative.current_value, type: alternative.alternative_type } %>
+        <span class="value-as-of"><%= "value as of #{date_format(alternative.updated_at)}" %></span>
+      </p>
     <% end %>
     
     <% if alternative.commitment.present? %>

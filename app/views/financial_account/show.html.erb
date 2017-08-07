@@ -93,7 +93,10 @@
 
     <% if account.value.present? %>
       <label>Account Value</label>
-      <p><%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %></p>
+      <p>
+        <%= render partial: "financial_information/value_show", locals: { value: account.value, type: account.account_type } %>
+        <span class="value-as-of"><%= "value as of #{date_format(account.updated_at)}" %></span>
+      </p>
     <% end %>
 
     <% if account.number.present? %>

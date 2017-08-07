@@ -3,7 +3,7 @@
 <% contact ||= false %>
 <% if contact.present? %>
   <div class="tooltip-item">
-    <% if @shared_user.blank? %>
+    <% if @shared_user.blank? && !corporate? %>
       <%= link_to content_tag(:a), contact_path(contact), class: "avatar-link" %>
     <% end %>
     <% if contact.photourl.present? %>

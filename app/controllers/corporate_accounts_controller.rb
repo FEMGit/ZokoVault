@@ -3,6 +3,7 @@ class CorporateAccountsController < CorporateBaseController
                                                         :billing_information]
   before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
+  helper_method :managed_by_contacts
   
   def set_index_breadcrumbs
     add_breadcrumb "Corporate Account", corporate_accounts_path
@@ -118,6 +119,13 @@ class CorporateAccountsController < CorporateBaseController
     authorize @corporate_contact
     super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_account_path(@corporate_profile) || corporate_accounts_path,
           params_to_update: user_account_params.except(:email))
+  end
+  
+  def managed_by_contacts(contact)
+    contact_user = User.where("email ILIKE ?", contact.emailaddress).first
+    return nil unless contact_user.present?
+    manager_emails = (Array.wrap(contact_user.corporate_admin_by_user) + contact_user.corporate_employees_by_user).compact.uniq.map(&:email).map(&:downcase)
+    Contact.for_user(current_user).select { |x| manager_emails.include? x.emailaddress.downcase }
   end
   
   private

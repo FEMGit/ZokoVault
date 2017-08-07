@@ -134,6 +134,10 @@ class User < ActiveRecord::Base
     CorporateAdminAccountUser.find_by(user_account_id: id).try(:corporate_admin)
   end
   
+  def corporate_employees_by_user
+    CorporateEmployeeAccountUser.where(user_account_id: id).map(&:corporate_employee)
+  end
+  
   def corporate_invitation_sent?
     corporate_record = CorporateAdminAccountUser.find_by(user_account_id: id)
     corporate_record.present? && corporate_record.confirmation_sent_at.present?

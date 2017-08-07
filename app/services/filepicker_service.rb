@@ -1,4 +1,6 @@
 class FilepickerService
+  @@multiple_document_upload_limit = 20.freeze
+  
   def self.pick_avatar_policy(expires_in: 10.minutes)
     ts = (Time.current + expires_in).to_i
     { expiry: ts, call: ['pick','store','convert'], path: '/avatars/' }
@@ -31,5 +33,9 @@ class FilepickerService
       end
     return policy_hash_string(policy: policy) if policy
     raise ArgumentError, "unknown filestack policy key: #{key.inspect}"
+  end
+  
+  def self.multiple_document_upload_limit
+    @@multiple_document_upload_limit
   end
 end

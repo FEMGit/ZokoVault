@@ -145,6 +145,7 @@ Rails.application.routes.draw do
   get 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document
   get 'documents/preview/:uuid(/:shared_user_id)', to: 'documents#preview', as: :preview_document
   get 'shared_view/:shared_user_id/documents/:uuid', to: 'documents#show', as: :shared_document
+  post 'documents/mass_document_upload', to: 'documents#mass_document_upload', as: :mass_document_upload
 
   get 'account_settings', to: 'account_settings#index', as: :account_settings
   get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users

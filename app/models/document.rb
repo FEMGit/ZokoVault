@@ -59,7 +59,7 @@ class Document < ActiveRecord::Base
   def to_param
     uuid
   end
-
+    
   private
 
   def build_shares

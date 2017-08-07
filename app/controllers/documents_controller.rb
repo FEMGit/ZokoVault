@@ -67,6 +67,8 @@ class DocumentsController < AuthenticatedController
 
   def index
     @documents = policy_scope(Document).each { |d| authorize d }
+    @category = Category.fetch(Rails.application.config.x.DocumentsCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     session[:ret_url] = "/documents"
   end
 
@@ -166,8 +168,9 @@ class DocumentsController < AuthenticatedController
     return unless mass_upload_files_params.present?
     files = JSON.parse mass_upload_files_params
     file_params = files.collect { |x| [name: x["filename"], url: x["key"], user: resource_owner, uuid: SecureRandom.uuid] }.flatten
+    mass_upload_add_shares_if_shared_view(file_params)
     if documents = Document.create(file_params)
-      render :json => { :success => true, documents: documents.map{ |d| d.as_json.merge(additional_json_params(d)) }, message: "Documents were successfully created." } 
+      render :json => { :success => true, documents: documents.map{ |d| d.as_json.merge(additional_json_params(d)) }, message: "Documents were successfully created." }, :status => 200
     else
       render :json => { :error => "Error occured, please try again later." }, :status => 500
     end
@@ -195,6 +198,16 @@ class DocumentsController < AuthenticatedController
   end
 
   private
+  
+  def mass_upload_add_shares_if_shared_view(file_params)
+    if current_user != resource_owner
+      contact = Contact.for_user(resource_owner).where("emailaddress ILIKE ?", current_user.email).first
+      document_access_shared = resource_owner.shares.any? { |sh| sh.shareable == Category.fetch(Rails.application.config.x.DocumentsCategory.downcase) && sh.contact == contact }
+      if document_access_shared == true
+        file_params.each { |f| f[:contact_ids] = Array.wrap(contact.id) }
+      end
+    end
+  end
   
   def set_document_content_type
     s3_object = S3Service.get_object_by_key(@document.url)
@@ -375,6 +388,8 @@ class DocumentsController < AuthenticatedController
     end
     additional_json_params["document_path"] = document_path(document)
     additional_json_params["modified_date"] = date_format(document.updated_at)
+    additional_json_params["share_contacts"] = render_to_string partial: 'layouts/avatar_circle_collection', locals: { contacts: document.contacts }
+
     additional_json_params
   end
 

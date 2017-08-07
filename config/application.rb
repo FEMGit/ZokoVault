@@ -25,9 +25,16 @@ module ZokuVault
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
                                 config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
                                 config.x.TaxCategory, config.x.FinalWishesCategory, config.x.DocumentsCategory, config.x.ContactCategory]
-    config.x.CorporateCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
-                                    config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
-                                    config.x.TaxCategory, config.x.FinalWishesCategory]
+    
+    config.x.CorporateCategories = {
+      config.x.FinancialInformationCategory => config.x.FinancialInformationCategory,
+      config.x.WillsPoaCategory => config.x.WillsPoaCategory,
+      config.x.TrustsEntitiesCategory => config.x.TrustsEntitiesCategory,
+      config.x.InsuranceCategory => config.x.InsuranceCategory,
+      config.x.TaxCategory => config.x.TaxCategory,
+      config.x.FinalWishesCategory => config.x.FinalWishesCategory,
+      config.x.DocumentsCategory => "Document Only"
+      }
 
     config.x.UserOnlineRange = 5.minutes
     config.x.UserOnlineRangeScheduleFormat = '5m'

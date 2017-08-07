@@ -1,5 +1,6 @@
 <h1>Dashboard</h1>
 <div class="card mb-30">
+  <%= hidden_field_tag :shared_user_id, @shared_user.try(:id) %>
   <% if @shared_category_names_full.any? %>
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>
@@ -25,5 +26,18 @@
   <% end %>
 </div>
 
-<h3>Documents</h3>
+<% if can_add_document? %>
+  <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, #{FilepickerService.multiple_document_upload_limit}, massUploadFilesToPage" %>
+  <a class="add-link fr", onclick = "uploadMultipleDocumentsWithFilestack(<%= upload_args %>);">
+    <span class="circle-button">
+      <svg class="icon circle-icon">
+        <use xlink:href="#icon-plus-1"></use>
+      </svg>
+    </span>Add Document
+  </a>
+<% else %>
+  <h3>Documents</h3>
+<% end %>
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @document_shareables, :shareable => true} %>
+
+<%= javascript_include_tag 'mass_upload_document' %>

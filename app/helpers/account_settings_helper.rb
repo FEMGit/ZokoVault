@@ -5,12 +5,12 @@ module AccountSettingsHelper
   
   def always_mfa_phone_text
     return '(mandatory for corporate accounts)' if current_user.present? &&
-                                                   current_user.corporate_admin
+                                                   corporate?
     '(recommended)'
   end
   
   def mfa_options_classes
-    return " opacity-half pl-0 " if current_user.present? && current_user.corporate_admin
+    return " opacity-half pl-0 " if current_user.present? && corporate?
     " pl-0 "
   end
 end

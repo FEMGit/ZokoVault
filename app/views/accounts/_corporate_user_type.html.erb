@@ -4,6 +4,10 @@
   <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130 mb-30", alt: @corporate_profile.business_name) %>
 <% end %>
 
-<p class="mb-30 m-0-auto">The next few steps will take you through the onboarding of your account. Complete as much or as little as you want at this time. When you are done, you will be taken to your Dashboard.</p>
+<% if current_user.corporate_employee? %>
+  <p class="mb-30 m-0-auto">Clicking continue will take you to the Corporate Dashboard where you can begin to manage your clients.</p>
+<% else %>
+  <p class="mb-30 m-0-auto">The next few steps will take you through the onboarding of your account. Complete as much or as little as you want at this time. When you are done, you will be taken to your Dashboard.</p>
+<% end %>
 
 <%= link_to 'Continue', 'javascript:formSubmit("trial")', class: 'button big-button-2 blue-button mb-20 inline-block' %>

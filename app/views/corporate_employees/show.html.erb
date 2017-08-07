@@ -1,0 +1,82 @@
+<%= render :partial => "layouts/bread_crumbs" %>
+
+<%= link_to edit_corporate_employee_path, class: "edit-link mrg-top pr-10" do %>
+  <span class="circle-button">
+  <svg class="icon circle-icon">
+    <use xlink:href="#icon-pencil-1"></use>
+  </svg>
+  </span>Edit
+<% end %>
+<h1>Employee Information</h1>
+
+<div class="card mb-30">
+  <label>Name</label>
+  <p><%= @corporate_contact.user_profile.name %></p>
+
+  <label>Email Address</label>
+  <p><%= @corporate_contact.emailaddress %></p>
+
+  <% if @corporate_contact.user_profile.two_factor_phone_number.present? %>
+    <label>Phone</label>
+    <p><%= @corporate_contact.user_profile.two_factor_phone_number %><span class="phone-type">mobile</span></p>
+  <% end %>
+</div>
+
+<h1>Accounts Managed By User</h1>
+<table id="account-managed-table">
+  <thead>
+    <tr>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th width="50%;">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employee_accounts.each do |account| %>
+      <tr>
+        <td><%= account.first_name %></td>
+        <td><%= account.last_name %></td>
+        <td><%= mail_to account.email, account.email, class: 'no-underline-link' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h1>Team User Actions</h1>
+<div class="card">
+  <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
+    <% invitation_sent = invitation_sent?(@corporate_contact) %>
+    <div class="user-account-title">
+      <h3>Send Invitation</h3>
+      <% if invitation_sent %>
+        <p>The <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> has already been sent.</p>
+      <% else %>
+        <p><%= @corporate_contact.name %> has not been sent an <%= link_to 'invitation', 'javascript:displayEmailPreviewCorporate(' + @corporate_contact.try(:id).try(:to_s) + ')', class: 'no-underline-link' %> to the site yet. </p>
+      <% end %>
+    </div>
+    <div class="user-account-link mt-10">
+      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact), method: :post, class: 'button big-button primary-button' %>
+    </div>
+  </section>
+  
+  <section class="flex-boxes percent-100">
+    <div class="user-account-title">
+      <h3>Remove User as Account Admin</h3>
+      <p>This will remove the user from your corporate account and remove their ability to manage client accounts.</p>
+    </div>
+    <div class="user-account-link mt-10">
+      <%= link_to 'Remove User', corporate_employee_remove_path(@corporate_contact), method: :post, class: 'button big-button primary-button' %>
+    </div>
+  </section>
+</div>
+
+<%= render partial: 'layouts/email_preview_javascript' %>
+
+<div id="email-preview-section">
+</div>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#account-managed-table', [ [25, 50, 100], 'accounts', [[0, 'asc']] ])
+  });
+</script>

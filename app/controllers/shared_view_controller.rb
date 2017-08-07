@@ -185,9 +185,9 @@ class SharedViewController < AuthenticatedController
   end
 
   def financial_information
-    @category = Rails.application.config.x.FinancialInformationCategory
+    @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
     if @shared_category_names.include? Rails.application.config.x.FinancialInformationCategory
-      @documents = Document.for_user(shared_user).where(category: @category)
+      @documents = Document.for_user(shared_user).where(category: @category.name)
 
       @account_providers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Account"])
     
@@ -252,7 +252,8 @@ class SharedViewController < AuthenticatedController
   end
   
   def check_expired
-    return if @shared_user.corporate_user_by_admin?(current_user)
+    return if @shared_user.corporate_user_by_admin?(current_user) ||
+              (current_user.corporate_employee? && @shared_user.corporate_user_by_admin?(current_user.corporate_admin_by_user))
     if @shared_user.free? || 
         (@shared_user.current_user_subscription &&
           (@shared_user.current_user_subscription.expired_trial? ||

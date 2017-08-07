@@ -103,8 +103,23 @@ class User < ActiveRecord::Base
     CorporateAdminAccountUser.select { |ca| ca.corporate_admin == self }.map(&:user_account)
   end
   
+  def employee_users
+    return [] unless corporate_employee?
+    CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account)
+  end
+  
+  def corporate_employee?
+    corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
+    corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
+  end
+  
   def corporate_user?
     CorporateAdminAccountUser.find_by(user_account_id: id).present?
+  end
+  
+  def corporate_type
+    corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
+    CorporateAdminAccountUser.find_by(user_account_id: id).try(:account_type)
   end
   
   def logged_in_at_least_once?
@@ -210,7 +225,7 @@ class User < ActiveRecord::Base
   def confirm_email!
     @confirm_email = true
   end
-
+  
   before_create { set_as_admin }
   before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
@@ -225,7 +240,7 @@ class User < ActiveRecord::Base
   def confirm_email?
     @confirm_email == true
   end
-
+  
   private
   
   def email_is_valid?

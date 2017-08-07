@@ -102,6 +102,7 @@ class AccountsController < AuthenticatedController
 
   def login_settings_update
     current_user.update_attributes(user_params.merge(setup_complete: true))
+    redirect_to corporate_accounts_path and return if current_user.corporate_employee?
     redirect_to user_type_account_path
   end
 

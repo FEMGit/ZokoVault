@@ -1,4 +1,4 @@
-<% if wills_poa_empty? || @tutorial_in_progress %>
+<% if (wills_poa_empty? && @shared_user.blank?) || @tutorial_in_progress %>
   <%= render partial: 'tutorials/category_empty_tutorial', locals: { next_tutorial_path: wills_powers_of_attorney_path(tutorial_in_progress: true) } %>
 <% else %>
   <h1>Wills & Powers of Attorney</h1>

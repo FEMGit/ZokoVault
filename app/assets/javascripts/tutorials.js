@@ -192,9 +192,11 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
 
   $(".save-and-continue").on("click", function() {
     $(".modal, .modal-overlay").fadeOut(500, function() {
-      $(".modal-overlay").remove();
-      that.updateAll()
-      $('form').unbind('submit').submit();
+      if ($(".modal-overlay").length == 1 ) {
+        $(".modal-overlay").remove();
+        that.updateAll()
+        $('form').unbind('submit').submit();
+      }
     });
   });
 

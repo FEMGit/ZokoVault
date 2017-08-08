@@ -30,7 +30,7 @@
         <span class="error-label"> - <%= errors.messages[:email].first %></span>
       <% end %>
       <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
-      
+
       <% if @user_account.confirm_email %>
         <%= f.label :email, 'Verify Email Address' %><span class="required">Required</span>
         <% if errors && errors.messages[:email_confirmation] %>
@@ -63,6 +63,32 @@
           <%= render partial: 'layouts/zip_code', locals: { f: user_profile_form, zip: :zip } %>
         </span>
       <% end %>
+
+      <ul class="radio-list">
+        <li class="radio-list">
+          <%= radio_button_tag :who_pays, "corporate", true %>
+          <label for="who_pays">
+            Provide user with an annual subscription<br/>
+            <span style="display:inline-block; width: 400px">
+              $119.88 charged annually for every user attached to your account.
+              Add and remove new users at any time.
+            </span>
+          </label>
+          <div class="check"></div>
+        </li><br/>
+        <li class="radio-list">
+          <%= radio_button_tag :who_pays, "client", false %>
+          <label for="who_pays">
+            User will pay for their own account<br/>
+            <span style="display:inline-block; width: 400px">
+              After UserName signs in they will have 14 days to pay
+              for their account before their Free Trial ends.
+            </span>
+          </label>
+          <div class="check"></div>
+        </li>
+      </ul>
     </div>
+    
     <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_accounts_path, f: f } %>
 <% end %>

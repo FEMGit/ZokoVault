@@ -1,7 +1,7 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
 <h1 class="card-title-260"><%= @financial_provider.name %></h1>
-<%= link_to edit_alternative_url(@financial_provider, @shared_user), class: "edit-link mrg-top" do%>
+<%= link_to edit_financial_alternative_url(@financial_provider, @shared_user), class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>
@@ -134,7 +134,7 @@
   </div>
 <% end %>
 
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :financial_information_id => @financial_provider.id), 
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category, :financial_information_id => @financial_provider.id), 
   documents_title: 'Alternative Documents'} %>
 
 

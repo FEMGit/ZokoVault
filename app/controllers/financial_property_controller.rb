@@ -34,15 +34,15 @@ class FinancialPropertyController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Financial Information", financial_information_path if general_view?
-    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user) if shared_view?
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_add_crumbs
-    add_breadcrumb "Financial Property - Setup", add_property_path(@shared_user)
+    add_breadcrumb "Financial Property - Setup", new_financial_property_path(@shared_user)
   end
 
   def set_details_crumbs
-    add_breadcrumb "#{@financial_property.name}", show_property_path(@financial_property, @shared_user)
+    add_breadcrumb "#{@financial_property.name}", financial_property_path(@financial_property, @shared_user)
   end
 
   def set_edit_crumbs
@@ -58,7 +58,7 @@ class FinancialPropertyController < AuthenticatedController
 
   def show
     authorize @financial_property
-    session[:ret_url] = show_property_url(@financial_property, @shared_user)
+    session[:ret_url] = financial_property_url(@financial_property, @shared_user)
   end
 
   def edit
@@ -79,7 +79,7 @@ class FinancialPropertyController < AuthenticatedController
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
         FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
-        @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
+        @path = success_path(financial_property_url(@financial_property), financial_property_url(@financial_property, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
           tutorial_redirection(format, @financial_property.as_json)
@@ -110,7 +110,7 @@ class FinancialPropertyController < AuthenticatedController
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
         FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
-        @path = success_path(show_property_url(@financial_property), show_property_url(@financial_property, shared_user_id: resource_owner.id))
+        @path = success_path(financial_property_url(@financial_property), financial_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }
       else

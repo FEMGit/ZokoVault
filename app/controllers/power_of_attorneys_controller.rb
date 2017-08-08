@@ -22,7 +22,7 @@ class PowerOfAttorneysController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_path if general_view?
-    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user) if shared_view?
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs

@@ -5,9 +5,9 @@
 
   <section class="flex-boxes">
     <% new_link_paths = {
-    "life" => @shared_user.present? ? shared_new_life_path : new_life_path,
-    "property" => @shared_user.present? ? shared_new_property_path : new_property_path,
-    "health" => @shared_user.present? ? shared_new_health_path : new_health_path,
+    "life" => @shared_user.present? ? new_life_and_disability_shared_view_path : new_life_path,
+    "property" => @shared_user.present? ? new_property_and_casualty_shared_view_path : new_property_path,
+    "health" => @shared_user.present? ? new_health_shared_view_path : new_health_path,
     } %>
 
     <% @groups.each do |group| %>
@@ -68,7 +68,7 @@
               <% end %>
 
               <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_life_path(@shared_user, vendor) : life_path(vendor), class: "small-button outline-button mt-20" %>
+              <%= link_to 'View Details', @shared_user.present? ? life_and_disability_shared_view_path(@shared_user, vendor) : life_path(vendor), class: "small-button outline-button mt-20" %>
             </div>
           <% end %>
         <% end %>
@@ -114,7 +114,7 @@
               <% end %>
 
               <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_property_path(@shared_user, vendor) : property_path(vendor), class: "small-button outline-button mt-20" %>
+              <%= link_to 'View Details', @shared_user.present? ? property_and_casualty_shared_view_path(@shared_user, vendor) : property_path(vendor), class: "small-button outline-button mt-20" %>
             </div>
           <% end %>
         <% end %>
@@ -158,7 +158,7 @@
                 <% end %>
 
               <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_health_path(@shared_user, vendor) : health_path(vendor), class: "small-button outline-button mt-20" %>
+              <%= link_to 'View Details', @shared_user.present? ? health_shared_view_path(@shared_user, vendor) : health_path(vendor), class: "small-button outline-button mt-20" %>
             </div>
           <% end %>
         <% end %>
@@ -168,7 +168,7 @@
 
 
 
-  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name),
+  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name),
     documents_title: "Insurance Documents"} %>
 
   <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @insurance_documents} %>

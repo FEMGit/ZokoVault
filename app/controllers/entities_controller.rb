@@ -23,7 +23,7 @@ class EntitiesController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Trusts & Entities", trusts_entities_path if general_view?
-    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(@shared_user) if shared_view?
+    add_breadcrumb "Trusts & Entities", trusts_entities_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs

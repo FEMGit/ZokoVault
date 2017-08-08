@@ -14,14 +14,14 @@
 <% end %>
 
 <label>Billing Info</label>
-<%= render partial: 'account_settings/stripe_card_information', locals: { card: card, update_payment_path: update_subscription_information_path } %>
+<%= render partial: 'account_settings/stripe_card_information', locals: { card: card, update_payment_path: update_subscription_information_account_settings_path } %>
 
 <h3>Previous Invoices</h3>
 <%= render partial: 'account_settings/previous_invoices', locals: { invoices: invoices } %>
 
 <div class="mt-20">
-  <%= link_to "Update Subscription", billing_info_path, class: "button primary-button big-button mt-10 inline-block fixed-width-big p-10" %>
+  <%= link_to "Update Subscription", billing_info_account_settings_path, class: "button primary-button big-button mt-10 inline-block fixed-width-big p-10" %>
   <% if !@subscription_cancelled %>
-    <%= link_to "Cancel Subscription", cancel_subscription_path, class: "button secondary-button big-button mt-10 inline-block fixed-width-big p-10" %>
+    <%= link_to "Cancel Subscription", cancel_subscription_account_settings_path, class: "button secondary-button big-button mt-10 inline-block fixed-width-big p-10" %>
   <% end %>
 </div>

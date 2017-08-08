@@ -25,7 +25,7 @@
           <% if @corporate_invoices.present? && @corporate_invoices.include?(invoice) %>
             <td>Corporate Payment</td>
           <% else %>
-            <td><%= link_to 'Invoice', invoice_information_path(invoice.id, corporate.to_s), class: 'no-underline-link', target: :_blank %></td>
+            <td><%= link_to 'Invoice', invoice_information_account_settings_path(invoice.id, corporate.to_s), class: 'no-underline-link', target: :_blank %></td>
           <% end %>
         </tr>
       <% end %>

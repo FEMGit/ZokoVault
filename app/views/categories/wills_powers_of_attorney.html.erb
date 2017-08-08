@@ -130,7 +130,7 @@
 
   <h3>Wills & Powers of Attorney Documents</h3>
 
-  <a class="add-link fr" href="<%= new_documents_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name) %>">
+  <a class="add-link fr" href="<%= new_document_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name) %>">
     <span class="circle-button">
       <svg class="icon circle-icon">
         <use xlink:href="#icon-plus-1"></use>

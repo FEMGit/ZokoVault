@@ -1,5 +1,5 @@
 <div class="card max-w-1000-centered">
-  <%= form_tag :corporate_account_options_update, { method: :post, id: 'corporate-account-form' } do %>
+  <%= form_tag :corporate_account_options_update_accounts, { method: :post, id: 'corporate-account-form' } do %>
     <h1>Corporate Account Options</h1>
 
     <p class="fw-600">Would you like to provide ZokuVault to your clients, employees or both?</p>
@@ -43,7 +43,7 @@
 
     <div class="back-continue-buttons" style="display: none;">
       <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
-        <%= link_to 'Back', corporate_logo_path, class:"big-button outline-button padded f-left" %>
+        <%= link_to 'Back', corporate_logo_accounts_path, class:"big-button outline-button padded f-left" %>
         <%= link_to 'Continue', 'javascript:void(0)', class: 'button big-button blue-button f-right', onclick: "submitForm()" %>
       </section>
     </div>

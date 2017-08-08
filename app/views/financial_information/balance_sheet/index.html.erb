@@ -12,7 +12,7 @@
     <h1><%= title %></h1>
     <p class="ml-5"><%= description %></p>
 
-    <%= form_for @financial_provider, url: update_balance_sheet_path, method: :post do |f| %>
+    <%= form_for @financial_provider, url: update_balance_sheet_financial_information_path, method: :post do |f| %>
       <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
       <%= hidden_field_tag :is_tutorial, !not_tutorial %>
       

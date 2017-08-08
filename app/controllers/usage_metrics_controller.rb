@@ -21,7 +21,7 @@ class UsageMetricsController < AuthenticatedController
   add_breadcrumb "Usage Metrics", :usage_metrics_path, only: [:statistic_details, :error_details, :edit_user]
   before_action :set_statistic_details_crumbs, only: [:statistic_details, :edit_user]
   before_action :set_edit_user_crumbs, only: [:edit_user]
-  add_breadcrumb "Error Details", :user_error_details_path, only: [:error_details]
+  add_breadcrumb "Error Details", :error_details_usage_metrics_path, only: [:error_details]
 
   include UserTrafficModule
 
@@ -60,7 +60,7 @@ class UsageMetricsController < AuthenticatedController
           set_corporate_profile(id: @user.try(:id))
           update_corporate_settings(corporate_admin: @user)
         end
-        format.html { redirect_to statistic_details_path(@user), flash: { success: 'User was successfully created.' } }
+        format.html { redirect_to statistic_details_usage_metrics_path(@user), flash: { success: 'User was successfully created.' } }
       else
         @corporate_profile = CorporateAccountProfile.new(corporate_settings_params)
         @user.try(:update_attributes, { corporate_admin: corporate_admin?, corporate_activated: corporate_admin? && corporate_activated? })
@@ -76,7 +76,7 @@ class UsageMetricsController < AuthenticatedController
     update_corporate_settings(corporate_admin: user)
 
     respond_to do |format|
-      format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
+      format.html { redirect_to edit_user_usage_metrics_path, flash: { success: "User was successfully updated" } }
       format.json { head :no_content }
     end
   end
@@ -92,17 +92,17 @@ class UsageMetricsController < AuthenticatedController
     user_invited = User.find_by(id: params[:user_id])
     InvitationService::CreateInvitationService.send_super_admin_invitation(super_admin_user: current_user, user_invited: user_invited)
     flash[:success] = "Invitation was successfully sent."
-    redirect_to statistic_details_path(user_invited)
+    redirect_to statistic_details_usage_metrics_path(user_invited)
   end
   
   def set_edit_user_crumbs
     return unless @user.present?
-    add_breadcrumb @user.name.to_s + " - Edit User", admin_edit_user_path(@user)
+    add_breadcrumb @user.name.to_s + " - Edit User", edit_user_usage_metrics_path(@user)
   end
 
   def set_statistic_details_crumbs
     return unless @user.present?
-    add_breadcrumb @user.name.to_s + " - User Details", statistic_details_path(@user)
+    add_breadcrumb @user.name.to_s + " - User Details", statistic_details_usage_metrics_path(@user)
   end
 
   def index; end
@@ -117,7 +117,7 @@ class UsageMetricsController < AuthenticatedController
 
   def create_trial
     SubscriptionService.activate_trial(user: @user)
-    redirect_to admin_edit_user_path(@user)
+    redirect_to edit_user_usage_metrics_path(@user)
   end
 
   def extend_trial
@@ -326,9 +326,9 @@ class UsageMetricsController < AuthenticatedController
     if @user
       sub = @user && @user.current_user_subscription
       yield(sub) if sub && sub.trial?
-      redirect_to admin_edit_user_path(@user)
+      redirect_to edit_user_usage_metrics_path(@user)
     else
-      redirect_to statistic_details_path
+      redirect_to statistic_details_usage_metrics_path
     end
   end
   

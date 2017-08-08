@@ -9,7 +9,7 @@
     <p id="two_factor_phone_label"><%= f.object.two_factor_phone_number %></p>
 
     <p class="mb-30">
-      <%= link_to 'Change Two-Factor Phone Number', account_settings_phone_setup_path, class: "button secondary-button small-button", id: "change-phone-btn"%>
+      <%= link_to 'Change Two-Factor Phone Number', phone_setup_account_settings_path, class: "button secondary-button small-button", id: "change-phone-btn"%>
     </p>
 
     <%= f.label :mfa_frequency, "Login Settings" %>

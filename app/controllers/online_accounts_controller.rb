@@ -16,7 +16,7 @@ class OnlineAccountsController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Online Accounts", online_accounts_path if general_view?
-    add_breadcrumb "Online Accounts", shared_view_online_accounts_path(@shared_user) if shared_view?
+    add_breadcrumb "Online Accounts", online_accounts_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs
@@ -153,7 +153,7 @@ class OnlineAccountsController < AuthenticatedController
   end
 
   def success_path
-    shared_view_path = @shared_user.present? ? shared_view_online_accounts_path(@shared_user) : online_accounts_path
+    shared_view_path = @shared_user.present? ? online_accounts_shared_view_path(@shared_user) : online_accounts_path
     ReturnPathService.success_path(resource_owner, current_user, online_accounts_path, shared_view_path)
   end
   

@@ -65,7 +65,7 @@ module DocumentsHelper
 
   def document_return_path(document)
     return session[:ret_url] || documents_path unless @shared_user.present?
-    session[:ret_url] || shared_view_dashboard_path(@shared_user)
+    session[:ret_url] || dashboard_shared_view_path(@shared_user)
   end
   
   def secondary_tag(document)

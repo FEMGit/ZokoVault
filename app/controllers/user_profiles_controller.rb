@@ -7,7 +7,7 @@ class UserProfilesController < AuthenticatedController
   skip_before_action :redirect_if_free_user
 
   # Breadcrumbs navigation
-  add_breadcrumb "My Profile", :my_profile_path
+  add_breadcrumb "My Profile", :user_profiles_path
   add_breadcrumb "Edit My Profile", :edit_user_profile_path, only: [:edit]
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
@@ -26,7 +26,7 @@ class UserProfilesController < AuthenticatedController
     authorize @user_profile
     @category = "My Profile"
     @my_profile_documents = Document.for_user(current_user).where(category: @category)
-    session[:ret_url] = my_profile_path
+    session[:ret_url] = user_profiles_path
   end
 
   def edit
@@ -39,7 +39,7 @@ class UserProfilesController < AuthenticatedController
     params[:user_profile][:date_of_birth] = date_format
     respond_to do |format|
       if @user_profile.update(user_profile_params)
-        format.html { redirect_to my_profile_path, flash: { success: 'User profile was successfully updated.' } }
+        format.html { redirect_to user_profiles_path, flash: { success: 'User profile was successfully updated.' } }
         format.json { render :show, status: :ok, location: @user_profile }
       else
         my_profile_error_breadcrumb_update

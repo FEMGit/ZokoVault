@@ -6,7 +6,7 @@
   <%= document.name %>
 <% else %>
   <% if @shared_user.present? %>
-    <%= link_to document.name, shared_documents_path(@shared_user, document), target: target %>
+    <%= link_to document.name, shared_view_document_path(@shared_user, document), target: target %>
   <% else %>
     <%= link_to document.name, document_path(document), target: target %>
   <% end %>

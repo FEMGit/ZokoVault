@@ -20,7 +20,7 @@ class FinalWishesController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Final Wishes", final_wishes_path if general_view?
-    add_breadcrumb "Final Wishes", shared_view_final_wishes_path(@shared_user) if shared_view?
+    add_breadcrumb "Final Wishes", final_wishes_shared_view_path(@shared_user) if shared_view?
   end
 
   def page_name
@@ -41,17 +41,17 @@ class FinalWishesController < AuthenticatedController
   def set_details_crumbs
     return unless @final_wish.final_wishes.any?
     add_breadcrumb "#{@final_wish.group}", final_wish_path(@final_wish) if general_view?
-    add_breadcrumb "#{@final_wish.group}", shared_final_wishes_path(@shared_user, @final_wish) if shared_view?
+    add_breadcrumb "#{@final_wish.group}", final_wish_shared_view_path(@shared_user, @final_wish) if shared_view?
   end
 
   def set_edit_crumbs
     add_breadcrumb "#{@final_wish.group} Setup", edit_final_wish_path(@final_wish) if general_view?
-    add_breadcrumb "#{@final_wish.group} Setup", shared_final_wishes_edit_path(@shared_user, @final_wish) if shared_view?
+    add_breadcrumb "#{@final_wish.group} Setup", edit_final_wish_shared_view_path(@shared_user, @final_wish) if shared_view?
   end
 
   def set_new_crumbs
     add_breadcrumb "#{params[:group]} Setup", new_final_wish_path if general_view?
-    add_breadcrumb "#{params[:group]} Setup", shared_new_final_wishes_path if shared_view?
+    add_breadcrumb "#{params[:group]} Setup", new_final_wish_shared_view_path if shared_view?
   end
 
   # GET /final_wishes
@@ -63,7 +63,7 @@ class FinalWishesController < AuthenticatedController
     @final_wishes = FinalWishInfo.for_user(resource_owner)
     @final_wishes.each { |fw| fw.final_wishes.each { |f| authorize f } }
     sort_groups(@final_wishes.map(&:group).sort)
-    session[:ret_url] = @shared_user.present? ? shared_final_wishes_path : final_wishes_path
+    session[:ret_url] = @shared_user.present? ? final_wish_shared_view_path : final_wishes_path
   end
 
   def sort_groups(existing_group_names)
@@ -83,19 +83,18 @@ class FinalWishesController < AuthenticatedController
     @final_wishes.each { |fw| authorize fw }
     @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
     @group_documents = Document.for_user(resource_owner).where(:category => @category, :group => @final_wish.group)
-    session[:ret_url] = @shared_user.present? ? shared_final_wishes_path(id: @final_wish.id) : final_wish_path(@final_wish)
+    session[:ret_url] = @shared_user.present? ? final_wish_shared_view_path(id: @final_wish.id) : final_wish_path(@final_wish)
   end
 
   # GET /final_wishes/new
   def new
     @group = FinalWishService.get_wish_group_value_by_name(@groups, params[:group])
     unless @group.present?
-      redirect_to shared_view_final_wishes_path if shared_view?
-      redirect_to final_wishes_path
-      return
+      redirect_to final_wishes_shared_view_path and return if shared_view?
+      redirect_to final_wishes_path and return
     end
     final_wish = FinalWishService.get_wish_info(@group["label"], resource_owner)
-    redirect_to edit_final_wish_path(final_wish) if final_wish
+    redirect_to current_user_edit_final_wish_path(final_wish) if final_wish
     @final_wish_info = FinalWishInfo.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase))
     @final_wish_info[:group] = params[:group]
     @final_wish_info.final_wishes << FinalWish.new(user: resource_owner, category: Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase))
@@ -103,7 +102,7 @@ class FinalWishesController < AuthenticatedController
     @final_wishes.each { |fw| authorize fw }
     set_viewable_contacts
   end
-
+  
   # GET /final_wishes/1/edit
   def edit
     @group = FinalWishService.get_wish_group_value_by_id(@groups, @final_wish.id)
@@ -122,7 +121,7 @@ class FinalWishesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @final_wish_info.save
         FinalWishService.update_shares(@final_wish_info, nil, resource_owner)
-        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
+        success_path(final_wish_path(@final_wish_info), final_wish_shared_view_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: 'Final Wish was successfully created.' } }
         format.json { render :show, status: :created, location: @final_wish_info }
       else
@@ -144,7 +143,7 @@ class FinalWishesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @final_wish_info.update(final_wish_params)
         FinalWishService.update_shares(@final_wish_info, @previous_share_with, resource_owner)
-        success_path(final_wish_path(@final_wish_info), shared_final_wishes_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
+        success_path(final_wish_path(@final_wish_info), final_wish_shared_view_path(shared_user_id: resource_owner.id, id: @final_wish_info.id))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @final_wish_info }
       else
@@ -167,6 +166,11 @@ class FinalWishesController < AuthenticatedController
   end
 
   private
+  
+  def current_user_edit_final_wish_path(final_wish)
+    return edit_final_wish_path(final_wish) unless @shared_user
+    edit_final_wish_shared_view_path(@shared_user, final_wish.id)
+  end
 
   def validate_params
     final_wish_groups = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.FinalWishesCategory }.values

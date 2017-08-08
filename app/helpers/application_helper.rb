@@ -70,34 +70,34 @@ module ApplicationHelper
   def category_view_path(category, user = nil)
     case category.try(:name)
     when Rails.application.config.x.WillsPoaCategory
-      return shared_view_wills_powers_of_attorney_path(user) if @shared_user.present?
+      return wills_powers_of_attorney_shared_view_path(user) if @shared_user.present?
       wills_powers_of_attorney_path
     when Rails.application.config.x.TrustsEntitiesCategory
-      return shared_view_trusts_entities_path(user) if @shared_user.present?
+      return trusts_entities_shared_view_path(user) if @shared_user.present?
       trusts_entities_path
     when Rails.application.config.x.InsuranceCategory
-      return shared_view_insurance_path(user) if @shared_user.present?
+      return insurance_shared_view_path(user) if @shared_user.present?
       insurance_path
     when Rails.application.config.x.TaxCategory
-      return shared_view_taxes_path(user) if @shared_user.present?
+      return taxes_shared_view_path(user) if @shared_user.present?
       taxes_path
     when Rails.application.config.x.FinalWishesCategory
-      return shared_view_final_wishes_path(user) if @shared_user.present?
+      return final_wishes_shared_view_path(user) if @shared_user.present?
       final_wishes_path
     when Rails.application.config.x.OnlineAccountCategory
-      return shared_view_online_accounts_path(user) if @shared_user.present?
+      return online_accounts_shared_view_path(user) if @shared_user.present?
       online_accounts_path
     when Rails.application.config.x.FinancialInformationCategory
-      return shared_view_financial_information_path(user) if @shared_user.present?
+      return financial_information_shared_view_path(user) if @shared_user.present?
       financial_information_path
     when Rails.application.config.x.DocumentsCategory
-      return shared_view_documents_path(user) if @shared_user.present?
+      return documents_shared_view_path(user) if @shared_user.present?
       documents_path
     when Rails.application.config.x.ContactCategory
-      return shared_view_contacts_path(user) if @shared_user.present?
+      return contacts_shared_view_path(user) if @shared_user.present?
       contacts_path
     else
-      return shared_view_dashboard_path(user) if @shared_user.present?
+      return dashboard_shared_view_path(user) if @shared_user.present?
     end
   end
   
@@ -136,27 +136,27 @@ module ApplicationHelper
         return power_of_attorney_path(subcategory, @shared_user) if @shared_user.present?
         power_of_attorney_path(subcategory)
       when PropertyAndCasualty
-        return shared_property_path(@shared_user, subcategory) if @shared_user.present?
+        return property_and_casualty_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         property_path(subcategory)
       when LifeAndDisability
-        return shared_life_path(@shared_user, subcategory) if @shared_user.present?
+        return life_and_disability_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         life_path(subcategory)
       when Health
-        return shared_health_path(@shared_user, subcategory) if @shared_user.present?
+        return health_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         health_path(subcategory)
       when Tax
         tax_year = TaxYearInfo.find(subcategory.tax_year_id)
-        return shared_taxes_path(@shared_user, tax_year) if @shared_user.present?
+        return tax_shared_view_path(@shared_user, tax_year) if @shared_user.present?
         tax_path(tax_year)
       when TaxYearInfo
-        return shared_taxes_path(@shared_user, subcategory) if @shared_user.present?
+        return tax_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         tax_path(subcategory)
       when FinalWish
         final_wish_info = FinalWishInfo.find(subcategory.final_wish_info_id)
-        return shared_final_wishes_path(@shared_user, final_wish_info) if @shared_user.present?
+        return final_wish_shared_view_path(@shared_user, final_wish_info) if @shared_user.present?
         final_wish_path(final_wish_info)
       when FinalWishInfo
-        return shared_final_wishes_path(@shared_user, subcategory) if @shared_user.present?
+        return final_wish_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         final_wish_path(subcategory)
       when FinancialProvider
         path_to_resource(subcategory)

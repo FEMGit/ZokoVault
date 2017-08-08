@@ -23,11 +23,11 @@ class CorporateAccountsController < CorporateBaseController
   end
 
   def set_account_settings_crumbs
-    add_breadcrumb "Corporate Account Settings", corporate_account_settings_path
+    add_breadcrumb "Corporate Account Settings", account_settings_corporate_accounts_path
   end
 
   def set_edit_corporate_details_crumbs
-    add_breadcrumb "Edit Client User", edit_corporate_settings_path
+    add_breadcrumb "Edit Client User", edit_corporate_settings_corporate_accounts_path
   end
 
   def page_name
@@ -60,7 +60,7 @@ class CorporateAccountsController < CorporateBaseController
     stripe_customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
     @card = StripeService.customer_card(customer: stripe_customer)
     @invoices = stripe_customer.invoices.to_a
-    session[:ret_url] = corporate_billing_information_path
+    session[:ret_url] = billing_information_corporate_accounts_path
   end
 
   def account_settings
@@ -91,7 +91,7 @@ class CorporateAccountsController < CorporateBaseController
     @corporate_profile.company_information_required!
     respond_to do |format|
       if @corporate_profile.update(corporate_settings_params)
-        format.html { redirect_to success_path(corporate_account_settings_path), flash: { success: 'Corporate Settings successfully updated.' } }
+        format.html { redirect_to success_path(account_settings_corporate_accounts_path), flash: { success: 'Corporate Settings successfully updated.' } }
         format.json { render :index, status: :created, location: @corporate_profile }
       else
         error_path(:edit_account_settings)

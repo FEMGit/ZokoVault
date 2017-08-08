@@ -21,19 +21,19 @@ module FinancialInformationHelper
   
   def path_to_resource(financial_provider)
     if FinancialAccountInformation.find_by(account_provider_id: financial_provider.id)
-      return show_account_path(financial_provider, @shared_user) if @shared_user.present?
-      show_account_path(financial_provider)
+      return financial_account_path(financial_provider, @shared_user) if @shared_user.present?
+      financial_account_path(financial_provider)
     elsif FinancialAlternative.find_by(manager_id: financial_provider.id)
-      return show_alternative_path(financial_provider, @shared_user) if @shared_user.present?
-      show_alternative_path(financial_provider)
+      return financial_alternative_path(financial_provider, @shared_user) if @shared_user.present?
+      financial_alternative_path(financial_provider)
     elsif FinancialInvestment.find_by(empty_provider_id: financial_provider.id)
       investment = FinancialInvestment.find_by(empty_provider_id: financial_provider.id)
-      return show_investment_path(investment, @shared_user) if @shared_user.present?
-      show_investment_path(investment)
+      return financial_investment_path(investment, @shared_user) if @shared_user.present?
+      financial_investment_path(investment)
     elsif FinancialProperty.find_by(empty_provider_id: financial_provider.id)
       property = FinancialProperty.find_by(empty_provider_id: financial_provider.id)
-      return show_property_path(property, @shared_user) if @shared_user.present?
-      show_property_path(property)
+      return financial_property_path(property, @shared_user) if @shared_user.present?
+      financial_property_path(property)
     end
   end
   

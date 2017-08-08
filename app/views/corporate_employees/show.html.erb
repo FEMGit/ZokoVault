@@ -60,7 +60,7 @@
       <% end %>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact, "employee"), method: :post, class: 'button big-button primary-button' %>
+      <%= link_to 'Send Invitation', send_invitation_corporate_accounts_path(@corporate_contact, "employee"), method: :post, class: 'button big-button primary-button' %>
     </div>
   </section>
   
@@ -70,7 +70,7 @@
       <p>This will remove the user from your corporate account and remove their ability to manage client accounts.</p>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Remove User', corporate_employee_remove_path(@corporate_contact), method: :post,
+      <%= link_to 'Remove User', remove_corporate_employee_path(@corporate_contact), method: :post,
             data: { confirm: "This will remove the user from your corporate account and remove their ability to manage client accounts." },
             class: 'button big-button primary-button' %>
     </div>

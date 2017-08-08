@@ -2,7 +2,7 @@
 
 <h1>Edit Corporate Details</h1>
 
-<%= form_for @corporate_profile, url: update_corporate_settings_path(@corporate_profile), method: :post do |f| %>
+<%= form_for @corporate_profile, url: update_account_settings_corporate_accounts_path(@corporate_profile), method: :post do |f| %>
   <div class="card mb-30">
     <h3 class="card-label">Company Details</h3>
     
@@ -76,7 +76,7 @@
     
     <%= render partial: 'corporate_accounts/company_logo_upload', locals: { f: f } %>
   </div>
-  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_account_settings_path, f: f } %>
+  <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || account_settings_corporate_accounts_path, f: f } %>
 <% end %>
 
 <%= javascript_include_tag 'url_validation' %>

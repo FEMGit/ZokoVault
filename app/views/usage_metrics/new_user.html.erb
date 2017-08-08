@@ -1,4 +1,4 @@
-<%= form_for @user, url: usage_metrics_create_user_path, method: :post do |f| %>
+<%= form_for @user, url: create_user_usage_metrics_path, method: :post do |f| %>
   <% if @user.errors.any? %>
     <% errors = @user.errors %>
   <% else %>

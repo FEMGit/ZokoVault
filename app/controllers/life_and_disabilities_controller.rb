@@ -35,22 +35,22 @@ class LifeAndDisabilitiesController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Insurance", insurance_path if general_view?
-    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user) if shared_view?
+    add_breadcrumb "Insurance", insurance_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs
     add_breadcrumb "Life & Disability - Setup", :new_life_path if general_view?
-    add_breadcrumb "Life & Disability - Setup", shared_new_life_path(@shared_user) if shared_view?
+    add_breadcrumb "Life & Disability - Setup", new_life_and_disability_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_details_crumbs
     add_breadcrumb "#{@life_and_disability.name}", life_path(@life_and_disability) if general_view?
-    add_breadcrumb "#{@life_and_disability.name}", shared_life_path(@shared_user, @life_and_disability) if shared_view?
+    add_breadcrumb "#{@life_and_disability.name}", life_and_disability_shared_view_path(@shared_user, @life_and_disability) if shared_view?
   end
 
   def set_edit_crumbs
     add_breadcrumb "Life & Disability - Setup", edit_life_path(@life_and_disability) if general_view?
-    add_breadcrumb "Life & Disability - Setup", shared_edit_life_path(@shared_user, @life_and_disability) if shared_view?
+    add_breadcrumb "Life & Disability - Setup", edit_life_and_disability_shared_view_path(@shared_user, @life_and_disability) if shared_view?
   end
 
   # GET /lives/1
@@ -61,7 +61,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
     @insurance_card = @life_and_disability
     @group_label = "Life & Disability"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
-    session[:ret_url] = general_view? ? life_path(@life_and_disability) : shared_life_path(@shared_user, @life_and_disability)
+    session[:ret_url] = general_view? ? life_path(@life_and_disability) : life_and_disability_shared_view_path(@shared_user, @life_and_disability)
   end
 
   # GET /lives/new
@@ -93,7 +93,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), nil, resource_owner)
         PolicyService.update_contacts(@insurance_card, policy_contact_params)
-        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(life_path(@insurance_card), life_and_disability_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
 
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
@@ -128,7 +128,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
       if validate_params && @insurance_card.update(life_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_contacts(@insurance_card, policy_contact_params)
-        @path = success_path(life_path(@insurance_card), shared_life_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(life_path(@insurance_card), life_and_disability_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else

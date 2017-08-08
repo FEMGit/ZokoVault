@@ -56,7 +56,7 @@ class AccountSettingsController < AuthenticatedController
   def cancel_subscription
     customer = current_user.stripe_customer
     @next_invoice_date = next_invoice(customer).try(:date)
-    redirect_to manage_subscription_path unless @next_invoice_date.present?
+    redirect_to manage_subscription_account_settings_path unless @next_invoice_date.present?
   end
   
   def cancel_subscription_update
@@ -65,18 +65,18 @@ class AccountSettingsController < AuthenticatedController
     else
       flash[:success] = "ZokuVault subscription was successfully canceled."
     end
-    redirect_to manage_subscription_path
+    redirect_to manage_subscription_account_settings_path
   end
   
   def remove_corporate_payment
     @subscription = current_user.current_user_subscription
-    redirect_to manage_subscription_path and return unless current_user.corporate_client? && @subscription &&
+    redirect_to manage_subscription_account_settings_path and return unless current_user.corporate_client? && @subscription &&
       @subscription.corporate?(corporate_client: current_user)
   end
   
   def remove_corporate_payment_update
     subscription = current_user.current_user_subscription
-    redirect_to manage_subscription_path and return unless current_user.corporate_client? && subscription &&
+    redirect_to manage_subscription_account_settings_path and return unless current_user.corporate_client? && subscription &&
                                                 subscription.corporate?(corporate_client: current_user)
     unless StripeService.cancel_subscription(subscription: subscription)
       flash[:error] = "Error removing corporate payment."
@@ -93,11 +93,11 @@ class AccountSettingsController < AuthenticatedController
 
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
-    redirect_to login_settings_path
+    redirect_to login_settings_account_settings_path
   end
 
   def manage_subscription
-    session[:ret_url] = manage_subscription_path
+    session[:ret_url] = manage_subscription_account_settings_path
     @subscription = current_user.current_user_subscription
     return if @subscription.blank? || !@subscription.full?
     if @subscription.funding.beta?
@@ -120,6 +120,7 @@ class AccountSettingsController < AuthenticatedController
         @card = customer_card
       end
     end
+    session[:ret_url] = manage_subscription_account_settings_path
   end
   
   def customer_card
@@ -174,7 +175,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def billing_info
-    session[:ret_url] = billing_info_path
+    session[:ret_url] = manage_subscription_account_settings_path
     @card = customer_card
   end
 
@@ -184,7 +185,7 @@ class AccountSettingsController < AuthenticatedController
         errors = update_password
         if (errors.nil? && password_change_params[:password].present?) || password_change_params[:password].empty?
           bypass_sign_in(@user)
-          format.html { redirect_to login_settings_path, flash: { success: 'Login Settings were successfully updated.' } }
+          format.html { redirect_to login_settings_account_settings_path, flash: { success: 'Login Settings were successfully updated.' } }
           format.json { render :login_settings, status: :updated, location: @user_profile }
         else
           @user_profile.errors.messages.merge!(errors.messages)
@@ -204,7 +205,7 @@ class AccountSettingsController < AuthenticatedController
         if tutorial_params[:tutorial_name].present?
           tutorial_redirection(format, @user_profile.as_json)
         else
-          format.html { redirect_to vault_co_owners_path, flash: { success: 'Vault Co-Owners were successfully updated.' } }
+          format.html { redirect_to vault_co_owners_account_settings_path, flash: { success: 'Vault Co-Owners were successfully updated.' } }
           format.json { render :account_users, status: :updated, location: @user_profile }
         end
       else
@@ -220,7 +221,7 @@ class AccountSettingsController < AuthenticatedController
       begin
         if @user_profile.update_attributes(full_primary_shared_with: user_profile_params[:full_primary_shared_with])
           InvitationService::VaultInheritanceInvitationService.send_invitation(user: current_user, contact: @user_profile.full_primary_shared_with)
-          format.html { redirect_to vault_inheritance_path, flash: { success: 'Vault Inheritance was successfully updated.' } }
+          format.html { redirect_to vault_inheritance_account_settings_path, flash: { success: 'Vault Inheritance was successfully updated.' } }
           format.json { render :account_users, status: :updated, location: @user_profile }
         else
           format.html { render :vault_inheritance }
@@ -313,7 +314,7 @@ class AccountSettingsController < AuthenticatedController
           plan_id: plan, promo_code: promo)
         SubscriptionService.create_from_stripe(
           user: current_user, stripe_subscription_object: stripe_obj)
-        redirect_to account_settings_thank_you_for_subscription_path(plan) and return
+        redirect_to thank_you_for_subscription_account_settings_path(plan) and return
       end
     end
     redirect_to redirect_from_payment_page_path
@@ -337,7 +338,7 @@ class AccountSettingsController < AuthenticatedController
       @customer_id = StripeService.customer_id(user: current_user)
       @revenue = StripeService.last_invoice_payment_amount(user: current_user)
         
-      redirect_to manage_subscription_path unless @plan_duration
+      redirect_to manage_subscription_account_settings_path unless @plan_duration
     end
   end
 
@@ -367,12 +368,12 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def redirect_to_manage_subscription_if_corporate_client
-    redirect_to manage_subscription_path if current_user && current_user.corporate_client? && @corporate_paid
+    redirect_to manage_subscription_account_settings_path if current_user && current_user.corporate_client? && @corporate_paid
   end
 
   def redirect_from_payment_page_path
     if session[:ret_url].present?
-      return manage_subscription_path if request.referer.eql? billing_info_url
+      return manage_subscription_account_settings_path if request.referer.eql? billing_info_account_settings_url
       session[:ret_url]
     else
       first_run_path

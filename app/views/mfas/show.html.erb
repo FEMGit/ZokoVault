@@ -44,7 +44,7 @@ $('#user_user_profile_attributes_two_factor_phone_number').keypress(function(e) 
 
 $('#resend-code').click(function() {
   $.ajax({
-    url: "<%= resend_code_path %>",
+    url: "<%= resend_code_mfas_path %>",
     type: "GET",
     success: function() {
       $('#send_code_text').html(' - Code sent!');
@@ -78,7 +78,7 @@ function verifyCode() {
   $.post("<%= mfa_verify_code_account_path %>",
       serializedData,
       function() {
-        window.location.replace('<%= @shared_user_id.present? ? shared_view_dashboard_path(@shared_user_id) : (return_to_path || root_path) %>' + "?mfa_submit=true")
+        window.location.replace('<%= @shared_user_id.present? ? dashboard_shared_view_path(@shared_user_id) : (return_to_path || root_path) %>' + "?mfa_submit=true")
       })
   .fail(function(data) {
     if (data.responseText) {

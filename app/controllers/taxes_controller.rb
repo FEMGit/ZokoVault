@@ -39,23 +39,23 @@ class TaxesController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Taxes", taxes_path if general_view?
-    add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user) if shared_view?
+    add_breadcrumb "Taxes", taxes_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_details_crumbs
     return unless @tax.taxes.any?
-    add_breadcrumb "#{@tax.year} Tax Details", show_tax_path(@tax) if general_view?
-    add_breadcrumb "#{@tax.year} Tax Details", shared_taxes_path(@shared_user, @tax) if shared_view?
+    add_breadcrumb "#{@tax.year} Tax Details", tax_path(@tax) if general_view?
+    add_breadcrumb "#{@tax.year} Tax Details", tax_shared_view_path(@shared_user, @tax) if shared_view?
   end
 
   def set_add_edit_crumbs
     if @tax && TaxesService.tax_by_year(@tax.year, resource_owner).present?
       add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_path(@tax) if general_view?
-      add_breadcrumb "#{@tax.year} Taxes Setup", shared_taxes_edit_path(@shared_user, @tax) if shared_view?
+      add_breadcrumb "#{@tax.year} Taxes Setup", edit_tax_shared_view_path(@shared_user, @tax) if shared_view?
     else
       year = params[:year] || Date.today.strftime("%Y").to_i
       add_breadcrumb "#{year} Taxes Setup", new_tax_path(@tax) if general_view?
-      add_breadcrumb "#{year} Taxes Setup", shared_new_taxes_path(@shared_user, year) if shared_view?
+      add_breadcrumb "#{year} Taxes Setup", new_tax_shared_view_path(@shared_user, year) if shared_view?
     end
   end
 
@@ -68,7 +68,7 @@ class TaxesController < AuthenticatedController
 
     @taxes = TaxYearInfo.for_user(resource_owner)
     @taxes.each { |ty| ty.taxes.each { |t| authorize t } }
-    session[:ret_url] = @shared_user.present? ? shared_taxes_path : taxes_path
+    session[:ret_url] = @shared_user.present? ? tax_shared_view_path : taxes_path
   end
 
   # GET /taxes/1
@@ -76,14 +76,14 @@ class TaxesController < AuthenticatedController
   def show
     @taxes = taxes
     @taxes.each { |t| authorize t }
-    session[:ret_url] = @shared_user.present? ? shared_taxes_path(id: @tax.id) : tax_path(@tax)
+    session[:ret_url] = @shared_user.present? ? tax_shared_view_path(id: @tax.id) : tax_path(@tax)
   end
 
   # GET /taxes/new
   def new
     year = params[:year] || Date.today.strftime("%Y").to_i
     tax = TaxesService.tax_by_year(year, resource_owner)
-    redirect_to edit_tax_path(tax) if tax
+    redirect_to current_user_edit_tax_path(tax) if tax
     @tax_year = TaxYearInfo.new(user: resource_owner,
                                 category: Category.fetch(Rails.application.config.x.TaxCategory.downcase))
     @tax_year[:year] = year
@@ -133,7 +133,7 @@ class TaxesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @tax_year.save
         TaxesService.update_shares(@tax_year, nil, resource_owner)
-        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
+        success_path(tax_path(@tax_year), tax_shared_view_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: 'Tax was successfully created.' } }
         format.json { render :show, status: :created, location: @tax_year }
       else
@@ -158,7 +158,7 @@ class TaxesController < AuthenticatedController
     respond_to do |format|
       if validate_params && @tax_year.update(tax_params)
         TaxesService.update_shares(@tax_year, @previous_share_with, resource_owner)
-        success_path(tax_path(@tax_year), shared_taxes_path(shared_user_id: resource_owner.id, id: @tax_year.id))
+        success_path(tax_path(@tax_year), tax_shared_view_path(shared_user_id: resource_owner.id, id: @tax_year.id))
         format.html { redirect_to @path, flash: { success: message } }
         format.json { render :show, status: :ok, location: @tax }
       else
@@ -184,6 +184,11 @@ class TaxesController < AuthenticatedController
   end
 
   private
+  
+  def current_user_edit_tax_path(tax)
+    return edit_tax_path(tax) unless @shared_user
+    edit_tax_shared_view_path(@shared_user, tax.id)
+  end
 
   def validate_params
     tax_values = Rails.application.config.x.categories.select { |k, v| k == Rails.application.config.x.TaxCategory }.values

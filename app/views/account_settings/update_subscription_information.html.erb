@@ -22,7 +22,7 @@
     </div>
     
     <%= submit_tag 'Submit', class: 'button big-button primary-button' %>
-    <%= link_to 'Cancel', @corporate_update.eql?('corporate') ? corporate_billing_information_path : back_path || manage_subscription_path, class:"button big-button secondary-button" %>
+    <%= link_to 'Cancel', @corporate_update.eql?('corporate') ? billing_information_corporate_accounts_path : manage_subscription_account_settings_path, class:"button big-button secondary-button" %>
   <% end %>
 </div>
 

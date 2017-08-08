@@ -115,7 +115,7 @@ module TutorialsHelper
          (Rails.application.routes.recognize_path(params[:next_tutorial_path]) rescue nil).present?
         redirect_to params[:next_tutorial_path] and return true
       elsif params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return true
+        redirect_to confirmation_tutorials_path and return true
       else
         tuto_index = session[:tutorial_index]
         next_page = session[:tutorial_paths][tuto_index][:current_page]
@@ -134,7 +134,7 @@ module TutorialsHelper
          session[:tutorial_paths][tuto_index].present?
       next_page = session[:tutorial_paths][tuto_index][:current_page]
       path = if next_tuto[:tuto_name] == 'confirmation_page'
-        tutorials_confirmation_path
+        confirmation_tutorials_path
       elsif next_tuto[:tuto_name] == 'tutorial_new'
         new_tutorial_path
       else
@@ -208,7 +208,7 @@ module TutorialsHelper
       new_tutorial_path
     elsif current_tutorial[:tuto_name] == 'lets_get_started'
       return if request.fullpath.eql? new_tutorial_path
-      tutorials_lets_get_started_path
+      lets_get_started_tutorials_path
     else
       tutorial_page_path(current_tutorial[:tuto_name], current_tutorial[:current_page])
     end
@@ -238,7 +238,7 @@ module TutorialsHelper
   # Tutorial Buttons
   def skip_button_path
     if @next_tutorial_name == 'confirmation_page'
-      tutorials_confirmation_path
+      confirmation_tutorials_path
     else
       tutorial_page_path(@next_tutorial_name, @next_page)
     end

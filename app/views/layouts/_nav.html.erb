@@ -86,21 +86,21 @@
       <use xlink:href="#icon-Safe"></use>
     </svg>Shared With Me
   <% end %>
-  <% my_profile_current = 'active' if current_page?(my_profile_url) || controller?('user_profiles') || breadcrumb?(my_profile_path) ||
-       breadcrumb?(:my_profile_path) %>
-  <%= link_to my_profile_path, class: "main-nav #{my_profile_current}" do %>
+  <% my_profile_current = 'active' if current_page?(user_profiles_url) || controller?('user_profiles') || breadcrumb?(user_profiles_path) ||
+       breadcrumb?(:user_profiles_path) %>
+  <%= link_to user_profiles_path, class: "main-nav #{my_profile_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
     </svg>My Profile
   <% end %>
-  <% account_traffic_current = 'active' if (current_page?(user_account_traffics_path))%>
-  <%= link_to user_account_traffics_path, class: "main-nav tablet-show #{account_traffic_current}" do %>
+  <% account_traffic_current = 'active' if (current_page?(account_traffics_path))%>
+  <%= link_to account_traffics_path, class: "main-nav tablet-show #{account_traffic_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-user-1"></use>
     </svg>Account Traffic
   <% end %>
-  <% account_settings_current = 'active' if (current_page?(vault_co_owners_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
-  <%= link_to vault_co_owners_path, class: "main-nav tablet-show #{account_settings_current}" do %>
+  <% account_settings_current = 'active' if (current_page?(vault_co_owners_account_settings_path) || current_page?(login_settings_account_settings_path) || current_page?(manage_subscription_account_settings_path))%>
+  <%= link_to vault_co_owners_account_settings_path, class: "main-nav tablet-show #{account_settings_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-settings-1"></use>
     </svg>Account Settings

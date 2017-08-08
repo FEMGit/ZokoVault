@@ -1,4 +1,4 @@
-<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_documents_path(:category => @category, :group => @contact.id, :shared_user_id => @shared_user.present? ? @shared_user.id : ""), documents_title: 'Contact Documents'} %>
+<%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category, :group => @contact.id, :shared_user_id => @shared_user.present? ? @shared_user.id : ""), documents_title: 'Contact Documents'} %>
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @contact_documents} %>
 

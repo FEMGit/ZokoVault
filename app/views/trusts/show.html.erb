@@ -67,7 +67,7 @@
 </div>
 
 <h3>Documents</h3>
-<a class="add-link fr" href="<%= new_documents_path(:category => @trust.category.name, :card_document_id => CardDocument.trust(@trust.id).id,
+<a class="add-link fr" href="<%= new_document_path(:category => @trust.category.name, :card_document_id => CardDocument.trust(@trust.id).id,
   :shared_user_id => @shared_user.present? ? @shared_user.id : "") %>">
   <span class="circle-button">
     <svg class="icon circle-icon">

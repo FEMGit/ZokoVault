@@ -10,7 +10,7 @@
     <% end %>
   </section>
 
-  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:category => @category.name), 
+  <%= render :partial => "layouts/add_document_button", :locals => {documents_path: new_document_path(:shared_user_id => @shared_user.present? ? @shared_user.id : "", :category => @category.name), 
     documents_title: "Tax Documents"} %>
 
   <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>

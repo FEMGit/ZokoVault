@@ -1,6 +1,6 @@
 <h1>Contacts & Permissions</h1>
 
-<%= link_to contact_new_path(@shared_user), class: "add-link fr" do %>
+<%= link_to new_contact_path(@shared_user), class: "add-link fr" do %>
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
@@ -33,7 +33,7 @@
           <span class="fw-600 clr-color-primary-shaded"><%= contact_status(contact) %></span>
           <%= contact.relationship %>
         </td>
-        <td class="details-col"><%= link_to 'Details', contact_details_path(contact, @shared_user), class: "outline-button small-button" %></td>
+        <td class="details-col"><%= link_to 'Details', contact_path(contact, @shared_user), class: "outline-button small-button" %></td>
       </tr>
     <% end %>
   </tbody>

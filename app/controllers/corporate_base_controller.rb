@@ -38,7 +38,7 @@ class CorporateBaseController < AuthenticatedController
         corporate_admin_contact = create_corporate_admin_contact_for_user_account
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
-        return_path = bill_result.eql?(:payed_for_client) ? account_settings_thank_you_for_subscription_path(StripeSubscription.yearly_plan[:id], @user_account) :
+        return_path = bill_result.eql?(:payed_for_client) ? thank_you_for_subscription_account_settings_path(StripeSubscription.yearly_plan[:id], @user_account) :
                                                             success_path(success_return_path)
         format.html { redirect_to return_path, flash: { success: "#{account_type} Account successfully created." } }
         format.json { render :show, status: :created, location: @user_account }

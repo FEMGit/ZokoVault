@@ -64,13 +64,16 @@
         </span>
       <% end %>
 
+      <% @plan ||= StripeSubscription.yearly_plan %>
+
       <ul class="radio-list">
         <li class="radio-list">
           <%= radio_button_tag :who_pays, "corporate", true %>
           <label for="who_pays">
             Provide user with an annual subscription<br/>
             <span style="display:inline-block; width: 400px">
-              $119.88 charged annually for every user attached to your account.
+              $<%= (@plan.amount / 100.0).round(2) %>
+              charged annually for every user attached to your account.
               Add and remove new users at any time.
             </span>
           </label>
@@ -89,6 +92,6 @@
         </li>
       </ul>
     </div>
-    
+
     <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_accounts_path, f: f } %>
 <% end %>

@@ -65,6 +65,7 @@
       <% end %>
 
       <% @plan ||= StripeSubscription.yearly_plan %>
+      <% cost = (@plan.amount / 100.0).round(2) %>
 
       <ul class="radio-list">
         <li class="radio-list">
@@ -72,9 +73,8 @@
           <label for="who_pays">
             Provide user with an annual subscription<br/>
             <span style="display:inline-block; width: 400px">
-              $<%= (@plan.amount / 100.0).round(2) %>
-              charged annually for every user attached to your account.
-              Add and remove new users at any time.
+              $<%=cost%> charged annually for every user attached to
+              your account. Add and remove new users at any time.
             </span>
           </label>
           <div class="check"></div>

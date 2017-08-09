@@ -1,4 +1,12 @@
 module FinancialInformationHelper
+  def financial_account_last_update_date(provider)
+    provider.accounts.max_by(&:updated_at).try(:updated_at)
+  end
+  
+  def financial_alternative_last_update_date(provider)
+    provider.alternatives.max_by(&:updated_at).try(:updated_at)
+  end
+  
   def uniq_account_types
     FinancialAccountInformation.for_user(resource_owner).flat_map(&:account_type).uniq
   end

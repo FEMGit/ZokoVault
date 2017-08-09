@@ -385,6 +385,13 @@ img.questionnaire-heart {
   clear: both;
 }
 
+.value-as-of {
+  color: $color-gray-med-shaded;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 500;
+}
+
 //DOCUMENT COUNTER
 .fa-stack{
   .document-number {

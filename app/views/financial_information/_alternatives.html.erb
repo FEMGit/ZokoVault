@@ -19,11 +19,14 @@
     <% end %>
 
     <ul class="data-list mb-20">
-      <% manager.alternatives.each do |alternative| %>
-        <li class="data-pair">
-          <label><%= alternative.name %></label>
-          <%= render partial: "financial_information/value_show", locals: { value: alternative.current_value, type: alternative.alternative_type } %>
-        </li>
+      <% if manager.alternatives.any? %>
+        <% manager.alternatives.each do |alternative| %>
+          <li class="data-pair">
+            <label><%= alternative.name %></label>
+            <%= render partial: "financial_information/value_show", locals: { value: alternative.current_value, type: alternative.alternative_type } %>
+          </li>
+        <% end %>
+        <span class="fr value-as-of"><%= "value as of #{date_format(financial_alternative_last_update_date(manager))}" %></span>
       <% end %>
     </ul>
 

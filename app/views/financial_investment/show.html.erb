@@ -29,6 +29,7 @@
     <label>Value</label>
     <p>
       <%= render partial: "financial_information/value_show", locals: { value: @financial_investment.value, type: @financial_investment.investment_type } %>
+      <span class="value-as-of"><%= "value as of #{date_format(@financial_investment.updated_at)}" %></span>
     </p>
   <% end %>
 

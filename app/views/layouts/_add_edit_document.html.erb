@@ -76,7 +76,7 @@
       {class: "js-modal-close button secondary-button big-button"} %>
     <% if !add_new_document?(yield(:title)) && policy(@document).destroy? %>
       <%= link_to 'Delete', document_path(@document), method: :delete, data: { confirm: 'Are you sure?' },
-        class: "button outline-button big-button fr"%>
+        class: "outline-button big-button fr"%>
     <% end %>
   </div>
 <% end %>

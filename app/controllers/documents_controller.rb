@@ -3,6 +3,7 @@ class DocumentsController < AuthenticatedController
   include DocumentsHelper
   include BackPathHelper
   include SanitizeModule
+  include DateHelper
   before_action :set_header_info_blank_layout, only: [:new]
   before_action :set_document, only: [:show, :edit, :update, :destroy, :download, :preview]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
@@ -66,6 +67,8 @@ class DocumentsController < AuthenticatedController
 
   def index
     @documents = policy_scope(Document).each { |d| authorize d }
+    @category = Category.fetch(Rails.application.config.x.DocumentsCategory.downcase)
+    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     session[:ret_url] = "/documents"
   end
 
@@ -160,6 +163,23 @@ class DocumentsController < AuthenticatedController
       format.json { head :no_content }
     end
   end
+  
+  def mass_document_upload
+    return unless mass_upload_files_params.present?
+    files = JSON.parse mass_upload_files_params
+    file_params = files.collect { |x| [name: x["filename"], url: x["key"], user: resource_owner, uuid: SecureRandom.uuid] }.flatten
+    mass_upload_add_shares_if_shared_view(file_params)
+    if documents = Document.create(file_params)
+      render :json => { :success => true, documents: documents.map{ |d| d.as_json.merge(additional_json_params(d)) }, message: "Documents were successfully created." }, :status => 200
+    else
+      render :json => { :error => "Error occured, please try again later." }, :status => 500
+    end
+  end
+  
+  def mass_upload_files_params
+    return nil unless params[:mass_upload_files].present?
+    params.require(:mass_upload_files)
+  end
 
   def get_drop_down_options
     render :json => card_values(base_params[:category]).flatten
@@ -178,6 +198,16 @@ class DocumentsController < AuthenticatedController
   end
 
   private
+  
+  def mass_upload_add_shares_if_shared_view(file_params)
+    if current_user != resource_owner
+      contact = Contact.for_user(resource_owner).where("emailaddress ILIKE ?", current_user.email).first
+      document_access_shared = resource_owner.shares.any? { |sh| sh.shareable == Category.fetch(Rails.application.config.x.DocumentsCategory.downcase) && sh.contact == contact }
+      if document_access_shared == true
+        file_params.each { |f| f[:contact_ids] = Array.wrap(contact.id) }
+      end
+    end
+  end
   
   def set_document_content_type
     s3_object = S3Service.get_object_by_key(@document.url)
@@ -346,17 +376,20 @@ class DocumentsController < AuthenticatedController
     else
       format.html { redirect_to documents_path, flash: { success: 'Document was successfully created.' } }
     end
-    format.json { render json: @document.as_json.merge(additional_json_params), status: :created }
+    format.json { render json: @document.as_json.merge(additional_json_params(@document)), status: :created }
   end
 
-  def additional_json_params
+  def additional_json_params(document)
     additional_json_params = Hash.new
-    additional_json_params["primary_tag"] = @document.category
-    secondary_tag_name = secondary_tag(@document)
+    additional_json_params["primary_tag"] = document.category.blank? ? "Document" : document.category
+    secondary_tag_name = secondary_tag(document)
     if secondary_tag_name.present?
       additional_json_params["secondary_tag"] = secondary_tag_name
     end
-    additional_json_params["document_path"] = document_path(@document)
+    additional_json_params["document_path"] = document_path(document)
+    additional_json_params["modified_date"] = date_format(document.updated_at)
+    additional_json_params["share_contacts"] = render_to_string partial: 'layouts/avatar_circle_collection', locals: { contacts: document.contacts }
+
     additional_json_params
   end
 

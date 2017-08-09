@@ -53,7 +53,9 @@ module SharedViewHelper
   end
   
   def show_navigation_link?(category)
-    @shared_category_names_full.include? category
+    primary_shared = current_user.primary_shared_with?(@shared_user)
+    return @shared_category_names_full.include? category if primary_shared
+    @shared_category_names_full.include?(category) && !SharedViewModule.primary_shared_with_category_names.include?(category)
   end
   
   def show_add_link?(owner, non_owner, category, subcategory)
@@ -65,6 +67,12 @@ module SharedViewHelper
   def show_insurance_info?(owner, vendors, vendor_group)
     return true if owner == current_user
     vendors.select { |v| v.group.eql? vendor_group }.count > 0
+  end
+  
+  def can_add_document?
+    return false unless @shared_user.present?
+    shares = policy_scope(Share).where(user: @shared_user)
+    current_user.primary_shared_with?(@shared_user) || SharedViewService.shared_categories_full(shares).include?(Rails.application.config.x.DocumentsCategory)
   end
   
   def category_shareable_type_transform(category)

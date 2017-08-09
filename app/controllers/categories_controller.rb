@@ -22,6 +22,13 @@ class CategoriesController < AuthenticatedController
       return "Trusts & Entities"
     when 'insurance'
       return "Insurance"
+    when 'share_category'
+      @category = Category.fetch(params[:id])
+      if @category.name.downcase.eql?(Rails.application.config.x.DocumentsCategory.downcase) 
+        return "Document Upload Access"
+      else
+        return "Share Category + #{@category.try(:name)}"
+      end
     end
   end
   
@@ -32,7 +39,13 @@ class CategoriesController < AuthenticatedController
   
   def set_share_category_crumbs
     @category = Category.fetch(params[:id])
-    add_breadcrumb "Category Shared With", share_category_category_path(@category.name.downcase)
+    breadcrumb_title = 
+      if @category.name.downcase.eql? Rails.application.config.x.DocumentsCategory.downcase
+        "Upload Document Access"
+      else
+        "Category Shared With"
+      end
+    add_breadcrumb breadcrumb_title, share_category_category_path(@category.name.downcase)
   end
 
   def index
@@ -67,6 +80,8 @@ class CategoriesController < AuthenticatedController
       wills_powers_of_attorney_url
     when Rails.application.config.x.TrustsEntitiesCategory
       trusts_entities_url
+    when Rails.application.config.x.DocumentsCategory
+      documents_url
     else
       root_url
     end

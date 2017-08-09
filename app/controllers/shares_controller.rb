@@ -74,7 +74,7 @@ class SharesController < AuthenticatedController
     
     def shared_category_count(shares, user)
       return Rails.application.config.x.ShareCategories.count if current_user.primary_shared_with? user
-      SharedViewService.shared_categories_full(shares).count
+      (SharedViewService.shared_categories_full(shares) - SharedViewModule.primary_shared_with_category_names).count
     end
 
     def shared_document_count(shareables, user)

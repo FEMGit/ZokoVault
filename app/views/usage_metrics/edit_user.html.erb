@@ -50,15 +50,16 @@
 
     <div id="corporate-account-settings" style="display: none;">
       <label>Corporate Admin Category Access</label>
+      <% corporate_categories = Rails.application.config.x.CorporateCategories %>
       <ul class="check-list">
-        <% Rails.application.config.x.CorporateCategories.each do |option| %>
+        <% corporate_categories.keys.each do |key| %>
           <li class="check-list">
             <label>
-              <%= check_box_tag "corporate_account[corporate_categories][#{option}]",
-                option,
-                (@user.corporate_categories.map(&:name).include? option ), {}
+              <%= check_box_tag "corporate_account[corporate_categories][#{key}]",
+                key,
+                (@user.corporate_categories.map(&:name).include? key ), {}
               %>
-              <span></span> <%= option %>
+              <span></span> <%= corporate_categories[key] %>
             </label>
           </li>
         <% end %>

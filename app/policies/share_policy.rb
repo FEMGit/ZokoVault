@@ -49,6 +49,10 @@ class SharePolicy < BasicPolicy
   def wills?; index?; end
   def documents?; index?; end
   
+  def mass_document_upload?
+    owned_or_shared?
+  end
+  
   def relationship_values?
     owned_or_shared?
   end

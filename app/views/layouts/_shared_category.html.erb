@@ -1,3 +1,7 @@
+<% title ||= 'Shared With' %>
+<% shared_with_title ||= 'Category Shared With' %>
+<% description ||= nil %>
+
 <% if !@shared_user.present? %>
   <% if category.present? %>
     <a class="edit-link fr" href='<%= share_category_category_path(category) %>'>
@@ -8,14 +12,17 @@
       </span>Edit
     </a>
   <% end %>
-  <h3>Shared With</h3>
+  <h3><%= title %></h3>
+  <% if description.present? %>
+    <p><%= description %></p>
+  <% end %>
 
   <div class="card category-shared">
     <section class="shared-with category-shared">
       <h3 class="card-label shared-label">
         <svg class="icon" viewBox="0 0 20 20">
           <use xlink:href="#icon-Safe"></use>
-        </svg> Category Shared With
+        </svg> <%= shared_with_title %>
       </h3>
 
       <label>SHARED WITH</label>

@@ -1,0 +1,11 @@
+<% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, #{FilepickerService.multiple_document_upload_limit}, massUploadFilesToPage" %>
+<a class="add-link bottom-link fr", onclick = "uploadMultipleDocumentsWithFilestack(<%= upload_args %>);">
+  <span class="circle-button small">
+    <svg class="icon circle-icon point-seven-em-size">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+  </span>Mass Document Upload
+</a>
+<span class="clear"></span>
+
+<%= javascript_include_tag 'mass_upload_document' %>

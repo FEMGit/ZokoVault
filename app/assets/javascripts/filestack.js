@@ -34,7 +34,32 @@ var setAvatarPhoto = function(suffix, preview, key, uploadButton) {
 
 var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
   var client = filestack.init(api_key, policy_hash)
-  client.pick({
+  client.pick(documentUploadParams()).then(function(result) {
+    if (result.filesUploaded.length == 1) {
+      file = result.filesUploaded[0]
+      callback(file)
+    } else {
+      console.log(JSON.stringify(result))
+    }
+  })
+}
+
+var uploadMultipleDocumentsWithFilestack = function(api_key, policy_hash, max_document_count, callback) {
+  var client = filestack.init(api_key, policy_hash)
+  client.pick(multipleDocumentUploadParams(max_document_count)).then(function(result) {
+    files = result.filesUploaded
+    callback(files)
+  })
+}
+  
+var multipleDocumentUploadParams = function(max_document_count) {
+  documentParams = documentUploadParams()
+  documentParams["maxFiles"] = max_document_count
+  return documentParams
+}
+
+var documentUploadParams = function() {
+  return {
     maxSize: 104857600,
     disableTransformer: true,
     fromSources: [
@@ -43,14 +68,7 @@ var uploadDocumentWithFilestack = function(api_key, policy_hash, callback) {
     storeTo: {
       location: 's3', path: '/documents/'
     }
-  }).then(function(result) {
-    if (result.filesUploaded.length == 1) {
-      file = result.filesUploaded[0]
-      callback(file)
-    } else {
-      console.log(JSON.stringify(result))
-    }
-  })
+  }
 }
 
 var uploadThumbnailWithFilestack = function(api_key, policy_hash, suffix, square, uploadButton) {

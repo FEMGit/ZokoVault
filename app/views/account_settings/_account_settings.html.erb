@@ -2,7 +2,7 @@
 
 <div class="card b-radius-0 p-0">
   <div class="tab-header">
-    <% account_users_selected = 'selected' if current_page?(account_users_path) %>
+    <% account_users_selected = 'selected' if (current_page?(account_users_path) || (controller_name.eql?('account_settings') && action_name.eql?('update_account_users') )) %>
     <%= link_to 'Vault Co-Owner', account_users_path, class: "tab left not-link #{account_users_selected}", id: "account_users"%>
 
     <% login_settings_selected = 'selected' if current_page?(login_settings_path) %>

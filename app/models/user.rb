@@ -113,6 +113,10 @@ class User < ActiveRecord::Base
     corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
   end
   
+  def corporate_manager?
+    corporate_employee? || corporate_admin
+  end
+  
   def corporate_user?
     CorporateAdminAccountUser.find_by(user_account_id: id).present?
   end

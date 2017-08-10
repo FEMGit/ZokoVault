@@ -165,6 +165,7 @@ a.mobile-menu{
     margin-top: -10px;
     box-shadow: $drop-shadow;
     display:none;
+    overflow-y: scroll;
 
     nav.marketing-nav{
       display:block;
@@ -272,7 +273,8 @@ a:visited.main-nav{
   }
 
   @include media($tablet) {
-    &.bottom-nav {
+    &.bottom-nav,
+    &.bottom-nav-corporate {
       position: relative !important;
       bottom: 0 !important;
     }

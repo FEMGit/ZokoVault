@@ -1,7 +1,7 @@
 <h1>Dashboard</h1>
-<div class="card mb-30">
-  <%= hidden_field_tag :shared_user_id, @shared_user.try(:id) %>
-  <% if @shared_category_names_full.any? %>
+<%= hidden_field_tag :shared_user_id, @shared_user.try(:id) %>
+<% if @shared_category_names_full.any? %>
+  <div class="card mb-30">
     <% Rails.application.config.x.ShareCategories.each do |category| %>
       <% if show_navigation_link?(category) %>
         <% category_instance = Category.fetch(category.downcase) %>
@@ -17,14 +17,8 @@
         </section>
       <% end %>
     <% end %>
-  <% else %>
-    <section class="flex-boxes shared-boxes">
-      <div class="shared-name">
-        <h4>No shared categories.</h4>
-      </div>
-    </section>
-  <% end %>
-</div>
+  </div>
+<% end %>
 
 <% if can_add_document? %>
   <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, #{FilepickerService.multiple_document_upload_limit}, massUploadFilesToPage" %>

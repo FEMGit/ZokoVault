@@ -1,48 +1,6 @@
-<% column_name = "Name"%>
-<% column_type = "Type/Account" %>
-<% column_value = "Value" %>
 <% category_empty ||= false %>
 <% next_tutorial_path ||= nil %>
 
-<div class="mt-20 mb-30 max-w-1000-centered">
-  <div class="card mb-30">
-    <h1>Balance Sheet</h1>
-    <p>Now that you have added all of your accounts, debts and property, let's build your balance sheet. You can use approximate values to get started.</p>
-
-    <%= form_for @financial_provider, url: update_balance_sheet_path, method: :post do |f| %>
-      <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
-      <table class="balance-sheet">
-        <tr class="mobile-hide">
-          <th><label><%= column_name %></label></th>
-          <th><label><%= column_type %></label></th>
-          <th><label><%= column_value %></label></th>
-        </tr>
-        <%= render partial: 'tutorials/balance-sheet/accounts', locals: { account_providers: @account_providers,
-                                                                         column_name: column_name,
-                                                                         column_type: column_type,
-                                                                         column_value: column_value,
-                                                                         f: f } %>
-
-        <%= render partial: 'tutorials/balance-sheet/alternatives', locals: { alternative_managers: @alternative_managers,
-                                                                         column_name: column_name,
-                                                                         column_type: column_type,
-                                                                         column_value: column_value,
-                                                                         f: f } %>
-
-        <%= render partial: 'tutorials/balance-sheet/investments', locals: { investments: @investments,
-                                                                         column_name: column_name,
-                                                                         column_type: column_type,
-                                                                         column_value: column_value,
-                                                                         f: f } %>
-
-        <%= render partial: 'tutorials/balance-sheet/properties', locals: { properties: @properties,
-                                                                         column_name: column_name,
-                                                                         column_type: column_type,
-                                                                         column_value: column_value,
-                                                                         f: f } %>
-      </table>
-
-      <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path, f: f } %>
-    <% end %>
-  </div>
-</div>
+<%= render template: 'financial_information/balance_sheet/index', locals: { category_empty: category_empty,
+                                                                            next_tutorial_path: next_tutorial_path,
+                                                                            description: "Now that you have added all of your accounts, debts and property, let's build your balance sheet. You can use approximate values to get started."} %>

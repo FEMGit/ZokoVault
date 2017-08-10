@@ -2,9 +2,17 @@
 <% f ||= nil %>
 <% skip_continue_equal ||= false %>
 <% next_tutorial_path ||= nil %>
+<% not_tutorial ||= false %>
 
-<% if category_empty.eql? true %>
-  <%= render partial: 'tutorials/buttons_section_category_empty', locals: { f: f, next_tutorial_path: next_tutorial_path } %>
+<% if not_tutorial.eql? false %>
+  <% if category_empty.eql? true %>
+    <%= render partial: 'tutorials/buttons_section_category_empty', locals: { f: f, next_tutorial_path: next_tutorial_path } %>
+  <% else %>
+    <%= render partial: 'tutorials/buttons_section', locals: { f: f, skip_continue_equal: skip_continue_equal } %>
+  <% end %>
 <% else %>
-  <%= render partial: 'tutorials/buttons_section', locals: { f: f, skip_continue_equal: skip_continue_equal } %>
+  <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
+    <%= link_to 'Back', financial_information_path, class: "big-button outline-button padded left-0 ps-absolute" %>
+    <%= f.submit "Save", class: "button big-button blue-button f-right submit-btn ml-0" %>
+  </section>
 <% end %>

@@ -1,0 +1,26 @@
+<% column_name = "Name"%>
+<% column_type = "Type/Account" %>
+<% column_value = "Value" %>
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+<% not_tutorial ||= false %>
+<% description ||= "" %>
+
+<div class="mt-20 mb-30 <% if !not_tutorial %> max-w-1000-centered <% end %>">
+  <div class="card mb-30">
+    <h1>Balance Sheet</h1>
+    <p><%= description %></p>
+
+    <%= form_for @financial_provider, url: update_balance_sheet_path, method: :post do |f| %>
+      <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
+      <%= hidden_field_tag :is_tutorial, !not_tutorial %>
+      
+      <%= render partial: 'financial_information/balance_sheet/balance_sheet_table', locals: { column_name: column_name,
+                                                           column_type: column_type,
+                                                           column_value: column_value,
+                                                           f: f } %>
+
+      <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path, f: f, not_tutorial: not_tutorial } %>
+    <% end %>
+  </div>
+</div>

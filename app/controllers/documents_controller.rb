@@ -217,6 +217,7 @@ class DocumentsController < AuthenticatedController
 
   def validate_params
     category_name = document_params[:category]
+    return false unless CategoryDropdownOptions::CATEGORIES[:corporate_manager].include?(category_name) && resource_owner.corporate_manager?
     card_values = card_values(category_name)
     card_names = card_names(category_name)
     permitted_names =
@@ -233,7 +234,11 @@ class DocumentsController < AuthenticatedController
     if base_params[:category].present?
       [base_params[:category]]
     else
-     (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES
+      if resource_owner.corporate_manager?
+        CategoryDropdownOptions::CATEGORIES[:corporate_manager] 
+      else
+       (resource_owner != current_user) ? @shared_category_names_full.prepend('Select...') : CategoryDropdownOptions::CATEGORIES[:common_user]
+      end
     end
   end
 

@@ -18,8 +18,9 @@
 
 <% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:avatar)}, '_account', false, #{upload_button}" %>
 
-<a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="<%= upload_button_class %>" id="action-avatar-link">Update Logo</a>
-<a onclick="clearAvatarPhoto('_account', <%= upload_button %>)" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link"
-<% if no_logo %> style="display: none;" <% end %>>Remove Logo</a>
+<div class="inline-block mt-10">
+  <a onclick="uploadThumbnailWithFilestack(<%= upload_args %>)" class="<%= upload_button_class %>" id="action-avatar-link">Update Logo</a>
+  <a onclick="clearAvatarPhoto('_account', <%= upload_button %>)" class="no-underline-link neighbour-link remove-button_account" id="action-avatar-link" <% if no_logo %> style="display: none;" <% end %>>Remove Logo</a>
+</div>
 
 <%= f.text_field :company_logo, id: "company_logo_account", style: "display: none;" %>

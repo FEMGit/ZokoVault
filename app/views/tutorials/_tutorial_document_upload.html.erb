@@ -139,7 +139,7 @@
       errorMessageHide()
     }).fail(function(data) {
       var response = JSON.parse(data.responseText)
-      if (response["name"] !== 'undefined') {
+      if (response["name"] !== undefined) {
         errorMessageShow(response["name"][0])
       }
     });

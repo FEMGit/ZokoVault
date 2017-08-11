@@ -5,6 +5,7 @@ class CorporateAdminService
   end
   
   def self.add_category_share_for_corporate_employee(corporate_employee_contact:, corporate_admin:, user:)
+    return nil unless corporate_employee_contact.present?
     corporate_admin.corporate_categories.each do |category|
       next if Share.find_by(contact_id: corporate_employee_contact.id, shareable: category, user_id: user.id).present?
       user.shares.create(contact_id: corporate_employee_contact.id, shareable: category)

@@ -285,11 +285,7 @@ module TutorialsHelper
   def set_balance_sheet_information(tutorial_id)
     if tutorial_id.eql? 'balance-sheet'
       if financial_information_any?
-        @financial_provider = FinancialProvider.new(:user => current_user)
-        @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
-        @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
-        @investments = FinancialInvestment.for_user(current_user)
-        @properties = FinancialProperty.for_user(current_user)
+        set_financial_information_resources
       else
         tuto_index = session[:tutorial_index] + 1
         if session[:category_tutorial_in_progress] == true

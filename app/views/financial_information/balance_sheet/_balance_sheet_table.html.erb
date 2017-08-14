@@ -1,0 +1,30 @@
+<table class="balance-sheet">
+  <tr class="mobile-hide">
+    <th><label><%= column_name %></label></th>
+    <th><label><%= column_type %></label></th>
+    <th><label><%= column_value %></label></th>
+  </tr>
+  <%= render partial: 'financial_information/balance_sheet/accounts', locals: { account_providers: @account_providers,
+                                                                                column_name: column_name,
+                                                                                column_type: column_type,
+                                                                                column_value: column_value,
+                                                                                f: f } %>
+
+  <%= render partial: 'financial_information/balance_sheet/alternatives', locals: { alternative_managers: @alternative_managers,
+                                                                                    column_name: column_name,
+                                                                                    column_type: column_type,
+                                                                                    column_value: column_value,
+                                                                                    f: f } %>
+
+  <%= render partial: 'financial_information/balance_sheet/investments', locals: { investments: @investments,
+                                                                                   column_name: column_name,
+                                                                                   column_type: column_type,
+                                                                                   column_value: column_value,
+                                                                                   f: f } %>
+
+  <%= render partial: 'financial_information/balance_sheet/properties', locals: { properties: @properties,
+                                                                                  column_name: column_name,
+                                                                                  column_type: column_type,
+                                                                                  column_value: column_value,
+                                                                                  f: f } %>
+</table>

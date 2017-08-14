@@ -1,4 +1,12 @@
 module FinancialInformationHelper
+  def set_financial_information_resources
+    @financial_provider = FinancialProvider.new(:user => current_user)
+    @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
+    @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
+    @investments = FinancialInvestment.for_user(current_user)
+    @properties = FinancialProperty.for_user(current_user)
+  end
+  
   def financial_account_last_update_date(provider)
     provider.accounts.max_by(&:updated_at).try(:updated_at)
   end

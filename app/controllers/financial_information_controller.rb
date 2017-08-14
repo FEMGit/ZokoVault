@@ -34,6 +34,10 @@ class FinancialInformationController < AuthenticatedController
     @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
   end
   
+  def balance_sheet
+    set_financial_information_resources
+  end
+  
   def update_balance_sheet
     update_value(:account, FinancialAccountInformation, :value)
     update_value(:alternative, FinancialAlternative, :current_value)
@@ -41,7 +45,11 @@ class FinancialInformationController < AuthenticatedController
     update_value(:investment, FinancialInvestment, :value)
     
     respond_to do |format|
-      tutorial_redirection(format, @financial_provider.as_json)
+      if params[:is_tutorial].present? && params[:is_tutorial].eql?('true')
+        tutorial_redirection(format, @financial_provider.as_json)
+      else
+        format.html { redirect_to financial_information_path, flash: { success: 'Balance Sheet was successfully updated.' } }
+      end
     end
   end
   

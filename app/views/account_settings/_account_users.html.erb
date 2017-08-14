@@ -18,6 +18,14 @@
   </div>
 
   <div class="ml-15 mb-30 ">
+    <% if @user_profile.errors.present? && (contact_error = @user_profile.errors.messages[:contact_validation_error]).present? %>
+      <p class="error-label">The following contacts have invalid data. Please fix them and try again.</p>
+      <ul class="mt-10">
+        <% contact_error.flatten.each do |contact_error| %>
+          <li class="error-label"><%= contact_error %></li>
+        <% end %>
+      </ul>
+    <% end %>
     <%= f.label :full_primary_shared_with, 'Upon presentation of a valid death certificate, please grant ownership of my vault to:' %>
     <div class="chosen-styled-select">
       <%= contact_select_with_create_new(f, :full_primary_shared_with_ids, @contacts_shareable, id: "full_primary_shared_with") %>

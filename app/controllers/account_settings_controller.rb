@@ -134,15 +134,29 @@ class AccountSettingsController < AuthenticatedController
 
   def update_account_users
     respond_to do |format|
-      if @user_profile.update_attributes(account_users_params)
-        if tutorial_params[:tutorial_name].present?
-          tutorial_redirection(format, @user_profile.as_json)
+      begin
+        if @user_profile.update_attributes(account_users_params)
+          if tutorial_params[:tutorial_name].present?
+            tutorial_redirection(format, @user_profile.as_json)
+          else
+            format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
+            format.json { render :account_users, status: :updated, location: @user_profile }
+          end
         else
-          format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
-          format.json { render :account_users, status: :updated, location: @user_profile }
+          tutorial_error_handle("Error saving Vault Co-Owner") && return
+          format.html { render :account_users }
+          format.json { render json: @user_profile.errors, status: :unprocessable_entity }
         end
-      else
-        tutorial_error_handle("Error saving Vault Co-Owner") && return
+      rescue ActiveRecord::RecordNotSaved
+        set_contacts_shareable
+        if account_users_params[:full_primary_shared_with_ids].present?
+          full_primary_shared_with_contact = Contact.for_user(current_user).where(:id => account_users_params[:full_primary_shared_with_ids])
+          invalid_contacts = full_primary_shared_with_contact.select { |x| !x.valid? }
+          if invalid_contacts.present?
+            @user_profile.errors[:contact_validation_error] = invalid_contacts.map(&:name)
+            flash[:error] = 'Some of the contacts you are trying to save have invalid data. Please fix them and try again.'
+          end
+        end
         format.html { render :account_users }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end

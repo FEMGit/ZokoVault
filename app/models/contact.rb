@@ -103,6 +103,12 @@ class Contact < ActiveRecord::Base
   end
   
   validates :relationship, inclusion: { in: RELATIONSHIP_TYPES.values.flatten, allow_blank: true }
-  validates :contact_type, inclusion: { in: CONTACT_TYPES.keys.flatten, allow_blank: true }
+  validate :contact_type_valid? 
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
+  
+  def contact_type_valid?
+    unless CONTACT_TYPES[contact_type].include? relationship
+      self.errors[:relationship] << "'#{relationship}' is invalid for selected contact type."
+    end
+  end
 end

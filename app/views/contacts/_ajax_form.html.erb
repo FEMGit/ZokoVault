@@ -192,9 +192,13 @@ var updateAddContactableTable = function(json) {
   }
 }
 
+var addSpanErrorMessage = function(selector, error_message) {
+  $('<span class="error-label"> - ' + error_message + '</span>').insertBefore($(selector));
+}
+
 var addErrorMessage = function(selector, error_message) {
   $(selector).addClass('input-error');
-  $('<span class="error-label"> - ' + error_message + '</span>').insertBefore($(selector));
+  addSpanErrorMessage(selector, error_message)
 }
 
 var cleanErrorMessages = function() {
@@ -226,6 +230,9 @@ $(function(){
         }
         if (key === "firstname") {
           addErrorMessage('#contact_firstname', contactErrors[key][0])
+        }
+        if (key == "relationship") {
+          addSpanErrorMessage('#contact_relationship_select', contactErrors[key][0])
         }
       }
     });

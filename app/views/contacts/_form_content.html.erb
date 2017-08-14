@@ -21,11 +21,12 @@
   </div>
 
   <%= f.label :relationship %>
-    <div class="styled-select">
-      <%= f.select :relationship,
-        options_for_select(Contact::RELATIONSHIP_TYPES[:personal], @contact.relationship),
-        {}, id: :relationships_select %>
-    </div>
+  <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:relationship] } %>
+  <div class="styled-select" id="contact_relationship_select">
+    <%= f.select :relationship,
+      options_for_select(Contact::RELATIONSHIP_TYPES[:professional], @contact.relationship),
+      {}, id: :relationships_select %>
+  </div>
 </div>
 
 <div id="category-form" class="contact-profile">
@@ -101,8 +102,11 @@
 <%= javascript_include_tag 'url_validation' %>
 <script>
   $(document).ready(function() {
-    contact_type_handle($('#contact_contact_type'), true)
+    if (typeof frozenContactChoice === 'undefined') {
+      contact_type_handle($('#contact_contact_type'), true)
+    }
   })
+  
   var setProfessionalDropdown = function(selectedOptions) {
     contact_type_dropdown = $('#contact_contact_type');
     contact_type_dropdown.empty();
@@ -110,6 +114,7 @@
       contact_type_dropdown.append("<option value='" + option + "'>" + option + "</option>");
     });
   }
+  
   var setRelationshipDropdown = function(selectedOptions) {
     relationship_dropdown = $('#relationships_select');
     relationship_dropdown.empty();

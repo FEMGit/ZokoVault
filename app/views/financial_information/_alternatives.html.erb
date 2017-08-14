@@ -2,10 +2,14 @@
   <div class="card cg-3 flex-column mb-20">
     <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_financial_count(resource_owner, @category, manager.id) } %>
     <h3><%= manager.name %></h3>
-    <p>
-      <%= link_to manager.web_address, manager.web_address, target: "_blank" %><br>
-      <%= manager.phone_number %>
-    </p>
+    <% if manager.web_address.present? || manager.phone_number.present? %>
+      <p>
+        <% if manager.web_address.present? %>
+          <%= link_to manager.web_address, manager.web_address, target: "_blank" %><br>
+        <% end %>
+        <%= manager.phone_number %>
+      </p>
+    <% end %>
       
     <% if manager.primary_contact.present? %>
       <label>Primary Contact</label>

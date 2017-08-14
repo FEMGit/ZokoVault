@@ -52,8 +52,9 @@ $state-width: 210px;
   padding: 15px 25px;
   margin: 15px 0;
   @include media($mobile) {
-    a.button {
-      margin: 0 7px 0 0;
+    a.button,
+    button {
+      margin: 0 7px 0 0 !important;
     }
     padding: 15px 10px 15px 25px;
   }

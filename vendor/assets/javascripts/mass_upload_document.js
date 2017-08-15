@@ -14,7 +14,7 @@ var massUploadFilesToPage = function(files){
     }
   })
 }
-console.log($("#shared_user_id").val() === null)
+
 var tableUpdate = function(documents) {
   var table = $('#documents-table').DataTable();
   for(var i = 0; i < documents.length; i++) {

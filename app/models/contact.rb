@@ -12,8 +12,8 @@ class Contact < ActiveRecord::Base
   validates_uniqueness_of :emailaddress, :scope => [:user_id, :emailaddress], allow_blank: true, message: "Email Address already taken"
   validates :emailaddress, :email_format => { :message => "Email should contain @ and domain like .com" }
   validate :email_is_valid?
-  
-  
+
+
   validates_length_of :firstname, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :lastname, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :emailaddress, :maximum => ApplicationController.helpers.get_max_length(:default)
@@ -21,13 +21,13 @@ class Contact < ActiveRecord::Base
   validates_length_of :address, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :zipcode, :maximum => ApplicationController.helpers.get_max_length(:zipcode)
   validates_length_of :notes, :maximum => ApplicationController.helpers.get_max_length(:notes)
-  
+
   validates_length_of :businessname, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :businesswebaddress, :maximum => (ApplicationController.helpers.get_max_length(:web) + ApplicationController.helpers.get_max_length(:web_prefix))
   validates_length_of :city, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_1, :maximum => ApplicationController.helpers.get_max_length(:default)
   validates_length_of :business_street_address_2, :maximum => ApplicationController.helpers.get_max_length(:default)
-  
+
   validates_format_of :businesswebaddress,
                       :with => Validation::WEB_ADDRESS_URL,
                       :message => "Please enter a valid url (starts with 'http://' or 'https://')",
@@ -64,7 +64,7 @@ class Contact < ActiveRecord::Base
     'Advisor' => RELATIONSHIP_TYPES[:professional],
     'Medical Professional' => RELATIONSHIP_TYPES[:medical_professional]
   }
-  
+
   def email_is_valid?
     MailService.email_is_valid?(emailaddress, errors, :emailaddress)
   end
@@ -80,7 +80,7 @@ class Contact < ActiveRecord::Base
   def professional_relationship?
     relationship.in? RELATIONSHIP_TYPES[:professional]
   end
-  
+
   def medical_relationship?
     relationship.in? RELATIONSHIP_TYPES[:medical_professional]
   end
@@ -88,7 +88,7 @@ class Contact < ActiveRecord::Base
   def initials
     [firstname, lastname].compact.map(&:first).join
   end
-  
+
   def account_owner?(resource_owner)
     (relationship.eql? 'Account Owner') &&
       (emailaddress.downcase.eql? resource_owner.email.downcase)
@@ -101,14 +101,18 @@ class Contact < ActiveRecord::Base
       [firstname,lastname].compact.join(' ')
     end
   end
-  
-  validates :relationship, inclusion: { in: RELATIONSHIP_TYPES.values.flatten, allow_blank: true }
-  validate :contact_type_valid? 
+
+  validate  :validate_contact_type_and_relationship
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }
-  
-  def contact_type_valid?
-    unless CONTACT_TYPES[contact_type].include? relationship
-      self.errors[:relationship] << "'#{relationship}' is invalid for selected contact type."
+
+  def validate_contact_type_and_relationship
+    if contact_type.blank?
+      return if relationship.blank? || RELATIONSHIP_TYPES[:account_owner].include?(relationship)
+      self.errors[:relationship] << "is invalid for blank contact_type"
+    elsif !CONTACT_TYPES.key?(contact_type)
+      self.errors[:contact_type] << "must be in #{CONTACT_TYPES.keys}"
+    elsif !CONTACT_TYPES[contact_type].include?(relationship)
+      self.errors[:relationship] << "is invalid for contact_type #{contact_type}"
     end
   end
 end

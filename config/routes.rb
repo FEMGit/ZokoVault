@@ -119,7 +119,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # contacts
+  # Contacts
   get 'contacts/relationship_values/:contact_type(/:shared_user_id)', to: 'contacts#relationship_values'
   get 'contacts/new(/:shared_user_id)', to: 'contacts#new', as: :contact_new
   get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact_details

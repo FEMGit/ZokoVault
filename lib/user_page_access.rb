@@ -1,7 +1,7 @@
 module UserPageAccess
   def self.permitted_shared_view
     ['shared_view', 'wills', 'power_of_attorneys', 'trusts', 'entities', 'financial_account', 'financial_alternative', 'financial_information', 'financial_investment', 'financial_property',
-               'healths', 'property_and_casualties', 'life_and_disabilities', 'taxes', 'final_wishes', 'documents']
+               'healths', 'property_and_casualties', 'life_and_disabilities', 'taxes', 'final_wishes', 'documents', 'contacts']
   end
 
   CONTROLLERS = {

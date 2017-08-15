@@ -23,7 +23,7 @@ class DocumentPolicy < BasicPolicy
   def owner_shared_category_with_user?
     shares = policy_share
     return false unless shares
-    return true if SharedViewService.shared_categories_full(shares).include? Rails.application.config.x.DocumentsCategory
+    return true if SharedViewService.shared_categories_full(shares).include? record.try(:category)
     false
   end
 

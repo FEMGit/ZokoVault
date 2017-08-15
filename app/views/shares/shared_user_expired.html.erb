@@ -1,8 +1,2 @@
-<div class="card mb-30 text-center">
-  <h5 class="text-center clr-gray-dark-tinted fw-600 mt-15 mb-30">Shared View Unavailable.</h5>
-  <section class="max-w-1000 inline-block mb-30">
-    <%= image_tag "marketing/files.png", :class => "w-200 mb-30" %><br>
-    <p class="mb-30 max-w-1000">The ZokuVault account for <%= @expired_user.name %> is unavailable at this time, please contact them directly for information.</p>
-    <%= link_to 'Back to Shared With Me', shares_path, class: "button big-button blue-button" %>
-  </section>
-</div>
+<%= render partial: 'shares/shared_user_expired', locals: { shares_dashboard_path: shares_path,
+                                                           back_to_shared_link_text: 'Back to Shared With Me' } %>

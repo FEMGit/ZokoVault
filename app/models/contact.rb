@@ -1,4 +1,5 @@
 class Contact < ActiveRecord::Base
+  ACCOUNT_OWNER_RELATIONSHIP = 'Account Owner'.freeze
   belongs_to :user
 
   scope :for_user, ->(user) {where(user: user)}
@@ -56,7 +57,7 @@ class Contact < ActiveRecord::Base
       'Other'
     ],
     medical_professional: %w(Doctor Nurse Administrator Caregiver Other),
-    account_owner: ['Account Owner']
+    account_owner: [ACCOUNT_OWNER_RELATIONSHIP]
   }
 
   CONTACT_TYPES = {
@@ -90,7 +91,7 @@ class Contact < ActiveRecord::Base
   end
 
   def account_owner?(resource_owner)
-    (relationship.eql? 'Account Owner') &&
+    (relationship.eql? ACCOUNT_OWNER_RELATIONSHIP) &&
       (emailaddress.downcase.eql? resource_owner.email.downcase)
   end
 

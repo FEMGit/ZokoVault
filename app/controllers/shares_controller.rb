@@ -4,6 +4,7 @@ class SharesController < AuthenticatedController
     helper_method :shared_category_count
     helper_method :shared_document_count
     include UserTrafficModule
+    include SharedUserExpired
     
     def page_name
       case action_name
@@ -12,10 +13,6 @@ class SharesController < AuthenticatedController
       end
     end
     
-    def shared_user_expired
-      @expired_user = User.find_by(id: params[:shared_user_id])
-    end
-
     def index
       @shares_by_user = policy_scope(Share)
                            .each { |s| authorize s }

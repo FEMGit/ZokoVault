@@ -5,6 +5,8 @@ class CorporateAccountsController < CorporateBaseController
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
   helper_method :managed_by_contacts
   
+  include SharedUserExpired
+  
   def set_index_breadcrumbs
     add_breadcrumb "Corporate Account", corporate_accounts_path
   end

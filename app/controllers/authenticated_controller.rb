@@ -77,15 +77,17 @@ class AuthenticatedController < ApplicationController
 
   def permitted_page_corporate_employee_user?
     shared_user_id = params[:shared_user_id]
-    ((controller_name && shared_user_id.blank? && UserPageAccess::CONTROLLERS[:corporate_employee][:general_view].include?(controller_name)) ||
+    (((controller_name && shared_user_id.blank? && UserPageAccess::CONTROLLERS[:corporate_employee][:general_view].include?(controller_name)) ||
      (controller_name && shared_user_id.present? && UserPageAccess::CONTROLLERS[:corporate_employee][:shared_view].include?(controller_name))) &&
-       !contains_paths?(black_listed(type: :corporate_employee), request.path_info)
+     !contains_paths?(black_listed(type: :corporate_employee), request.path_info)) ||
+      contains_paths?(white_listed(type: :corporate_employee), request.path_info)
   end
 
   def permitted_page_corporate_admin_user?
     shared_user_id = params[:shared_user_id]
     (controller_name && shared_user_id.blank? && UserPageAccess::CONTROLLERS[:corporate][:general_view].include?(controller_name)) ||
-      (controller_name && shared_user_id.present? && UserPageAccess::CONTROLLERS[:corporate][:shared_view].include?(controller_name))
+      (controller_name && shared_user_id.present? && UserPageAccess::CONTROLLERS[:corporate][:shared_view].include?(controller_name)) ||
+      contains_paths?(white_listed(type: :corporate_admin), request.path_info)
   end
 
   def missing_mfa?

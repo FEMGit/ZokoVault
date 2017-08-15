@@ -258,6 +258,7 @@ class SharedViewController < AuthenticatedController
         (@shared_user.current_user_subscription &&
           (@shared_user.current_user_subscription.expired_trial? ||
            @shared_user.current_user_subscription.expired_full?))
+      redirect_to shared_expired_corporate_path(@shared_user) and return if current_user.corporate_manager?
       redirect_to shared_expired_path(@shared_user)
     end
   end

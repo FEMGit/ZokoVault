@@ -12,6 +12,8 @@ module UserPageAccessHelper
           account_path,
           mfa_path,
           mfa_verify_code_account_path ]
+      when :corporate_admin, :corporate_employee
+      [ shared_expired_corporate_path(:id) ]
     end
   end
   

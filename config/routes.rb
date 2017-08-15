@@ -380,6 +380,7 @@ Rails.application.routes.draw do
 
   # Corporate Account
   get '/corporate', to: 'corporate_accounts#index', as: :corporate_accounts
+  get '/corporate/expired/:shared_user_id', to: 'corporate_accounts#shared_user_expired', as: :shared_expired_corporate
   get '/corporate/account_settings', to: 'corporate_accounts#account_settings', as: :corporate_account_settings
   get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings
   get '/corporate/billing_information', to: 'corporate_accounts#billing_information', as: :corporate_billing_information

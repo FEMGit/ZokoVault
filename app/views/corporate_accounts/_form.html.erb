@@ -71,10 +71,10 @@
         <li class="radio-list">
           <%= radio_button_tag :who_pays, "corporate", true %>
           <label for="who_pays">
-            Provide user with an annual subscription<br/>
+            Provide client with an annual subscription<br/>
             <span style="display:inline-block; width: 400px">
-              $<%=cost%> charged annually for every user attached to
-              your account. Add and remove new users at any time.
+              $<%=cost%> charged annually for every client attached to
+              your account. Add and remove new clients at any time.
             </span>
           </label>
           <div class="check"></div>
@@ -82,10 +82,10 @@
         <li class="radio-list">
           <%= radio_button_tag :who_pays, "client", false %>
           <label for="who_pays">
-            User will pay for their own account<br/>
+            Client will pay for their own account<br/>
             <span style="display:inline-block; width: 400px">
-              After UserName signs in they will have 14 days to pay
-              for their account before their Free Trial ends.
+              After your client signs in they will have 14 days to
+              pay for their account before their Free Trial ends.
             </span>
           </label>
           <div class="check"></div>

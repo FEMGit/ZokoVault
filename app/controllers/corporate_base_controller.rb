@@ -8,15 +8,15 @@ class CorporateBaseController < AuthenticatedController
   before_action :set_details_crumbs, only: [:edit, :show]
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
-  
+
   include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
-  
+
   helper_method :invitation_sent?
-  
+
   def index(account_type:)
-    corporate_users = 
+    corporate_users =
       if current_user.corporate_employee?
         CorporateEmployeeAccountUser.select { |x| x.corporate_employee == current_user }
       elsif current_user.corporate_admin
@@ -27,7 +27,7 @@ class CorporateBaseController < AuthenticatedController
                                  .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
     @corporate_profile =CorporateAccountProfile.find_by(user: corporate_owner)
   end
-  
+
   def create(account_type:, success_return_path:)
     respond_to do |format|
       if @user_account.save
@@ -37,6 +37,9 @@ class CorporateBaseController < AuthenticatedController
         corporate_admin_contact = create_corporate_admin_contact_for_user_account
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
+        handle_corporate_client_payment(
+          client: @user_account, admin: current_user, who_pays: params[:who_pays]
+        ) if account_type == CorporateAdminAccountUser.client_type
         format.html { redirect_to success_path(success_return_path), flash: { success: "#{account_type} Account successfully created." } }
         format.json { render :show, status: :created, location: @user_account }
       else
@@ -46,7 +49,7 @@ class CorporateBaseController < AuthenticatedController
       end
     end
   end
-  
+
   def update(account_type:, success_return_path:, params_to_update:)
     respond_to do |format|
       if @user_account.update(params_to_update)
@@ -61,7 +64,7 @@ class CorporateBaseController < AuthenticatedController
       end
     end
   end
-  
+
   def send_invitation
     account_type = params[:account_type] || "client"
     corporate_contact = corporate_contact_by_contact_id(params[:contact_id])
@@ -75,16 +78,16 @@ class CorporateBaseController < AuthenticatedController
       end
     end
   end
-  
+
   def invitation_sent?(contact)
     account_user = User.find_by(email: contact.emailaddress)
     corporate_admin_record = CorporateAdminAccountUser.find_by(corporate_admin_id: corporate_owner.id, user_account_id: account_user.id)
     return nil unless corporate_admin_record.present?
     corporate_admin_record.confirmation_sent_at.present?
   end
-  
+
   private
-  
+
   def corporate_owner
     if current_user.corporate_employee?
       current_user.corporate_admin_by_user
@@ -92,21 +95,21 @@ class CorporateBaseController < AuthenticatedController
       current_user
     end
   end
-  
+
   def redirect_if_corporate_employee
     redirect_to root_path if current_user.present? && current_user.corporate_employee?
   end
-  
+
   def redirect_unless_corporate
     redirect_to root_path unless current_user.present? && (current_user.corporate_admin || current_user.corporate_employee?)
   end
-  
+
   def corporate_activated?
     return true if current_user.present? && current_user.corporate_employee?
     redirect_to corporate_accounts_path unless current_user.present? && current_user.corporate_admin &&
                                                current_user.corporate_activated
   end
-  
+
   def details_path(account_type, corporate_profile)
     case account_type
       when CorporateAdminAccountUser.employee_type
@@ -115,7 +118,7 @@ class CorporateBaseController < AuthenticatedController
         corporate_account_path(corporate_profile)
     end
   end
-  
+
   def create_corporate_admin_contact_for_user_account
     account_profile = CorporateAccountProfile.find_by(user: corporate_owner)
 
@@ -137,7 +140,7 @@ class CorporateBaseController < AuthenticatedController
                    corporate_contact: true
     )
   end
-  
+
   def create_corporate_employee_contact_for_user_account(corporate_employee:, user_account:)
     return unless corporate_employee.corporate_employee?
     if (employee_contact = Contact.where(emailaddress: corporate_employee.email, user_id: user_account.id).first).present?
@@ -152,7 +155,7 @@ class CorporateBaseController < AuthenticatedController
       )
     end
   end
-  
+
   def create_associated_contact
     admin_contact = Contact.find_or_initialize_by(emailaddress: @user_account.email,
                                                   user_id: corporate_owner.id)
@@ -161,13 +164,13 @@ class CorporateBaseController < AuthenticatedController
     user_profile = admin_contact.user_profile
     update_contact_attributes(admin_contact, user_profile)
   end
-  
+
   def update_associated_contacts
     admin_contact = Contact.where(emailaddress: @user_account.email, user_id: corporate_owner.id).first
     user_profile = admin_contact.user_profile
     update_contact_attributes(admin_contact, user_profile)
   end
-  
+
   def update_contact_attributes(contact, user_profile)
     contact.update_attributes(
       firstname: user_profile.first_name,
@@ -183,14 +186,14 @@ class CorporateBaseController < AuthenticatedController
       city: user_profile.city
     )
   end
-  
+
   def set_corporate_contact_by_user_profile
     user_profile = UserProfile.find_by(id: params[:id])
     return unless user_profile.present?
     return unless user_accounts.include? user_profile.user
     @corporate_contact = Contact.where(user_profile_id: user_profile.id, user_id: corporate_owner.id).first
   end
-  
+
   def set_corporate_user_by_user_profile
     return unless corporate_owner.corporate_admin
     user_id = UserProfile.find_by(id: params[:id]).user_id
@@ -198,20 +201,23 @@ class CorporateBaseController < AuthenticatedController
     return unless user_accounts.include? user
     @user_account = user
   end
-  
+
   def set_corporate_profile_by_user_account
     @corporate_profile = Contact.for_user(corporate_owner).find_by(emailaddress: @user_account.email).user_profile
   end
-  
+
   def corporate_contact_by_contact_id(contact_id)
     return nil unless contact_id.present? &&
            (corporate_contact = Contact.find_by(id: contact_id)).present?
     corporate_contact
   end
-  
+
   def corporate_contact_by_contact_id(contact_id)
     return nil unless contact_id.present? &&
            (corporate_contact = Contact.find_by(id: contact_id)).present?
     corporate_contact
+  end
+
+  def handle_corporate_client_payment(client:, admin:, who_pays:)
   end
 end

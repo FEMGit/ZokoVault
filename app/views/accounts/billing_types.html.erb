@@ -1,21 +1,15 @@
 <div class="card max-w-1000-centered">
   <h4 class="fw-600 mb-30 clr-gray-dark-tinted">Billing Types</h4>
-  
-  <p class="mb-5">Provide user(s) with a lifetime subscription.</p>
-  <p class="fz-14 clr-gray-dark mb-30">One time fee charged to your account will provide lifetime access your client/employee on the platform.</p>
-  
+
   <p class="mb-5">Provide user(s) with an annual subscription.</p>
   <p class="fz-14 clr-gray-dark mb-30">Fee charged annually for every user attached to your account.</p>
   
-  <p class="mb-5">Provide user(s) with a one year subscription.</p>
-  <p class="fz-14 clr-gray-dark mb-30">Fee charged once to your account. Your client is responsible for maintaining their account after their first year on the platform, or purchase annual subscription coupon codes, and distribute them to your users.</p>
-  
   <p class="mb-5">User(s) will pay for their account.</p>
   <p class="fz-14 clr-gray-dark mb-30">After your user signs up, they will have 14 days to pay for their account before their free trial ends.</p>
-  
+
   <p class="mb-5">User(s) will pay for their own account with your discounted affiliate code.</p>
   <p class="fz-14 clr-gray-dark mb-30">After your user signs up, they will have 14 days to pay for their account before their free trial ends. When the user pays for their account using your affiliate code, you will receive compensation through our affiliate platform.</p>
-  
+
   <%= render partial: 'layouts/back_continue_buttons', locals: { back_path: how_billing_works_path,
                                                                  continue_path: corporate_credit_card_path } %>
 </div>

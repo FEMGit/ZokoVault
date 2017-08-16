@@ -1,3 +1,7 @@
+$(document).ready(function() {
+  $(window).trigger('resize')
+})
+
 function stripeTokenHandler(token) {
   var form = document.getElementById('payment-form');
   var hiddenInput = document.createElement('input');
@@ -6,6 +10,22 @@ function stripeTokenHandler(token) {
   hiddenInput.setAttribute('value', token.id);
   form.appendChild(hiddenInput);
   form.submit();
+}
+
+function stripeWindowResize(card) {
+  if(window.innerWidth <= 340) {
+    card.update({style: {base: {fontSize: '13px'}}})
+  } else if(window.innerWidth <= 375) {
+    card.update({style: {base: {fontSize: '16px'}}})
+  } else {
+    card.update({style: {base: {fontSize: '20px'}}})
+  }
+}
+
+function headerPositionFix() {
+  var headerElement = $('.app-nav').find('header')
+  var offset = -headerElement.offset().top
+  headerElement.css('margin-top', "+=" + offset)
 }
 
 function setupStripeCardEntryForm(key) {
@@ -28,8 +48,22 @@ function setupStripeCardEntryForm(key) {
   var card = elements.create('card', {style: style});
 
   card.mount('#card-element');
-
+  
+  window.addEventListener('resize', function(event) {
+    stripeWindowResize(card)
+  })
+  
+  window.addEventListener('touchstart', function(event) {
+    headerPositionFix()
+  })
+  
+  card.on('blur', function(event) { 
+    headerPositionFix()
+  })
+  
   card.addEventListener('change', function(event) {
+    stripeWindowResize(card)
+    headerPositionFix()
     var displayError = document.getElementById('card-errors');
     if (event.error) {
       displayError.textContent = event.error.message;

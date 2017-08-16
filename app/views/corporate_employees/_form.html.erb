@@ -47,24 +47,30 @@
         <th>First Name</th>
         <th>Email</th>
       </tr>
-      <% @corporate_contacts.each do |contact| %>
+      <% if @corporate_contacts.any? %>
+        <% @corporate_contacts.each do |contact| %>
+          <tr>
+            <td class="w-10">
+              <ul class="check-list">
+                <li class="check-list">
+                  <label>
+                    <%= check_box_tag "corporate_employee[user_accounts][#{contact.emailaddress}]",
+                      contact.emailaddress,
+                      @employee_account_user_emails.include?(contact.emailaddress.downcase), {}
+                    %>
+                  <span class="mb-10"></span>
+                </label>
+                </li>
+              </ul>
+            </td>
+            <td><%= contact.firstname %></td>
+            <td><%= contact.lastname %></td>
+            <td><%= mail_to contact.emailaddress, contact.emailaddress, class: 'no-underline-link' %></td>
+          </tr>
+        <% end %>
+      <% else %>
         <tr>
-          <td class="w-10">
-            <ul class="check-list">
-              <li class="check-list">
-                <label>
-                  <%= check_box_tag "corporate_employee[user_accounts][#{contact.emailaddress}]",
-                    contact.emailaddress,
-                    @employee_account_user_emails.include?(contact.emailaddress.downcase), {}
-                  %>
-                <span class="mb-10"></span>
-              </label>
-              </li>
-            </ul>
-          </td>
-          <td><%= contact.firstname %></td>
-          <td><%= contact.lastname %></td>
-          <td><%= mail_to contact.emailaddress, contact.emailaddress, class: 'no-underline-link' %></td>
+          <td colspan="4" align="center">No accounts available.</td>
         </tr>
       <% end %>
     </table>

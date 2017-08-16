@@ -1,13 +1,13 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 <% document_upload_access = @category.name.downcase.eql?(Rails.application.config.x.DocumentsCategory.downcase) %>
 
-<h1>Edit - <%= document_upload_access ? 'Document Upload Access' : @category.name %></h1>
+<h1>Edit - <%= document_upload_access ? 'Document Upload Shared With' : @category.name %></h1>
 
 <%= form_for :shareable_category, url: share_category_path(@shareable_category.id) do |f| %>
   <div class="card cg-3 mb-30 fin-toggle" data-toggle="true">
 
 <% if document_upload_access %>
-  Allow users to upload documents into your vault. They will only be able to see documents they upload.
+  Allow contacts to securely upload documents directly into your Vault.
 <% else %>
   Sharing your entire category with a Contact will enable them to view all category details. This will include all of the accounts, contacts, documents and data associated with the category.
 <% end %>

@@ -1,6 +1,6 @@
 class UserProfilesController < AuthenticatedController
-  before_action :set_user_profile, only: [:show, :edit, :update, :destroy]
-  before_action :set_contacts, only: [:new, :create, :edit, :update]
+  before_action :set_user_profile, only: [:index, :edit, :update]
+  before_action :set_contacts, only: [:edit, :update]
   include SanitizeModule
 
   skip_before_action :redirect_if_free_user
@@ -9,82 +9,42 @@ class UserProfilesController < AuthenticatedController
   add_breadcrumb "My Profile", :my_profile_path
   add_breadcrumb "Edit My Profile", :edit_user_profile_path, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
 
   def page_name
     case action_name
       when 'edit'
         return "Edit My Profile"
-      when 'show'
+      when 'index'
         return "My Profile"
     end
   end
 
-  # GET /user_profiles
-  # GET /user_profiles.json
   def index
-    @user_profiles = UserProfile.all
-  end
-
-  # GET /user_profiles/1
-  # GET /user_profiles/1.json
-  def show
+    authorize @user_profile
     @category = "My Profile"
     @my_profile_documents = Document.for_user(current_user).where(category: @category)
     session[:ret_url] = my_profile_path
   end
 
-  # GET /user_profiles/new
-  def new
-    @user_profile = UserProfile.new(user: current_user)
-    @user_profile.employers.first_or_initialize
-    authorize @user_profile
-  end
-
-  # GET /user_profiles/1/edit
   def edit
+    authorize @user_profile
     @user_profile.employers.first_or_initialize
   end
 
-  # POST /user_profiles
-  # POST /user_profiles.json
-  def create
-    params[:user_profile][:date_of_birth] = date_format
-    @user_profile = UserProfile.new(user_profile_params)
-    authorize @user_profile
-    respond_to do |format|
-      if @user_profile.save
-        format.html { redirect_to my_profile_path, flash: { success: 'User profile was successfully created.' } }
-        format.json { render :show, status: :created, location: @user_profile }
-      else
-        format.html { render :new }
-        format.json { render json: @user_profile.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /user_profiles/1
-  # PATCH/PUT /user_profiles/1.json
   def update
+    authorize @user_profile
     params[:user_profile][:date_of_birth] = date_format
     respond_to do |format|
       if @user_profile.update(user_profile_params)
         format.html { redirect_to my_profile_path, flash: { success: 'User profile was successfully updated.' } }
         format.json { render :show, status: :ok, location: @user_profile }
       else
+        my_profile_error_breadcrumb_update
         format.html { render :edit }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /user_profiles/1
-  # DELETE /user_profiles/1.json
-  def destroy
-    @user_profile.destroy
-    respond_to do |format|
-      format.html { redirect_to user_profile_url, notice: 'User profile was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

@@ -74,6 +74,12 @@ module BreadcrumbsErrorModule
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
+  
+  def my_profile_error_breadcrumb_update
+    breadcrumbs.clear
+    add_breadcrumb "My Profile", :my_profile_path
+    add_breadcrumb "Edit My Profile", :edit_user_profile_path
+  end
 
   private
 

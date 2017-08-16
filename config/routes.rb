@@ -169,8 +169,8 @@ Rails.application.routes.draw do
   resources :account_traffics
   get 'account_traffic', to: 'account_traffics#index', as: :user_account_traffics
 
-  resource :user_profile
-  get 'my_profile' => 'user_profiles#show'
+  resource :user_profile, only: [:edit, :update]
+  get 'my_profile' => 'user_profiles#index'
 
   get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_ended
   get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update

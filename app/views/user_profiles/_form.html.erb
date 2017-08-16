@@ -8,19 +8,22 @@
     <h3 class="card-label">Personal Information</h3>
 
     <%= f.label :first_name, 'First Name' %>
-    <p><%= f.text_field :first_name, :maxlength => get_max_length(:default) %></p>
+    <% if errors && @user_profile.errors.messages[:first_name].first %>
+      <span class="error-label"> - <%= @user_profile.errors.messages[:first_name].first %></span>
+    <% end %>
+    <p><%= f.text_field :first_name, { class: ("input-error" if @user_profile.errors.messages[:first_name].present?), :maxlength => get_max_length(:default) } %></p>
 
     <%= f.label :middle_name, 'Middle Name (optional)' %>
     <p><%= f.text_field :middle_name, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :last_name, 'Last Name' %>
-    <p><%= f.text_field :last_name, :maxlength => get_max_length(:default) %></p>
+    <% if errors && @user_profile.errors.messages[:last_name].first %>
+      <span class="error-label"> - <%= @user_profile.errors.messages[:last_name].first %></span>
+    <% end %>
+    <p><%= f.text_field :last_name, { class: ("input-error" if @user_profile.errors.messages[:last_name].present?), :maxlength => get_max_length(:default) } %></p>
 
     <%= f.label :email, 'Email Address' %>
-    <% if errors && @user_profile.errors.messages[:email] %>
-      <span class="error-label"> - <%= @user_profile.errors.messages[:email].first %></span>
-    <% end %>
-    <p><%= f.email_field :email, { class: ("input-error" if @user_profile.errors.messages[:email].present?), :maxlength => get_max_length(:default) } %></p>
+    <p><%= f.email_field :email, :maxlength => get_max_length(:default) %></p>
 
     <%= f.label :phone_number_mobile, 'Cell Phone Number' %>
 
@@ -104,7 +107,7 @@
   <% end %>
 
   <%= f.submit "Save", class: "button primary-button big-button" %>
-  <%= link_to 'Cancel', user_profile_path, {class: "button secondary-button big-button", id: "submit-button"} %>
+  <%= link_to 'Cancel', my_profile_path, {class: "button secondary-button big-button", id: "submit-button"} %>
 <% end %>
 
 <%= javascript_include_tag 'url_validation' %>

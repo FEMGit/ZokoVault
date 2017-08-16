@@ -68,24 +68,32 @@
       <% cost = (plan.amount / 100.0).round(2) %>
 
       <ul class="radio-list">
-        <li class="radio-list">
-          <%= radio_button_tag 'payment[who_pays]', "corporate", true,
-              onclick: 'showPricingRows()' %>
-          <label for="payment_who_pays_corporate">
+        <% if !@has_card %>
+          <div class="card" style="float:right">
+            You must setup <%=
+              link_to 'Billing Information', corporate_billing_information_path
+            %> to enable this option.
+          </div>
+        <% end %>
+        <li class="radio-list" style="width:50%">
+          <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
+              onclick: 'showPricingRows()', disabled: !@has_card %>
+          <label for="payment_who_pays_corporate"
+               style="<%= 'color:#989797' if !@has_card %>">
             Provide client with an annual subscription<br/>
-            <span style="display:inline-block; width: 400px">
+            <span style="display:inline-block; width:400px">
               $<%=cost%> charged annually for every client attached to
               your account. Add and remove new clients at any time.
             </span>
           </label>
           <div class="check"></div>
         </li><br/>
-        <li class="radio-list">
-          <%= radio_button_tag 'payment[who_pays]', "client", false,
+        <li class="radio-list" style="width:50%">
+          <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,
               onclick: 'hidePricingRows()' %>
           <label for="payment_who_pays_client">
             Client will pay for their own account<br/>
-            <span style="display:inline-block; width: 400px">
+            <span style="display:inline-block; width:400px">
               After your client signs in they will have 14 days to
               pay for their account before their Free Trial ends.
             </span>
@@ -126,6 +134,9 @@
   <script type='text/javascript'>
     function hidePricingRows() { $('#pricing-rows').hide(); }
     function showPricingRows() { $('#pricing-rows').show(); }
+    <% if !@has_card %>
+      $(document).ready(function() { hidePricingRows(); })
+    <% end %>
   </script>
 
 <%= javascript_include_tag "promotion_logic" %>

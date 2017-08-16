@@ -56,7 +56,7 @@ class CorporateAccountsController < CorporateBaseController
     ShareService.append_primary_shares(current_user, shares_by_user)
     @shares_by_user = (shares_by_user[:primary_shared_user] + shares_by_user.keys.select { |x| x.is_a? User }).uniq.reject { |sh| corporate_users_emails.include? sh.email.downcase }
   end
-    
+
   def billing_information
     stripe_customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
     @card = StripeService.customer_card(customer: stripe_customer)
@@ -75,6 +75,8 @@ class CorporateAccountsController < CorporateBaseController
   def new
     @user_account = User.new(user_profile: UserProfile.new)
     @user_account.confirm_email!
+    stripe_customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
+    @has_card = !!(stripe_customer && StripeService.customer_card(customer: stripe_customer))
   end
 
   def edit_account_settings

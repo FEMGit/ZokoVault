@@ -151,7 +151,7 @@ class TutorialsController < AuthenticatedController
     if @prev_tutorial_name == 'tutorial_new'
       session[:tutorial_index] = 0
       redirect_to return_path and return
-    elsif @prev_tutorial_name == 'balance-sheet' && !financial_information_any?
+    elsif @prev_tutorial_name == 'balance-sheet' && !financial_information_balance_sheet_any?
       tuto_index -= 1
       session[:tutorial_index] -= 1
       redirect_to return_path and return if session[:tutorial_index] <= 0

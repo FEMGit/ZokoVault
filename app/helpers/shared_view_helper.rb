@@ -66,7 +66,9 @@ module SharedViewHelper
   
   def show_insurance_info?(owner, vendors, vendor_group)
     return true if owner == current_user
-    vendors.select { |v| v.group.eql? vendor_group }.count > 0
+    shares = SharedViewService.shares(owner, current_user)
+    shared_category_names = SharedViewService.shared_category_names(shares)
+    (vendors.select { |v| v.group.eql? vendor_group }.count > 0) || (shared_category_names.include? Rails.application.config.x.InsuranceCategory)
   end
   
   def can_add_document?

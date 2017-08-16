@@ -1,6 +1,6 @@
 class SharedViewService
   def self.shared_categories_full(shares)
-    @shared_category_names_full = shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+    @shared_category_names_full = shared_category_names(shares)
     shares.select(&:shareable_type).map(&:shareable).each do |shareable|
       case shareable
       when Will, PowerOfAttorneyContact
@@ -18,6 +18,10 @@ class SharedViewService
       end
     end
     @shared_category_names_full
+  end
+  
+  def self.shared_category_names(shares)
+    shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
   end
   
   def self.shares(owner, non_owner)

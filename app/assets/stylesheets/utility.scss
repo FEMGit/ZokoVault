@@ -19,6 +19,12 @@
 .fn{
   float:none !important;
 }
+.fl-mobile-off {
+  float: left !important;
+  @include media($mobile) {
+    float: none !important;
+  }
+}
 .justify-content-center {
   justify-content: center !important;
 }

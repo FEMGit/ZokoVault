@@ -3,11 +3,6 @@
 
 <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
-<%= render :partial => "documents/mass_document_upload_button" %>
-
 <div class="mt-30">
-  <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.DocumentsCategory.downcase,
-                                                               :title => 'Document Upload Access',
-                                                               :shared_with_title => 'Upload Shared With',
-                                                               :description => 'Allow users to upload documents into your vault. They will only be able to see documents they upload.'} %>
+  <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.DocumentsCategory.downcase } %>
 </div>

@@ -30,16 +30,13 @@ class CorporateBaseController < AuthenticatedController
 
   def create(account_type:, success_return_path:)
     respond_to do |format|
-      if @user_account.save
+      if bill_and_persist_client(client: @user_account, account_type: account_type)
         CorporateAdminAccountUser.create(corporate_admin: corporate_owner, user_account: @user_account,
                                          account_type: CorporateAdminAccountUser.account_types[account_type])
         create_associated_contact
         corporate_admin_contact = create_corporate_admin_contact_for_user_account
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
-        handle_corporate_client_payment(
-          client: @user_account, admin: current_user, payment: params[:payment]
-        ) if account_type == CorporateAdminAccountUser.client_type
         format.html { redirect_to success_path(success_return_path), flash: { success: "#{account_type} Account successfully created." } }
         format.json { render :show, status: :created, location: @user_account }
       else
@@ -218,25 +215,36 @@ class CorporateBaseController < AuthenticatedController
     corporate_contact
   end
 
-  def handle_corporate_client_payment(client:, admin:, payment:)
-    if payment["who_pays"] == "corporate"
-      stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin)
-      plan = StripeSubscription.yearly_plan
-      stripe_sub = StripeService.subscribe(
-        customer:   stripe_customer,
-        plan_id:    plan.id,
-        promo_code: payment["promo_code"]
-      )
-      our_obj = client.create_stripe_subscription(
-        customer_id:      stripe_customer.id,
-        subscription_id:  stripe_sub.id,
-        plan_id:          plan.id,
-        promo_code:       payment["promo_code"]
-      )
-      SubscriptionService.create_from_stripe(
-        user: client, stripe_subscription_object: stripe_sub)
-    end
-  # rescue Stripe::InvalidRequestError, Stripe::CardError => se
-  # need to handle stripe failures
+  def bill_and_persist_client(client:, account_type:)
+    return false if !client || !client.valid? || !client.save
+    return true if account_type != CorporateAdminAccountUser.client_type
+    payment = params[:payment] || {}
+    return true if payment["who_pays"] != "corporate"
+    result = bill_corporate_admin(
+      client: client, admin: current_user, promo: payment["promo_code"])
+    return true if result
+    client.destroy
+    false
+  end
+
+  def bill_corporate_admin(client:, admin:, promo:)
+    stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin)
+    plan = StripeSubscription.yearly_plan
+    stripe_sub = StripeService.subscribe(
+      customer:   stripe_customer,
+      plan_id:    plan.id,
+      promo_code: promo
+    )
+    our_obj = client.create_stripe_subscription(
+      customer_id:      stripe_customer.id,
+      subscription_id:  stripe_sub.id,
+      plan_id:          plan.id,
+      promo_code:       promo
+    )
+    SubscriptionService.create_from_stripe(
+      user: client, stripe_subscription_object: stripe_sub)
+  rescue Stripe::CardError => err
+    @billing_error = err.message
+    nil
   end
 end

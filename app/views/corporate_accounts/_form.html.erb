@@ -66,6 +66,7 @@
 
       <% plan = StripeSubscription.yearly_plan %>
       <% cost = (plan.amount / 100.0).round(2) %>
+      <% @has_card = true if @billing_error %>
 
       <ul class="radio-list">
         <% if !@has_card %>
@@ -99,9 +100,16 @@
             </span>
           </label>
           <div class="check"></div>
-        </li>
+        </li><br/>
       </ul>
-      <br/>
+      <% if @billing_error %>
+        <div class="flash-error-static flash static"
+             style="width:55%; margin-left:0" id="billing_error">
+          <div>Billing Error: <%= @billing_error %></div>
+          <div>Please <%= link_to 'update your credit card on file',
+            corporate_billing_information_path, :target => "_blank" %>.</div>
+        </div>
+      <% end %>
       <div id="pricing-rows">
         <section class="bb-gray-light-dashed mb-10">
           <div class="inline-block mb-10">Annual Subscription</div>
@@ -132,8 +140,15 @@
   <% end %>
 
   <script type='text/javascript'>
-    function hidePricingRows() { $('#pricing-rows').hide(); }
-    function showPricingRows() { $('#pricing-rows').show(); }
+    function hidePricingRows() {
+      $('#pricing-rows').hide();
+      <% if @billing_error %>
+      $('#billing_error').hide();
+      <% end %>
+    }
+    function showPricingRows() {
+      $('#pricing-rows').show();
+    }
     <% if !@has_card %>
       $(document).ready(function() { hidePricingRows(); })
     <% end %>

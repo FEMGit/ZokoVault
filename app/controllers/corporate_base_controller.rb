@@ -38,7 +38,7 @@ class CorporateBaseController < AuthenticatedController
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
         handle_corporate_client_payment(
-          client: @user_account, admin: current_user, who_pays: params[:who_pays]
+          client: @user_account, admin: current_user, payment: params[:payment]
         ) if account_type == CorporateAdminAccountUser.client_type
         format.html { redirect_to success_path(success_return_path), flash: { success: "#{account_type} Account successfully created." } }
         format.json { render :show, status: :created, location: @user_account }
@@ -218,6 +218,25 @@ class CorporateBaseController < AuthenticatedController
     corporate_contact
   end
 
-  def handle_corporate_client_payment(client:, admin:, who_pays:)
+  def handle_corporate_client_payment(client:, admin:, payment:)
+    if payment["who_pays"] == "corporate"
+      stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin)
+      plan = StripeSubscription.yearly_plan
+      stripe_sub = StripeService.subscribe(
+        customer:   stripe_customer,
+        plan_id:    plan.id,
+        promo_code: payment["promo_code"]
+      )
+      our_obj = client.create_stripe_subscription(
+        customer_id:      stripe_customer.id,
+        subscription_id:  stripe_sub.id,
+        plan_id:          plan.id,
+        promo_code:       payment["promo_code"]
+      )
+      SubscriptionService.create_from_stripe(
+        user: client, stripe_subscription_object: stripe_sub)
+    end
+  # rescue Stripe::InvalidRequestError, Stripe::CardError => se
+  # need to handle stripe failures
   end
 end

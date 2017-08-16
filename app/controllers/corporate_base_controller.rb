@@ -234,7 +234,7 @@ class CorporateBaseController < AuthenticatedController
       customer:   stripe_customer,
       plan_id:    plan.id,
       promo_code: promo,
-      metadata: { client_id: client.id, client_email: client.email }
+      metadata: { corporate: true, client_id: client.id, client_email: client.email }
     )
     our_obj = client.create_stripe_subscription(
       customer_id:      stripe_customer.id,

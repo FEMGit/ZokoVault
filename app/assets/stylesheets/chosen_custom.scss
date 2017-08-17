@@ -1,5 +1,5 @@
-$chosen-sprite: asset-data-url('chosen-sprite.svg') !default;
-$chosen-sprite-retina: asset-data-url('chosen-sprite@2x.svg') !default;
+$chosen-sprite: asset-url('chosen-sprite.svg') !default;
+$chosen-sprite-retina: asset-url('chosen-sprite@2x.svg') !default;
 
 $arrow-dropdown-margin-right: 30px;
 
@@ -42,7 +42,7 @@ $arrow-dropdown-margin-right: 30px;
     abbr {
       top: 10px !important;
       right: 35px !important;
-      background: asset-data-url('chosen-sprite.svg') -42px 1px no-repeat !important;
+      background: asset-url('chosen-sprite.svg') -42px 1px no-repeat !important;
       font-size: 1px;
     }
   }
@@ -58,7 +58,7 @@ $arrow-dropdown-margin-right: 30px;
     border-radius: 5px !important;
     min-height: 32px !important;
     padding: 0 !important;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right !important;
+    background: white asset-url('SVG/select-drop-down.svg') no-repeat right !important;
     font-family: "Open Sans", serif;
     font-size: 16px;
     font-weight: normal;
@@ -84,12 +84,12 @@ $arrow-dropdown-margin-right: 30px;
 
 //CHOSEN SPRITE
 .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-  background: asset-data-url('chosen-sprite.svg') -42px 1px no-repeat !important;
+  background: asset-url('chosen-sprite.svg') -42px 1px no-repeat !important;
 }
 .chosen-container-single .chosen-single abbr:hover,
 .chosen-container-single.chosen-disabled .chosen-single abbr:hover,
 .chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
-  background: asset-data-url('chosen-sprite.svg') -42px -10px no-repeat !important;
+  background: asset-url('chosen-sprite.svg') -42px -10px no-repeat !important;
 }
 
 //Search-results
@@ -100,7 +100,7 @@ $arrow-dropdown-margin-right: 30px;
 
 //Search in single select
 .chosen-container-single .chosen-search input[type="text"] {
-  background: transparent asset-data-url('SVG/search.svg')no-repeat 4px 7px !important;
+  background: transparent asset-url('SVG/search.svg')no-repeat 4px 7px !important;
   padding-left: 20px;
 }
 
@@ -130,7 +130,7 @@ $arrow-dropdown-margin-right: 30px;
   float: none;
 }
 .chosen-container-multi .chosen-choices li.search-field input:focus{
-  background: transparent asset-data-url('SVG/search.svg')no-repeat 0 7px !important;
+  background: transparent asset-url('SVG/search.svg')no-repeat 0 7px !important;
   padding-left: 16px;
 }
 
@@ -153,7 +153,7 @@ $arrow-dropdown-margin-right: 30px;
 
   &::before{
     content:"";
-    background: transparent asset-data-url('SVG/add-contact.svg') no-repeat 0 0px;
+    background: transparent asset-url('SVG/add-contact.svg') no-repeat 0 0px;
     width: 16px;
     height: 16px;
     position: absolute;

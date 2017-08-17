@@ -15,7 +15,7 @@ body.logged-out{
 //HOME PAGE
 .corporate-1a{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0.85) 100%),
-              transparent asset-data-url('marketing/corporate-1.jpg') center center;
+              transparent asset-url('marketing/corporate-1.jpg') center center;
   background-size: cover;
   text-align: center;
   height: 500px;
@@ -99,7 +99,7 @@ body.logged-out{
   background: white;
   padding-top: 215px;
   background:linear-gradient(to bottom, rgba(255, 255, 255, .0) 0%, rgba(255, 255, 255, 0.9) 100%),
-              transparent asset-data-url('marketing/wall.jpg') center center;
+              transparent asset-url('marketing/wall.jpg') center center;
   background-size: cover;
 
   @include media($mobile) {
@@ -151,14 +151,14 @@ body.logged-out{
 
 
 .hero-01{
-  background: transparent asset-data-url('marketing/hero-01.jpg') center top;
+  background: transparent asset-url('marketing/hero-01.jpg') center top;
   background-size: cover;
   height: 600px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0.15) 100%),
-                transparent asset-data-url('marketing/hero-01.jpg') center top;
+                transparent asset-url('marketing/hero-01.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -177,14 +177,14 @@ body.logged-out{
 }
 .hero-01a{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .05) 0%, rgba(0, 0, 0, 0.6) 100%),
-              transparent asset-data-url('marketing/hero-01a.jpg') center top;
+              transparent asset-url('marketing/hero-01a.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/hero-01a.jpg') center top;
+                transparent asset-url('marketing/hero-01a.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -202,7 +202,7 @@ body.logged-out{
   }
 }
 .logo-bg{
-  background: transparent asset-data-url('marketing/logo-bg.jpg') left top;
+  background: transparent asset-url('marketing/logo-bg.jpg') left top;
   background-size: cover;
   height: 615px;
   text-align: center;
@@ -224,14 +224,14 @@ body.logged-out{
 
 .hero-02{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
-              transparent asset-data-url('marketing/hero-02.jpg') center top;
+              transparent asset-url('marketing/hero-02.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/hero-02.jpg') center top;
+                transparent asset-url('marketing/hero-02.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -268,13 +268,13 @@ body.logged-out{
 }
 .hero-03{
   background: linear-gradient(to bottom, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0.3) 100%),
-              transparent asset-data-url('marketing/hero-03.jpg') center top;
+              transparent asset-url('marketing/hero-03.jpg') center top;
   background-size: cover;
   height: 700px;
 
   @include media($eightfifty) {
     background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.5) 100%),
-                transparent asset-data-url('marketing/hero-03.jpg') center center;
+                transparent asset-url('marketing/hero-03.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -313,7 +313,7 @@ body.logged-out{
 }
 
 .hero-04{
-  background: white asset-data-url('marketing/hero-04.png') center top;
+  background: white asset-url('marketing/hero-04.png') center top;
   background-size: cover;
   height: 700px;
   text-align: center;
@@ -325,14 +325,14 @@ body.logged-out{
 
 .hero-05{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, 0.6) 100%),
-              transparent asset-data-url('marketing/hero-05.jpg') center top;
+              transparent asset-url('marketing/hero-05.jpg') center top;
   background-size: cover;
   height: 500px;
   text-align:center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/hero-05.jpg') center top;
+                transparent asset-url('marketing/hero-05.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -379,14 +379,14 @@ h1.hero-text-dark{
 //CORPORATE
 .corporate-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/corporate-1.jpg') center center;
+              transparent asset-url('marketing/corporate-1.jpg') center center;
   background-size: cover;
   height: 450px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/corporate-1.jpg') center center;
+                transparent asset-url('marketing/corporate-1.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -408,14 +408,14 @@ h1.hero-text-dark{
 //SECURITY
 .security-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/hands.jpg') center center;
+              transparent asset-url('marketing/hands.jpg') center center;
   background-size: cover;
   height: 450px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/hands.jpg') center center;
+                transparent asset-url('marketing/hands.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -441,7 +441,7 @@ h1.hero-text-dark{
   @include media($mobile) {
     article{
       background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.8) 100%),
-                  transparent asset-data-url('marketing/lock.png') center 50px no-repeat;
+                  transparent asset-url('marketing/lock.png') center 50px no-repeat;
     }
     img{
       display:none;
@@ -458,7 +458,7 @@ h1.hero-text-dark{
 
     @include media($tablet) {
         background: linear-gradient(to bottom, rgba(255, 255, 255, .85) 0%, rgba(255, 255, 255, 0.85) 100%),
-                    transparent asset-data-url('marketing/safe.png') center top no-repeat;
+                    transparent asset-url('marketing/safe.png') center top no-repeat;
     }
 
     h1,p{
@@ -479,14 +479,14 @@ h1.hero-text-dark{
 }
 .security-cta{
   background: linear-gradient(to bottom, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0.8) 100%),
-              transparent asset-data-url('marketing/family.jpg') center top;
+              transparent asset-url('marketing/family.jpg') center top;
   background-size: cover;
   height: 700px;
   text-align:center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.9) 100%),
-                transparent asset-data-url('marketing/security-cta.jpg') center center;
+                transparent asset-url('marketing/security-cta.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -506,14 +506,14 @@ h1.hero-text-dark{
 //ABOUT
 .about-header{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/about-header.jpg') center top;
+              transparent asset-url('marketing/about-header.jpg') center top;
   background-size: cover;
   height: 550px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/about-header.jpg') center top;
+                transparent asset-url('marketing/about-header.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -560,13 +560,13 @@ h1.hero-text-dark{
 }
 
 .generic.wall{
-  background: asset-data-url('marketing/wall.jpg');
+  background: asset-url('marketing/wall.jpg');
   padding: 60px 20px;
   background-size: cover;
 }
 
 .generic.paper{
-  background: asset-data-url('marketing/paper.jpg') center center;
+  background: asset-url('marketing/paper.jpg') center center;
   padding: 60px 20px;
   background-size: cover;
 }
@@ -574,14 +574,14 @@ h1.hero-text-dark{
 //RESOURCES
 .resources-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/resources.jpg') center top;
+              transparent asset-url('marketing/resources.jpg') center top;
   background-size: cover;
   height: 450px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/resources.jpg') center top;
+                transparent asset-url('marketing/resources.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -603,14 +603,14 @@ h1.hero-text-dark{
 //SETUP
 .setup-1{
   background: linear-gradient(to bottom, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0.8) 100%),
-              transparent asset-data-url('marketing/security-cta.jpg') center top;
+              transparent asset-url('marketing/security-cta.jpg') center top;
   background-size: cover;
   height: 600px;
   text-align:center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, 0.9) 100%),
-                transparent asset-data-url('marketing/security-cta.jpg') center center;
+                transparent asset-url('marketing/security-cta.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -630,7 +630,7 @@ h1.hero-text-dark{
 .get-help{
   float: right;
   width: 300px;
-  background: asset-data-url('marketing/sidebar.jpg') top center;
+  background: asset-url('marketing/sidebar.jpg') top center;
   color: white;
   padding: 20px;
   margin: 0 20px !important;
@@ -669,14 +669,14 @@ h1.hero-text-dark{
 //careers
 .careers-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/team.jpg') center top;
+              transparent asset-url('marketing/team.jpg') center top;
   background-size: cover;
   height: 450px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/team.jpg') center top;
+                transparent asset-url('marketing/team.jpg') center top;
     background-size: cover;
     height: auto;
   }
@@ -697,14 +697,14 @@ h1.hero-text-dark{
 //careers
 .contact-1{
   background: linear-gradient(to bottom, rgba(0, 0, 0, .4) 0%, rgba(0, 0, 0, 0.60) 100%),
-              transparent asset-data-url('marketing/contact.jpg') center center;
+              transparent asset-url('marketing/contact.jpg') center center;
   background-size: cover;
   height: 450px;
   text-align: center;
 
   @include media($mobile) {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0.75) 100%),
-                transparent asset-data-url('marketing/contact.jpg') center center;
+                transparent asset-url('marketing/contact.jpg') center center;
     background-size: cover;
     height: auto;
   }
@@ -733,7 +733,7 @@ h1.hero-text-dark{
 }
 
 .cta{
-    background: asset-data-url('marketing/cta_bg.jpg') top center;
+    background: asset-url('marketing/cta_bg.jpg') top center;
     width: 250px;
     text-align: center;
     text-decoration: none;

@@ -35,7 +35,7 @@ $date-time-changes-top-position: 15px;
   margin-bottom: 15px;
   .styled-select{
     width: $document-form-width;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+    background: white asset-url('SVG/select-drop-down.svg') no-repeat right;
   }
   select{
     width: $document-form-width + $gu;
@@ -90,7 +90,7 @@ $date-time-changes-top-position: 15px;
   }
   .styled-select {
     width: $document-form-width;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+    background: white asset-url('SVG/select-drop-down.svg') no-repeat right;
   }
   select{
     width: $document-form-width + $gu;

@@ -190,7 +190,7 @@ a.modal-close:hover {
         }
       }
       .styled-select {
-        background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right;
+        background: white asset-url('SVG/select-drop-down.svg') no-repeat right;
         select {
           min-width: 200px;
           text-overflow: ellipsis;

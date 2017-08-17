@@ -9,7 +9,7 @@
   select {
     border: 1px solid $color-gray-med-tinted;
     border-radius: 5px;
-    background: white asset-data-url('SVG/select-drop-down.svg') no-repeat right center;
+    background: white asset-url('SVG/select-drop-down.svg') no-repeat right center;
     overflow: hidden;
     width: 80px;
     padding: 0;
@@ -46,7 +46,7 @@ table.ui-datepicker-calendar {
   height: 25px;
   text-align: center;
   cursor: pointer;
-  background-image:asset-data-url('arrow.png');
+  background-image:asset-url('arrow.png');
   background-repeat: no-repeat;
   line-height: 600%;
   overflow: hidden;

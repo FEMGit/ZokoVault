@@ -212,18 +212,12 @@ Rails.application.routes.draw do
   end
 
   # Tutorials
-  get 'tutorials/getting_started/primary_contacts' => 'tutorials#primary_contacts', as: :tutorial_primary_contacts
-  get 'tutorials/getting_started/trusted_advisors' => 'tutorials#trusted_advisors', as: :tutorial_trusted_advisors
-  get 'tutorials/getting_started/important_documents' => 'tutorials#important_documents', as: :tutorial_important_documents
-  get 'tutorials/getting_started/new_document' => 'tutorials#new_document', as: :tutorial_new_document
-  get 'tutorials/getting_started/video' => 'tutorials#video', as: :tutorial_video
-
   get 'tutorials/confirmation', to: 'tutorials#confirmation', as: :tutorials_confirmation
   get 'tutorials/lets_get_started', to: 'tutorials#lets_get_started', as: :tutorials_lets_get_started
   get 'tutorials/vault_co_owners', to: 'tutorials#vault_co_owners', as: :tutorials_vault_co_owners
   get 'tutorials/tutorials_end', to: 'tutorials#tutorials_end', as: :tutorials_end
   resources :tutorials, except: :destroy do
-    get '/:page_id', to: 'pages#show', as: :page
+    get '/:page_id', to: 'tutorials#show', as: :page
     post '/destroy', to: 'tutorials#destroy'
     post '/create_wills', to: 'tutorials#create_wills', as: :create_wills
   end

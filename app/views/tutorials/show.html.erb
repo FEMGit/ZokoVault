@@ -1,12 +1,1 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @tutorial.name %>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <%= @tutorial.content %>
-</p>
-
+<%= render "tutorials/#{@tutorial_name}/#{@page_name}", tutorial_name: @tutorial_name, page_number: @page_number %>

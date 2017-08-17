@@ -30,7 +30,7 @@
         <span class="error-label"> - <%= errors.messages[:email].first %></span>
       <% end %>
       <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
-      
+
       <% if @user_account.confirm_email %>
         <%= f.label :email, 'Verify Email Address' %><span class="required">Required</span>
         <% if errors && errors.messages[:email_confirmation] %>
@@ -63,6 +63,95 @@
           <%= render partial: 'layouts/zip_code', locals: { f: user_profile_form, zip: :zip } %>
         </span>
       <% end %>
+
+      <% plan = StripeSubscription.yearly_plan %>
+      <% cost = (plan.amount / 100.0).round(2) %>
+      <% @has_card = true if @billing_error %>
+
+      <ul class="radio-list">
+        <% if !@has_card %>
+          <div class="card" style="float:right">
+            You must setup <%=
+              link_to 'Billing Information', corporate_billing_information_path
+            %> to enable this option.
+          </div>
+        <% end %>
+        <li class="radio-list" style="width:50%">
+          <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
+              onclick: 'showPricingRows()', disabled: !@has_card %>
+          <label for="payment_who_pays_corporate"
+               style="<%= 'color:#989797' if !@has_card %>">
+            Provide client with an annual subscription<br/>
+            <span style="display:inline-block; width:400px">
+              $<%=cost%> charged annually for every client attached to
+              your account. Add and remove new clients at any time.
+            </span>
+          </label>
+          <div class="check"></div>
+        </li><br/>
+        <li class="radio-list" style="width:50%">
+          <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,
+              onclick: 'hidePricingRows()' %>
+          <label for="payment_who_pays_client">
+            Client will pay for their own account<br/>
+            <span style="display:inline-block; width:400px">
+              After your client signs in they will have 14 days to
+              pay for their account before their Free Trial ends.
+            </span>
+          </label>
+          <div class="check"></div>
+        </li><br/>
+      </ul>
+      <% if @billing_error %>
+        <div class="flash-error-static flash static"
+             style="width:55%; margin-left:0" id="billing_error">
+          <div>Billing Error: <%= @billing_error %></div>
+          <div>Please <%= link_to 'update your credit card on file',
+            corporate_billing_information_path, :target => "_blank" %>.</div>
+        </div>
+      <% end %>
+      <div id="pricing-rows">
+        <section class="bb-gray-light-dashed mb-10">
+          <div class="inline-block mb-10">Annual Subscription</div>
+          <span class="fr" id="subscription-price">$<%= cost %></span>
+          <span class="clear"></span>
+        </section>
+        <section class="pb-10 mb-10" id="promo-row">
+          <span class="bold" id="promo-name"></span>
+          <span class="fr clr-red" id="promo-price"></span>
+        </section>
+        <section class="bb-gray-light pb-10 mb-10">
+          <span class="bold">Total</span>
+          <span class="fr" id="subscription-total">$<%= cost %></span>
+        </section>
+        <section>
+          <span class="mr-10">Promo Code</span>
+          <%= hidden_field_tag 'payment[promo_code]', nil, id: 'user_stripe_subscription_attributes_promo_code' %>
+          <%= text_field_tag 'promo_code_text_field', nil, class: 'promo-form inline-block width-250' %>
+          <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
+            class: "button primary-button text-field-button" %>
+          <span id='promo-code-text'></span>
+        </section>
+      </div>
+
     </div>
+
     <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_accounts_path, f: f } %>
-<% end %>
+  <% end %>
+
+  <script type='text/javascript'>
+    function hidePricingRows() {
+      $('#pricing-rows').hide();
+      <% if @billing_error %>
+      $('#billing_error').hide();
+      <% end %>
+    }
+    function showPricingRows() {
+      $('#pricing-rows').show();
+    }
+    <% if !@has_card %>
+      $(document).ready(function() { hidePricingRows(); })
+    <% end %>
+  </script>
+
+<%= javascript_include_tag "promotion_logic" %>

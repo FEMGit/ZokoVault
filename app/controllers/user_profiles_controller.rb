@@ -1,6 +1,7 @@
 class UserProfilesController < AuthenticatedController
   before_action :set_user_profile, only: [:index, :edit, :update]
   before_action :set_contacts, only: [:edit, :update]
+  before_action :save_user_profile_info, only: [:update]
   include SanitizeModule
 
   skip_before_action :redirect_if_free_user
@@ -49,7 +50,11 @@ class UserProfilesController < AuthenticatedController
   end
 
   private
-
+  
+  def save_user_profile_info
+    @user_profile_stored = @user_profile.dup
+  end
+  
   def set_user_profile
     @user_profile = current_user.user_profile
     authorize @user_profile

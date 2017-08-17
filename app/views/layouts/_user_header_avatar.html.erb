@@ -1,6 +1,8 @@
 <% return if user.nil? %>
 <% with_name ||= false %>
 <% avatar_size ||= 'small' %>
+<% user = @user_profile_stored || user %>
+
 <div class="avatar-wrapper">
   <% if user.photourl.present? %>
     <%= image_tag(get_file_url(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>

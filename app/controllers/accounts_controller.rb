@@ -182,12 +182,15 @@ class AccountsController < AuthenticatedController
       unless SubscriptionService.trial_was_used?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
+      current_user.update_attributes(setup_complete: true)
       redirect_to corporate_accounts_path and return if current_user.corporate_employee?
       redirect_to first_run_path and return
     elsif user_params[:user_type].eql? 'free'
       MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+      current_user.update_attributes(setup_complete: true)
     elsif user_params[:user_type].eql? 'corporate'
       MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+      current_user.update_attributes(setup_complete: false)
       redirect_to corporate_user_type_path and return
     end
     redirect_to root_path

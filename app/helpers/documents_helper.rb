@@ -110,9 +110,10 @@ module DocumentsHelper
   def asset_type(resource)
     case resource
       when Document
-        return 'Document'
+        'Document'
       when Category
-        return 'Category'
+        return 'Document Upload' if resource.name.eql? Rails.application.config.x.DocumentsCategory
+        'Category'
       else
         "Card"
       end

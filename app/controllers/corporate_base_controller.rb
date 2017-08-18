@@ -68,7 +68,7 @@ class CorporateBaseController < AuthenticatedController
     corporate_profile = corporate_contact.try(:user_profile)
     corporate_type = corporate_profile.user.corporate_type
     respond_to do |format|
-      if ShareInvitationService.send_corporate_invitation(corporate_contact, corporate_owner, account_type)
+      if ShareInvitationService.send_corporate_invitation(corporate_contact, current_user, account_type)
         format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { success: 'Invitation has been successfully sent.' } }
       else
         format.html { redirect_to details_path(corporate_type, corporate_profile), flash: { error: 'Error sending an invitation, please try again later.' } }

@@ -105,7 +105,7 @@ class User < ActiveRecord::Base
   
   def employee_users
     return [] unless corporate_employee?
-    CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account)
+    CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account).compact
   end
   
   def corporate_employee?
@@ -236,7 +236,8 @@ class User < ActiveRecord::Base
   
   before_create { set_as_admin }
   before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
-  after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear
+  after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear,
+                                        :corporate_employees_clear
   
   protected
   
@@ -268,6 +269,11 @@ class User < ActiveRecord::Base
 
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
+  end
+  
+  def corporate_employees_clear
+    CorporateEmployeeAccountUser.where(user_account_id: id).delete_all
+    CorporateEmployeeAccountUser.where(corporate_employee_id: id).delete_all
   end
   
   def corporate_admin_accounts_clear

@@ -247,6 +247,8 @@ class UsageMetricsController < AuthenticatedController
   end
 
   def user_type(user)
+    return "Corporate Admin" if user.corporate_admin
+    return "Corporate Employee" if user.corporate_employee?
     if user.current_user_subscription
       if user.current_user_subscription.active_trial?
         "Trial Active"

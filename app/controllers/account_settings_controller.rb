@@ -193,6 +193,7 @@ class AccountSettingsController < AuthenticatedController
       customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
       (redirect_to (session[:ret_url] || root_path) and return) unless update_customer_information(customer, token)
     end
+    current_user.update_attributes(setup_complete: true)
     redirect_to corporate_accounts_path
   end
 

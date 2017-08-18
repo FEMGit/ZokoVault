@@ -69,13 +69,6 @@
       <% @has_card = true if @billing_error %>
 
       <ul class="radio-list">
-        <% if !@has_card %>
-          <div class="card" style="float:right">
-            You must setup <%=
-              link_to 'Billing Information', corporate_billing_information_path
-            %> to enable this option.
-          </div>
-        <% end %>
         <li class="radio-list" style="width:50%">
           <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
               onclick: 'showPricingRows()', disabled: !@has_card %>
@@ -88,6 +81,9 @@
             </span>
           </label>
           <div class="check"></div>
+          <% if !@has_card %>
+            <span class="fz-12 ml-10">You must setup <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
+          <% end %>
         </li><br/>
         <li class="radio-list" style="width:50%">
           <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,

@@ -5,7 +5,7 @@ class TrustBuilder
       if options[:id].present?
         Trust.find(options[:id])
       else
-        Trust.new(options.slice(:user_id, :document_id, :name))
+        Trust.new(options.slice(:user_id, :document_id, :name).merge(category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)))
       end
     self.options = options
     clear_options if options[:id].present?

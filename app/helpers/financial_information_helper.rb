@@ -45,12 +45,15 @@ module FinancialInformationHelper
     provider.provider_type.eql? "Alternative"
   end
   
-  def financial_information_any?
+  def financial_information_balance_sheet_any?
     FinancialAccountInformation.for_user(resource_owner).any? ||
       FinancialInvestment.for_user(resource_owner).any? ||
       FinancialAlternative.for_user(resource_owner).any? ||
-      FinancialProperty.for_user(resource_owner).any? ||
-      FinancialProvider.for_user(resource_owner).any?
+      FinancialProperty.for_user(resource_owner).any?
+  end
+  
+  def financial_information_any?
+     financial_information_balance_sheet_any? || FinancialProvider.for_user(resource_owner).any?
   end
   
   def financial_provider(empty_provider_object)

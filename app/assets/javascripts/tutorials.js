@@ -8,6 +8,65 @@ var modalScreenShift = function(element) {
   element.css("margin-top", offset + "px")
 }
 
+var addErrorOnChange = function(field, fieldWithErrorClass) {
+  fieldWithErrorClass = fieldWithErrorClass || field
+  fieldWithErrorClass.addClass('input-error');
+  field.on('change keydown paste input', function(event) {
+    var selectedValue = event.target.value.trim()
+    if (!selectedValue.length) {
+      fieldWithErrorClass.addClass('input-error');
+    } else {
+      fieldWithErrorClass.removeClass('input-error');
+    }
+  })
+}
+
+var highlightErrorField = function(fieldWithErrorClass) {
+  fieldWithErrorClass.addClass('input-error')
+  setTimeout(function() {
+    fieldWithErrorClass.removeClass('input-error')
+  }, 1000)
+}
+
+var highlightOrAddError = function(isNewTutorial, field, fieldWithErrorClass) {
+  fieldWithErrorClass = fieldWithErrorClass || field
+  if (isNewTutorial) {
+    highlightErrorField(fieldWithErrorClass)
+  } else {
+    addErrorOnChange(field, fieldWithErrorClass)
+  }
+}
+
+var FieldsValidate = function(){
+  var tutorialFields = $(".tutorial-fields")
+  var errorsCount = 0
+  $.each(tutorialFields, function(index, value) {
+    var textField = $(value).find("input[type='text']")
+    var multipleSelect = $(value).find('.chosen-styled-select.repeated-field')
+    var multipleSelectValue = multipleSelect.find('.chosen-select').val()
+    var multipleSelectChoices = multipleSelect.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
+    var id = $(value).find('a').last().attr('data-id')
+    var name = textField.val()
+    var isNewTutorial = $(value).hasClass('add-tutorial')
+
+    // Already saved tutorial has an error: at least one field is empty
+    // New tutorial has an error: only one field is filled
+    if ((!isNewTutorial && (!name.trim().length || (multipleSelect.length > 0 && multipleSelectValue === null))) ||
+         (isNewTutorial && ((name.trim().length > 0 && (multipleSelect.length > 0 && multipleSelectValue === null)) ||
+                            (!name.trim().length && (multipleSelect.length > 0 && multipleSelectValue !== null))))) {
+      errorsCount++
+      if (!name.trim().length) {
+        highlightOrAddError(isNewTutorial, textField)
+      }
+
+      if (multipleSelectValue === null) {
+        highlightOrAddError(isNewTutorial, multipleSelect, multipleSelectChoices)
+      }
+    }
+  })
+  return errorsCount === 0
+}
+
 var DynamicTutorialField = function(creationPath, destroyPath, updatePath) {
   this.submitURL = creationPath;
   this.destroyURL = destroyPath;
@@ -73,10 +132,18 @@ DynamicTutorialField.prototype.fieldIsEmpty = function($btn) {
 };
 
 DynamicTutorialField.prototype.showLittleError = function($btn) {
-  $btn.siblings('input.repeated-field').addClass('input-error');
-  setTimeout(function() {
-    $btn.siblings('input.repeated-field').removeClass('input-error');
-  }, 1000);
+  var chosenMultipleSelect = $btn.prev()
+  var chosenMultipleChoices = chosenMultipleSelect.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
+  var chosenMultipleValue = chosenMultipleSelect.find('.chosen-select').val()
+  var inputTextField = $btn.siblings('input.repeated-field')
+  var inputTextValue = inputTextField.val()
+  
+  if (chosenMultipleChoices.length > 0 && chosenMultipleValue === null) {
+    addErrorOnChange(chosenMultipleSelect, chosenMultipleChoices)
+  }
+  if (!inputTextValue.trim().length) {
+    addErrorOnChange(inputTextField)
+  }
 };
 
 DynamicTutorialField.prototype.addRemoveBtn = function(id) {
@@ -98,8 +165,8 @@ DynamicTutorialField.prototype.removeBtnListener = function($btn) {
 
 var update_dropdown_attributes = function(form_id) {
   var multiple_select = $("#" + form_id).find('.tutorial-fields.add-tutorial').last()
-                                                    .find('.chosen-styled-select')
-                                                    .find("select")
+                                        .find('.chosen-styled-select')
+                                        .find("select")
   if (multiple_select.length === 0) {
     return
   }
@@ -110,6 +177,7 @@ var update_dropdown_attributes = function(form_id) {
     name: "tutorial_multiple_types_" + new_id + "[[types]][]",
     value: ""
   });
+  multiple_select.trigger('chosen:updated')
 }
 
 var multiselectDropdownHandle = function() {
@@ -273,6 +341,13 @@ $(document).on('ready', function() {
 
     $('.remove-btn').each(function(){ tutorial.removeBtnListener($(this)) })
     $("input[type='submit']").on('click', function(){ tutorial.updateAll() })
+    
+    $("form").on('submit', function(e) {
+      e.preventDefault()
+      if (FieldsValidate()) {
+        $("form").unbind('submit').submit()
+      }
+    })
   }
   
   // Subtutorials with ajax-page (some action only)

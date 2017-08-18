@@ -36,15 +36,17 @@ class TutorialService
       
       return unless objects_to_update.present?
       
-      objects_to_update.each do |object_to_update|
-        unless (update_value[:types].include? object_to_update.try(:alternative_type) || object_to_update.try(:account_type))
-          object_to_update.destroy
+      if update_value[:types].present?
+        objects_to_update.each do |object_to_update|
+          unless (update_value[:types].include? object_to_update.try(:alternative_type) ||object_to_update.try(:account_type))
+            object_to_update.destroy
+          end
         end
-      end
-      
-      update_value[:types].each do |type|
-        next if (objects_to_update.map { |x| x[key] }.include? types_collection[type])
-        objects_to_update << model.new(:user => resource_owner, key => type)
+
+        update_value[:types].each do |type|
+          next if (objects_to_update.map { |x| x[key] }.include? types_collection[type]) || type.blank?
+          objects_to_update << model.new(:user => resource_owner, key => type)
+        end
       end
       financial_provider.update(id: update_value[:id], name: update_value[:name])
     end

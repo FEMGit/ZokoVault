@@ -65,6 +65,11 @@ $arrow-dropdown-margin-right: 30px;
     padding-left: 5px !important;
     cursor: pointer !important;
     @include form-width;
+  
+  &.input-error{
+    border-color: $color-alert !important;
+    background-color: $color-alert-ligth !important;
+  }
 }
 .chosen-drop {
    font-weight: normal;

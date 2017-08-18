@@ -411,7 +411,7 @@ input[type=button].button{
 
 .input-error{
   border-color: $color-alert;
-  background: #fff3f5;
+  background: $color-alert-ligth;
 }
 
 .form-hidden{

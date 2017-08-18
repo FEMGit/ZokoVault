@@ -253,6 +253,7 @@ module TutorialsHelper
   def multiple_types_create(tutorial_multiple_types_params, key, resource_owner)
     return false unless tutorial_multiple_types_params.present?
     types = tutorial_multiple_types_params[:types].reject(&:blank?)
+    tutorial_error_handle("Fill in Type field to continue") and return true if types.blank?
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id, provider_type: provider_type))
     authorize @financial_provider
     types.collect! { |x| [key => x] }.flatten!
@@ -284,7 +285,7 @@ module TutorialsHelper
   # Balance Sheet Tutorial Check
   def set_balance_sheet_information(tutorial_id)
     if tutorial_id.eql? 'balance-sheet'
-      if financial_information_any?
+      if financial_information_balance_sheet_any?
         set_financial_information_resources
       else
         tuto_index = session[:tutorial_index] + 1

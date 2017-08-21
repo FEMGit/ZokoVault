@@ -101,6 +101,9 @@ class AccountSettingsController < AuthenticatedController
   def stripe_customer_lookup(user)
     if user.corporate_admin
       StripeService.ensure_corporate_stripe_customer(user: user)
+    elsif user.corporate_user?
+      StripeService.ensure_corporate_stripe_customer(
+        user: user.corporate_provider_join.corporate_admin)
     else
       user.stripe_customer
     end
@@ -254,6 +257,7 @@ class AccountSettingsController < AuthenticatedController
   Invoice = Struct.new(:date, :amount)
 
   def next_invoice(customer)
+    return if customer.blank? || customer.id.blank?
     upcoming = Stripe::Invoice.upcoming(customer: customer.id)
     Invoice.new(
       DateTime.strptime(upcoming.date.to_s, '%s'),

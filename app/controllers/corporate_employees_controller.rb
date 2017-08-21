@@ -50,14 +50,25 @@ class CorporateEmployeesController < CorporateBaseController
     @user_account.skip_password_validation!
     @user_account.skip_confirmation_notification!
     @user_account.confirm_email!
-    super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employees_path)
-    save_employee_account_users
+    
+    if !employee_relationship_valid?(@user_account)
+      respond_to_format_error(:new)
+    else
+      super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employees_path)
+      add_employee_relationship(@user_account)
+      save_employee_account_users
+    end
   end
-
+  
   def update
-    super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employee_path(@corporate_profile) || corporate_employees_path,
-          params_to_update: employee_account_params.except(:email))
-    save_employee_account_users
+    if !employee_relationship_valid?(@user_account)
+      respond_to_format_error(:edit)
+    else
+      super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employee_path(@corporate_profile) || corporate_employees_path,
+            params_to_update: employee_account_params.except(:email))
+      add_employee_relationship(@user_account)
+      save_employee_account_users
+    end
   end
   
   def save_employee_account_users
@@ -100,6 +111,29 @@ class CorporateEmployeesController < CorporateBaseController
   
   private
   
+  def employee_relationship_valid?(corporate_employee)
+    find_or_initialize_employee_profile(corporate_employee).valid?
+  end
+  
+  def add_employee_relationship(corporate_employee)
+    find_or_initialize_employee_profile(corporate_employee).save
+  end
+  
+  def find_or_initialize_employee_profile(corporate_employee)
+    employee_profile = CorporateEmployeeProfile.find_or_initialize_by(:corporate_employee => corporate_employee)
+    employee_profile.relationship = employee_relationship_params[:employee_relationship]
+    employee_profile.contact_type = 'Advisor'
+    employee_profile
+  end
+  
+  def respond_to_format_error(action)
+    respond_to do |format|
+      error_path(action)
+      format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
+      format.json { render json: @user_accounts.errors, status: :unprocessable_entity }
+    end
+  end
+  
   def add_employee_shares(user_ids, corporate_employee)
     user_ids.each do |user_id|
       next unless (user = User.find_by(:id => user_id)).present?
@@ -137,6 +171,10 @@ class CorporateEmployeesController < CorporateBaseController
   def employee_account_params
     params.require(:user).permit(:email, :email_confirmation,
                                  user_profile_attributes: [ :first_name, :last_name ])
+  end
+  
+  def employee_relationship_params
+    params.require(:user).permit(:employee_relationship)
   end
   
   def employee_account_user_params

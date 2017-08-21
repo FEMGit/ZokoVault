@@ -33,7 +33,7 @@ class SubscriptionService
   end
 
   def self.eligible_for_trial?(user)
-    user.user_subscriptions.to_a.blank?
+    user.current_user_subscription.blank?
   end
 
   def self.trial_was_used?(user)

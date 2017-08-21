@@ -62,22 +62,20 @@ class AccountSettingsController < AuthenticatedController
     if @subscription.funding.beta?
       @plan = OpenStruct.new(name: 'Beta User - One Year Free')
       @card = customer_card
-    elsif current_user.corporate_user?
-      @corporate = true
-      admin = current_user.corporate_provider_join.corporate_admin
-      @company_name = admin.corporate_account_profile.try(:business_name)
-      record = @subscription.funding.stripe_subscription_record
-      set_subscription_cancelled(record)
-      @plan = record.try(:plan)
-      @next_invoice = next_invoice(stripe_customer_lookup(current_user))
     else
-      customer = stripe_customer_lookup(current_user)
-      @next_invoice = next_invoice(customer)
-      @invoices = customer.invoices.to_a
       record = @subscription.funding.stripe_subscription_record
       set_subscription_cancelled(record)
       @plan = record.try(:plan)
-      @card = customer_card
+      stripe_customer = stripe_customer_lookup(current_user)
+      @next_invoice = next_invoice(stripe_customer)
+      if current_user.corporate_user?
+        @corporate = true
+        admin = current_user.corporate_provider_join.corporate_admin
+        @company_name = admin.corporate_account_profile.try(:business_name)
+      else
+        @invoices = stripe_customer.invoices.to_a
+        @card = customer_card
+      end
     end
   end
 

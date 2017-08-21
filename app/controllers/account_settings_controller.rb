@@ -28,13 +28,13 @@ class AccountSettingsController < AuthenticatedController
   def login_settings; end
 
   def phone_setup; end
-  
+
   def cancel_subscription
     customer = current_user.stripe_customer
     @next_invoice_date = next_invoice(customer).first
     redirect_to manage_subscription_path unless @next_invoice_date.present?
   end
-  
+
   def cancel_subscription_update
     @subscription = current_user.current_user_subscription
     return if @subscription.blank? || !@subscription.full? ||
@@ -49,15 +49,17 @@ class AccountSettingsController < AuthenticatedController
     @card = customer_card
     @corporate_update = corporate_update? ? params[:corporate] : nil
   end
-  
+
   def phone_setup_update
     current_user.update_attributes(phone_setup_params)
     redirect_to login_settings_path
   end
-  
+
   def manage_subscription
     @subscription = current_user.current_user_subscription
-    return if @subscription.blank? || !@subscription.full?
+    return if @subscription.blank? ||
+              !@subscription.full? ||
+              current_user.corporate_user?
     customer = current_user.stripe_customer
     @card = customer_card
     if @subscription.funding.beta?
@@ -79,7 +81,7 @@ class AccountSettingsController < AuthenticatedController
     end
     session[:ret_url] = manage_subscription_path
   end
-  
+
   def customer_card
     customer =
       if corporate_update?
@@ -90,7 +92,7 @@ class AccountSettingsController < AuthenticatedController
     return nil unless customer.present?
     StripeService.customer_card(customer: customer)
   end
-  
+
   def invoice_information
     if params[:id].blank?
       flash[:error] = "Error occured while receiving an invoice."

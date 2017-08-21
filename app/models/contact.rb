@@ -49,6 +49,7 @@ class Contact < ActiveRecord::Base
       'Attorney',
       'Financial Advisor / Broker',
       'Insurance Agent / Broker',
+      'Real Estate Agent / Broker',
       'Commercial Banker',
       'Trustee',
       'Consultant',

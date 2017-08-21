@@ -138,6 +138,10 @@ class User < ActiveRecord::Base
     CorporateAdminAccountUser.find_by(user_account_id: id).try(:corporate_admin)
   end
   
+  def corporate_user_by_employee?(employee)
+    CorporateEmployeeAccountUser.find_by(corporate_employee_id: employee.try(:id), user_account_id: id).present?
+  end
+  
   def corporate_employees_by_user
     CorporateEmployeeAccountUser.where(user_account_id: id).map(&:corporate_employee)
   end

@@ -5,7 +5,7 @@
     <% end %>
   </h3>
   <% if @corporate_profile.blank? %>
-    <label>There is on information about Corporate Account</label>
+    <label>There is no information about Corporate Account</label>
   <% else %>
     <p>Your ZokuVault account is provided by: <%= @corporate_profile.business_name %> </p>
     <% if @corporate_profile.web_address.present? %>
@@ -35,7 +35,7 @@
         <% end %>
       </p>
     <% end %>
-    
+
     <label>Primary Contact - Account Admin</label>
     <p>
       <%= @corporate_profile.user.name %><br>

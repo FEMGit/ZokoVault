@@ -11,7 +11,7 @@
 <div class="card">
   <h3 class="card-label">Corporate Details</h3>
   <% if @corporate_profile.blank? %>
-    <label>There is on information about Corporate Account</label>
+    <label>There is no information about Corporate Account</label>
   <% else %>
     <% if @corporate_profile.business_name.present? %>
       <label>Business Name</label>
@@ -45,7 +45,7 @@
         <% end %>
       </p>
     <% end %>
-    
+
     <% if @corporate_profile.relationship.present? %>
       <label>Advisor Relationship</label>
       <p><%= @corporate_profile.relationship %></p>

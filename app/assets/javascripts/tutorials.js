@@ -37,14 +37,30 @@ var highlightOrAddError = function(isNewTutorial, field, fieldWithErrorClass) {
   }
 }
 
+var getTutorialInputTextField = function(selector) {
+  return selector.find("input[type='text']")
+}
+
+var getMultipleSelectField = function(selector) {
+  return selector.find('.chosen-styled-select.repeated-field')
+}
+
+var getMultipleSelectValue = function(multiselectSelector) {
+  return multiselectSelector.find('.chosen-select').val()
+}
+
+var getMultipleSelectChoices = function(multiselectSelector) {
+  return multiselectSelector.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
+}
+
 var FieldsValidate = function(){
   var tutorialFields = $(".tutorial-fields")
   var errorsCount = 0
   $.each(tutorialFields, function(index, value) {
-    var textField = $(value).find("input[type='text']")
-    var multipleSelect = $(value).find('.chosen-styled-select.repeated-field')
-    var multipleSelectValue = multipleSelect.find('.chosen-select').val()
-    var multipleSelectChoices = multipleSelect.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
+    var textField = getTutorialInputTextField($(value))
+    var multipleSelect = getMultipleSelectField($(value))
+    var multipleSelectValue = getMultipleSelectValue(multipleSelect)
+    var multipleSelectChoices = getMultipleSelectChoices(multipleSelect)
     var id = $(value).find('a').last().attr('data-id')
     var name = textField.val()
     var isNewTutorial = $(value).hasClass('add-tutorial')
@@ -240,7 +256,13 @@ DynamicTutorialField.prototype.destroy = function($btn, id) {
 }
 
 DynamicTutorialField.prototype.dialogBehaviour = function(ev) {
-  if ($('.collect-fields input.repeated-field').val() != '') {
+  var tutorialFields = $(".tutorial-fields.add-tutorial")[0]
+  var textField = getTutorialInputTextField($(tutorialFields))
+  var multipleSelect = getMultipleSelectField($(tutorialFields))
+  var multipleSelectValue = getMultipleSelectValue(multipleSelect)
+  var name = textField.val()
+
+  if (name.trim().length > 0 || (multipleSelect.length > 0 && multipleSelectValue !== null)) {
     ev.preventDefault();
     $('.unsaved-changes-modal').click();
   };
@@ -254,7 +276,7 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
     $('.collect-fields input.repeated-field').val('');
     $(".modal, .modal-overlay").fadeOut(500, function() {
       $(".modal-overlay").remove();
-      $('form').submit();
+      $('form').unbind('submit').submit()
     });
   });
 
@@ -262,8 +284,10 @@ DynamicTutorialField.prototype.listenUnsavedChanges = function() {
     $(".modal, .modal-overlay").fadeOut(500, function() {
       if ($(".modal-overlay").length == 1 ) {
         $(".modal-overlay").remove();
-        that.updateAll()
-        $('form').unbind('submit').submit();
+        if (FieldsValidate()) {
+          that.updateAll()
+          $("form").unbind('submit').submit()
+        }
       }
     });
   });

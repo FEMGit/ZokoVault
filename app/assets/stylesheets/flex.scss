@@ -417,7 +417,6 @@
 }
 
 //Shared view Dashboard
-
 .shared-boxes{
   border-top: 1px solid $color-gray-light;
   padding: 5px 0;
@@ -443,13 +442,13 @@
 }
 .shared-link{
   flex: 15%;
-  text-align:right;
+  text-align: right;
   padding-top: 5px;
   @include media($teneighty) {
-    border-top: 1px solid $color-gray-light;
     flex:20%;
     padding-bottom: 12px;
     margin-right: 1px;
+    text-align: left;
   }
 }
 

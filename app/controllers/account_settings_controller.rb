@@ -31,7 +31,7 @@ class AccountSettingsController < AuthenticatedController
 
   def cancel_subscription
     customer = current_user.stripe_customer
-    @next_invoice_date = next_invoice(customer).first
+    @next_invoice_date = next_invoice(customer).try(:date)
     redirect_to manage_subscription_path unless @next_invoice_date.present?
   end
 
@@ -56,41 +56,54 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def manage_subscription
+    session[:ret_url] = manage_subscription_path
     @subscription = current_user.current_user_subscription
-    return if @subscription.blank? ||
-              !@subscription.full? ||
-              current_user.corporate_user?
-    customer = current_user.stripe_customer
-    @card = customer_card
+    return if @subscription.blank? || !@subscription.full?
     if @subscription.funding.beta?
       @plan = OpenStruct.new(name: 'Beta User - One Year Free')
+      @card = customer_card
+    elsif current_user.corporate_user?
+      @corporate = true
+      admin = current_user.corporate_provider_join.corporate_admin
+      @company_name = admin.corporate_account_profile.try(:business_name)
+      record = @subscription.funding.stripe_subscription_record
+      set_subscription_cancelled(record)
+      @plan = record.try(:plan)
+      @next_invoice = next_invoice(stripe_customer_lookup(current_user))
     else
-      @next_invoice_date, @next_invoice_amount = next_invoice(customer)
+      customer = stripe_customer_lookup(current_user)
+      @next_invoice = next_invoice(customer)
       @invoices = customer.invoices.to_a
       record = @subscription.funding.stripe_subscription_record
-      begin
-        stripe_subscription = Stripe::Subscription.retrieve(record.try(:subscription_id))
-        if stripe_subscription.cancel_at_period_end == true
-          @subscription_end_time = DateTime.strptime(stripe_subscription.current_period_end.to_s, '%s')
-          @subscription_calceled = true
-        end
-      rescue Stripe::InvalidRequestError
-        @subscription_calceled = false
-      end
+      set_subscription_cancelled(record)
       @plan = record.try(:plan)
+      @card = customer_card
     end
-    session[:ret_url] = manage_subscription_path
   end
 
   def customer_card
-    customer =
-      if corporate_update?
-        current_user.corporate_admin ? StripeService.ensure_corporate_stripe_customer(user: current_user) : nil
-      else
-        current_user.stripe_customer.present? ? current_user.stripe_customer : nil
-      end
-    return nil unless customer.present?
-    StripeService.customer_card(customer: customer)
+    customer = stripe_customer_lookup(current_user)
+    StripeService.customer_card(customer: customer) if customer.present?
+  end
+
+  def set_subscription_cancelled(stripe_record)
+    return if stripe_record.blank? || stripe_record.fetch.blank?
+    if stripe_record.fetch.cancel_at_period_end
+      pend = stripe_record.fetch.current_period_end
+      @subscription_end_time = DateTime.strptime(pend.to_s, '%s')
+      @subscription_cancelled = true
+    else
+      @subscription_cancelled = false
+    end
+  end
+
+  # TODO normalize representation & remove this
+  def stripe_customer_lookup(user)
+    if user.corporate_admin
+      StripeService.ensure_corporate_stripe_customer(user: user)
+    else
+      user.stripe_customer
+    end
   end
 
   def invoice_information
@@ -238,13 +251,15 @@ class AccountSettingsController < AuthenticatedController
     params[:corporate].eql? 'corporate'
   end
 
+  Invoice = Struct.new(:date, :amount)
+
   def next_invoice(customer)
-    begin
-      upcoming = Stripe::Invoice.upcoming(customer: customer.id)
-      [DateTime.strptime(upcoming.date.to_s, '%s'), upcoming.amount_due]
-    rescue Stripe::InvalidRequestError
-      [nil, nil]
-    end
+    upcoming = Stripe::Invoice.upcoming(customer: customer.id)
+    Invoice.new(
+      DateTime.strptime(upcoming.date.to_s, '%s'),
+        upcoming.amount_due)
+  rescue Stripe::InvalidRequestError
+    nil
   end
 
   def create_contact_if_not_exists

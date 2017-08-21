@@ -1,0 +1,19 @@
+<label>Plan</label>
+<p><%= plan.try(:name) || '--' %></p>
+
+<label>Start Date</label>
+<p><%= date_format(subscription.start_at) || '–' %></p>
+
+<label>Next Invoice</label>
+<% if next_invoice.present? %>
+  <p><%= "$#{next_invoice.amount / 100.0} - #{date_format(next_invoice.date)} - Automatic Collection" %></p>
+<% else %>
+  <% if @subscription_cancelled %>
+    <p>Subscription was canceled. It will be available until <%= date_format @subscription_end_time %></p>
+  <% else %>
+    <p>–</p>
+  <% end %>
+<% end %>
+
+<label>Billing Info</label>
+<p>Managed by <%=company_name%></p>

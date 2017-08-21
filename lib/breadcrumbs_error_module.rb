@@ -1,37 +1,33 @@
 module BreadcrumbsErrorModule
   def financial_error_breadcrumb_update
     breadcrumbs.clear
-    set_provider if @path[:action].eql? :edit
     add_breadcrumb "Financial Information", :financial_information_path if general_view?
     add_breadcrumb "Financial Information", shared_view_financial_information_path(shared_user_id: @shared_user.id) if shared_view?
     set_add_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
+  
+  def error_path_generate(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    yield
+  end
 
   def wills_error_breadcrumb_update
-    breadcrumbs.clear
-    set_will if @path[:action].eql? :edit
-    add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path if general_view?
-    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(shared_user_id: @shared_user.id) if shared_view?
-    set_new_crumbs && return if @path[:action].eql? :new
-    edit_crumbs_set
+    wills_poa_error_breadcrumbs_update { set_will if @path[:action].eql? :edit }
   end
   
   def poa_error_breadcrumb_update
-    breadcrumbs.clear
-    add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path if general_view?
-    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(shared_user_id: @shared_user.id) if shared_view?
-    set_new_crumbs && return if @path[:action].eql? :new
-    edit_crumbs_set
+    wills_poa_error_breadcrumbs_update
   end
 
   def entities_breadcrumb_update
-    breadcrumbs.clear
-    set_entity if @path[:action].eql? :edit
-    add_breadcrumb "Trusts & Entities", :trusts_entities_path if general_view?
-    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(shared_user_id: @shared_user.id) if shared_view?
-    set_new_crumbs && return if @path[:action].eql? :new
-    edit_crumbs_set
+    trusts_entities_breadcrumb_update { set_entity if @path[:action].eql? :edit }
+  end
+  
+  def trusts_breadcrumb_update
+    trusts_entities_breadcrumb_update { set_trust if @path[:action].eql? :edit }
   end
 
   def insurance_breadcrumb_update(type)
@@ -82,6 +78,24 @@ module BreadcrumbsErrorModule
   end
 
   private
+  
+  def wills_poa_error_breadcrumbs_update
+    breadcrumbs.clear
+    yield
+    add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path if general_view?
+    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(shared_user_id: @shared_user.id) if shared_view?
+    set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
+  
+  def trusts_entities_breadcrumb_update
+    breadcrumbs.clear
+    yield
+    add_breadcrumb "Trusts & Entities", :trusts_entities_path if general_view?
+    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(shared_user_id: @shared_user.id) if shared_view?
+    set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
 
   def edit_crumbs_set
     if @path[:action].eql? :edit

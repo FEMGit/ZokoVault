@@ -6,7 +6,7 @@ class FinancialAccountController < AuthenticatedController
   include SanitizeModule
   before_action :set_provider, only: [:show, :edit, :update, :destroy_provider]
   before_action :initialize_category_and_group, :set_documents, only: [:show]
-  before_action :set_contacts, only: [:new, :edit]
+  before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_account, only: [:destroy]
   before_action :prepare_share_params, only: [:create, :update]
   include AccountPolicyOwnerModule
@@ -110,7 +110,7 @@ class FinancialAccountController < AuthenticatedController
     @previous_share_with = @financial_provider.share_with_contact_ids
     FinancialInformationService.fill_accounts(account_params, @financial_provider, resource_owner.id)
     respond_to do |format|
-      if @financial_provider.update(provider_params.merge(provider_type: provider_type))
+      if @financial_provider.update(provider_params)
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
         FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
         @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
@@ -118,7 +118,6 @@ class FinancialAccountController < AuthenticatedController
         format.json { render :show, status: :ok, location: @financial_provider }
       else
         error_path(:edit)
-        @financial_provider.update(provider_params.merge(provider_type: provider_type))
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
@@ -157,24 +156,25 @@ class FinancialAccountController < AuthenticatedController
     @financial_provider.share_with_contact_ids |= ContactService.filter_contacts(contacts.map(&:contact_id))
   end
   
-  def prepare_share_params
+  def prepare_share_params(error: false)
+    return true if current_user != resource_owner
     return unless provider_params[:share_with_contact_ids].present?
     viewable_shares = full_category_shares(Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase), resource_owner).map(&:contact_id).map(&:to_s)
-    params[:financial_provider][:share_with_contact_ids] -= viewable_shares
+    params[:financial_provider][:share_with_contact_ids] -= viewable_shares unless error
     params[:financial_provider][:share_with_contact_ids].reject!(&:blank?)
   end
 
   def shared_user_params
     params.permit(:shared_user_id)
   end
-
+  
   def error_path(action)
-    set_contacts
-    set_account_owners
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    financial_error_breadcrumb_update
+    error_path_generate(action) do
+      set_account_owners
+      financial_error_breadcrumb_update
+      prepare_share_params(error: true)
+      set_viewable_contacts
+    end
   end
 
   def success_path(common_path, shared_view_path)
@@ -208,7 +208,7 @@ class FinancialAccountController < AuthenticatedController
 
   def provider_params
     params.require(:financial_provider).permit(:id, :name, :web_address, :street_address, :city, :state, :zip, :phone_number, :fax_number, :primary_contact_id, :category_id,
-                                               share_with_contact_ids: [])
+                                               share_with_contact_ids: []).merge(provider_type: provider_type)
   end
 
   def account_params

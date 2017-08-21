@@ -15,6 +15,7 @@ class TrustsController < AuthenticatedController
   before_action :set_new_crumbs, only: [:new]
   before_action :set_edit_crumbs, only: [:edit]
   include BreadcrumbsCacheModule
+  include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
   
@@ -111,14 +112,12 @@ class TrustsController < AuthenticatedController
           error_path(action)
           format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
           format.json { render json: @errors, status: :unprocessable_entity }
-          set_error_breadcrumbs
         end
       else
         tutorial_error_handle("Fill in Trust Name field to continue") && return
         error_path(action)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
         format.json { render json: @errors, status: :unprocessable_entity }
-        set_error_breadcrumbs
       end
     end
   end
@@ -136,18 +135,6 @@ class TrustsController < AuthenticatedController
 
   private
 
-  def set_error_breadcrumbs
-    breadcrumbs.clear
-    set_trust if @path[:action].eql? :edit
-    add_breadcrumb "Trusts & Entities", :trusts_entities_path if general_view?
-    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(shared_user_id: @shared_user.id) if shared_view?
-    set_new_crumbs && return if @path[:action].eql? :new
-    if @path[:action].eql? :edit
-      set_details_crumbs
-      set_edit_crumbs
-    end
-  end
-
   def set_documents
     @category = Rails.application.config.x.TrustsEntityCategory
     @group_documents = Document.for_user(resource_owner).where(:category => @trust.category.name, :card_document_id => CardDocument.trust(@trust.id).try(:id))
@@ -160,9 +147,10 @@ class TrustsController < AuthenticatedController
   end
 
   def error_path(action)
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    error_path_generate(action) do
+      trusts_breadcrumb_update
+      set_viewable_contacts
+    end
   end
 
   def success_path
@@ -249,7 +237,7 @@ class TrustsController < AuthenticatedController
                                                                                                       :successor_trustee_ids,
                                                                                                       :agent_ids)).build
       if !@new_vault_entries.save
-        @new_params << Trust.new(new_trust_params)
+        @new_params << Trust.new(new_trust_params.merge(category: Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)))
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries

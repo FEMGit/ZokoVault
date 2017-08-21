@@ -58,12 +58,12 @@ class PowerOfAttorneysController < AuthenticatedController
       category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase))
     @power_of_attorney_contact.power_of_attorneys << @power_of_attorney
     authorize @power_of_attorney_contact
-    set_viewable_contacts_global
+    set_viewable_contacts
   end
 
   def edit
     authorize @power_of_attorney_contact
-    set_viewable_contacts_global
+    set_viewable_contacts
   end
 
   def show
@@ -156,20 +156,14 @@ class PowerOfAttorneysController < AuthenticatedController
   private
 
   def set_viewable_contacts
-    @vault_entries.each do |attorney|
-      attorney.share_with_contact_ids |= category_subcategory_shares(attorney, resource_owner).map(&:contact_id)
-    end
-  end
-
-  def set_viewable_contacts_global
     @power_of_attorney_contact.share_with_contact_ids = category_subcategory_shares(@power_of_attorney_contact, resource_owner).map(&:contact_id)
   end
 
   def error_path(action)
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    poa_error_breadcrumb_update
+    error_path_generate(action) do
+      poa_error_breadcrumb_update
+      set_viewable_contacts
+    end
   end
 
   def success_path(common_path, shared_view_path)

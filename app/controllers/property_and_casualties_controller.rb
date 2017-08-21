@@ -190,12 +190,12 @@ class PropertyAndCasualtiesController < AuthenticatedController
   end
 
   def error_path(action)
-    set_contacts
-    set_account_owners
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    insurance_breadcrumb_update(:property)
+    error_path_generate(action) do
+      set_contacts
+      set_account_owners
+      insurance_breadcrumb_update(:property)
+      set_viewable_contacts
+    end
   end
 
   def success_path(common_path, shared_view_path)

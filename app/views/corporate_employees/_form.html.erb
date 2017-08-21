@@ -37,6 +37,12 @@
         <% end %>
         <%= f.email_field :email_confirmation, { class: ("input-error" if errors && errors.messages[:email_confirmation].present?), :maxlength => get_max_length(:default) } %>
       <% end %>
+      
+      <%= f.label :employee_relationship, 'Advisor Relationship' %>
+      <div class="styled-select">
+        <%= f.select :employee_relationship,
+          options_for_select(Contact::RELATIONSHIP_TYPES[:professional], f.object.try(:employee_relationship)), {} %>
+      </div>
     </div>
     
     <h1>Accounts Managed By User</h1>

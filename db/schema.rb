@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170816103815) do
+ActiveRecord::Schema.define(version: 20170821045902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,14 @@ ActiveRecord::Schema.define(version: 20170816103815) do
 
   add_index "corporate_employee_account_users", ["corporate_employee_id"], name: "index_corporate_employee_account_users_on_corporate_employee_id", using: :btree
   add_index "corporate_employee_account_users", ["user_account_id"], name: "index_corporate_employee_account_users_on_user_account_id", using: :btree
+
+  create_table "corporate_employee_profiles", force: :cascade do |t|
+    t.integer "corporate_employee_id"
+    t.string  "contact_type"
+    t.string  "relationship"
+  end
+
+  add_index "corporate_employee_profiles", ["corporate_employee_id"], name: "index_corporate_employee_profiles_on_corporate_employee_id", using: :btree
 
   create_table "current_user_subscription_markers", id: false, force: :cascade do |t|
     t.integer "user_id",              null: false

@@ -75,11 +75,7 @@ class CorporateAccountsController < CorporateBaseController
   def new
     @user_account = User.new(user_profile: UserProfile.new)
     @user_account.confirm_email!
-    admin = current_user.corporate_admin ? current_user : (
-      current_user.corporate_employee? && current_user.corporate_account_owner)
-    stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin) if admin
-    @has_card = !!(stripe_customer && StripeService.customer_card(customer: stripe_customer))
-    @is_corporate_employee = current_user.corporate_employee?
+    new_account_form_billing_checks
   end
 
   def edit_account_settings
@@ -156,9 +152,18 @@ class CorporateAccountsController < CorporateBaseController
   def error_path(action)
     @path = ReturnPathService.error_path(corporate_owner, corporate_owner, params[:controller], action)
     corporate_account_error_breadcrumb_update
+    new_account_form_billing_checks if action == :new
   end
 
   def success_path(path)
     ReturnPathService.success_path(corporate_owner, corporate_owner, path, path)
+  end
+
+  def new_account_form_billing_checks
+    admin = current_user.corporate_admin ? current_user : (
+      current_user.corporate_employee? && current_user.corporate_account_owner)
+    stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin) if admin
+    @has_card = !!(stripe_customer && StripeService.customer_card(customer: stripe_customer))
+    @is_corporate_employee = current_user.corporate_employee?
   end
 end

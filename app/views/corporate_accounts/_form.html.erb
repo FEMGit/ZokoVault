@@ -81,7 +81,9 @@
             </span>
           </label>
           <div class="check"></div>
-          <% if !@has_card %>
+          <% if !@has_card && @is_corporate_employee %>
+            <span class="fz-12 ml-10">The Corporate Administrator must setup Billing Information to enable this option.</span>
+          <% elsif !@has_card %>
             <span class="fz-12 ml-10">You must setup <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
           <% end %>
         </li><br/>

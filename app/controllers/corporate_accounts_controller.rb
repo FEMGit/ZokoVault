@@ -79,6 +79,7 @@ class CorporateAccountsController < CorporateBaseController
       current_user.corporate_employee? && current_user.corporate_account_owner)
     stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin) if admin
     @has_card = !!(stripe_customer && StripeService.customer_card(customer: stripe_customer))
+    @is_corporate_employee = current_user.corporate_employee?
   end
 
   def edit_account_settings

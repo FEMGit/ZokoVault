@@ -116,7 +116,7 @@ class AccountsController < AuthenticatedController
   def user_type
     check_phone_setup_passed
     if current_user.corporate_user?
-      @corporate_admin = CorporateAdminAccountUser.find_by(user_account: current_user).corporate_admin
+      @corporate_admin = user.corporate_account_owner
       @corporate_profile = @corporate_admin.corporate_account_profile
     end
   end

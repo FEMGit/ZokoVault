@@ -114,11 +114,6 @@ class User < ActiveRecord::Base
     CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account).compact
   end
 
-  def corporate_employee?
-    corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
-    corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
-  end
-
   def employee_contact_type
     CorporateEmployeeProfile.find_by(corporate_employee: self).try(:contact_type)
   end
@@ -134,6 +129,18 @@ class User < ActiveRecord::Base
   def corporate_user?
     corporate_provider_join.present? &&
     corporate_provider_join.corporate_admin.present?
+  end
+
+  def corporate_client?
+    corporate_user? && corporate_provider_join.client?
+  end
+
+  def corporate_employee?
+    corporate_user? && corporate_provider_join.employee?
+  end
+
+  def corporate_account_owner
+    corporate_provider_join.corporate_admin if corporate_user?
   end
 
   def corporate_type

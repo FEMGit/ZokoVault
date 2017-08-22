@@ -68,9 +68,9 @@ class AccountSettingsController < AuthenticatedController
       @plan = record.try(:plan)
       stripe_customer = stripe_customer_lookup(current_user)
       @next_invoice = next_invoice(stripe_customer)
-      if current_user.corporate_user?
+      if current_user.corporate_client?
         @corporate = true
-        admin = current_user.corporate_provider_join.corporate_admin
+        admin = current_user.corporate_account_owner
         @company_name = admin.corporate_account_profile.try(:business_name)
       else
         @invoices = stripe_customer.invoices.to_a
@@ -100,8 +100,7 @@ class AccountSettingsController < AuthenticatedController
     if user.corporate_admin
       StripeService.ensure_corporate_stripe_customer(user: user)
     elsif user.corporate_user?
-      StripeService.ensure_corporate_stripe_customer(
-        user: user.corporate_provider_join.corporate_admin)
+      StripeService.ensure_corporate_stripe_customer(user: user.corporate_account_owner)
     else
       user.stripe_customer
     end

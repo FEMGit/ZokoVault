@@ -5,7 +5,7 @@ class WillBuilder
       if options[:id].present?
         Will.find(options[:id])
       else
-        Will.new(options.slice(:user_id, :document_id, :title))
+        Will.new(options.slice(:user_id, :document_id, :title).merge(:category => Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)))
       end
     self.options = options
     clear_options if options[:id].present?

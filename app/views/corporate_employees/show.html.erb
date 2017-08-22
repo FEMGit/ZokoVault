@@ -20,6 +20,11 @@
     <label>Phone</label>
     <p><%= @corporate_contact.user_profile.two_factor_phone_number %><span class="phone-type">mobile</span></p>
   <% end %>
+  
+  <% if @corporate_contact.user_profile.employee_relationship.present? %>
+    <label>Advisor Relationship</label>
+    <p><%= @corporate_contact.user_profile.employee_relationship %></p>
+  <% end %>
 </div>
 
 <h1>Accounts Managed By User</h1>

@@ -138,10 +138,10 @@ class WillsController < AuthenticatedController
   end
 
   def error_path(action)
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    wills_error_breadcrumb_update
+    error_path_generate(action) do
+      wills_error_breadcrumb_update
+      set_viewable_contacts
+    end
   end
 
   def success_path
@@ -223,7 +223,7 @@ class WillsController < AuthenticatedController
     new_wills.each do |new_will_params|
       @new_vault_entries = WillBuilder.new(new_will_params.merge(user_id: resource_owner.id).except(:primary_beneficiary_ids, :secondary_beneficiary_ids, :agent_ids)).build
       if !@new_vault_entries.save
-        @new_params << Will.new(new_will_params)
+        @new_params << Will.new(new_will_params.merge(category: Category.fetch(Rails.application.config.x.WillsPoaCategory.downcase)))
         @errors << { id: "", error: @new_vault_entries.errors }
       else
         @new_params << @new_vault_entries

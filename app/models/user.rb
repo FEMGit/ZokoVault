@@ -40,6 +40,7 @@ class User < ActiveRecord::Base
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy
 
+
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription
 
@@ -118,6 +119,14 @@ class User < ActiveRecord::Base
     corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
   end
 
+  def employee_contact_type
+    CorporateEmployeeProfile.find_by(corporate_employee: self).try(:contact_type)
+  end
+
+  def employee_relationship
+    CorporateEmployeeProfile.find_by(corporate_employee: self).try(:relationship)
+  end
+
   def corporate_manager?
     corporate_employee? || corporate_admin
   end
@@ -142,6 +151,10 @@ class User < ActiveRecord::Base
 
   def corporate_admin_by_user
     CorporateAdminAccountUser.find_by(user_account_id: id).try(:corporate_admin)
+  end
+
+  def corporate_user_by_employee?(employee)
+    CorporateEmployeeAccountUser.find_by(corporate_employee_id: employee.try(:id), user_account_id: id).present?
   end
 
   def corporate_employees_by_user
@@ -280,6 +293,7 @@ class User < ActiveRecord::Base
   def corporate_employees_clear
     CorporateEmployeeAccountUser.where(user_account_id: id).delete_all
     CorporateEmployeeAccountUser.where(corporate_employee_id: id).delete_all
+    CorporateEmployeeProfile.where(corporate_employee_id: id).delete_all
   end
 
   def corporate_admin_accounts_clear

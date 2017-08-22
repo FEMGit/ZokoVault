@@ -148,6 +148,8 @@ class CorporateBaseController < AuthenticatedController
                      emailaddress: corporate_employee.email,
                      firstname: corporate_employee.first_name,
                      lastname: corporate_employee.last_name,
+                     contact_type: corporate_employee.employee_contact_type,
+                     relationship: corporate_employee.employee_relationship,
                      corporate_contact: true
       )
     end

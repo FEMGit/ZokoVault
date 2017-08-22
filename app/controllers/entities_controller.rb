@@ -7,8 +7,8 @@ class EntitiesController < AuthenticatedController
   before_action :set_entity, only: [:show, :edit, :update, :destroy]
   before_action :set_documents, only: [:show]
   before_action :set_contacts, only: [:new, :create, :edit, :update]
-  before_action :update_share_params, only: [:create, :update]
   before_action :set_previous_shared_with, only: [:update]
+  before_action :update_share_params, only: [:create, :update]
   include AccountPolicyOwnerModule
 
   # General Breadcrumbs
@@ -82,8 +82,6 @@ class EntitiesController < AuthenticatedController
         end
       else
         tutorial_error_handle("Fill in Entity Name field to continue") && return
-        set_account_owners
-        set_agents_and_partners
         error_path(:new)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @entity.errors, status: :unprocessable_entity }
@@ -137,13 +135,12 @@ class EntitiesController < AuthenticatedController
   end
 
   def error_path(action)
-    set_contacts
-    set_account_owners
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    set_account_owners
-    entities_breadcrumb_update
+    error_path_generate(action) do
+      set_account_owners
+      entities_breadcrumb_update
+      set_viewable_contacts
+      set_agents_and_partners
+    end
   end
 
   def success_path
@@ -203,6 +200,6 @@ class EntitiesController < AuthenticatedController
   def set_agents_and_partners
     @selected_agents = params[:entity][:agent_ids]
     @selected_partners = params[:entity][:partner_ids]
-    @selected_shareables = params[:entity][:share_with_contact_ids]
+    @selected_shareables = @entity.share_with_contact_ids
   end
 end

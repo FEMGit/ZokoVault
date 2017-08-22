@@ -25,7 +25,8 @@ class UserProfile < ActiveRecord::Base
   delegate :email, :email=, to: :user
   delegate :photourl, :photourl=, to: :contact, allow_nil: true
   delegate :password, :password=, to: :user
-  delegate :password_confirmation, :password_confirmation=, to: :user
+  delegate :password_confirmation, :password_confirmation=,
+           :employee_relationship, :employee_contact_type, to: :user
   
   accepts_nested_attributes_for :security_questions
   accepts_nested_attributes_for :employers

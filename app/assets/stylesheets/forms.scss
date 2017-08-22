@@ -109,7 +109,12 @@ input[type=radio]{
 .promo-form {
   &.width-250 {
     @include media($tablet) {
-      width: $small-form-width;
+      width: 30%;
+      min-width: $small-form-width;
+    }
+    @include media($mobile) {
+      width: 30%;
+      min-width: 85px;
     }
   }
 }

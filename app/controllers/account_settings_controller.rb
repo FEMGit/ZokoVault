@@ -7,6 +7,8 @@ class AccountSettingsController < AuthenticatedController
   before_action :set_contacts_shareable, only: [:account_users]
   before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_account_users]
   before_action :update_account_users_params, only: [:update_account_users]
+  before_action :redirect_to_manage_subscription_if_corporate_client, only: [:billing_info, :update_payment,  :cancel_subscription,
+                                                                             :cancel_subscription_update, :update_subscription_information]
   include TutorialsHelper
   include UserTrafficModule
 
@@ -245,6 +247,10 @@ class AccountSettingsController < AuthenticatedController
   end
 
   private
+
+  def redirect_to_manage_subscription_if_corporate_client
+    redirect_to manage_subscription_path if current_user && current_user.corporate_client?
+  end
 
   def corporate_update?
     return nil unless params[:corporate].present?

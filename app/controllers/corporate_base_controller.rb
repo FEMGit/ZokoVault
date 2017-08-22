@@ -222,14 +222,20 @@ class CorporateBaseController < AuthenticatedController
     return true if account_type != CorporateAdminAccountUser.client_type
     payment = params[:payment] || {}
     return true if payment["who_pays"] != "corporate"
+    admin = current_user.corporate_admin ? current_user : (
+      current_user.corporate_employee? && current_user.corporate_account_owner)
     result = bill_corporate_admin(
-      client: client, admin: current_user, promo: payment["promo_code"])
+      client: client, admin: admin, promo: payment["promo_code"])
     return true if result
     client.destroy
     false
   end
 
   def bill_corporate_admin(client:, admin:, promo:)
+    if admin.blank?
+      @billing_error = 'Something went wrong, please try again'
+      return
+    end
     stripe_customer = StripeService.ensure_corporate_stripe_customer(user: admin)
     plan = StripeSubscription.yearly_plan
     stripe_sub = StripeService.subscribe(

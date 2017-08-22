@@ -395,7 +395,9 @@ module TutorialsHelper
     end
     
     if session[:tutorial_paths][tuto_index].blank?
-      tutorial_id = session[:tutorial_paths][session[:tutorial_paths].count - 2][:tuto_name]
+      # session[:tutorial_paths][0] stores 'tutorials/new' tutorial
+      # session[:tutorial_paths][1] stores current category tutorial - so we can get tutorial id from it
+      tutorial_id = session[:tutorial_paths][1][:tuto_name]
       @tutorial_in_progress = false
       tutorial_set_session(tutorial_id)
       tuto_index = session[:tutorial_index]

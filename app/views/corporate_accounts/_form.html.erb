@@ -69,13 +69,13 @@
       <% @has_card = true if @billing_error %>
 
       <ul class="radio-list">
-        <li class="radio-list" style="width:55%">
+        <li class="radio-list">
           <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
               onclick: 'showPricingRows()', disabled: !@has_card %>
           <label for="payment_who_pays_corporate"
-               style="<%= 'color:#989797' if !@has_card %>">
-            Provide client with an annual subscription<br/>
-            <span style="display:inline-block; width:400px">
+               class="<%= 'clr-gray-med-tinted' if !@has_card %>">
+            <p class="max-w-300 inline-block w-80-percent">Provide client with an annual subscription</p>
+            <span class="block max-w-400">
               $<%=cost%> charged annually for every client attached to
               your account. Add and remove new clients at any time.
             </span>
@@ -87,12 +87,12 @@
             <span class="fz-12 ml-10">You must setup <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
           <% end %>
         </li><br/>
-        <li class="radio-list" style="width:50%">
+        <li class="radio-list">
           <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,
               onclick: 'hidePricingRows()' %>
           <label for="payment_who_pays_client">
-            Client will pay for their own account<br/>
-            <span style="display:inline-block; width:400px">
+            <p class="max-w-300 inline-block w-80-percent">Client will pay for their own account</p>
+            <span class="block max-w-400">
               After your client signs in they will have 14 days to
               pay for their account before their Free Trial ends.
             </span>

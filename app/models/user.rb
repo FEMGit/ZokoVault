@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   has_one :tutorial_selection, dependent: :destroy
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy
-  
+
 
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription
@@ -55,6 +55,11 @@ class User < ActiveRecord::Base
   has_one :current_user_subscription,
     through: :current_user_subscription_marker, source: :user_subscription
 
+  has_one :corporate_provider_join, class_name: 'CorporateAdminAccountUser',
+            foreign_key: :user_account_id, inverse_of: :user_account
+  has_many :corporate_client_joins, class_name: 'CorporateAdminAccountUser',
+            foreign_key: :corporate_admin_id, inverse_of: :corporate_admin
+
   # == Delegations
   delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
            :name, :phone_number, :phone_number_mobile, :two_factor_phone_number,
@@ -64,7 +69,7 @@ class User < ActiveRecord::Base
   def category_shares
     @category_shares ||= shares.categories
   end
-  
+
   def primary_shared_with?(shared_user)
     return false unless shared_user.present?
     shared_user.user_profile
@@ -72,14 +77,14 @@ class User < ActiveRecord::Base
                .map { |sh| sh.emailaddress.downcase }
                .include? email.downcase
   end
-  
+
   def primary_shared_with_by_contact?(contact)
     return false unless contact.present?
     user_profile.primary_shared_with
                 .map { |sh| sh.emailaddress.downcase }
                 .include? contact.emailaddress.downcase
   end
-  
+
   def primary_shared_with_or_owner?(shared_user)
     return false unless shared_user.present?
     return true if shared_user == self
@@ -93,68 +98,69 @@ class User < ActiveRecord::Base
   def free?
     !paid? && !primary_shared_of_paid?
   end
-  
+
   def corporate_categories
     return [] unless categories.present?
     Category.all.select { |c| categories.map(&:category_id).include? c.id }
   end
-  
+
   def corporate_users
     return [] unless corporate_admin
     CorporateAdminAccountUser.select { |ca| ca.corporate_admin == self }.map(&:user_account)
   end
-  
+
   def employee_users
     return [] unless corporate_employee?
     CorporateEmployeeAccountUser.select { |ce| ce.corporate_employee == self }.map(&:user_account).compact
   end
-  
+
   def corporate_employee?
     corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
     corporate_account_record.present? && corporate_account_record.account_type.eql?(CorporateAdminAccountUser.employee_type)
   end
-  
+
   def employee_contact_type
     CorporateEmployeeProfile.find_by(corporate_employee: self).try(:contact_type)
   end
-  
+
   def employee_relationship
     CorporateEmployeeProfile.find_by(corporate_employee: self).try(:relationship)
   end
-  
+
   def corporate_manager?
     corporate_employee? || corporate_admin
   end
-  
+
   def corporate_user?
-    CorporateAdminAccountUser.find_by(user_account_id: id).present?
+    corporate_provider_join.present? &&
+    corporate_provider_join.corporate_admin.present?
   end
-  
+
   def corporate_type
     corporate_account_record = CorporateAdminAccountUser.find_by(user_account_id: id)
     CorporateAdminAccountUser.find_by(user_account_id: id).try(:account_type)
   end
-  
+
   def logged_in_at_least_once?
     last_sign_in_at.present?
   end
-  
+
   def corporate_user_by_admin?(admin)
     CorporateAdminAccountUser.find_by(corporate_admin_id: admin.try(:id), user_account_id: id).present?
   end
-  
+
   def corporate_admin_by_user
     CorporateAdminAccountUser.find_by(user_account_id: id).try(:corporate_admin)
   end
-  
+
   def corporate_user_by_employee?(employee)
     CorporateEmployeeAccountUser.find_by(corporate_employee_id: employee.try(:id), user_account_id: id).present?
   end
-  
+
   def corporate_employees_by_user
     CorporateEmployeeAccountUser.where(user_account_id: id).map(&:corporate_employee)
   end
-  
+
   def corporate_invitation_sent?
     corporate_record = CorporateAdminAccountUser.find_by(user_account_id: id)
     corporate_record.present? && corporate_record.confirmation_sent_at.present?
@@ -174,7 +180,7 @@ class User < ActiveRecord::Base
   def paid?
     current_user_subscription.present? && current_user_subscription.active?
   end
-  
+
   def primary_shared_with?(shared_user)
     return false unless shared_user.present?
     shared_user.user_profile
@@ -182,7 +188,7 @@ class User < ActiveRecord::Base
                .map { |sh| sh.emailaddress.downcase }
                .include? email.downcase
   end
-  
+
   def primary_shared_with_or_owner?(shared_user)
     return false unless shared_user.present?
     return true if shared_user == self
@@ -238,33 +244,33 @@ class User < ActiveRecord::Base
     date_of_birth_year = date_of_birth && date_of_birth.year.to_s || ""
     [date_of_birth_year, email_nick, first_name, last_name, middle_name].any? { |x| x.present? && password.downcase.include?(x.downcase) }
   end
-  
+
   def skip_password_validation!
     @skip_password_validation = true
   end
-  
+
   def confirm_email!
     @confirm_email = true
   end
-  
+
   before_create { set_as_admin }
   before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear,
                                         :corporate_employees_clear
-  
+
   protected
-  
+
   def password_required?
     return false if skip_password_validation
     super
   end
-  
+
   def confirm_email?
     @confirm_email == true
   end
-  
+
   private
-  
+
   def email_is_valid?
     MailService.email_is_valid?(email, errors, :email)
   end
@@ -283,18 +289,18 @@ class User < ActiveRecord::Base
   def invitation_sent_clear
     ShareInvitationSent.where("contact_email ILIKE ?", email).destroy_all
   end
-  
+
   def corporate_employees_clear
     CorporateEmployeeAccountUser.where(user_account_id: id).delete_all
     CorporateEmployeeAccountUser.where(corporate_employee_id: id).delete_all
     CorporateEmployeeProfile.where(corporate_employee_id: id).delete_all
   end
-  
+
   def corporate_admin_accounts_clear
     CorporateAdminAccountUser.where(user_account_id: id).delete_all
     CorporateAdminAccountUser.where(corporate_admin_id: id).delete_all
   end
-  
+
   def corporate_contacts_clear
     Contact.where(emailaddress: email, relationship: 'Account Owner').destroy_all
   end

@@ -4,8 +4,4 @@ module SubscriptionHelper
     days_left = (subscription.end_at.utc - Time.current.utc) / 1.day
     (days_left <= 0) ? 0 : days_left.ceil
   end
-
-  def trial_was_used?(user)
-    SubscriptionService.trial_was_used?(user)
-  end
 end

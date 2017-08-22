@@ -1,13 +1,18 @@
 <div class="card mb-10 b-radius-0 b-none box-shadow-none">
   <h3>Subscription Details</h3>
-  <% if @subscription && @subscription.full? %>
+  <% if @subscription && @corporate %>
+    <%= render partial: 'subscription_corporate.html.erb',
+                locals: { subscription: @subscription,
+                          plan: @plan,
+                          company_name: @company_name,
+                          next_invoice: @next_invoice } %>
+  <% elsif @subscription && @subscription.full? %>
     <%= render partial: 'subscription_info.html.erb',
                 locals: { subscription: @subscription,
                           card: @card,
                           plan: @plan,
                           invoices: @invoices,
-                          next_invoice_date: @next_invoice_date,
-                          next_invoice_amount: @next_invoice_amount } %>
+                          next_invoice: @next_invoice } %>
   <% elsif @subscription && @subscription.trial? %>
     <%= render partial: 'free_trial_subscription_info.html.erb',
                 locals: { trial: @subscription } %>

@@ -33,7 +33,7 @@ class AccountsController < AuthenticatedController
   def setup; end
 
   def first_run
-    if !SubscriptionService.trial_was_used?(current_user)
+    if SubscriptionService.eligible_for_trial?(current_user)
       SubscriptionService.activate_trial(user: current_user)
     end
     redirect_to tutorials_lets_get_started_path
@@ -96,7 +96,7 @@ class AccountsController < AuthenticatedController
     if current_user.corporate_employee?
       current_user.user_profile.update_attributes(mfa_frequency: 'always')
       current_user.update_attributes(setup_complete: true)
-      redirect_to user_type_account_path 
+      redirect_to user_type_account_path
     else
       redirect_to login_settings_account_path
     end
@@ -120,14 +120,14 @@ class AccountsController < AuthenticatedController
       @corporate_profile = @corporate_admin.corporate_account_profile
     end
   end
-  
+
   def corporate_user_type
     corporate_admin = User.find_by(id: current_user.try(:id))
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
     @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
     @corporate_profile.save
   end
-  
+
   def corporate_user_type_update
     corporate_admin = User.find_by(id: current_user.try(:id))
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
@@ -141,12 +141,12 @@ class AccountsController < AuthenticatedController
       end
     end
   end
-  
+
   def corporate_logo
     corporate_admin = User.find_by(id: current_user.try(:id))
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
   end
-  
+
   def corporate_logo_update
     corporate_admin = User.find_by(id: current_user.try(:id))
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
@@ -159,9 +159,9 @@ class AccountsController < AuthenticatedController
       end
     end
   end
-  
+
   def corporate_account_options; end
-  
+
   def corporate_account_options_update
     current_user.update_attributes(:corporate_admin => true)
     corporate_admin = User.find_by(id: current_user.try(:id))
@@ -170,16 +170,16 @@ class AccountsController < AuthenticatedController
     MessageMailer.corporate_account_information(corporate_profile, corporate_options_params).deliver
     redirect_to how_billing_works_path
   end
-  
+
   def how_billing_works; end
-  
+
   def billing_types; end
-  
+
   def corporate_credit_card; end
 
   def user_type_update
     if user_params[:user_type].eql? 'trial'
-      unless SubscriptionService.trial_was_used?(current_user)
+      if SubscriptionService.eligible_for_trial?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
       current_user.update_attributes(setup_complete: true)
@@ -195,7 +195,7 @@ class AccountsController < AuthenticatedController
     end
     redirect_to root_path
   end
-  
+
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
     redirect_to session[:ret_url] || first_run_path

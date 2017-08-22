@@ -133,7 +133,8 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def billing_info
-    session[:ret_url] = manage_subscription_path
+    session[:ret_url] = billing_info_path
+    @card = customer_card
   end
 
   def update_login_settings
@@ -233,9 +234,12 @@ class AccountSettingsController < AuthenticatedController
 
   def update_payment
     token = params[:stripeToken]
-    if token.present?
+    card = customer_card
+    if token.present? || card.present?
       customer = StripeService.stripe_customer(user: current_user, corporate_update: corporate_update?)
-      (redirect_to (session[:ret_url] || root_path) and return) unless update_customer_information(customer, token)
+      unless ((token.present? && update_customer_information(customer, token)) || card.present?)
+        redirect_to (session[:ret_url] || root_path) and return
+      end
       if customer.subscriptions.blank? && stripe_subscription_params.present? &&
           stripe_subscription_params[:plan_id].present?
         plan = stripe_subscription_params[:plan_id]
@@ -250,13 +254,22 @@ class AccountSettingsController < AuthenticatedController
           user: current_user, stripe_subscription_object: stripe_obj)
       end
     end
-    redirect_to session[:ret_url] || first_run_path
+    redirect_to redirect_from_payment_page_path
   end
 
   private
 
   def redirect_to_manage_subscription_if_corporate_client
     redirect_to manage_subscription_path if current_user && current_user.corporate_client?
+  end
+
+  def redirect_from_payment_page_path
+    if session[:ret_url].present?
+      return manage_subscription_path if request.referer.eql? billing_info_url
+      session[:ret_url]
+    else
+      first_run_path
+    end
   end
 
   def corporate_update?

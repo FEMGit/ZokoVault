@@ -21,7 +21,7 @@
 
 <div class="mt-20">
   <%= link_to "Update Subscription", billing_info_path, class: "button primary-button big-button mt-10 inline-block fixed-width-big p-10" %>
-  <% if @next_invoice_date.present? %>
+  <% if next_invoice.present? %>
     <%= link_to "Cancel Subscription", cancel_subscription_path, class: "button secondary-button big-button mt-10 inline-block fixed-width-big p-10" %>
   <% end %>
 </div>

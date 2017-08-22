@@ -39,6 +39,13 @@
       class: "button primary-button text-field-button" %>
     <span id='promo-code-text'></span>
   </section>
+  
+  <% if @card %>
+    <section class="mt-10">
+      <label class="fz-16">Billing Info</label>
+      <%= render partial: 'account_settings/stripe_card_information', locals: { card: @card, update_subscription_path: update_subscription_information_path } %>
+    </section>
+  <% end %>
 </div>
 
 <%= javascript_include_tag "promotion_logic" %>

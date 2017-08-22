@@ -69,7 +69,7 @@
       <% @has_card = true if @billing_error %>
 
       <ul class="radio-list">
-        <li class="radio-list" style="width:50%">
+        <li class="radio-list" style="width:55%">
           <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
               onclick: 'showPricingRows()', disabled: !@has_card %>
           <label for="payment_who_pays_corporate"

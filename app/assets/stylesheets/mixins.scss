@@ -36,6 +36,26 @@
   }
 }
 
+@mixin chosen-min-width($width) {
+  select,
+  .chosen-container,
+  .chosen-choices,
+  .chosen-results,
+  .chosen-drop {
+    width: 100% !important;
+    min-width: $width !important;
+  }
+  .search-choice-close {
+    min-width: auto;
+    margin-top: 0 !important;
+  }
+  input {
+    @include media($mobile) {
+      max-width: 100% !important;
+    }
+  }
+}
+
 @mixin avatar-circle($radius) {
   width: $radius;
   height: $radius;

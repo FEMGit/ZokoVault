@@ -1,11 +1,11 @@
 <% account_providers.each do |account_provider| %>
   <% account_provider.accounts.each do |account| %>
     <tr>
-      <td>
+      <td class="financial-name-cell">
         <label class="mobile-show"><%= column_name %></label>
-        <p><%= account_provider.name %></p>
+        <p class="financial-name-text"><%= account_provider.name %></p>
       </td>
-      <td>
+      <td >
         <label class="mobile-show"><%= column_type %></label>
         <p><%= account.account_type %></p>
       </td>
@@ -17,7 +17,7 @@
                               field_id: "account_value_#{account.id}",
                               value: number_to_currency(account.value,
                               precision: 0, unit: "$"),
-                              additional_classes: 'tutorial-value' } %>
+                              additional_classes: 'tutorial-value small' } %>
       </td>
     </tr>
   <% end %>

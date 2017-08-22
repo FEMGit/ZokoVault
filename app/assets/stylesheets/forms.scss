@@ -44,10 +44,24 @@ input[type=radio]{
   }
 }
 .tutorial-value{
-  max-width: 300px;
-  @include media($tablet) {
-    width: 100%;
-    min-width: 200px;
+  &:not(.small) {
+    max-width: 300px;
+    @include media($ninesixty) {
+      max-width: 270px;
+    }
+    @include media($eightfifty) {
+      max-width: 240px;
+    }
+    @include media($tablet) {
+      width: 100%;
+      min-width: 200px;
+    }
+  }
+  &.small {
+    max-width: 120px;
+    @include media($mobile) {
+      max-width: 230px;
+    }
   }
 }
 

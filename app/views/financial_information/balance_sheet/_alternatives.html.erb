@@ -1,9 +1,9 @@
 <% alternative_managers.each do |alternative_manager| %>
   <% alternative_manager.alternatives.each do |alternative| %>
     <tr>
-      <td>
+      <td class="financial-name-cell">
         <label class="mobile-show"><%= column_name %></label>
-        <p><%= alternative_manager.name %></p>
+        <p class="financial-name-text"><%= alternative_manager.name %></p>
       </td>
       <td>
         <label class="mobile-show"><%= column_type %></label>
@@ -17,7 +17,7 @@
                               field_id: "alternative_value_#{alternative.id}",
                               value: number_to_currency(alternative.current_value, 
                               precision: 0, unit: "$"),
-                              additional_classes: 'tutorial-value' } %>
+                              additional_classes: 'tutorial-value small' } %>
       </td>
     </tr>
   <% end %>

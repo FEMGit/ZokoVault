@@ -1,0 +1,72 @@
+<% category_empty ||= false %>
+<% next_tutorial_path ||= nil %>
+
+<%= render partial: 'tutorials/skip_tutorial_modal' %>
+
+<div class="mt-20 mb-30 max-w-1000-centered">
+  <div class="card mb-30">
+    <h1><%= title %></h1>
+    <p><%= description %></p>
+    
+    <%= form_for form_for_object, url: url_for(action: :create, controller: form_controller) do |f| %>
+      <table class="tutorial-multiple-dropdown collect-fields">
+        <%= hidden_field_tag :tutorial_name, @tutorial_name %>
+        <%= hidden_field_tag :next_tutorial, @next_tutorial.try(:name).try(:parameterize) || 'confirmation_page' %>
+        <%= hidden_field_tag :next_page_number, @next_page %>
+        <%= hidden_field_tag :page_number, @page_number %>
+        <%= hidden_field_tag :next_tutorial_path, next_tutorial_path %>
+        <% hidden_field_tag_values.try(:each) do |hidden_field_tag_value| %>
+          <%= hidden_field_tag hidden_field_tag_value[:name], hidden_field_tag_value[:value] %>
+        <% end %>
+      
+        <tr class="mobile-hide">
+          <th width="30%"><label><%= label_tag[0][:value] %></label></th>
+          <th width="30%;"><label><%= label_tag[1][:value] %></label></th>
+          <th width="20%;"></th>
+        </tr>
+          <% partial_path[:resources].each do |res| %>
+            <%= hidden_field_tag :tutorial_name, @tutorial_name, class: 'saved-field' %>
+            <tr class="tutorial-fields <%= fields_class %>">
+              <td>
+                <label class="mobile-show mt-10"><%= label_tag[0][:value] %></label>
+                <%= text_field_tag text_field_tag[:name], res.name, class: "saved-field form-control medium h-34 max-w-300 w-100-percent min-w-200", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+              </td>
+              <td>
+                <label class="mobile-show"><%= label_tag[1][:value] %></label>
+                <div class="chosen-styled-select form-control medium min-w-240 min-h-30">
+                  <%= collection_select 'tutorial_multiple_types', "[existing_account][types]", select_tag[:value], :to_s, :to_s, { selected: select_tag_values(res) }, { class: "chosen-select", multiple: true, :'data-placeholder' => "Select all that apply" } %>
+                </div>
+              </td>
+              <td class="pb-15">
+                <a data-id=<%= res.id %> class="medium-button outline-button remove-btn h-34">Remove</a>
+              </td>
+            </tr>
+          <% end %>
+        
+        
+        <!-- New Elements -->
+          <tr class="tutorial-fields add-tutorial <%= fields_class %>">
+            <td>
+              <label class="mobile-show mt-10"><%= label_tag[0][:value] %></label>
+              <%= text_field_tag text_field_tag[:name], "", class: "form-control medium repeated-field h-34 max-w-300 w-100-percent min-w-200 mb-0", placeholder: text_field_tag[:placeholder], :maxlength => text_field_tag[:max_length] || get_max_length(:default) %>
+            </td>
+            <td>
+              <label class="mobile-show"><%= label_tag[1][:value] %></label>
+              <div class="chosen-styled-select form-control medium repeated-field min-w-240 min-h-30 mb-0">
+                <%= collection_select 'tutorial_multiple_types', "[types]", select_tag[:value], :to_s, :to_s, { }, { class: "chosen-select", multiple: true, :'data-placeholder' => "Select all that apply" } %>
+              </div>
+            </td>
+            <td class="pb-15">
+              <%= link_to 'Add Another', 'javascript:void(0);', class: "medium-button button primary-button add-another-btn h-34"%>
+            </td>
+          </tr>
+      </table>
+      
+      <%= render partial: 'tutorials/buttons', locals: { category_empty: category_empty, next_tutorial_path: next_tutorial_path, f: f } %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

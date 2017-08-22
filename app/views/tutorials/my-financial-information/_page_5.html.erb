@@ -7,7 +7,7 @@
 <% alternatives = current_user.financial_alternatives %>
 <% providers = FinancialProvider.where(id: alternatives.try(:map, &:manager_id)) %>
 
-<%= render partial: 'tutorials/add_remove_tutorial',
+<%= render partial: 'tutorials/multiple_dropdowns',
            locals: { wide: true,
                      multiple: true,
                      form_controller: :financial_alternative,

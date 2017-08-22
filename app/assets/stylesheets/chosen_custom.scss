@@ -21,6 +21,9 @@ $arrow-dropdown-margin-right: 30px;
   &.w-270 {
     @include chosen-width(270px)
   }
+  &.min-w-240 {
+    @include chosen-min-width(240px)
+  }
 }
 
 .chosen-container-multi .chosen-choices li.search-field input[type=text]{

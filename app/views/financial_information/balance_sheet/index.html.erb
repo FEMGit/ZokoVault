@@ -5,10 +5,11 @@
 <% next_tutorial_path ||= nil %>
 <% not_tutorial ||= false %>
 <% description ||= "" %>
+<% title ||= "Balance Sheet" %>
 
 <div class="mt-20 mb-30 <% if !not_tutorial %> max-w-1000-centered <% end %>">
   <div class="card mb-30">
-    <h1>Balance Sheet</h1>
+    <h1><%= title %></h1>
     <p class="ml-5"><%= description %></p>
 
     <%= form_for @financial_provider, url: update_balance_sheet_path, method: :post do |f| %>

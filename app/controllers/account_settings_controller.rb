@@ -1,6 +1,7 @@
 require 'ostruct'
 
 class AccountSettingsController < AuthenticatedController
+  skip_before_filter :complete_setup!, only: [:store_corporate_payment]
   before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
                                           :verify_code, :account_users, :update_account_users,
                                           :login_settings, :update_login_settings]

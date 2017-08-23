@@ -39,6 +39,14 @@ class UserSubscription < ActiveRecord::Base
     full? && !active?
   end
   
+  def corporate?(corporate_client:)
+    corporate_owner = corporate_client.corporate_account_owner
+    return false unless corporate_owner && corporate_client.corporate_user_by_admin?(corporate_owner)
+    customer_id = corporate_owner.corporate_account_profile.stripe_customer_id
+    stripe_record = funding.stripe_subscription_record
+    stripe_record.present? && customer_id == stripe_record.customer_id
+  end
+  
   def subscription_id
     return nil unless funding && funding.details &&
                       funding.details["stripe_subscription_id"]

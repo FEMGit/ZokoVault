@@ -138,16 +138,16 @@ class CorporateEmployeesController < CorporateBaseController
   def add_employee_shares(user_ids, corporate_employee)
     user_ids.each do |user_id|
       next unless (user = User.find_by(:id => user_id)).present?
-      corporate_emplooyee_contact = create_corporate_employee_contact_for_user_account(corporate_employee: corporate_employee, user_account: user)
-      CorporateAdminService.add_category_share_for_corporate_employee(corporate_employee_contact: corporate_emplooyee_contact, corporate_admin: corporate_owner, user: user)
+      corporate_employee_contact = create_corporate_employee_contact_for_user_account(corporate_employee: corporate_employee, user_account: user)
+      CorporateAdminService.add_category_share_for_corporate_employee(corporate_employee_contact: corporate_employee_contact, corporate_admin: corporate_owner, user: user)
     end
   end
   
   def remove_employee_shares(user_ids, corporate_employee)
     user_ids.each do |user_id|
       next unless (user = User.find_by(:id => user_id)).present?
-      corporate_emplooyee_contact = create_corporate_employee_contact_for_user_account(corporate_employee: corporate_employee, user_account: user)
-      Share.where(contact_id: corporate_emplooyee_contact.id, user_id: user.id).destroy_all
+      corporate_employee_contact = create_corporate_employee_contact_for_user_account(corporate_employee: corporate_employee, user_account: user)
+      Share.where(contact_id: corporate_employee_contact.id, user_id: user.id).destroy_all
     end
   end
   

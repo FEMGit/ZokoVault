@@ -22,7 +22,11 @@
           <% end %>
           <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
           <td><%= "$#{invoice.total / 100.0}" %></td>
-          <td><%= link_to 'Invoice', invoice_information_path(invoice.id, corporate.to_s), class: 'no-underline-link', target: :_blank %></td>
+          <% if @corporate_invoices.present? && @corporate_invoices.include?(invoice) %>
+            <td>Corporate Payment</td>
+          <% else %>
+            <td><%= link_to 'Invoice', invoice_information_path(invoice.id, corporate.to_s), class: 'no-underline-link', target: :_blank %></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

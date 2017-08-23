@@ -64,73 +64,75 @@
         </span>
       <% end %>
 
-      <% plan = StripeSubscription.yearly_plan %>
-      <% cost = (plan.amount / 100.0).round(2) %>
-      <% @has_card = true if @billing_error %>
+      <% unless @user_account.persisted? %>
+        <% plan = StripeSubscription.yearly_plan %>
+        <% cost = (plan.amount / 100.0).round(2) %>
+        <% @has_card = true if @billing_error %>
 
-      <ul class="radio-list">
-        <li class="radio-list">
-          <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
-              onclick: 'showPricingRows()', disabled: !@has_card %>
-          <label for="payment_who_pays_corporate"
-               class="<%= 'clr-gray-med-tinted' if !@has_card %>">
-            <p class="max-w-300 inline-block w-80-percent">Provide client with an annual subscription</p>
-            <span class="block max-w-400">
-              $<%=cost%> charged annually for every client attached to
-              your account. Add and remove new clients at any time.
-            </span>
-          </label>
-          <div class="check"></div>
-          <% if !@has_card && @is_corporate_employee %>
-            <span class="fz-12 ml-10">The Corporate Administrator must setup Billing Information to enable this option.</span>
-          <% elsif !@has_card %>
-            <span class="fz-12 ml-10">You must setup <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
-          <% end %>
-        </li><br/>
-        <li class="radio-list">
-          <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,
-              onclick: 'hidePricingRows()' %>
-          <label for="payment_who_pays_client">
-            <p class="max-w-300 inline-block w-80-percent">Client will pay for their own account</p>
-            <span class="block max-w-400">
-              After your client signs in they will have 14 days to
-              pay for their account before their Free Trial ends.
-            </span>
-          </label>
-          <div class="check"></div>
-        </li><br/>
-      </ul>
-      <% if @billing_error %>
-        <div class="flash-error-static flash static"
-             style="width:55%; margin-left:0" id="billing_error">
-          <div>Billing Error: <%= @billing_error %></div>
-          <div>Please <%= link_to 'update your credit card on file',
-            corporate_billing_information_path, :target => "_blank" %>.</div>
+        <ul class="radio-list">
+          <li class="radio-list">
+            <%= radio_button_tag 'payment[who_pays]', "corporate", @has_card,
+                onclick: 'showPricingRows()', disabled: !@has_card %>
+            <label for="payment_who_pays_corporate"
+                 class="<%= 'clr-gray-med-tinted' if !@has_card %>">
+              <p class="max-w-300 inline-block w-80-percent">Provide client with an annual subscription</p>
+              <span class="block max-w-400">
+                $<%=cost%> charged annually for every client attached to
+                your account. Add and remove new clients at any time.
+              </span>
+            </label>
+            <div class="check"></div>
+            <% if !@has_card && @is_corporate_employee %>
+              <span class="fz-12 ml-10">The Corporate Administrator must setup Billing Information to enable this option.</span>
+            <% elsif !@has_card %>
+              <span class="fz-12 ml-10">You must setup <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
+            <% end %>
+          </li><br/>
+          <li class="radio-list">
+            <%= radio_button_tag 'payment[who_pays]', "client", !@has_card,
+                onclick: 'hidePricingRows()' %>
+            <label for="payment_who_pays_client">
+              <p class="max-w-300 inline-block w-80-percent">Client will pay for their own account</p>
+              <span class="block max-w-400">
+                After your client signs in they will have 14 days to
+                pay for their account before their Free Trial ends.
+              </span>
+            </label>
+            <div class="check"></div>
+          </li><br/>
+        </ul>
+        <% if @billing_error %>
+          <div class="flash-error-static flash static"
+               style="width:55%; margin-left:0" id="billing_error">
+            <div>Billing Error: <%= @billing_error %></div>
+            <div>Please <%= link_to 'update your credit card on file',
+              corporate_billing_information_path, :target => "_blank" %>.</div>
+          </div>
+        <% end %>
+        <div id="pricing-rows">
+          <section class="bb-gray-light-dashed mb-10">
+            <div class="inline-block mb-10">Annual Subscription</div>
+            <span class="fr" id="subscription-price">$<%= cost %></span>
+            <span class="clear"></span>
+          </section>
+          <section class="pb-10 mb-10" id="promo-row">
+            <span class="bold" id="promo-name"></span>
+            <span class="fr clr-red" id="promo-price"></span>
+          </section>
+          <section class="bb-gray-light pb-10 mb-10">
+            <span class="bold">Total</span>
+            <span class="fr" id="subscription-total">$<%= cost %></span>
+          </section>
+          <section>
+            <span class="mr-10">Promo Code</span>
+            <%= hidden_field_tag 'payment[promo_code]', nil, id: 'user_stripe_subscription_attributes_promo_code' %>
+            <%= text_field_tag 'promo_code_text_field', nil, class: 'promo-form inline-block width-250' %>
+            <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
+              class: "button primary-button text-field-button" %>
+            <span id='promo-code-text'></span>
+          </section>
         </div>
       <% end %>
-      <div id="pricing-rows">
-        <section class="bb-gray-light-dashed mb-10">
-          <div class="inline-block mb-10">Annual Subscription</div>
-          <span class="fr" id="subscription-price">$<%= cost %></span>
-          <span class="clear"></span>
-        </section>
-        <section class="pb-10 mb-10" id="promo-row">
-          <span class="bold" id="promo-name"></span>
-          <span class="fr clr-red" id="promo-price"></span>
-        </section>
-        <section class="bb-gray-light pb-10 mb-10">
-          <span class="bold">Total</span>
-          <span class="fr" id="subscription-total">$<%= cost %></span>
-        </section>
-        <section>
-          <span class="mr-10">Promo Code</span>
-          <%= hidden_field_tag 'payment[promo_code]', nil, id: 'user_stripe_subscription_attributes_promo_code' %>
-          <%= text_field_tag 'promo_code_text_field', nil, class: 'promo-form inline-block width-250' %>
-          <%= link_to "Apply", 'javascript:void(0);', onClick: "applyPromoCode(); return false", id: "apply-promo-code-button",
-            class: "button primary-button text-field-button" %>
-          <span id='promo-code-text'></span>
-        </section>
-      </div>
 
     </div>
 

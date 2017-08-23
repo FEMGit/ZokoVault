@@ -55,7 +55,7 @@
 </div>
 
 <h1>Admin Actions</h1>
-<div class="card">
+<div class="card mb-30">
   <section class="flex-boxes percent-100 bb-gray-light-padding mb-10">
     <div class="user-account-title">
       <h3>Access Shared Vault</h3>
@@ -81,6 +81,11 @@
     </div>
   </section>
 </div>
+
+<% if @invoices.any? %>
+  <h1>Invoices</h1>
+  <%= render partial: 'account_settings/previous_invoices', locals: { invoices: @invoices, corporate: true } %>
+<% end %>
 
 <%= render partial: 'layouts/email_preview_javascript' %>
 

@@ -3,6 +3,7 @@ class CorporateAccountsController < CorporateBaseController
                                                         :billing_information]
   before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
+  before_action :set_corporate_user_by_user_profile, only: [:show]
   helper_method :managed_by_contacts
 
   include SharedUserExpired
@@ -70,6 +71,10 @@ class CorporateAccountsController < CorporateBaseController
 
   def show
     authorize @corporate_contact
+    stripe_customer = StripeService.ensure_corporate_stripe_customer(user: corporate_owner)
+    corporate_admin_customer_id = CorporateAccountProfile.find_by(user: corporate_owner).try(:stripe_customer_id)
+    corporate_subscription_ids = StripeSubscription.where(user: @user_account, customer_id: corporate_admin_customer_id).map(&:subscription_id)
+    @invoices = stripe_customer.invoices.to_a.select { |inv| inv[:lines][:data].any? { |sub| corporate_subscription_ids.include? sub[:id] } }
   end
 
   def new

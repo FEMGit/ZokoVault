@@ -155,7 +155,7 @@ Rails.application.routes.draw do
   put 'account_settings/phone_setup_update', to: 'account_settings#phone_setup_update', as: :account_settings_phone_update
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
   get 'account_settings/cancel_subscription', to: 'account_settings#cancel_subscription', as: :cancel_subscription
-  get 'account_settings/invoice_information/:id', to: 'account_settings#invoice_information', as: :invoice_information
+  get 'account_settings/invoice_information/:id/:corporate', to: 'account_settings#invoice_information', as: :invoice_information
   get 'account_settings/update_subscription_information(/:corporate)', to: 'account_settings#update_subscription_information', as: :update_subscription_information
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users', as: :account_settings_update_account_users

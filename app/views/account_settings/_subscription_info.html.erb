@@ -25,21 +25,3 @@
     <%= link_to "Cancel Subscription", cancel_subscription_path, class: "button secondary-button big-button mt-10 inline-block fixed-width-big p-10" %>
   <% end %>
 </div>
-
-<script>
-  $(document).ready(function(){
-    $('#documents-table').DataTable( {
-      paging: false,
-      searching: false,
-      info: false,
-      aaSorting: [[1, 'asc']],
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }, {
-        'bSearchable': false,
-        'aTargets': ['nosearch']
-      }],
-    } );
-  });
-</script>

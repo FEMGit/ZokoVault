@@ -11,6 +11,7 @@ class AccountSettingsController < AuthenticatedController
                                                                              :cancel_subscription_update, :update_subscription_information]
   include TutorialsHelper
   include UserTrafficModule
+  include StripeHelper
 
   def page_name
     case action_name
@@ -116,9 +117,15 @@ class AccountSettingsController < AuthenticatedController
     end
     invoice = Stripe::Invoice.retrieve(params[:id])
     charge  = Stripe::Charge.retrieve(invoice.charge) if invoice.try(:charge).present?
+    user_paid_for = 
+      if params[:corporate].present? && params[:corporate].eql?('true')
+        user_name_by_subscription_id(invoice.try(:subscription))
+      else
+        nil
+      end
     html = render_to_string(
       layout: 'pdf_invoice',
-      locals: { invoice: invoice, card: charge.try(:source) }
+      locals: { invoice: invoice, card: charge.try(:source), user_paid_for: user_paid_for }
     )
     kit = PDFKit.new(html)
     pdf_file = kit.to_pdf

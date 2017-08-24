@@ -39,7 +39,7 @@
     <label>Primary Contact - Account Admin</label>
     <p>
       <%= @corporate_profile.user.name %><br>
-      <%= @corporate_profile.user.email %><br>
+      <%= mail_to @corporate_profile.user.email, @corporate_profile.user.email, class: "no-underline-link" %><br>
       <%= @corporate_profile.user.two_factor_phone_number %>
     </p>
   <% end %>

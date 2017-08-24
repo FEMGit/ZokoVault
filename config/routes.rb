@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
   get 'email_confirmed' => 'welcome#email_confirmed'
+  get 'password_link_expired(/:corporate)' => 'welcome#reset_password_expired', as: :password_link_expired
   get 'onboarding_back' => 'welcome#onboarding_back', as: :onboarding_back
 
   # Default category pages ?Could probably be done better programatically?

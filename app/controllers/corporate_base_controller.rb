@@ -2,8 +2,7 @@ class CorporateBaseController < AuthenticatedController
   before_action :redirect_unless_corporate
   before_action :corporate_activated?, except: [:index]
   before_action :set_corporate_contact_by_user_profile, only: [:edit, :show]
-  before_action :set_corporate_user_by_user_profile, only: [:edit, :update, :show]
-  before_action :set_corporate_profile_by_user_account, only: [:edit, :update]
+  before_action :set_corporate_user_by_user_profile, :set_corporate_profile_by_user_account, only: [:edit, :update]
 
   before_action :set_index_breadcrumbs, :only => %w(new edit show)
   before_action :set_details_crumbs, only: [:edit, :show]
@@ -94,7 +93,7 @@ class CorporateBaseController < AuthenticatedController
   def corporate_owner
     if current_user.corporate_employee?
       current_user.corporate_admin_by_user
-    elsif current_user.corporate_admin?
+    elsif current_user.corporate_admin
       current_user
     end
   end
@@ -200,7 +199,7 @@ class CorporateBaseController < AuthenticatedController
   end
 
   def set_corporate_user_by_user_profile
-    return unless corporate_owner.corporate_admin?
+    return unless corporate_owner.corporate_admin
     user_id = UserProfile.find_by(id: params[:id]).user_id
     user = User.find_by(id: user_id)
     return unless user_accounts.include? user

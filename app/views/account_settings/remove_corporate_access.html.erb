@@ -1,0 +1,9 @@
+<div class="card">
+  <h1>Remove Corporate Access</h1>
+  
+  <p>Removing corporate access severs all shared access between your account and <%= @corporate_admin.corporate_account_profile.business_name %>. This includes any employees, and all payment.</p>
+  <p>Your account is currently paid through <%= date_format(@subscription.end_at) || '–' %></p>
+
+  <%= link_to 'Remove Corporate Access', remove_corporate_access_update_path(@corporate_admin_contact), method: :patch, class: 'button primary-button big-button inline-block mt-10 mb-10' %>
+  <%= link_to 'Cancel', back_path || contacts_path, class: 'button secondary-button big-button inline-block mt-10 mb-10' %>
+</div>

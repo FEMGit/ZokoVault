@@ -61,10 +61,10 @@ class User < ActiveRecord::Base
             foreign_key: :corporate_admin_id, inverse_of: :corporate_admin
 
   # == Delegations
-  delegate :mfa_frequency, :initials, :first_name, :middle_name, :last_name,
-           :name, :phone_number, :phone_number_mobile, :two_factor_phone_number,
-           :date_of_birth, :signed_terms_of_service?, :street_address_1,
-           :city, :state, :zip, to: :user_profile, allow_nil: true
+  delegate :mfa_frequency, :mfa_disabled, :initials, :first_name, :middle_name,
+           :last_name, :name, :phone_number, :phone_number_mobile,
+           :two_factor_phone_number, :date_of_birth, :signed_terms_of_service?,
+           :street_address_1, :city, :state, :zip, to: :user_profile, allow_nil: true
 
   def category_shares
     @category_shares ||= shares.categories
@@ -205,8 +205,13 @@ class User < ActiveRecord::Base
     return true if shared_user == self
     self.primary_shared_with?(shared_user)
   end
+  
+  def mfa_disabled?
+    mfa_disabled.eql? true
+  end
 
   def mfa_verify?
+    return false if mfa_disabled?
     case mfa_frequency
     when "never"
       false

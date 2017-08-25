@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170828083657) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -495,6 +494,15 @@ ActiveRecord::Schema.define(version: 20170828083657) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "s3_image_urls", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "key"
+    t.string  "presigned_url"
+    t.string  "expires_at"
+  end
+
+  add_index "s3_image_urls", ["key"], name: "index_s3_image_urls_on_key", using: :btree
+
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
@@ -653,8 +661,8 @@ ActiveRecord::Schema.define(version: 20170828083657) do
     t.string   "middle_name"
     t.string   "last_name"
     t.date     "date_of_birth"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.datetime "signed_terms_of_service_at"
     t.string   "phone_number"
     t.integer  "mfa_frequency"
@@ -667,6 +675,7 @@ ActiveRecord::Schema.define(version: 20170828083657) do
     t.string   "zip"
     t.string   "notes"
     t.string   "two_factor_phone_number"
+    t.boolean  "mfa_disabled",               default: false, null: false
   end
 
   create_table "user_subscriptions", force: :cascade do |t|

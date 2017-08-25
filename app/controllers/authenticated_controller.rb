@@ -92,6 +92,7 @@ class AuthenticatedController < ApplicationController
   end
 
   def missing_mfa?
+    return false if current_user.mfa_disabled?
     if params[:shared_user_id].present? && !current_user.mfa_verify?
       !session[:mfa_shared]
     elsif current_user.mfa_verify?

@@ -26,6 +26,19 @@
   <% end %>
 
   <%= form_for @user, url: usage_metrics_update_user_path, method: :post do |f| %>
+    <%= f.label :mfa_disabled, 'Disable Two-Factor' %>
+    <ul class="check-list mb-20">
+      <li class="check-list">
+        <label>
+          <%= check_box_tag "user[mfa_disabled]",
+            true,
+            @user.mfa_disabled, { }
+          %>
+          <span></span>Disable TFA authorization for this user
+        </label>
+      </li>
+    </ul>
+    
     <%= f.label :corporate_admin, 'Corporate Admin' %>
     <ul class="check-list mb-20">
       <li class="check-list">

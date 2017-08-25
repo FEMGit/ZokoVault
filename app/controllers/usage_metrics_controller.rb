@@ -66,6 +66,7 @@ class UsageMetricsController < AuthenticatedController
     corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
     update_corporate_account_settings(corporate_admin, corporate_admin_value)
     corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
+    corporate_admin.user_profile.update_attributes(:mfa_disabled => mfa_disabled?)
     
     respond_to do |format|
       format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
@@ -144,6 +145,11 @@ class UsageMetricsController < AuthenticatedController
   end
 
   private
+  
+  def mfa_disabled?
+    return false unless params[:user] && params[:user][:mfa_disabled]
+    params[:user][:mfa_disabled].eql? 'true'
+  end
 
   def set_user
     @user = User.find(params[:id])

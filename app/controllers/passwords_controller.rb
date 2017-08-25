@@ -49,8 +49,8 @@ class PasswordsController < Devise::PasswordsController
         if errors && errors.messages[:reset_password_token] &&
             errors.messages[:reset_password_token].include?('Incorrect Format')
           format.html { redirect_to password_link_expired_path(corporate_password_update?) }
-        elsif corporate_password_update? && reset_token_params[:reset_password_token].present?
-          format.html { render :action => :corporate_edit}
+        elsif create_new_invitation? && reset_token_params[:reset_password_token].present?
+          format.html { render :action => :create_new_invitation}
         else
           format.html { render :action => :edit}
         end
@@ -58,7 +58,7 @@ class PasswordsController < Devise::PasswordsController
     end
   end
   
-  def corporate_edit
+  def create_new_invitation
     self.resource = resource_class.new
     set_minimum_password_length
     resource.reset_password_token = params[:reset_password_token]
@@ -70,8 +70,8 @@ class PasswordsController < Devise::PasswordsController
     params.require(:user).permit(:reset_password_token)
   end
   
-  def corporate_password_update?
-    params[:corporate_password].present? &&
-      (params[:corporate_password].eql? 'true')
+  def create_new_invitation?
+    params[:create_new_invitation].present? &&
+      (params[:create_new_invitation].eql? 'true')
   end
 end

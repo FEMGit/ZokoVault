@@ -24,4 +24,8 @@ module UsersHelper
     current_user.present? && current_user.corporate_admin &&
       current_user.corporate_activated
   end
+  
+  def user_invited?(user)
+    user.confirmation_sent_at.present? ? 'User has been invited.' : 'User has not been invited.'
+  end
 end

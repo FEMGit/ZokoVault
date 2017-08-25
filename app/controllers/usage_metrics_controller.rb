@@ -60,7 +60,7 @@ class UsageMetricsController < AuthenticatedController
           set_corporate_profile(id: @user.try(:id))
           update_corporate_settings(corporate_admin: @user)
         end
-        format.html { redirect_to statistic_details_path(@user), flash: { success: 'User successfully created.' } }
+        format.html { redirect_to statistic_details_path(@user), flash: { success: 'User was successfully created.' } }
       else
         @corporate_profile = CorporateAccountProfile.new(corporate_settings_params)
         @user.try(:update_attributes, { corporate_admin: corporate_admin?, corporate_activated: corporate_admin? && corporate_activated? })
@@ -87,7 +87,14 @@ class UsageMetricsController < AuthenticatedController
       @corporate_profile.update(corporate_settings_params)
     end
   end
-
+  
+  def send_invitation_email
+    user_invited = User.find_by(id: params[:user_id])
+    InvitationService::CreateInvitationService.send_super_admin_invitation(super_admin_user: current_user, user_invited: user_invited)
+    flash[:success] = "Invitation was successfully sent."
+    redirect_to statistic_details_path(user_invited)
+  end
+  
   def set_edit_user_crumbs
     return unless @user.present?
     add_breadcrumb @user.name.to_s + " - Edit User", admin_edit_user_path(@user)

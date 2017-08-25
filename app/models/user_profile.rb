@@ -146,7 +146,7 @@ class UserProfile < ActiveRecord::Base
   
   after_update do
     primary_shared_with.each do |contact|
-      ShareInvitationService.send_invitation(user, contact)
+      InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact)
     end
   end
 end

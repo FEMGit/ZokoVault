@@ -19,6 +19,10 @@
 <div class="card mb-30">
   <h3 class="card-label">User Information</h3>
   
+  <%= link_to 'Invite User to ZokuVault', usage_metrics_send_invitation_email_path(@user), method: :post,
+     class: "button big-button primary-button inline-block" %>
+  <p class="mt-10"><%= user_invited?(@user) %></p>
+  
   <label>Name</label>
   <p><%= @user.name %></p>
   

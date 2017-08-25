@@ -45,21 +45,35 @@ class UsageMetricsController < AuthenticatedController
     redirect_to usage_metrics_path
   end
   
-  def update_user
-    corporate_admin = User.find_by(id: params[:id])
-    CorporateAdminService.clean_categories(corporate_admin)
-    if corporate_account_params.present?
-      corporate_admin_value = (corporate_account_params[:corporate_admin].eql? 'true') ? true : false
-      corporate_account_params[:corporate_categories] = [] unless (corporate_admin_value.eql? true)
-      CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories], corporate_admin_value)
-      corporate_activated = corporate_admin_value && ((corporate_account_params[:corporate_activated].eql? 'true') ? true : false)
-    else
-      corporate_admin_value = false
-      corporate_activated = false
+  def new_user
+    @user = User.new(user_profile: UserProfile.new)
+    @corporate_profile = CorporateAccountProfile.new
+  end
+  
+  def create_user
+    @user = User.new(user_params)
+    @user.skip_password_validation!
+    @user.skip_confirmation!
+    respond_to do |format|
+      if @user.save
+        if corporate_account_params.present?
+          set_corporate_profile(id: @user.try(:id))
+          update_corporate_settings(corporate_admin: @user)
+        end
+        format.html { redirect_to statistic_details_path(@user), flash: { success: 'User was successfully created.' } }
+      else
+        @corporate_profile = CorporateAccountProfile.new(corporate_settings_params)
+        @user.try(:update_attributes, { corporate_admin: corporate_admin?, corporate_activated: corporate_admin? && corporate_activated? })
+        format.html { render :new_user }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
-    corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
-    update_corporate_account_settings(corporate_admin, corporate_admin_value)
-    corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
+  end
+  
+  def update_user
+    user = User.find_by(id: params[:id])
+    CorporateAdminService.clean_categories(user)
+    update_corporate_settings(corporate_admin: user)
     
     respond_to do |format|
       format.html { redirect_to admin_edit_user_path, flash: { success: "User was successfully updated" } }
@@ -67,9 +81,9 @@ class UsageMetricsController < AuthenticatedController
     end
   end
   
-  def update_corporate_account_settings(corporate_admin, corporate_admin_value)
+  def update_corporate_account_settings(corporate_admin_value)
     if corporate_admin_value.eql? true
-      return if corporate_settings_params.blank?
+      return if corporate_settings_params.blank? || @corporate_profile.blank?
       @corporate_profile.update(corporate_settings_params)
     end
   end
@@ -138,7 +152,11 @@ class UsageMetricsController < AuthenticatedController
   end
 
   private
-
+  
+  def user_params
+    params.require(:user).permit(:email, user_profile_attributes: [:first_name, :last_name])
+  end
+  
   def set_user
     @user = User.find(params[:id])
   end
@@ -303,6 +321,15 @@ class UsageMetricsController < AuthenticatedController
   end
   
   # Corporate Account
+  def corporate_activated?
+    return false unless corporate_account_params.present?
+    corporate_account_params[:corporate_activated].eql?('true') ? true : false
+  end
+  
+  def corporate_admin?
+    return false unless corporate_account_params.present?
+    corporate_account_params[:corporate_admin].eql?('true') ? true : false
+  end
   
   def corporate_account_params
     return nil unless params[:corporate_account].present?
@@ -315,10 +342,25 @@ class UsageMetricsController < AuthenticatedController
                                               :zip, :state, :phone_number, :fax_number, :company_logo, :relationship)
   end
   
-  def set_corporate_profile
-    corporate_admin = User.find_by(id: params[:id])
+  def set_corporate_profile(id: nil)
+    corporate_admin = User.find_by(id: id.nil? ? params[:id] : id)
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
     @corporate_profile.contact_type = 'Advisor' if @corporate_profile.contact_type.blank?
     @corporate_profile.save
+  end
+  
+  def update_corporate_settings(corporate_admin:)
+    if corporate_account_params.present?
+      corporate_admin_value = corporate_admin?
+      corporate_account_params[:corporate_categories] = [] unless (corporate_admin_value.eql? true)
+      CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories], corporate_admin_value)
+      corporate_activated = corporate_admin_value && corporate_activated?
+    else
+      corporate_admin_value = false
+      corporate_activated = false
+    end
+    corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
+    update_corporate_account_settings(corporate_admin_value)
+    corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
   end
 end

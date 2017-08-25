@@ -21,6 +21,6 @@ class Share < ActiveRecord::Base
   end
 
   after_create do
-    ShareInvitationService.send_invitation(user, contact)
+    InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact)
   end
 end

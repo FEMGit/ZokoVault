@@ -52,6 +52,12 @@
 .clr-red {
   color: red;
 }
+.clr-alert-ligth-shaded {
+  color: $color-alert-ligth-shaded !important;
+}
+.clr-alert {
+  color: $color-alert !important;
+}
 .box-shadow-none {
   box-shadow: none !important;
 }
@@ -303,6 +309,9 @@
 .mt-2{
   margin-top: 2px !important;
 }
+.mt-0{
+  margin-top: 0px !important;
+}
 .ml-0{
   margin-left: 0px !important;
 }
@@ -365,6 +374,9 @@
 }
 .pl-15 {
   padding-left: 15px !important;
+}
+.pl-20 {
+  padding-left: 20px !important;
 }
 .pr-0 {
   padding-right: 0px !important;

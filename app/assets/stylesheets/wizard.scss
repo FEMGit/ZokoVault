@@ -63,6 +63,13 @@
   &.completed-step{
     padding: 5px 8px 5px 9px;
   }
+  
+  &.alert {
+    background: $color-alert;
+  }
+  &.alert-light-shaded {
+    background: $color-alert-ligth-shaded;
+  }
 }
 
 @media screen and (max-width: 525px) {

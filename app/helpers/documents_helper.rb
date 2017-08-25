@@ -149,6 +149,19 @@ module DocumentsHelper
     s3_object = S3Service.get_object_by_key(document.url)
     s3_object.exists?
   end
+  
+  def get_file_url_cached(key)
+    return unless key.present?
+    s3_image_url = S3ImageUrl.for_user(resource_owner).find_by(key: key)
+    if s3_image_url && s3_image_url.presigned_url.present? && DateTime.current < s3_image_url.expires_at
+      s3_image_url.presigned_url
+    else
+      s3_object = S3Service.get_object_by_key(key)
+      avatar_url = s3_object.presigned_url(:get, expires_in: 2.hours)
+      S3ImageUrl.create(user: resource_owner, key: key, presigned_url: avatar_url, expires_at: DateTime.current + 2.hours)
+      avatar_url
+    end
+  end
 
   def get_file_url(key)
     return unless key.present?

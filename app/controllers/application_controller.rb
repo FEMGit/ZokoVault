@@ -67,7 +67,8 @@ class ApplicationController < ActionController::Base
     UserActivity.for_date(Date.current).where(user_id: user_ids).update_all("session_length = session_length + 5")
   end
   
-  scheduler.every Rails.application.config.x.UsageMetricsUpdateScheduleFormat do
+  scheduler.every Rails.application.config.x.OneHourUpdate do
+    S3ImageUrl.where('expires_at <= ?', DateTime.current).delete_all
     UserService.update_user_information
   end
 end

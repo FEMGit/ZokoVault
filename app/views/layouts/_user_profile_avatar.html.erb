@@ -3,7 +3,7 @@
 <% avatar_size ||= 'small' %>
 <div class="avatar-wrapper">
   <% if user.photourl.present? %>
-    <%= image_tag(get_file_url(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
+    <%= image_tag(get_file_url_cached(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
   <% else %>
     <%= image_tag(empty_image, class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
     <p class="avatar-initials"><%= user.initials %></p>

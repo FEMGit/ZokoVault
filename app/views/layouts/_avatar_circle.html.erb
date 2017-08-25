@@ -8,7 +8,7 @@
     <% end %>
     <% if contact.photourl.present? %>
       <p class="avatar-initials transparent unselectable"><%= contact.initials %></p>
-      <%= image_tag(get_file_url(contact.photourl), class: "avatar-small", alt: contact.initials.to_s) %>
+      <%= image_tag(get_file_url_cached(contact.photourl), class: "avatar-small", alt: contact.initials.to_s) %>
     <% else %>
       <p class="avatar-initials"><%= contact.initials %></p>
       <%= image_tag(empty_image, class: "avatar-small", alt: contact.initials.to_s) %>

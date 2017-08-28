@@ -89,6 +89,17 @@
   word-break: break-word;
 }
 
+@mixin card-title($button-width) {
+  max-width: calc(100% - #{$button-width});
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  white-space: nowrap;
+  @include media($eightfifty) {
+    max-width: 100%;
+  }
+}
+
 // Table mixins
 @mixin fixed-cell-size($width) {
   width: $width;

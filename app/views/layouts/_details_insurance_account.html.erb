@@ -1,5 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<h1 class="<%= card_title_class %>"><%= @insurance_card.name %></h1>
 <%= link_to "#{@insurance_card.id}/edit", class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -7,8 +8,6 @@
     </svg>
   </span>Edit <%= yield(:edit_title) %>
 <% end %>
-<h1><%= @insurance_card.name %></h1>
-
 
 <div class="card <%= @insurance_card.group %>">
   <h3 class="card-label">Insurance Provider Details</h3>

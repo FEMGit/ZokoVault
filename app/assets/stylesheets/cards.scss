@@ -116,6 +116,35 @@ img.questionnaire-heart {
   }
 }
 
+// CARD TITLE
+.card-title-0 {
+  @include card-title(0px)
+}
+.card-title-110 {
+  @include card-title(110px)
+}
+.card-title-130 {
+  @include card-title(130px)
+}
+.card-title-140 {
+  @include card-title(140px)
+}
+.card-title-200 {
+  @include card-title(200px)
+}
+.card-title-220 {
+  @include card-title(220px)
+}
+.card-title-230 {
+  @include card-title(230px)
+}
+.card-title-240 {
+  @include card-title(240px)
+}
+.card-title-260 {
+  @include card-title(260px)
+}
+
 //CARD TABS
 .tab-header {
   height: 60px;
@@ -530,21 +559,6 @@ img.questionnaire-heart {
 
   .percent-complete {
     float: left;
-  }
-}
-
-.edit-link {
-  float: right;
-  text-decoration: none;
-  &.mrg-top {
-    margin-top: $edit-button-margin-top;
-  }
-  &.mobile-view {
-    @include media($eightfifty) {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-    }
   }
 }
 

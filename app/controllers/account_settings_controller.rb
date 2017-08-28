@@ -253,12 +253,28 @@ class AccountSettingsController < AuthenticatedController
           plan_id: plan, promo_code: promo)
         SubscriptionService.create_from_stripe(
           user: current_user, stripe_subscription_object: stripe_obj)
+        redirect_to account_settings_thank_you_for_subscription_path(plan) and return
       end
     end
     redirect_to redirect_from_payment_page_path
   end
 
+  def thank_you_for_subscription
+    @plan_duration = thank_you_subscription_plan_duration
+    if corporate_client_id = params[:corporate_client_id]
+      @corporate_client = User.find_by(id: corporate_client_id)
+      redirect_to corporate_accounts_path unless current_user.corporate_manager? && @plan_duration
+                                                 @corporate_client.corporate_user_by_manager?(current_user)
+    else
+      redirect_to manage_subscription_path unless @plan_duration
+    end
+  end
+
   private
+
+  def thank_you_subscription_plan_duration
+    StripeSubscription.plan_duration_name(plan_id: params[:plan_id])
+  end
 
   def redirect_to_manage_subscription_if_corporate_client
     redirect_to manage_subscription_path if current_user && current_user.corporate_client?

@@ -30,14 +30,17 @@ class CorporateBaseController < AuthenticatedController
 
   def create(account_type:, success_return_path:)
     respond_to do |format|
-      if bill_and_persist_client(client: @user_account, account_type: account_type)
+      bill_result = bill_and_persist_client(client: @user_account, account_type: account_type)
+      if bill_result
         CorporateAdminAccountUser.create(corporate_admin: corporate_owner, user_account: @user_account,
                                          account_type: CorporateAdminAccountUser.account_types[account_type])
         create_associated_contact
         corporate_admin_contact = create_corporate_admin_contact_for_user_account
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
-        format.html { redirect_to success_path(success_return_path), flash: { success: "#{account_type} Account successfully created." } }
+        return_path = bill_result.eql?(:payed_for_client) ? account_settings_thank_you_for_subscription_path(StripeSubscription.yearly_plan[:id], @user_account) :
+                                                            success_path(success_return_path)
+        format.html { redirect_to return_path, flash: { success: "#{account_type} Account successfully created." } }
         format.json { render :show, status: :created, location: @user_account }
       else
         error_path(:new)
@@ -226,7 +229,7 @@ class CorporateBaseController < AuthenticatedController
       current_user.corporate_employee? && current_user.corporate_account_owner)
     result = bill_corporate_admin(
       client: client, admin: admin, promo: payment["promo_code"])
-    return true if result
+    return :payed_for_client if result
     client.destroy
     false
   end

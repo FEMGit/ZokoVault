@@ -1,0 +1,17 @@
+<% title = "Thank You" %>
+
+<% if current_user.corporate_manager? %>
+  <% description = "You have purchased a #{@plan_duration} subscription for #{@corporate_client.name}." %>
+  <% button_path = corporate_accounts_path %>
+  <% button_text = "Dashboard" %>
+<% else %>
+  <% description = "You have purchased a #{@plan_duration} subscription." %>
+  <% button_path = manage_subscription_path %>
+  <% button_text = "Back to Account Settings" %>
+<% end %>
+
+<div class="card max-w-1000-centered text-center">
+  <h1 class="text-center"><%= title %></h1>
+  <p class="max-w-100-percent mb-20"><%= description %></p>
+  <%= link_to button_text, button_path, class: 'button primary-button big-button inline-block' %>
+</div>

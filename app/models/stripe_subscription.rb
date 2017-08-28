@@ -20,6 +20,16 @@ class StripeSubscription < ActiveRecord::Base
   def self.monthly_plan
     map_of_plans[StripeConfig.monthly_plan_id]
   end
+  
+  def self.plan_duration_name(plan_id:)
+    if plan_id.eql? monthly_plan[:id]
+      'monthly'
+    elsif plan_id.eql? yearly_plan[:id]
+      'yearly'
+    else
+      nil
+    end
+  end
 
   def customer
     @customer ||= Stripe::Customer.retrieve(customer_id)

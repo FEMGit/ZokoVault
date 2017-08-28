@@ -178,16 +178,16 @@ class AccountsController < AuthenticatedController
   def corporate_credit_card; end
 
   def user_type_update
-    if user_params[:user_type].eql? 'trial'
+    if user_params[:user_type].eql?('free') || current_user.corporate_manager?
+      MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+      current_user.update_attributes(setup_complete: true)
+    elsif user_params[:user_type].eql? 'trial'
       if SubscriptionService.eligible_for_trial?(current_user)
         SubscriptionService.activate_trial(user: current_user)
       end
       current_user.update_attributes(setup_complete: true)
       redirect_to corporate_accounts_path and return if current_user.corporate_employee?
       redirect_to first_run_path and return
-    elsif user_params[:user_type].eql? 'free'
-      MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
-      current_user.update_attributes(setup_complete: true)
     elsif user_params[:user_type].eql? 'corporate'
       MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
       current_user.update_attributes(setup_complete: false)

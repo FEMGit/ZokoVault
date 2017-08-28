@@ -61,7 +61,7 @@ class AuthenticatedController < ApplicationController
   end
 
   def is_expired_trial_user?
-    is_trial_user? && current_user.current_user_subscription.expired_trial?
+    is_trial_user? && current_user.current_user_subscription.expired_trial? && !current_user.corporate_manager?
   end
 
   def trial_whitelist_page?

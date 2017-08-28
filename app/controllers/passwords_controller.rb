@@ -45,8 +45,9 @@ class PasswordsController < Devise::PasswordsController
     else
       set_minimum_password_length
       respond_with resource do |format|
-        if resource.corporate_user? && corporate_password_update? &&
-             reset_token_params[:reset_password_token].present?
+        if resource.errors.messages[:reset_password_token].include? 'Incorrect Format'
+          format.html { redirect_to password_link_expired_path(corporate_password_update?) }
+        elsif corporate_password_update? && reset_token_params[:reset_password_token].present?
           format.html { render :action => :corporate_edit}
         else
           format.html { render :action => :edit}

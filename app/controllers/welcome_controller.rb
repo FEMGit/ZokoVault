@@ -1,5 +1,6 @@
 class WelcomeController < AuthenticatedController
-  skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed]
+  skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed,
+                                                                                 :reset_password_expired]
   helper_method :financial_information_any?, :insurance_vendors_count,
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
@@ -90,6 +91,10 @@ class WelcomeController < AuthenticatedController
   def thank_you; end
 
   def email_confirmed; end
+  
+  def reset_password_expired
+    @corporate = params[:corporate].eql? 'true'
+  end
   
   private
   

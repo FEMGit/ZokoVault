@@ -1,0 +1,17 @@
+<% if current_user.corporate_manager? %>
+  <% description = "You have purchased a #{@plan_duration} subscription for #{@corporate_client.name}." %>
+<% else %>
+  <% description = "You have purchased a #{@plan_duration} subscription." %>
+<% end %>
+
+<div class="card max-w-1000-centered text-center">
+  <h1 class="text-center">Thank You</h1>
+  <p class="max-w-100-percent mb-20"><%= description %></p>
+  <%= image_tag "marketing/rocket.png", :class => "block m-0-auto mb-20 w-30-percent"%>
+  <%= link_to "Dashboard", root_path, class: 'button blue-button big-button inline-block' %>
+
+  <% if current_user.corporate_manager? %>  
+  <% else %>
+    <%= link_to "Account Settings", manage_subscription_path, class: 'button blue-button big-button inline-block' %>
+  <% end %>
+</div>

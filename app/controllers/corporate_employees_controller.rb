@@ -56,6 +56,7 @@ class CorporateEmployeesController < CorporateBaseController
     else
       super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employees_path)
       add_employee_relationship(@user_account)
+      MailchimpService.new.subscribe_to_corporate(@user_account)
       save_employee_account_users
     end
   end
@@ -96,6 +97,7 @@ class CorporateEmployeesController < CorporateBaseController
       corporate_clients = current_user.corporate_users.compact.reject { |x| x.corporate_employee? }
       if remove_employee_shares(corporate_clients.map(&:id), corporate_profile.user) &&
           CorporateAdminAccountUser.where(corporate_admin: current_user, user_account: corporate_profile.user).delete_all
+        MailchimpService.new.add_to_subscription_based_list(corporate_profile.user)
         format.html { redirect_to corporate_employees_path, flash: { success: 'Employee was successfully destroyed.' } }
       else
         format.html { redirect_to corporate_employees_path, flash: { error: 'Error removing an employee, please try again later.' } }

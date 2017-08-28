@@ -67,7 +67,8 @@ class TutorialsController < AuthenticatedController
       session[:tutorials_list] = params["tutorial"]
     else
       session[:tutorial_index] += 1
-      redirect_to tutorial_page_path('shares', 1) and return
+      tuto_id = session[:tutorial_paths][session[:tutorial_index]][:tuto_id]
+      redirect_to tutorial_page_path(tuto_id, 1) and return
     end
     session[:tutorial_paths] = tutorial_path_generator session[:tutorials_list]
     session[:tutorial_index] = 1

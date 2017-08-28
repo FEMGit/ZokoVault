@@ -291,7 +291,7 @@ a:visited.main-nav{
   &:hover{
     background: #22303A;
     text-decoration: none;
-    color: #C8C8C8;
+    color: $color-primary;
   }
 
   &.close-primary-nav{

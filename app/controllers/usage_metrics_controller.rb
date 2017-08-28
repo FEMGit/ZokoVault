@@ -57,6 +57,12 @@ class UsageMetricsController < AuthenticatedController
       corporate_admin_value = false
       corporate_activated = false
     end
+    if corporate_admin_value.eql? true
+      MailchimpService.new.subscribe_to_corporate(corporate_admin)
+    else
+      MailchimpService.new.add_to_subscription_based_list(corporate_admin)
+    end
+    
     corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
     update_corporate_account_settings(corporate_admin, corporate_admin_value)
     corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821045902) do
+ActiveRecord::Schema.define(version: 20170828083657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -430,20 +430,6 @@ ActiveRecord::Schema.define(version: 20170821045902) do
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
 
-  create_table "online_accounts", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "website"
-    t.string   "username"
-    t.binary   "password"
-    t.string   "notes"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "category_id"
-  end
-
-  add_index "online_accounts", ["category_id"], name: "index_online_accounts_on_category_id", using: :btree
-  add_index "online_accounts", ["user_id"], name: "index_online_accounts_on_user_id", using: :btree
-
   create_table "payments", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "stripe_id"
@@ -841,7 +827,6 @@ ActiveRecord::Schema.define(version: 20170821045902) do
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "fundings", "user_subscriptions"
-  add_foreign_key "online_accounts", "users"
   add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"

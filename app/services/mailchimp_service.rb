@@ -10,32 +10,38 @@ class MailchimpService
   
   def unsubscribe_from_all_lists
     check_staging && return
-    unsubscribe_all(mailchimp_lists(:paid))
-    unsubscribe_all(mailchimp_lists(:trial))
-    unsubscribe_all(mailchimp_lists(:shared))
+    MailchimpLists::LIST_TYPES.each do |list_type|
+      unsubscribe_all(mailchimp_lists(list_type))
+    end
   end
   
   def subscribe_to_paid(user)
-    check_staging && return
-    subscribe(mailchimp_lists(:paid), user)
-    unsubscribe_from_shared(user)
-    unsubscribe_from_trial(user)
+    subscribe_to(list_type: :paid, user: user)
   end
   
   def subscribe_to_shared(user)
-    check_staging && return
-    subscribe(mailchimp_lists(:shared), user)
-    unsubscribe_from_paid(user)
-    unsubscribe_from_trial(user)
+    subscribe_to(list_type: :shared, user: user)
   end
   
   def subscribe_to_trial(user)
-    check_staging && return
-    subscribe(mailchimp_lists(:trial), user)
-    unsubscribe_from_shared(user)
-    unsubscribe_from_paid(user)
+    subscribe_to(list_type: :trial, user: user)
   end
-
+  
+  def subscribe_to_corporate(user)
+    subscribe_to(list_type: :corporate, user: user)
+  end
+  
+  def add_to_subscription_based_list(user)
+    subscribe_to_shared(user) and return unless user.current_user_subscription.present?
+    if user.current_user_subscription.active_trial?
+      subscribe_to_trial(user)
+    elsif user.current_user_subscription.active_full?
+      subscribe_to_paid(user)
+    else
+      subscribe_to_shared(user)
+    end
+  end
+  
   private
     
   def check_staging
@@ -54,16 +60,15 @@ class MailchimpService
     end
   end
   
-  def unsubscribe_from_paid(user)
-    unsubscribe(mailchimp_lists(:paid), user)
+  def unsubscribe_from_all_except(except:, user:)
+    MailchimpLists::LIST_TYPES.reject { |type| Array.wrap(except).include? type }.each do |list_type|
+      unsubscribe_from(list_type: list_type, user: user)
+    end
   end
   
-  def unsubscribe_from_shared(user)
-    unsubscribe(mailchimp_lists(:shared), user)
-  end
-  
-  def unsubscribe_from_trial(user)
-    unsubscribe(mailchimp_lists(:trial), user)
+  def unsubscribe_from(list_type:, user:)
+    return unless MailchimpLists::LIST_TYPES.include? list_type
+    unsubscribe(mailchimp_lists(list_type), user)
   end
   
   def unsubscribe(list_name, user)
@@ -71,6 +76,12 @@ class MailchimpService
     member_id = member_id_by_email(list_id, user.email)
     return unless list_id.present? && member_id.present?
     @gibbon.lists(list_id).members(member_id).delete
+  end
+  
+  def subscribe_to(list_type:, user:)
+    check_staging && return
+    subscribe(mailchimp_lists(list_type), user)
+    unsubscribe_from_all_except(except: list_type, user: user)
   end
   
   def subscribe(list_name, user)

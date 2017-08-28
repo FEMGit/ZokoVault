@@ -1,5 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<h1 class="card-title-0"><%= @tax.year %> Tax Details</h1>
 <%= link_to "#{@tax.id}/edit", class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -7,7 +8,6 @@
     </svg>
   </span>Edit <%= @tax.year %> Taxes
 <% end %>
-<h1><%= @tax.year %> Tax Details</h1>
 
 <% @taxes.each do |tax| %>
   <div class="card cg-<%= @tax.year %> mb-30">

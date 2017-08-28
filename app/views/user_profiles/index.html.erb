@@ -1,4 +1,11 @@
-<div class="contact-element-title">
+<div class="contact-element-title mb-0">
+  <h1 class="card-title-0">
+    <% if current_user && current_user.user_profile.photourl.present? %>
+      <% avatar = true %>
+      <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :avatar_size => 'medium' } %>
+    <% end %>
+    <span <% if avatar %> class="avatar-name" <% end %> >My Profile</span>
+  </h1>
   <a class="edit-link mrg-top" href=<%=edit_user_profile_path%>>
     <span class="circle-button">
     <svg class="icon circle-icon">
@@ -6,12 +13,6 @@
     </svg>
     </span>Edit Profile
   </a>
-  <h1>
-  <% if current_user && current_user.user_profile.photourl.present? %>
-    <% avatar = true %>
-    <%= render :partial => "layouts/user_profile_avatar", locals: { user: current_user.user_profile, :avatar_size => 'medium' } %>
-  <% end %>
-  <span <% if avatar %> class="avatar-name" <% end %> >My Profile</span></h1>
 </div>
 
 <div class="card mb-30 my_profile_info">

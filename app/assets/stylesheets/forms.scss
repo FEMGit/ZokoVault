@@ -379,6 +379,23 @@ input[type=button].button{
   }
 }
 
+.edit-link {
+  float: right;
+  text-decoration: none;
+  &.mrg-top {
+    margin-top: $edit-button-margin-top;
+  }
+  &:not(.ignore-media) {
+    @include media($eightfifty) {
+      display: block;
+      width: 100%;
+      float: none;
+      margin-top: 0 !important;
+      margin-bottom: 15px;
+    }
+  }
+}
+
 .top-top {
   z-index: 99999;
 }

@@ -1,5 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<h1 class="card-title-110"><%= @will.title %></h1>
 <%= link_to edit_will_path(@will, @shared_user), class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -7,7 +8,6 @@
     </svg>
   </span>Edit Will
 <% end %>
-<h1><%= @will.title %></h1>
 
 <div class="card wills mb-20">
   <h3 class="card-label">Will Details</h3>

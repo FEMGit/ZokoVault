@@ -1,5 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<h1 class="card-title-220"><%= @financial_property.name %></h1>
 <%= link_to edit_financial_property_url(@financial_property, @shared_user), class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -7,7 +8,6 @@
     </svg>
   </span>Edit Financial Property
 <% end %>
-<h1><%= @financial_property.name %></h1>
 
 <div class="card cg-3">
 

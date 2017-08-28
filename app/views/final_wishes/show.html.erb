@@ -1,5 +1,6 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<h1 class="card-title-0"><%= @final_wish.group %></h1>
 <%= link_to "#{@final_wish.id}/edit", class: "edit-link mrg-top" do%>
   <span class="circle-button">
     <svg class="icon circle-icon">
@@ -7,7 +8,6 @@
     </svg>
   </span>Edit <%= @final_wish.group %>
 <% end %>
-<h1><%= @final_wish.group %></h1>
 
 <% @final_wishes.each do |final_wish| %>
   <div class="card cg-<%= @group["value"] %> mb-30">

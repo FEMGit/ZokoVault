@@ -282,7 +282,7 @@ class User < ActiveRecord::Base
   before_create { set_as_admin }
   before_destroy :corporate_contacts_clear, :clear_user_traffics_shared_user
   after_destroy :invitation_sent_clear, :corporate_admin_accounts_clear,
-                                        :corporate_employees_clear
+                :corporate_employees_clear, :remove_from_mailchimp
 
   protected
 
@@ -333,5 +333,9 @@ class User < ActiveRecord::Base
 
   def clear_user_traffics_shared_user
     UserTraffic.where(shared_user_id: id).destroy_all
+  end
+  
+  def remove_from_mailchimp
+    MailchimpService.new.unsubscribe_from_all_except(except: [], user: self)
   end
 end

@@ -42,6 +42,12 @@ class MailchimpService
     end
   end
   
+  def unsubscribe_from_all_except(except:, user:)
+    MailchimpLists::LIST_TYPES.reject { |type| Array.wrap(except).include? type }.each do |list_type|
+      unsubscribe_from(list_type: list_type, user: user)
+    end
+  end
+  
   private
     
   def check_staging
@@ -57,12 +63,6 @@ class MailchimpService
       member_id = member_id_by_email(list_id, email)
       next unless list_id.present? && member_id.present?
       @gibbon.lists(list_id).members(member_id).delete
-    end
-  end
-  
-  def unsubscribe_from_all_except(except:, user:)
-    MailchimpLists::LIST_TYPES.reject { |type| Array.wrap(except).include? type }.each do |list_type|
-      unsubscribe_from(list_type: list_type, user: user)
     end
   end
   

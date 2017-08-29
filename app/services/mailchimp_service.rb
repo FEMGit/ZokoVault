@@ -32,7 +32,11 @@ class MailchimpService
   end
   
   def add_to_subscription_based_list(user)
-    subscribe_to_shared(user) and return unless user.current_user_subscription.present?
+    unless user.current_user_subscription.present?
+      subscribe_to_shared(user)
+      return
+    end
+
     if user.current_user_subscription.active_trial?
       subscribe_to_trial(user)
     elsif user.current_user_subscription.active_full?

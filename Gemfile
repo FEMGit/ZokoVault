@@ -27,6 +27,9 @@ gem 'rbnacl'
 
 gem 'acts_as_tree'
 
+# Session Timeout Auto Redirection
+gem 'auto-session-timeout'
+
 # Email Validation
 gem 'validates_email_format_of'
 

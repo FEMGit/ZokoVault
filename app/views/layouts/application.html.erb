@@ -28,12 +28,7 @@
     </div>
     <%= render :partial => 'layouts/footer' %>
   </main>
-    <%= javascript_include_tag 'autonumeric' %>
-    <%= javascript_include_tag 'tooltip_position' %>
-    <!‐‐ REFERSION TRACKING: BEGIN ‐‐>
-      <script src="//zokuvault.refersion.com/tracker/v3/pub_67c99ccb533535d2f230.js"></script>
-      <script>_refersion();</script>
-    <!‐‐ REFERSION TRACKING: END ‐‐>
+    <%= render partial: 'layouts/layout_javascript_include' %>
   </body>
 </html>
 

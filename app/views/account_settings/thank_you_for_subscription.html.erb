@@ -15,3 +15,12 @@
     <%= link_to "Account Settings", manage_subscription_path, class: 'button blue-button big-button inline-block' %>
   <% end %>
 </div>
+
+<!‐‐ REFERSION TRACKING: BEGIN ‐‐>
+<script src="//zokuvault.refersion.com/tracker/v3/pub_67c99ccb533535d2f230.js"></script>
+<script>_refersion(function()
+                   { _rfsn._setSource("STRIPE"); 
+                    _rfsn._addCart("<%= @customer_id %>"); }
+                  );
+</script>
+<!‐‐ REFERSION TRACKING: END ‐‐>

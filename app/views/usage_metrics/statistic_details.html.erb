@@ -47,6 +47,9 @@
   
   <label>User Type</label>
   <p><%= user_type(@user) %></p>
+  
+  <label>TFA Authorization Disabled</label>
+  <p><%= @user.mfa_disabled %></p>
 
   <label>Documents/User</label>
   <p><%= documents_per_user(@user) %></p>

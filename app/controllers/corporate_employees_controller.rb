@@ -56,7 +56,6 @@ class CorporateEmployeesController < CorporateBaseController
     else
       super(account_type: CorporateAdminAccountUser.employee_type, success_return_path: corporate_employees_path)
       add_employee_relationship(@user_account)
-      MailchimpService.new.subscribe_to_corporate(@user_account)
       save_employee_account_users
     end
   end

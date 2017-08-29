@@ -1,3 +1,11 @@
+// Datatables Plug-in Code for enabling checkbox sorting
+$.fn.dataTable.ext.order['dom-checkbox'] = function  ( settings, col )
+{
+    return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+        return $('input', td).prop('checked') ? '1' : '0';
+    } );
+};
+
 var DatatableUpdate = function(tableId, tableSettings, desirableColspan, extraOptions) {
   $(tableId).DataTable(tableSettingsGenerate(tableSettings[0], tableSettings[1], tableSettings[2], extraOptions));
   // Save all controls to variables and add listeners
@@ -26,6 +34,9 @@ var tableSettingsGenerate = function(lengthMenuValues, recordName, aaSortingValu
     }, {
       'bSearchable': false,
       'aTargets': ['nosearch']
+    }, {
+      'sSortDataType': 'dom-checkbox',
+      'aTargets': ['checkbox-sort']
     }]
   }, extraOptions);
 }

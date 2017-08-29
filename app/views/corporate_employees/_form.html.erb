@@ -46,40 +46,62 @@
     </div>
     
     <h1>Accounts Managed By User</h1>
-    <table>
-      <tr>
-        <th class="w-10"></th>
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>Email</th>
-      </tr>
-      <% if @corporate_contacts.any? %>
-        <% @corporate_contacts.each do |contact| %>
-          <tr>
-            <td class="w-10">
-              <ul class="check-list">
-                <li class="check-list">
-                  <label>
-                    <%= check_box_tag "corporate_employee[user_accounts][#{contact.emailaddress}]",
-                      contact.emailaddress,
-                      @employee_account_user_emails.include?(contact.emailaddress.downcase), {}
-                    %>
-                  <span class="mb-10"></span>
-                </label>
-                </li>
-              </ul>
-            </td>
-            <td><%= contact.firstname %></td>
-            <td><%= contact.lastname %></td>
-            <td><%= mail_to contact.emailaddress, contact.emailaddress, class: 'no-underline-link' %></td>
-          </tr>
-        <% end %>
-      <% else %>
+    <table id="accounts-managed-table">
+      <thead>
         <tr>
-          <td colspan="4" align="center">No accounts available.</td>
+          <th class="w-10 checkbox-sort"></th>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>Email</th>
         </tr>
-      <% end %>
+      </thead>
+      <tbody>
+        <% if @corporate_contacts.any? %>
+          <% @corporate_contacts.each do |contact| %>
+            <tr>
+              <td class="w-10">
+                <ul class="check-list">
+                  <li class="check-list">
+                    <label>
+                      <%= check_box_tag "",
+                        contact.emailaddress,
+                        @employee_account_user_emails.include?(contact.emailaddress.downcase), {}
+                      %>
+                    <span class="mb-10"></span>
+                  </label>
+                  </li>
+                </ul>
+              </td>
+              <td><%= contact.firstname %></td>
+              <td><%= contact.lastname %></td>
+              <td><%= mail_to contact.emailaddress, contact.emailaddress, class: 'no-underline-link' %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
     </table>
     
     <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: back_path || corporate_employees_path, f: f } %>
 <% end %>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#accounts-managed-table', [ [5, 10, 15, 25, 50, 100], 'accounts', [[1, 'asc']] ], [1, 2, 1])
+  });
+  
+  $('form').on('submit', function() {
+    var form = $(this)
+    $('#accounts-managed-table').DataTable().rows().nodes().each(function(data) {
+      var checkbox = $(data).find('input[type="checkbox"]')
+      if(checkbox.prop('checked') === true) {
+        var contactEmail = checkbox.val()
+        form.append(
+          $('<input>')
+            .attr('type', 'hidden')
+            .attr('name', 'corporate_employee[user_accounts][' + contactEmail + ']')
+            .val(contactEmail)
+        )
+      }
+    })
+  })
+</script>

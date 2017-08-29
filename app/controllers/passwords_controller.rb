@@ -44,8 +44,10 @@ class PasswordsController < Devise::PasswordsController
       respond_with resource, location: after_resetting_password_path_for(resource)
     else
       set_minimum_password_length
+      errors = resource.errors
       respond_with resource do |format|
-        if resource.errors.messages[:reset_password_token].include? 'Incorrect Format'
+        if errors && errors.messages[:reset_password_token] &&
+            errors.messages[:reset_password_token].include?('Incorrect Format')
           format.html { redirect_to password_link_expired_path(corporate_password_update?) }
         elsif corporate_password_update? && reset_token_params[:reset_password_token].present?
           format.html { render :action => :corporate_edit}

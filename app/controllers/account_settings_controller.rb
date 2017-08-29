@@ -2,6 +2,7 @@ require 'ostruct'
 
 class AccountSettingsController < AuthenticatedController
   skip_before_filter :complete_setup!, only: [:store_corporate_payment]
+  before_action :set_corporate_paid
   before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
                                           :verify_code, :account_users, :update_account_users,
                                           :login_settings, :update_login_settings]
@@ -70,21 +71,23 @@ class AccountSettingsController < AuthenticatedController
       record = @subscription.funding.stripe_subscription_record
       set_subscription_cancelled(record)
       @plan = record.try(:plan)
-      stripe_customer = stripe_customer_lookup(current_user)
+      stripe_customer = stripe_customer_lookup(current_user, @corporate_paid)
       @next_invoice = next_invoice(stripe_customer)
-      if current_user.corporate_client?
+      if current_user.corporate_client? && @corporate_paid
         @corporate = true
         admin = current_user.corporate_account_owner
         @company_name = admin.corporate_account_profile.try(:business_name)
       else
-        @invoices = stripe_customer.invoices.to_a
+        personal_invoices = stripe_customer ? stripe_customer.invoices.to_a : []
+        @corporate_invoices = StripeService.corporate_stripe_customers_invoices_history(user: current_user)
+        @invoices = personal_invoices + @corporate_invoices
         @card = customer_card
       end
     end
   end
 
   def customer_card
-    customer = stripe_customer_lookup(current_user)
+    customer = stripe_customer_lookup(current_user, @corporate_paid)
     StripeService.customer_card(customer: customer) if customer.present?
   end
 
@@ -100,10 +103,11 @@ class AccountSettingsController < AuthenticatedController
   end
 
   # TODO normalize representation & remove this
-  def stripe_customer_lookup(user)
+  def stripe_customer_lookup(user, corporate_paid = nil)
+    corporate_paid = corporate_paid.nil? ? user.paid_by_corporate_admin? : corporate_paid
     if user.corporate_admin
       StripeService.ensure_corporate_stripe_customer(user: user)
-    elsif user.corporate_user?
+    elsif user.corporate_user? && corporate_paid
       StripeService.ensure_corporate_stripe_customer(user: user.corporate_account_owner)
     else
       user.stripe_customer
@@ -276,8 +280,12 @@ class AccountSettingsController < AuthenticatedController
     StripeSubscription.plan_duration_name(plan_id: params[:plan_id])
   end
 
+  def set_corporate_paid
+    @corporate_paid = current_user.paid_by_corporate_admin?
+  end
+
   def redirect_to_manage_subscription_if_corporate_client
-    redirect_to manage_subscription_path if current_user && current_user.corporate_client?
+    redirect_to manage_subscription_path if current_user && current_user.corporate_client? && @corporate_paid
   end
 
   def redirect_from_payment_page_path

@@ -138,6 +138,16 @@ class User < ActiveRecord::Base
   def corporate_employee?
     corporate_user? && corporate_provider_join.employee?
   end
+  
+  def paid_by_corporate_admin?
+    return unless corporate_account_owner &&
+      corporate_account_owner.corporate_admin && corporate_user_by_admin?(corporate_account_owner)
+    customer_id = corporate_account_owner.corporate_account_profile.stripe_customer_id
+    stripe_record = current_user_subscription.funding.stripe_subscription_record
+    return false unless stripe_record.present?
+    subscription_canceled = stripe_record.fetch.cancel_at_period_end
+    (customer_id == stripe_record.customer_id) && !subscription_canceled
+  end
 
   def corporate_account_owner
     corporate_provider_join.corporate_admin if corporate_user?

@@ -11,6 +11,10 @@ class AccountsController < AuthenticatedController
                                 :corporate_account_options, :how_billing_works, :billing_types,
                                 :corporate_credit_card]
   before_action :set_blank_layout_header_info, only: [:first_run]
+  before_action :redirect_to_root_unless_corporate_admin, only: [:corporate_user_type, :corporate_user_type_update,
+                                                                 :corporate_logo, :corporate_logo_update,
+                                                                 :corporate_account_options, :corporate_account_options_update,
+                                                                 :how_billing_works, :billing_types, :corporate_credit_card]
   skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
   def page_name
@@ -176,8 +180,13 @@ class AccountsController < AuthenticatedController
 
   def billing_types; end
 
-  def corporate_credit_card; end
-
+  def corporate_credit_card
+    if !current_user.corporate_credit_card_required
+      current_user.update_attributes(setup_complete: true)
+      redirect_to corporate_accounts_path 
+    end
+  end
+  
   def user_type_update
     if user_params[:user_type].eql?('free') || current_user.corporate_manager?
       if current_user.corporate_manager?
@@ -330,5 +339,8 @@ class AccountsController < AuthenticatedController
   def questionnaire_params
     params.require(:questionnaire)
   end
-
+  
+  def redirect_to_root_unless_corporate_admin
+    redirect_to root_path unless current_user.corporate_admin
+  end
 end

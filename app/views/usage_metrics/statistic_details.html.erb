@@ -55,6 +55,11 @@
   <label>TFA Authorization Disabled</label>
   <p><%= @user.mfa_disabled %></p>
 
+  <% if @user.corporate_admin %>
+    <label>Corporate Credit Card</label>
+    <p><%= @user.corporate_credit_card_required ? 'Required' : 'Not Required' %></p>
+  <% end %>
+
   <label>Documents/User</label>
   <p><%= documents_per_user(@user) %></p>
 

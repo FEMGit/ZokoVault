@@ -333,14 +333,21 @@ class UsageMetricsController < AuthenticatedController
   end
   
   # Corporate Account
-  def corporate_activated?
+  def boolean_param_value(param_key:)
     return false unless corporate_account_params.present?
-    corporate_account_params[:corporate_activated].eql?('true') ? true : false
+    corporate_account_params[param_key].eql?('true') ? true : false
+  end
+  
+  def corporate_activated?
+    boolean_param_value(param_key: :corporate_activated)
   end
   
   def corporate_admin?
-    return false unless corporate_account_params.present?
-    corporate_account_params[:corporate_admin].eql?('true') ? true : false
+    boolean_param_value(param_key: :corporate_activated)
+  end
+  
+  def corporate_credit_card_required?
+    !boolean_param_value(param_key: :credit_card_not_required)
   end
   
   def corporate_account_params
@@ -367,9 +374,11 @@ class UsageMetricsController < AuthenticatedController
       corporate_account_params[:corporate_categories] = [] unless (corporate_admin_value.eql? true)
       CorporateAdminService.add_categories(corporate_admin, corporate_account_params[:corporate_categories], corporate_admin_value)
       corporate_activated = corporate_admin_value && corporate_activated?
+      corporate_credit_card_required = corporate_admin_value && corporate_credit_card_required?
     else
       corporate_admin_value = false
       corporate_activated = false
+      corporate_credit_card_required = true
     end
     
     if corporate_admin_value.eql? true
@@ -378,7 +387,8 @@ class UsageMetricsController < AuthenticatedController
       MailchimpService.new.add_to_subscription_based_list(corporate_admin)
     end
     
-    corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated })
+    corporate_admin.try(:update_attributes, { corporate_admin: corporate_admin_value, corporate_activated: corporate_activated,
+                                              corporate_credit_card_required: corporate_credit_card_required })
     update_corporate_account_settings(corporate_admin_value)
     corporate_admin.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always]) if corporate_admin_value.eql? true
     corporate_admin.user_profile.update_attributes(:mfa_disabled => mfa_disabled?)

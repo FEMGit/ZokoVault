@@ -77,6 +77,15 @@ module BreadcrumbsErrorModule
     add_breadcrumb "Edit My Profile", :edit_user_profile_path
   end
 
+  def online_accounts_error_breadcrumb_update
+    breadcrumbs.clear
+    set_online_account if @path[:action].eql? :edit
+    add_breadcrumb "Online Accounts", :online_accounts_path if general_view?
+    add_breadcrumb "Online Accounts", shared_view_online_accounts_path(shared_user_id: @shared_user.id) if shared_view?
+    set_new_crumbs && return if @path[:action].eql? :new
+    set_edit_crumbs if @path[:action].eql? :edit
+  end
+
   private
   
   def wills_poa_error_breadcrumbs_update
@@ -106,5 +115,5 @@ module BreadcrumbsErrorModule
 
   module_function :wills_error_breadcrumb_update, :entities_breadcrumb_update,
                   :insurance_breadcrumb_update, :financial_error_breadcrumb_update,
-                  :corporate_account_error_breadcrumb_update
+                  :corporate_account_error_breadcrumb_update, :online_accounts_error_breadcrumb_update
 end

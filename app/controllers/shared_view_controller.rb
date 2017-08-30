@@ -164,26 +164,6 @@ class SharedViewController < AuthenticatedController
     session[:ret_url] = shared_view_trusts_entities_path
   end
   
-  def contacts
-    if @shared_category_names.include? Rails.application.config.x.ContactCategory
-      contact_service = ContactService.new(:user => shared_user)
-      @contacts = contact_service.contacts_shareable
-      session[:ret_url] = shared_view_contacts_path
-    end
-  end
-
-  def documents
-    if @shared_category_names.include? Rails.application.config.x.DocumentsCategory
-      @documents = Document.for_user(shared_user).each { |d| authorize d }
-      session[:ret_url] = shared_view_documents_path
-    end
-  end
-
-  def card_values(category)
-    service = DocumentService.new(:category => category)
-    service.get_card_values(shared_user)
-  end
-
   def financial_information
     @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
     if @shared_category_names.include? Rails.application.config.x.FinancialInformationCategory
@@ -214,6 +194,39 @@ class SharedViewController < AuthenticatedController
       @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
     end
     session[:ret_url] = shared_view_financial_information_path
+  end
+  
+  def online_accounts
+    @category = Category.fetch(Rails.application.config.x.OnlineAccountCategory.downcase)
+    if @shared_category_names.include? Rails.application.config.x.OnlineAccountCategory
+      @online_accounts = OnlineAccount.for_user(resource_owner)
+      @online_accounts.each { |online_account| authorize online_account }
+    else
+      online_account_ids = @other_shareables.select { |shareable| shareable.is_a? OnlineAccount }.map(&:id)
+      @online_accounts = OnlineAccount.for_user(shared_user).where(id: online_account_ids)
+      @online_accounts.each { |online_account| authorize online_account }
+    end
+    session[:ret_url] = shared_view_online_accounts_path
+  end
+  
+  def contacts
+    if @shared_category_names.include? Rails.application.config.x.ContactCategory
+      contact_service = ContactService.new(:user => shared_user)
+      @contacts = contact_service.contacts_shareable
+      session[:ret_url] = shared_view_contacts_path
+    end
+  end
+
+  def documents
+    if @shared_category_names.include? Rails.application.config.x.DocumentsCategory
+      @documents = Document.for_user(shared_user).each { |d| authorize d }
+      session[:ret_url] = shared_view_documents_path
+    end
+  end
+
+  def card_values(category)
+    service = DocumentService.new(:category => category)
+    service.get_card_values(shared_user)
   end
 
   private

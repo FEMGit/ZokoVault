@@ -97,6 +97,9 @@
 .bt-gray-light{
   border-top: 1px solid $color-gray-light;
 }
+.v-align-middle {
+  vertical-align: middle;
+}
 .b-radius-0 {
   border-radius: 0 !important;
  }
@@ -120,6 +123,9 @@
 }
 .w-10{
   width: 10px !important;
+}
+.w-47{
+  width: 47px !important;
 }
 .w-60{
   width: 60px !important;
@@ -153,6 +159,9 @@
 }
 .max-w-150 {
   max-width: 150px !important;
+}
+.max-w-295 {
+  max-width: 295px !important;
 }
 .max-w-300 {
   max-width: 300px !important;
@@ -317,6 +326,9 @@
 }
 .p-0 {
   padding: 0 !important;
+}
+.p-8 {
+  padding: 8px !important;
 }
 .p-10 {
   padding: 10 !important;

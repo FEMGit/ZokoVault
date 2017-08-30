@@ -77,6 +77,9 @@ module ApplicationHelper
     when Rails.application.config.x.FinalWishesCategory
       return shared_view_final_wishes_path(user) if @shared_user.present?
       final_wishes_path
+    when Rails.application.config.x.OnlineAccountCategory
+      return shared_view_online_accounts_path(user) if @shared_user.present?
+      online_accounts_path
     when Rails.application.config.x.FinancialInformationCategory
       return shared_view_financial_information_path(user) if @shared_user.present?
       financial_information_path
@@ -87,7 +90,7 @@ module ApplicationHelper
       return shared_view_contacts_path(user) if @shared_user.present?
       contacts_path
     else
-     return shared_view_dashboard_path(user) if @shared_user.present?
+      return shared_view_dashboard_path(user) if @shared_user.present?
     end
   end
   

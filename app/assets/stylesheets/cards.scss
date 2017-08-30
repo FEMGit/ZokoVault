@@ -49,10 +49,10 @@ img.questionnaire-heart {
     padding: 0;
   }
 
-  &.document {
+  &.document, .online-account {
     border-radius: 20px;
   }
-
+  
   .data-border {
     margin-top: 10px;
     border-bottom: 1px solid  $color-off-white-shaded-more;
@@ -542,6 +542,31 @@ img.questionnaire-heart {
     left: 0;
     width: 100%;
     height: 100%;
+  }
+}
+
+//ONLINE ACCOUNT CARD
+.online-account {
+  .password-block {
+    position: relative;
+    a#toggle-button {
+      position: absolute;
+      margin-right: 0;
+      margin-left: 7px;
+      width: 47px;
+    }
+    @include media($mobile) {
+      input[type="text"],
+      input[type="password"] {
+        max-width: 100% !important;
+      }
+      a#toggle-button {
+        display: block !important;
+        position: relative;
+        margin-left: 0;
+        margin-bottom: 10px;
+      }
+    }
   }
 }
 

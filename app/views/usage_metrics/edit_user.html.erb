@@ -24,8 +24,9 @@
   <% elsif @subscription_info[:status] == :unknown %>
     <%= link_to 'Create Trial', admin_create_trial_path(@user), class: "button secondary-button medium-button mb-20"%>
   <% end %>
-
+  
   <%= form_for @user, url: usage_metrics_update_user_path, method: :post do |f| %>
+    <%= render partial: 'usage_metrics/tfa_disable_field' %>
     <%= render partial: 'usage_metrics/corporate_profile_edit', locals: { f: f } %>
   <% end %>
 </div>

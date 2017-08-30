@@ -17,7 +17,7 @@ Rails.application.routes.draw do
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
 
   devise_scope :user do
-    get 'users/password/corporate_edit/:uuid', to: 'passwords#corporate_edit', as: :corporate_edit_password
+    get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
   end
 
   scope 'insurance' do
@@ -241,16 +241,19 @@ Rails.application.routes.draw do
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Usage metrics path
+  resources :usage_metrics, only: [:index]
   get 'usage_metrics/update_site_completed', to: 'usage_metrics#update_information', as: :update_usage_metrics
-  resources :usage_metrics
   get 'usage_metrics/error_details/:id', to: 'usage_metrics#error_details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
+  get 'usage_metrics/new_user', to: 'usage_metrics#new_user', as: :usage_metrics_new_user
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
   get 'usage_metrics/error_details/:id/extend_trial', to: 'usage_metrics#extend_trial', as: :admin_extend_trial
   get 'usage_metrics/error_details/:id/create_trial', to: 'usage_metrics#create_trial', as: :admin_create_trial
   get 'usage_metrics/error_details/:id/cancel_trial', to: 'usage_metrics#cancel_trial', as: :admin_cancel_trial
   post 'usage_metrics/statistic_details/update_user/:id', to: 'usage_metrics#update_user', as: :usage_metrics_update_user
+  post 'usage_metrics/create_user', to: 'usage_metrics#create_user', as: :usage_metrics_create_user
+  post 'usage_metrics/send_invitation_email/:user_id', to: 'usage_metrics#send_invitation_email', as: :usage_metrics_send_invitation_email
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'

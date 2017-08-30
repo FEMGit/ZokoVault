@@ -1,0 +1,114 @@
+<%= f.label :corporate_admin, 'Corporate Admin' %>
+<ul class="check-list mb-20">
+  <li class="check-list">
+    <label>
+      <%= check_box_tag "corporate_account[corporate_admin]",
+        true,
+        @user.corporate_admin, { onchange: 'toggleCategoryCheckbox(this)'}
+      %>
+      <span></span>Corporate Admin turned on
+    </label>
+  </li>
+  <li class="check-list" id="corporate-activated">
+    <label>
+      <%= check_box_tag "corporate_account[corporate_activated]",
+        true,
+        @user.corporate_activated, { }
+      %>
+      <span></span>Corporate Admin is activated
+    </label>
+  </li>
+</ul>
+
+<div id="corporate-account-settings" style="display: none;">
+  <label>Corporate Credit Card</label>
+  <ul class="check-list mb-20">
+    <li class="check-list">
+      <label>
+        <%= check_box_tag "corporate_account[credit_card_not_required]",
+          true,
+          !@user.corporate_credit_card_required, { }
+        %>
+        <span></span>Not Required
+      </label>
+    </li>
+  </ul>
+  
+  <label>Corporate Admin Category Access</label>
+  <% corporate_categories = Rails.application.config.x.CorporateCategories %>
+  <ul class="check-list">
+    <% corporate_categories.keys.each do |key| %>
+      <li class="check-list">
+        <label>
+          <%= check_box_tag "corporate_account[corporate_categories][#{key}]",
+            key,
+            (@user.corporate_categories.map(&:name).include? key ), {}
+          %>
+          <span></span> <%= corporate_categories[key] %>
+        </label>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= f.fields_for @corporate_profile do |corporate_profile_form| %>
+
+    <%= corporate_profile_form.label :business_name, 'Company Name' %>
+    <%= corporate_profile_form.text_field :business_name, :maxlength => get_max_length(:default) %>
+
+    <%= corporate_profile_form.label :web_address, 'Web Address' %>
+    <%= corporate_profile_form.text_field :web_address, { type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
+    <%= corporate_profile_form.label :street_address, 'Street Addess' %>
+    <%= corporate_profile_form.text_field :street_address, :maxlength => get_max_length(:default) %>
+
+    <%= corporate_profile_form.label :city, 'City' %>
+    <%= corporate_profile_form.text_field :city, :maxlength => get_max_length(:default) %>
+
+    <span class="state-input">
+      <%= corporate_profile_form.label :state %>
+      <div class="styled-select">
+        <%= corporate_profile_form.select :state, options_for_select(us_states, corporate_profile_form.object.try(:state)), :include_blank => "Select..." %>
+      </div>
+    </span>
+    <span class="zip-input">
+      <%= corporate_profile_form.label :zip, 'Zip Code' %>
+      <%= render partial: 'layouts/zip_code', locals: { f: corporate_profile_form, zip: :zip } %>
+    </span>
+
+    <%= corporate_profile_form.label :phone_number, 'Phone Number' %>
+    <%= render partial: 'layouts/phone_number', locals: { f: corporate_profile_form, phone: :phone_number } %>
+
+    <%= corporate_profile_form.label :fax_number, 'Fax Number' %>
+    <%= render partial: 'layouts/phone_number', locals: { f: corporate_profile_form, phone: :fax_number } %>
+
+    <%= corporate_profile_form.label :relationship, 'Advisor Relationship' %>
+    <div class="styled-select">
+      <%= corporate_profile_form.select :relationship,
+        options_for_select(Contact::RELATIONSHIP_TYPES[:professional], corporate_profile_form.object.try(:relationship)), {} %>
+    </div>
+
+    <%= corporate_profile_form.label :company_logo, 'Company Logo' %>
+    <p></p>
+
+    <%= render partial: 'corporate_accounts/company_logo_upload', locals: { f: corporate_profile_form } %>
+
+  <% end %>
+</div>
+
+<%= javascript_include_tag 'url_validation' %>
+<script>
+  $(document).ready(function() {
+    toggleCategoryCheckbox("#corporate_account_corporate_admin")
+  })
+
+  var toggleCategoryCheckbox = function(checkbox) {
+    var corporateAccountSettings = $("#corporate-account-settings")
+    var activateCorporateCheckbox = $("#corporate-activated")
+    if ($(checkbox).is(":checked")) {
+      corporateAccountSettings.show()
+      activateCorporateCheckbox.show()
+    } else {
+      corporateAccountSettings.hide()
+      activateCorporateCheckbox.hide()
+    }
+  }
+</script>

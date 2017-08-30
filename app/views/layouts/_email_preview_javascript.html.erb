@@ -6,12 +6,12 @@
   
   var displayEmailPreviewCorporate = function(contact_id) {
     emailPreviewSectionPrepare()
-    createEmailIframeByName("corporate_user", contact_id)
+    createEmailIframeByName("corporate_user", contact_id, "create_invitation_mailer")
   }
   
   var displayEmailPreviewCorporateEmployee = function(contact_id) {
     emailPreviewSectionPrepare()
-    createEmailIframeByName("corporate_employee", contact_id)
+    createEmailIframeByName("corporate_employee", contact_id, "create_invitation_mailer")
   }
   
   var emailPreviewSectionPrepare = function() {
@@ -24,8 +24,8 @@
     element.css("margin-top", offset + "px")
   }
   
-  var createEmailIframeByName = function(name, contact_id) {
-    $('#email-iframe').attr('src', "/email/share_invitation_mailer/" + name + "/<%=@resource_owner.id%>/" + contact_id)
+  var createEmailIframeByName = function(name, contact_id, base) {
+    $('#email-iframe').attr('src', "/email/" + base + "/" + name + "/<%=@resource_owner.id%>/" + contact_id)
      screenShift($('#email-preview-modal'))
      $("body").append("<div class='modal-overlay js-modal-close'></div>");
      $(".modal-overlay").fadeTo(500, 0.8);
@@ -46,7 +46,7 @@
       dataType: 'json',
     })
      .done(function(data){
-       createEmailIframeByName(data["name"], contact_id)
+       createEmailIframeByName(data["name"], contact_id, "share_invitation_mailer")
      })
      .fail(function(data) {
      })

@@ -45,4 +45,12 @@ class StripeService
     source = customer.try(:default_source)
     customer.sources.retrieve(source) if source.present?
   end
+  
+  def self.customer_id(user:)
+    return nil unless user
+    subscription = user.current_user_subscription
+    return nil unless subscription
+    record = subscription.funding.stripe_subscription_record
+    record.customer_id
+  end
 end

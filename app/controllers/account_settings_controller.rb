@@ -246,7 +246,7 @@ class AccountSettingsController < AuthenticatedController
         redirect_to (session[:ret_url] || root_path) and return
       end
       if customer.subscriptions.blank? && stripe_subscription_params.present? &&
-          stripe_subscription_params[:plan_id].present?
+           stripe_subscription_params[:plan_id].present?
         plan = stripe_subscription_params[:plan_id]
         promo = stripe_subscription_params[:promo_code]
         stripe_obj = StripeService.subscribe(
@@ -267,9 +267,11 @@ class AccountSettingsController < AuthenticatedController
     @plan_duration = thank_you_subscription_plan_duration
     if corporate_client_id = params[:corporate_client_id]
       @corporate_client = User.find_by(id: corporate_client_id)
+      @customer_id = StripeService.customer_id(user: @corporate_client)
       redirect_to corporate_accounts_path unless current_user.corporate_manager? && @plan_duration
                                                  @corporate_client.corporate_user_by_manager?(current_user)
     else
+      @customer_id = StripeService.customer_id(user: current_user)
       redirect_to manage_subscription_path unless @plan_duration
     end
   end

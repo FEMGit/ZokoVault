@@ -23,13 +23,12 @@
 
     <div class="content">
       <%= yield %>
-      
+
       <div class="ie-edge-bottom"></div>
     </div>
     <%= render :partial => 'layouts/footer' %>
   </main>
-    <%= javascript_include_tag 'autonumeric' %>
-    <%= javascript_include_tag 'tooltip_position' %>
+    <%= render partial: 'layouts/layout_javascript_include' %>
   </body>
 </html>
 

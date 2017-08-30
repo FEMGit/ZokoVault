@@ -2,7 +2,7 @@ require 'zoku/aws/s3'
 
 class S3Service
   def self.get_object_by_key(document_key)
-    Aws::S3::Object.new(
+    ::Aws::S3::Object.new(
       bucket_name: Zoku::AWS::S3.bucket_name,
       key: document_key,
       client: Zoku::AWS::S3.client

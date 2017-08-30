@@ -7,7 +7,7 @@ module Zoku
       end
 
       def self.s3_user
-        Aws::Credentials.new(
+        ::Aws::Credentials.new(
           Rails.application.secrets.aws_user_key_id,
           Rails.application.secrets.aws_user_secret_key
         )
@@ -23,7 +23,7 @@ module Zoku
       end
 
       def self.kms_user
-        Aws::Credentials.new(
+        ::Aws::Credentials.new(
           Rails.application.secrets.aws_crypto_user_key_id,
           Rails.application.secrets.aws_crypto_user_secret_key
         )
@@ -39,8 +39,8 @@ module Zoku
       end
 
       def self.assume_role(user:, role_arn:, role_alias:, region:)
-        client = Aws::STS::Client.new(region: region, credentials: user)
-        Aws::AssumeRoleCredentials.new(
+        client = ::Aws::STS::Client.new(region: region, credentials: user)
+        ::Aws::AssumeRoleCredentials.new(
           client: client, role_arn: role_arn, role_session_name: role_alias)
       end
 

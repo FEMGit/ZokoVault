@@ -55,7 +55,7 @@ class MailchimpService
   private
     
   def check_staging
-    return true if develop_staging?
+    #return true if develop_staging?
     false
   end
   
@@ -163,7 +163,7 @@ class MailchimpService
     elsif ENV['STAGING_TYPE'].eql? 'beta'
       MailchimpLists::BETA[type]
     else
-      nil
+      MailchimpLists::BETA[type]#nil
     end
   end
 end

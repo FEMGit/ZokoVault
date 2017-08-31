@@ -73,6 +73,19 @@
           <% if !entity_present?(entity) %>
             <label>There is no information about this Entity</label>
           <% end %>
+          
+          <% if entity.agents.any? %>
+            <label>Advisor</label>
+          <% end %>
+          <ul class="data-list">
+            <% entity.agents.each do |agent| %>
+              <li class="contact-pair">
+                <%= agent.name %><br>
+                <a href="mailto:<%= agent.emailaddress %>"><%= agent.emailaddress %></a><br>
+                <%= agent.phone %>
+              </li>
+            <% end %>
+          </ul>
 
           <% if entity.partners.any? %>
             <label>Owner</label>

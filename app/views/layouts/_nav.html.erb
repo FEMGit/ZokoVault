@@ -47,12 +47,12 @@
       <use xlink:href="#icon-book-6"></use>
     </svg>Taxes
   <% end %>
-<!--  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) || breadcrumb?(healthcare_choices_path) %>
-  <%= link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
+  <% healthcare_choices_current = 'active' if current_page?(healthcare_choices_url) || breadcrumb?(healthcare_choices_path) %>
+  <% link_to healthcare_choices_path, class: "main-nav #{healthcare_choices_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-plus-1"></use>
     </svg>Healthcare Choices
-  <% end %> -->
+  <% end %>
   <% final_wishes_current = 'active' if current_page?(final_wishes_url) || controller?('final_wishes') || breadcrumb?(final_wishes_path) ||
       breadcrumb?(:final_wishes_path) %>
   <%= link_to final_wishes_path, class: "main-nav #{final_wishes_current}" do %>
@@ -60,12 +60,14 @@
       <use xlink:href="#icon-bookmark-2"></use>
     </svg>Final Wishes
   <% end %>
+
   <% online_accounts_current = 'active' if current_page?(online_accounts_url) || controller?('online_accounts') || breadcrumb?(online_accounts_path) || breadcrumb?(:online_accounts_path) %>
-  <%= link_to online_accounts_path, class: "main-nav #{online_accounts_current}" do %>
+  <% link_to online_accounts_path, class: "main-nav #{online_accounts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Online Accounts
   <% end %>
+  
   <% documents_current = 'active' if current_page?(documents_url) || controller?('documents') && document_breadcrumb_free? %>
   <%= link_to documents_path, class: "main-nav #{documents_current}" do %>
     <svg class="icon nav-icon">

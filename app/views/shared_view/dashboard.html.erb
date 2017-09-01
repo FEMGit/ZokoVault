@@ -1,8 +1,9 @@
 <h1>Dashboard</h1>
 <%= hidden_field_tag :shared_user_id, @shared_user.try(:id) %>
-<% if @shared_category_names_full.any? %>
+<% if (@shared_category_names_full - [Rails.application.config.x.OnlineAccountCategory]).any? %>
   <div class="card mb-30">
-    <% Rails.application.config.x.ShareCategories.each do |category| %>
+    <% (Rails.application.config.x.ShareCategories - 
+        [Rails.application.config.x.OnlineAccountCategory]).each do |category| %>
       <% if show_navigation_link?(category) %>
         <% category_instance = Category.fetch(category.downcase) %>
         <section class="flex-boxes shared-boxes padding-right">

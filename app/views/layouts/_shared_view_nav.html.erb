@@ -72,16 +72,17 @@
       </svg>Final Wishes
     <% end %>
   <% end %>
-  <! -- Online Accounts -->
+
   <% if show_navigation_link?('Online Accounts') %>
     <% shared_view_online_accounts = 'active' if current_page?(shared_view_online_accounts_path(@shared_user)) || controller?('online_accounts') ||
        breadcrumb?(:shared_view_online_accounts_path) || breadcrumb?(shared_view_online_accounts_path(@shared_user)) %>
-    <%= link_to shared_view_online_accounts_path(@shared_user), class: "main-nav #{shared_view_online_accounts}" do %>
+    <% link_to shared_view_online_accounts_path(@shared_user), class: "main-nav #{shared_view_online_accounts}" do %>
       <svg class="icon nav-icon">
         <use xlink:href="#icon-cloud-1"></use>
       </svg>Online Accounts
     <% end %>
   <% end %>
+  
   <! -- Documents -->
   <% if show_navigation_link?('Documents') %>
     <% shared_view_documents = 'active' if current_page?(shared_view_documents_path(@shared_user)) ||

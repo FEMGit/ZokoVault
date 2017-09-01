@@ -11,6 +11,7 @@
   <%= render :partial => 'layouts/svgdefs' %>
   <%= render :partial => 'layouts/alerts' %>
   <% if user_signed_in? %>
+    <%= auto_session_timeout_js frequency: 15 %>
     <%= render :partial => 'layouts/left_nav' %>
     <main class="app-nav">
 

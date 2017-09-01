@@ -10,8 +10,10 @@ class ApplicationController < ActionController::Base
   around_filter :save_current_user
   before_action :redirect_if_user_terms_of_service_empty
   
+  auto_session_timeout Session::TIMEOUT_LIMIT
+  
   rescue_from ActionController::InvalidAuthenticityToken do
-    flash[:alert] = "Your session expired. Please sign in again to continue."
+    flash[:alert] = Session::SESSION_EXPIRED_ALERT_MESSAGE
     redirect_to new_user_session_path
   end
 

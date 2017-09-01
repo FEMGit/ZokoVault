@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
+    match 'active' => 'sessions#active', via: :get
+    match 'timeout' => 'sessions#timeout', via: :get
   end
 
   scope 'insurance' do

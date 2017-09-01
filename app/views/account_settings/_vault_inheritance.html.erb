@@ -1,0 +1,30 @@
+<%= form_for @user_profile, :url => url_for(action: :update_vault_inheritance, controller: :account_settings) do |f| %>
+  <div class="card mb-30 b-radius-0 b-none box-shadow-none">
+    <% if @user_profile.errors.present? && (contact_error = @user_profile.errors.messages[:contact_validation_error]).present? %>
+      <p class="error-label">The following contacts have invalid data. Please fix them and try again.</p>
+      <ul class="mt-10">
+        <% contact_error.flatten.each do |contact_error| %>
+          <li class="error-label"><%= contact_error %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    
+    <h3>Vault Inheritance</h3>
+    <p>Set up a chain of custody for your vault. If the following contact presents a valid death certificate to the ZokuVault team we will pass access of your account onto them. This role is primarily given to the executor of your will.</p>
+    
+    <%= f.label :full_primary_shared_with, 'Contingent Owner' %>
+    <div class="chosen-styled-select">
+      <%= contact_select_with_create_new(f, :full_primary_shared_with, @contacts_shareable, { id: "full_primary_shared_with", multiple: false }, [@user_profile.full_primary_shared_with.try(:id)]) %>
+    </div>
+  </div>
+
+  <div class="ml-15 mb-30">
+    <%= f.submit "Update", class: "button primary-button big-button" %>
+  </div>
+<% end %>
+
+<%= yield :new_contact_form %>
+
+<script>
+  $('.chosen-select').chosen({allow_single_deselect: true});
+</script>

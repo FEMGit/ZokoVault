@@ -157,6 +157,9 @@ img.questionnaire-heart {
     color: $color-black;
     display: inline-block;
     padding: 0 15px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     &:not(.left) {
       margin-left: -5px;
       padding-left: 20px;
@@ -171,7 +174,10 @@ img.questionnaire-heart {
     &:not(.selected):hover {
       cursor: pointer;
     }
-    @include media($tablet) {
+    @include media($ninesixty) {
+      width: 25%;
+    }
+    @include media($mobile) {
       font-size: 12px;
     }
   }

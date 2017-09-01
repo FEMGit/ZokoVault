@@ -48,17 +48,8 @@
     <%= render partial: 'layouts/phone_number', locals: { f: f, phone: :fax_number } %>
   </section>
 
-  <section class="shared-with edit-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
-    <label>Shared With</label><br>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
-    </div>
-  </section>
+  <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "financial_provider_share_with_contact_ids" } %>
 
   <% if params[:id] && policy(@financial_provider).destroy? %>
     <%= link_to 'Delete this Provider', delete_provider_account_url(params[:id]), method: :delete,
@@ -108,6 +99,7 @@
 
 <%= javascript_include_tag "phone_address_toggle" %>
 <%= javascript_include_tag 'url_validation' %>
+
 <script>
   document.addEventListener('change', function(e) {
     element = e.target
@@ -117,6 +109,10 @@
         $('#account_value_' + id_number))
     }
   });
+  
+  var displayEmailPreview = function(contact_id) {
+    displayEmailPreviewSharedWith(contact_id)
+  }
 
   $(document).ready(function(){
     clearFormFields = function(form){

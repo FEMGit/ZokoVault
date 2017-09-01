@@ -63,17 +63,8 @@
   <%= f.label :notes, 'Notes' %>
   <%= f.text_area :notes, :maxlength => get_max_length(:notes) %>
 
-  <section class="shared-with edit-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
-    <label>Shared With</label><br>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable) %>
-    </div>
-  </section>
+  <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "financial_property_share_with_contact_ids" } %>
 
   <% if params[:id] && policy(@financial_property).destroy? %>
     <%= link_to 'Delete this Property', delete_property_url(params[:id]), method: :delete,

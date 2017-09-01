@@ -7,21 +7,10 @@
 
   <label>Notes</label>
   <p><%= ff.text_area :notes, id: "tax_notes_id_#{index}", :maxlength => get_max_length(:notes) %></p>
+  <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: ff, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "tax_share_id_#{index}",
+                                                                             additional_params: { id: "tax_share_id_#{index}" }} %>
 
-  <section class="shared-with edit-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg>
-      Shared With
-    </h3>
-
-    <label>Shared With</label>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(ff, :share_with_contact_ids, @contacts_shareable, id: "tax_share_id_#{index}") %>
-    </div>
-  </section>
-  
   <% if data && data.id && policy(data).destroy? %>
     <%= link_to 'Delete', "#{taxes_path}/#{data.id}", method: :delete,
         data: { confirm: "Deleting this tax will permanently remove it from ZokuVault." },
@@ -43,7 +32,7 @@
       
     changeHiddenMultipleSelect($newWtlForm, "tax_year_info[tax_" + old_id + "][share_with_contact_ids][]",
       "tax_year_info[tax_" + new_id + "][share_with_contact_ids][]")
-      
+
     $newWtlForm.find("#delete-tax").remove();
   }
 </script>

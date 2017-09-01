@@ -1,6 +1,6 @@
-var setEmailPreviewSingleDropdown = function(chosenSelector) {
+var setEmailPreviewSingleDropdown = function(chosenSelector, emailPreviewListAdditionalId) {
   chosenSelector.on('change', function(e, params) {
-    addRemoveShareInfoLineSingleDropdown(e, params)
+    addRemoveShareInfoLineSingleDropdown(e, params, emailPreviewListAdditionalId)
   })
 }
 
@@ -10,12 +10,13 @@ var setEmailPreviewMultipleDropdown = function(chosenSelector) {
   })
 }
 
-var addRemoveShareInfoLineSingleDropdown = function(e, params) {
-  $("#email-preview-list").find("p").remove()
+var addRemoveShareInfoLineSingleDropdown = function(e, params, submitButtonText, emailPreviewListAdditionalId) {
+  emailPreviewListAdditionalId = emailPreviewListAdditionalId || ''
+  $('#email-preview-list' + (emailPreviewListAdditionalId.length > 0 ? '.' + emailPreviewListAdditionalId : '')).find("p").remove()
   var targetId = $(e.target).attr('id')
   
   $.each($("#" + targetId + " option:selected"), function(i, val) {
-    appendNewEmailPreviewLine(val.value)
+    appendNewEmailPreviewLine(val.value, submitButtonText, emailPreviewListAdditionalId)
   })
 }
 
@@ -47,9 +48,12 @@ var addRemoveShareInfoLineMultipleDropdown = function(e, params) {
   }
 }
 
-var appendNewEmailPreviewLine = function(selectedContact){
-  $.get('/email/email_preview_line/' + selectedContact)
+var appendNewEmailPreviewLine = function(selectedContact, submitButtonText, emailPreviewListAdditionalId){
+  emailPreviewListAdditionalId = emailPreviewListAdditionalId || ''
+  submitButtonText = submitButtonText || ''
+  sharedUserId = $("#shared_user_id").val()
+  $.get('/email/email_preview_line/' + selectedContact + '/' + submitButtonText + '/' + sharedUserId)
   .done(function(data) {
-    $('#email-preview-list').append(data)
+    $('#email-preview-list' + (emailPreviewListAdditionalId.length > 0 ? '.' + emailPreviewListAdditionalId : '')).append(data)
   })
 }

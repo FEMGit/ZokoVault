@@ -41,17 +41,11 @@
     </div>
   <% end %>
 
-  <h3>Shared With</h3>
-
-  <div class="card category-shared">
-    <section class="shared-with category-shared">
-
-      <label>Shared With</label>
-      <div class="chosen-styled-select">
-         <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "power_attorney_shared_id") %>
-      </div>
-    </section>
-  </div><br>
+  
+  <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "power_attorney_shared_id",
+                                                                             separate_shared_card: true,
+                                                                             additional_params: { id: "power_attorney_shared_id" } } %>
 
   <%= render partial: 'layouts/save_cancel_buttons', locals: { previous_path: wills_powers_of_attorney_path, f: f } %>
   <% if @power_of_attorney_contact.try(:id) && policy(@power_of_attorney_contact).destroy? %>

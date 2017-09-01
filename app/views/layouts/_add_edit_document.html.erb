@@ -52,18 +52,10 @@
     <label>Notes</label>
     <%= f.text_area :description, :maxlength => get_max_length(:notes) %>
 
-    <section class="shared-with edit-shared">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg> Shared With
-      </h3>
-      <label>Shared With</label><br>
-      <% f.hidden_field :contact_ids, :value => f.object.contact_ids %>
-      <div class="chosen-styled-select">
-        <%= contact_select_with_create_new(f, :contact_ids, @contacts_shareable) %>
-      </div>
-    </section>
+    <% f.hidden_field :contact_ids, :value => f.object.contact_ids %>
+    <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :contact_ids,
+                                                                             shared_with_dropdown_id: "document_contact_ids",
+                                                                             additional_params: { id: "document_contact_ids" }} %>
   </div>
 
   <div class="<% if @first_run %> max-w-1000-centered <% end %>" >

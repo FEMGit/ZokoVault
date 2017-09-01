@@ -49,6 +49,7 @@
     $('.chosen-container',$newForm).remove();
     $newForm.insertAfter('.body-content:last');
     $('.chosen-select').chosen({allow_single_deselect: true});
+    updateShareEmailPreviewSection($newForm, "final_wish_share_id_" + new_id_number)
     $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});

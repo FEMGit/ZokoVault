@@ -31,18 +31,9 @@
     <%= f.label :notes %>
     <p><%= f.text_area :notes, :maxlength => get_max_length(:notes) %></p>
 
-    <section class="shared-with edit-shared">
-      <h3 class="card-label shared-label">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="#icon-Safe"></use>
-        </svg> Shared With
-      </h3>
-      <label>Shared With</label><br>
-      <div class="chosen-styled-select">
-        <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, {}, @selected_shareables) %>
-      </div>
-    </section>
-
+    <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "entity_share_with_contact_ids",
+                                                                             additional_params: { html_options: {}, selected_options: @selected_shareables } } %>
     <% if @entity.id && policy(@entity).destroy? %>
       <%= link_to 'Delete', "#{yield(:delete_path)}#{@entity.id}", method: :delete,
           data: { confirm: "Deleting this '#{yield(:question_title)}' will permanently remove it from ZokuVault." },

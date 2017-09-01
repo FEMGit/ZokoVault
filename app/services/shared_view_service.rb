@@ -26,6 +26,10 @@ class SharedViewService
     shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
   end
   
+  def self.category_shares(shares)
+    shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }
+  end
+  
   def self.shares(owner, non_owner)
     return [] if non_owner.blank?
     owner.shares.where(contact: Contact.where("emailaddress ILIKE ?", non_owner.email))

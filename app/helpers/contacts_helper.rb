@@ -50,6 +50,14 @@ module ContactsHelper
     contact.user_profile.user.corporate_invitation_sent? ? 'Yes' : 'No'
   end
   
+  def managed_by_contacts(contact)
+    current_user ||= Thread.current[:current_user]
+    contact_user = User.where("email ILIKE ?", contact.emailaddress).first
+    return nil unless contact_user.present?
+    manager_emails = (Array.wrap(contact_user.corporate_admin_by_user) + contact_user.corporate_employees_by_user).compact.uniq.map(&:email).map(&:downcase)
+    Contact.for_user(current_user).select { |x| manager_emails.include? x.emailaddress.downcase }
+  end
+  
   def contact_status(contact)
     return nil unless current_user
     if current_user.user_profile.primary_shared_with

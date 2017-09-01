@@ -6,6 +6,18 @@
   <svg class="icon nav-icon">
     <use xlink:href="#icon-document-3"></use>
   </svg>
+<% elsif resource.is_a? CorporateAccountProfile %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-settings-1"></use>
+  </svg>
+<% elsif resource.is_a? CorporateClient %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-key-1"></use>
+  </svg>
+<% elsif resource.is_a? CorporateEmployee %>
+  <svg class="icon nav-icon">
+    <use xlink:href="#icon-share-3"></use>
+  </svg>
 <% else %>
   <% if resource.try(:category) %>
     <%= render partial: "layouts/category_icons", locals: { :category => resource.category } %>

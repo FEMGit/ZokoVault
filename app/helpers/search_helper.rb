@@ -42,22 +42,28 @@ module SearchHelper
   end
   
   def entity_name(resource)
-    if resource[:name].present?
-      return resource[:name]
+    if resource.respond_to?(:[]) && resource[:name].present?
+      return resource[:name] + shared_user_name_if_exists(resource)
     end
     
     case resource
-    when Contact, Document, Category
-      resource.name
-    else
-      subcategory_name(resource)
-    end
+      when Contact, Document, Category
+        resource.name + shared_user_name_if_exists(resource)
+      when CorporateClient
+        "#{resource.name} - Corporate Client"
+      when CorporateEmployee
+        "#{resource.name} - Corporate Employee"
+      else
+        subcategory_name(resource) + shared_user_name_if_exists(resource)
+      end
   end
   
   def entity_info(resource)
-    if resource.try(:attributes)
-      response_format(resource)
-    elsif resource[:name].present?
+    if (resource_attributes = resource.try(:attributes))
+      response_format(resource_attributes)
+    elsif (resource_attributes = resource.try(:to_h))
+      response_format(resource_attributes)
+    elsif resource.respond_to?(:[]) && resource[:name].present?
       "#{resource[:name]} - Category"
     else
       nil
@@ -66,10 +72,21 @@ module SearchHelper
   
   private
   
-  def response_format(resource)
-    full_response = resource.attributes.reject { |k, v| k.index("id").present? || v.blank? }
+  def shared_user_name_if_exists(resource)
+    if resource.respond_to?(:[]) && resource[:path].present?
+      shared_user_id = Rails.application.routes.recognize_path(resource[:path])[:shared_user_id]
+      shared_user_id.present? ? " - #{User.find_by(id: shared_user_id).try(:name)}" : ''
+    elsif resource.try(:user) && resource.user != current_user
+      " - #{resource.user.name}"
+    else
+      ''
+    end
+  end
+  
+  def response_format(resource_attributes)
+    full_response = resource_attributes.reject { |k, v| k.respond_to?(:index) && k.index("id").present? || v.blank? }
                                        .map { |k,v| "#{k}:#{v}" }.join(", ").prepend("…")
-    index_of_match = full_response.downcase.index(params[:q])
+    index_of_match = full_response.downcase.index(params[:q].downcase)
     
     return if index_of_match.nil?
     

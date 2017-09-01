@@ -135,7 +135,11 @@ class User < ActiveRecord::Base
   def corporate_client?
     corporate_user? && corporate_provider_join.client?
   end
-
+ 
+  def corporate_admin?
+    corporate_admin
+  end
+  
   def corporate_employee?
     corporate_user? && corporate_provider_join.employee?
   end
@@ -151,6 +155,7 @@ class User < ActiveRecord::Base
   end
 
   def corporate_account_owner
+    return self if corporate_admin?
     corporate_provider_join.corporate_admin if corporate_user?
   end
 

@@ -11,10 +11,12 @@
     
     <h3>Vault Inheritance</h3>
     <p>Set up a chain of custody for your vault. If the following contact presents a valid death certificate to the ZokuVault team we will pass access of your account onto them. This role is primarily given to the executor of your will.</p>
-    
     <%= f.label :full_primary_shared_with, 'Contingent Owner' %>
-    <div class="chosen-styled-select">
+    <div class="chosen-styled-select mb-30">
       <%= contact_select_with_create_new(f, :full_primary_shared_with, @contacts_shareable, { id: "full_primary_shared_with", multiple: false }, [@user_profile.full_primary_shared_with.try(:id)]) %>
+    </div>
+    
+    <div id="email-preview-list">
     </div>
   </div>
 
@@ -25,6 +27,20 @@
 
 <%= yield :new_contact_form %>
 
+<%= render partial: 'layouts/email_preview_javascript' %>
+
+<div id="email-preview-section">
+</div>
+
 <script>
+  $(document).ready(function() {
+    setEmailPreviewSingleDropdown($('#full_primary_shared_with'))
+    $('#full_primary_shared_with').trigger("change")
+  })
+  
+  var displayEmailPreview = function(contact_id) {
+    displayEmailPreviewVaultInheritance(contact_id)
+  }
+  
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

@@ -14,6 +14,11 @@
     createEmailIframeByName("corporate_employee", contact_id, "create_invitation_mailer")
   }
   
+  var displayEmailPreviewVaultInheritance = function(contact_id) {
+    emailPreviewSectionPrepare()
+    createEmailIframeByName("contingent_owner", contact_id, "vault_inheritance_invitation_mailer")
+  }
+  
   var emailPreviewSectionPrepare = function() {
     $('#email-preview-section').empty()
     $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')

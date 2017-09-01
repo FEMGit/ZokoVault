@@ -219,15 +219,11 @@ class AccountSettingsController < AuthenticatedController
     respond_to do |format|
       begin
         if @user_profile.update_attributes(full_primary_shared_with: user_profile_params[:full_primary_shared_with])
-          if tutorial_params[:tutorial_name].present?
-            tutorial_redirection(format, @user_profile.as_json)
-          else
-            format.html { redirect_to vault_inheritance_path, flash: { success: 'Vault Inheritance was successfully updated.' } }
-            format.json { render :account_users, status: :updated, location: @user_profile }
-          end
+          InvitationService::VaultInheritanceInvitationService.send_invitation(user: current_user, contact: @user_profile.full_primary_shared_with)
+          format.html { redirect_to vault_inheritance_path, flash: { success: 'Vault Inheritance was successfully updated.' } }
+          format.json { render :account_users, status: :updated, location: @user_profile }
         else
-          tutorial_error_handle("Error saving Contingent Owner") && return
-          format.html { render :account_users }
+          format.html { render :vault_inheritance }
           format.json { render json: @user_profile.errors, status: :unprocessable_entity }
         end
       rescue ActiveRecord::RecordNotSaved
@@ -240,7 +236,7 @@ class AccountSettingsController < AuthenticatedController
             flash[:error] = 'Some of the contacts you are trying to save have invalid data. Please fix them and try again.'
           end
         end
-        format.html { render :account_users }
+        format.html { render :vault_inheritance }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end
     end

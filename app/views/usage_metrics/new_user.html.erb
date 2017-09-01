@@ -26,7 +26,8 @@
       <span class="error-label"> - <%= errors.messages[:email].first %></span>
     <% end %>
     <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
-
+    
+    <%= render partial: 'usage_metrics/tfa_disable_field' %>
     <%= render partial: 'usage_metrics/corporate_profile_edit', locals: { f: f } %>
   </div>
   

@@ -343,7 +343,7 @@ class UsageMetricsController < AuthenticatedController
   end
   
   def corporate_admin?
-    boolean_param_value(param_key: :corporate_activated)
+    boolean_param_value(param_key: :corporate_admin)
   end
   
   def corporate_credit_card_required?

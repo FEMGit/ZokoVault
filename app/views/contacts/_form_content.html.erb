@@ -1,6 +1,17 @@
 <%= hidden_field_tag :shared_user_id, params[:shared_user_id] %>
 
 <div id="detail-form">
+  <% contact_errors_messages = @contact.errors && @contact.errors.messages %>
+  <% if contact_errors_messages[:firstname].present? ||
+        contact_errors_messages[:emailaddress].present? ||
+        contact_errors_messages[:relationship].present? %>
+    <% first_tab_error = true %>
+  <% end %>
+  
+  <% if contact_errors_messages[:businesswebaddress].present? %>
+    <% second_tab_error = true %>
+  <% end %>
+  
   <%= f.label :firstname, 'First Name' %>
   <%= render partial: 'layouts/error_message', locals: { errors: errors, error: @contact.errors.messages[:firstname] } %>
   <%= f.text_field :firstname, { class: ("input-error" if @contact.errors.messages[:firstname].present?), :maxlength => get_max_length(:default) } %>
@@ -149,9 +160,11 @@ var wizNav = function(step){
     $("#detail-form").show();
     $("#avatar-form").hide();
     $("#category-form").hide();
-    $("#step-1").removeClass().addClass("inner-counter current-step");
+    $("#step-1").removeClass().addClass("inner-counter current-step <% if first_tab_error.eql?(true) %> alert <% end %>");
+    $("#step-1").next('.modal-step-title').addClass("<% if first_tab_error.eql?(true) %> clr-alert <% end %>")
     $("#step-1").html('1');
-    $("#step-2").removeClass().addClass("inner-counter");
+    $("#step-2").removeClass().addClass("inner-counter <% if second_tab_error.eql?(true) %> alert-light-shaded <% end %>");
+    $("#step-2").next('.modal-step-title').addClass("<% if second_tab_error.eql?(true) %> clr-alert-light-shaded <% end %>")
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
@@ -163,9 +176,11 @@ var wizNav = function(step){
     $("#detail-form").hide();
     $("#category-form").show();
     $("#avatar-form").hide();
-    $("#step-1").removeClass().addClass("inner-counter completed-step");
+    $("#step-1").removeClass().addClass("inner-counter completed-step <% if first_tab_error.eql?(true) %> alert-light-shaded <% end %>");
+    $("#step-1").next('.modal-step-title').addClass("<% if first_tab_error.eql?(true) %> clr-alert-light-shaded <% end %>")
     $("#step-1").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
-    $("#step-2").removeClass().addClass("inner-counter current-step");
+    $("#step-2").removeClass().addClass("inner-counter current-step <% if second_tab_error.eql?(true) %> alert <% end %>");
+    $("#step-2").next('.modal-step-title').addClass("<% if second_tab_error.eql?(true) %> clr-alert <% end %>")
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
@@ -176,9 +191,11 @@ var wizNav = function(step){
     $("#detail-form").hide();
     $("#category-form").hide();
     $("#avatar-form").show();
-    $("#step-1").removeClass().addClass("inner-counter completed-step");
+    $("#step-1").removeClass().addClass("inner-counter completed-step <% if first_tab_error.eql?(true) %> alert-light-shaded <% end %>");
+    $("#step-1").next('.modal-step-title').addClass("<% if first_tab_error.eql?(true) %> clr-alert-light-shaded <% end %>")
     $("#step-1").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
-    $("#step-2").removeClass().addClass("inner-counter completed-step");
+    $("#step-2").removeClass().addClass("inner-counter completed-step <% if second_tab_error.eql?(true) %> alert-light-shaded <% end %>");
+    $("#step-2").next('.modal-step-title').addClass("<% if second_tab_error.eql?(true) %> clr-alert-light-shaded <% end %>")
     $("#step-2").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
     $("#step-3").removeClass().addClass("inner-counter current-step");
     $("#step-3").html('3');

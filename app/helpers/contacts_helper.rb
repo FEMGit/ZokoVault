@@ -60,4 +60,15 @@ module ContactsHelper
       nil
     end
   end
+  
+  def error_key_to_field_name(error_key)
+    case error_key
+      when :emailaddress
+        'Email Address'
+      when :businesswebaddress
+        'Business Web Address'
+      else
+        error_key
+    end
+  end
 end

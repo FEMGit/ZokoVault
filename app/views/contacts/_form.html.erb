@@ -24,6 +24,14 @@
   </div>
   <div class="modal-header">
     <h2 class="inline-block"><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
+    <% if @contact.errors.any? %>
+      <ul class="mt-0 pl-20">
+        <% @contact.errors.messages.each do |error_key, error_values| %>
+          <li class="fz-12 error-label"><%= "#{error_key_to_field_name(error_key)} - #{error_values.first}" %></li>
+        <% end %>
+      </ul>
+    <% end %>
+    
     <% if show_delete_button?(@contact) %>
       <%= link_to 'Delete', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "outline-button big-button mobile-show fr" %>
     <% end %>

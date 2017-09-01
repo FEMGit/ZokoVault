@@ -14,7 +14,7 @@ class UserProfile < ActiveRecord::Base
   
   has_many :shares, as: :shareable, dependent: :destroy
   
-  has_many :full_primary_shared_with,
+  has_one :full_primary_shared_with,
     class_name: "Contact",
     foreign_key: "full_primary_shared_id"
   

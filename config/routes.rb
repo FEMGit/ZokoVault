@@ -160,9 +160,10 @@ Rails.application.routes.draw do
   post 'documents/mass_document_upload(/:shared_user_id)', to: 'documents#mass_document_upload', as: :mass_document_upload
 
   get 'account_settings', to: 'account_settings#index', as: :account_settings
-  get 'account_settings/account_users', to: 'account_settings#account_users', as: :account_users
+  get 'account_settings/vault_co_owners', to: 'account_settings#vault_co_owners', as: :vault_co_owners
   get 'account_settings/login_settings', to: 'account_settings#login_settings', as: :login_settings
   get 'account_settings/manage_subscription', to: 'account_settings#manage_subscription', as: :manage_subscription
+  get 'account_settings/vault_inheritance', to: 'account_settings#vault_inheritance', as: :vault_inheritance
   get 'account_settings/phone_setup', to: 'account_settings#phone_setup', as: :account_settings_phone_setup
   put 'account_settings/phone_setup_update', to: 'account_settings#phone_setup_update', as: :account_settings_phone_update
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
@@ -175,7 +176,8 @@ Rails.application.routes.draw do
                                                                                      constraints: { :plan_id => /[^\/]+/ }
   
   patch 'account_settings/update', to: 'account_settings#update'
-  patch 'account_settings/update_account_users', to: 'account_settings#update_account_users', as: :account_settings_update_account_users
+  patch 'account_settings/update_vault_co_owner', to: 'account_settings#update_vault_co_owner', as: :account_settings_update_vault_co_owner
+  patch 'account_settings/update_vault_inheritance', to: 'account_settings#update_vault_inheritance', as: :account_settings_update_vault_inheritance
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update
   patch 'account_settings/remove_corporate_access_update/:contact_id', to: 'account_settings#remove_corporate_access_update', as: :remove_corporate_access_update

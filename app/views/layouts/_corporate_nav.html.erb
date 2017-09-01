@@ -52,8 +52,8 @@
     </svg>Account Traffic
   <% end %>
   
-  <% account_settings_current = 'active' if (current_page?(account_users_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
-  <%= link_to account_users_path, class: "main-nav tablet-show #{account_settings_current}" do %>
+  <% account_settings_current = 'active' if (current_page?(vault_co_owners_path) || current_page?(login_settings_path) || current_page?(manage_subscription_path))%>
+  <%= link_to vault_co_owners_path, class: "main-nav tablet-show #{account_settings_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-settings-1"></use>
     </svg>Account Settings

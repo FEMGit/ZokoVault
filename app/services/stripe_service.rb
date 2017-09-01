@@ -40,6 +40,14 @@ class StripeService
     subscription_attrs[:coupon] = promo_code if promo_code.present?
     customer.subscriptions.create(subscription_attrs)
   end
+  
+  def self.cancel_subscription(user:)
+    subscription = user.current_user_subscription
+    return if subscription.blank? || !subscription.full? ||
+              subscription.subscription_id.blank?
+    stripe_subscription = Stripe::Subscription.retrieve(subscription.subscription_id)
+    stripe_subscription.delete(:at_period_end => true)
+  end
 
   def self.customer_card(customer:)
     source = customer.try(:default_source)

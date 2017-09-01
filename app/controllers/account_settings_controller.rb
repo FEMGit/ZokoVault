@@ -41,11 +41,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def cancel_subscription_update
-    @subscription = current_user.current_user_subscription
-    return if @subscription.blank? || !@subscription.full? ||
-              @subscription.subscription_id.blank?
-    stripe_subscription = Stripe::Subscription.retrieve(@subscription.subscription_id)
-    stripe_subscription.delete(:at_period_end => true)
+    return unless StripeService.cancel_subscription(user: current_user)
     flash[:success] = "ZokuVault subscription was successfully canceled."
     redirect_to manage_subscription_path
   end
@@ -85,7 +81,7 @@ class AccountSettingsController < AuthenticatedController
       end
     end
   end
-
+  
   def customer_card
     customer = stripe_customer_lookup(current_user, @corporate_paid)
     StripeService.customer_card(customer: customer) if customer.present?
@@ -242,11 +238,12 @@ class AccountSettingsController < AuthenticatedController
     card = customer_card
     if token.present? || card.present?
       customer = StripeService.stripe_customer(user: current_user, corporate_update: corporate_update?)
+      
       unless ((token.present? && update_customer_information(customer, token)) || card.present?)
         redirect_to (session[:ret_url] || root_path) and return
       end
-      if customer.subscriptions.blank? && stripe_subscription_params.present? &&
-           stripe_subscription_params[:plan_id].present?
+      if !(current_user.paid? && !current_user.trial?) && customer.subscriptions.blank? && stripe_subscription_params.present? &&
+          stripe_subscription_params[:plan_id].present? 
         plan = stripe_subscription_params[:plan_id]
         promo = stripe_subscription_params[:promo_code]
         stripe_obj = StripeService.subscribe(

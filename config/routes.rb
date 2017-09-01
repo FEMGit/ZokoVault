@@ -395,6 +395,7 @@ Rails.application.routes.draw do
   get '/corporate/account_settings', to: 'corporate_accounts#account_settings', as: :corporate_account_settings
   get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings
   get '/corporate/billing_information', to: 'corporate_accounts#billing_information', as: :corporate_billing_information
+  post '/corporate/remove_client/:contact_id', to: 'corporate_accounts#remove_corporate_client', as: :corporate_account_remove_client
   post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_corporate_settings
   post '/corporate/send_invitation/:contact_id(/:account_type)', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account

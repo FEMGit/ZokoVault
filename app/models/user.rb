@@ -202,6 +202,10 @@ class User < ActiveRecord::Base
   def paid?
     current_user_subscription.present? && current_user_subscription.active?
   end
+  
+  def trial?
+    current_user_subscription.present? && current_user_subscription.active? && current_user_subscription.trial?
+  end
 
   def primary_shared_with?(shared_user)
     return false unless shared_user.present?

@@ -128,8 +128,25 @@ class CorporateAccountsController < CorporateBaseController
     manager_emails = (Array.wrap(contact_user.corporate_admin_by_user) + contact_user.corporate_employees_by_user).compact.uniq.map(&:email).map(&:downcase)
     Contact.for_user(current_user).select { |x| manager_emails.include? x.emailaddress.downcase }
   end
-
+  
+  def remove_corporate_client
+    contact = Contact.find_by(id: params[:contact_id])
+    authorize contact
+    user_account = User.find_by(email: contact.try(:emailaddress))
+    CorporateService.remove_client_from_admin(client: user_account, admin: current_user)
+    flash[:success] = "Client Account was successfully removed."
+    redirect_to corporate_accounts_path
+  end
+  
   private
+  
+  def remove_client_shares(client)
+    return unless client.present?
+    Share.where(user: client).each do |client_share|
+      next unless user = User.find_by(email: client_share.contact.emailaddress)
+      client_share.destroy if client.corporate_user_by_employee?(user) || client.corporate_user_by_admin?(user)
+    end
+  end
 
   def add_account_user_to_employee(user)
     CorporateEmployeeAccountUser.create!(:corporate_employee => current_user, :user_account => user)

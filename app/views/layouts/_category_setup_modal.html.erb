@@ -1,0 +1,24 @@
+<div id="category-setup-category-modal" class="modal medium-modal">
+  <a href="javascript:void(null)" class="js-modal-close fr no-underline-link mr-15 mt-15">
+    Dismiss
+  </a>
+  <span class="clear"></span>
+  <h2 class="text-center" id='category-setup-title'></h2>
+  <div class="modal-content text-center overflow-y-visible">
+    <p id="category-setup-description" class="inline-block"></p>
+    <%= image_tag '', class: 'max-w-460 pl-15 pr-15', id: 'category-setup-image' %>
+  </div>
+  
+  <footer class="modal-footer text-center mt-0">
+    <button class="js-modal-close blue-button big-button">Set Up</a>
+  </footer>
+</div>
+
+<script>
+  categorySetupModal = function(title, description, imagePath) {
+  console.log(description)
+    $("#category-setup-title").text(title)
+    $("#category-setup-description").text(description)
+    $("#category-setup-image").attr('src', imagePath)
+  }
+</script>

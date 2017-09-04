@@ -211,6 +211,12 @@ class User < ActiveRecord::Base
       .map(&:user)
       .any?(&:paid?)
   end
+  
+  def contingent_owner_for?(user)
+    current_user_contacts = Contact.where("emailaddress ILIKE ?", email.downcase)
+    returl false unless user && user.user_profile
+    current_user_contacts.include? user.user_profile.full_primary_shared_with
+  end
 
   def paid?
     current_user_subscription.present? && current_user_subscription.active?

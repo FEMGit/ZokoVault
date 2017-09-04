@@ -163,7 +163,6 @@ Rails.application.routes.draw do
   delete 'documents/:uuid', to: 'documents#destroy'
   get 'documents/download/:uuid(/:shared_user_id)', to: 'documents#download', as: :download_document
   get 'documents/preview/:uuid(/:shared_user_id)', to: 'documents#preview', as: :preview_document
-  get 'shared_view/:shared_user_id/documents/:uuid', to: 'documents#show', as: :shared_view_document
   post 'documents/mass_document_upload(/:shared_user_id)', to: 'documents#mass_document_upload', as: :mass_document_upload
   resources :documents, except: [:new, :edit], param: :uuid
 
@@ -319,6 +318,7 @@ Rails.application.routes.draw do
   
   # Shared view
   get 'shared_view/:shared_user_id/contacts' => 'shared_view#contacts', as: :contacts_shared_view
+  get 'shared_view/:shared_user_id/contingent_owner' => 'shared_view#contingent_owner', as: :contingent_owner_shared_view
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :dashboard_shared_view
   get 'shared_view/:shared_user_id/documents' => 'shared_view#documents', as: :documents_shared_view
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :final_wishes_shared_view
@@ -328,7 +328,8 @@ Rails.application.routes.draw do
   get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :taxes_shared_view
   get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :trusts_entities_shared_view
   get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :wills_powers_of_attorney_shared_view
-  
+  get 'shared_view/:shared_user_id/documents/:uuid', to: 'documents#show', as: :document_shared_view
+
   # Search
   get "/search", to: "search#index", as: :search
 

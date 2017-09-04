@@ -54,6 +54,7 @@ class SharePolicy < BasicPolicy
   def wills?; index?; end
   def online_accounts?; index?; end
   def documents?; index?; end
+  def contingent_owner?; index?; end
   
   def mass_document_upload?
     owned_or_shared?

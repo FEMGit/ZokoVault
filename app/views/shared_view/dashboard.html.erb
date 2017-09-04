@@ -6,17 +6,15 @@
         [Rails.application.config.x.OnlineAccountCategory]).each do |category| %>
       <% if show_navigation_link?(category) %>
         <% category_instance = Category.fetch(category.downcase) %>
-        <section class="flex-boxes shared-boxes padding-right">
-          <div class="shared-name">
-            <h4>
-              <%= render partial: 'layouts/category_icons', locals: { category: category_instance } %> <%= category_name(category) %>
-            </h4>
-          </div>
-          <div class="shared-link">
-            <%= link_to 'View Category', category_view_path(category_instance, @shared_user), class: 'outline-button category-btn small-button' %>
-          </div>
-        </section>
+        <%= render partial: 'shared_view/dashboard_stripe_element.html', locals: { category_icons_locals: { category: category_instance },
+                                                                                   stripe_element_title: category_name(category),
+                                                                                   view_categorty_path: category_view_path(category_instance, @shared_user) } %>
       <% end %>
+    <% end %>
+    <% if current_user.contingent_owner_for?(@shared_user) %>
+      <%= render partial: 'shared_view/dashboard_stripe_element.html', locals: { category_icons_locals: { page_name: 'Contingent Owner' },
+                                                                                 stripe_element_title: "Contingent Owner",
+                                                                                 view_categorty_path: contingent_owner_shared_view_path(@shared_user) } %>
     <% end %>
   </div>
 <% end %>

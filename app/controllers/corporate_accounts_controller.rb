@@ -3,7 +3,6 @@ class CorporateAccountsController < CorporateBaseController
                                                         :billing_information]
   before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
-  before_action :set_corporate_user_by_user_profile, only: [:show]
 
   include SharedUserExpired
 

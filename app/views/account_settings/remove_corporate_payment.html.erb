@@ -1,0 +1,9 @@
+<div class="card">
+  <h1>Remove Corporate Payment</h1>
+  
+  <p>Removing corporate payment with make you responsible for future account payments. To remove the companies access to your Vault you will need to remove their shared access at the category level.</p>
+  <p>Your account is currently paid through <%= date_format(@subscription.end_at) || '–' %></p>
+  
+  <%= link_to 'Remove Corporate Payment', remove_corporate_payment_update_path, method: :patch, class: 'button primary-button big-button inline-block mt-10 mb-10' %>
+  <%= link_to 'Cancel', manage_subscription_path, class: 'button secondary-button big-button inline-block mt-10 mb-10' %>
+</div>

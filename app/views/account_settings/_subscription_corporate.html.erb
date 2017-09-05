@@ -14,4 +14,6 @@
 <% end %>
 
 <label>Billing Info</label>
-<p>Managed by <%=company_name%></p>
+<p class="mb-30">Managed by <%=company_name%></p>
+
+<%= link_to 'Remove Corporate Payment', account_settings_remove_corporate_payment_path, class: 'button big-button primary-button' %>

@@ -138,7 +138,6 @@ Rails.application.routes.draw do
   get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact_details
   get 'contacts/:id/edit(/:shared_user_id)', to: 'contacts#edit', as: :edit_contact_details
 
-
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
   get 'insurance/:group/details', to: 'categories#details_account', as: :details_account_category
@@ -169,6 +168,7 @@ Rails.application.routes.draw do
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
   get 'account_settings/cancel_subscription', to: 'account_settings#cancel_subscription', as: :cancel_subscription
   get 'account_settings/remove_corporate_access/:contact_id', to: 'account_settings#remove_corporate_access', as: :account_settings_remove_corporate_access
+  get 'account_settings/remove_corporate_payment', to: 'account_settings#remove_corporate_payment', as: :account_settings_remove_corporate_payment
   get 'account_settings/invoice_information/:id/:corporate', to: 'account_settings#invoice_information', as: :invoice_information
   get 'account_settings/update_subscription_information(/:corporate)', to: 'account_settings#update_subscription_information', as: :update_subscription_information
   get 'account_settings/thank_you_for_subscription/:plan_id(/:corporate_client_id)', to: 'account_settings#thank_you_for_subscription', as: :account_settings_thank_you_for_subscription,
@@ -179,6 +179,7 @@ Rails.application.routes.draw do
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update
   patch 'account_settings/remove_corporate_access_update/:contact_id', to: 'account_settings#remove_corporate_access_update', as: :remove_corporate_access_update
+  patch 'account_settings/remove_corporate_payment_update', to: 'account_settings#remove_corporate_payment_update', as: :remove_corporate_payment_update
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment(/:corporate)', to: 'account_settings#update_payment', as: :update_payment_account_settings

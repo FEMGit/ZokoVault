@@ -35,8 +35,8 @@ class StripeService
     customer
   end
 
-  def self.subscribe(customer:, plan_id:, promo_code: nil, metadata: {})
-    subscription_attrs = { plan: plan_id, metadata: metadata }
+  def self.subscribe(customer:, plan_id:, promo_code: nil, metadata: {}, additional_params: {})
+    subscription_attrs = { plan: plan_id, metadata: metadata }.merge(additional_params)
     subscription_attrs[:coupon] = promo_code if promo_code.present?
     customer.subscriptions.create(subscription_attrs)
   end

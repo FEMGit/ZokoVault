@@ -11,6 +11,7 @@ class AccountSettingsController < AuthenticatedController
   before_action :update_account_users_params, only: [:update_account_users]
   before_action :redirect_to_manage_subscription_if_corporate_client, only: [:billing_info, :update_payment,  :cancel_subscription,
                                                                              :cancel_subscription_update, :update_subscription_information]
+  before_action :set_corporate_admin_resources, only: [:remove_corporate_access, :remove_corporate_access_update]
   include TutorialsHelper
   include UserTrafficModule
   include StripeHelper
@@ -33,6 +34,19 @@ class AccountSettingsController < AuthenticatedController
   def login_settings; end
 
   def phone_setup; end
+  
+  def remove_corporate_access
+    @subscription = current_user.current_user_subscription
+    redirect_to contacts_path unless (@corporate_admin = current_user.corporate_account_owner)
+  end
+  
+  def remove_corporate_access_update
+    corporate_subscription = current_user.current_user_subscription.corporate?(corporate_client: current_user)
+    CorporateService.remove_client_from_admin(client: current_user, admin: @corporate_admin_user)
+    flash[:success] = "Corporate Access was successfully removed."
+    redirect_to update_subscription_information_path and return if corporate_subscription
+    redirect_to contact_path(@corporate_admin_contact)
+  end
 
   def cancel_subscription
     customer = current_user.stripe_customer
@@ -41,8 +55,11 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def cancel_subscription_update
-    return unless StripeService.cancel_subscription(user: current_user)
-    flash[:success] = "ZokuVault subscription was successfully canceled."
+    unless StripeService.cancel_subscription(subscription: current_user.current_user_subscription)
+      flash[:error] = "Error canceling ZokuVault subscription."
+    else
+      flash[:success] = "ZokuVault subscription was successfully canceled."
+    end
     redirect_to manage_subscription_path
   end
 
@@ -242,6 +259,7 @@ class AccountSettingsController < AuthenticatedController
       unless ((token.present? && update_customer_information(customer, token)) || card.present?)
         redirect_to (session[:ret_url] || root_path) and return
       end
+      
       if !(current_user.paid? && !current_user.trial?) && customer.subscriptions.blank? && stripe_subscription_params.present? &&
           stripe_subscription_params[:plan_id].present? 
         plan = stripe_subscription_params[:plan_id]
@@ -281,6 +299,12 @@ class AccountSettingsController < AuthenticatedController
 
   def set_corporate_paid
     @corporate_paid = current_user.paid_by_corporate_admin?
+  end
+
+  def set_corporate_admin_resources
+    @corporate_admin_contact = Contact.for_user(current_user).find_by(id: params[:contact_id])
+    @corporate_admin_user = User.where("email ILIKE ?", @corporate_admin_contact.try(:emailaddress)).first
+    redirect_to contacts_path unless current_user.corporate_user_by_admin?(@corporate_admin_user)
   end
 
   def redirect_to_manage_subscription_if_corporate_client

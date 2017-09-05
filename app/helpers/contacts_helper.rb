@@ -60,6 +60,11 @@ module ContactsHelper
   
   def contact_status(contact)
     return nil unless current_user
+    if current_user.corporate_client?
+      user = User.where("email ILIKE ?", contact.emailaddress).first
+      return 'Corporate Sponsor' if current_user.corporate_user_by_admin?(user)
+    end
+    
     if current_user.user_profile.primary_shared_with
                    .map { |sh| sh.emailaddress.downcase }
                    .include? contact.emailaddress.downcase

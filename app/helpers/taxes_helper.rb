@@ -28,7 +28,7 @@ module TaxesHelper
   end
 
   def year_exist?(taxes, year)
-    tax_year_info = taxes.detect { |x| x.year == year }
+    tax_year_info = taxes.includes(:taxes).detect { |x| x.year == year }
     tax_year_info && tax_year_info.taxes.any?
   end
   

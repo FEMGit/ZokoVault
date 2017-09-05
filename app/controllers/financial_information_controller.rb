@@ -20,7 +20,7 @@ class FinancialInformationController < AuthenticatedController
     session[:ret_url] = financial_information_path
     @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
     set_tutorial_in_progress(financial_information_empty?)
-    @documents = Document.for_user(current_user).where(category: @category.name)
+    @documents = Document.for_user(current_user).includes(:user).where(category: @category.name)
     
     @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
     
@@ -29,9 +29,9 @@ class FinancialInformationController < AuthenticatedController
     @investments = FinancialInvestment.for_user(current_user)
     @properties = FinancialProperty.for_user(current_user)
     
-    @all_cards = (@account_providers + @alternative_managers +
-                 @investments + @properties).sort_by!(&:name)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @all_cards = [@account_providers + @alternative_managers + @investments + @properties].reduce([], :concat).sort_by!(&:name)
+    @contacts_with_access = current_user.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    render stream: true
   end
   
   def balance_sheet

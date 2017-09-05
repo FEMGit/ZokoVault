@@ -13,6 +13,9 @@ gem 'devise', '>= 4.2.0'
 # Authorization
 gem "pundit"
 
+# Progress bar
+gem 'pace-rails'
+
 # Pdf Generation
 gem 'pdfkit'
 gem 'wkhtmltopdf-binary'
@@ -26,6 +29,9 @@ gem 'rbnacl-libsodium'
 gem 'rbnacl'
 
 gem 'acts_as_tree'
+
+# Render Later
+gem 'render-later'
 
 # Session Timeout Auto Redirection
 gem 'auto-session-timeout'
@@ -143,6 +149,9 @@ group :development, :test do
 
   # Style verifier
   gem 'rubocop', require: false
+  
+  # Performance Text
+  gem 'bullet'
 end
 
 group :test do

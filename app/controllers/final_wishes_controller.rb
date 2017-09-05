@@ -58,10 +58,10 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes.json
   def index
     @category = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase)
-    @contacts_with_access = resource_owner.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
+    @contacts_with_access = resource_owner.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact)
 
-    @final_wishes = FinalWishInfo.for_user(resource_owner)
-    @final_wishes.each { |fw| fw.final_wishes.each { |f| authorize f } }
+    @final_wishes = FinalWishInfo.for_user(resource_owner).includes(:final_wishes)
+    @final_wishes.each { |fw| fw.final_wishes.includes(:user).each { |f| authorize f } }
     sort_groups(@final_wishes.map(&:group).sort)
     session[:ret_url] = @shared_user.present? ? shared_final_wishes_path : final_wishes_path
   end
@@ -82,7 +82,7 @@ class FinalWishesController < AuthenticatedController
     @final_wishes = final_wishes
     @final_wishes.each { |fw| authorize fw }
     @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
-    @group_documents = Document.for_user(resource_owner).where(:category => @category, :group => @final_wish.group)
+    @group_documents = Document.for_user(resource_owner).includes(:user).where(:category => @category, :group => @final_wish.group)
     session[:ret_url] = @shared_user.present? ? shared_final_wishes_path(id: @final_wish.id) : final_wish_path(@final_wish)
   end
 
@@ -251,7 +251,7 @@ class FinalWishesController < AuthenticatedController
   end
 
   def set_all_documents
-    @documents = Document.for_user(resource_owner).where(:category => @category)
+    @documents = Document.for_user(resource_owner).includes(:user).where(:category => @category)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

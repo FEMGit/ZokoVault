@@ -10,7 +10,7 @@
     "health" => @shared_user.present? ? shared_new_health_path : new_health_path,
     } %>
 
-    <% @groups.each do |group| %>
+    <% @groups.each_with_index do |group, index| %>
       <div class="flex-column">
         <div class="card <%= group['value'] %> column-card section-header">
           <% count = insurance_document_count(resource_owner, group['value'], @category.name) %>
@@ -26,113 +26,69 @@
           <% end %>
           <span class="clear"></span>
         </div>
+        <%= render_later "insurance-group-#{index}" do %>
+          <% if group['value']=="life" %>
+            <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
+              <div class="card <%= group['value'] %> column-card">
 
-        <% if group['value']=="life" %>
-          <% @insurance_vendors.select { |v| v["group"]=="life" }.each do |vendor| %>
-            <div class="card <%= group['value'] %> column-card">
-
-              <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
-              <h3><%= vendor.name %></h3>
-
-              <% vendor.try(:policy) && vendor.policy.each do |policy| %>
-                <label><%= policy.policy_type %></label>
-                <ul class="data-list">
-                  <li class="data-pair">
-                    <span class="pair-name">
-                      <%= policy.policy_holder && policy.policy_holder.name %>
-                    </span>
-                    <span class="data-right">
-                      <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
-                    </span>
-                  </li>
-                </ul>
-              <% end %>
-
-              <% if provider_main_page_present?(vendor) %>
-                <label>Provider Details</label>
-                <ul class="data-list">
-                  <li class="contact-pair">
-                    <%if vendor.webaddress.present? %>
-                      <%= link_to vendor.webaddress, vendor.webaddress, target: "_blank" %><br>
-                    <% end %>
-                    <%= vendor.phone %>
-                  </li>
-                </ul>
-              <% end %>
-
-              <% if category_subcategory_shares(vendor, resource_owner).present? %>
-                <label>Shared With</label>
-                <section class="shared-list">
-                  <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
-                </section>
-              <% end %>
-
-              <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_life_path(@shared_user, vendor) : life_path(vendor), class: "small-button outline-button mt-20" %>
-            </div>
-          <% end %>
-        <% end %>
-
-        <% if group['value']=="property" %>
-          <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
-            <div class="card <%= group['value'] %> column-card">
-
-              <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
-              <h3><%= vendor.name %></h3>
-
-              <% vendor.try(:policy) && vendor.policy.each do |policy| %>
-                <label><%= policy.policy_type %></label>
-                <ul class="data-list">
-                  <li class="data-pair">
-                    <span class="pair-name">
-                      <%= policy.insured_property %>
-                    </span>
-                    <span class="data-right">
-                      <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
-                    </span>
-                  </li>
-                </ul>
-              <% end %>
-
-              <% if provider_main_page_present?(vendor) %>
-                <label>Provider Details</label>
-                <ul class="data-list">
-                  <li class="contact-pair">
-                    <% if vendor.webaddress.present? %>
-                      <%= link_to vendor.webaddress, vendor.webaddress, target: "_blank" %><br>
-                    <% end %>
-                    <%= vendor.phone %>
-                  </li>
-                </ul>
-              <% end %>
-
-              <% if category_subcategory_shares(vendor, resource_owner).present? %>
-                <label>Shared With</label>
-                <section class="shared-list">
-                  <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
-                </section>
-              <% end %>
-
-              <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_property_path(@shared_user, vendor) : property_path(vendor), class: "small-button outline-button mt-20" %>
-            </div>
-          <% end %>
-        <% end %>
-
-        <% if group['value']=="health" %>
-          <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
-            <div class="card <%= group['value'] %> column-card">
-
-              <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
-              <h3><%= vendor.name %></h3>
+                <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
+                <h3><%= vendor.name %></h3>
 
                 <% vendor.try(:policy) && vendor.policy.each do |policy| %>
-                  <label><%= policy_type_abbreviate(policy.policy_type) %></label>
+                  <label><%= policy.policy_type %></label>
                   <ul class="data-list">
-                    <li class="data-pair ">
-                      <span class="pair-name"><%= policy.policy_holder && policy.policy_holder.name %></span>
+                    <li class="data-pair">
+                      <span class="pair-name">
+                        <%= policy.policy_holder && policy.policy_holder.name %>
+                      </span>
                       <span class="data-right">
-                        <%= policy.policy_number %>
+                        <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
+                      </span>
+                    </li>
+                  </ul>
+                <% end %>
+
+                <% if provider_main_page_present?(vendor) %>
+                  <label>Provider Details</label>
+                  <ul class="data-list">
+                    <li class="contact-pair">
+                      <%if vendor.webaddress.present? %>
+                        <%= link_to vendor.webaddress, vendor.webaddress, target: "_blank" %><br>
+                      <% end %>
+                      <%= vendor.phone %>
+                    </li>
+                  </ul>
+                <% end %>
+
+                <% if category_subcategory_shares(vendor, resource_owner).present? %>
+                  <label>Shared With</label>
+                  <section class="shared-list">
+                    <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
+                  </section>
+                <% end %>
+
+                <br>
+                <%= link_to 'View Details', @shared_user.present? ? shared_life_path(@shared_user, vendor) : life_path(vendor), class: "small-button outline-button mt-20" %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <% if group['value']=="property" %>
+            <% @insurance_vendors.select { |v| v["group"]=="property" }.each do |vendor| %>
+              <div class="card <%= group['value'] %> column-card">
+
+                <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
+                <h3><%= vendor.name %></h3>
+
+                <% vendor.try(:policy) && vendor.policy.each do |policy| %>
+                  <label><%= policy.policy_type %></label>
+                  <ul class="data-list">
+                    <li class="data-pair">
+                      <span class="pair-name">
+                        <%= policy.insured_property %>
+                      </span>
+                      <span class="data-right">
+                        <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
                       </span>
                     </li>
                   </ul>
@@ -157,9 +113,54 @@
                   </section>
                 <% end %>
 
-              <br>
-              <%= link_to 'View Details', @shared_user.present? ? shared_health_path(@shared_user, vendor) : health_path(vendor), class: "small-button outline-button mt-20" %>
-            </div>
+                <br>
+                <%= link_to 'View Details', @shared_user.present? ? shared_property_path(@shared_user, vendor) : property_path(vendor), class: "small-button outline-button mt-20" %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <% if group['value']=="health" %>
+            <% @insurance_vendors.select { |v| v["group"]=="health" }.each do |vendor| %>
+              <div class="card <%= group['value'] %> column-card">
+
+                <%= render :partial => "layouts/documents_count_icon", :locals => {:count => document_card_insurance_count(resource_owner, @category, group['label'], vendor.id) } %>
+                <h3><%= vendor.name %></h3>
+
+                  <% vendor.try(:policy) && vendor.policy.each do |policy| %>
+                    <label><%= policy_type_abbreviate(policy.policy_type) %></label>
+                    <ul class="data-list">
+                      <li class="data-pair ">
+                        <span class="pair-name"><%= policy.policy_holder && policy.policy_holder.name %></span>
+                        <span class="data-right">
+                          <%= policy.policy_number %>
+                        </span>
+                      </li>
+                    </ul>
+                  <% end %>
+
+                  <% if provider_main_page_present?(vendor) %>
+                    <label>Provider Details</label>
+                    <ul class="data-list">
+                      <li class="contact-pair">
+                        <% if vendor.webaddress.present? %>
+                          <%= link_to vendor.webaddress, vendor.webaddress, target: "_blank" %><br>
+                        <% end %>
+                        <%= vendor.phone %>
+                      </li>
+                    </ul>
+                  <% end %>
+
+                  <% if category_subcategory_shares(vendor, resource_owner).present? %>
+                    <label>Shared With</label>
+                    <section class="shared-list">
+                      <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(vendor, resource_owner) } %>
+                    </section>
+                  <% end %>
+
+                <br>
+                <%= link_to 'View Details', @shared_user.present? ? shared_health_path(@shared_user, vendor) : health_path(vendor), class: "small-button outline-button mt-20" %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
       </div>

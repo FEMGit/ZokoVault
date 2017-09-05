@@ -17,6 +17,7 @@
 //= require maskedinput
 //= require dataTables/jquery.dataTables
 //= require masonry.pkgd.min.js
+//= require pace/pace
 //= require_tree .
 Array.prototype.last = function() {
   return this[this.length - 1];

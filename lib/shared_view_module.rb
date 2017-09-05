@@ -37,7 +37,7 @@ module SharedViewModule
 
   def set_shares
     return unless params[:shared_user_id].present?
-    @shares = policy_scope(Share).where(user: @shared_user).each { |s| authorize s }
+    @shares = policy_scope(Share.includes(:user, :contact)).where(user: @shared_user).each { |s| authorize s }
   end
 
   def set_shared_categories_names

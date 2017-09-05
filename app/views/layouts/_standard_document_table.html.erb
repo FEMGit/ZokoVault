@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <% documents && documents.each do |document| %>
+    <% documents && documents.each_with_index do |document, index| %>
       <tr>
         <td>
           <%= render :partial => "layouts/document_links", :locals => {:document => document } %>

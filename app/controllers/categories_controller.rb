@@ -58,12 +58,13 @@ class CategoriesController < AuthenticatedController
     #TODO: fix bug in padding out groups if missing
     @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
     set_tutorial_in_progress(insurance_empty?)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = current_user.shares.includes(:shareable, :contact).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @insurance_vendors = Vendor.for_user(current_user).where(category: @category)
-    @insurance_documents = Document.for_user(current_user).where(category: @category.name)
+    @insurance_documents = Document.for_user(current_user).includes(:user).where(category: @category.name)
     session[:ret_url] = "/insurance"
+    render stream: true
   end
 
   def redirect_path(category)
@@ -117,22 +118,24 @@ class CategoriesController < AuthenticatedController
     set_tutorial_in_progress(wills_poa_empty?)
 
     @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(current_user)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = current_user.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @wills = Will.for_user(current_user)
-    @wtl_documents = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
+    @wtl_documents = Document.for_user(current_user).includes(:user).where(category: Rails.application.config.x.WillsPoaCategory)
 
     session[:ret_url] = "/wills_powers_of_attorney"
+    render stream: true
   end
   
   def trusts_entities
     @category = Category.fetch(Rails.application.config.x.TrustsEntitiesCategory.downcase)
     set_tutorial_in_progress(trusts_entities_empty?)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = current_user.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     
     @trusts = Trust.for_user(current_user)
     @entities = Entity.for_user(current_user)
-    @documents = Document.for_user(current_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
+    @documents = Document.for_user(current_user).includes(:user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
     session[:ret_url] = "/trusts_entities"
+    render stream: true
   end
 
   def destroy_share_category

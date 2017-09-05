@@ -1,7 +1,7 @@
 <h1>Final Wishes</h1>
 
 <section class="flex-boxes">
-  <% @groups && @groups.each do |group| %>
+  <% @groups && @groups.each_with_index do |group, index| %>
     <% group_title = group["label"] %>
     <div class="flex-column">
       <div class="card cg-<%= group["value"] %> mb-30">
@@ -11,40 +11,42 @@
         <% end %>
 
         <h3><%= group_title %></h3>
+        <%= render_later "final-wish-#{index}" do %>
 
-        <% if final_wish_exists?(@final_wishes, group_title) %>
-          <% final_wish = wish_by_group(group_title) %>
-          <% if final_wish && final_wish.primary_contact.present? %>
-
-            <label>Primary Contact</label>
-            <ul class="data-list">
-              <li class="contact-pair">
-                <%= final_wish.primary_contact.name %><br>
-                <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
-                <%= final_wish.primary_contact.phone %>
-              </li>
-            </ul>
-
-          <% end %>
-          
-          <% final_wish_info = final_wish_info(group_title) %>
-          <% if category_subcategory_shares(final_wish_info.final_wishes, resource_owner).present? %>
-            <label>Shared With</label>
-            <section class="shared-list mb-20">
-              <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(final_wish_info.final_wishes, resource_owner) } %>
-           </section>
-         <% end %>
-
-        <% end %>
-
-        <% if @category_shared || show_add_link?(@shared_user, current_user, 'Final Wishes', group_title) %>
           <% if final_wish_exists?(@final_wishes, group_title) %>
-            <%= link_to 'View Details', final_wish_details(group_title), class: "small-button outline-button mt-20" %>
-          <% else %>
-            <%= link_to 'Add Details', final_wish_add_details(group_title),  class: "small-button outline-button mt-20" %>
+            <% final_wish = wish_by_group(group_title) %>
+            <% if final_wish && final_wish.primary_contact.present? %>
+
+              <label>Primary Contact</label>
+              <ul class="data-list">
+                <li class="contact-pair">
+                  <%= final_wish.primary_contact.name %><br>
+                  <%= mail_to final_wish.primary_contact.emailaddress, final_wish.primary_contact.emailaddress, class:"link-on-top" %><br>
+                  <%= final_wish.primary_contact.phone %>
+                </li>
+              </ul>
+
+            <% end %>
+
+            <% final_wish_info = final_wish_info(group_title) %>
+            <% if category_subcategory_shares(final_wish_info.final_wishes, resource_owner).present? %>
+              <label>Shared With</label>
+              <section class="shared-list mb-20">
+                <%= render :partial => "layouts/subcategory_share", :locals => { :shares => category_subcategory_shares(final_wish_info.final_wishes, resource_owner) } %>
+             </section>
+           <% end %>
+
           <% end %>
-        <% else %>
-          <p>No shared items</p>
+
+          <% if @category_shared || show_add_link?(@shared_user, current_user, 'Final Wishes', group_title) %>
+            <% if final_wish_exists?(@final_wishes, group_title) %>
+              <%= link_to 'View Details', final_wish_details(group_title), class: "small-button outline-button mt-20" %>
+            <% else %>
+              <%= link_to 'Add Details', final_wish_add_details(group_title),  class: "small-button outline-button mt-20" %>
+            <% end %>
+          <% else %>
+            <p>No shared items</p>
+          <% end %>
         <% end %>
       </div>
     </div>

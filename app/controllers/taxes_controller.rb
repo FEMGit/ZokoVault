@@ -64,11 +64,12 @@ class TaxesController < AuthenticatedController
   def index
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
     set_tutorial_in_progress(taxes_empty?)
-    @contacts_with_access = resource_owner.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact)
+    @contacts_with_access = resource_owner.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact)
 
     @taxes = TaxYearInfo.for_user(resource_owner)
-    @taxes.each { |ty| ty.taxes.each { |t| authorize t } }
+    @taxes.each { |ty| ty.taxes.includes(:user).each { |t| authorize t } }
     session[:ret_url] = @shared_user.present? ? shared_taxes_path : taxes_path
+    render stream: true
   end
 
   # GET /taxes/1
@@ -275,11 +276,11 @@ class TaxesController < AuthenticatedController
   end
 
   def set_all_documents
-    @documents = Document.for_user(resource_owner).where(category: @category)
+    @documents = Document.for_user(resource_owner).includes(:user).where(category: @category)
   end
 
   def set_year_documents
-    @documents = Document.for_user(resource_owner).where(category: @category, group: @tax.year)
+    @documents = Document.for_user(resource_owner).includes(:user).where(category: @category, group: @tax.year)
   end
 
   def tax_form_params

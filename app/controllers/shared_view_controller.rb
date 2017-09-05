@@ -70,58 +70,61 @@ class SharedViewController < AuthenticatedController
   
   def dashboard
     session[:ret_url] = shared_view_dashboard_path
+    render stream: true
   end
   
   def insurance
     @category = Category.fetch(Rails.application.config.x.InsuranceCategory.downcase)
-    @contacts_with_access = shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
-
+    @contacts_with_access = shared_user.shares.includes(:shareable, :contact).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     if @shared_category_names.include? Rails.application.config.x.InsuranceCategory
       @insurance_vendors = Vendor.for_user(shared_user).where(category: @category)
-      @insurance_documents = Document.for_user(shared_user).where(category: @category.name)
+      @insurance_documents = Document.for_user(shared_user).includes(:user).where(category: @category.name)
     else
       @insurance_vendors = @other_shareables.select { |shareable| shareable.is_a?Vendor }
       shared_ids =  @insurance_vendors.map(&:id)
-      @insurance_documents = Document.for_user(shared_user).where(:vendor_id => shared_ids)
+      @insurance_documents = Document.for_user(shared_user).includes(:user).where(:vendor_id => shared_ids)
     end
     session[:ret_url] = shared_view_insurance_path
+    render stream: true
   end
 
   def taxes
     @category = Category.fetch(Rails.application.config.x.TaxCategory.downcase)
 
-    @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = @shared_user.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     if @shared_category_names.include? 'Taxes'
       @category_shared = true
       @taxes = TaxYearInfo.for_user(@shared_user)
-      @documents = Document.for_user(shared_user).where(category: @category.name)
+      @documents = Document.for_user(shared_user).includes(:user, :shares).where(category: @category.name)
     else
       tax_year_ids = @other_shareables.select { |shareable| shareable.is_a?Tax }.map(&:tax_year_id).uniq
       @taxes = TaxYearInfo.for_user(@shared_user).where(id: tax_year_ids)
-      @documents = Document.for_user(shared_user).where(group: @taxes.map(&:year))
+      @documents = Document.for_user(shared_user).includes(:user, :shares).where(group: @taxes.map(&:year))
     end
     session[:ret_url] = shared_view_taxes_path
+    render stream: true
   end
 
   # GET /final_wishes
   # GET /final_wishes.json
   def final_wishes
     @category = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase)
-    @contacts_with_access = @shared_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = @shared_user.shares.includes(:shareable).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
 
     if @shared_category_names.include? 'Final Wishes'
       @category_shared = true
       @final_wishes = FinalWishInfo.for_user(@shared_user)
-      @documents = Document.for_user(shared_user).where(category: @category.name)
+      @documents = Document.for_user(shared_user).includes(:user).where(category: @category.name)
     else
       final_wish_ids = @other_shareables.select { |shareable| shareable.is_a?FinalWish }.map(&:final_wish_info_id)
       @final_wishes = FinalWishInfo.for_user(@shared_user).where(id: final_wish_ids)
-      @documents = Document.for_user(shared_user).where(group: @final_wishes.map(&:group))
+      @documents = Document.for_user(shared_user).includes(:user).where(group: @final_wishes.map(&:group))
     end
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @groups.sort_by { |group| group["label"] }
     sort_groups(@final_wishes.map(&:group).sort)
+    render stream: true
   end
   
   def wills_powers_of_attorney
@@ -129,7 +132,7 @@ class SharedViewController < AuthenticatedController
     if @shared_category_names.include? Rails.application.config.x.WillsPoaCategory
       @power_of_attorney_contacts = PowerOfAttorneyContact.for_user(shared_user)
       @wills = Will.for_user(shared_user)
-      @wtl_documents = Document.for_user(shared_user).where(category: Rails.application.config.x.WillsPoaCategory)
+      @wtl_documents = Document.for_user(shared_user).includes(:user).where(category: Rails.application.config.x.WillsPoaCategory)
     else
       @poa_ids = @other_shareables.select { |shareable| shareable.is_a? PowerOfAttorneyContact }.map(&:id)
       @will_ids = @other_shareables.select { |shareable| shareable.is_a? Will }.map(&:id)
@@ -142,6 +145,7 @@ class SharedViewController < AuthenticatedController
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
     session[:ret_url] = shared_view_wills_powers_of_attorney_path
+    render stream: true
   end
 
   def trusts_entities
@@ -149,7 +153,7 @@ class SharedViewController < AuthenticatedController
     if @shared_category_names.include? Rails.application.config.x.TrustsEntitiesCategory
       @trusts = Trust.for_user(shared_user)
       @entities = Entity.for_user(shared_user)
-      @documents = Document.for_user(shared_user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
+      @documents = Document.for_user(shared_user).includes(:user).where(category: Rails.application.config.x.TrustsEntitiesCategory)
     else
       @trust_ids = @other_shareables.select { |shareable| shareable.is_a? Trust }.map(&:id)
       @entity_ids = @other_shareables.select { |shareable| shareable.is_a? Entity }.map(&:id)
@@ -162,12 +166,13 @@ class SharedViewController < AuthenticatedController
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
     session[:ret_url] = shared_view_trusts_entities_path
+    render stream: true
   end
   
   def financial_information
     @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
     if @shared_category_names.include? Rails.application.config.x.FinancialInformationCategory
-      @documents = Document.for_user(shared_user).where(category: @category.name)
+      @documents = Document.for_user(shared_user).includes(:user).where(category: @category.name)
 
       @account_providers = FinancialProvider.for_user(shared_user).type(FinancialProvider::provider_types["Account"])
     
@@ -191,9 +196,10 @@ class SharedViewController < AuthenticatedController
       @all_cards = (@account_providers + @alternative_managers +
                  @investments + @properties).sort_by!(&:name)
       
-      @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
+      @documents = Document.for_user(shared_user).includes(:user).select { |doc| provider_ids.include? doc.financial_information_id }
     end
     session[:ret_url] = shared_view_financial_information_path
+    render stream: true
   end
   
   def online_accounts
@@ -219,9 +225,10 @@ class SharedViewController < AuthenticatedController
 
   def documents
     if @shared_category_names.include? Rails.application.config.x.DocumentsCategory
-      @documents = Document.for_user(shared_user).each { |d| authorize d }
+      @documents = Document.for_user(shared_user).includes(:user).each { |d| authorize d }
       session[:ret_url] = shared_view_documents_path
     end
+    render stream: true
   end
 
   def card_values(category)
@@ -233,7 +240,7 @@ class SharedViewController < AuthenticatedController
 
   def set_shareables
     if current_user.primary_shared_with?(shared_user)
-      @document_shareables = Document.for_user(shared_user)
+      @document_shareables = Document.for_user(shared_user).includes(:user, :shares)
     else
       @document_shareables, @category_shareables, @other_shareables = Array.new(3) { [] }
 

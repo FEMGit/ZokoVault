@@ -54,15 +54,24 @@ class StripeService
     customer.sources.retrieve(source) if source.present?
   end
   
+  def self.last_invoice_payment_amount(user:)
+    if (stripe_customer = user.stripe_customer)
+      invoice = stripe_customer.invoices.first
+      invoice.total / 100.0
+    else
+      0
+    end
+  end
 
   def self.customer_id(user:)
     return nil unless user
     subscription = user.current_user_subscription
     return nil unless subscription
     record = subscription.funding.stripe_subscription_record
+    return nil unless record
     record.customer_id
   end
-
+  
   def self.cancel_subscription(subscription:)
     return false if subscription.blank? || !subscription.full? ||
               subscription.subscription_id.blank?

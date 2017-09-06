@@ -5,5 +5,6 @@ module FormLimitations
                   {type: :wtl_name, limit: 100},
                   {type: :zipcode, limit: 5},
                   {type: :default, limit: 50},
-                  {type: :year, limit: 4}]
+                  {type: :year, limit: 4}
+                ]
 end

@@ -1,25 +1,28 @@
 require 'forwardable'
 
 class PasswordService
+  
   class << self
-    def encrypt_password(password)
-      crypto.encrypt(password)
-    end
-    
-    def decrypt_password(password)
-      crypto.decrypt(password)
-    end
-    
-    private
-    
-    def crypto
-      @crypto ||= SymmetricEncryption.new(format_secret_key)
-    end
-    
-    def format_secret_key
-      Base64.strict_decode64(Rails.application.secrets.online_accounts_secret_key)
+    def for_per_user_key(puk)
+      new(puk.plaintext)
     end
   end
+  
+  def initialize(secret_key)
+    @crypto = SymmetricEncryption.new(secret_key)
+  end
+  
+  def encrypt_password(password)
+    crypto.encrypt(password)
+  end
+  
+  def decrypt_password(password)
+    crypto.decrypt(password)
+  end
+    
+  private
+  attr_reader :crypto
+    
 end
 
 class SymmetricEncryption

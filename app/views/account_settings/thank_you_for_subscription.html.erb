@@ -16,6 +16,7 @@
   <% end %>
 </div>
 
+<%= render partial: 'layouts/improvely_conversion_tracking_js', locals: { goal: 'subscription payment', revenue: @revenue, reference: current_user.email } %>
 <!‐‐ REFERSION TRACKING: BEGIN ‐‐>
 <script src="//zokuvault.refersion.com/tracker/v3/pub_67c99ccb533535d2f230.js"></script>
 <script>_refersion(function()

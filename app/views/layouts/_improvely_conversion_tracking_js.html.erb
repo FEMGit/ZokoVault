@@ -1,0 +1,14 @@
+<% unless develop_staging? %>
+  <script type="text/javascript" src="https://zokuvault.iljmp.com/improvely.js"></script>
+  <script type="text/javascript">
+  improvely.init('zokuvault', 1);
+  improvely.conversion({
+      goal: "<%= goal %>",
+      revenue: <%= revenue %>,
+      reference: "<%= reference %>"
+  });
+  </script>
+  <noscript>
+    <img src="https://zokuvault.iljmp.com/track/conversion?project=1&goal=<%=goal%>&revenue=<%=revenue%>&reference=<%=reference%>" width="1" height="1" />
+  </noscript>
+<% end %>

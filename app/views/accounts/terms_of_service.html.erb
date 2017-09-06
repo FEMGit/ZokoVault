@@ -23,9 +23,8 @@
   </div>
 <% end %>
 
+<%= render partial: 'layouts/improvely_conversion_tracking_js', locals: { goal: 'terms of service', revenue: 0, reference: current_user.email } %>
 <script>
-
-
 function toggleNextOnTos() {
   var check_el = $('#user_user_profile_attributes_signed_terms_of_service');
   var continue_button = $("#terms-accepted");

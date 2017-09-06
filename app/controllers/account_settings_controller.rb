@@ -306,10 +306,19 @@ class AccountSettingsController < AuthenticatedController
     if corporate_client_id = params[:corporate_client_id]
       @corporate_client = User.find_by(id: corporate_client_id)
       @customer_id = StripeService.customer_id(user: @corporate_client)
+      @revenue = 
+        if (customer_invoices = StripeService.corporate_stripe_customers_invoices_history(user: @corporate_client))
+          customer_invoices.first.total / 100.0
+        else
+          0
+        end
+      
       redirect_to corporate_accounts_path unless current_user.corporate_manager? && @plan_duration
                                                  @corporate_client.corporate_user_by_manager?(current_user)
     else
       @customer_id = StripeService.customer_id(user: current_user)
+      @revenue = StripeService.last_invoice_payment_amount(user: current_user)
+        
       redirect_to manage_subscription_path unless @plan_duration
     end
   end

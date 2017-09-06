@@ -46,6 +46,12 @@
     "AWS_CRYPTO_USER_SECRET_ACCESS_KEY": {
       "required": true
     },
+    "AWS_PER_USER_KEY_ALIAS": {
+      "required": true
+    },
+    "AWS_PER_USER_KEY_ROLE": {
+      "required": true
+    },
     "AWS_REGION": {
       "required": true
     },

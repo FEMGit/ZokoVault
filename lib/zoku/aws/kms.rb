@@ -12,7 +12,7 @@ module Zoku
       end
       
       def self.key_alias
-        "alias/per-user-at-rest"
+        Rails.application.secrets.aws_per_user_key_alias
       end
 
     end

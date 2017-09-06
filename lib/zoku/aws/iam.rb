@@ -32,7 +32,7 @@ module Zoku
       def self.kms_role
         assume_role(
           user:       kms_user,
-          role_arn:   'arn:aws:iam::751141858228:role/per-user-crypto-role',
+          role_arn:   Rails.application.secrets.aws_per_user_key_role,
           role_alias: 'PerUserCryptoKeys',
           region:     region
         )

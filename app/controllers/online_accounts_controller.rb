@@ -62,9 +62,14 @@ class OnlineAccountsController < AuthenticatedController
     key = PerUserEncryptionKey.fetch_for(resource_owner)
     svc = PasswordService.for_per_user_key(key)
     encrypted_password = svc.encrypt_password(online_account_params[:password])
-    @online_account = OnlineAccount.new(online_account_params.except(:password).merge(user_id: resource_owner.id,
-                                                                                      password: encrypted_password,
-                                                                                      category: Category.fetch(Rails.application.config.x.OnlineAccountCategory.downcase)))
+    @online_account = OnlineAccount.new(
+      online_account_params.except(:password).merge(
+        user_id: resource_owner.id,
+        password: encrypted_password,
+        per_user_encryption_key_id: key.id,
+        category: Category.fetch(Rails.application.config.x.OnlineAccountCategory.downcase)
+      )
+    )
     authorize @online_account
     respond_to do |format|
       if @online_account.save
@@ -85,7 +90,8 @@ class OnlineAccountsController < AuthenticatedController
     svc = PasswordService.for_per_user_key(key)
     encrypted_password = svc.encrypt_password(online_account_params[:password])
     respond_to do |format|
-      if @online_account.update(online_account_params.except(:password).merge(password: encrypted_password))
+      diff = online_account_params.except(:password).merge(password: encrypted_password, per_user_encryption_key_id: key.id)
+      if @online_account.update(diff)
         OnlineAccountService.update_shares(@online_account.id, resource_owner)
         format.html { redirect_to success_path, flash: { success: 'Account successfully updated.' } }
         format.json { render :show, status: :created, location: @online_account }

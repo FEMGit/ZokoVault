@@ -4,9 +4,6 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
-    "ONLINE_ACCOUNTS_SECRET_KEY" : {
-      "required": true
-    },
     "STAGING_TYPE" : {
       "required": true
     },
@@ -41,6 +38,12 @@
       "required": true
     },
     "AWS_USER_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_CRYPTO_USER_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_CRYPTO_USER_SECRET_ACCESS_KEY": {
       "required": true
     },
     "AWS_REGION": {

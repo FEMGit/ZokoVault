@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829083651) do
+ActiveRecord::Schema.define(version: 20170906140802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -457,6 +457,14 @@ ActiveRecord::Schema.define(version: 20170829083651) do
 
   add_index "payments", ["user_id"], name: "index_payments_on_user_id", using: :btree
 
+  create_table "per_user_encryption_keys", force: :cascade do |t|
+    t.integer "user_id"
+    t.binary  "ciphertext", null: false
+    t.string  "aws_key_id", null: false
+  end
+
+  add_index "per_user_encryption_keys", ["user_id"], name: "index_per_user_encryption_keys_on_user_id", using: :btree
+
   create_table "power_of_attorney_contacts", force: :cascade do |t|
     t.integer  "contact_id"
     t.integer  "category_id"
@@ -845,6 +853,7 @@ ActiveRecord::Schema.define(version: 20170829083651) do
   add_foreign_key "fundings", "user_subscriptions"
   add_foreign_key "online_accounts", "users"
   add_foreign_key "payments", "users"
+  add_foreign_key "per_user_encryption_keys", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"
   add_foreign_key "shares", "users"

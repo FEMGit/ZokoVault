@@ -10,6 +10,10 @@ module Zoku
           credentials: Zoku::AWS::IAM.kms_role
         )
       end
+      
+      def self.key_alias
+        "alias/per-user-at-rest"
+      end
 
     end
   end

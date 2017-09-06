@@ -10,7 +10,7 @@ class PerUserEncryptionKey < ActiveRecord::Base
   end
   
   def self.fetch_for(user)
-    user.per_user_encryption_keys.order(id: :desc).last || setup_new_key(user)
+    user.per_user_encryption_keys.order(id: :desc).first || setup_new_key(user)
   end
   
   def self.setup_new_key(user)

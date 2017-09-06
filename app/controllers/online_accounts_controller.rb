@@ -54,7 +54,7 @@ class OnlineAccountsController < AuthenticatedController
   
   def edit
     authorize @online_account
-    @password = online_account.try(:decrypted_password)
+    @password = @online_account.try(:decrypted_password)
     set_viewable_contacts
   end
   

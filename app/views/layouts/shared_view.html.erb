@@ -17,6 +17,7 @@
     </div>
   </div>
   <% if user_signed_in? %>
+    <%= auto_session_timeout_js frequency: 15 %>
     <body class="logged-in">
   <% else %>
     <body class="logged-out">
@@ -42,8 +43,7 @@
 
   <%= render :partial => 'layouts/footer' %>
   </main>
-    <%= javascript_include_tag 'autonumeric' %>
-    <%= javascript_include_tag 'tooltip_position' %>
+    <%= render partial: 'layouts/layout_javascript_include' %>
   </body>
 </html>
 

@@ -11,6 +11,7 @@ class AccountSettingsController < AuthenticatedController
   before_action :update_account_users_params, only: [:update_account_users]
   before_action :redirect_to_manage_subscription_if_corporate_client, only: [:billing_info, :update_payment,  :cancel_subscription,
                                                                              :cancel_subscription_update, :update_subscription_information]
+  before_action :set_corporate_admin_resources, only: [:remove_corporate_access, :remove_corporate_access_update]
   include TutorialsHelper
   include UserTrafficModule
   include StripeHelper
@@ -33,21 +34,51 @@ class AccountSettingsController < AuthenticatedController
   def login_settings; end
 
   def phone_setup; end
+  
+  def remove_corporate_access
+    @subscription = current_user.current_user_subscription
+    redirect_to contacts_path unless (@corporate_admin = current_user.corporate_account_owner)
+  end
+  
+  def remove_corporate_access_update
+    corporate_subscription = current_user.current_user_subscription.corporate?(corporate_client: current_user)
+    CorporateService.remove_client_from_admin(client: current_user, admin: @corporate_admin_user)
+    flash[:success] = "Corporate Access was successfully removed."
+    redirect_to update_subscription_information_path and return if corporate_subscription
+    redirect_to contact_path(@corporate_admin_contact)
+  end
 
   def cancel_subscription
     customer = current_user.stripe_customer
     @next_invoice_date = next_invoice(customer).try(:date)
     redirect_to manage_subscription_path unless @next_invoice_date.present?
   end
-
+  
   def cancel_subscription_update
-    @subscription = current_user.current_user_subscription
-    return if @subscription.blank? || !@subscription.full? ||
-              @subscription.subscription_id.blank?
-    stripe_subscription = Stripe::Subscription.retrieve(@subscription.subscription_id)
-    stripe_subscription.delete(:at_period_end => true)
-    flash[:success] = "ZokuVault subscription was successfully canceled."
+    unless StripeService.cancel_subscription(subscription: current_user.current_user_subscription)
+      flash[:error] = "Error canceling ZokuVault subscription."
+    else
+      flash[:success] = "ZokuVault subscription was successfully canceled."
+    end
     redirect_to manage_subscription_path
+  end
+  
+  def remove_corporate_payment
+    @subscription = current_user.current_user_subscription
+    redirect_to manage_subscription_path and return unless current_user.corporate_client? && @subscription &&
+      @subscription.corporate?(corporate_client: current_user)
+  end
+  
+  def remove_corporate_payment_update
+    subscription = current_user.current_user_subscription
+    redirect_to manage_subscription_path and return unless current_user.corporate_client? && subscription &&
+                                                subscription.corporate?(corporate_client: current_user)
+    unless StripeService.cancel_subscription(subscription: subscription)
+      flash[:error] = "Error removing corporate payment."
+    else
+      flash[:success] = "Corporate Payment was successfully removed."
+    end
+    redirect_to update_subscription_information_path
   end
 
   def update_subscription_information
@@ -72,7 +103,7 @@ class AccountSettingsController < AuthenticatedController
       set_subscription_cancelled(record)
       @plan = record.try(:plan)
       stripe_customer = stripe_customer_lookup(current_user, @corporate_paid)
-      @next_invoice = next_invoice(stripe_customer)
+      @next_invoice = next_invoice(stripe_customer, record.subscription_id)
       if current_user.corporate_client? && @corporate_paid
         @corporate = true
         admin = current_user.corporate_account_owner
@@ -85,14 +116,14 @@ class AccountSettingsController < AuthenticatedController
       end
     end
   end
-
+  
   def customer_card
     customer = stripe_customer_lookup(current_user, @corporate_paid)
     StripeService.customer_card(customer: customer) if customer.present?
   end
 
   def set_subscription_cancelled(stripe_record)
-    return if stripe_record.blank? || stripe_record.fetch.blank?
+    return false if stripe_record.blank? || stripe_record.fetch.blank?
     if stripe_record.fetch.cancel_at_period_end
       pend = stripe_record.fetch.current_period_end
       @subscription_end_time = DateTime.strptime(pend.to_s, '%s')
@@ -113,7 +144,7 @@ class AccountSettingsController < AuthenticatedController
       user.stripe_customer
     end
   end
-
+  
   def invoice_information
     if params[:id].blank?
       flash[:error] = "Error occured while receiving an invoice."
@@ -242,15 +273,22 @@ class AccountSettingsController < AuthenticatedController
     card = customer_card
     if token.present? || card.present?
       customer = StripeService.stripe_customer(user: current_user, corporate_update: corporate_update?)
+      
       unless ((token.present? && update_customer_information(customer, token)) || card.present?)
         redirect_to (session[:ret_url] || root_path) and return
       end
-      if customer.subscriptions.blank? && stripe_subscription_params.present? &&
-          stripe_subscription_params[:plan_id].present?
+      
+      if (@subscription = current_user.current_user_subscription)
+        stripe_subscription_record = @subscription.funding.stripe_subscription_record
+        set_subscription_cancelled(stripe_subscription_record)
+      end
+      
+      if !(current_user.paid? && !current_user.trial? && !@subscription_cancelled) && (customer.subscriptions.blank? || @subscription_cancelled) && stripe_subscription_params.present? &&
+          stripe_subscription_params[:plan_id].present? 
         plan = stripe_subscription_params[:plan_id]
         promo = stripe_subscription_params[:promo_code]
         stripe_obj = StripeService.subscribe(
-          customer: customer, plan_id: plan, promo_code: promo)
+          customer: customer, plan_id: plan, promo_code: promo, metadata: {}, additional_params: { trial_end: trial_end_date(stripe_subscription_record) } )
         our_obj = current_user.create_stripe_subscription(
           customer_id: customer.id,
           subscription_id: stripe_obj.id,
@@ -267,14 +305,25 @@ class AccountSettingsController < AuthenticatedController
     @plan_duration = thank_you_subscription_plan_duration
     if corporate_client_id = params[:corporate_client_id]
       @corporate_client = User.find_by(id: corporate_client_id)
+      @customer_id = StripeService.customer_id(user: @corporate_client)
       redirect_to corporate_accounts_path unless current_user.corporate_manager? && @plan_duration
                                                  @corporate_client.corporate_user_by_manager?(current_user)
     else
+      @customer_id = StripeService.customer_id(user: current_user)
       redirect_to manage_subscription_path unless @plan_duration
     end
   end
 
   private
+
+  def trial_end_date(stripe_subscription_record)
+    if current_user.paid? && !current_user.trial? && @subscription_cancelled.eql?(true) && stripe_subscription_params.present? &&
+      stripe_subscription_params[:plan_id].present? 
+      stripe_subscription_record.fetch.current_period_end
+    else
+      nil
+    end
+  end
 
   def thank_you_subscription_plan_duration
     StripeSubscription.plan_duration_name(plan_id: params[:plan_id])
@@ -282,6 +331,12 @@ class AccountSettingsController < AuthenticatedController
 
   def set_corporate_paid
     @corporate_paid = current_user.paid_by_corporate_admin?
+  end
+
+  def set_corporate_admin_resources
+    @corporate_admin_contact = Contact.for_user(current_user).find_by(id: params[:contact_id])
+    @corporate_admin_user = User.where("email ILIKE ?", @corporate_admin_contact.try(:emailaddress)).first
+    redirect_to contacts_path unless current_user.corporate_user_by_admin?(@corporate_admin_user)
   end
 
   def redirect_to_manage_subscription_if_corporate_client
@@ -304,9 +359,9 @@ class AccountSettingsController < AuthenticatedController
 
   Invoice = Struct.new(:date, :amount)
 
-  def next_invoice(customer)
+  def next_invoice(customer, subscription = nil)
     return if customer.blank? || customer.id.blank?
-    upcoming = Stripe::Invoice.upcoming(customer: customer.id)
+    upcoming = Stripe::Invoice.upcoming(customer: customer.id, subscription: subscription)
     Invoice.new(
       DateTime.strptime(upcoming.date.to_s, '%s'),
         upcoming.amount_due)

@@ -71,6 +71,7 @@ class MailchimpService
   end
   
   def unsubscribe_from(list_type:, user:)
+    check_staging && return
     return unless MailchimpLists::LIST_TYPES.include? list_type
     unsubscribe(mailchimp_lists(list_type), user)
   end

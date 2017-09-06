@@ -1,5 +1,7 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
+<button class="primary-button big-button d-none" data-modal-id="remove-client-modal" id="remove-client-modal-btn"></button>
+
 <%= link_to edit_corporate_account_path, class: "edit-link mrg-top pr-10" do %>
   <span class="circle-button">
   <svg class="icon circle-icon">
@@ -66,7 +68,7 @@
     </div>
   </section>
 
-  <section class="flex-boxes percent-100">
+  <section class="flex-boxes percent-100 <% if current_user.corporate_admin %> bb-gray-light-padding mb-10 <% end %>">
     <% invitation_sent = invitation_sent?(@corporate_contact) %>
     <div class="user-account-title">
       <h3>Send Invitation</h3>
@@ -80,6 +82,18 @@
       <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact), method: :post, class: 'button big-button blue-button' %>
     </div>
   </section>
+  
+  <% if current_user.corporate_admin %>
+    <section class="flex-boxes percent-100">
+      <div class="user-account-title">
+        <h3>Remove Client Account</h3>
+        <p>Remove this clients account and vault from your corporation.</p>
+      </div>
+      <div class="user-account-link mt-10">
+        <%= link_to 'Remove Client', 'javascript:void(0);', class: 'button big-button blue-button', onclick: 'removeClientModalShow()' %>
+      </div>
+    </section>
+  <% end %>
 </div>
 
 <% if @invoices.any? %>
@@ -91,3 +105,30 @@
 
 <div id="email-preview-section">
 </div>
+
+<div id="remove-client-modal" class="modal medium-modal">
+  <a href="javascript:void(null)" class="js-modal-close modal-close">
+    <svg class="icon">
+      <use xlink:href="#icon-x-2"></use>
+    </svg>
+  </a>
+  <div class="modal-header">
+    <h2>Remove Client Account</h2>
+  </div>
+  <div class="modal-content">
+    <p class="mb-30">
+      Removing the client account will sever all access between you and this account, revoking access to all shared documents and information.
+      <div class="mb-30">
+        <%= link_to 'Remove Account', corporate_account_remove_client_path(@corporate_contact), method: :post, class: "js-modal-close button primary-button big-button" %>
+        <%= link_to 'Cancel', 'javascript:void(null)', class: "js-modal-close button secondary-button big-button" %>
+      </div>
+    </p>
+  </div>
+</div>
+
+<%= javascript_include_tag 'modal' %>
+<script>
+  var removeClientModalShow = function() {
+    $("#remove-client-modal-btn").click()
+  }
+</script>

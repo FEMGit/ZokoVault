@@ -77,6 +77,9 @@ module ApplicationHelper
     when Rails.application.config.x.FinalWishesCategory
       return shared_view_final_wishes_path(user) if @shared_user.present?
       final_wishes_path
+    when Rails.application.config.x.OnlineAccountCategory
+      return shared_view_online_accounts_path(user) if @shared_user.present?
+      online_accounts_path
     when Rails.application.config.x.FinancialInformationCategory
       return shared_view_financial_information_path(user) if @shared_user.present?
       financial_information_path
@@ -87,7 +90,7 @@ module ApplicationHelper
       return shared_view_contacts_path(user) if @shared_user.present?
       contacts_path
     else
-     return shared_view_dashboard_path(user) if @shared_user.present?
+      return shared_view_dashboard_path(user) if @shared_user.present?
     end
   end
   
@@ -111,9 +114,10 @@ module ApplicationHelper
   end
   
   def subcategory_view_path(subcategory)
+    set_shared_user(subcategory)
     case subcategory
       when Will
-        return will_path(subcategory, @shared_user) if @shared_user.present?
+        return will_path(subcategory, @shared_user) if 
         will_path(subcategory)
       when Trust
         return trust_path(subcategory, @shared_user) if @shared_user.present?
@@ -149,6 +153,16 @@ module ApplicationHelper
         final_wish_path(subcategory)
       when FinancialProvider
         path_to_resource(subcategory)
+      when Document
+        return shared_document_path(@shared_user, subcategory) if @shared_user.present?
+        document_path(subcategory)
+      when CorporateAccountProfile
+        corporate_account_settings_path
+      when CorporateClient,
+           CorporateEmployee
+        corporate_user_profile = Contact.for_user(current_user.corporate_account_owner).where("emailaddress ILIKE ?", subcategory.email).first.user_profile
+        return corporate_employee_path(corporate_user_profile) if corporate_user_profile.user.corporate_employee?
+        corporate_account_path(corporate_user_profile)
       else
         ""
       end
@@ -164,5 +178,15 @@ module ApplicationHelper
   
   def shared_with_property_names
     %w(share_with_contact_ids contact_ids share_with_ids)
+  end
+  
+  private
+  
+  def set_shared_user(subcategory)
+    shares_for_current_user = Share.where(contact: Contact.where("emailaddress ILIKE ?", current_user.email))
+    if @shared_user.blank? && (subcategory.try(:user) && subcategory.user != current_user) &&
+        shares_for_current_user.find_by(user: subcategory.user).present?
+      @shared_user = subcategory.user
+    end
   end
 end

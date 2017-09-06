@@ -35,14 +35,42 @@ class StripeService
     customer
   end
 
-  def self.subscribe(customer:, plan_id:, promo_code: nil, metadata: {})
-    subscription_attrs = { plan: plan_id, metadata: metadata }
+  def self.subscribe(customer:, plan_id:, promo_code: nil, metadata: {}, additional_params: {})
+    subscription_attrs = { plan: plan_id, metadata: metadata }.merge(additional_params)
     subscription_attrs[:coupon] = promo_code if promo_code.present?
     customer.subscriptions.create(subscription_attrs)
+  end
+  
+  def self.cancel_subscription(user:)
+    subscription = user.current_user_subscription
+    return if subscription.blank? || !subscription.full? ||
+              subscription.subscription_id.blank?
+    stripe_subscription = Stripe::Subscription.retrieve(subscription.subscription_id)
+    stripe_subscription.delete(:at_period_end => true)
   end
 
   def self.customer_card(customer:)
     source = customer.try(:default_source)
     customer.sources.retrieve(source) if source.present?
+  end
+  
+
+  def self.customer_id(user:)
+    return nil unless user
+    subscription = user.current_user_subscription
+    return nil unless subscription
+    record = subscription.funding.stripe_subscription_record
+    record.customer_id
+  end
+
+  def self.cancel_subscription(subscription:)
+    return false if subscription.blank? || !subscription.full? ||
+              subscription.subscription_id.blank?
+    begin
+      stripe_subscription = Stripe::Subscription.retrieve(subscription.subscription_id)
+      stripe_subscription.delete(:at_period_end => true)
+    rescue Stripe::InvalidRequestError
+      return false
+    end
   end
 end

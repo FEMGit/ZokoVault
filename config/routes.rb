@@ -17,7 +17,9 @@ Rails.application.routes.draw do
                                     unlocks: 'unlocks' }, :path => 'users', :path_names => { :sign_up => 'sign_up_form' }
 
   devise_scope :user do
-    get 'users/password/corporate_edit/:uuid', to: 'passwords#corporate_edit', as: :corporate_edit_password
+    get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
+    match 'active' => 'sessions#active', via: :get
+    match 'timeout' => 'sessions#timeout', via: :get
   end
 
   scope 'insurance' do
@@ -119,13 +121,22 @@ Rails.application.routes.draw do
       delete 'share_category/:contact_id', to: 'categories#destroy_share_category'
     end
   end
+  
+  # Online Accounts
+  get 'online_accounts/reveal_password/:account_id(/:shared_user_id)', to: 'online_accounts#reveal_password'
+  get 'online_accounts', to: 'online_accounts#index', as: :online_accounts
+  get 'online_accounts/new(/:shared_user_id)', to: 'online_accounts#new', as: :new_online_account
+  get 'online_accounts/:id/edit(/:shared_user_id)', to: 'online_accounts#edit', as: :edit_online_account
+  patch 'online_accounts/:id', to: 'online_accounts#update', as: :online_account
+  post 'online_accounts', to: 'online_accounts#create'
+  post 'online_accounts/update_all', to: 'online_accounts#update_all'
+  delete 'online_accounts/:id', to: 'online_accounts#destroy'
 
   # Contacts
   get 'contacts/relationship_values/:contact_type(/:shared_user_id)', to: 'contacts#relationship_values'
   get 'contacts/new(/:shared_user_id)', to: 'contacts#new', as: :contact_new
   get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact_details
   get 'contacts/:id/edit(/:shared_user_id)', to: 'contacts#edit', as: :edit_contact_details
-
 
   # insurance details and create new account routes
   get 'insurance/:group/new_account', to: 'categories#new_account', as: :new_account_category
@@ -156,14 +167,19 @@ Rails.application.routes.draw do
   put 'account_settings/phone_setup_update', to: 'account_settings#phone_setup_update', as: :account_settings_phone_update
   get 'account_settings/billing_info', to: 'account_settings#billing_info', as: :billing_info
   get 'account_settings/cancel_subscription', to: 'account_settings#cancel_subscription', as: :cancel_subscription
+  get 'account_settings/remove_corporate_access/:contact_id', to: 'account_settings#remove_corporate_access', as: :account_settings_remove_corporate_access
+  get 'account_settings/remove_corporate_payment', to: 'account_settings#remove_corporate_payment', as: :account_settings_remove_corporate_payment
   get 'account_settings/invoice_information/:id/:corporate', to: 'account_settings#invoice_information', as: :invoice_information
   get 'account_settings/update_subscription_information(/:corporate)', to: 'account_settings#update_subscription_information', as: :update_subscription_information
-  get 'account_settings/thank_you_for_subscription/:plan_id(/:corporate_client_id)', to: 'account_settings#thank_you_for_subscription', as: :account_settings_thank_you_for_subscription
+  get 'account_settings/thank_you_for_subscription/:plan_id(/:corporate_client_id)', to: 'account_settings#thank_you_for_subscription', as: :account_settings_thank_you_for_subscription,
+                                                                                     constraints: { :plan_id => /[^\/]+/ }
   
   patch 'account_settings/update', to: 'account_settings#update'
   patch 'account_settings/update_account_users', to: 'account_settings#update_account_users', as: :account_settings_update_account_users
   patch 'account_settings/update_login_settings', to: 'account_settings#update_login_settings'
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update
+  patch 'account_settings/remove_corporate_access_update/:contact_id', to: 'account_settings#remove_corporate_access_update', as: :remove_corporate_access_update
+  patch 'account_settings/remove_corporate_payment_update', to: 'account_settings#remove_corporate_payment_update', as: :remove_corporate_payment_update
   post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
   post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment(/:corporate)', to: 'account_settings#update_payment', as: :update_payment_account_settings
@@ -231,16 +247,19 @@ Rails.application.routes.draw do
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code
 
   # Usage metrics path
+  resources :usage_metrics, only: [:index]
   get 'usage_metrics/update_site_completed', to: 'usage_metrics#update_information', as: :update_usage_metrics
-  resources :usage_metrics
   get 'usage_metrics/error_details/:id', to: 'usage_metrics#error_details', as: :user_error_details
   get 'usage_metrics/statistic_details/:id', to: 'usage_metrics#statistic_details', as: :statistic_details
+  get 'usage_metrics/new_user', to: 'usage_metrics#new_user', as: :usage_metrics_new_user
   get 'usage_errors', to: 'usage_metrics#errors'
   get 'usage_metrics/statistic_details/:id/edit', to: 'usage_metrics#edit_user', as: :admin_edit_user
   get 'usage_metrics/error_details/:id/extend_trial', to: 'usage_metrics#extend_trial', as: :admin_extend_trial
   get 'usage_metrics/error_details/:id/create_trial', to: 'usage_metrics#create_trial', as: :admin_create_trial
   get 'usage_metrics/error_details/:id/cancel_trial', to: 'usage_metrics#cancel_trial', as: :admin_cancel_trial
   post 'usage_metrics/statistic_details/update_user/:id', to: 'usage_metrics#update_user', as: :usage_metrics_update_user
+  post 'usage_metrics/create_user', to: 'usage_metrics#create_user', as: :usage_metrics_create_user
+  post 'usage_metrics/send_invitation_email/:user_id', to: 'usage_metrics#send_invitation_email', as: :usage_metrics_send_invitation_email
 
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
@@ -295,15 +314,16 @@ Rails.application.routes.draw do
   resources :financial_alternative
 
   # Shared view
+  get 'shared_view/:shared_user_id/contacts' => 'shared_view#contacts', as: :shared_view_contacts
   get 'shared_view/:shared_user_id/dashboard' => 'shared_view#dashboard', as: :shared_view_dashboard
-  get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :shared_view_wills_powers_of_attorney
-  get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :shared_view_trusts_entities
-  get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
-  get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
+  get 'shared_view/:shared_user_id/documents' => 'shared_view#documents', as: :shared_view_documents
   get 'shared_view/:shared_user_id/final_wishes' => 'shared_view#final_wishes', as: :shared_view_final_wishes
   get 'shared_view/:shared_user_id/financial_information' => 'shared_view#financial_information', as: :shared_view_financial_information
-  get 'shared_view/:shared_user_id/documents' => 'shared_view#documents', as: :shared_view_documents
-  get 'shared_view/:shared_user_id/contacts' => 'shared_view#contacts', as: :shared_view_contacts
+  get 'shared_view/:shared_user_id/insurance' => 'shared_view#insurance', as: :shared_view_insurance
+  get 'shared_view/:shared_user_id/online_accounts' => 'shared_view#online_accounts', as: :shared_view_online_accounts
+  get 'shared_view/:shared_user_id/taxes' => 'shared_view#taxes', as: :shared_view_taxes
+  get 'shared_view/:shared_user_id/trusts_entities' => 'shared_view#trusts_entities', as: :shared_view_trusts_entities
+  get 'shared_view/:shared_user_id/wills_powers_of_attorney' => 'shared_view#wills_powers_of_attorney', as: :shared_view_wills_powers_of_attorney
 
   get 'shared_view/:shared_user_id/wills' => 'shared_view#wills', as: :shared_view_wills
   get 'shared_view/:shared_user_id/trusts' => 'shared_view#trusts', as: :shared_view_trusts
@@ -381,6 +401,7 @@ Rails.application.routes.draw do
   get '/corporate/account_settings', to: 'corporate_accounts#account_settings', as: :corporate_account_settings
   get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings
   get '/corporate/billing_information', to: 'corporate_accounts#billing_information', as: :corporate_billing_information
+  post '/corporate/remove_client/:contact_id', to: 'corporate_accounts#remove_corporate_client', as: :corporate_account_remove_client
   post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_corporate_settings
   post '/corporate/send_invitation/:contact_id(/:account_type)', to: 'corporate_accounts#send_invitation', as: :corporate_send_invitation
   post '/corporate', to: 'corporate_accounts#create', as: :create_corporate_account

@@ -15,6 +15,8 @@ class SharedViewService
         @shared_category_names_full |= [Rails.application.config.x.FinalWishesCategory]
       when FinancialProvider
         @shared_category_names_full |= [Rails.application.config.x.FinancialInformationCategory]
+      when OnlineAccount
+        @shared_category_names_full |= [Rails.application.config.x.OnlineAccountCategory]
       end
     end
     @shared_category_names_full
@@ -22,6 +24,10 @@ class SharedViewService
   
   def self.shared_category_names(shares)
     shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }.map(&:shareable).map(&:name)
+  end
+  
+  def self.category_shares(shares)
+    shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? Category }
   end
   
   def self.shares(owner, non_owner)
@@ -72,6 +78,8 @@ class SharedViewService
         groups.merge!("Vendor" => (groups["Vendor"] + [shareable.id]).uniq)
       when FinancialProvider
         groups.merge!("FinancialProvider" => (groups["FinancialProvider"] + [shareable.id]).uniq)
+      when OnlineAccount
+        groups.merge!("Online Accounts" => (groups["OnlineAccount"] + [shareable.id]).uniq)
       else
         next
       end
@@ -88,5 +96,6 @@ class SharedViewService
     groups["FinalWish"] ||= []
     groups["Vendor"] ||= []
     groups["FinancialProvider"] ||= []
+    groups["OnlineAccount"] ||= []
   end
 end

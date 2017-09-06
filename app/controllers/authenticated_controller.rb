@@ -5,7 +5,6 @@ class AuthenticatedController < ApplicationController
   before_action :authenticate_user!, :complete_setup!, :mfa_verify!
   before_action :redirect_if_corporate_user, :redirect_if_free_user, :trial_check
   before_action :save_return_to_path
-  before_action :force_refresh_after_session_timeout
 
   private
 
@@ -100,9 +99,5 @@ class AuthenticatedController < ApplicationController
     else
       false
     end
-  end
-
-  def force_refresh_after_session_timeout
-    response.headers['Refresh'] = (1.25 * Session::TIMEOUT_LIMIT).to_i.to_s
   end
 end

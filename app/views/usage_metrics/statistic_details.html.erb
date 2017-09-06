@@ -19,6 +19,10 @@
 <div class="card mb-30">
   <h3 class="card-label">User Information</h3>
   
+  <%= link_to 'Invite User to ZokuVault', usage_metrics_send_invitation_email_path(@user), method: :post,
+     class: "button big-button primary-button inline-block" %>
+  <p class="mt-10"><%= user_invited?(@user) %></p>
+  
   <label>Name</label>
   <p><%= @user.name %></p>
   
@@ -50,6 +54,11 @@
   
   <label>TFA Authorization Disabled</label>
   <p><%= @user.mfa_disabled %></p>
+
+  <% if @user.corporate_admin %>
+    <label>Corporate Credit Card</label>
+    <p><%= @user.corporate_credit_card_required ? 'Required' : 'Not Required' %></p>
+  <% end %>
 
   <label>Documents/User</label>
   <p><%= documents_per_user(@user) %></p>

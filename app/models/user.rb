@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   has_many :card_documents, dependent: :destroy
   has_many :user_traffics, dependent: :destroy
   has_many :payments
+  has_many :online_accounts, dependent: :destroy
   has_one :tutorial_selection, dependent: :destroy
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy
@@ -134,7 +135,11 @@ class User < ActiveRecord::Base
   def corporate_client?
     corporate_user? && corporate_provider_join.client?
   end
-
+ 
+  def corporate_admin?
+    corporate_admin
+  end
+  
   def corporate_employee?
     corporate_user? && corporate_provider_join.employee?
   end
@@ -150,6 +155,7 @@ class User < ActiveRecord::Base
   end
 
   def corporate_account_owner
+    return self if corporate_admin?
     corporate_provider_join.corporate_admin if corporate_user?
   end
 
@@ -200,6 +206,10 @@ class User < ActiveRecord::Base
 
   def paid?
     current_user_subscription.present? && current_user_subscription.active?
+  end
+  
+  def trial?
+    current_user_subscription.present? && current_user_subscription.active? && current_user_subscription.trial?
   end
 
   def primary_shared_with?(shared_user)

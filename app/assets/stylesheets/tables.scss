@@ -289,3 +289,18 @@ table.balance-sheet {
     }
   }
 }
+
+// Online Account Table
+table#online-accounts-table {
+  td.password-cell {
+    min-width: 120px;
+    max-width: 200px;
+    width: 30%;
+    .password-text {
+      width: calc(90% - 90px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
+  }
+}

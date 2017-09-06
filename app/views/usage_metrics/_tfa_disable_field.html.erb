@@ -1,0 +1,12 @@
+<label>Disable Two-Factor</label>
+<ul class="check-list mb-20">
+  <li class="check-list">
+    <label>
+      <%= check_box_tag "user[mfa_disabled]",
+        true,
+        @user.user_profile.mfa_disabled, {}
+      %>
+      <span></span>Disable TFA authorization for this user
+    </label>
+  </li>
+</ul>

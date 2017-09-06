@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170828083657) do
+ActiveRecord::Schema.define(version: 20170829083651) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -429,6 +430,20 @@ ActiveRecord::Schema.define(version: 20170828083657) do
 
   add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
 
+  create_table "online_accounts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "website"
+    t.string   "username"
+    t.binary   "password"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "category_id"
+  end
+
+  add_index "online_accounts", ["category_id"], name: "index_online_accounts_on_category_id", using: :btree
+  add_index "online_accounts", ["user_id"], name: "index_online_accounts_on_user_id", using: :btree
+
   create_table "payments", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "stripe_id"
@@ -493,15 +508,6 @@ ActiveRecord::Schema.define(version: 20170828083657) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  create_table "s3_image_urls", force: :cascade do |t|
-    t.integer "user_id"
-    t.string  "key"
-    t.string  "presigned_url"
-    t.string  "expires_at"
-  end
-
-  add_index "s3_image_urls", ["key"], name: "index_s3_image_urls_on_key", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
@@ -702,11 +708,11 @@ ActiveRecord::Schema.define(version: 20170828083657) do
   add_index "user_traffics", ["user_id"], name: "index_user_traffics_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                          default: "",                   null: false
-    t.string   "encrypted_password",                             default: "",                   null: false
+    t.string   "email",                                                  default: "",                   null: false
+    t.string   "encrypted_password",                                     default: "",                   null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.integer  "sign_in_count",                                  default: 0,                    null: false
+    t.integer  "sign_in_count",                                          default: 0,                    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -715,25 +721,26 @@ ActiveRecord::Schema.define(version: 20170828083657) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "failed_attempts",                                default: 0,                    null: false
+    t.integer  "failed_attempts",                                        default: 0,                    null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "created_at",                                                                    null: false
-    t.datetime "updated_at",                                                                    null: false
-    t.boolean  "setup_complete",                                 default: false
+    t.datetime "created_at",                                                                            null: false
+    t.datetime "updated_at",                                                                            null: false
+    t.boolean  "setup_complete",                                         default: false
     t.boolean  "admin"
     t.string   "stripe_id"
-    t.string   "subscription_status",                            default: "unpaid"
+    t.string   "subscription_status",                                    default: "unpaid"
     t.string   "subscription_type"
     t.datetime "paid_through"
-    t.boolean  "auto_resubscribe",                               default: true
-    t.decimal  "site_completed",         precision: 5, scale: 2
+    t.boolean  "auto_resubscribe",                                       default: true
+    t.decimal  "site_completed",                 precision: 5, scale: 2
     t.integer  "category_count"
     t.integer  "subcategory_count"
-    t.uuid     "uuid",                                           default: "uuid_generate_v4()", null: false
-    t.boolean  "corporate_admin",                                default: false
-    t.integer  "mfa_failed_attempts",                            default: 0,                    null: false
-    t.boolean  "corporate_activated",                            default: false
+    t.uuid     "uuid",                                                   default: "uuid_generate_v4()", null: false
+    t.boolean  "corporate_admin",                                        default: false
+    t.integer  "mfa_failed_attempts",                                    default: 0,                    null: false
+    t.boolean  "corporate_activated",                                    default: false
+    t.boolean  "corporate_credit_card_required",                         default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -836,6 +843,7 @@ ActiveRecord::Schema.define(version: 20170828083657) do
   add_foreign_key "financial_alternatives", "users"
   add_foreign_key "financial_investments", "users"
   add_foreign_key "fundings", "user_subscriptions"
+  add_foreign_key "online_accounts", "users"
   add_foreign_key "payments", "users"
   add_foreign_key "power_of_attorney_contacts", "categories"
   add_foreign_key "power_of_attorney_contacts", "users"

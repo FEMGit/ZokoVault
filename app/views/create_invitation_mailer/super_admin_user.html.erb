@@ -623,23 +623,17 @@
     <tr>
       <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
 
-        <p>Dear <%= @contact.firstname %>,</p>
+        <p>Dear <%= @user_invited.first_name %>,</p>
 
-        <% if @account_type.eql? 'employee' %>
-          <p><%= @corporate_manager.name %> at <%= @corporate_profile.business_name %> has created a Corporate Employee ZokuVault account for you. ZokuVault will allow for you and <%= @corporate_manager.first_name %> to securely collaborate on your client's most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
-        <% else %>
-          <p><%= @corporate_manager.name %> at <%= @corporate_profile.business_name %> has created a ZokuVault account for you.  ZokuVault will allow for you and <%= @corporate_manager.first_name %> to securely collaborate on your most important information. Starting is easy, and only takes a few minutes. Please follow the link below to create your password and complete the opening of your account!</p>
-        <% end %>
+        <p><%= @super_admin_user.name %> has created your ZokuVault account. Please follow the link below to set your password and complete your account setup!</p>
 
-        <p><%= link_to 'Create Password', corporate_edit_password_url(@user.uuid, reset_password_token: @token_raw) %></p>
+        <p><%= link_to 'Create Password', create_new_password_invitation_url(@user_invited.uuid, reset_password_token: @token_raw) %></p>
 
-        <p><%= @corporate_manager.first_name %> thanks you in advance for your participation. Additionally, please visit <%= link_to 'www.zokuvault.com', root_path, class: 'no-underline-link' %> for more information.</p>
-
-        <p>P.S. It’s important to only accept invitations from people you know and recognize. If you have any questions about this invitation, please reach out to <%= @corporate_manager.first_name %> to discuss.</p>
+        <p><%= @super_admin_user.first_name %> thanks you in advance for your business. Additionally, please visit <%= link_to 'www.zokuvault.com', root_url, class: 'no-underline-link' %> for more information.</p>
 
         <p style="margin: 20px 0;">Thank you,<br>
-          The ZokuVault team<br>
-          <a href="mailto:support@zokuvault.com">support@zokuvault.com</a><br>
+          <%= @super_admin_user.name %><br>
+          <%= mail_to @super_admin_user.email, @super_admin_user.email %><br>
           <img data-file-id="353639" height="24" src="https://gallery.mailchimp.com/55ddf9415eea8def74757885c/images/715ea898-7a36-46e0-b68b-eb801fac0af6.jpg" style="border: 0px;width: 100px;height: 24px;margin: 0px;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" width="100"><br>
         </p>
 

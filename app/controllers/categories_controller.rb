@@ -82,6 +82,8 @@ class CategoriesController < AuthenticatedController
       trusts_entities_url
     when Rails.application.config.x.DocumentsCategory
       documents_url
+    when Rails.application.config.x.OnlineAccountCategory
+      online_accounts_path
     else
       root_url
     end

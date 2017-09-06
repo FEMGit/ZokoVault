@@ -1,0 +1,100 @@
+<%= hidden_field_tag :shared_user_id, @shared_user.present? ? @shared_user.id : "" %>
+
+<h1>Online Accounts</h1>
+<% if category_shared?(resource_owner, @category.try(:name)) %>
+  <%= link_to new_online_account_path(@shared_user), class: "edit-link mobile-view" do %>
+    <span class="circle-button">
+    <svg class="icon circle-icon">
+      <use xlink:href="#icon-plus-1"></use>
+    </svg>
+    </span>Add Account
+  <% end %>
+<% end %>
+
+<table id="online-accounts-table">
+  <thead>
+    <tr>
+      <th>Website</th>
+      <th>UserName</th>
+      <th>Password</th>
+      <th>Shared With</th>
+      <th class="nosort nosearch">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @online_accounts.each do |account| %>
+      <tr>
+        <td>
+          <%= link_to account.website, account.website, target: '_blank', class: 'no-underline-link' %>
+        </td>
+        <td><%= account.username %></td>
+        <td class="password-cell">
+          <%= link_to 'Copy', "javascript:void(0);", class: 'button small-button blue-button fr w-47 text-center mr-0', style: 'display: none;', id: "copy_#{account.id}", onclick:"javascript:copyPassword(#{account.id})" %>
+          <%= link_to 'Show', "javascript:togglePasswordView(#{account.id})", class: 'button small-button blue-button fr w-47 text-center mr-0', id: "toggle_#{account.id}" %>
+          <span id=<%="password_#{account.id}"%> class="v-align-middle password-text">**********</span>
+        </td>
+        <td>
+          <%= render :partial => "layouts/share_with_contacts", :locals => {:shares => online_account_shares(account)} %>
+        </td>
+        <td>
+          <%= link_to 'Edit', edit_online_account_path(account, @shared_user), class: "outline-button small-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.OnlineAccountCategory.downcase } %>
+
+<script>
+  $(document).ready(function(){
+    DatatableUpdate('#online-accounts-table', [ [10, 25, 50, 100], 'accounts', [[0, 'asc']] ], [2, 1, 2])
+  });
+  
+  var isToggleShow = function(password_id) {
+    toggleButtonValue = $("#toggle_" + password_id).text()
+    return toggleButtonValue === "Show"
+  }
+  
+  var togglePasswordView = function(password_id) {
+    if (isToggleShow(password_id)) {
+      shared_user_id = $("#shared_user_id").val();
+      $.ajax({
+        url: "/online_accounts/reveal_password/" + password_id + '/' + shared_user_id,
+        type: 'GET',
+        dataType: 'json'
+      }).success(function(data) {
+        $("#password_" + password_id).text(data)
+        $("#toggle_" + password_id).text("Hide").addClass('mr-5')
+        $("#copy_" + password_id).show()
+      }).fail(function(data) {
+        showFlashMessageError("Error while receiving a password.", 2000)
+      })
+    } else {
+      $("#password_" + password_id).text("**********")
+      $("#toggle_" + password_id).text("Show").removeClass('mr-5')
+      $("#copy_" + password_id).hide()
+    }
+  }
+  
+  var copyPassword = function(password_id) {
+    var password = document.querySelector("#password_" + password_id)
+    var range = document.createRange()
+    range.selectNode(password)
+    window.getSelection().addRange(range)
+    
+    try {
+      var successful = document.execCommand('copy')
+      if (successful) {
+        showFlashMessageSuccess('Password copied to clipboard.', 2000)
+      } else {
+        showFlashMessageError("Unable to copy.", 2000)
+      }
+    } catch(err) {
+      showFlashMessageError("Unable to copy.", 2000)
+    }
+    
+    window.getSelection().removeAllRanges()
+  }
+</script>

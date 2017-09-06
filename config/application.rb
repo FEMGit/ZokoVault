@@ -19,12 +19,14 @@ module ZokuVault
     config.x.InsuranceCategory = "Insurance"
     config.x.ContactCategory = "Contact"
     config.x.TaxCategory = "Taxes"
+    config.x.OnlineAccountCategory = "Online Accounts"
     config.x.FinalWishesCategory = "Final Wishes"
     config.x.FinancialInformationCategory = "Financial Information"
     config.x.ProfileCategory = "My Profile"
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
                                 config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
-                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.DocumentsCategory, config.x.ContactCategory]
+                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.OnlineAccountCategory,
+                                config.x.DocumentsCategory, config.x.ContactCategory]
     
     config.x.CorporateCategories = {
       config.x.FinancialInformationCategory => config.x.FinancialInformationCategory,

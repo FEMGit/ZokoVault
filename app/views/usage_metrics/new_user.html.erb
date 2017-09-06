@@ -1,0 +1,36 @@
+<%= form_for @user, url: usage_metrics_create_user_path, method: :post do |f| %>
+  <% if @user.errors.any? %>
+    <% errors = @user.errors %>
+  <% else %>
+    <% errors = nil %>
+  <% end %>
+
+  <div class="card mb-30">
+
+    <%= f.fields_for :user_profile do |user_profile_form| %>
+      <%= user_profile_form.label :first_name, 'First Name' %><span class="required">Required</span>
+      <% if errors && errors.messages[:"user_profile.first_name"] %>
+        <span class="error-label"> - <%= errors.messages[:"user_profile.first_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :first_name, { class: ("input-error" if errors && errors.messages[:"user_profile.first_name"].present?), :maxlength => get_max_length(:default) } %>
+
+      <%= user_profile_form.label :last_name, 'Last Name' %><span class="required">Required</span>
+      <% if errors && errors.messages[:"user_profile.last_name"] %>
+        <span class="error-label"> - <%= errors.messages[:"user_profile.last_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :last_name, { class: ("input-error" if errors && errors.messages[:"user_profile.last_name"].present?), :maxlength => get_max_length(:default) } %>
+    <% end %>
+
+    <%= f.label :email, 'Email Address' %><span class="required">Required</span>
+    <% if errors && errors.messages[:email].first %>
+      <span class="error-label"> - <%= errors.messages[:email].first %></span>
+    <% end %>
+    <%= f.email_field :email, { class: ("input-error" if errors && errors.messages[:email].present?), :maxlength => get_max_length(:default) } %>
+    
+    <%= render partial: 'usage_metrics/tfa_disable_field' %>
+    <%= render partial: 'usage_metrics/corporate_profile_edit', locals: { f: f } %>
+  </div>
+  
+  <%= f.submit 'Save', class: "button primary-button big-button" %>
+  <%= link_to 'Cancel', usage_metrics_path, class: "button secondary-button big-button"%>
+<% end %>

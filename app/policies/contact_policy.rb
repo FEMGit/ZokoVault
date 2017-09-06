@@ -23,6 +23,11 @@ class ContactPolicy < BasicPolicy
   def edit?
     super || corporate_permitted?
   end
+  
+  def remove_corporate_client?
+    user_account = User.find_by(email: record.try(:emailaddress))
+    user_account.corporate_client? && user.corporate_admin && user_account.corporate_user_by_admin?(user)
+  end
 
   private
   

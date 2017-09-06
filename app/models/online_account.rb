@@ -18,15 +18,7 @@ class OnlineAccount < ActiveRecord::Base
                       :message => "Please enter a valid url (starts with 'http://' or 'https://')",
                       :allow_blank => true
   
-  validate :validate_password_length
+  validates_length_of :password, :maximum => 500
   
-  before_save { self.category = Category.fetch("online accounts") }
-  
-  private
-  
-  def validate_password_length
-    if PasswordService.decrypt_password(password).length > ApplicationController.helpers.get_max_length(:default)
-      errors.add(:password, "Password must be less than #{ApplicationController.helpers.get_max_length(:default)} characters" )
-    end
-  end
+  before_save { self.category = Category.fetch("online accounts") }  
 end

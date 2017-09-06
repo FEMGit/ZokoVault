@@ -3,6 +3,8 @@ require 'zoku/aws/kms'
 class PerUserEncryptionKey < ActiveRecord::Base
   belongs_to :user, inverse_of: :per_user_encryption_keys
   
+  has_many :online_accounts, inverse_of: :per_user_encryption_key
+  
   def self.kms_client
     @kms_client ||= Zoku::AWS::KMS.client
   end

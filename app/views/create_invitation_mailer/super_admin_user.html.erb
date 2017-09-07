@@ -625,7 +625,7 @@
 
         <p>Dear <%= @user_invited.first_name %>,</p>
 
-        <p><%= @super_admin_user.name %> has created your ZokuVault account. Please follow the link below to set your password and complete your account setup!</p>
+        <p><%= @super_admin_user.name %> has created your Corporate Admin ZokuVault account. Please follow the password link below to login and confirm your company profile that we have set up on your behalf.</p>
 
         <p><%= link_to 'Create Password', create_new_password_invitation_url(@user_invited.uuid, reset_password_token: @token_raw) %></p>
 

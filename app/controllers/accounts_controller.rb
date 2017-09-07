@@ -11,6 +11,13 @@ class AccountsController < AuthenticatedController
                                 :corporate_account_options, :how_billing_works, :billing_types,
                                 :corporate_credit_card]
   before_action :set_blank_layout_header_info, only: [:first_run]
+  before_action :redirect_to_root_if_setup_complete, only: [:terms_of_service, :terms_of_service_update,
+                                                            :phone_setup, :phone_setup_update, :login_settings,
+                                                            :login_settings_update, :user_type, :user_type_update,
+                                                            :corporate_user_type, :corporate_user_type_update,
+                                                            :corporate_logo, :corporate_logo_update, :zoku_vault_info,
+                                                            :corporate_account_options, :corporate_account_options_update,
+                                                            :how_billing_works, :billing_types, :corporate_credit_card]
   before_action :redirect_to_root_unless_corporate_admin, only: [:corporate_user_type, :corporate_user_type_update,
                                                                  :corporate_logo, :corporate_logo_update,
                                                                  :corporate_account_options, :corporate_account_options_update,
@@ -113,13 +120,14 @@ class AccountsController < AuthenticatedController
   end
 
   def login_settings_update
-    current_user.update_attributes(user_params.merge(setup_complete: true))
+    current_user.update_attributes(user_params)
     redirect_to corporate_accounts_path and return if current_user.corporate_employee?
     redirect_to user_type_account_path
   end
 
   def user_type
     check_phone_setup_passed
+    current_user.update(corporate_admin: false)
     if current_user.corporate_user?
       @corporate_admin = current_user.corporate_account_owner
       @corporate_profile = @corporate_admin.corporate_account_profile
@@ -194,7 +202,6 @@ class AccountsController < AuthenticatedController
       elsif !current_user.paid?
         MailchimpService.new.subscribe_to_shared(current_user)
       end
-      
       current_user.update_attributes(setup_complete: true)
     elsif user_params[:user_type].eql? 'trial'
       if SubscriptionService.eligible_for_trial?(current_user)
@@ -206,6 +213,7 @@ class AccountsController < AuthenticatedController
     elsif user_params[:user_type].eql? 'corporate'
       MailchimpService.new.subscribe_to_corporate(current_user)
       current_user.update_attributes(setup_complete: false)
+      current_user.update(corporate_admin: true)
       redirect_to corporate_user_type_path and return
     end
     redirect_to root_path
@@ -342,5 +350,9 @@ class AccountsController < AuthenticatedController
   
   def redirect_to_root_unless_corporate_admin
     redirect_to root_path unless current_user.corporate_admin
+  end
+
+  def redirect_to_root_if_setup_complete
+    redirect_to root_path if current_user.setup_complete
   end
 end

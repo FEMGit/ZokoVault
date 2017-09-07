@@ -6,7 +6,6 @@ module InvitationService
         previously_invited = ShareInvitationSent.exists?(user_id: user.id,
                                                          contact_email: contact.emailaddress)
         shared_with_user = User.find_by(email: contact.emailaddress)
-        return unless shared_with_user.present?
 
         # Return in case if corporate user is not activated yet
         return if user && user.corporate_user? && !user.corporate_invitation_sent?

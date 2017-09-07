@@ -16,6 +16,10 @@ module StagingHelper
     TYPES.values.include?(staging_type)
   end
   
+  TYPES.each do |k,v|
+    define_method("#{k}_deploy?"){ staging_type == v }
+  end
+  
   def heroku_app_name
     ENV.fetch('HEROKU_APP_NAME', '')
   end
@@ -25,8 +29,6 @@ module StagingHelper
   end
   
   def develop_staging?
-    heroku_review_app? ||
-    staging_type == TYPES[:local] ||
-    staging_type == TYPES[:development]
+    heroku_review_app? || local_deploy? || development_deploy?
   end
 end

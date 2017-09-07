@@ -30,13 +30,13 @@ module Zoku
           data['s3']['bucket_name'].freeze,
           from_env(data['s3'], 'ACCESS_KEY_ID'),
           from_env(data['s3'], 'ACCESS_KEY_SECRET')
-        )
+        ).freeze
         @kms = KMS.new(
           data['kms']['role_arn'].freeze,
           data['kms']['key_alias'].freeze,
           from_env(data['kms'], 'ACCESS_KEY_ID'),
           from_env(data['kms'], 'ACCESS_KEY_SECRET')
-        )
+        ).freeze
       end
       
       private

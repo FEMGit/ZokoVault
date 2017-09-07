@@ -1,0 +1,25 @@
+development:
+  region:         'us-east-1'
+  
+  s3:
+    user_env:     'AWS_S3_USER'
+    role_arn:     'arn:aws:iam::751141858228:role/s3access'
+    bucket_name:  'zoku-stage'
+    
+  kms:
+    user_env:     'AWS_CRYPTO_USER'
+    role_arn:     'arn:aws:iam::751141858228:role/per-user-crypto-dev-role'
+    key_alias:    'alias/per-user-at-rest-dev'
+  
+production:
+  region:         'us-east-1'
+  
+  s3:
+    user_env:     'AWS_S3_USER'
+    role_arn:     'arn:aws:iam::751141858228:role/s3access'
+    bucket_name:  'zoku-stage'
+    
+  kms:
+    user_env:     'AWS_CRYPTO_USER'
+    role_arn:     'arn:aws:iam::751141858228:role/per-user-crypto-role'
+    key_alias:    'alias/per-user-at-rest'

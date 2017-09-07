@@ -1,22 +1,24 @@
+require 'zoku/aws/profile'
+
 module Zoku
   module AWS
     module IAM
 
       def self.region
-        Rails.application.secrets.aws_region
+        Zoku::AWS::Profile.active.aws_region
       end
 
       def self.s3_user
         ::Aws::Credentials.new(
-          Rails.application.secrets.aws_user_key_id,
-          Rails.application.secrets.aws_user_secret_key
+          Zoku::AWS::Profile.active.s3.access_key_id,
+          Zoku::AWS::Profile.active.s3.access_key_secret
         )
       end
 
       def self.s3_role
         assume_role(
           user:       s3_user,
-          role_arn:   'arn:aws:iam::751141858228:role/s3access',
+          role_arn:   Zoku::AWS::Profile.active.s3.role_arn,
           role_alias: 'S3Access',
           region:     region
         )
@@ -24,15 +26,15 @@ module Zoku
 
       def self.kms_user
         ::Aws::Credentials.new(
-          Rails.application.secrets.aws_crypto_user_key_id,
-          Rails.application.secrets.aws_crypto_user_secret_key
+        Zoku::AWS::Profile.active.kms.access_key_id,
+        Zoku::AWS::Profile.active.kms.access_key_secret
         )
       end
 
       def self.kms_role
         assume_role(
           user:       kms_user,
-          role_arn:   Rails.application.secrets.aws_per_user_key_role,
+          role_arn:   Zoku::AWS::Profile.active.kms.role_arn,
           role_alias: 'PerUserCryptoKeys',
           region:     region
         )

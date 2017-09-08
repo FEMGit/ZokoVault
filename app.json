@@ -4,25 +4,19 @@
     "postdeploy":"bundle install && rake db:migrate"
   },
   "env": {
-    "STAGING_TYPE" : {
+    "AWS_CRYPTO_USER_ACCESS_KEY_ID": {
       "required": true
     },
-    "STRIPE_YEARLY_PLAN" : {
+    "AWS_CRYPTO_USER_ACCESS_KEY_SECRET": {
       "required": true
     },
-    "MAILCHIMP_API_KEY": {
+    "AWS_S3_USER_ACCESS_KEY_ID": {
       "required": true
     },
-    "MAILCHIMP_LISTING_ID": {
+    "AWS_S3_USER_ACCESS_KEY_SECRET": {
       "required": true
     },
-    "STRIPE_PUBLIC_KEY": {
-      "required": true
-    },
-    "STRIPE_SECRET_KEY": {
-      "required": true
-    },
-    "AWS_ACCESS_KEY_ID": {
+    "DATABASE_URL": {
       "required": true
     },
     "FILEPICKER_API_KEY": {
@@ -31,37 +25,19 @@
     "FILEPICKER_SECRET": {
       "required": true
     },
-    "AWS_USER_SECRET_ACCESS_KEY": {
+    "HEROKU_APP_NAME": {
       "required": true
     },
-    "AWS_ACCESS_ROLE_ARN": {
-      "required": true
-    },
-    "AWS_USER_ACCESS_KEY_ID": {
-      "required": true
-    },
-    "AWS_CRYPTO_USER_ACCESS_KEY_ID": {
-      "required": true
-    },
-    "AWS_CRYPTO_USER_SECRET_ACCESS_KEY": {
-      "required": true
-    },
-    "AWS_PER_USER_KEY_ALIAS": {
-      "required": true
-    },
-    "AWS_PER_USER_KEY_ROLE": {
-      "required": true
-    },
-    "AWS_REGION": {
-      "required": true
-    },
-    "AWS_SECRET_ACCESS_KEY": {
-      "required": true
-    },
-    "DATABASE_URL": {
+    "HEROKU_PARENT_APP_NAME": {
       "required": true
     },
     "LANG": {
+      "required": true
+    },
+    "MAILCHIMP_API_KEY": {
+      "required": true
+    },
+    "MAILCHIMP_LISTING_ID": {
       "required": true
     },
     "OTP_SECRET_ENCRYPTION_KEY": {
@@ -76,12 +52,6 @@
     "RAILS_ENV": {
       "required": true
     },
-    "S3_BUCKET": {
-      "required": true
-    },
-    "S3_BUCKET_NAME": {
-      "required": true
-    },
     "RAILS_SERVE_STATIC_FILES": {
       "required": true
     },
@@ -94,6 +64,18 @@
     "SENDGRID_USERNAME": {
       "required": true
     },
+    "STAGING_TYPE" : {
+      "required": true
+    },
+    "STRIPE_PUBLIC_KEY": {
+      "required": true
+    },
+    "STRIPE_SECRET_KEY": {
+      "required": true
+    },
+    "STRIPE_YEARLY_PLAN" : {
+      "required": true
+    },
     "TWILIO_ACCOUNT_SID": {
       "required": true
     },
@@ -101,12 +83,6 @@
       "required": true
     },
     "TWILIO_PHONE_NUMBER": {
-      "required": true
-    },
-    "HEROKU_APP_NAME": {
-      "required": true
-    },
-    "HEROKU_PARENT_APP_NAME": {
       "required": true
     }
   },

@@ -12,7 +12,7 @@ module Zoku
       end
 
       def self.bucket_name
-        Rails.application.secrets.aws_bucket_name
+        Zoku::AWS::Profile.active.s3.bucket_name
       end
 
     end

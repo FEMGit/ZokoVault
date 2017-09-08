@@ -159,9 +159,9 @@ class MailchimpService
   end
 
   def mailchimp_lists(type)
-    if ENV['STAGING_TYPE'].eql? 'production'
+    if StagingHelper.production_deploy?
       MailchimpLists::PRODUCTION[type]
-    elsif ENV['STAGING_TYPE'].eql? 'beta'
+    elsif StagingHelper.staging_deploy?
       MailchimpLists::BETA[type]
     else
       nil

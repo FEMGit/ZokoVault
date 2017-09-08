@@ -5,7 +5,7 @@ module Zoku
     module IAM
 
       def self.region
-        Zoku::AWS::Profile.active.aws_region
+        Zoku::AWS::Profile.active.region
       end
 
       def self.s3_user

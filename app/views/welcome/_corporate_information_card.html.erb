@@ -1,7 +1,7 @@
 <div class="card mb-30">
   <h3 class="card-label">
     <% if @corporate_profile.company_logo.present? %>
-      <p class="mb-0"><%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-300 w-100-percent", alt: @corporate_profile.business_name) %></p>
+      <p class="mb-0"><%= image_tag(get_avatar_url(@corporate_profile.company_logo), class: "max-w-300 w-100-percent", alt: @corporate_profile.business_name) %></p>
     <% end %>
   </h3>
   <% if @corporate_profile.blank? %>

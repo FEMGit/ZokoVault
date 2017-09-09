@@ -155,6 +155,12 @@ module DocumentsHelper
     s3_object = S3Service.get_object_by_key(key)
     s3_object.presigned_url(:get, expires_in: 2.minutes.to_i)
   end
+  
+  def get_avatar_url(key)
+    s3_object = S3Service.get_object_by_key(key) if key.present?
+    return if s3_object.blank? || !s3_object.exists?
+    S3Service.stable_presigned_url_for_today(s3_object)
+  end
 
   def download_file(document_url)
     s3_object = S3Service.get_object_by_key(document_url)

@@ -4,7 +4,7 @@
 <div class="avatar-wrapper">
   <% if @user_profile.photourl.present? %>
     <div id="new-avatar_account">
-      <%= image_tag(get_file_url(@user_profile.photourl), class: "avatar-small", id: "image_view_account", alt: @user_profile.initials.to_s) %>
+      <%= image_tag(get_avatar_url(@user_profile.photourl), class: "avatar-small", id: "image_view_account", alt: @user_profile.initials.to_s) %>
     </div>
     <div id="text-avatar_account" style="display: none;" >
       <%= image_tag(empty_image, class: "avatar-small", alt: @user_profile.initials.to_s) %>

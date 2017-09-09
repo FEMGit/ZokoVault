@@ -153,12 +153,13 @@ module DocumentsHelper
   def get_file_url(key)
     return unless key.present?
     s3_object = S3Service.get_object_by_key(key)
-    s3_object.presigned_url(:get, expires_in: 2.minutes)
+    s3_object.presigned_url(:get, expires_in: 2.minutes.to_i)
   end
 
   def download_file(document_url)
     s3_object = S3Service.get_object_by_key(document_url)
-    s3_object.presigned_url(:get, response_content_disposition: "attachment", expires_in: 2.minutes)
+    s3_object.presigned_url(:get,
+      response_content_disposition: "attachment", expires_in: 2.minutes.to_i)
   end
 
   private

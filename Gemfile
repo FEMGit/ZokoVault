@@ -83,7 +83,7 @@ gem 'bourbon'
 gem 'neat'
 
 # File Up/download tools
-gem 'aws-sdk', '~> 2'
+gem 'aws-sdk', '~> 3'
 gem 'carrierwave', '0.10.0'
 gem "fog"
 

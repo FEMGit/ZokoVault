@@ -30,8 +30,8 @@
         </td>
         <td><%= account.username %></td>
         <td class="password-cell">
-          <%= link_to 'Copy', "javascript:void(0);", class: 'button small-button blue-button fr w-47 text-center mr-0', style: 'display: none;', id: "copy_#{account.id}", onclick:"javascript:copyPassword(#{account.id})" %>
           <%= link_to 'Show', "javascript:togglePasswordView(#{account.id})", class: 'button small-button blue-button fr w-47 text-center mr-0', id: "toggle_#{account.id}" %>
+          <%= link_to 'Copy', "javascript:void(0);", class: 'button small-button blue-button fr w-47 text-center mr-5', id: "copy_#{account.id}", onclick:"javascript:copyPassword(#{account.id})" %>
           <span id=<%="password_#{account.id}"%> class="v-align-middle password-text">**********</span>
         </td>
         <td>
@@ -66,22 +66,51 @@
         dataType: 'json'
       }).success(function(data) {
         $("#password_" + password_id).text(data)
-        $("#toggle_" + password_id).text("Hide").addClass('mr-5')
-        $("#copy_" + password_id).show()
+        $("#toggle_" + password_id).text("Hide")
       }).fail(function(data) {
         showFlashMessageError("Error while receiving a password.", 2000)
       })
     } else {
       $("#password_" + password_id).text("**********")
-      $("#toggle_" + password_id).text("Show").removeClass('mr-5')
-      $("#copy_" + password_id).hide()
+      $("#toggle_" + password_id).text("Show")
     }
   }
   
+  var copyHiddenPassword = function(password_id) {
+    shared_user_id = $("#shared_user_id").val();
+    $.ajax({
+      url: "/online_accounts/reveal_password/" + password_id + '/' + shared_user_id,
+      type: 'GET',
+      dataType: 'json',
+      async: false
+    }).success(function(data) {
+      $("#shared_user_id").after('<span id="password_hidden"/>')
+      $("#password_hidden").text(data)
+      var password = document.querySelector("#password_hidden")
+      copyToClipboard(password)
+      removePasswordFromHidden()
+    }).fail(function(data) {
+      removePasswordFromHidden()
+      showFlashMessageError("Error while receiving a password.", 2000)
+    })
+  }
+  
+  var removePasswordFromHidden = function() {
+    $('#password_hidden').remove()
+  }
+  
   var copyPassword = function(password_id) {
-    var password = document.querySelector("#password_" + password_id)
+    if ($("#password_" + password_id).text() === "**********") {
+      copyHiddenPassword(password_id)
+    } else {
+      var password = document.querySelector("#password_" + password_id)
+      copyToClipboard(password)
+    }
+  }
+  
+  var copyToClipboard = function(passwordNode) {
     var range = document.createRange()
-    range.selectNode(password)
+    range.selectNode(passwordNode)
     window.getSelection().addRange(range)
     
     try {
@@ -94,7 +123,7 @@
     } catch(err) {
       showFlashMessageError("Unable to copy.", 2000)
     }
-    
+
     window.getSelection().removeAllRanges()
   }
 </script>

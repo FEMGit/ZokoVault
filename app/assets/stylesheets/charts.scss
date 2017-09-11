@@ -18,7 +18,18 @@
     height: 300px;
     width: 100%;
   }
+  
+  @include media($mobile) {
+    margin-top: 0;
+  }
 }
+
+#debt {
+  @include media($mobile) {
+    display: none;
+  }
+}
+
 .pie-legend{
   height: auto;
   width: 25%;

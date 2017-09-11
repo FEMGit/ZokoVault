@@ -66,9 +66,9 @@ class DocumentsController < AuthenticatedController
   @after_new_user_created = ""
 
   def index
-    @documents = policy_scope(Document).each { |d| authorize d }
+    @documents = policy_scope(Document.includes(:user)).each { |d| authorize d }
     @category = Category.fetch(Rails.application.config.x.DocumentsCategory.downcase)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = current_user.shares.includes(:shareable, :contact).categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
     session[:ret_url] = "/documents"
   end
 

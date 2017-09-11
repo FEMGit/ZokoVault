@@ -5,7 +5,7 @@ module Zoku
     module S3
 
       def self.client
-        ::Aws::S3::Client.new(
+        @s3client ||= ::Aws::S3::Client.new(
           region: Zoku::AWS::IAM.region,
           credentials: Zoku::AWS::IAM.s3_role
         )

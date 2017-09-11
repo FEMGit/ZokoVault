@@ -1,7 +1,7 @@
 <h5 class="clr-gray-dark-tinted mt-10 mb-20 fw-600 max-w-600 m-0-auto">Your ZokuVault account has been provided and set up by <%= @corporate_admin.name %> at <%= @corporate_profile.business_name %>.</h5>
 
 <% if @corporate_profile.company_logo.present? %>
-  <%= image_tag(get_file_url(@corporate_profile.company_logo), class: "max-w-130 mb-30", alt: @corporate_profile.business_name) %>
+  <%= image_tag(get_avatar_url(@corporate_profile.company_logo), class: "max-w-130 mb-30", alt: @corporate_profile.business_name) %>
 <% end %>
 
 <% if current_user.corporate_employee? %>

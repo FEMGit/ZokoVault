@@ -5,7 +5,7 @@
 
 <div class="avatar-wrapper">
   <% if user.photourl.present? %>
-    <%= image_tag(get_file_url(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
+    <%= image_tag(get_avatar_url(user.photourl), class: "avatar-#{avatar_size}", alt: user.initials.to_s) %>
   <% else %>
   <span class="no-vatar"></span>
   <% end %>

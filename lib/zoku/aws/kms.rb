@@ -5,7 +5,7 @@ module Zoku
     module KMS
 
       def self.client
-        ::Aws::KMS::Client.new(
+        @kmsclient ||= ::Aws::KMS::Client.new(
           region: Zoku::AWS::IAM.region,
           credentials: Zoku::AWS::IAM.kms_role
         )

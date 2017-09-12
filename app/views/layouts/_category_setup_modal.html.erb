@@ -1,24 +1,51 @@
-<div id="category-setup-category-modal" class="modal medium-modal">
+<div id="category-setup-category-modal" class="modal medium-modal mr-5 mb-5 mt-5">
   <a href="javascript:void(null)" class="js-modal-close fr no-underline-link mr-15 mt-15">
-    Dismiss
+    Close
   </a>
   <span class="clear"></span>
   <h2 class="text-center" id='category-setup-title'></h2>
   <div class="modal-content text-center overflow-y-visible">
     <p id="category-setup-description" class="inline-block"></p>
-    <%= image_tag '', class: 'max-w-460 pl-15 pr-15', id: 'category-setup-image' %>
+    <%= image_tag '', class: 'max-w-460 pl-15 pr-15 w-100-percent', id: 'category-setup-image' %>
   </div>
   
   <footer class="modal-footer text-center mt-0">
-    <button class="js-modal-close blue-button big-button">Set Up</a>
+    <%= link_to 'Set Up', 'javascript:void(0);', class:"js-modal-close button blue-button big-button inline-block", id: 'category-setup-link' %>
+    <%= link_to 'Do not show again', 'javascript:void(0);', class:"js-modal-close not-link block mt-15 clr-color-gray-med-shaded", id: 'category-do-not-show-link' %>
   </footer>
 </div>
 
 <script>
-  categorySetupModal = function(title, description, imagePath) {
-  console.log(description)
+  var initialModalCenter = function() {
+    var currentWidth = $(".medium-modal").outerWidth()
+    var prevWidth = 0
+    var iterationCount = 0
+    while(currentWidth !== prevWidth || iterationCount >= 5) {
+      prevWidth = currentWidth
+      $(window).resize()
+      currentWidth = $(".medium-modal").outerWidth()
+      iterationCount++
+    }
+  }
+  
+  var setWindowResizeEvent = function() {
+    $(window).resize(function() {
+      $('.medium-modal').css({
+        top: 10,
+        left: ($(window).width() - $(".medium-modal").outerWidth()) / 2,
+      });
+    });
+    initialModalCenter()
+  }
+  
+  categorySetupModal = function(title, description, imagePath, setupLinkPath, toDoModalPopupPath) {
     $("#category-setup-title").text(title)
     $("#category-setup-description").text(description)
     $("#category-setup-image").attr('src', imagePath)
+    $("#category-setup-link").attr('href', setupLinkPath)
+    $("#category-do-not-show-link").on('click', function() {
+      $.post("<%= do_not_show_popup_to_do_popup_path %>", { to_do_modal_popup_path: toDoModalPopupPath })
+    })
+    setWindowResizeEvent()
   }
 </script>

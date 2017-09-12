@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906150148) do
+ActiveRecord::Schema.define(version: 20170913041200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -519,6 +519,15 @@ ActiveRecord::Schema.define(version: 20170906150148) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "s3_image_urls", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "key"
+    t.string  "presigned_url"
+    t.string  "expires_at"
+  end
+
+  add_index "s3_image_urls", ["key"], name: "index_s3_image_urls_on_key", using: :btree
+
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
@@ -608,6 +617,13 @@ ActiveRecord::Schema.define(version: 20170906150148) do
   end
 
   add_index "taxes", ["category_id"], name: "index_taxes_on_category_id", using: :btree
+
+  create_table "to_do_popup_cancels", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "cancelled_popups", default: [], array: true
+  end
+
+  add_index "to_do_popup_cancels", ["user_id"], name: "index_to_do_popup_cancels_on_user_id", using: :btree
 
   create_table "trusts", force: :cascade do |t|
     t.integer  "document_id"

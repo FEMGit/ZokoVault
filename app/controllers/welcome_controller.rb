@@ -5,7 +5,7 @@ class WelcomeController < AuthenticatedController
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed]
-  before_action :set_corporate_profile, only: [:index]
+  before_action :set_corporate_profile, :set_to_do_modal_popup_view, only: [:index]
   include UserTrafficModule
   include TutorialsHelper
   
@@ -96,12 +96,36 @@ class WelcomeController < AuthenticatedController
     @corporate = params[:corporate].eql? 'true'
   end
   
+  def do_not_show_popup
+    redirect_to root_path and return unless do_not_show_modal_popup_path
+    to_do_popup_cancel = ToDoPopupCancel.find_or_initialize_by(user: current_user)
+    redirect_to root_path and return unless cancelled_category_name = 
+      ToDoPopupModal.popup_name_by_route(path: do_not_show_modal_popup_path)
+    to_do_popup_cancel.update(cancelled_popups: (to_do_popup_cancel.cancelled_popups + [cancelled_category_name]).uniq)
+    render nothing: true
+  end
+  
   private
+  
+  def do_not_show_modal_popup_path
+    return nil unless params[:to_do_modal_popup_path]
+    params.require(:to_do_modal_popup_path)
+  end
   
   def set_corporate_profile
     corporate_admin = current_user.corporate_admin_by_user
     return unless corporate_admin.present?
     @corporate_profile = CorporateAccountProfile.find_by(user: corporate_admin)
+  end
+  
+  def set_to_do_modal_popup_view
+    @to_do_modal_popup_view = 
+      #if session[:popup_was_shown].nil?
+      #  session[:popup_was_shown] = true
+        ToDoPopupModal.random_popup_modal(user: current_user)
+      #else
+      #  nil
+      #end
   end
   
   def redirect_if_signed_in

@@ -1,0 +1,4 @@
+<%= render partial: 'layouts/category_setup_modal' %>
+
+<button class="d-none" id="to-do-modal-popup" data-modal-id="category-setup-category-modal" onclick='categorySetupModal("Vault Inheritance", "Set up a chain of custody for your vault by designating a Contingent Owner. This is typically provided to the executor of your estate.", "<%= asset_url('setup_modal/vault_inheritance.png') %>", "<%= vault_inheritance_path %>", "<%= to_do_modal_popup_path %>")' >
+</button>

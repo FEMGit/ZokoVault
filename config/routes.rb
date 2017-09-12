@@ -54,6 +54,9 @@ Rails.application.routes.draw do
   get 'email_confirmed' => 'welcome#email_confirmed'
   get 'password_link_expired(/:corporate)' => 'welcome#reset_password_expired', as: :password_link_expired
   get 'onboarding_back' => 'welcome#onboarding_back', as: :onboarding_back
+  
+  # To do popups
+  post 'to_do/do_not_show_popup' => 'to_do_popup#do_not_show_popup', as: :do_not_show_popup_to_do_popup
 
   # Default category pages ?Could probably be done better programatically?
   get 'wills_powers_of_attorney' => 'categories#wills_powers_of_attorney'

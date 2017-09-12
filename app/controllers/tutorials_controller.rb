@@ -196,7 +196,7 @@ class TutorialsController < AuthenticatedController
   def add_digital_wills_subtutorial
     if subtutorial_id_params[:subtutorial_ids].present?
       tuto_index = session[:tutorial_index]
-      tutorial_id = session[:tutorial_paths][tuto_index - 1][:tuto_id].to_i
+      tutorial_id = Tutorial.where("name ILIKE ?", "my will(s)").first.try(:id)
       tutorial_path_update({"2" => params[:subtutorial_ids].first }, tutorial_id)
     end
   end

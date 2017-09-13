@@ -23,6 +23,7 @@
   $(document).ready(function() {
     setEmailPreviewSingleDropdown($('#user_profile_primary_shared_with_ids'))
   })
+  
   var submitForm = function() {
     var form = $('#edit_user_profile_' + "<%=@user_profile.id%>")
     form.submit()

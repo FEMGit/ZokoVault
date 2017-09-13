@@ -4,11 +4,12 @@ class AccountSettingsController < AuthenticatedController
   skip_before_filter :complete_setup!, only: [:store_corporate_payment]
   before_action :set_corporate_paid
   before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
-                                          :verify_code, :account_users, :update_account_users,
-                                          :login_settings, :update_login_settings]
-  before_action :set_contacts_shareable, only: [:account_users]
-  before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_account_users]
-  before_action :update_account_users_params, only: [:update_account_users]
+                                          :verify_code, :vault_co_owners, :update_vault_co_owner,
+                                          :login_settings, :update_login_settings, :vault_inheritance,
+                                          :update_vault_inheritance]
+  before_action :set_contacts_shareable, only: [:vault_co_owners, :vault_inheritance]
+  before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_vault_co_owner, :update_vault_inheritance]
+  before_action :prepare_user_profile_params, only: [:update_vault_co_owner, :update_vault_inheritance]
   before_action :redirect_to_manage_subscription_if_corporate_client, only: [:billing_info, :update_payment,  :cancel_subscription,
                                                                              :cancel_subscription_update, :update_subscription_information]
   before_action :set_corporate_admin_resources, only: [:remove_corporate_access, :remove_corporate_access_update]
@@ -18,18 +19,22 @@ class AccountSettingsController < AuthenticatedController
 
   def page_name
     case action_name
-      when 'account_users'
+      when 'vault_co_owners'
         "Account Settings - Account Users"
       when 'login_settings'
         "Account Settings - Login Settings"
       when 'manage_subscription'
         "Account Settings - Manage Subscription"
+      when 'vault_inheritance'
+        "Account Settings - Vault Inheritance"
       when 'billing_info'
         "Account Settings - Update Billing Info"
     end
   end
 
-  def account_users; end
+  def vault_co_owners; end
+  
+  def vault_inheritance; end
 
   def login_settings; end
 
@@ -193,32 +198,45 @@ class AccountSettingsController < AuthenticatedController
     end
   end
 
-  def update_account_users
+  def update_vault_co_owner
+    respond_to do |format|
+      if @user_profile.update_attributes(vault_co_owner_params)
+        if tutorial_params[:tutorial_name].present?
+          tutorial_redirection(format, @user_profile.as_json)
+        else
+          format.html { redirect_to vault_co_owners_path, flash: { success: 'Vault Co-Owners were successfully updated.' } }
+          format.json { render :account_users, status: :updated, location: @user_profile }
+        end
+      else
+        tutorial_error_handle("Error saving Vault Co-Owner") && return
+        format.html { render :account_users }
+        format.json { render json: @user_profile.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
+  def update_vault_inheritance
     respond_to do |format|
       begin
-        if @user_profile.update_attributes(account_users_params)
-          if tutorial_params[:tutorial_name].present?
-            tutorial_redirection(format, @user_profile.as_json)
-          else
-            format.html { redirect_to account_users_path, flash: { success: 'Account Users were successfully updated.' } }
-            format.json { render :account_users, status: :updated, location: @user_profile }
-          end
+        if @user_profile.update_attributes(full_primary_shared_with: user_profile_params[:full_primary_shared_with])
+          InvitationService::VaultInheritanceInvitationService.send_invitation(user: current_user, contact: @user_profile.full_primary_shared_with)
+          format.html { redirect_to vault_inheritance_path, flash: { success: 'Vault Inheritance was successfully updated.' } }
+          format.json { render :account_users, status: :updated, location: @user_profile }
         else
-          tutorial_error_handle("Error saving Vault Co-Owner") && return
-          format.html { render :account_users }
+          format.html { render :vault_inheritance }
           format.json { render json: @user_profile.errors, status: :unprocessable_entity }
         end
       rescue ActiveRecord::RecordNotSaved
         set_contacts_shareable
-        if account_users_params[:full_primary_shared_with_ids].present?
-          full_primary_shared_with_contact = Contact.for_user(current_user).where(:id => account_users_params[:full_primary_shared_with_ids])
+        if user_profile_params[:full_primary_shared_with].present?
+          full_primary_shared_with_contact = Contact.for_user(current_user).where(:id => user_profile_params[:full_primary_shared_with])
           invalid_contacts = full_primary_shared_with_contact.select { |x| !x.valid? }
           if invalid_contacts.present?
             @user_profile.errors[:contact_validation_error] = invalid_contacts.map(&:name)
             flash[:error] = 'Some of the contacts you are trying to save have invalid data. Please fix them and try again.'
           end
         end
-        format.html { render :account_users }
+        format.html { render :vault_inheritance }
         format.json { render json: @user_profile.errors, status: :unprocessable_entity }
       end
     end
@@ -399,9 +417,10 @@ class AccountSettingsController < AuthenticatedController
     @user.errors
   end
 
-  def update_account_users_params
+  def prepare_user_profile_params
     return if params[:user_profile].blank?
     params[:user_profile][:primary_shared_with_ids] = Array.wrap(params[:user_profile][:primary_shared_with_ids])
+    params[:user_profile][:full_primary_shared_with] = Contact.for_user(current_user).find_by(id: params[:user_profile][:full_primary_shared_with])
   end
 
   def tutorial_params
@@ -413,9 +432,14 @@ class AccountSettingsController < AuthenticatedController
     params.require(:user_profile).permit(:photourl, :phone_code)
   end
 
-  def account_users_params
+  def vault_co_owner_params
     return {} if params[:user_profile].blank?
-    params.require(:user_profile).permit(full_primary_shared_with_ids: [], primary_shared_with_ids: [])
+    params.require(:user_profile).permit(primary_shared_with_ids: [])
+  end
+
+  def user_profile_params
+    return {} if params[:user_profile].blank?
+    params.require(:user_profile)
   end
 
   def login_settings_params

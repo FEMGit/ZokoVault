@@ -43,8 +43,15 @@ module ApplicationHelper
       select_options.prepend([ "create_new_contact", "", class: "create-new d-none", disabled: 'disabled']).prepend([])
     end
 
+    contacts_placeholder_text = 
+      if html_options[:multiple].eql?(false)
+        'Choose Contact...'
+      else
+        'Choose Contacts...'
+      end
+    
     local_options = {
-      'data-placeholder': 'Choose Contacts...',
+      'data-placeholder': contacts_placeholder_text,
       class: 'chosen-select add-new-contactable',
       multiple: true,
       onchange: "handleSelectOnChange(this);",

@@ -31,6 +31,9 @@
 .clear{
   clear:both;
 }
+.clr-inherit {
+  color: inherit !important;
+}
 .clr-color-primary-shaded {
   color: $color-primary-shaded !important;
 }

@@ -32,17 +32,9 @@
   <%= f.label :notes %>
   <p><%= f.text_area :notes, id: "trust_notes_id_#{index}", value: data.notes, :maxlength => get_max_length(:notes) %></p>
 
-  <section class="shared-with edit-shared">
-    <h3 class="card-label shared-label">
-      <svg class="icon" viewBox="0 0 20 20">
-        <use xlink:href="#icon-Safe"></use>
-      </svg> Shared With
-    </h3>
-    <label>Shared With</label><br>
-    <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, :share_with_contact_ids, @contacts_shareable, id: "trust_share_id_#{index}", value: data.share_with_contact_ids) %>
-    </div>
-  </section>
+  <%= render partial: 'layouts/shared_with_email_preview_section', locals: { f: f, shared_with_field_symbol: :share_with_contact_ids,
+                                                                             shared_with_dropdown_id: "trust_share_id_#{index}",
+                                                                             additional_params: {id: "trust_share_id_#{index}", value: data.share_with_contact_ids} } %>
 
   <% if data.id && policy(data).destroy? %>
     <%= link_to 'Delete', "#{yield(:delete_path)}#{data.id}", method: :delete,

@@ -22,8 +22,6 @@ class Share < ActiveRecord::Base
 
   after_create do
     current_user = Thread.current[:current_user]
-    unless current_user.present? && user && user.corporate_user_by_manager?(current_user)
-      InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact)
-    end
+    InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact)
   end
 end

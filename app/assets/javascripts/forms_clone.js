@@ -14,3 +14,9 @@ changeHiddenMultipleSelect = function($form, old_name, new_name) {
     value: ''
   });
 };
+
+updateShareEmailPreviewSection = function(form, new_name) {
+  setEmailPreviewSingleDropdown($("#" + new_name), new_name)
+  form.find("#email-preview-list").find("p").remove()
+  form.find("#email-preview-list").removeClass().addClass(new_name)
+}

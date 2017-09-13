@@ -1,0 +1,10 @@
+<%= render partial: 'layouts/email_preview_javascript' %>
+<div id="email-preview-section">
+</div>
+
+<script>
+  $(document).ready(function() {
+    setEmailPreviewSingleDropdown($("#" + "<%= shared_with_dropdown_id %>"), "Save", "<%= shared_with_dropdown_id %>")
+    $("#" + "<%= shared_with_dropdown_id %>").trigger("change")
+  })
+</script>

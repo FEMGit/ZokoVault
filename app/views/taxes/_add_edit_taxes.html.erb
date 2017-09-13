@@ -47,9 +47,11 @@
     clearForm($newForm, old_id_number, new_id_number);
     clearFormFields($newForm);
     $('.chosen-container',$newForm).remove();
+
     $newForm.insertAfter('.body-content:last');
     $('.chosen-select').chosen({allow_single_deselect: true});
-	$('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
+    updateShareEmailPreviewSection($newForm, "tax_share_id_" + new_id_number)
+    $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
   };
   $('.chosen-select').chosen({allow_single_deselect: true});
 

@@ -18,6 +18,11 @@
     emailPreviewSectionPrepare()
     createEmailIframeByName("contingent_owner", contact_id, "vault_inheritance_invitation_mailer")
   }
+
+  var displayEmailPreviewSharedWith = function(contact_id) {
+    emailPreviewSectionPrepare()
+    createEmailIframeByName("share_invitation_email", contact_id, "share_invitation_mailer")
+  }
   
   var emailPreviewSectionPrepare = function() {
     $('#email-preview-section').empty()

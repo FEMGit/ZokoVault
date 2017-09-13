@@ -391,7 +391,7 @@ class DocumentsController < AuthenticatedController
     if secondary_tag_name.present?
       additional_json_params["secondary_tag"] = secondary_tag_name
     end
-    additional_json_params["document_path"] = document_path(document)
+    additional_json_params["document_path"] = @shared_user.present? ? shared_document_path(@shared_user, document) : document_path(document)
     additional_json_params["modified_date"] = date_format(document.updated_at)
     additional_json_params["share_contacts"] = render_to_string partial: 'layouts/avatar_circle_collection.html.erb', locals: { contacts: document.contacts }
 

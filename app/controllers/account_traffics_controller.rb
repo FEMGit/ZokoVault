@@ -33,6 +33,7 @@ class AccountTrafficsController < AuthenticatedController
 
   def resource_link(traffic_info)
     return root_path if traffic_info.page_url.eql? root_url
+    return '--' if  traffic_info.page_url.eql? '--'
     begin
       recognized_path = Rails.application.routes.recognize_path(traffic_info.page_url)
     rescue

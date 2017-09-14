@@ -7,6 +7,7 @@ module InvitationService
         return unless corporate_user.corporate_user_by_admin?(corporate_admin)
 
         CreateInvitationMailer.corporate_user(corporate_contact, corporate_manager, account_type).deliver_now
+        UserTrafficModule.save_traffic_with_params(page_url: '--', page_name: "Corporate Invitation to #{corporate_contact.name}", user: corporate_manager, ip_address: '--')
         CorporateAdminAccountUser.where(corporate_admin: corporate_admin, user_account: corporate_user).update_all(confirmation_sent_at: Time.now)
       end
     end

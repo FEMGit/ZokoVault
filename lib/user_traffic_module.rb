@@ -18,12 +18,12 @@ module UserTrafficModule
     end
   end
   
-  def save_traffic_with_params(page_url, page_name)
+  def self.save_traffic_with_params(page_url:, page_name:, user: current_user, ip_address: request.remote_ip)
     if @shared_user.present?
       page_name << " (Shared View)"
     end
-    @user_traffic_record = UserTraffic.new(:user => current_user,
-                                           :ip_address => request.remote_ip,
+    @user_traffic_record = UserTraffic.new(:user => user,
+                                           :ip_address => ip_address,
                                            :page_url => page_url,
                                            :page_name => page_name,
                                            :shared_user_id => @shared_user.try(:id))

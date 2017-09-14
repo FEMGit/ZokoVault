@@ -124,6 +124,10 @@ class User < ActiveRecord::Base
   def employee_relationship
     CorporateEmployeeProfile.find_by(corporate_employee: self).try(:relationship)
   end
+  
+  def contingent_owner
+    user_profile.full_primary_shared_with
+  end
 
   def corporate_manager?
     corporate_employee? || corporate_admin

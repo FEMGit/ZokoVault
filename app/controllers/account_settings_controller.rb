@@ -12,6 +12,8 @@ class AccountSettingsController < AuthenticatedController
   before_action :prepare_user_profile_params, only: [:update_vault_co_owner, :update_vault_inheritance]
   before_action :redirect_to_manage_subscription_if_corporate_client, only: [:billing_info, :update_payment,  :cancel_subscription,
                                                                              :cancel_subscription_update, :update_subscription_information]
+  before_action :redirect_to_login_settings_if_corporate_manager, only: [:vault_co_owners, :vault_inheritance, :manage_subscription,
+                                                                         :billing_info, :update_vault_co_owner, :update_vault_inheritance]
   before_action :set_corporate_admin_resources, only: [:remove_corporate_access, :remove_corporate_access_update]
   include TutorialsHelper
   include UserTrafficModule
@@ -215,7 +217,7 @@ class AccountSettingsController < AuthenticatedController
       end
     end
   end
-  
+
   def update_vault_inheritance
     respond_to do |format|
       begin
@@ -365,6 +367,10 @@ class AccountSettingsController < AuthenticatedController
     @corporate_admin_contact = Contact.for_user(current_user).find_by(id: params[:contact_id])
     @corporate_admin_user = User.where("email ILIKE ?", @corporate_admin_contact.try(:emailaddress)).first
     redirect_to contacts_path unless current_user.corporate_user_by_admin?(@corporate_admin_user)
+  end
+
+  def redirect_to_login_settings_if_corporate_manager
+    redirect_to login_settings_path if current_user && current_user.corporate_manager?
   end
 
   def redirect_to_manage_subscription_if_corporate_client

@@ -3,8 +3,8 @@ development:
   
   s3:
     user_env:     'AWS_S3_USER'
-    role_arn:     'arn:aws:iam::751141858228:role/s3access'
-    bucket_name:  'zoku-stage'
+    role_arn:     'arn:aws:iam::751141858228:role/development-s3-user-role'
+    bucket_name:  'zoku-development'
     
   kms:
     user_env:     'AWS_CRYPTO_USER'
@@ -16,8 +16,8 @@ production:
   
   s3:
     user_env:     'AWS_S3_USER'
-    role_arn:     'arn:aws:iam::751141858228:role/s3access'
-    bucket_name:  'zoku-stage'
+    role_arn:     'arn:aws:iam::751141858228:role/production-s3-user-role'
+    bucket_name:  'zoku-production'
     
   kms:
     user_env:     'AWS_CRYPTO_USER'

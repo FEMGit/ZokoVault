@@ -30,8 +30,8 @@
   }
   
   var screenShift = function(element) {
-    var offset = $(document).scrollTop()
-    element.css("margin-top", offset + "px")
+    var offset = $('.content').scrollTop()
+    element.css("top", offset - 50 + "px")
   }
   
   var createEmailIframeByName = function(name, contact_id, base) {

@@ -1,0 +1,4 @@
+<%= render partial: 'layouts/category_setup_modal' %>
+
+<button class="d-none" id="to-do-modal-popup" data-modal-id="category-setup-category-modal" onclick='categorySetupModal("Co-Owner", "You can allow a third-party 100% access to your Vault. This is typically provided to a spouse, executor, or family member.", "<%= asset_url('setup_modal/vault_co_owner.png') %>", "<%= vault_co_owners_path %>", "<%= to_do_modal_popup_path %>")' >
+</button>

@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :user_activities, dependent: :destroy
   has_many :user_death_traps, dependent: :destroy
   has_many :tax_year_infos, dependent: :destroy
+  has_one :to_do_popup_cancel, dependent: :destroy
   has_many :final_wish_infos, dependent: :destroy
   has_many :financial_investments, dependent: :destroy
   has_many :financial_alternatives, dependent: :destroy
@@ -67,7 +68,8 @@ class User < ActiveRecord::Base
   delegate :mfa_frequency, :mfa_disabled, :initials, :first_name, :middle_name,
            :last_name, :name, :phone_number, :phone_number_mobile,
            :two_factor_phone_number, :date_of_birth, :signed_terms_of_service?,
-           :street_address_1, :city, :state, :zip, to: :user_profile, allow_nil: true
+           :street_address_1, :city, :state, :zip, :full_primary_shared_with,
+           :primary_shared_with, to: :user_profile, allow_nil: true
 
   def category_shares
     @category_shares ||= shares.categories
@@ -289,6 +291,10 @@ class User < ActiveRecord::Base
 
   def confirm_email!
     @confirm_email = true
+  end
+  
+  def login_count
+    UserActivity.for_user(self).map(&:login_count).reduce(&:+)
   end
 
   before_create { set_as_admin }

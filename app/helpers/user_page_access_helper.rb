@@ -2,10 +2,10 @@ module UserPageAccessHelper
   def white_listed(type:)
     case type
       when :trial
-        [ trial_ended_path,
-          trial_membership_update_path,
-          trial_questionnaire_path,
-          payment_path,
+        [ trial_membership_ended_accounts_path,
+          trial_membership_update_accounts_path,
+          trial_questionnaire_accounts_path,
+          payment_accounts_path,
           update_payment_account_settings_path,
           subscriptions_account_path,
           apply_promo_code_account_path,
@@ -13,17 +13,17 @@ module UserPageAccessHelper
           mfa_path,
           mfa_verify_code_account_path ]
       when :corporate_admin, :corporate_employee
-      [ shared_expired_corporate_path(:id) ]
+      [ shared_user_expired_corporate_accounts_path(:id) ]
     end
   end
   
   def black_listed(type:)
     case type
       when :corporate_employee
-        [ corporate_account_settings_path,
-          edit_corporate_settings_path,
-          update_corporate_settings_path(:id),
-          corporate_billing_information_path]
+        [ account_settings_corporate_accounts_path,
+          edit_corporate_settings_corporate_accounts_path,
+          update_account_settings_corporate_accounts_path(:id),
+          billing_information_corporate_accounts_path]
     end
   end
   

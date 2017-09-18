@@ -1,7 +1,7 @@
 <div class="card mb-30 max-w-1000-centered">
   <h1>Upload your company logo</h1>
   
-  <%= form_for @corporate_profile, url: corporate_logo_update_path, method: :post do |f| %>
+  <%= form_for @corporate_profile, url: corporate_logo_update_accounts_path, method: :post do |f| %>
     <p class="mb-30">Your logo will show up when clients join the platform, and in their dashboard.</p>
     
     <label style="display: none;" id="company-logo-label">Company Logo</label>
@@ -9,7 +9,7 @@
     <%= render partial: 'corporate_accounts/company_logo_upload', locals: { f: f, upload_button: true } %>
 
     <div style="display: none;" id="button-section">
-      <%= render partial: 'layouts/back_continue_buttons', locals: { back_path: corporate_user_type_path,
+      <%= render partial: 'layouts/back_continue_buttons', locals: { back_path: corporate_user_type_accounts_path,
                                                                      form: f } %>
     </div>
   <% end %>

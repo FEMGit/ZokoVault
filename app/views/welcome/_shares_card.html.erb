@@ -24,7 +24,7 @@
         <%= resource.user.name %> shared new details since your last login.
       </div>
       <div class="board-link">
-        <%= link_to 'View', shared_view_dashboard_path(resource.user_id), :class=>"outline-button small-button"  %>
+        <%= link_to 'View', dashboard_shared_view_path(resource.user_id), :class=>"outline-button small-button"  %>
       </div>
     </section>
 <% end %>

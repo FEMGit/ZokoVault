@@ -11,7 +11,7 @@ class AuthenticatedController < ApplicationController
   def trial_check
     return unless is_expired_trial_user?
     if !trial_whitelist_page? && !permitted_page_trial_expired_user?
-      redirect_to trial_ended_path
+      redirect_to trial_membership_ended_accounts_path
     end
   end
 

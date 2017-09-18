@@ -5,7 +5,7 @@
     <p class="m-0-auto">Corporate accounts require a credit card on file. You will not be billed anything at this time.</p>
   </div>
 
-  <%= form_tag store_corporate_payment_path, { id: 'payment-form' } do %>
+  <%= form_tag store_corporate_payment_account_settings_path, { id: 'payment-form' } do %>
     <div class="form-row mt-50 max-w-800 m-0-auto">
       <label for="card-element">
         Enter card details
@@ -15,7 +15,7 @@
     </div>
 
     <section class="mt-60 bt-gray-light pt-20 mb-10 flex-button">
-      <%= link_to 'Back', how_billing_works_path, class:"big-button outline-button padded f-left" %>
+      <%= link_to 'Back', billing_types_accounts_path, class:"big-button outline-button padded f-left" %>
       <%= submit_tag 'Continue', class: 'button big-button blue-button f-right' %>
     </section>
   <% end %>

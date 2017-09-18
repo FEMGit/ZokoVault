@@ -1,4 +1,4 @@
-<%= form_tag :trial_questionnaire, { method: :put, id: 'questionnaire-form' } do %>
+<%= form_tag :trial_questionnaire_accounts, { method: :put, id: 'questionnaire-form' } do %>
   <div class="card mb-30 max-w-1000-centered">
     <%= image_tag "marketing/heart_bubble.png", :class => "questionnaire-heart" %>
 
@@ -20,7 +20,7 @@
     <p>2. Do you have feedback you would like to leave our team?</p>
     <%= text_area_tag 'questionnaire[feedback]', nil, class: 'w-100-percent max-w-430 h-100' %>
     <section class="mt-20 bt-gray-light pt-20 mb-10 flex-button">
-      <%= link_to 'Back', trial_membership_update_path, class: 'big-button outline-button padded f-left' %>
+      <%= link_to 'Back', trial_membership_update_accounts_path, class: 'big-button outline-button padded f-left' %>
       <%= hidden_field_tag 'skip', false %>
       <%= link_to 'Skip', 'javascript:skip()', class: 'big-button outline-button padded' %>
       <%= link_to 'Continue as Free User', 'javascript:submitForm()', class: 'button big-button blue-button f-right' %>

@@ -21,7 +21,7 @@ class AccountTrafficsController < AuthenticatedController
   private
   
   def user_link(traffic_info)
-    return my_profile_path if traffic_info.user == current_user
+    return user_profiles_path if traffic_info.user == current_user
     contact = Contact.for_user(current_user).detect do |c|
       c.emailaddress.downcase.eql? traffic_info.user.email.downcase
     end

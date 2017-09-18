@@ -82,6 +82,6 @@
     <% end %>
     
     <% if resource_owner.corporate_user_by_admin?(User.where('email ILIKE ?', @contact.emailaddress).first) %>
-      <p class="mt-30"><%= link_to 'Remove Corporate Access', account_settings_remove_corporate_access_path(@contact), class: 'button primary-button big-button' %></p>
+      <p class="mt-30"><%= link_to 'Remove Corporate Access', remove_corporate_access_account_settings_path(@contact), class: 'button primary-button big-button' %></p>
     <% end %>
 </div>

@@ -34,22 +34,22 @@ class PropertyAndCasualtiesController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Insurance", insurance_path if general_view?
-    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user) if shared_view?
+    add_breadcrumb "Insurance", insurance_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs
     add_breadcrumb "Property & Casualty - Setup", :new_property_path if general_view?
-    add_breadcrumb "Property & Casualty - Setup", shared_new_property_path(@shared_user) if shared_view?
+    add_breadcrumb "Property & Casualty - Setup", new_property_and_casualty_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_details_crumbs
     add_breadcrumb "#{@property_and_casualty.name}", property_path(@property_and_casualty) if general_view?
-    add_breadcrumb "#{@property_and_casualty.name}", shared_property_path(@shared_user, @property_and_casualty) if shared_view?
+    add_breadcrumb "#{@property_and_casualty.name}", property_and_casualty_shared_view_path(@shared_user, @property_and_casualty) if shared_view?
   end
 
   def set_edit_crumbs
     add_breadcrumb "Property & Casualty - Setup", edit_property_path(@property_and_casualty) if general_view?
-    add_breadcrumb "Property & Casualty - Setup", shared_edit_property_path(@shared_user, @property_and_casualty) if shared_view?
+    add_breadcrumb "Property & Casualty - Setup", edit_property_and_casualty_shared_view_path(@shared_user, @property_and_casualty) if shared_view?
   end
 
   # GET /properties/1
@@ -59,7 +59,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
     @insurance_card = @property_and_casualty
     @group_label = "Property & Casualty"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
-    session[:ret_url] = general_view? ? property_path(@property_and_casualty) : shared_property_path(@shared_user, @property_and_casualty)
+    session[:ret_url] = general_view? ? property_path(@property_and_casualty) : property_and_casualty_shared_view_path(@shared_user, @property_and_casualty)
   end
 
   # GET /properties/new
@@ -97,7 +97,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
-        @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(property_path(@insurance_card), property_and_casualty_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
@@ -132,7 +132,7 @@ class PropertyAndCasualtiesController < AuthenticatedController
       if validate_params && @insurance_card.update(property_and_casualty_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_properties(@insurance_card, property_params)
-        @path = success_path(property_path(@insurance_card), shared_property_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(property_path(@insurance_card), property_and_casualty_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @insurance_card }
       else

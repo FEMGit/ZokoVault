@@ -1,6 +1,6 @@
 <div class="card mb-30 max-w-1000-centered">
   <h1>Tell us about your company.</h1>
-  <%= form_for @corporate_profile, url: corporate_user_type_update_path, method: :post do |f| %>
+  <%= form_for @corporate_profile, url: corporate_user_type_update_accounts_path, method: :post do |f| %>
     <% if @corporate_profile.errors.any? %>
       <% errors = true %>
       <% error_messages = @corporate_profile.errors.messages %>

@@ -52,11 +52,11 @@ class DocumentsController < AuthenticatedController
   end
 
   def set_add_crumbs
-    add_breadcrumb "Add Document", new_documents_path(@shared_user)
+    add_breadcrumb "Add Document", new_document_path(@shared_user)
   end
 
   def set_edit_crumbs
-    add_breadcrumb "Edit Document", edit_documents_path(@document, @shared_user)
+    add_breadcrumb "Edit Document", edit_document_path(@document, @shared_user)
   end
 
   def set_show_crumbs

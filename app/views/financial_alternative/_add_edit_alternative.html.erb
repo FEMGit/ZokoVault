@@ -52,7 +52,7 @@
                                                                              shared_with_dropdown_id: "financial_provider_share_with_contact_ids" } %>
 
   <% if params[:id] && policy(@financial_provider).destroy? %>
-    <%= link_to 'Delete this Manager', delete_provider_alternative_url(params[:id]), method: :delete,
+    <%= link_to 'Delete this Manager', financial_alternative_provider_path(params[:id]), method: :delete,
       data: { confirm: "Deleting this manager will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-provider' %>
   <% end %>
@@ -68,7 +68,7 @@
 
       <% if data.id && policy(@financial_provider).destroy? %>
         <span class="mt-30 mb-30">
-          <%= link_to 'Delete this investment', delete_alternative_url(data.id), method: :delete,
+          <%= link_to 'Delete this investment', financial_alternative_url(data.id), method: :delete,
               data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },
               class: 'button small-button secondary-button', id: 'delete-investment' %>
         </span>

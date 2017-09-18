@@ -35,19 +35,19 @@ class FinancialAccountController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Financial Information", financial_information_path if general_view?
-    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user) if shared_view?
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_add_crumbs
-    add_breadcrumb "Financial Account - Setup", add_account_path(@shared_user)
+    add_breadcrumb "Financial Account - Setup", new_financial_account_path(@shared_user)
   end
 
   def set_details_crumbs
-    add_breadcrumb "#{@financial_provider.name}", show_account_path(@financial_provider, @shared_user)
+    add_breadcrumb "#{@financial_provider.name}", financial_account_path(@financial_provider, @shared_user)
   end
 
   def set_edit_crumbs
-    add_breadcrumb "Financial Account - Setup", edit_account_path(@financial_provider, @shared_user)
+    add_breadcrumb "Financial Account - Setup", edit_financial_account_path(@financial_provider, @shared_user)
   end
 
   def new
@@ -61,7 +61,7 @@ class FinancialAccountController < AuthenticatedController
 
   def show
     authorize @financial_provider
-    session[:ret_url] = show_account_url(@financial_provider, @shared_user)
+    session[:ret_url] = financial_account_url(@financial_provider, @shared_user)
   end
 
   def edit
@@ -84,7 +84,7 @@ class FinancialAccountController < AuthenticatedController
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
         FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
 
-        @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
+        @path = success_path(financial_account_url(@financial_provider), financial_account_url(@financial_provider, shared_user_id: resource_owner.id))
         if params[:tutorial_name]
           tutorial_redirection(format, @financial_provider.as_json)
         else
@@ -113,7 +113,7 @@ class FinancialAccountController < AuthenticatedController
       if @financial_provider.update(provider_params)
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
         FinancialInformationService.update_account_owners(@financial_provider.accounts, account_owner_params)
-        @path = success_path(show_account_url(@financial_provider), show_account_url(@financial_provider, shared_user_id: resource_owner.id))
+        @path = success_path(financial_account_url(@financial_provider), financial_account_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Account was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }
       else

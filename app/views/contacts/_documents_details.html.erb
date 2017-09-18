@@ -15,6 +15,7 @@
     </tr>
   </thead>
   <tbody>
+    <%= render partial: 'contacts/contingent_owner_shared_with_row' %>
     <% @contact_shares && @contact_shares.each do |share| %>
       <tr>
         <td class="document-name-big">

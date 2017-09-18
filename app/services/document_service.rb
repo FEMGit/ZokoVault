@@ -25,7 +25,7 @@ class DocumentService
   end
   
   def get_financial_documents(user, id)
-    Document.for_user(user).where(:category => @category, :financial_information_id => id)
+    Document.for_user(user).where(:category => @category.try(:name), :financial_information_id => id)
   end
   
   def get_all_groups

@@ -20,6 +20,7 @@ module InvitationService
 
           ShareInvitationMailer.send(*invitation_args).deliver_now
           ShareInvitationSent.create(user_id: user.id, contact_email: contact.emailaddress, user_invite_status: invitation_args.first.to_s)
+          UserTrafficModule.save_traffic_with_params(page_url: '--', page_name: "Share Invitation to #{invitation_args[1].name}", user: user, ip_address: '--')
         end
       end
     end

@@ -125,7 +125,8 @@ class DocumentsController < AuthenticatedController
 
     respond_to do |format|
       if saved
-        UserTrafficModule.save_traffic_with_params(page_url: document_path(@document), page_name: 'Uploaded New Document')
+        UserTrafficModule.save_traffic_with_params(page_url: document_path(@document), page_name: 'Uploaded New Document',
+                                                   user: current_user, ip_address: request.remote_ip)
         handle_document_saved(format)
       else
         handle_document_not_saved(format)
@@ -138,7 +139,8 @@ class DocumentsController < AuthenticatedController
     respond_to do |format|
       set_document_update_date_to_now(@document)
       if validate_params && @document.update(document_changes(:update))
-        UserTrafficModule.save_traffic_with_params(page_url: document_path(@document), page_name: 'Updated Document')
+        UserTrafficModule.save_traffic_with_params(page_url: document_path(@document), page_name: 'Updated Document',
+                                                   user: current_user, ip_address: request.remote_ip)
         BreadcrumbsCacheModule.cache_temp_breadcrumbs_delete
         if return_url?
           format.html { redirect_to session[:ret_url], flash: { success: 'Document was successfully updated.' } }

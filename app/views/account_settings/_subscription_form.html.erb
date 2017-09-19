@@ -43,7 +43,7 @@
   <% if @card %>
     <section class="mt-10">
       <label class="fz-16">Billing Info</label>
-      <%= render partial: 'account_settings/stripe_card_information', locals: { card: @card, update_subscription_path: update_subscription_information_path } %>
+      <%= render partial: 'account_settings/stripe_card_information', locals: { card: @card, update_subscription_path: update_subscription_information_account_settings_path } %>
     </section>
   <% end %>
 </div>

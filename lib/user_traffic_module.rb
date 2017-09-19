@@ -18,7 +18,7 @@ module UserTrafficModule
     end
   end
   
-  def self.save_traffic_with_params(page_url:, page_name:, user: current_user, ip_address: request.remote_ip)
+  def self.save_traffic_with_params(page_url:, page_name:, user:, ip_address:)
     if @shared_user.present?
       page_name << " (Shared View)"
     end

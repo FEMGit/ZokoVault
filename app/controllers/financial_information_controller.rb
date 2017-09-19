@@ -69,7 +69,7 @@ class FinancialInformationController < AuthenticatedController
   end
   
   private
-  
+
   def balance_sheet_params(type)
     return [] unless params[:financial_provider].present?
     params[:financial_provider].select { |k, _v| k.include? "#{type.to_s}_" }.collect { |k, v| [k[/\d+/], v] }

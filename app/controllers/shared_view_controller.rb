@@ -36,7 +36,7 @@ class SharedViewController < AuthenticatedController
       when 'contingent_owner'
         return "Shared Contingent Owner"
       when 'contacts'
-        return "Shared Contacts"
+        return "Shared Contacts & Permissions"
       when 'documents'
         return "Shared Documents"
     end

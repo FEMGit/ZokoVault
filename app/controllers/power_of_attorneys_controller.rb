@@ -41,11 +41,11 @@ class PowerOfAttorneysController < AuthenticatedController
     poa = CardDocument.power_of_attorney(params[:id])
     case action_name
       when 'show'
-        return "PoA - #{poa.name} - Details"
+        return "Power of Attorney for #{poa.poa_for_name} - Details"
       when 'new'
-        return "PoA - Setup"
+        return "Power of Attorney - Setup"
       when 'edit'
-        return "PoA - #{poa.name} - Edit"
+        return "Power of Attorney for #{poa.poa_for_name} - Edit"
     end
   end
 

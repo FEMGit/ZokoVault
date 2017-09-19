@@ -106,7 +106,7 @@ class WelcomeController < AuthenticatedController
   end
   
   private
-  
+
   def do_not_show_modal_popup_path
     return nil unless params[:to_do_modal_popup_path]
     params.require(:to_do_modal_popup_path)

@@ -2,6 +2,13 @@ class EmailSupportController < AuthenticatedController
   include BackPathHelper
   include SanitizeModule
   attr_reader :referrer
+  
+  def page_name
+    case action_name
+      when 'index'
+        return "ZokuVault Support"
+    end
+  end
 
   def index
     @message = Message.new

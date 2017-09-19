@@ -64,7 +64,7 @@
       <p>Upload and update information in the User's Vault.</p>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'View Client Vault', shared_view_dashboard_path(@corporate_contact.user_profile.user_id), class: 'button big-button blue-button' %>
+      <%= link_to 'View Client Vault', dashboard_shared_view_path(@corporate_contact.user_profile.user_id), class: 'button big-button blue-button' %>
     </div>
   </section>
 
@@ -79,7 +79,7 @@
       <% end %>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Send Invitation', corporate_send_invitation_path(@corporate_contact), method: :post, class: 'button big-button blue-button' %>
+      <%= link_to 'Send Invitation', send_invitation_corporate_accounts_path(@corporate_contact), method: :post, class: 'button big-button blue-button' %>
     </div>
   </section>
   
@@ -119,7 +119,7 @@
     <p class="mb-30">
       Removing the client account will sever all access between you and this account, revoking access to all shared documents and information.
       <div class="mb-30">
-        <%= link_to 'Remove Account', corporate_account_remove_client_path(@corporate_contact), method: :post, class: "js-modal-close button primary-button big-button" %>
+        <%= link_to 'Remove Account', remove_corporate_client_corporate_accounts_path(@corporate_contact), method: :post, class: "js-modal-close button primary-button big-button" %>
         <%= link_to 'Cancel', 'javascript:void(null)', class: "js-modal-close button secondary-button big-button" %>
       </div>
     </p>

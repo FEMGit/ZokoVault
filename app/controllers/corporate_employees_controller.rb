@@ -88,7 +88,7 @@ class CorporateEmployeesController < CorporateBaseController
     add_employee_shares(new_user_ids - previous_user_id, @user_account)
   end
   
-  def remove_employee
+  def remove
     corporate_contact = corporate_contact_by_contact_id(params[:contact_id])
     corporate_profile = corporate_contact.try(:user_profile)
     return unless corporate_profile.present?

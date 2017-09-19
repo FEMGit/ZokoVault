@@ -33,7 +33,7 @@ class MfasController < AuthenticatedController
 
   def not_verified!
     if params[:shared_user_id].present? && session[:mfa_shared]
-      redirect_to shared_view_dashboard_path(params[:shared_user_id])
+      redirect_to dashboard_shared_view_path(params[:shared_user_id])
     elsif params[:shared_user_id].blank? && session[:mfa]
       redirect_to root_path
     end

@@ -34,19 +34,19 @@ class FinancialInvestmentController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Financial Information", financial_information_path if general_view?
-    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user) if shared_view?
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_add_crumbs
-    add_breadcrumb "Financial Investment or Debt - Setup", add_investment_path(@shared_user)
+    add_breadcrumb "Financial Investment or Debt - Setup", new_financial_investment_path(@shared_user)
   end
 
   def set_details_crumbs
-    add_breadcrumb "#{@financial_investment.name}", show_investment_path(@financial_investment, @shared_user)
+    add_breadcrumb "#{@financial_investment.name}", financial_investment_path(@financial_investment, @shared_user)
   end
 
   def set_edit_crumbs
-    add_breadcrumb "Financial Investment or Debt - Setup", edit_investment_path(@financial_investment, @shared_user)
+    add_breadcrumb "Financial Investment or Debt - Setup", edit_financial_investment_path(@financial_investment, @shared_user)
   end
 
   def new
@@ -59,7 +59,7 @@ class FinancialInvestmentController < AuthenticatedController
   def show
     authorize @financial_investment
     authorize @investment_provider
-    session[:ret_url] = show_investment_url(@financial_investment, @shared_user)
+    session[:ret_url] = financial_investment_url(@financial_investment, @shared_user)
   end
 
   def edit
@@ -78,7 +78,7 @@ class FinancialInvestmentController < AuthenticatedController
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_investment.share_with_contact_ids, nil, resource_owner, @financial_investment)
         FinancialInformationService.update_investment_owners(@financial_investment, investment_owner_params)
-        @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+        @path = success_path(financial_investment_url(@financial_investment), financial_investment_url(@financial_investment, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
           tutorial_redirection(format, @financial_investment.as_json)
@@ -109,7 +109,7 @@ class FinancialInvestmentController < AuthenticatedController
         FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_investment)
         FinancialInformationService.update_investment_owners(@financial_investment, investment_owner_params)
-        @path = success_path(show_investment_url(@financial_investment), show_investment_url(@financial_investment, shared_user_id: resource_owner.id))
+        @path = success_path(financial_investment_url(@financial_investment), financial_investment_url(@financial_investment, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Investment was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_investment }
       else

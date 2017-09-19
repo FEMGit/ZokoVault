@@ -2,7 +2,7 @@ module BreadcrumbsErrorModule
   def financial_error_breadcrumb_update
     breadcrumbs.clear
     add_breadcrumb "Financial Information", :financial_information_path if general_view?
-    add_breadcrumb "Financial Information", shared_view_financial_information_path(shared_user_id: @shared_user.id) if shared_view?
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_add_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
@@ -43,7 +43,7 @@ module BreadcrumbsErrorModule
       end
     end
     add_breadcrumb "Insurance", :insurance_path if general_view?
-    add_breadcrumb "Insurance", shared_view_insurance_path(shared_user_id: @shared_user.id) if shared_view?
+    add_breadcrumb "Insurance", insurance_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
@@ -81,7 +81,7 @@ module BreadcrumbsErrorModule
     breadcrumbs.clear
     set_online_account if @path[:action].eql? :edit
     add_breadcrumb "Online Accounts", :online_accounts_path if general_view?
-    add_breadcrumb "Online Accounts", shared_view_online_accounts_path(shared_user_id: @shared_user.id) if shared_view?
+    add_breadcrumb "Online Accounts", online_accounts_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_new_crumbs && return if @path[:action].eql? :new
     set_edit_crumbs if @path[:action].eql? :edit
   end
@@ -92,7 +92,7 @@ module BreadcrumbsErrorModule
     breadcrumbs.clear
     yield
     add_breadcrumb "Wills & Powers of Attorney", :wills_powers_of_attorney_path if general_view?
-    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(shared_user_id: @shared_user.id) if shared_view?
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
@@ -101,7 +101,7 @@ module BreadcrumbsErrorModule
     breadcrumbs.clear
     yield
     add_breadcrumb "Trusts & Entities", :trusts_entities_path if general_view?
-    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(shared_user_id: @shared_user.id) if shared_view?
+    add_breadcrumb "Trusts & Entities", trusts_entities_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_new_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end

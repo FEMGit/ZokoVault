@@ -5,7 +5,7 @@
     <p class="mb-30 max-w-1000">There are 0 users sharing data with you on ZokuVault.</p>
 
     <% if current_user.free? %>
-      <%= link_to 'Upgrade Your Account', account_upgrade_path, class: "button big-button blue-button" %>
+      <%= link_to 'Upgrade Your Account', upgrade_accounts_path, class: "button big-button blue-button" %>
     <% end %>
   </section>
 </div>

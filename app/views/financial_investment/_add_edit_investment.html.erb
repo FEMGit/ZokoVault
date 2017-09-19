@@ -73,7 +73,7 @@
                                                                              shared_with_dropdown_id: "financial_investment_share_with_contact_ids" } %>
 
   <% if params[:id] && policy(@financial_investment).destroy? %>
-    <%= link_to 'Delete this Investment', delete_investment_url(params[:id]), method: :delete,
+    <%= link_to 'Delete this Investment', financial_investment_url(params[:id]), method: :delete,
       data: { confirm: "Deleting this investment will permanently remove it from ZokuVault." },
       class: 'button small-button secondary-button', id: 'delete-insurance' %>
   <% end %>

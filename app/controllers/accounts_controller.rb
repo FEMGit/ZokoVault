@@ -47,7 +47,7 @@ class AccountsController < AuthenticatedController
     if SubscriptionService.eligible_for_trial?(current_user)
       SubscriptionService.activate_trial(user: current_user)
     end
-    redirect_to tutorials_lets_get_started_path
+    redirect_to lets_get_started_tutorials_path
   end
 
   def payment
@@ -147,7 +147,7 @@ class AccountsController < AuthenticatedController
     @corporate_profile.company_information_required!
     respond_to do |format|
       if @corporate_profile.update(company_information_params)
-        format.html { redirect_to corporate_logo_path }
+        format.html { redirect_to corporate_logo_accounts_path }
       else
         format.html { render :corporate_user_type, layout: 'blank_layout' }
         format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
@@ -165,7 +165,7 @@ class AccountsController < AuthenticatedController
     @corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
     respond_to do |format|
       if @corporate_profile.update(company_information_params)
-        format.html { redirect_to corporate_account_options_path }
+        format.html { redirect_to corporate_account_options_accounts_path }
       else
         format.html { render :corporate_logo, layout: 'blank_layout' }
         format.json { render json: @corporate_profile.errors, status: :unprocessable_entity }
@@ -181,7 +181,7 @@ class AccountsController < AuthenticatedController
     corporate_profile = CorporateAccountProfile.find_or_initialize_by(user: corporate_admin)
     current_user.user_profile.update_attributes(:mfa_frequency => UserProfile.mfa_frequencies[:always])
     MessageMailer.corporate_account_information(corporate_profile, corporate_options_params).deliver
-    redirect_to how_billing_works_path
+    redirect_to how_billing_works_accounts_path
   end
 
   def how_billing_works; end
@@ -209,19 +209,22 @@ class AccountsController < AuthenticatedController
       end
       current_user.update_attributes(setup_complete: true)
       redirect_to corporate_accounts_path and return if current_user.corporate_employee?
-      redirect_to first_run_path and return
+      redirect_to first_run_accounts_path and return
+    elsif user_params[:user_type].eql? 'free'
+      MailchimpService.new.subscribe_to_shared(current_user) unless current_user.paid?
+      current_user.update_attributes(setup_complete: true)
     elsif user_params[:user_type].eql? 'corporate'
       MailchimpService.new.subscribe_to_corporate(current_user)
       current_user.update_attributes(setup_complete: false)
       current_user.update(corporate_admin: true)
-      redirect_to corporate_user_type_path and return
+      redirect_to corporate_user_type_accounts_path and return
     end
     redirect_to root_path
   end
 
   def update
     current_user.update_attributes(user_params.merge(setup_complete: true))
-    redirect_to session[:ret_url] || first_run_path
+    redirect_to session[:ret_url] || first_run_accounts_path
   end
 
   def show; end

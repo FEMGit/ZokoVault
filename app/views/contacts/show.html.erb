@@ -8,7 +8,7 @@
     <% end %>
     <span <% if avatar %> class="avatar-name" <% end %>><%=@contact.firstname%> <%=@contact.lastname%></span>
   </h1>
-  <%= link_to edit_contact_details_path(@contact, @shared_user), class: "edit-link mrg-top" do %>
+  <%= link_to edit_contact_path(@contact, @shared_user), class: "edit-link mrg-top" do %>
     <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-pencil-1"></use>

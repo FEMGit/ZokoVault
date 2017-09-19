@@ -25,7 +25,7 @@
           <%= date_format(user_error.created_at) %>
         </td>
         <td>
-          <%= link_to 'Details', user_error_details_path(user_error.id), class: "outline-button small-button" %>
+          <%= link_to 'Details', error_details_usage_metrics_path(user_error.id), class: "outline-button small-button" %>
         </td>
       </tr>
     <% end %>

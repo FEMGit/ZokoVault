@@ -32,7 +32,7 @@ class TutorialsController < AuthenticatedController
         "Guided Tutorial - #{@tutorial.try(:name)}" 
     end
   end
-  
+
   def lets_get_started
     tutorial_progress_save('lets_get_started')
   end
@@ -87,7 +87,7 @@ class TutorialsController < AuthenticatedController
         redirect_to root_path if recognized_path.nil? and return
         redirect_to recognized_path
       elsif params[:next_tutorial] == 'confirmation_page'
-        redirect_to tutorials_confirmation_path and return
+        redirect_to confirmation_tutorials_path and return
       else
         tuto_index = session[:tutorial_index]
         tuto_name = session[:tutorial_paths][tuto_index][:tuto_name]
@@ -116,9 +116,9 @@ class TutorialsController < AuthenticatedController
     tuto_index = session[:tutorial_index] + 1
     
     if @tutorial_name.eql? 'confirmation_page'
-      redirect_to tutorials_confirmation_path and return
+      redirect_to confirmation_tutorials_path and return
     elsif @tutorial_name.eql? 'vault_co_owners'
-      redirect_to tutorials_vault_co_owners_path and return
+      redirect_to vault_co_owners_tutorials_path and return
     end
 
     if session[:tutorial_paths][tuto_index]
@@ -330,7 +330,7 @@ class TutorialsController < AuthenticatedController
     @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
     if @tax_accountants.blank? && @financial_advisors.blank? && 
         @estate_planning_attorneys.blank? && @trust_planning_attorneys.blank?
-      redirect_to tutorials_confirmation_path and return;
+      redirect_to confirmation_tutorials_path and return;
     else
       add_shares_tutorials
     end

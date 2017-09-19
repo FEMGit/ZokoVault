@@ -2,17 +2,17 @@ module SharedViewHelper
   def shared_category_path(category_name, user)
     case category_name
     when Rails.application.config.x.FinalWishesCategory
-      link_to 'View Category', shared_view_final_wishes_path(@shared_user), class: 'view-category'
+      link_to 'View Category', final_wishes_shared_view_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.TaxCategory
-      link_to 'View Category', shared_view_taxes_path(@shared_user), class: 'view-category'
+      link_to 'View Category', taxes_shared_view_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.InsuranceCategory
-      link_to 'View Category', shared_view_insurance_path(@shared_user), class: 'view-category'
+      link_to 'View Category', insurance_shared_view_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.WillsPoaCategory
-      link_to 'View Category', shared_view_wills_powers_of_attorney_path(@shared_user), class: 'view-category'
+      link_to 'View Category', wills_powers_of_attorney_shared_view_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.TrustsEntitiesCategory
-      link_to 'View Category', shared_view_trusts_entities_path(@shared_user), class: 'view-category'
+      link_to 'View Category', trusts_entities_shared_view_path(@shared_user), class: 'view-category'
     when Rails.application.config.x.ContactCategory
-      link_to 'View Category', shared_view_contacts_path(@shared_user), class: 'view-category'
+      link_to 'View Category', contacts_shared_view_path(@shared_user), class: 'view-category'
     end
   end
   

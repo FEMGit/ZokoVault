@@ -16,16 +16,16 @@
   <p><%= @subscription_info[:text] %></p>
   <% if @subscription_info[:status] == :trial %>
     <div class="mb-20">
-      <%= link_to 'Extend Trial Period', admin_extend_trial_path(@user), class: "button secondary-button medium-button"%>
+      <%= link_to 'Extend Trial Period', extend_trial_usage_metrics_path(@user), class: "button secondary-button medium-button"%>
       <% if @subscription_info[:active] %>
-        <%= link_to 'End Trial Period', admin_cancel_trial_path(@user), class: "button secondary-button medium-button"%>
+        <%= link_to 'End Trial Period', cancel_trial_usage_metrics_path(@user), class: "button secondary-button medium-button"%>
       <% end %>
     </div>
   <% elsif @subscription_info[:status] == :unknown %>
-    <%= link_to 'Create Trial', admin_create_trial_path(@user), class: "button secondary-button medium-button mb-20"%>
+    <%= link_to 'Create Trial', create_trial_usage_metrics_path(@user), class: "button secondary-button medium-button mb-20"%>
   <% end %>
   
-  <%= form_for @user, url: usage_metrics_update_user_path, method: :post do |f| %>
+  <%= form_for @user, url: update_user_usage_metrics_path, method: :post do |f| %>
     <%= render partial: 'usage_metrics/tfa_disable_field' %>
     <%= render partial: 'usage_metrics/corporate_profile_edit', locals: { f: f } %>
   <% end %>

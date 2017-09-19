@@ -102,10 +102,12 @@ class UserTrafficDatatable
   end
 
   def traffic_page(info)
+    return info.page_name if resource_link(info).eql? '--'
     link_to info.page_name, resource_link(info), class: 'no-underline-link'
   end
 
   def traffic_url(info)
+    return '--' if resource_link(info).eql? '--'
     link_name = resource_link(info).remove(root_url).blank? ? "/" : resource_link(info).remove(root_url)
     link_to link_name, resource_link(info), class: 'no-underline-link'
   end

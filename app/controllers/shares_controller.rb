@@ -20,54 +20,6 @@ class SharesController < AuthenticatedController
       ShareService.append_primary_shares(current_user, @shares_by_user)
     end
     
-    def show; end
-
-    def new
-      @share = Share.new user: current_user
-      authorize @share
-    end
-
-    def edit; end
-
-    def create
-      @share = Share.new(share_params.merge(user_id: current_user.id))
-      authorize @share
-      respond_to do |format|
-        if @share.save
-          format.html { redirect_to @share, notice: 'share was successfully created.' }
-          format.json { render :show, status: :created, location: @share }
-        else
-          format.html { render :new }
-          format.json { render json: @share.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-
-    def update
-      authorize @share
-
-      respond_to do |format|
-        if @share.update(share_params)
-          format.html { redirect_to @share, notice: 'share was successfully updated.' }
-          format.json { render :show, status: :ok, location: @share }
-        else
-          format.html { render :edit }
-          format.json { render json: @share.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-
-    def destroy
-      authorize @share
-
-      @share.destroy
-      respond_to do |format|
-        format.html { redirect_to shares_url, notice: 'share was successfully destroyed.' }
-        format.json { head :no_content }
-      end
-    end
-
-    private
     
     def shared_category_count(shares, user)
       return Rails.application.config.x.ShareCategories.count if current_user.primary_shared_with? user

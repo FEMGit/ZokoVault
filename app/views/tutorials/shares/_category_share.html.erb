@@ -19,7 +19,7 @@
 
   <div id="email-preview-list">
     <% @contacts_with_access.each do |contact| %>
-      <%= render partial: 'tutorials/tutorial_share_contact_preview', locals: { :contact_id => contact.id } %>
+      <%= render partial: 'layouts/share_contact_preview', locals: { :contact_id => contact.id } %>
     <% end %>
   </div>
   

@@ -34,22 +34,22 @@ class HealthsController < AuthenticatedController
   
   def set_index_breadcrumbs
     add_breadcrumb "Insurance", insurance_path if general_view?
-    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user) if shared_view?
+    add_breadcrumb "Insurance", insurance_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_new_crumbs
     add_breadcrumb "Health - Setup", :new_health_path if general_view?
-    add_breadcrumb "Health - Setup", shared_new_health_path(@shared_user) if shared_view?
+    add_breadcrumb "Health - Setup", new_health_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_details_crumbs
     add_breadcrumb "#{@health.name}", health_path(@health) if general_view?
-    add_breadcrumb "#{@health.name}", shared_health_path(@shared_user, @health) if shared_view?
+    add_breadcrumb "#{@health.name}", health_shared_view_path(@shared_user, @health) if shared_view?
   end
 
   def set_edit_crumbs
     add_breadcrumb "Health - Setup", edit_health_path(@health) if general_view?
-    add_breadcrumb "Health - Setup", shared_edit_health_path(@shared_user, @health) if shared_view?
+    add_breadcrumb "Health - Setup", edit_health_shared_view_path(@shared_user, @health) if shared_view?
   end
 
   # GET /healths/1
@@ -59,7 +59,7 @@ class HealthsController < AuthenticatedController
     @insurance_card = @health
     @group_label = "Health"
     @group_documents = DocumentService.new(:category => @insurance_card.category).get_insurance_documents(resource_owner, @group_label, params[:id])
-    session[:ret_url] = general_view? ? health_path(@health) : shared_health_path(@shared_user, @health)
+    session[:ret_url] = general_view? ? health_path(@health) : health_shared_view_path(@shared_user, @health)
   end
 
   # GET /healths/new
@@ -92,7 +92,7 @@ class HealthsController < AuthenticatedController
       if validate_params && @insurance_card.save
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids, nil, resource_owner)
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
-        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(health_path(@insurance_card), health_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         # If comes from Tutorials workflow, redirect to next step
         if params[:tutorial_name]
           tutorial_redirection(format, @insurance_card.as_json)
@@ -126,7 +126,7 @@ class HealthsController < AuthenticatedController
       if validate_params && @insurance_card.update(health_params)
         PolicyService.update_shares(@insurance_card.id, @insurance_card.share_with_ids.map(&:to_i), @previous_share_with_ids, resource_owner)
         PolicyService.update_insured_members(@insurance_card, policy_insured_params)
-        @path = success_path(health_path(@insurance_card), shared_health_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
+        @path = success_path(health_path(@insurance_card), health_shared_view_path(shared_user_id: resource_owner.id, id: @insurance_card.id))
         format.html { redirect_to @path, flash: { success: 'Insurance was successfully updated.' } }
         format.json { render :show, status: :ok, location: @health }
       else

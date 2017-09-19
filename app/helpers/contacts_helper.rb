@@ -69,7 +69,7 @@ module ContactsHelper
                    .map { |sh| sh.emailaddress.downcase }
                    .include? contact.emailaddress.downcase
       link_to 'Co-Owner', vault_co_owners_path, class: 'no-underline-link clr-inherit'
-    elsif current_user.user_profile.full_primary_shared_with.eql?(contact)
+    elsif current_user.contingent_owner.eql?(contact)
       link_to 'Contingent Owner', vault_inheritance_path, class: 'no-underline-link clr-inherit'
     else
       nil

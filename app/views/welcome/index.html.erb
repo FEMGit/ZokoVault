@@ -8,6 +8,8 @@
 
 <% subscription = current_user.current_user_subscription %>
 
+<%= render partial: @to_do_modal_popup_view, locals: { to_do_modal_popup_path: @to_do_modal_popup_view } if @to_do_modal_popup_view %>
+
 <% if tutorial_unfinished? %>
   <%= render partial: "onboarding_back_card" %>
 <% end %>
@@ -65,3 +67,11 @@
 <% else %>
     <%= render :partial => 'welcome/marketing_home' %>
 <% end %>
+
+<%= javascript_include_tag 'modal' %>
+
+<script>
+  $(document).ready(function() {
+    $("#to-do-modal-popup").click()
+  })
+</script>

@@ -28,13 +28,13 @@ class ContactsController < AuthenticatedController
   
   def set_index_crumbs
     add_breadcrumb "Contacts & Permissions", contacts_path if general_view?
-    add_breadcrumb "Contacts & Permissions", shared_view_contacts_path(@shared_user) if shared_view?
+    add_breadcrumb "Contacts & Permissions", contacts_shared_view_path(@shared_user) if shared_view?
   end
 
   def set_details_crumbs
     return unless @contact.present?
-    add_breadcrumb "#{@contact.name.to_s}", contact_details_path(@contact) if general_view?
-    add_breadcrumb "#{@contact.name.to_s}", contact_details_path(@contact, @shared_user) if shared_view?
+    add_breadcrumb "#{@contact.name.to_s}", contact_path(@contact) if general_view?
+    add_breadcrumb "#{@contact.name.to_s}", contact_path(@contact, @shared_user) if shared_view?
   end
 
   # GET /contacts
@@ -51,7 +51,7 @@ class ContactsController < AuthenticatedController
   def show
     authorize @contact
 
-    session[:ret_url] = contact_details_path(@contact, @shared_user)
+    session[:ret_url] = contact_path(@contact, @shared_user)
   end
 
   # GET /contacts/new
@@ -90,7 +90,7 @@ class ContactsController < AuthenticatedController
 
     respond_to do |format|
       if @contact.update(contact_params)
-        format.html { redirect_to success_path(contact_details_path(@contact), contact_details_path(@contact, @shared_user)), flash: { success: 'Contact was successfully updated.' } }
+        format.html { redirect_to success_path(contact_path(@contact), contact_path(@contact, @shared_user)), flash: { success: 'Contact was successfully updated.' } }
         format.json { render :show, status: :ok, location: @contact }
       else
         error_path(:edit)
@@ -107,7 +107,7 @@ class ContactsController < AuthenticatedController
 
     @contact.destroy
     respond_to do |format|
-      format.html { redirect_to @shared_user.present? ? shared_view_contacts_url : contacts_url, notice: 'Contact was successfully destroyed.' }
+      format.html { redirect_to @shared_user.present? ? contacts_shared_view_url : contacts_url, notice: 'Contact was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -182,7 +182,7 @@ class ContactsController < AuthenticatedController
 
   def handle_contact_saved(format)
     UpdateDocumentService.new(:user => resource_owner, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
-    format.html { redirect_to success_path(contact_details_path(@contact), contact_details_path(@contact, @shared_user)), flash: { success: 'Contact was successfully created.' } }
+    format.html { redirect_to success_path(contact_path(@contact), contact_path(@contact, @shared_user)), flash: { success: 'Contact was successfully created.' } }
 
     contact_ids = Contact.for_user(resource_owner).sort_by { |s| s.lastname.downcase }.map(&:id)
     contact_position = contact_ids.find_index(@contact.id)

@@ -4,10 +4,10 @@
 <label>Number of Unique Documents</label>
 <p><%= @uniq_document_count %></p>
 
-<%= link_to 'Update Information', update_usage_metrics_path, class: 'button big-button primary-button' %>
+<%= link_to 'Update Information', update_information_usage_metrics_path, class: 'button big-button primary-button' %>
 
 <h3 class="mt-30">ZokuVault Users</h3>
-<a class="add-link fr" href="<%=usage_metrics_new_user_path%>">
+<a class="add-link fr" href="<%= new_user_usage_metrics_path %>">
   <span class="circle-button">
     <svg class="icon circle-icon">
       <use xlink:href="#icon-plus-1"></use>
@@ -90,7 +90,7 @@
           <%= site_completed(user) %>
         </td>
         <td>
-          <%= link_to 'Details', statistic_details_path(user.id), class: "outline-button small-button" %>
+          <%= link_to 'Details', statistic_details_usage_metrics_path(user.id), class: "outline-button small-button" %>
         </td>
       </tr>
     <% end %>

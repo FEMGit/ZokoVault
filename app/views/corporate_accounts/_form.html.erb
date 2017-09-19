@@ -85,7 +85,7 @@
             <% if !@has_card && @is_corporate_employee %>
               <span class="fz-12 ml-10">The Corporate Administrator must setup Billing Information to enable this option.</span>
             <% elsif !@has_card %>
-              <span class="fz-12 ml-10">You must set up <%= link_to 'Billing Information', corporate_billing_information_path %> to enable this option.</span>
+              <span class="fz-12 ml-10">You must set up <%= link_to 'Billing Information', billing_information_corporate_accounts_path %> to enable this option.</span>
             <% end %>
           </li><br/>
           <li class="radio-list">
@@ -106,7 +106,7 @@
                style="width:55%; margin-left:0" id="billing_error">
             <div>Billing Error: <%= @billing_error %></div>
             <div>Please <%= link_to 'update your credit card on file',
-              corporate_billing_information_path, :target => "_blank" %>.</div>
+              billing_information_corporate_accounts_path, :target => "_blank" %>.</div>
           </div>
         <% end %>
         <div id="pricing-rows">

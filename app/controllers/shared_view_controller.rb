@@ -37,39 +37,39 @@ class SharedViewController < AuthenticatedController
   end
   
   def dashboard_breadcrumbs
-    add_breadcrumb "Dashboard", shared_view_dashboard_path(@shared_user)
+    add_breadcrumb "Dashboard", dashboard_shared_view_path(@shared_user)
   end
   
   def documents_breadcrumbs
-    add_breadcrumb "Documents", shared_view_documents_path(@shared_user)
+    add_breadcrumb "Documents", documents_shared_view_path(@shared_user)
   end
   
   def insurance_breadcrumbs
-    add_breadcrumb "Insurance", shared_view_insurance_path(@shared_user)
+    add_breadcrumb "Insurance", insurance_shared_view_path(@shared_user)
   end
   
   def taxes_breadcrumbs
-    add_breadcrumb "Taxes", shared_view_taxes_path(@shared_user)
+    add_breadcrumb "Taxes", taxes_shared_view_path(@shared_user)
   end
   
   def final_wishes_breadcrumbs
-    add_breadcrumb "Final Wishes", shared_view_final_wishes_path(@shared_user)
+    add_breadcrumb "Final Wishes", final_wishes_shared_view_path(@shared_user)
   end
   
   def wills_poa_breadcrumbs
-    add_breadcrumb "Wills & Powers of Attorney", shared_view_wills_powers_of_attorney_path(@shared_user)
+    add_breadcrumb "Wills & Powers of Attorney", wills_powers_of_attorney_shared_view_path(@shared_user)
   end
   
   def trusts_entities_breadcrumbs
-    add_breadcrumb "Trusts & Entities", shared_view_trusts_entities_path(@shared_user)
+    add_breadcrumb "Trusts & Entities", trusts_entities_shared_view_path(@shared_user)
   end
   
   def financial_information_breadcrumbs
-    add_breadcrumb "Financial Information", shared_view_financial_information_path(@shared_user)
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(@shared_user)
   end
   
   def dashboard
-    session[:ret_url] = shared_view_dashboard_path
+    session[:ret_url] = dashboard_shared_view_path
   end
   
   def insurance
@@ -85,7 +85,7 @@ class SharedViewController < AuthenticatedController
       shared_ids =  @insurance_vendors.map(&:id)
       @insurance_documents = Document.for_user(shared_user).where(:vendor_id => shared_ids)
     end
-    session[:ret_url] = shared_view_insurance_path
+    session[:ret_url] = insurance_shared_view_path
   end
 
   def taxes
@@ -101,7 +101,7 @@ class SharedViewController < AuthenticatedController
       @taxes = TaxYearInfo.for_user(@shared_user).where(id: tax_year_ids)
       @documents = Document.for_user(shared_user).where(group: @taxes.map(&:year))
     end
-    session[:ret_url] = shared_view_taxes_path
+    session[:ret_url] = taxes_shared_view_path
   end
 
   # GET /final_wishes
@@ -141,7 +141,7 @@ class SharedViewController < AuthenticatedController
       @wtl_documents = (Document.for_user(shared_user).where(:card_document_id => card_document_ids) + 
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
-    session[:ret_url] = shared_view_wills_powers_of_attorney_path
+    session[:ret_url] = wills_powers_of_attorney_shared_view_path
   end
 
   def trusts_entities
@@ -161,7 +161,7 @@ class SharedViewController < AuthenticatedController
       @documents = (Document.for_user(shared_user).where(:card_document_id => card_document_ids) + 
         @document_shareables.select { |d| d.category == @category.name }).uniq
     end
-    session[:ret_url] = shared_view_trusts_entities_path
+    session[:ret_url] = trusts_entities_shared_view_path
   end
   
   def financial_information
@@ -193,7 +193,7 @@ class SharedViewController < AuthenticatedController
       
       @documents = Document.for_user(shared_user).select { |doc| provider_ids.include? doc.financial_information_id }
     end
-    session[:ret_url] = shared_view_financial_information_path
+    session[:ret_url] = financial_information_shared_view_path
   end
   
   def online_accounts
@@ -206,21 +206,21 @@ class SharedViewController < AuthenticatedController
       @online_accounts = OnlineAccount.for_user(shared_user).where(id: online_account_ids)
       @online_accounts.each { |online_account| authorize online_account }
     end
-    session[:ret_url] = shared_view_online_accounts_path
+    session[:ret_url] = online_accounts_shared_view_path
   end
   
   def contacts
     if @shared_category_names.include? Rails.application.config.x.ContactCategory
       contact_service = ContactService.new(:user => shared_user)
       @contacts = contact_service.contacts_shareable
-      session[:ret_url] = shared_view_contacts_path
+      session[:ret_url] = contacts_shared_view_path
     end
   end
 
   def documents
     if @shared_category_names.include? Rails.application.config.x.DocumentsCategory
       @documents = Document.for_user(shared_user).each { |d| authorize d }
-      session[:ret_url] = shared_view_documents_path
+      session[:ret_url] = documents_shared_view_path
     end
   end
 
@@ -271,8 +271,8 @@ class SharedViewController < AuthenticatedController
         (@shared_user.current_user_subscription &&
           (@shared_user.current_user_subscription.expired_trial? ||
            @shared_user.current_user_subscription.expired_full?))
-      redirect_to shared_expired_corporate_path(@shared_user) and return if current_user.corporate_manager?
-      redirect_to shared_expired_path(@shared_user)
+      redirect_to shared_user_expired_corporate_accounts_path(@shared_user) and return if current_user.corporate_manager?
+      redirect_to shared_user_expired_path(@shared_user)
     end
   end
 end

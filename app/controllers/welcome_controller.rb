@@ -120,12 +120,12 @@ class WelcomeController < AuthenticatedController
   
   def set_to_do_modal_popup_view
     @to_do_modal_popup_view = 
-      #if session[:popup_was_shown].nil?
-      #  session[:popup_was_shown] = true
+      if session[:popup_was_shown].nil?
+        session[:popup_was_shown] = true
         ToDoPopupModal.random_popup_modal(user: current_user)
-      #else
-      #  nil
-      #end
+      else
+        nil
+      end
   end
   
   def redirect_if_signed_in

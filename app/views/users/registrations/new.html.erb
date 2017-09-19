@@ -72,3 +72,7 @@
 </section>
 
 <%= render partial: 'layouts/improvely_conversion_tracking_js', locals: { goal: 'sign up', revenue: 0, reference: '' } %>
+
+<script>
+  fbq('track', 'SignUpPage');
+</script>

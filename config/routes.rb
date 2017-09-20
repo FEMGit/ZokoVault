@@ -137,8 +137,8 @@ Rails.application.routes.draw do
   # Contacts
   get 'contacts/relationship_values/:contact_type(/:shared_user_id)', to: 'contacts#relationship_values'
   get 'contacts/new(/:shared_user_id)', to: 'contacts#new', as: :new_contact
-  get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact
   get 'contacts/:id/edit(/:shared_user_id)', to: 'contacts#edit', as: :edit_contact
+  get 'contacts/:id(/:shared_user_id)', to: 'contacts#show', as: :contact
   resources :contacts, except: [:new, :edit, :show]
 
   # insurance details and create new account routes

@@ -34,7 +34,7 @@ class AuthenticatedController < ApplicationController
   def complete_setup!
     unless current_user.setup_complete?
       redirect_to terms_of_service_account_path and return unless current_user.corporate_admin
-      redirect_to corporate_user_type_path
+      redirect_to corporate_user_type_accounts_path
     end
   end
 

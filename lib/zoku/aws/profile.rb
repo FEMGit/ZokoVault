@@ -12,7 +12,12 @@ module Zoku
         end
         
         def active
-          all[StagingHelper.production_deploy? ? :production : :development]
+          key = case
+          when StagingHelper.production_deploy? then :production
+          when StagingHelper.staging_deploy? then :beta
+          else :development
+          end
+          all[key]
         end
         
         private

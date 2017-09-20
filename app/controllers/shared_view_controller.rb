@@ -33,6 +33,12 @@ class SharedViewController < AuthenticatedController
         return "Shared Trusts & Entities"
       when 'financial_information'
         return "Shared Financial Information"
+      when 'contingent_owner'
+        return "Shared Contingent Owner"
+      when 'contacts'
+        return "Shared Contacts"
+      when 'documents'
+        return "Shared Documents"
     end
   end
   
@@ -215,6 +221,10 @@ class SharedViewController < AuthenticatedController
       @contacts = contact_service.contacts_shareable
       session[:ret_url] = contacts_shared_view_path
     end
+  end
+  
+  def contingent_owner
+    redirect_to shared_view_dashboard_path unless current_user.contingent_owner_for?(@shared_user)
   end
 
   def documents

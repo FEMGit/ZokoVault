@@ -1,3 +1,6 @@
+<% category ||= nil %>
+<% page_name ||= nil %>
+
 <% if category.present? %>
   <% if category.name.eql? Rails.application.config.x.InsuranceCategory %>
     <svg class="icon nav-icon">
@@ -38,6 +41,12 @@
   <% elsif category.name.eql? Rails.application.config.x.ProfileCategory %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-contacts-2"></use>
+    </svg>
+  <% end %>
+<% elsif page_name.present? %>
+  <% if page_name.eql? 'Contingent Owner' %>
+    <svg class="icon nav-icon">
+      <use xlink:href="#icon-link-4"></use>
     </svg>
   <% end %>
 <% end %>

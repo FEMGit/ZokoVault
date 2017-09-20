@@ -1,0 +1,10 @@
+<section class="flex-boxes shared-boxes padding-right">
+  <div class="shared-name">
+    <h4>
+      <%= render partial: 'layouts/category_icons', locals: category_icons_locals %> <%= stripe_element_title %>
+    </h4>
+  </div>
+  <div class="shared-link">
+    <%= link_to 'View Category', view_categorty_path, class: 'outline-button category-btn small-button' %>
+  </div>
+</section>

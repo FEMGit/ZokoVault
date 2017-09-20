@@ -103,6 +103,16 @@
     </svg>Contacts &amp; Permissions
     <% end %>
   <% end %>
+  <! -- Contingent Owner -->
+  <% if current_user.contingent_owner_for?(@shared_user) %>
+    <% contingent_owner = 'active' if current_page?(contingent_owner_shared_view_path(@shared_user)) ||
+       breadcrumb?(:contingent_owner_shared_view_path) || breadcrumb?(contingent_owner_shared_view_path(@shared_user)) %>
+    <%= link_to contingent_owner_shared_view_path(@shared_user), class: "main-nav #{contingent_owner}" do %>
+      <svg class="icon nav-icon">
+        <use xlink:href="#icon-link-4"></use>
+      </svg>Contingent Owner
+    <% end %>
+  <% end %>
   
   <%= link_to shares_path, class: "main-nav mobile-show" do %>
     Exit Shared View

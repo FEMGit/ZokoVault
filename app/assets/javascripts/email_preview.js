@@ -57,3 +57,7 @@ var appendNewEmailPreviewLine = function(selectedContact, submitButtonText, emai
     $('#email-preview-list' + (emailPreviewListAdditionalId.length > 0 ? '.' + emailPreviewListAdditionalId : '')).append(data)
   })
 }
+
+var prependEmailPreviewSectionToContent = function() {
+  $('.content').prepend('<div id="email-preview-section"></div>')
+}

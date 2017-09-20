@@ -11,13 +11,14 @@ module Zoku
           @all ||= load_yaml.reduce({}){ |h,(k,v)| h[k.to_sym] = new(v); h }.freeze
         end
         
+        def active_key
+          return :production if StagingHelper.production_deploy?
+          return :beta if StagingHelper.staging_deploy?
+          :development
+        end
+        
         def active
-          key = case
-          when StagingHelper.production_deploy? then :production
-          when StagingHelper.staging_deploy? then :beta
-          else :development
-          end
-          all[key]
+          all[active_key]
         end
         
         private

@@ -107,7 +107,7 @@ class AccountsController < AuthenticatedController
     if current_user.corporate_manager?
       current_user.user_profile.update_attributes(mfa_frequency: 'always')
       current_user.update_attributes(setup_complete: true) unless current_user.corporate_admin
-      redirect_to corporate_user_type_path and return if current_user.corporate_admin
+      redirect_to corporate_user_type_accounts_path and return if current_user.corporate_admin
       redirect_to user_type_account_path 
     else
       redirect_to login_settings_account_path

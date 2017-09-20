@@ -1,4 +1,4 @@
-<% unless develop_staging? %>
+<% if production_deploy? %>
   <script type="text/javascript" src="https://zokuvault.iljmp.com/improvely.js"></script>
   <script type="text/javascript">
   improvely.init('zokuvault', 1);

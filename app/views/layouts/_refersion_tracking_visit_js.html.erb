@@ -1,4 +1,6 @@
-<!‐‐ REFERSION TRACKING: BEGIN ‐‐>
-<script src="//zokuvault.refersion.com/tracker/v3/pub_67c99ccb533535d2f230.js"></script>
-<script>_refersion();</script>
-<!‐‐ REFERSION TRACKING: END ‐‐>
+<% if production_deploy? %>
+  <!‐‐ REFERSION TRACKING: BEGIN ‐‐>
+  <script src="//zokuvault.refersion.com/tracker/v3/pub_67c99ccb533535d2f230.js"></script>
+  <script>_refersion();</script>
+  <!‐‐ REFERSION TRACKING: END ‐‐>
+<% end %>

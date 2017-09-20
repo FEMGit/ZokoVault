@@ -29,9 +29,6 @@
 
 <%= render partial: 'layouts/email_preview_javascript' %>
 
-<div id="email-preview-section">
-</div>
-
 <script>
   $(document).ready(function() {
     setEmailPreviewSingleDropdown($('#full_primary_shared_with'))
@@ -41,6 +38,6 @@
   var displayEmailPreview = function(contact_id) {
     displayEmailPreviewVaultInheritance(contact_id)
   }
-  
+  prependEmailPreviewSectionToContent()
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

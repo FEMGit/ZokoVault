@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.3.1"
+ruby "2.3.5"
 gem 'json', github: 'flori/json', branch: 'v1.8'
 
 gem 'rails', '4.2.7.1'

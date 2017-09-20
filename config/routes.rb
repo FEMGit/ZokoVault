@@ -284,7 +284,7 @@ Rails.application.routes.draw do
   get 'financial_information/alternative/:id(/:shared_user_id)', to: 'financial_alternative#show', as: :financial_alternative
   delete 'financial_information/alternative/:id', to: 'financial_alternative#destroy'
   patch 'financial_information/alternative/update/:id', to: 'financial_alternative#update'
-  post 'financial_information/alternative/create', to: 'financial_alternative#create', as: :financial_alternatives
+  post 'financial_information/alternative/add_alternative', to: 'financial_alternative#create', as: :financial_alternatives
   post 'financial_information/alternative/update_all', to: 'financial_alternative#update_all'
   delete 'financial_information/alternative/provider/:id', to: 'financial_alternative#destroy_provider', as: :financial_alternative_provider
 
@@ -313,7 +313,7 @@ Rails.application.routes.draw do
   get 'financial_information/investment/:id(/:shared_user_id)', to: 'financial_investment#show', as: :financial_investment
   delete 'financial_information/investment/:id', to: 'financial_investment#destroy'
   patch 'financial_information/investment/update/:id', to: 'financial_investment#update'
-  post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :financial_invstments
+  post 'financial_information/investment/add_investment', to: 'financial_investment#create', as: :financial_investments
   post 'financial_information/investment/update_all', to: 'financial_investment#update_all'
   
   # Shared view

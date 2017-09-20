@@ -3,8 +3,6 @@
   <%= image_tag "marketing/airplane.png", :class => "mb-30 w-50-percent" %>
   <p class="text-center mb-10">We sent you a link to verify your identity.<br>You will need to log in once your identity is verified.</p>
 </div>
-<script>
-fbq('track', 'CompleteRegistration');
-</script>
 
 <%= render partial: 'layouts/improvely_conversion_tracking_js', locals: { goal: 'sign up complete', revenue: 0, reference: '' } %>
+<%= render partial: 'layouts/facebook_pixel_tracking_js', locals: { event_name: 'CompleteRegistration' } %>

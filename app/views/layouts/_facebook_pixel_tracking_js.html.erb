@@ -1,0 +1,5 @@
+<% if production_deploy? %>
+  <script>
+    fbq('track', '<%=event_name%>');
+  </script>
+<% end %>

@@ -24,6 +24,9 @@
   </div>
   <div class="modal-header">
     <h2><%= @contact.new_record? ? 'Add' : 'Edit' %> Contact</h2>
+    <ul class="mt-0 pl-20" id="contact-errors-list">
+      <!-- Errors will be displayed here -->
+    </ul>
   </div>
   <div class="modal-content">
     <%= form_for @contact, remote: true, :html => {:id => "contact-form", 'data-type' => 'json'} do |f| %>
@@ -196,9 +199,21 @@ var addSpanErrorMessage = function(selector, error_message) {
   $('<span class="error-label"> - ' + error_message + '</span>').insertBefore($(selector));
 }
 
-var addErrorMessage = function(selector, error_message) {
+var addErrorMessage = function(selector, error_title, error_message, tab_number) {
   $(selector).addClass('input-error');
   addSpanErrorMessage(selector, error_message)
+  $("#contact-errors-list").append('<li class="fz-12 error-label">' + error_title + ' - ' + error_message + '</li>')
+  circleClass = ""
+  tabTextClass = ""
+  if (tab_number === 1) {
+    circleClass = "alert-light-shaded"
+    tabTextClass = "clr-alert-light-shaded"
+  } else {
+    circleClass = "alert"
+    tabTextClass = "clr-alert"
+  }
+  $("#step-" + tab_number).addClass(circleClass)
+  $("#step-" + tab_number).next('.modal-step-title').addClass(tabTextClass)
 }
 
 var cleanErrorMessages = function() {
@@ -222,19 +237,23 @@ $(function(){
       if (!!contactErrors['id']) {
         return addContactAndCloseModal(contactErrors)
       }
-      wizNav(1);
       cleanErrorMessages()
+      firstTabError = false
+      secondTabError = false
       for (var key in contactErrors) {
         if (key === "emailaddress") {
-          addErrorMessage('#contact_emailaddress', contactErrors[key][0])
+          addErrorMessage('#contact_emailaddress', "Email Address", contactErrors[key][0], 1)
+          firstTabError = true
         }
-        if (key === "firstname") {
-          addErrorMessage('#contact_firstname', contactErrors[key][0])
+        if (key === "businesswebaddress") {
+          addErrorMessage('#contact_businesswebaddress', "Business Web Address", contactErrors[key][0], 2)
+          secondTabError = true
         }
         if (key == "relationship") {
           addSpanErrorMessage('#contact_relationship_select', contactErrors[key][0])
         }
       }
+      wizNav(1);
     });
 
   $("#close-form-link").click(function() { closeContactFormModal(); });

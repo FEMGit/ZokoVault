@@ -27,13 +27,13 @@ class TaxesController < AuthenticatedController
       when 'index'
         return "Taxes"
       when 'new'
-        return "Taxes - #{params[:year]} - Setup"
+        return "#{params[:year]} Taxes Setup"
       when 'edit'
         tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
-        return "Taxes - #{tax_year_info.year} - Edit"
+        return "#{tax_year_info.year} Taxes Edit"
       when 'show'
         tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
-        return "Taxes - #{tax_year_info.year} - Details"
+        return "#{tax_year_info.year} Tax Details"
     end
   end
   

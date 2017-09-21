@@ -42,7 +42,7 @@ class TrustsController < AuthenticatedController
       when 'show'
         return "Trust - #{trust.name} - Details"
       when 'new'
-        return "Trust - Setup"
+        return "Trusts - Setup"
       when 'edit'
         return "Trust - #{trust.name} - Edit"
     end

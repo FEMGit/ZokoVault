@@ -1,4 +1,11 @@
 class SearchController < AuthenticatedController
+  def page_name
+    case action_name
+      when 'index'
+        "Search"
+    end
+  end
+
   PER_PAGE_RECORDS = 10
 
   def index

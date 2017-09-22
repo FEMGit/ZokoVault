@@ -12,7 +12,10 @@ module PageTitle
     contact_us: "ZokuVault - Contact us for more information.",
     sign_up: "ZokuVault - Free Trial Sign Up.",
     login: "ZokuVault Login",
-    setup: "ZokuVault easy life planning storage and setup."
+    setup: "ZokuVault easy life planning storage and setup.",
+    terms_of_service: "ZokuVault - Terms of Service",
+    careers: "ZokuVault - Careers",
+    privacy_policy: "ZokuVault - Privacy Policy"
   }
   
   private

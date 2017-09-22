@@ -1,4 +1,29 @@
 class RegistrationsController < Devise::RegistrationsController
+  layout "no_header_footer_layout", only: [:new_email_only]
+  
+  def new_email_only
+    new
+  end
+  
+  def create_email_only
+    user = User.find_by(email: sign_up_params[:email])
+    if user.present?
+      expire_data_after_sign_in!
+      alert_existing_user_by_email(user)
+      redirect_to email_registration_thank_you_path and return
+    end
+    
+    user = User.new(email: sign_up_params[:email], uuid: SecureRandom.uuid)
+    user.skip_password_validation!
+    user.skip_confirmation_notification!
+    user.skip_confirmation!
+    unless user.save
+      redirect_to (new_email_only_registrations_path(error: email_error_to_display(user)))
+    else
+      InvitationService::CreateInvitationService.send_regular_user_invitation(user: user)
+      redirect_to email_registration_thank_you_path and return
+    end
+  end
 
   def create
     super do |resource|

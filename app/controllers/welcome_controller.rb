@@ -1,10 +1,11 @@
 class WelcomeController < AuthenticatedController
+  layout "no_header_footer_layout", only: [:thank_you_email_only]
   skip_before_action :authenticate_user!, :complete_setup!, :mfa_verify!, only: [:thank_you, :email_confirmed,
-                                                                                 :reset_password_expired]
+                                                                                 :thank_you_email_only, :reset_password_expired]
   helper_method :financial_information_any?, :insurance_vendors_count,
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
-  before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed]
+  before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed, :thank_you_email_only]
   before_action :set_corporate_profile, :set_to_do_modal_popup_view, only: [:index]
   include UserTrafficModule
   include TutorialsHelper

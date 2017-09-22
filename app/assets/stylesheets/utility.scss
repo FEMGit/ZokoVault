@@ -31,6 +31,9 @@
 .clear{
   clear:both;
 }
+.bg-white {
+  background: $white;
+}
 .clr-inherit {
   color: inherit !important;
 }
@@ -112,6 +115,9 @@
 .b-radius-0 {
   border-radius: 0 !important;
  }
+.w-20-percent {
+  width: 20% !important;
+}
 .w-30-percent {
   width: 30% !important;
 }
@@ -157,6 +163,9 @@
 .w-250 {
   width: 250px !important;
 }
+.w-300 {
+  width: 300px !important;
+}
 .w-430 {
   width: 430px !important;
 }
@@ -168,6 +177,9 @@
 }
 .max-w-150 {
   max-width: 150px !important;
+}
+.max-w-250 {
+  max-width: 250px !important;
 }
 .max-w-295 {
   max-width: 295px !important;
@@ -346,7 +358,10 @@
   padding: 8px !important;
 }
 .p-10 {
-  padding: 10 !important;
+  padding: 10px !important;
+}
+.p-15 {
+  padding: 15px !important;
 }
 .mt-5{
   margin-top: 5px !important;

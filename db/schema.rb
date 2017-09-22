@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170913041200) do
+ActiveRecord::Schema.define(version: 20170922065122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -766,7 +766,7 @@ ActiveRecord::Schema.define(version: 20170913041200) do
     t.boolean  "corporate_admin",                                        default: false
     t.integer  "mfa_failed_attempts",                                    default: 0,                    null: false
     t.boolean  "corporate_activated",                                    default: false
-    t.boolean  "corporate_credit_card_required",                         default: true
+    t.boolean  "corporate_credit_card_required",                         default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -1,4 +1,7 @@
-<div class="card mb-30">
+<% additional_classes, card_id = additional_card_class_and_id_by_category(final_wishes_empty?, 
+  Rails.application.config.x.FinalWishesCategory) %>
+
+<div class="card mb-30 <%= additional_classes %>" id="<%= card_id %>">
   <section class="flex-boxes padding-right">
     <div class="board-name">
       <h3>

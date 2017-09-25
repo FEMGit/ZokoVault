@@ -26,7 +26,8 @@
       dataType: 'json',
       data: { to_do_modal_popup_path: modalName }
     })
-    .success(function() {
+    .success(function(resp) {
+      $("div#" + resp["category"]).removeClass('d-none')
       $("#dismiss-btn-" + btnId).closest('section').remove()
       var toDoItems = $('.to-do-list').find('.to-do-item')
       if (!toDoItems.length) {

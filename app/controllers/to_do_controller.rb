@@ -15,7 +15,7 @@ class ToDoController < AuthenticatedController
       end
       to_do_cancel.update(cancelled_categories: (to_do_cancel.cancelled_categories + [cancelled_category_name]).uniq)
       format.html { render nothing: true }
-      format.json { render json: { status: 200 }, status: 200 }
+      format.json { render json: { category: cancelled_category_name.parameterize('_'),  status: 200 }, status: 200 }
     end
   end
   

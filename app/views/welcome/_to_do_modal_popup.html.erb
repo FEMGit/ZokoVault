@@ -1,0 +1,4 @@
+<%= render partial: 'category_setup_modal' %>
+
+<button class="d-none" id="to-do-modal-popup" data-modal-id="category-setup-category-modal" onclick='categorySetupModal("<%= to_do_modal_popup[:title] %>", "<%= to_do_modal_popup[:description] %>", "<%= asset_url(to_do_modal_popup[:image_path]) %>", "<%= to_do_modal_popup[:setup_path] %>", "<%= to_do_modal_popup[:name] %>")' >
+</button>

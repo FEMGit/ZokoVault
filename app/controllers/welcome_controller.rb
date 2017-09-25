@@ -6,7 +6,7 @@ class WelcomeController < AuthenticatedController
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed, :thank_you_email_only]
-  before_action :set_corporate_profile, :set_to_do_modal_popup_view, only: [:index]
+  before_action :set_corporate_profile, :set_to_do_list, :set_to_do_modal_popup, only: [:index]
   after_action :allow_iframe, only: [:thank_you_email_only]
   include UserTrafficModule
   include TutorialsHelper
@@ -98,15 +98,6 @@ class WelcomeController < AuthenticatedController
     @corporate = params[:corporate].eql? 'true'
   end
   
-  def do_not_show_popup
-    redirect_to root_path and return unless do_not_show_modal_popup_path
-    to_do_popup_cancel = ToDoPopupCancel.find_or_initialize_by(user: current_user)
-    redirect_to root_path and return unless cancelled_category_name = 
-      ToDoPopupModal.popup_name_by_route(path: do_not_show_modal_popup_path)
-    to_do_popup_cancel.update(cancelled_popups: (to_do_popup_cancel.cancelled_popups + [cancelled_category_name]).uniq)
-    render nothing: true
-  end
-  
   private
 
   def do_not_show_modal_popup_path
@@ -120,11 +111,16 @@ class WelcomeController < AuthenticatedController
     @corporate_profile = CorporateAccountProfile.find_by(user: corporate_admin)
   end
   
-  def set_to_do_modal_popup_view
-    @to_do_modal_popup_view = 
+  def set_to_do_list
+    @to_do_items = ToDoItem.all_items(user: current_user).map(&:values).flatten
+  end
+  
+  def set_to_do_modal_popup
+    @to_do_modal_popup = 
       if session[:popup_was_shown].nil?
         session[:popup_was_shown] = true
-        ToDoPopupModal.random_popup_modal(user: current_user)
+        return nil unless @to_do_items.present?
+        @to_do_items.sample
       else
         nil
       end

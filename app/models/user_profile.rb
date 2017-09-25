@@ -125,6 +125,7 @@ class UserProfile < ActiveRecord::Base
 
   def create_or_update_contact_card
     contact = Contact.for_user(user).find_or_initialize_by(emailaddress: email)
+    return unless contact.present?
     contact.update(
       firstname: first_name,
       lastname: last_name,

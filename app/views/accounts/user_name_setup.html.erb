@@ -1,0 +1,40 @@
+<%= form_for @user, url: :user_name_setup_update_accounts, html: { id: 'account-form' } do |f| %>
+
+  <div class="settings-card max-w-1000-centered">
+    <div class="modal-header">
+      <h5 class="fw-600 text-center max-w-100-percent clr-gray-dark-tinted">Thanks for signing up! We need a few more details to get started.</h5>
+    </div>
+	
+	<% if @user.errors.any? %>
+      <% errors = true %>
+    <% end %>
+
+    <div class="modal-content text-center">
+	<%= f.fields_for :user_profile do |user_profile_form| %>
+
+      <%= user_profile_form.label :first_name, 'First Name', autofocus: true %>
+      <% if errors && @user.errors.messages[:"user_profile.first_name"].try(:first) %>
+        <span class="error-label"> - <%= @user.errors.messages[:"user_profile.first_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :first_name, { class: "m-0-auto max-w-250 mb-10 " + (@user.errors.messages[:"user_profile.first_name"].present? ? "input-error" : "" ) } %>
+
+      <%= user_profile_form.label :last_name, 'Last Name' %>
+      <% if errors && @user.errors.messages[:"user_profile.last_name"].try(:first) %>
+        <span class="error-label"> - <%= @user.errors.messages[:"user_profile.last_name"].first %></span>
+      <% end %>
+      <%= user_profile_form.text_field :last_name, { class: "m-0-auto max-w-250 " + (@user.errors.messages[:"user_profile.last_name"].present? ? "input-error" : "" ) } %>
+	  <% end %>
+    </div>
+
+    <footer class="text-center">
+      <%= link_to('Next', 'javascript:void(0);', :class=>"button blue-button big-button-2", :id=>"next", onclick: 'submitAccount(event)') %>
+    </footer>
+  </div>
+<% end %>
+
+<script>
+  var submitAccount = function(){
+    var accountForm = document.getElementById("account-form");
+    accountForm.submit();
+  }
+</script>

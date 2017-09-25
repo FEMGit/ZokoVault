@@ -23,6 +23,10 @@ module InvitationService
       def send_super_admin_invitation(super_admin_user:, user_invited:)
         CreateInvitationMailer.super_admin_user(super_admin_user, user_invited).deliver_now
       end
+      
+      def send_regular_user_invitation(user:)
+        CreateInvitationMailer.regular_user(user).deliver_now
+      end
     end
   end
 end

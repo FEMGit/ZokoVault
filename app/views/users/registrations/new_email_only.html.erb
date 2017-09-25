@@ -1,0 +1,10 @@
+<% error = params[:error] %>
+
+<%= form_for(resource, as: resource_name, url: create_email_only_registrations_path, html: {novalidate: true}) do |f| %>
+
+  <% if error.present? %>
+    <p class="error-label mb-0"><%= error %></p>
+  <% end %>
+  <%= f.email_field :email, autofocus: true, class: "inline-block w-300 " + ((error.present?) ? "input-error" : ""), placeholder: "Email Address" %>
+  <%= f.button "Start Your Free Trial", class: "big-button primary-button" %>
+<% end %>

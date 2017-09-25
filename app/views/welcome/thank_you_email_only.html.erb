@@ -1,0 +1,8 @@
+<div class="p-15 pl-0 mb-30 max-w-460 w-80-percent">
+  <%= image_tag "marketing/airplane.png", :class => "mb-30 w-20-percent fl inline-block" %>
+  <h5 class="text-center clr-gray-dark-tinted fw-600 mb-0 mt-5 fl inline-block">Check your email.</h5>
+  <p class="mb-10 mt-40">We sent you a link to verify your identity.</p>
+</div>
+
+<%= render partial: 'layouts/improvely_conversion_tracking_js', locals: { goal: 'sign up complete', revenue: 0, reference: '' } %>
+<%= render partial: 'layouts/facebook_pixel_tracking_js', locals: { event_name: 'CompleteRegistration' } %>

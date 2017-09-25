@@ -1,0 +1,4 @@
+<%= render partial: 'layouts/category_setup_modal' %>
+
+<button class="d-none" id="to-do-modal-popup" data-modal-id="category-setup-category-modal" onclick='categorySetupModal("Personal Profile", "Complete your personal profile, including your address and employment information.", "<%= asset_url('setup_modal/my_profile.jpg') %>", "<%= edit_user_profile_path %>", "<%= to_do_modal_popup_path %>")' >
+</button>

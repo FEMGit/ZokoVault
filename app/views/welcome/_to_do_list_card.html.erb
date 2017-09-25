@@ -1,0 +1,41 @@
+<% if @to_do_items.any? %>
+  <div class="card mb-30 to-do-list">
+    <section class="flex-boxes striped padding-right">
+      <div class="striped-name flex-40">
+        <svg class="icon icon-checkmark-1 clr-color-primary-shaded">
+          <use xlink:href="#icon-checkmark-1">
+          </use>
+        </svg><h4 class="inline-block ml-15">To Do</h4>
+      </div>
+      <div class="striped-link flex-60">
+        <p class="mb-0 max-w-100-percent">Complete the following tasks to finish setting up your vault.</p>
+      </div>
+    </section>
+    <% @to_do_items.each_with_index do |to_do_item, index| %>
+      <%= render partial: 'to_do_stripe_element', locals: { title: to_do_item[:title], setup_path: to_do_item[:setup_path],
+                                                              modal_path: to_do_item[:name], index: index } %>
+    <% end %>
+  </div>
+<% end %>
+
+<script>
+  var dismissToDoItem = function(modalName, btnId) {
+  $.ajax({
+      url: "<%= do_not_show_to_do_path %>",
+      type: 'POST',
+      dataType: 'json',
+      data: { to_do_modal_popup_path: modalName }
+    })
+    .success(function() {
+      $("#dismiss-btn-" + btnId).closest('section').remove()
+      var toDoItems = $('.to-do-list').find('.to-do-item')
+      if (!toDoItems.length) {
+        $('.to-do-list').remove()
+      }
+      showFlashMessageSuccess("To do item was successfully dismissed.")
+    })
+    .fail(function() {
+      showFlashMessageError("Error removing to do item. Please try again later.")
+    })
+  }
+</script>

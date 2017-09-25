@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922065122) do
-
+ActiveRecord::Schema.define(version: 20170925044906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -618,12 +617,12 @@ ActiveRecord::Schema.define(version: 20170922065122) do
 
   add_index "taxes", ["category_id"], name: "index_taxes_on_category_id", using: :btree
 
-  create_table "to_do_popup_cancels", force: :cascade do |t|
+  create_table "to_do_cancels", force: :cascade do |t|
     t.integer "user_id"
-    t.string  "cancelled_popups", default: [], array: true
+    t.string  "cancelled_categories", default: [], array: true
   end
 
-  add_index "to_do_popup_cancels", ["user_id"], name: "index_to_do_popup_cancels_on_user_id", using: :btree
+  add_index "to_do_cancels", ["user_id"], name: "index_to_do_cancels_on_user_id", using: :btree
 
   create_table "trusts", force: :cascade do |t|
     t.integer  "document_id"

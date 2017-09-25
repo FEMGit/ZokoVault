@@ -8,7 +8,7 @@
 
 <% subscription = current_user.current_user_subscription %>
 
-<%= render partial: @to_do_modal_popup_view, locals: { to_do_modal_popup_path: @to_do_modal_popup_view } if @to_do_modal_popup_view %>
+<%= render partial: 'to_do_modal_popup', locals: { to_do_modal_popup: @to_do_modal_popup } if @to_do_modal_popup %>
 
 <% if tutorial_unfinished? %>
   <%= render partial: "onboarding_back_card" %>
@@ -21,6 +21,8 @@
 <% if current_user.corporate_user? %>
   <%= render partial: "corporate_information_card" %>
 <% end %>
+
+<%= render partial: "to_do_list_card" %>
 
 <%= render "financial_information_card" %>
 

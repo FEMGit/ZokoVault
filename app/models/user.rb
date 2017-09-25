@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   has_many :user_activities, dependent: :destroy
   has_many :user_death_traps, dependent: :destroy
   has_many :tax_year_infos, dependent: :destroy
-  has_one :to_do_popup_cancel, dependent: :destroy
+  has_one :to_do_cancel, dependent: :destroy
   has_many :final_wish_infos, dependent: :destroy
   has_many :financial_investments, dependent: :destroy
   has_many :financial_alternatives, dependent: :destroy

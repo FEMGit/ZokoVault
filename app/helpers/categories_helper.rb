@@ -72,7 +72,7 @@ module CategoriesHelper
     profile = user.user_profile
     profile.date_of_birth.blank? && profile.street_address_1.blank? && profile.city.blank? &&
       profile.state.blank? && profile.zip.blank? && profile.phone_number_mobile.blank? &&
-      profile.phone_number.blank? && my_profile_employer_empty?(profile)
+      profile.phone_number.blank? && profile.photourl.blank? && my_profile_employer_empty?(profile)
   end
   
   def my_profile_employer_empty?(user_profile)

@@ -11,7 +11,8 @@ class ToDoPopupModal
     Rails.application.config.x.WillsPoaCategory => 'wills_and_powers_of_attorney_modal',
     Rails.application.config.x.TrustsEntitiesCategory => 'trusts_and_entities_modal',
     Rails.application.config.x.InsuranceCategory => 'insurance_modal',
-    Rails.application.config.x.TaxCategory => 'taxes_modal'
+    Rails.application.config.x.TaxCategory => 'taxes_modal',
+    Rails.application.config.x.ProfileCategory => 'my_profile_modal'
   }
 
   def self.random_popup_modal(user:)
@@ -48,6 +49,8 @@ class ToDoPopupModal
     check_and_push(name: Rails.application.config.x.InsuranceCategory, is_empty: insurance_empty?(user),
                    cancelled_categories: cancelled_categories, current_popup_categories: popup_categories)
     check_and_push(name: Rails.application.config.x.TaxCategory, is_empty: taxes_empty?(user),
+                   cancelled_categories: cancelled_categories, current_popup_categories: popup_categories)
+    check_and_push(name: Rails.application.config.x.ProfileCategory, is_empty: my_profile_empty?(user),
                    cancelled_categories: cancelled_categories, current_popup_categories: popup_categories)
     popup_categories
   end

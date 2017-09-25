@@ -73,7 +73,7 @@ module BreadcrumbsErrorModule
   
   def my_profile_error_breadcrumb_update
     breadcrumbs.clear
-    add_breadcrumb "My Profile", :my_profile_path
+    add_breadcrumb "My Profile", :user_profile_path
     add_breadcrumb "Edit My Profile", :edit_user_profile_path
   end
 

@@ -15,7 +15,11 @@ module PageTitle
     setup: "ZokuVault easy life planning storage and setup.",
     terms_of_service: "ZokuVault - Terms of Service",
     careers: "ZokuVault - Careers",
-    privacy_policy: "ZokuVault - Privacy Policy"
+    privacy_policy: "ZokuVault - Privacy Policy",
+    resend_unlock_instructions: "ZokuVault - Resend unlock instructions",
+    resend_confirmation_instructions: "ZokuVault - Resend confirmation instructions",
+    send_reset_password_instructions: "ZokuVault - Send reset password instructions",
+    password_setup: "ZokuVault - Password setup"
   }
   
   private

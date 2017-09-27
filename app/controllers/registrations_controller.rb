@@ -1,5 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   layout "no_header_footer_layout", only: [:new_email_only]
+  after_action :allow_iframe, only: [:new_email_only]
   
   def new_email_only
     new

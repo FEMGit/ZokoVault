@@ -7,6 +7,7 @@ class WelcomeController < AuthenticatedController
                 :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed, :thank_you_email_only]
   before_action :set_corporate_profile, :set_to_do_modal_popup_view, only: [:index]
+  after_action :allow_iframe, only: [:thank_you_email_only]
   include UserTrafficModule
   include TutorialsHelper
   

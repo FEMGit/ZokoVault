@@ -58,6 +58,10 @@ class ApplicationController < ActionController::Base
     user_death_trap.save
     raise exception
   end
+  
+  def allow_iframe
+    response.headers["X-Frame-Options"] = "ALLOWALL"
+  end
 
   # Run Schedule for handling online users
   scheduler = Rufus::Scheduler.new

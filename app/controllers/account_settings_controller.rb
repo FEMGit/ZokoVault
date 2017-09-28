@@ -376,7 +376,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def redirect_to_login_settings_if_corporate_manager
-    redirect_to login_settings_path if current_user && current_user.corporate_manager?
+    redirect_to login_settings_account_settings_path if current_user && current_user.corporate_manager?
   end
 
   def redirect_to_manage_subscription_if_corporate_client

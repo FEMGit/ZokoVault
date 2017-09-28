@@ -4,7 +4,8 @@ class CorporateService
     remove_client_shares(client: client)
     CorporateAdminAccountUser.where(corporate_admin: admin, user_account: client).delete_all
     CorporateEmployeeAccountUser.where(user_account: client).delete_all
-    StripeService.cancel_subscription(user: client) if client.current_user_subscription.corporate?(corporate_client: client)
+    StripeService.cancel_subscription(user: client) if client.current_user_subscription &&
+                                                       client.current_user_subscription.corporate?(corporate_client: client)
   end
   
   private

@@ -9,7 +9,7 @@
     </span>Edit User
   </a>
   <h1>
-  <% if @user && @user.user_profile.photourl.present? %>
+  <% if @user && @user.user_profile && @user.user_profile.photourl.present? %>
     <% avatar = true %>
     <%= render :partial => "layouts/user_profile_avatar", locals: { user: @user.user_profile, :avatar_size => 'medium' } %>
   <% end %>

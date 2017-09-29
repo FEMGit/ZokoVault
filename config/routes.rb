@@ -205,7 +205,7 @@ Rails.application.routes.draw do
   get 'my_profile/edit' => 'user_profiles#edit', as: :edit_user_profile
 
   # Account
-  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts_path
+  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts
   get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update_accounts
   get 'account/questionnaire' => 'accounts#trial_questionnaire', as: :trial_questionnaire_accounts
   put 'account/questionnaire' => 'accounts#trial_questionnaire_update'

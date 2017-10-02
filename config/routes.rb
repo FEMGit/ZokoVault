@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
     get 'users/sign_up_email_only', to: 'registrations#new_email_only', as: :new_email_only_registrations
+    get 'users/free_sign_up_email_only', to: 'registrations#new_email_only_free_sign_up', as: :new_email_only_free_sign_up_registrations
     post 'users/sign_up_email_only', to: 'registrations#create_email_only', as: :create_email_only_registrations
     match 'active' => 'sessions#active', via: :get
     match 'timeout' => 'sessions#timeout', via: :get

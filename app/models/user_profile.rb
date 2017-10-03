@@ -31,7 +31,7 @@ class UserProfile < ActiveRecord::Base
   accepts_nested_attributes_for :security_questions
   accepts_nested_attributes_for :employers
 
-  attr_accessor :phone_code, :share_ids
+  attr_accessor :share_ids
 
   enum mfa_frequency: [:never, :new_ip, :always]
 

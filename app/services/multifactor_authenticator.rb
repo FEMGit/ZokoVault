@@ -22,10 +22,23 @@ class MultifactorAuthenticator
   def verify_code(code)
     MultifactorPhoneCode.verify(user: user, code: code)
   end
+  
+  def valid_phone_number?(phone_number)
+    response = lookup_client.phone_numbers.get(phone_number)
+    response.phone_number
+    return true
+    
+    rescue
+      return false
+  end
 
   private
 
   attr_internal_reader :user
+  
+  def lookup_client
+    Twilio::REST::LookupsClient.new
+  end
 
   def client
     Twilio::REST::Client.new

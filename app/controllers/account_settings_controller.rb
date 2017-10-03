@@ -100,8 +100,18 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def phone_setup_update
-    current_user.update_attributes(phone_setup_params)
-    redirect_to login_settings_account_settings_path
+    user_mfa_service = MultifactorAuthenticator.new(current_user)
+    if user_mfa_service.valid_phone_number?(phone_number) && user_mfa_service.verify_code(phone_code)
+      current_user.update_attributes(phone_setup_params)
+      redirect_to login_settings_account_settings_path
+    else
+      begin
+        Rails.application.routes.recognize_path(request.referrer)
+        redirect_to request.referrer
+      rescue
+        redirect_to root_path
+      end
+    end
   end
 
   def manage_subscription
@@ -463,8 +473,18 @@ class AccountSettingsController < AuthenticatedController
     params.require(:user_profile).permit(:password, :password_confirmation)
   end
 
+  def phone_number
+    return nil unless phone_setup_params[:user_profile_attributes]
+    phone_setup_params[:user_profile_attributes][:two_factor_phone_number]
+  end
+
+  def phone_code
+    return nil unless phone_setup_params[:user_profile_attributes]
+    phone_setup_params[:user_profile_attributes][:phone_code]
+  end
+
   def phone_setup_params
-    params.require(:user).permit(user_profile_attributes: [:two_factor_phone_number])
+    params.require(:user).permit(user_profile_attributes: [:two_factor_phone_number, :phone_code])
   end
 
   def stripe_subscription_params

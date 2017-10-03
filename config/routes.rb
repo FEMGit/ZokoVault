@@ -188,8 +188,6 @@ Rails.application.routes.draw do
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update_account_settings
   patch 'account_settings/remove_corporate_access_update/:contact_id', to: 'account_settings#remove_corporate_access_update', as: :remove_corporate_access_update_account_settings
   patch 'account_settings/remove_corporate_payment_update', to: 'account_settings#remove_corporate_payment_update', as: :remove_corporate_payment_update_account_settings
-  post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
-  post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment(/:corporate)', to: 'account_settings#update_payment', as: :update_payment_account_settings
   post 'account_settings/store_corporate_payment', to: 'account_settings#store_corporate_payment', as: :store_corporate_payment_account_settings
 

@@ -245,30 +245,6 @@ class AccountSettingsController < AuthenticatedController
     end
   end
 
-  def send_code
-    status =
-      begin
-        MultifactorAuthenticator.new(current_user).send_code_on_number(new_phone)
-        :ok
-      rescue
-        :bad_request
-      end
-
-    head status
-  end
-
-  def verify_code
-    phone_code = login_settings_params[:phone_code]
-    verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
-    status = if verified
-               @user_profile.update_attributes(:two_factor_phone_number => new_phone)
-               :ok
-             else
-               :unauthorized
-             end
-    head status
-  end
-
   def store_corporate_payment
     token = params[:stripeToken]
     if token.present?
@@ -436,7 +412,7 @@ class AccountSettingsController < AuthenticatedController
 
   def account_settings_params
     return nil unless params[:user_profile].present?
-    params.require(:user_profile).permit(:photourl, :phone_code)
+    params.require(:user_profile).permit(:photourl)
   end
 
   def vault_co_owner_params
@@ -450,7 +426,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def login_settings_params
-    params.require(:user_profile).permit(:mfa_frequency, :phone_code, :two_factor_phone_number)
+    params.require(:user_profile).permit(:mfa_frequency, :two_factor_phone_number)
   end
 
   def password_change_params
@@ -470,10 +446,6 @@ class AccountSettingsController < AuthenticatedController
 
   def set_user_profile
     @user_profile = UserProfile.for_user(current_user)
-  end
-
-  def new_phone
-    login_settings_params[:two_factor_phone_number]
   end
 
   def set_contacts_shareable

@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   # == Scope methods
   scope :online, -> { where("updated_at > ?", Rails.application.config.x.UserOnlineRange.ago) }
+  
+  scope :email_match, ->(email) { where("email ILIKE ?", email.downcase) }
 
   # == Validations
   validates :email, :email_format => { :message => "Email should contain @ and domain like .com" }

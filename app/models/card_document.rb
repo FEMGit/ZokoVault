@@ -10,6 +10,11 @@ class CardDocument < ActiveRecord::Base
     object.try(:name) || object.try(:title) || "PoA for #{object.contact.try(:name)}"
   end
   
+  def poa_for_name
+    object = (Object.const_get self.object_type).find(self.card_id)
+    object.contact.try(:name) || ''
+  end
+  
   def share_with_contacts
     object = (Object.const_get self.object_type).find(self.card_id)
     object.share_with_contacts

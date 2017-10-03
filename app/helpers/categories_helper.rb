@@ -43,25 +43,25 @@ module CategoriesHelper
       Document.for_user(user).where(category: category_name).blank? &&
       Contact.for_user(user).where(relationship: 'Accountant', contact_type: 'Advisor').blank?
   end
-  
+
   def final_wishes_empty?(user = current_user)
     return false unless user.present?
     category_name = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase).name
     FinalWish.for_user(user).blank? &&
       Document.for_user(user).where(category: category_name).blank?
   end
-  
-  def online_accounts_empty?(user = current_user)
-    return false unless user.present?
-    category_name = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase).name
-    OnlineAccount.for_user(user).blank?
-  end
-  
+
+  # def online_accounts_empty?(user = current_user)
+  #   return false unless user.present?
+  #   category_name = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase).name
+  #   OnlineAccount.for_user(user).blank?
+  # end
+
   def vault_inheritance_empty?(user = current_user)
     return false unless user.present? && user.user_profile.present?
     user.full_primary_shared_with.blank?
   end
-  
+
   def vault_co_owner_empty?(user = current_user)
     return false unless user.present? && user.user_profile.present?
     user.primary_shared_with.blank?

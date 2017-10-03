@@ -24,11 +24,11 @@ class PropertyAndCasualtiesController < AuthenticatedController
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
       when 'show'
-        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
+        return "Property & Casualty - #{vendor.name} - Details"
       when 'new'
-        return "#{controller_name.humanize} - Setup"
+        return "Property & Casualty - Setup"
       when 'edit'
-        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
+        return "Property & Casualty - #{vendor.name} - Edit"
     end
   end
   

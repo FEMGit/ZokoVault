@@ -20,7 +20,7 @@
     var currentWidth = $(".medium-modal").outerWidth()
     var prevWidth = 0
     var iterationCount = 0
-    while(currentWidth !== prevWidth || iterationCount >= 5) {
+    while(currentWidth !== prevWidth || iterationCount <= 5) {
       prevWidth = currentWidth
       $(window).resize()
       currentWidth = $(".medium-modal").outerWidth()

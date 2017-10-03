@@ -4,7 +4,7 @@ class AccountsController < AuthenticatedController
   skip_before_filter :complete_setup!, except: :show
   skip_before_filter :mfa_verify!
   skip_before_action :redirect_if_free_user
-  layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup,
+  layout "blank_layout", only: [:setup, :terms_of_service, :phone_setup, :user_name_setup,
                                 :login_settings, :user_type, :trial_membership_ended,
                                 :trial_membership_update, :trial_questionnaire, :payment,
                                 :first_run, :zoku_vault_info, :corporate_user_type, :corporate_logo,
@@ -12,6 +12,7 @@ class AccountsController < AuthenticatedController
                                 :corporate_credit_card]
   before_action :set_blank_layout_header_info, only: [:first_run]
   before_action :redirect_to_root_if_setup_complete, only: [:terms_of_service, :terms_of_service_update,
+                                                            :user_name_setup, :user_name_setup_update,
                                                             :phone_setup, :phone_setup_update, :login_settings,
                                                             :login_settings_update, :user_type, :user_type_update,
                                                             :corporate_user_type, :corporate_user_type_update,
@@ -22,6 +23,12 @@ class AccountsController < AuthenticatedController
                                                                  :corporate_logo, :corporate_logo_update,
                                                                  :corporate_account_options, :corporate_account_options_update,
                                                                  :how_billing_works, :billing_types, :corporate_credit_card]
+  before_action :redirect_to_user_name_update_if_name_empty, only: [:phone_setup, :phone_setup_update, :login_settings,
+                                                            :login_settings_update, :user_type, :user_type_update,
+                                                            :corporate_user_type, :corporate_user_type_update,
+                                                            :corporate_logo, :corporate_logo_update, :zoku_vault_info,
+                                                            :corporate_account_options, :corporate_account_options_update,
+                                                            :how_billing_works, :billing_types, :corporate_credit_card]
   skip_before_action :redirect_if_user_terms_of_service_empty, only: [:terms_of_service_update]
 
   def page_name
@@ -93,9 +100,26 @@ class AccountsController < AuthenticatedController
 
   def terms_of_service_update
     current_user.update_attributes(user_params)
+    current_user.save(validate: false)
+    redirect_to user_name_setup_account_path and return if current_user.first_name.blank? || current_user.last_name.blank?
     redirect_to zoku_vault_info_account_path
   end
-
+  
+  def user_name_setup
+    @user = current_user
+  end
+  
+  def user_name_setup_update
+    respond_to do |format|
+      if current_user.update_attributes(user_params)
+        format.html { redirect_to zoku_vault_info_account_path }
+      else
+        @user = current_user
+        format.html { render :user_name_setup, layout: 'blank_layout' }
+      end
+    end
+  end
+  
   def zoku_vault_info; end
 
   def phone_setup
@@ -332,6 +356,8 @@ class AccountsController < AuthenticatedController
     params.require(:user).permit(
       :user_type,
       user_profile_attributes: [
+        :first_name,
+        :last_name,
         :signed_terms_of_service,
         :phone_number_mobile,
         :two_factor_phone_number,
@@ -362,5 +388,9 @@ class AccountsController < AuthenticatedController
 
   def redirect_to_root_if_setup_complete
     redirect_to root_path if current_user.setup_complete
+  end
+
+  def redirect_to_user_name_update_if_name_empty
+    redirect_to user_name_setup_account_path if current_user.first_name.blank? || current_user.last_name.blank?
   end
 end

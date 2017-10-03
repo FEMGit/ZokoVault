@@ -161,10 +161,10 @@ module ApplicationHelper
       when FinancialProvider
         path_to_resource(subcategory)
       when Document
-        return shared_document_path(@shared_user, subcategory) if @shared_user.present?
+        return document_shared_view_path(@shared_user, subcategory) if @shared_user.present?
         document_path(subcategory)
       when CorporateAccountProfile
-        corporate_account_settings_path
+        account_settings_corporate_accounts_path
       when CorporateClient,
            CorporateEmployee
         corporate_user_profile = Contact.for_user(current_user.corporate_account_owner).where("emailaddress ILIKE ?", subcategory.email).first.user_profile

@@ -1,4 +1,5 @@
 module SearchHelper
+  include ResourcePath
   def results_summary
     page = params[:page].to_i
     results_count = @search_results&.length || 0
@@ -12,29 +13,6 @@ module SearchHelper
     end
 
     "Results #{start_range}-#{end_range} of #{results_count}"
-  end
-  
-  def absolute_path(relative_path)
-    root_url.chomp('/') + relative_path
-  end
-  
-  def resource_link(resource)
-    if resource.is_a? Contact
-      profile_for_current_user = UserProfile.find_by(user_id: current_user.id)
-      if resource.user_profile_id.present? && (resource.user_profile_id.eql? profile_for_current_user.id)
-        return user_profiles_path
-      else
-        return url_for(resource)
-      end
-    end
-    
-    if subcategory_view_path(resource).present?
-      subcategory_view_path(resource)
-    elsif resource.try(:attributes)
-      url_for(resource)
-    else
-      url_for(resource[:path])
-    end
   end
   
   def results_any?

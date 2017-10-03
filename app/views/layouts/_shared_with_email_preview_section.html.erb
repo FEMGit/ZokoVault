@@ -12,7 +12,7 @@
     </h3>
     <label>Shared With</label><br>
     <div class="chosen-styled-select">
-      <%= contact_select_with_create_new(f, shared_with_field_symbol, @contacts, additional_params) %>
+      <%= contact_select_with_create_new(f, shared_with_field_symbol, @contacts_shareable, additional_params) %>
     </div>
     <div id="email-preview-list" class="<%= shared_with_dropdown_id %>"></div>
   </section>

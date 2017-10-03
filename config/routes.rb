@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
+    get 'users/sign_up_email_only', to: 'registrations#new_email_only', as: :new_email_only_registrations
+    get 'users/free_sign_up_email_only', to: 'registrations#new_email_only_free_sign_up', as: :new_email_only_free_sign_up_registrations
+    post 'users/sign_up_email_only', to: 'registrations#create_email_only', as: :create_email_only_registrations
     match 'active' => 'sessions#active', via: :get
     match 'timeout' => 'sessions#timeout', via: :get
   end
@@ -50,6 +53,7 @@ Rails.application.routes.draw do
   get 'cards' => 'welcome#cards'
   get 'cardcolumn' => 'welcome#cardcolumn'
   get 'thank_you' => 'welcome#thank_you'
+  get 'email_registration_thank_you' => 'welcome#thank_you_email_only'
   get 'email_confirmed' => 'welcome#email_confirmed'
   get 'password_link_expired(/:corporate)' => 'welcome#reset_password_expired', as: :password_link_expired
   get 'onboarding_back' => 'welcome#onboarding_back', as: :onboarding_back
@@ -200,7 +204,7 @@ Rails.application.routes.draw do
   get 'my_profile/edit' => 'user_profiles#edit', as: :edit_user_profile
 
   # Account
-  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts_path
+  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts
   get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update_accounts
   get 'account/questionnaire' => 'accounts#trial_questionnaire', as: :trial_questionnaire_accounts
   put 'account/questionnaire' => 'accounts#trial_questionnaire_update'
@@ -220,10 +224,12 @@ Rails.application.routes.draw do
   put 'account/phone_setup_update' => 'accounts#phone_setup_update', as: :phone_setup_update_accounts
   put 'account/login_settings_update' => 'accounts#login_settings_update', as: :login_settings_update_accounts
   put 'account/user_type_update' => 'accounts#user_type_update', as: :user_type_update_accounts
+  patch 'account/user_name_setup_update' => 'accounts#user_name_setup_update', as: :user_name_setup_update_accounts
 
   resource :account, only: [:update, :show] do
     collection do
       get :terms_of_service
+      get :user_name_setup
       get :zoku_vault_info
       get :phone_setup
       get :login_settings

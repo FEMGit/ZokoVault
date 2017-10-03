@@ -21,7 +21,7 @@ class AccountSettingsController < AuthenticatedController
   def page_name
     case action_name
       when 'vault_co_owners'
-        "Account Settings - Account Users"
+        "Account Settings - Vault Co-Owner"
       when 'login_settings'
         "Account Settings - Login Settings"
       when 'manage_subscription'
@@ -30,6 +30,12 @@ class AccountSettingsController < AuthenticatedController
         "Account Settings - Vault Inheritance"
       when 'billing_info'
         "Account Settings - Update Billing Info"
+      when 'update_subscription_information'
+        "Update Subscription Information"
+      when 'billing_info'
+        "Update Subscription"
+      when 'cancel_subscription'
+        "Cancel Subscription"
     end
   end
 
@@ -345,7 +351,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def redirect_to_login_settings_if_corporate_manager
-    redirect_to login_settings_path if current_user && current_user.corporate_manager?
+    redirect_to login_settings_account_settings_path if current_user && current_user.corporate_manager?
   end
 
   def redirect_to_manage_subscription_if_corporate_client

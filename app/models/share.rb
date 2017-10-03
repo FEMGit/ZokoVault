@@ -22,6 +22,6 @@ class Share < ActiveRecord::Base
 
   after_create do
     current_user = Thread.current[:current_user]
-    InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact)
+    InvitationService::ShareInvitationService.send_invitation(user: user, contact: contact, share: self)
   end
 end

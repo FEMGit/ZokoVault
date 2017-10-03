@@ -41,7 +41,7 @@ class WillsController < AuthenticatedController
       when 'show'
         return "Will - #{will.name} - Details"
       when 'new'
-        return "Will - Setup"
+        return "Wills - Setup"
       when 'edit'
         return "Will - #{will.name} - Edit"
     end

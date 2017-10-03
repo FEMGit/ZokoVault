@@ -35,11 +35,17 @@
               <h3><%= vendor.name %></h3>
 
               <% vendor.try(:policy) && vendor.policy.each do |policy| %>
-                <label><%= policy.policy_type %></label>
+                
+                <% unless policy.policy_holder.blank? %>
+                  <label><%= policy.policy_type %></label>
+                <% end %>
                 <ul class="data-list">
                   <li class="data-pair">
                     <span class="pair-name">
                       <%= policy.policy_holder && policy.policy_holder.name %>
+                      <% if policy.policy_holder.blank? %>
+                        <label><%= policy.policy_type %></label>
+                      <% end %>
                     </span>
                     <span class="data-right">
                       <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>
@@ -81,11 +87,16 @@
               <h3><%= vendor.name %></h3>
 
               <% vendor.try(:policy) && vendor.policy.each do |policy| %>
-                <label><%= policy.policy_type %></label>
+                <% unless policy.insured_property.blank? %>
+                  <label><%= policy.policy_type %></label>
+                <% end %>
                 <ul class="data-list">
                   <li class="data-pair">
                     <span class="pair-name">
                       <%= policy.insured_property %>
+                      <% if policy.insured_property.blank? %>
+                        <label><%= policy.policy_type %></label>
+                      <% end %>
                     </span>
                     <span class="data-right">
                       <%= policy.coverage_amount && number_to_currency(policy.coverage_amount, unit: "$", precision: 0) %>

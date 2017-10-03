@@ -36,7 +36,7 @@ class SharedViewController < AuthenticatedController
       when 'contingent_owner'
         return "Shared Contingent Owner"
       when 'contacts'
-        return "Shared Contacts"
+        return "Shared Contacts & Permissions"
       when 'documents'
         return "Shared Documents"
     end
@@ -128,6 +128,7 @@ class SharedViewController < AuthenticatedController
     @groups = Rails.configuration.x.categories[@category.name]["groups"]
     @groups.sort_by { |group| group["label"] }
     sort_groups(@final_wishes.map(&:group).sort)
+    session[:ret_url] = final_wishes_shared_view_path
   end
   
   def wills_powers_of_attorney

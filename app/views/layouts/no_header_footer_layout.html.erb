@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <%= render partial: 'layouts/application_head_tag' %>
+
+  <%= render :partial => 'layouts/svgdefs' %>
+  <%= render :partial => 'layouts/alerts' %>
+    <main class="app-nav blank">
+
+    <div class="content blank bg-white p-0">
+      <%= yield %>
+
+    </div>
+  </main>
+    <%= render partial: 'layouts/layout_javascript_include' %>
+  </body>
+</html>
+
+<%= javascript_include_tag 'date_picker_check' %>

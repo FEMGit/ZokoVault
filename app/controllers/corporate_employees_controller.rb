@@ -22,13 +22,13 @@ class CorporateEmployeesController < CorporateBaseController
   def page_name
     case action_name
       when 'index'
-        return "Employee Accounts - Main Page"
+        "Employee Accounts"
       when 'new'
-        return "Employee Accounts - Add Account"
+        "Employee Accounts - Add Employee Account"
       when 'edit'
-        return "Employee Accounts - Edit Account"
+        "Employee Accounts - Edit Employee Account"
       when 'show'
-        return "Employee Accounts - Details"
+        "Employee Accounts - Employee Information"
     end
   end
   

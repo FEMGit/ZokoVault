@@ -151,8 +151,45 @@
       }
     });
   }
+  
+  var setTabErrorVariables = function() {
+    if (typeof firstTabError === 'undefined') {
+      firstTabError = null
+    }
+    if (typeof secondTabError === 'undefined') {
+      secondTabError = null
+    }
+  }
+  
+  var removeErrorColors = function() {
+    if(firstTabError === false) {
+      $("#step-1").removeClass("alert alert-light-shaded")
+      $("#step-1").next('.modal-step-title').removeClass("clr-alert clr-alert-light-shaded")
+    }
+    if(secondTabError === false) {
+      $("#step-2").removeClass("alert alert-light-shaded")
+      $("#step-2").next('.modal-step-title').removeClass("clr-alert clr-alert-light-shaded")
+    }
+  }
+  
+  var setTabErrorColors = function(tabNumber) {
+    removeErrorColors()
+    if(firstTabError === true) {
+      var stepClass = tabNumber === 1 ? "current-step " : "completed-step "
+      var errorClass = tabNumber === 1 ? "alert " : "alert-light-shaded "
+      $("#step-1").removeClass().addClass("inner-counter " + errorClass + stepClass);
+      $("#step-1").next('.modal-step-title').addClass("clr-" + errorClass)
+    }
+    if(secondTabError === true) {
+      var stepClass = tabNumber === 2 ? "current-step" : (tabNumber > 2 ? "completed-step" : "")
+      var errorClass = tabNumber === 2 ? "alert " : "alert-light-shaded "
+      $("#step-2").removeClass().addClass("inner-counter " + errorClass + stepClass);
+      $("#step-2").next('.modal-step-title').addClass("clr-" + errorClass)
+    }
+  }
 
 var wizNav = function(step){
+  setTabErrorVariables()
   currentStep = step;
   if(step===1){
     $("#next-step").text('Add more details')
@@ -168,6 +205,7 @@ var wizNav = function(step){
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
+    setTabErrorColors(1)
     $(".footer_right > a").css("float", "");
   }
   else if(step===2){
@@ -184,6 +222,7 @@ var wizNav = function(step){
     $("#step-2").html('2');
     $("#step-3").removeClass().addClass("inner-counter");
     $("#step-3").html('3');
+    setTabErrorColors(2)
     $(".footer_right > a").css("float", "");
   }
   else if(step===3){
@@ -199,6 +238,7 @@ var wizNav = function(step){
     $("#step-2").html('<svg class="icon circle-icon"><use xlink:href="#icon-checkmark-1"> </use></svg>');
     $("#step-3").removeClass().addClass("inner-counter current-step");
     $("#step-3").html('3');
+    setTabErrorColors(3)
     $(".footer_right > a").css("float", "right");
   }
 

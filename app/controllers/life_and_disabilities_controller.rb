@@ -25,11 +25,11 @@ class LifeAndDisabilitiesController < AuthenticatedController
     vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
       when 'show'
-        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Details"
+        return "Life & Disability - #{vendor.name} - Details"
       when 'new'
-        return "#{controller_name.humanize} - Setup"
+        return "Life & Disability - Setup"
       when 'edit'
-        return "#{vendor.type.underscore.humanize} - #{vendor.name} - Edit"
+        return "Life & Disability - #{vendor.name} - Edit"
     end
   end
   

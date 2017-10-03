@@ -1,0 +1,12 @@
+<% show_static_error ||= false %>
+<% error = show_static_error && params[:error] %>
+<% button_text ||= "Start Your Free Trial" %>
+
+<%= form_for(resource, as: resource_name, url: create_email_only_registrations_path, html: {novalidate: true}) do |f| %>
+
+  <% if error.present? %>
+    <p class="error-label mb-0"><%= error %></p>
+  <% end %>
+  <%= f.email_field :email, autofocus: true, class: "inline-block max-w-300 email-signup-input " + ((error.present?) ? "input-error" : ""), placeholder: "Email Address" %>
+  <%= f.button button_text, class: "big-button primary-button" %>
+<% end %>

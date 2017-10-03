@@ -33,17 +33,19 @@ class CorporateAccountsController < CorporateBaseController
   def page_name
     case action_name
       when 'index'
-        return "Corporate Account - Main Page"
+        "Corporate Account - Client Accounts"
       when 'new'
-        return "Corporate Account - Add Account"
+        "Corporate Account - Add Client User"
       when 'edit'
-        return "Corporate Account - Edit Account"
+        "Corporate Account - Edit Client User"
       when 'show'
-        return "Corporate Account - Details"
+        "Corporate Account - Client Details"
       when 'account_settings'
-        return "Corporate Account - Account Settings"
+        "Corporate Account - Account Settings"
       when 'edit_account_settings'
-        return "Corporate Account - Edit Account Settings"
+        "Corporate Account - Edit Account Settings"
+      when 'billing_information'
+        "Billing Information"
     end
   end
 

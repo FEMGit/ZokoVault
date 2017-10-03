@@ -14,9 +14,9 @@ class ContactsController < AuthenticatedController
   def page_name
     case action_name
       when 'index'
-        return "Documents"
+        return "Contacts"
       when 'new'
-        return "Create Contact"
+        return "Add Contact"
       when 'edit'
         contact = Contact.for_user(resource_owner).find_by(id: params[:id])
         return "Contacts - #{contact.name} - Edit"

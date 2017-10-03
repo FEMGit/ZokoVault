@@ -282,8 +282,7 @@ class AccountsController < AuthenticatedController
   private
 
   def code_verified?
-    current_user.attributes = user_params
-    phone_code = current_user.user_profile.phone_code
+    phone_code = mfa_phone_code[:phone_code]
     MultifactorAuthenticator.new(current_user).verify_code(phone_code)
   end
 
@@ -339,6 +338,10 @@ class AccountsController < AuthenticatedController
         security_questions_attributes: [:question, :answer],
       ]
     )
+  end
+  
+  def mfa_phone_code
+    params.require(:user).require(:user_profile_attributes).permit(:phone_code)
   end
 
   def stripe_promo_params

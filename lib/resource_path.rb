@@ -42,6 +42,8 @@ module ResourcePath
         financial_investment_path(resource)
       when FinancialProperty
         financial_property_path(resource)
+      when OnlineAccount
+        online_account_path(resource)
       else
         url_for(resource)
     end

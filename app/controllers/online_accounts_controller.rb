@@ -1,6 +1,7 @@
 class OnlineAccountsController < AuthenticatedController
   include SharedViewHelper
   include SharedViewModule
+  include SanitizeModule
   
   before_action :set_contacts, only: [:new, :create, :edit, :update]
   before_action :set_online_account, only: [:edit, :update, :destroy]
@@ -63,7 +64,7 @@ class OnlineAccountsController < AuthenticatedController
     svc = PasswordService.for_per_user_key(key)
     encrypted_password = svc.encrypt_password(online_account_params[:password])
     @online_account = OnlineAccount.new(
-      online_account_params.except(:password).merge(
+      online_account_params.except(:password, :share_with_contact_ids).merge(
         user_id: resource_owner.id,
         password: encrypted_password,
         per_user_encryption_key_id: key.id,
@@ -73,7 +74,8 @@ class OnlineAccountsController < AuthenticatedController
     authorize @online_account
     respond_to do |format|
       if @online_account.save
-        OnlineAccountService.update_shares(@online_account.id, resource_owner)
+        OnlineAccountService.create_shares(online_account_id: @online_account.id, owner: resource_owner,
+          share_with_contact_ids: online_account_params[:share_with_contact_ids])
         format.html { redirect_to success_path, flash: { success: 'Account successfully created.' } }
         format.json { render :show, status: :created, location: @online_account }
       else
@@ -92,7 +94,7 @@ class OnlineAccountsController < AuthenticatedController
     respond_to do |format|
       diff = online_account_params.except(:password).merge(password: encrypted_password, per_user_encryption_key_id: key.id)
       if @online_account.update(diff)
-        OnlineAccountService.update_shares(@online_account.id, resource_owner)
+        OnlineAccountService.update_shares(online_account_id: @online_account.id, owner: resource_owner)
         format.html { redirect_to success_path, flash: { success: 'Account successfully updated.' } }
         format.json { render :show, status: :created, location: @online_account }
       else
@@ -114,7 +116,9 @@ class OnlineAccountsController < AuthenticatedController
   end
   
   def reveal_password
-    online_account = OnlineAccount.for_user(resource_owner).find_by(id: reveal_password_params[:account_id])
+    account_id = reveal_password_params[:account_id]
+    online_account = OnlineAccount.for_user(resource_owner).find_by(id: account_id) if account_id
+    render(status: 404, json: false) and return if online_account.blank?
     authorize online_account
     password = 
       if reveal_password_params.present? && online_account.present?

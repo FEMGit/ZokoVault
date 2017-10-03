@@ -1,4 +1,4 @@
-module WtlBuildShares
+module BuildShares
   def build_shares
     if not_shared_mode?
       shares.clear

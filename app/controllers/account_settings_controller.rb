@@ -3,10 +3,9 @@ require 'ostruct'
 class AccountSettingsController < AuthenticatedController
   skip_before_filter :complete_setup!, only: [:store_corporate_payment]
   before_action :set_corporate_paid
-  before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
-                                          :verify_code, :vault_co_owners, :update_vault_co_owner,
-                                          :login_settings, :update_login_settings, :vault_inheritance,
-                                          :update_vault_inheritance]
+  before_action :set_user_profile, only: [:vault_co_owners, :update_vault_co_owner,
+                                          :login_settings, :update_login_settings,
+                                          :vault_inheritance, :update_vault_inheritance]
   before_action :set_contacts_shareable, only: [:vault_co_owners, :vault_inheritance]
   before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_vault_co_owner, :update_vault_inheritance]
   before_action :prepare_user_profile_params, only: [:update_vault_co_owner, :update_vault_inheritance]

@@ -19,14 +19,12 @@ class ToDoItem
       image_path: 'setup_modal/vault_co_owner.jpg',
       description: "You can allow a third-party 100% access to your Vault. This is typically provided to a spouse, executor, or family member.",
       title: "Co-Owner"},
-=begin
     Rails.application.config.x.OnlineAccountCategory => { 
       name: BASE + 'online_accounts_modal',
       setup_path: online_accounts_path,
       image_path: 'setup_modal/online_accounts.jpg',
       description: "Store your login and password information for social media, utility companies, banks and more.",
       title: "Online Accounts"},
-=end
     Rails.application.config.x.FinalWishesCategory => { 
       name: BASE + 'final_wishes_modal',
       setup_path: final_wishes_path,
@@ -96,8 +94,8 @@ class ToDoItem
                    cancelled_categories: cancelled_categories, current_to_do_categories: to_do_categories)
     check_and_push(name: 'Vault Co-Owner', is_empty: vault_co_owner_empty?(user),
                    cancelled_categories: cancelled_categories, current_to_do_categories: to_do_categories)
-    # check_and_push(name: Rails.application.config.x.OnlineAccountCategory, is_empty: online_accounts_empty?(user),
-    #                cancelled_categories: cancelled_categories, current_to_do_categories: to_do_categories)
+    check_and_push(name: Rails.application.config.x.OnlineAccountCategory, is_empty: online_accounts_empty?(user),
+                   cancelled_categories: cancelled_categories, current_to_do_categories: to_do_categories)
     check_and_push(name: Rails.application.config.x.FinalWishesCategory, is_empty: final_wishes_empty?(user),
                    cancelled_categories: cancelled_categories, current_to_do_categories: to_do_categories)
     check_and_push(name: Rails.application.config.x.FinancialInformationCategory, is_empty: financial_information_empty?(user),

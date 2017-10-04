@@ -1,0 +1,18 @@
+<div class="card mb-30">
+  <section class="flex-boxes padding-right">
+    <div class="board-name">
+      <h3>
+        <svg class="icon nav-icon">
+          <use xlink:href="#icon-cloud-1"></use>
+        </svg>Online Accounts
+      </h3>
+    </div>
+    <div class="board-text">
+      <%= online_accounts_count %> online accounts.
+    </div>
+    
+    <div class="board-link">
+      <%= link_to button_text(online_accounts_any?), online_accounts_path, :class=>"outline-button small-button" %>
+    </div>
+  </section>
+</div>

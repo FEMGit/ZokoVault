@@ -16,6 +16,7 @@ class FinalWishesController < AuthenticatedController
   before_action :set_new_crumbs, only: [:new]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
   include CancelPathErrorUpdateModule
   
   def set_index_breadcrumbs
@@ -30,10 +31,10 @@ class FinalWishesController < AuthenticatedController
       when 'new'
         return "Final Wishes - #{params[:group]} Setup"
       when 'edit'
-        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        final_wish_info = FinalWishInfo.for_user(resource_owner).find(params[:id])
         return "Final Wishes - #{final_wish_info.group} Edit"
       when 'show'
-        final_wish_info = FinalWishInfo.for_user(resource_owner).find_by(id: params[:id])
+        final_wish_info = FinalWishInfo.for_user(resource_owner).find(params[:id])
         return "Final Wishes - #{final_wish_info.group} Details"
     end
   end

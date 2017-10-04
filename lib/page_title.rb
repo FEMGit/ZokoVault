@@ -25,7 +25,8 @@ module PageTitle
   private
   
   def set_page_title
-    @title = page_name.blank? ? "ZokuVault" : "ZokuVault - #{page_name}"
+    page_title = page_name
+    @title = page_title.blank? ? "ZokuVault" : "ZokuVault - #{page_title}"
   end
   
   def page_name; end

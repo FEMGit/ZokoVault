@@ -18,10 +18,11 @@ class FinancialInvestmentController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include PageTitle
   include CancelPathErrorUpdateModule
 
   def page_name
-    financial_property = FinancialInvestment.for_user(resource_owner).find_by(id: params[:id])
+    financial_property = FinancialInvestment.for_user(resource_owner).find(params[:id])
     case action_name
       when 'new'
         return "Financial Investment - Setup"

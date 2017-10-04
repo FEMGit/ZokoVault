@@ -10,6 +10,7 @@ class ContactsController < AuthenticatedController
   before_action :set_details_crumbs, only: [:show]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
 
   def page_name
     case action_name
@@ -18,10 +19,10 @@ class ContactsController < AuthenticatedController
       when 'new'
         return "Add Contact"
       when 'edit'
-        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        contact = Contact.for_user(resource_owner).find(params[:id])
         return "Contacts - #{contact.name} - Edit"
       when 'show'
-        contact = Contact.for_user(resource_owner).find_by(id: params[:id])
+        contact = Contact.for_user(resource_owner).find(params[:id])
         return "Contacts - #{contact.name} - Details"
     end
   end

@@ -19,10 +19,11 @@ class FinancialAlternativeController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include PageTitle
   include CancelPathErrorUpdateModule
 
   def page_name
-    provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
+    provider = FinancialProvider.for_user(resource_owner).find(params[:id])
     case action_name
       when 'new'
         return "Financial Alternative - Setup"

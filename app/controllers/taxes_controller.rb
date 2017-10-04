@@ -20,6 +20,7 @@ class TaxesController < AuthenticatedController
   before_action :set_add_edit_crumbs, only: [:edit, :new]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
   include CancelPathErrorUpdateModule
   
   def page_name
@@ -29,10 +30,10 @@ class TaxesController < AuthenticatedController
       when 'new'
         return "#{params[:year]} Taxes Setup"
       when 'edit'
-        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        tax_year_info = TaxYearInfo.for_user(resource_owner).find(params[:id])
         return "#{tax_year_info.year} Taxes Edit"
       when 'show'
-        tax_year_info = TaxYearInfo.for_user(resource_owner).find_by(id: params[:id])
+        tax_year_info = TaxYearInfo.for_user(resource_owner).find(params[:id])
         return "#{tax_year_info.year} Tax Details"
     end
   end

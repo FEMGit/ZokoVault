@@ -4,7 +4,8 @@ class WelcomeController < AuthenticatedController
                                                                                  :thank_you_email_only, :reset_password_expired]
   helper_method :financial_information_any?, :insurance_vendors_count,
                 :tax_year_count, :final_wishes_count, :contacts_count, :button_text,
-                :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?
+                :wills_poa_document_count, :wills_poa_any?, :trusts_entities_document_count, :trusts_entities_any?,
+                :online_accounts_count, :online_accounts_any?
   before_action :redirect_if_signed_in, only: [:thank_you, :email_confirmed, :thank_you_email_only]
   before_action :set_corporate_profile, :set_to_do_list, :set_to_do_modal_popup, only: [:index]
   after_action :allow_iframe, only: [:thank_you_email_only]
@@ -83,6 +84,14 @@ class WelcomeController < AuthenticatedController
   def final_wishes_count
     final_wish_infos = FinalWishInfo.for_user(current_user)
     final_wish_infos.select { |t| t.final_wishes.present? }.count
+  end
+  
+  def online_accounts_count
+    OnlineAccount.for_user(current_user).count
+  end
+    
+  def online_accounts_any?
+    online_accounts_count > 0
   end
   
   def button_text(any_data)

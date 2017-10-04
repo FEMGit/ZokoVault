@@ -1,6 +1,6 @@
 module SanitizeModule
   def self.included(base)
-    base.before_filter :sanitize_params, only: [:create, :update, :send_email]
+    base.before_filter :sanitize_params, only: [:create, :update, :send_email, :update_account_settings]
   end
   
   def sanitize_params

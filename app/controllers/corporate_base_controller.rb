@@ -12,6 +12,7 @@ class CorporateBaseController < AuthenticatedController
   include BreadcrumbsErrorModule
   include UserTrafficModule
   include CancelPathErrorUpdateModule
+  include SanitizeModule
 
   helper_method :invitation_sent?
 

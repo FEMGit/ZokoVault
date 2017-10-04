@@ -189,15 +189,15 @@ class UsageMetricsController < AuthenticatedController
   end
 
   def uniq_user_count
-    @uniq_user_count = User.all.uniq.count
+    @uniq_user_count = User.count
   end
 
   def uniq_document_count
-    @uniq_document_count = Document.all.uniq.count
+    @uniq_document_count = Document.count
   end
 
   def users
-    @users = User.all.uniq
+    @users = User.all
   end
 
   # Helper Methods

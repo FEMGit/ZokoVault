@@ -22,7 +22,11 @@ class MfasController < AuthenticatedController
   end
 
   def resend_code
-    render :json => {:success => true} if MultifactorAuthenticator.new(current_user).send_code
+    if MultifactorAuthenticator.new(current_user).send_code
+      render status: 200, json: {success: true}
+    else
+      render status: 422, json: {success: false}
+    end
   end
 
   private

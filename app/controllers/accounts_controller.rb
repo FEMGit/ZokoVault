@@ -253,18 +253,6 @@ class AccountsController < AuthenticatedController
 
   def show; end
 
-  def send_code
-    status =
-      begin
-        MultifactorAuthenticator.new(current_user).send_code_on_number(two_factor_phone_params[:two_factor_phone_number])
-        :ok
-      rescue
-        :bad_request
-      end
-
-    head status
-  end
-
   def subscriptions
     render json: StripeSubscription.active_plans.to_json.html_safe
   end
@@ -284,6 +272,20 @@ class AccountsController < AuthenticatedController
     else
       render json: { :message => 'Coupon Not Found', :status => 500 }
     end
+  end
+  
+  # this is only used from layouts/two_factor_phone_setup
+  # therefore the current_user should be fully authenticated or in setup
+  def send_code
+    status = :bad_request if missing_mfa? && current_user.setup_complete
+    status ||= begin
+      number = two_factor_phone_params[:two_factor_phone_number]
+      MultifactorAuthenticator.new(current_user).send_code_on_number(number)
+      :ok
+    rescue
+      :bad_request
+    end
+    head status
   end
 
   def mfa_verify_code
@@ -306,8 +308,7 @@ class AccountsController < AuthenticatedController
   private
 
   def code_verified?
-    current_user.attributes = user_params
-    phone_code = current_user.user_profile.phone_code
+    phone_code = mfa_phone_code[:phone_code]
     MultifactorAuthenticator.new(current_user).verify_code(phone_code)
   end
 
@@ -365,6 +366,10 @@ class AccountsController < AuthenticatedController
         security_questions_attributes: [:question, :answer],
       ]
     )
+  end
+  
+  def mfa_phone_code
+    params.require(:user).require(:user_profile_attributes).permit(:phone_code)
   end
 
   def stripe_promo_params

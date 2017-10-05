@@ -149,6 +149,8 @@
   <%= render :partial => "layouts/standard_document_table", :locals => {:documents => @documents} %>
 
   <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.FinancialInformationCategory.downcase } %>
-
-  <%= render :partial => 'financial_information/financial_javascript' %>
+  
+  <% if category_shared?(resource_owner, @category.name) %>
+    <%= render :partial => 'financial_information/financial_javascript' %>
+  <% end %>
 <% end %>

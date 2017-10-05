@@ -70,14 +70,16 @@
       <p>This will remove the user from your corporate account and remove their ability to manage client accounts.</p>
     </div>
     <div class="user-account-link mt-10">
-      <%= link_to 'Remove User', remove_corporate_employee_path(@corporate_contact), method: :post,
-            data: { confirm: "This will remove the user from your corporate account and remove their ability to manage client accounts." },
-            class: 'button big-button primary-button' %>
+      <%= link_to 'Remove User', 'javascript:void(null);', class: 'button big-button primary-button', onclick: 'removeCorporateUserModalShow()' %>
     </div>
   </section>
 </div>
 
 <%= render partial: 'layouts/email_preview_javascript' %>
+<%= render partial: 'corporate_base/remove_corporate_user_modal', locals: { title: "Remove User as Account Admin",
+    description: "This will remove the user from your corporate account and remove their ability to manage client accounts.",
+    remove_user_button_text: "Remove User",
+    remove_user_path: remove_corporate_employee_path(@corporate_contact) } %>
 
 <div id="email-preview-section">
 </div>

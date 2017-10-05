@@ -5,9 +5,10 @@
     <h1 class="hero-text">Your virtual safety deposit box and estate planning portal.</h1>
     <h4 class="hero-text">ZokuVault helps families plan, organize, and share the important details of their lives.</h4>
     <br>
-    <%= link_to 'Start Your Free Trial', sign_up_path, class: "button primary-button call-to-action" %>
-
-
+    <%= render partial: 'users/registrations/email_only_registration_form', locals: { 
+        show_static_error: false, 
+        resource: User.new(user_profile: UserProfile.new),
+        resource_name: :user } %>
   </article>
 </section>
 

@@ -58,13 +58,16 @@ class ApplicationController < ActionController::Base
     user_death_trap.save
     raise exception
   end
+  
+  def allow_iframe
+    response.headers["X-Frame-Options"] = "ALLOWALL"
+  end
 
   # Run Schedule for handling online users
   scheduler = Rufus::Scheduler.new
   scheduler.every Rails.application.config.x.UserOnlineRangeScheduleFormat do
-    online_users = User.online
-    user_ids = online_users.collect(&:id)
-    UserActivity.for_date(Date.current).where(user_id: user_ids).update_all("session_length = session_length + 5")
+    online_user_ids = User.online.pluck(:id)
+    UserActivity.for_date(Date.current).where(user_id: online_user_ids).update_all("session_length = session_length + 5")
   end
   
   scheduler.every Rails.application.config.x.UsageMetricsUpdateScheduleFormat do

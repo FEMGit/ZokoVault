@@ -26,6 +26,10 @@ class UserResourceGatherer < Struct.new(:user)
     end
     shared_category_links
   end
+  
+  def free_user_resources
+    @my_resources = gather_contacts(user)
+  end
 
   def regular_user_resources
     return @my_resources if @my_resources
@@ -83,6 +87,8 @@ class UserResourceGatherer < Struct.new(:user)
       corporate_admin_resources
     elsif user.corporate_employee?
       corporate_employee_resources
+    elsif user.free?
+      free_user_resources
     else
       regular_user_resources
     end
@@ -152,8 +158,10 @@ class UserResourceGatherer < Struct.new(:user)
   end
   
   def gather_contacts(user)
-    return Contact.for_user(user) unless user.corporate_manager?
-    Contact.for_user(user).where("emailaddress ILIKE ?", user.email.downcase)
+    if user.corporate_manager? || user.free?
+      return Contact.for_user(user).where("emailaddress ILIKE ?", user.email.downcase)
+    end
+    Contact.for_user(user) 
   end
   
   def gather_documents(user)

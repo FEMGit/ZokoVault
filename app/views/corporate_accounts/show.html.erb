@@ -1,7 +1,5 @@
 <%= render :partial => "layouts/bread_crumbs" %>
 
-<button class="primary-button big-button d-none" data-modal-id="remove-client-modal" id="remove-client-modal-btn"></button>
-
 <%= link_to edit_corporate_account_path, class: "edit-link mrg-top pr-10" do %>
   <span class="circle-button">
   <svg class="icon circle-icon">
@@ -90,7 +88,7 @@
         <p>Remove this clients account and vault from your corporation.</p>
       </div>
       <div class="user-account-link mt-10">
-        <%= link_to 'Remove Client', 'javascript:void(0);', class: 'button big-button blue-button', onclick: 'removeClientModalShow()' %>
+        <%= link_to 'Remove Client', 'javascript:void(0);', class: 'button big-button blue-button', onclick: 'removeCorporateUserModalShow()' %>
       </div>
     </section>
   <% end %>
@@ -106,29 +104,7 @@
 <div id="email-preview-section">
 </div>
 
-<div id="remove-client-modal" class="modal medium-modal">
-  <a href="javascript:void(null)" class="js-modal-close modal-close">
-    <svg class="icon">
-      <use xlink:href="#icon-x-2"></use>
-    </svg>
-  </a>
-  <div class="modal-header">
-    <h2>Remove Client Account</h2>
-  </div>
-  <div class="modal-content">
-    <p class="mb-30">
-      Removing the client account will sever all access between you and this account, revoking access to all shared documents and information.
-      <div class="mb-30">
-        <%= link_to 'Remove Account', remove_corporate_client_corporate_accounts_path(@corporate_contact), method: :post, class: "js-modal-close button primary-button big-button" %>
-        <%= link_to 'Cancel', 'javascript:void(null)', class: "js-modal-close button secondary-button big-button" %>
-      </div>
-    </p>
-  </div>
-</div>
-
-<%= javascript_include_tag 'modal' %>
-<script>
-  var removeClientModalShow = function() {
-    $("#remove-client-modal-btn").click()
-  }
-</script>
+<%= render partial: 'corporate_base/remove_corporate_user_modal', locals: { title: "Remove Client Account",
+    description: "Removing the client account will sever all access between you and this account, revoking access to all shared documents and information.",
+    remove_user_button_text: "Remove Account",
+    remove_user_path: remove_corporate_client_corporate_accounts_path(@corporate_contact) } %>

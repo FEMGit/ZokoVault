@@ -28,16 +28,15 @@ class UserService
       user_models = all_models.select { |x| x.table_exists? && x.column_names.include?("user_id") }
     end
     
-    User.all.map(&:id).each do |user_id|
-      completed_count = user_models.select { |x| x.where(:user_id => user_id).any? }.count
+    User.find_each do |user|
+      completed_count = user_models.select { |x| x.where(:user_id => user.id).any? }.count
       models_with_user_count = user_models.count
-      User.find_by(id: user_id).update(site_completed: ((completed_count.to_f / models_with_user_count) * 100).round(2))
+      user.update(site_completed: ((completed_count.to_f / models_with_user_count) * 100).round(2))
     end
   end
   
   def self.update_categories_count
-    User.all.map(&:id).each do |user_id|
-      user = User.find_by(id: user_id)
+    User.find_each do |user|
       contact_service = ContactService.new(:user => user)
 
       category_count = if_any_return_one(FinancialProvider.for_user(user)) + 
@@ -55,9 +54,7 @@ class UserService
   end
   
   def self.update_subcategories_count
-    User.all.map(&:id).each do |user_id|
-      user = User.find_by(id: user_id)
-      
+    User.find_each do |user|
       subcategory_count = financial_information_count(user) + 
                             wills_powers_of_attorney_count(user) +
                             trusts_entities_count(user) + 
@@ -68,9 +65,7 @@ class UserService
       user.update(subcategory_count: subcategory_count)
     end
   end
-  
-  private
-  
+    
   def self.contacts_count(user)
     contact_service = ContactService.new(:user => user)
     contact_service.contacts_shareable.count

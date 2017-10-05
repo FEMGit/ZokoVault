@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'users/password/create_new_invitation/:uuid', to: 'passwords#create_new_invitation', as: :create_new_password_invitation
     get 'users/sign_up_email_only', to: 'registrations#new_email_only', as: :new_email_only_registrations
+    get 'users/free_sign_up_email_only', to: 'registrations#new_email_only_free_sign_up', as: :new_email_only_free_sign_up_registrations
     post 'users/sign_up_email_only', to: 'registrations#create_email_only', as: :create_email_only_registrations
     match 'active' => 'sessions#active', via: :get
     match 'timeout' => 'sessions#timeout', via: :get
@@ -191,8 +192,6 @@ Rails.application.routes.draw do
   patch 'account_settings/cancel_subscription_update', to: 'account_settings#cancel_subscription_update', as: :cancel_subscription_update_account_settings
   patch 'account_settings/remove_corporate_access_update/:contact_id', to: 'account_settings#remove_corporate_access_update', as: :remove_corporate_access_update_account_settings
   patch 'account_settings/remove_corporate_payment_update', to: 'account_settings#remove_corporate_payment_update', as: :remove_corporate_payment_update_account_settings
-  post 'account_settings/send_code', to: 'account_settings#send_code', as: :send_code_account_settings
-  post 'account_settings/verify_code', to: 'account_settings#verify_code', as: :verify_code_account_settings
   post 'account_settings/update_payment(/:corporate)', to: 'account_settings#update_payment', as: :update_payment_account_settings
   post 'account_settings/store_corporate_payment', to: 'account_settings#store_corporate_payment', as: :store_corporate_payment_account_settings
 
@@ -205,7 +204,7 @@ Rails.application.routes.draw do
   get 'my_profile/edit' => 'user_profiles#edit', as: :edit_user_profile
 
   # Account
-  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts_path
+  get 'account/trial_membership_ended' => 'accounts#trial_membership_ended', as: :trial_membership_ended_accounts
   get 'account/trial_membership_update' => 'accounts#trial_membership_update', as: :trial_membership_update_accounts
   get 'account/questionnaire' => 'accounts#trial_questionnaire', as: :trial_questionnaire_accounts
   put 'account/questionnaire' => 'accounts#trial_questionnaire_update'

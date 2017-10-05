@@ -53,7 +53,7 @@
   <% end %>
   
   <% account_settings_current = 'active' if (current_page?(vault_co_owners_account_settings_path) || current_page?(login_settings_account_settings_path) || current_page?(manage_subscription_account_settings_path))%>
-  <%= link_to vault_co_owners_account_settings_path, class: "main-nav tablet-show #{account_settings_current}" do %>
+  <%= link_to login_settings_account_settings_path, class: "main-nav tablet-show #{account_settings_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-settings-1"></use>
     </svg>Account Settings

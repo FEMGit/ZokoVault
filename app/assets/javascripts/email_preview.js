@@ -52,6 +52,9 @@ var appendNewEmailPreviewLine = function(selectedContact, submitButtonText, emai
   emailPreviewListAdditionalId = emailPreviewListAdditionalId || ''
   submitButtonText = submitButtonText || ''
   sharedUserId = $("#shared_user_id").val()
+  if (!selectedContact.length) {
+    return
+  }
   $.get('/email/email_preview_line/' + selectedContact + '/' + submitButtonText + '/' + sharedUserId)
   .done(function(data) {
     $('#email-preview-list' + (emailPreviewListAdditionalId.length > 0 ? '.' + emailPreviewListAdditionalId : '')).append(data)

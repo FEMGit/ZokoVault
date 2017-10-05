@@ -19,7 +19,7 @@ module BreadcrumbsErrorModule
   end
   
   def poa_error_breadcrumb_update
-    wills_poa_error_breadcrumbs_update
+    wills_poa_error_breadcrumbs_update { set_power_of_attorney if @path[:action].eql? :edit }
   end
 
   def entities_breadcrumb_update

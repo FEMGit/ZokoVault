@@ -4,7 +4,9 @@
     <% if contact.present? %>
       <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
     <% else %>
-      <% user = User.all.detect { |u| u.email.downcase == user.email.downcase } %>
+      <% if user && user.email.present? && user.id.blank? %>
+        <% user = User.email_match(user.email).first || user %>
+      <% end %>
       <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => nil, :user => user } %>
     <% end %>
   </td>

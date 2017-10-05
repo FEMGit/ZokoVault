@@ -1,5 +1,10 @@
 class RegistrationsController < Devise::RegistrationsController
-  layout "no_header_footer_layout", only: [:new_email_only]
+  layout "no_header_footer_layout", only: [:new_email_only, :new_email_only_free_sign_up]
+  after_action :allow_iframe, only: [:new_email_only, :new_email_only_free_sign_up]
+  
+  def new_email_only_free_sign_up
+    new
+  end
   
   def new_email_only
     new
@@ -10,7 +15,7 @@ class RegistrationsController < Devise::RegistrationsController
     if user.present?
       expire_data_after_sign_in!
       alert_existing_user_by_email(user)
-      redirect_to email_registration_thank_you_path and return
+      redirect_to return_path_for_email_only_signup and return
     end
     
     user = User.new(email: sign_up_params[:email], uuid: SecureRandom.uuid)
@@ -18,13 +23,13 @@ class RegistrationsController < Devise::RegistrationsController
     user.skip_confirmation_notification!
     user.skip_confirmation!
     unless user.save
-      redirect_to (new_email_only_registrations_path(error: email_error_to_display(user)))
+      redirect_to return_path_for_email_only_signup(error: email_error_to_display(user))
     else
       InvitationService::CreateInvitationService.send_regular_user_invitation(user: user)
-      redirect_to email_registration_thank_you_path and return
+      redirect_to return_path_for_email_only_signup and return
     end
   end
-
+  
   def create
     super do |resource|
       if valid_except_email_taken?(resource)
@@ -57,6 +62,15 @@ class RegistrationsController < Devise::RegistrationsController
         user_profile_attributes: [
           :first_name, :middle_name, :last_name, :date_of_birth
         ])
+  end
+  
+  def return_path_for_email_only_signup(error: nil)
+    if URI(request.referrer).path.eql? root_path
+      flash[:error] = error
+      error.present? ? root_path : thank_you_path
+    else
+      error.present? ? new_email_only_registrations_path(error: error) : email_registration_thank_you_path
+    end
   end
 
   def date_format

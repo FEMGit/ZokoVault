@@ -3,10 +3,9 @@ require 'ostruct'
 class AccountSettingsController < AuthenticatedController
   skip_before_filter :complete_setup!, only: [:store_corporate_payment]
   before_action :set_corporate_paid
-  before_action :set_user_profile, only: [:send_code, :update_two_factor_phone,
-                                          :verify_code, :vault_co_owners, :update_vault_co_owner,
-                                          :login_settings, :update_login_settings, :vault_inheritance,
-                                          :update_vault_inheritance]
+  before_action :set_user_profile, only: [:vault_co_owners, :update_vault_co_owner,
+                                          :login_settings, :update_login_settings,
+                                          :vault_inheritance, :update_vault_inheritance]
   before_action :set_contacts_shareable, only: [:vault_co_owners, :vault_inheritance]
   before_action :create_contact_if_not_exists, only: [:update_login_settings, :update_vault_co_owner, :update_vault_inheritance]
   before_action :prepare_user_profile_params, only: [:update_vault_co_owner, :update_vault_inheritance]
@@ -251,30 +250,6 @@ class AccountSettingsController < AuthenticatedController
     end
   end
 
-  def send_code
-    status =
-      begin
-        MultifactorAuthenticator.new(current_user).send_code_on_number(new_phone)
-        :ok
-      rescue
-        :bad_request
-      end
-
-    head status
-  end
-
-  def verify_code
-    phone_code = login_settings_params[:phone_code]
-    verified = MultifactorAuthenticator.new(current_user).verify_code(phone_code)
-    status = if verified
-               @user_profile.update_attributes(:two_factor_phone_number => new_phone)
-               :ok
-             else
-               :unauthorized
-             end
-    head status
-  end
-
   def store_corporate_payment
     token = params[:stripeToken]
     if token.present?
@@ -376,7 +351,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def redirect_to_login_settings_if_corporate_manager
-    redirect_to login_settings_path if current_user && current_user.corporate_manager?
+    redirect_to login_settings_account_settings_path if current_user && current_user.corporate_manager?
   end
 
   def redirect_to_manage_subscription_if_corporate_client
@@ -442,7 +417,7 @@ class AccountSettingsController < AuthenticatedController
 
   def account_settings_params
     return nil unless params[:user_profile].present?
-    params.require(:user_profile).permit(:photourl, :phone_code)
+    params.require(:user_profile).permit(:photourl)
   end
 
   def vault_co_owner_params
@@ -456,7 +431,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def login_settings_params
-    params.require(:user_profile).permit(:mfa_frequency, :phone_code, :two_factor_phone_number)
+    params.require(:user_profile).permit(:mfa_frequency, :two_factor_phone_number)
   end
 
   def password_change_params
@@ -476,10 +451,6 @@ class AccountSettingsController < AuthenticatedController
 
   def set_user_profile
     @user_profile = UserProfile.for_user(current_user)
-  end
-
-  def new_phone
-    login_settings_params[:two_factor_phone_number]
   end
 
   def set_contacts_shareable

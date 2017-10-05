@@ -17,6 +17,7 @@
 <table id="user-statistics-table">
   <thead>
     <tr>
+      <th>Member Since</th>
       <th>Last Name</th>
       <th>First Name</th>
       <th>Email</th>
@@ -29,7 +30,6 @@
       <th>Session Length AVG</th>
       <th>Categories with Information</th>
       <th>Subcategories with Information</th>
-      <th>Member Since</th>
       <th>Current Subscription Start Date</th>
       <th>Current Subscription End Date</th>
       <th>Site Completed (%)</th>
@@ -39,6 +39,9 @@
   <tbody>
     <% @users && @users.each do |user| %>
       <tr>
+        <td>
+          <%= date_format(user.created_at) %>
+        </td>
         <td>
           <%= user.last_name %>
         </td>
@@ -76,9 +79,6 @@
           <%= subcategories_with_information_count(user) %>
         </td>
         <td>
-          <%= date_format(user.created_at) %>
-        </td>
-        <td>
           <%= date_format(user.current_user_subscription && 
                           user.current_user_subscription.start_at) || '--' %>
         </td>
@@ -99,7 +99,7 @@
 
 <script>
   $(document).ready(function(){
-    DatatableUpdate('#user-statistics-table', [ [25, 50, 100, 200, 500], 'data', [[0, 'asc']] ])
+    DatatableUpdate('#user-statistics-table', [ [25, 50, 100, 200, 500], 'data', [[0, 'desc']] ])
     $('#user-statistics-table_wrapper').addClass('scroll')
   });
 </script>

@@ -66,4 +66,21 @@ module CategoriesHelper
     return false unless user.present? && user.user_profile.present?
     user.primary_shared_with.blank?
   end
+  
+  def my_profile_empty?(user = current_user)
+    return false unless user.present? && user.user_profile.present?
+    profile = user.user_profile
+    profile.date_of_birth.blank? && profile.street_address_1.blank? && profile.city.blank? &&
+      profile.state.blank? && profile.zip.blank? && profile.phone_number_mobile.blank? &&
+      profile.phone_number.blank? && profile.photourl.blank? && my_profile_employer_empty?(profile)
+  end
+  
+  def my_profile_employer_empty?(user_profile)
+    return true if user_profile.employers.blank?
+    user_profile_employer = user_profile.employers.first
+    user_profile_employer.name.blank? && user_profile_employer.web_address.blank? &&
+      user_profile_employer.street_address_1.blank? && user_profile_employer.city.blank? &&
+      user_profile_employer.state.blank? && user_profile_employer.zip.blank? &&
+      user_profile_employer.phone_number_office.blank? && user_profile_employer.phone_number_fax.blank?
+  end
 end

@@ -44,7 +44,7 @@
     $("#category-setup-image").attr('src', imagePath)
     $("#category-setup-link").attr('href', setupLinkPath)
     $("#category-do-not-show-link").on('click', function() {
-      $.post("<%= do_not_show_popup_to_do_popup_path %>", { to_do_modal_popup_path: toDoModalPopupPath })
+      $.post("<%= do_not_show_to_do_path %>", { to_do_modal_popup_path: toDoModalPopupPath })
     })
     setWindowResizeEvent()
   }

@@ -1,4 +1,7 @@
-<div class="card mb-30">
+<% additional_classes, card_id = additional_card_class_and_id_by_category(financial_information_empty?, 
+  Rails.application.config.x.FinancialInformationCategory) %>
+
+<div class="card mb-30 <%= additional_classes %>" id="<%= card_id %>">
   <section class="flex-boxes padding-right">
     <div class="board-name">
       <h3>
@@ -17,7 +20,7 @@
         <span>0 account values uploaded.</span>
       <% end %>
     </div>
-    
+
     <div class="board-link">
       <%= link_to button_text(financial_information_any?), financial_information_path, :class=>"outline-button small-button" %>
     </div>

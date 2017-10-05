@@ -273,8 +273,8 @@ class DocumentsController < AuthenticatedController
   end
 
   def set_viewable_contacts
-    possible_share_ids = document_shares(@document).pluck(:contact_id)
-    existing_share_ids = Contact.where(id: possible_contact_ids).pluck(:id)
+    possible_share_ids = document_shares(@document).try(:pluck, :contact_id)
+    existing_share_ids = Contact.where(id: possible_share_ids).pluck(:id)
     @document.contact_ids |= existing_share_ids
   end
 

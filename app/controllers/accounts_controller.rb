@@ -127,7 +127,7 @@ class AccountsController < AuthenticatedController
   end
 
   def phone_setup_update
-    current_user.update_attributes(user_params)
+    current_user.update_attributes(user_phone_params)
     if current_user.corporate_manager?
       current_user.user_profile.update_attributes(mfa_frequency: 'always')
       current_user.update_attributes(setup_complete: true) unless current_user.corporate_admin
@@ -350,6 +350,10 @@ class AccountsController < AuthenticatedController
 
   def two_factor_phone_params
     params.require(:user).require(:user_profile_attributes).permit(:two_factor_phone_number)
+  end
+
+  def user_phone_params
+    params.require(:user).permit(user_profile_attributes: [:two_factor_phone_number])
   end
 
   def user_params

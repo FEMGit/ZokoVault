@@ -34,6 +34,31 @@
 </section>
 
 <script>
+  $(document).ready(function() {
+    prepopulate_shared_with()
+  })
+  
+  var prepopulate_shared_with = function() {
+    var category_selected = $('#document_category.chosen-select :selected').text()
+    switch(category_selected) {
+      case "<%=Rails.application.config.x.FinancialInformationCategory%>":
+        financial_information_shared_with_update()
+        break
+      case "<%=Rails.application.config.x.InsuranceCategory%>":
+        insurance_shared_with_update()
+        break
+      case "<%=raw Rails.application.config.x.TrustsEntitiesCategory%>":
+      case "<%=raw Rails.application.config.x.WillsPoaCategory%>":
+        card_document_shared_with_update()
+        break
+      case "<%=Rails.application.config.x.TaxCategory%>":
+      case "<%=Rails.application.config.x.FinalWishesCategory%>":
+      case "<%=Rails.application.config.x.ContactCategory%>":
+        category_group_shared_with_update()
+        break
+    }
+  }
+  
   function get_drop_down_options() {
     update_category($('#document_category.chosen-select :selected').text())
   }
@@ -48,26 +73,42 @@
     })
   })
   
-  $("#document_subcategory_financial.chosen-select").change(function(e, params) {
+  $("#document_subcategory_financial.chosen-select").change(function() {
+    financial_information_shared_with_update()
+  })
+  
+  $("#document_subcategory_insurance.chosen-select").change(function() {
+    insurance_shared_with_update()
+  })
+  
+  $("#document_subcategory_card_documents.chosen-select").change(function() {
+    card_document_shared_with_update()
+  })
+  
+  $("#document_category_groups.chosen-select").change(function(){
+    category_group_shared_with_update()
+  });
+  
+  var financial_information_shared_with_update = function() {
     var subcategory_selected = $('#document_subcategory_financial :selected').val()
     update_shared_with(subcategory_selected)
-  })
+  }
   
-  $("#document_subcategory_insurance.chosen-select").change(function(e, params) {
+  var insurance_shared_with_update = function() {
     var subcategory_selected = $('#document_subcategory_insurance :selected').val()
     update_shared_with(subcategory_selected)
-  })
+  }
   
-  $("#document_subcategory_card_documents.chosen-select").change(function(e, params) {
+  var card_document_shared_with_update = function() {
     var subcategory_selected = $('#document_subcategory_card_documents :selected').val()
     update_shared_with(subcategory_selected)
-  })
-
-  $("#document_category_groups.chosen-select").change(function(e, params){
-    $("#group").val(params.selected)
+  }
+  
+  var category_group_shared_with_update = function() {
     var subcategory_selected = $('#document_category_groups :selected').val()
+    $("#group").val(subcategory_selected)
     update_shared_with(subcategory_selected)
-  });
+  }
   
   var update_shared_with = function(subcategory_selected) {
     var shared_user_id = $("#shared_user_id").val();

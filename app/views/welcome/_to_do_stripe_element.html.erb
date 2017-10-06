@@ -1,9 +1,0 @@
-<section class="flex-boxes striped padding-right to-do-item">
-  <div class="striped-name">
-    <p class="mb-0 mt-5 fw-300"><%= title %></p>
-  </div>
-  <div class="striped-link">
-    <%= link_to 'Start Workflow', setup_path, class: 'outline-button category-btn small-button mr-5' %>
-    <%= link_to 'Dismiss', 'javascript:void(0);', class: 'no-underline-link', onClick: "dismissToDoItem(\"#{modal_path}\", \"#{index}\")", id: "dismiss-btn-#{index}" %>
-  </div>
-</section>

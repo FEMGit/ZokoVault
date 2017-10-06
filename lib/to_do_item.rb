@@ -7,18 +7,24 @@ class ToDoItem
 
   BASE = 'to_do_popup_modals/'
   TO_DO_ITEMS = {
-    "Vault Inheritance" => { 
-      name: BASE + 'vault_inheritance_modal',
-      setup_path: vault_inheritance_account_settings_path,
-      image_path: 'setup_modal/vault_inheritance.jpg',
-      description: "Set up a chain of custody for your vault by designating a Contingent Owner. This is typically provided to the executor of your estate.",
-      title: "Vault Inheritance"},
+    Rails.application.config.x.ProfileCategory => { 
+      name: BASE + 'my_profile_modal',
+      setup_path: edit_user_profile_path,
+      image_path: 'setup_modal/my_profile.jpg',
+      description: "Complete your personal profile, including your address and employment information.",
+      title: "Personal Profile"},
     "Vault Co-Owner" => { 
       name: BASE + 'vault_co_owner_modal',
       setup_path: vault_co_owners_account_settings_path,
       image_path: 'setup_modal/vault_co_owner.jpg',
       description: "You can allow a third-party 100% access to your Vault. This is typically provided to a spouse, executor, or family member.",
       title: "Co-Owner"},
+    "Vault Inheritance" => { 
+      name: BASE + 'vault_inheritance_modal',
+      setup_path: vault_inheritance_account_settings_path,
+      image_path: 'setup_modal/vault_inheritance.jpg',
+      description: "Set up a chain of custody for your vault by designating a Contingent Owner. This is typically provided to the executor of your estate.",
+      title: "Vault Inheritance"},
 =begin
     Rails.application.config.x.OnlineAccountCategory => { 
       name: BASE + 'online_accounts_modal',
@@ -27,12 +33,6 @@ class ToDoItem
       description: "Store your login and password information for social media, utility companies, banks and more.",
       title: "Online Accounts"},
 =end
-    Rails.application.config.x.FinalWishesCategory => { 
-      name: BASE + 'final_wishes_modal',
-      setup_path: final_wishes_path,
-      image_path: 'setup_modal/final_wishes.jpg',
-      description: "Record your plans for pet care, burial, charity, organ donation and more.",
-      title: "Final Wishes"},
     Rails.application.config.x.FinancialInformationCategory => { 
       name: BASE + 'financial_information_modal',
       setup_path: financial_information_path,
@@ -63,12 +63,12 @@ class ToDoItem
       image_path: 'setup_modal/taxes.jpg',
       description: "Store your tax records and documents.",
       title: "Taxes"},
-    Rails.application.config.x.ProfileCategory => { 
-      name: BASE + 'my_profile_modal',
-      setup_path: edit_user_profile_path,
-      image_path: 'setup_modal/my_profile.jpg',
-      description: "Complete your personal profile, including your address and employment information.",
-      title: "Personal Profile"}
+    Rails.application.config.x.FinalWishesCategory => { 
+      name: BASE + 'final_wishes_modal',
+      setup_path: final_wishes_path,
+      image_path: 'setup_modal/final_wishes.jpg',
+      description: "Record your plans for pet care, burial, charity, organ donation and more.",
+      title: "Final Wishes"}
   }
 
   def self.random_item(user:)

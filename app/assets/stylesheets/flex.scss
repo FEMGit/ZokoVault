@@ -416,9 +416,9 @@
   }
 }
 
-//Striped Box
+//Row List Boxes
 .shared-boxes,
-.striped {
+.row-list {
   border-top: 1px solid $color-gray-light;
   padding: 5px 0;
   margin-top: 5px;
@@ -433,7 +433,7 @@
   }
 }
 .shared-name,
-.striped-name {
+.row-list-item-name {
   flex: 85%;
   h4{
     margin-bottom: 0;
@@ -443,7 +443,7 @@
   }
 }
 .shared-link,
-.striped-link {
+.row-list-item-link {
   flex: 15%;
   text-align: right;
   padding-top: 5px;
@@ -454,10 +454,10 @@
     text-align: left;
   }
 }
-.striped-name {
+.row-list-item-name {
   flex: 70%;
 }
-.striped-link {
+.row-list-item-link {
   flex: 30%;
 }
 

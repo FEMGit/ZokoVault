@@ -48,8 +48,7 @@ class CorporateEmployeesController < CorporateBaseController
   def create
     @user_account = User.new(employee_account_params)
     @user_account.skip_password_validation!
-    @user_account.skip_confirmation_notification!
-    @user_account.confirm_email!
+    @user_account.skip_confirmation!
     
     if !employee_relationship_valid?(@user_account)
       respond_to_format_error(:new)

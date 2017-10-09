@@ -59,6 +59,10 @@ $state-width: 210px;
     padding: 15px 10px 15px 25px;
   }
 }
+.skip-tutorial-modal-footer {
+  margin: 20px 0;
+  padding: 0 25px;
+}
 .modal-overlay {
   opacity: 0;
   filter: alpha(opacity=0);

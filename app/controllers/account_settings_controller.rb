@@ -56,7 +56,7 @@ class AccountSettingsController < AuthenticatedController
     corporate_subscription = current_user.current_user_subscription.corporate?(corporate_client: current_user)
     CorporateService.remove_client_from_admin(client: current_user, admin: @corporate_admin_user)
     flash[:success] = "Corporate Access was successfully removed."
-    redirect_to update_subscription_information_path and return if corporate_subscription
+    redirect_to update_subscription_information_account_settings_path and return if corporate_subscription
     redirect_to contact_path(@corporate_admin_contact)
   end
 
@@ -90,7 +90,7 @@ class AccountSettingsController < AuthenticatedController
     else
       flash[:success] = "Corporate Payment was successfully removed."
     end
-    redirect_to update_subscription_information_path
+    redirect_to update_subscription_information_account_settings_path
   end
 
   def update_subscription_information

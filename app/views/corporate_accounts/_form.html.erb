@@ -101,12 +101,14 @@
             <div class="check"></div>
           </li><br/>
         </ul>
-        <% if @billing_error %>
+        <% if @billing_error || @stripe_error %>
           <div class="flash-error-static flash static"
                style="width:55%; margin-left:0" id="billing_error">
-            <div>Billing Error: <%= @billing_error %></div>
-            <div>Please <%= link_to 'update your credit card on file',
-              billing_information_corporate_accounts_path, :target => "_blank" %>.</div>
+            <div>Billing Error: <%= @billing_error || @stripe_error %></div>
+            <% if @billing_error %>
+              <div>Please <%= link_to 'update your credit card on file',
+                billing_information_corporate_accounts_path, :target => "_blank" %>.</div>
+            <% end %>
           </div>
         <% end %>
         <div id="pricing-rows">

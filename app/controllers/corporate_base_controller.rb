@@ -260,6 +260,13 @@ class CorporateBaseController < AuthenticatedController
       user: client, stripe_subscription_object: stripe_sub)
   rescue Stripe::CardError => err
     @billing_error = err.message
+  rescue Stripe::InvalidRequestError => err
+    if max_subscription_error_match = 
+         err.message.match(/the maximum (?<max_subscriptions_number>\d+) current subscriptions/)
+      @stripe_error = "The maximum number of #{max_subscription_error_match[:max_subscriptions_number]} corporate subscriptions reached."
+    else
+      @stripe_error = "Error occurred. Please try again later or contact us directly at <a href='mailto:support@zokuvault.com'>support@zokuvault.com</a>.".html_safe
+    end
     nil
   end
 end

@@ -79,6 +79,7 @@ class FinalWishesController < AuthenticatedController
   # GET /final_wishes/1
   # GET /final_wishes/1.json
   def show
+    authorize @final_wish
     @final_wishes = final_wishes
     @final_wishes.each { |fw| authorize fw }
     @group = FinalWishService.get_wish_group_value_by_id(@groups, params[:id])
@@ -105,6 +106,7 @@ class FinalWishesController < AuthenticatedController
   
   # GET /final_wishes/1/edit
   def edit
+    authorize @final_wish
     @group = FinalWishService.get_wish_group_value_by_id(@groups, @final_wish.id)
     @final_wish_info = @final_wish
     @final_wishes = final_wishes
@@ -115,7 +117,9 @@ class FinalWishesController < AuthenticatedController
   # POST /final_wishes
   # POST /final_wishes.json
   def create
-    @final_wish_info = FinalWishInfo.new(final_wish_params.merge(user_id: resource_owner.id))
+    @final_wish_info = FinalWishInfo.new(final_wish_params.merge(user_id: resource_owner.id,
+      category: Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase)))
+    authorize @final_wish_info
     FinalWishService.fill_wishes(final_wish_form_params, @final_wish_info, resource_owner.id)
     authorize_save
     respond_to do |format|
@@ -135,6 +139,7 @@ class FinalWishesController < AuthenticatedController
   # PATCH/PUT /final_wishes/1
   # PATCH/PUT /final_wishes/1.json
   def update
+    authorize @final_wish
     @final_wish_info = @final_wish
     @previous_share_with = @final_wish_info.final_wishes.map(&:share_with_contact_ids)
     message = success_message

@@ -74,6 +74,7 @@ class TaxesController < AuthenticatedController
   # GET /taxes/1
   # GET /taxes/1.json
   def show
+    authorize @tax
     @taxes = taxes
     @taxes.each { |t| authorize t }
     session[:ret_url] = @shared_user.present? ? tax_shared_view_path(id: @tax.id) : tax_path(@tax)
@@ -96,6 +97,7 @@ class TaxesController < AuthenticatedController
 
   # GET /taxes/1/edit
   def edit
+    authorize @tax
     @tax_year = @tax
     @taxes = taxes
     @taxes.each { |t| authorize t }
@@ -127,7 +129,9 @@ class TaxesController < AuthenticatedController
   # POST /taxes
   # POST /taxes.json
   def create
-    @tax_year = TaxYearInfo.new(tax_params.merge(user_id: resource_owner.id))
+    @tax_year = TaxYearInfo.new(tax_params.merge(user_id: resource_owner.id,
+      category: Category.fetch(Rails.application.config.x.TaxCategory.downcase)))
+    authorize @tax_year
     TaxesService.fill_taxes(tax_form_params, @tax_year, resource_owner.id)
     authorize_save
     respond_to do |format|
@@ -150,6 +154,7 @@ class TaxesController < AuthenticatedController
   # PATCH/PUT /taxes/1
   # PATCH/PUT /taxes/1.json
   def update
+    authorize @tax
     @tax_year = @tax
     @previous_share_with = @tax_year.taxes.map(&:share_with_contact_ids)
     message = success_message

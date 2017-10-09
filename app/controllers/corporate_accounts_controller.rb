@@ -110,8 +110,7 @@ class CorporateAccountsController < CorporateBaseController
   def create
     @user_account = User.new(user_account_params)
     @user_account.skip_password_validation!
-    @user_account.skip_confirmation_notification!
-    @user_account.confirm_email!
+    @user_account.skip_confirmation!
     super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_accounts_path)
   end
 

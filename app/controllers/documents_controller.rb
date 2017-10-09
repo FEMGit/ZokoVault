@@ -168,7 +168,7 @@ class DocumentsController < AuthenticatedController
   
   def mass_document_upload
     return unless mass_upload_files_params.present?
-    files = JSON.parse mass_upload_files_params
+    files = Oj.load mass_upload_files_params
     file_params = files.collect { |x| [name: x["filename"], url: x["key"], user: resource_owner, uuid: SecureRandom.uuid] }.flatten
     mass_upload_add_shares_if_shared_view(file_params)
     if documents = Document.create(file_params)

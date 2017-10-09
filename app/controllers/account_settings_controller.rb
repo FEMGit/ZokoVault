@@ -121,7 +121,7 @@ class AccountSettingsController < AuthenticatedController
         admin = current_user.corporate_account_owner
         @company_name = admin.corporate_account_profile.try(:business_name)
       else
-        personal_invoices = stripe_customer ? stripe_customer.invoices.to_a : []
+        personal_invoices = stripe_customer ? StripeService.all_invoices(customer: stripe_customer).to_a : []
         @corporate_invoices = StripeService.corporate_stripe_customers_invoices_history(user: current_user)
         @invoices = personal_invoices + @corporate_invoices
         @card = customer_card

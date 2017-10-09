@@ -62,6 +62,19 @@ class StripeService
       0
     end
   end
+  
+  def self.all_invoices(customer:)
+    return [] unless customer.present?
+    invoices = Stripe::Invoice.list(customer: customer)
+    next_invoices = invoices
+    while next_invoices.has_more do
+      next_invoices = (Stripe::Invoice.list(customer: customer, starting_after: next_invoices.data.last.id))
+      invoices.data.push(next_invoices.data).flatten!
+    end
+    invoices
+    rescue Stripe::InvalidRequestError
+      return []
+  end
 
   def self.customer_id(user:)
     return nil unless user

@@ -5,5 +5,5 @@
   <p>Your account is currently paid through <%= date_format(@subscription.end_at) || '–' %></p>
   
   <%= link_to 'Remove Corporate Payment', remove_corporate_payment_update_account_settings_path, method: :patch, class: 'button primary-button big-button inline-block mt-10 mb-10' %>
-  <%= link_to 'Cancel', manage_subscription_path, class: 'button secondary-button big-button inline-block mt-10 mb-10' %>
+  <%= link_to 'Cancel', manage_subscription_account_settings_path, class: 'button secondary-button big-button inline-block mt-10 mb-10' %>
 </div>

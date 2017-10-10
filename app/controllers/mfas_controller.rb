@@ -10,17 +10,6 @@ class MfasController < AuthenticatedController
     @phone_number_error = true
   end
 
-  def create
-    phone_code = phone_params[:phone_code]
-
-    if MultifactorAuthenticator.new(current_user).verify_code(phone_code)
-      session[:mfa] = true
-      redirect_to root_path
-    else
-      redirect_to mfa_path
-    end
-  end
-
   def resend_code
     if MultifactorAuthenticator.new(current_user).send_code
       render status: 200, json: {success: true}
@@ -30,10 +19,6 @@ class MfasController < AuthenticatedController
   end
 
   private
-
-  def phone_params
-    params.permit(:phone_code)
-  end
 
   def not_verified!
     if params[:shared_user_id].present? && session[:mfa_shared]

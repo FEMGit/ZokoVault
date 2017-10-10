@@ -1,97 +1,83 @@
-<section class="card login-card" >
-  <%= form_tag mfa_path, id: 'mfa-form' do %>
-    <%= hidden_field_tag :shared_user_id, @shared_user_id, id: 'shared-user-id' %>
-    <h2>Two-Factor Authentication</h2>
-    <% if @shared_user_id.present? && !current_user.mfa_verify? %>
-      <p>Two-factor authentication is required to access shared materials on ZokuVault. A code has been sent to your mobile device.</p>
-    <% end %>
-    <div class="flash-alert-static flash static" style="display:none;"><%= alert %></div>
-    <% if @phone_number_error %>
-      <div class="mb-10" >
-        <%= label_tag 'Cell Phone Number' %>
-        <span id='send_code_text'></span>
-        <%= render partial: 'layouts/phone_number', locals: { f: nil, phone: "user[user_profile_attributes][two_factor_phone_number]", autofocus: true } %>
-        <input type="button" onClick="sendCode();" value="Send code" class="button fixed-width big-button primary-button">
+<section class="card login-card">
+  <% if @phone_number_error %>
+    <div class="mb-10">
+      <div>
+        <h1 class="mn-30">We're sorry, but something went wrong.</h1>
+        <p class="mn-30">
+          Your account requires two-factor authentication, but we were
+          not able to send a code to your mobile device. Please refresh
+          to try again, or if that fails, contact us.
+        </p>
       </div>
-    <% end %>
-    <div class="mb-10" >
-      <%= label_tag 'user_user_profile_attributes_phone_code', 'Phone Code' %>
-      <span id='verify_code_text'></span>
-      <%= text_field_tag 'user[user_profile_attributes][phone_code]', "", autofocus: true %>
-      <input type="button" onClick="verifyCode();" value="Verify code" class="button fixed-width big-button primary-button">
+      <p>
+        <%= link_to 'Refresh', mfa_path(shared_user_id: params[:shared_user_id]), class: "button primary-button big-button"%>
+        <%= link_to 'Contact Us', email_support_path, class: "button secondary-button big-button"%>
+      </p>
     </div>
-    <% if !@phone_number_error %>
+  <% else %>
+    <%= form_tag mfa_path, id: 'mfa-form' do %>
+      <%= hidden_field_tag :shared_user_id, @shared_user_id, id: 'shared-user-id' %>
+      <h2>Two-Factor Authentication</h2>
+      <% if @shared_user_id.present? && !current_user.mfa_verify? %>
+        <p>Two-factor authentication is required to access shared materials on ZokuVault. A code has been sent to your mobile device.</p>
+      <% end %>
+      <div class="flash-alert-static flash static" style="display:none;"><%= alert %></div>
+      <div class="mb-10" >
+        <%= label_tag 'user_user_profile_attributes_phone_code', 'Phone Code' %>
+        <span id='verify_code_text'></span>
+        <%= text_field_tag 'user[user_profile_attributes][phone_code]', "", autofocus: true %>
+        <input type="button" onClick="verifyCode();" value="Verify code" class="button fixed-width big-button primary-button">
+      </div>
       <p><%= link_to 'Resend code', 'javascript:;', class: "no-underline-link", id: 'resend-code' %><span id='send_code_text'></span></p>
     <% end %>
   <% end %>
 </section>
 
-<script>
-// handle 'enter press' to verify code
-$('#user_user_profile_attributes_phone_code').keypress(function(e) {
-  if(e.which == 13) {
-    e.preventDefault();
-    verifyCode();
-  }
-});
-
-$('#user_user_profile_attributes_two_factor_phone_number').keypress(function(e) {
-  if(e.which == 13) {
-    e.preventDefault();
-    sendCode();
-  }
-});
-
-$('#resend-code').click(function() {
-  $.ajax({
-    url: "<%= resend_code_mfas_path %>",
-    type: "GET",
-    success: function() {
-      $('#send_code_text').html(' - Code sent!');
-    },
-    error: function() {
-      $('#send_code_text').html(' - Error!');
-    }
-  });
-});
-
-function sendCode() {
-  var data = $('#user_user_profile_attributes_two_factor_phone_number').serialize();
-  $.post("<%= send_code_account_path %>",
-      data,
-      function() {
-        $('#send_code_text').html(' - Code sent!');
-      })
-  .fail(function() {
-    var msg = "Please reenter your Cell Phone number for verification purposes. You will be receiving a code shortly. If you do not receive a code, please reach out to support@zokuvault.com. Thank you."
-    $(".flash-alert.flash").html(msg);
-    $(".flash-alert-static.flash.static").html(msg)
-    $(".flash-alert.flash").show().delay(3000).fadeOut();
-    $(".flash-alert-static.flash.static").show();
-  })
-}
-
-function verifyCode() {
-  var data = $('#user_user_profile_attributes_phone_code').serialize();
-  var sharedUser = $("#shared-user-id").serialize()
-  var serializedData = data + "&" + sharedUser
-  $.post("<%= mfa_verify_code_account_path %>",
-      serializedData,
-      function() {
-        window.location.replace('<%= @shared_user_id.present? ? dashboard_shared_view_path(@shared_user_id) : (return_to_path || root_path) %>' + "?mfa_submit=true")
-      })
-  .fail(function(data) {
-    if (data.responseText) {
-      var response = JSON.parse(data.responseText)
-      if (response !== undefined && response["errors"] === "Account locked") {
-        window.location.replace('<%= root_path %>')
+<% unless @phone_number_error %>
+  <script>
+    // handle 'enter press' to verify code
+    $('#user_user_profile_attributes_phone_code').keypress(function(e) {
+      if(e.which == 13) {
+        e.preventDefault();
+        verifyCode();
       }
+    });
+
+    $('#resend-code').click(function() {
+      $.ajax({
+        url: "<%= resend_code_mfas_path %>",
+        type: "GET",
+        success: function() {
+          $('#send_code_text').html(' - Code sent!');
+        },
+        error: function() {
+          $('#send_code_text').html(' - Error!');
+        }
+      });
+    });
+
+    function verifyCode() {
+      var data = $('#user_user_profile_attributes_phone_code').serialize();
+      var sharedUser = $("#shared-user-id").serialize()
+      var serializedData = data + "&" + sharedUser
+      $.post("<%= mfa_verify_code_account_path %>",
+          serializedData,
+          function() {
+            window.location.replace('<%= @shared_user_id.present? ? dashboard_shared_view_path(@shared_user_id) : (return_to_path || root_path) %>' + "?mfa_submit=true")
+          })
+      .fail(function(data) {
+        if (data.responseText) {
+          var response = JSON.parse(data.responseText)
+          if (response !== undefined && response["errors"] === "Account locked") {
+            window.location.replace('<%= root_path %>')
+          }
+        }
+        var msg = "Incorrect code submitted.";
+        $(".flash-alert.flash").html(msg);
+        $(".flash-alert-static.flash.static").html(msg)
+        $(".flash-alert.flash").show().delay(3000).fadeOut();
+        $(".flash-alert-static.flash.static").show();
+      })
     }
-    var msg = "Incorrect code submitted.";
-    $(".flash-alert.flash").html(msg);
-    $(".flash-alert-static.flash.static").html(msg)
-    $(".flash-alert.flash").show().delay(3000).fadeOut();
-    $(".flash-alert-static.flash.static").show();
-  })
-}
-</script>
+  </script>
+<% end %>

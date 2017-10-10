@@ -3,6 +3,8 @@ class EmailSupportController < AuthenticatedController
   include SanitizeModule
   attr_reader :referrer
   
+  skip_before_filter :mfa_verify!, :redirect_if_free_user
+  
   def page_name
     case action_name
       when 'index'

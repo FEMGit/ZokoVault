@@ -10,7 +10,7 @@ class WelcomeController < AuthenticatedController
   after_action :allow_iframe, only: [:thank_you_email_only]
   include UserTrafficModule
   include TutorialsHelper
-  
+
   def page_name
     case action_name
       when 'index'

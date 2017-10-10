@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925044906) do
+ActiveRecord::Schema.define(version: 20171010004129) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -413,8 +414,9 @@ ActiveRecord::Schema.define(version: 20170925044906) do
   create_table "multifactor_phone_codes", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "phone_number"
   end
 
   add_index "multifactor_phone_codes", ["user_id"], name: "index_multifactor_phone_codes_on_user_id", using: :btree
@@ -517,15 +519,6 @@ ActiveRecord::Schema.define(version: 20170925044906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  create_table "s3_image_urls", force: :cascade do |t|
-    t.integer "user_id"
-    t.string  "key"
-    t.string  "presigned_url"
-    t.string  "expires_at"
-  end
-
-  add_index "s3_image_urls", ["key"], name: "index_s3_image_urls_on_key", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false

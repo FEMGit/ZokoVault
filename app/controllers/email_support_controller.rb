@@ -3,6 +3,10 @@ class EmailSupportController < AuthenticatedController
   include SanitizeModule
   attr_reader :referrer
   
+  skip_before_filter :mfa_verify!, :redirect_if_free_user
+  
+  layout :pick_layout
+  
   def page_name
     case action_name
       when 'index'
@@ -12,9 +16,6 @@ class EmailSupportController < AuthenticatedController
 
   def index
     @message = Message.new
-  end
-
-  def thank_you
   end
 
   def send_email
@@ -29,6 +30,7 @@ class EmailSupportController < AuthenticatedController
 
     if @message.valid? && @message.message_content.length > 0
       MessageMailer.new_message_support(@message, admin_emails).deliver
+      set_thank_you_close_path
       render :thank_you
     else
       @message.errors.add(:message_content, :not_implemented, message: "required") if @message.message_content.length == 0
@@ -52,5 +54,19 @@ class EmailSupportController < AuthenticatedController
 
   def add_phone_number?(phone_number, user_phones)
     phone_number.present? && (user_phones.exclude? phone_number)
+  end
+  
+  def pick_layout
+    missing_mfa? ? 'without_sidebar_layout' : 'application'
+  end
+  
+  def set_thank_you_close_path
+    if missing_mfa?
+      @close_path = destroy_user_session_path
+      @close_method = :delete
+    else
+      @close_path = root_path
+      @close_method = :get
+    end
   end
 end

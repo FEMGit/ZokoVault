@@ -258,7 +258,7 @@ Rails.application.routes.draw do
 
   resources :vault_entries, only: [:index, :new, :show, :create]
 
-  resource :mfa, only: [:show, :create, :resend_code]
+  resource :mfa, only: [:show]
   get 'resend_code', to: 'mfas#resend_code', as: :resend_code_mfas
 
   # Usage metrics path

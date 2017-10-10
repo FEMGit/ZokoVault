@@ -308,8 +308,20 @@ class AccountsController < AuthenticatedController
   private
 
   def code_verified?
-    phone_code = mfa_phone_code[:phone_code]
-    MultifactorAuthenticator.new(current_user).verify_code(phone_code)
+    phone_code = mfa_phone_params[:phone_code]
+    phone_number = mfa_phone_params[:two_factor_phone_number] ||
+                   current_user.user_profile.two_factor_phone_number
+    MultifactorAuthenticator.new(current_user).verify_code(
+      code: phone_code, phone_number: phone_number
+    ).tap do |result|
+      if result
+        session[:mfa_code_used] = phone_code
+        session[:mfa_phone_number] = phone_number
+      else
+        session[:mfa_code_used] = nil
+        session[:mfa_phone_number] = nil
+      end
+    end
   end
 
   def set_blank_layout_header_info
@@ -372,8 +384,9 @@ class AccountsController < AuthenticatedController
     )
   end
   
-  def mfa_phone_code
-    params.require(:user).require(:user_profile_attributes).permit(:phone_code)
+  def mfa_phone_params
+    params.require(:user).require(:user_profile_attributes
+      ).permit(:phone_code, :two_factor_phone_number)
   end
 
   def stripe_promo_params

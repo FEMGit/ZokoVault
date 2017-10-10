@@ -10,7 +10,7 @@
         <% end %>
         <th>Paid on</th>
         <th>Payment Amount</th>
-        <th>Invoice</th>
+        <th class="nosearch nosort">Invoice</th>
       </tr>
     </thead>
     <tbody>
@@ -37,22 +37,21 @@
 
 <script>
   $(document).ready(function(){
-    $('#invoices-table').DataTable( {
-      paging: false,
-      searching: false,
-      info: false,
+    DatatableUpdate('#invoices-table',
+      [
+        [25, 50, 100],
+        'invoices',
+        <% if corporate %>
+          [[2, 'asc']]
+        <% else %>
+          [[1, 'asc']]
+        <% end %>
+      ], 
       <% if corporate %>
-        aaSorting: [[2, 'asc']],
+        [1, 2, 2]
       <% else %>
-        aaSorting: [[1, 'asc']],
+        [1, 1, 2]
       <% end %>
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }, {
-        'bSearchable': false,
-        'aTargets': ['nosearch']
-      }],
-    } );
+    )
   });
 </script>

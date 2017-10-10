@@ -61,7 +61,7 @@ class CorporateAccountsController < CorporateBaseController
   def billing_information
     stripe_customer = StripeService.ensure_corporate_stripe_customer(user: current_user)
     @card = StripeService.customer_card(customer: stripe_customer)
-    @invoices = stripe_customer.invoices.to_a
+    @invoices = StripeService.all_invoices(customer: stripe_customer)
     session[:ret_url] = billing_information_corporate_accounts_path
   end
 

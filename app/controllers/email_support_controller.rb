@@ -5,6 +5,8 @@ class EmailSupportController < AuthenticatedController
   
   skip_before_filter :mfa_verify!, :redirect_if_free_user
   
+  layout :pick_layout
+  
   def page_name
     case action_name
       when 'index'
@@ -54,5 +56,9 @@ class EmailSupportController < AuthenticatedController
 
   def add_phone_number?(phone_number, user_phones)
     phone_number.present? && (user_phones.exclude? phone_number)
+  end
+  
+  def pick_layout
+    missing_mfa? ? 'without_sidebar_layout' : 'application'
   end
 end

@@ -7,6 +7,8 @@ class ShareInheritanceService
   end
   
   def self.remove_document_shares(owner, category_id, shareable_category_params)
+    category = Category.find_by(id: category_id)
+    return if category.try(:name).eql? Rails.application.config.x.DocumentsCategory
     contact_ids_to_remove = contact_ids_to_remove_from_shares(owner, category_id, shareable_category_params)
     Share.where(user_id: owner.id, shareable_type: 'Document', contact_id: contact_ids_to_remove).delete_all
   end

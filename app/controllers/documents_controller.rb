@@ -10,7 +10,6 @@ class DocumentsController < AuthenticatedController
   before_action :set_viewable_contacts, only: [:update, :edit]
   before_action :prepare_document_params, only: [:create, :update]
   before_action :set_dropdown_options, only: [:new, :edit]
-  before_action :prepare_shares, only: [:update]
   before_action :set_document_content_type, only: [:show, :preview]
  
   # Breadcrumbs navigation
@@ -357,13 +356,6 @@ class DocumentsController < AuthenticatedController
 
   def set_document_update_date_to_now(document)
     document.updated_at = Time.now.utc
-  end
-
-  def prepare_shares
-    if DocumentService.category_or_group_changed?(@document, document_params[:category], base_params[:group],
-                                                  document_params[:financial_information_id], document_params[:vendor_id], document_params[:card_document_id])
-      params[:document][:contact_ids] = [];
-    end
   end
 
   def prepare_document_params

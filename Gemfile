@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.3.5"
-gem 'json', github: 'flori/json', branch: 'v1.8'
 
-gem 'rails', '4.2.7.1'
+gem 'rails', '4.2.10'
 
 gem 'pg'
 gem "rails_12factor", group: :production
@@ -75,17 +74,12 @@ gem 'highcharts-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
-
 # Design and grid tools
 gem 'bourbon'
 gem 'neat'
 
 # File Up/download tools
 gem 'aws-sdk', '~> 3'
-gem 'carrierwave', '0.10.0'
-gem "fog"
 
 # Currency formatting
 gem 'autonumeric-rails'
@@ -109,7 +103,7 @@ gem 'rollbar'
 gem 'rambulance', '~> 0.4'
 
 # JSON parsing
-gem 'oj', '~> 2.12.14'
+gem 'oj', '~> 3.3'
 
 # Mailchimp manipulation gem
 gem 'gibbon'
@@ -151,4 +145,9 @@ group :test do
   gem 'spring-commands-rspec'
   gem 'webmock'
   gem 'stripe-ruby-mock', '~> 2.4.0', :require => 'stripe_mock'
+end
+
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', '1.0.0.rc3'
 end

@@ -35,7 +35,7 @@ private
   end
   
   def prep_request
-    @request = JSON.parse(request.body.read)
+    @request = Oj.load(request.body.read)
   end
   
   def set_subscription

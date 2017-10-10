@@ -295,9 +295,11 @@ class AccountsController < AuthenticatedController
                else
                  session[:mfa] = true
                end
+               session[:mfa_code_used] = mfa_phone_code[:phone_code]
                current_user.update(:mfa_failed_attempts => 0)
                :ok
              else
+               session[:mfa_code_used] = nil
                mfa_failed_attempts_limit_reached? && lock_account &&
                  (render json: { errors: 'Account locked' }, status: :unauthorized) and return
                :unauthorized

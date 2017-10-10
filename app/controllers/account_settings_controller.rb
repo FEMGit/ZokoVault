@@ -99,8 +99,12 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def phone_setup_update
-    current_user.update_attributes(phone_setup_params)
-    redirect_to login_settings_account_settings_path
+    if session[:mfa_code_used] == phone_code_param
+      current_user.update_attributes(phone_setup_params)
+      redirect_to login_settings_account_settings_path
+    else
+      redirect_to phone_setup_account_settings
+    end
   end
 
   def manage_subscription
@@ -440,6 +444,10 @@ class AccountSettingsController < AuthenticatedController
 
   def phone_setup_params
     params.require(:user).permit(user_profile_attributes: [:two_factor_phone_number])
+  end
+  
+  def phone_code_param
+    params.require(:user).require(:user_profile_attributes).permit(:phone_code)[:phone_code]
   end
 
   def stripe_subscription_params

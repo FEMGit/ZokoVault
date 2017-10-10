@@ -18,9 +18,6 @@ class EmailSupportController < AuthenticatedController
     @message = Message.new
   end
 
-  def thank_you
-  end
-
   def send_email
     user_name = [params[:first_name], params[:last_name]].join ' '
 
@@ -33,6 +30,7 @@ class EmailSupportController < AuthenticatedController
 
     if @message.valid? && @message.message_content.length > 0
       MessageMailer.new_message_support(@message, admin_emails).deliver
+      set_thank_you_close_path
       render :thank_you
     else
       @message.errors.add(:message_content, :not_implemented, message: "required") if @message.message_content.length == 0
@@ -60,5 +58,15 @@ class EmailSupportController < AuthenticatedController
   
   def pick_layout
     missing_mfa? ? 'without_sidebar_layout' : 'application'
+  end
+  
+  def set_thank_you_close_path
+    if missing_mfa?
+      @close_path = destroy_user_session_path
+      @close_method = :delete
+    else
+      @close_path = root_path
+      @close_method = :get
+    end
   end
 end

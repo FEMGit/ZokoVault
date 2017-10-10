@@ -99,7 +99,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def phone_setup_update
-    if session[:mfa_code_used] == phone_code_param
+    if phone_code_param.present? && session[:mfa_code_used] == phone_code_param
       current_user.update_attributes(phone_setup_params)
       redirect_to login_settings_account_settings_path
     else

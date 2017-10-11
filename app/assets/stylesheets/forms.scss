@@ -487,6 +487,7 @@ li.check-list{
 ******************************************/
 li.check-list{
   margin-bottom: 10px;
+  user-select: none;
 
   label{
       cursor: pointer;
@@ -584,6 +585,7 @@ li.icon-box{
   width: 150px;
   height: 150px;
   display: inline-block;
+  user-select: none;
   @include display(flex);
 
   label{
@@ -634,6 +636,7 @@ li.icon-box-large{
   width: 240px;
   height: 240px;
   display: inline-block;
+  user-select: none;
   @include display(flex);
 
   label{

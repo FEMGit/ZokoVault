@@ -30,6 +30,7 @@ class CorporateBaseController < AuthenticatedController
   end
 
   def create(account_type:, success_return_path:)
+    @user_account.confirm_email!
     respond_to do |format|
       bill_result = bill_and_persist_client(client: @user_account, account_type: account_type)
       if bill_result

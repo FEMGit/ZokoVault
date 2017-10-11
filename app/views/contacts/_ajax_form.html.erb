@@ -163,6 +163,7 @@ var addContactAndCloseModal = function(json) {
     }
     
     $(this).trigger("chosen:updated");
+    $(this).trigger("change");
   })
 
   updateAddContactableTable(json);

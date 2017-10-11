@@ -35,6 +35,7 @@
 
     if (id !== undefined) {
       $("#user_profile_primary_shared_with_ids").val(id)
+      $("#user_profile_primary_shared_with_ids").change()
     } else {
       $("#user_profile_primary_shared_with_ids").val()
       $("#email-preview-list").find("p").remove()

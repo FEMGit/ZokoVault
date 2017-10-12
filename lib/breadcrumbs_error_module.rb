@@ -1,25 +1,26 @@
 module BreadcrumbsErrorModule
-  def financial_error_breadcrumb_update
-    breadcrumbs.clear
-    add_breadcrumb "Financial Information", :financial_information_path if general_view?
-    add_breadcrumb "Financial Information", financial_information_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
-    set_add_crumbs && return if @path[:action].eql? :new
-    edit_crumbs_set
+  def financial_account_error_breadcrumb_update
+    financial_information_error_breadcrumb_update { set_provider if @path[:action].eql? :edit }
   end
   
-  def error_path_generate(action)
-    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
-    @shared_user = ReturnPathService.shared_user(@path)
-    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
-    yield
+  def financial_property_error_breadcrumb_update
+    financial_information_error_breadcrumb_update { set_financial_property if @path[:action].eql? :edit }
   end
-
+  
+  def financial_investment_error_breadcrumb_update
+    financial_information_error_breadcrumb_update { set_financial_investment if @path[:action].eql? :edit }
+  end
+  
+  def financial_alternative_error_breadcrumb_update
+    financial_information_error_breadcrumb_update { set_provider if @path[:action].eql? :edit }
+  end
+  
   def wills_error_breadcrumb_update
     wills_poa_error_breadcrumbs_update { set_will if @path[:action].eql? :edit }
   end
   
   def poa_error_breadcrumb_update
-    wills_poa_error_breadcrumbs_update { set_power_of_attorney if @path[:action].eql? :edit }
+    wills_poa_error_breadcrumbs_update { set_power_of_attorney_contact if @path[:action].eql? :edit }
   end
 
   def entities_breadcrumb_update
@@ -45,6 +46,15 @@ module BreadcrumbsErrorModule
     add_breadcrumb "Insurance", :insurance_path if general_view?
     add_breadcrumb "Insurance", insurance_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
     set_new_crumbs && return if @path[:action].eql? :new
+    edit_crumbs_set
+  end
+  
+  def financial_information_error_breadcrumb_update
+    breadcrumbs.clear
+    yield
+    add_breadcrumb "Financial Information", :financial_information_path if general_view?
+    add_breadcrumb "Financial Information", financial_information_shared_view_path(shared_user_id: @shared_user.id) if shared_view?
+    set_add_crumbs && return if @path[:action].eql? :new
     edit_crumbs_set
   end
   
@@ -85,6 +95,13 @@ module BreadcrumbsErrorModule
     set_new_crumbs && return if @path[:action].eql? :new
     set_edit_crumbs if @path[:action].eql? :edit
   end
+  
+  def error_path_generate(action)
+    @path = ReturnPathService.error_path(resource_owner, current_user, params[:controller], action)
+    @shared_user = ReturnPathService.shared_user(@path)
+    @shared_category_names_full = ReturnPathService.shared_category_names(@path)
+    yield
+  end
 
   private
   
@@ -114,6 +131,7 @@ module BreadcrumbsErrorModule
   end
 
   module_function :wills_error_breadcrumb_update, :entities_breadcrumb_update,
-                  :insurance_breadcrumb_update, :financial_error_breadcrumb_update,
+                  :insurance_breadcrumb_update, :financial_account_error_breadcrumb_update,
+                  :financial_property_error_breadcrumb_update, :financial_investment_error_breadcrumb_update,
                   :corporate_account_error_breadcrumb_update, :online_accounts_error_breadcrumb_update
 end

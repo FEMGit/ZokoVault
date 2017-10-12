@@ -121,6 +121,7 @@ class PowerOfAttorneysController < AuthenticatedController
         end
       else
         error_path(:edit)
+        @power_of_attorney_contact.update(power_of_attorney_contact_params)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @power_of_attorney_contact.errors, status: :unprocessable_entity }
       end

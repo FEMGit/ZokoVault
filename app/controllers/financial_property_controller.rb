@@ -104,8 +104,9 @@ class FinancialPropertyController < AuthenticatedController
   def update
     authorize @financial_property
     @previous_share_with = @property_provider.share_with_contact_ids
+    params_valid = validate_params
     respond_to do |format|
-      if validate_params && @financial_property.update(property_params.merge(user_id: resource_owner.id))
+      if params_valid && @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @property_provider.update(name: property_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
@@ -115,6 +116,7 @@ class FinancialPropertyController < AuthenticatedController
         format.json { render :show, status: :created, location: @financial_property }
       else
         error_path(:edit)
+        params_valid && @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @financial_property.share_with_contact_ids = (@financial_property.share_with_contact_ids + @previous_share_with).uniq
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_property.errors, status: :unprocessable_entity }
@@ -172,7 +174,7 @@ class FinancialPropertyController < AuthenticatedController
   def error_path(action)
     error_path_generate(action) do
       set_account_owners
-      financial_error_breadcrumb_update
+      financial_property_error_breadcrumb_update
       prepare_share_params(error: true)
       set_viewable_contacts
     end

@@ -118,6 +118,7 @@ class FinancialAlternativeController < AuthenticatedController
         format.json { render :show, status: :ok, location: @financial_provider }
       else
         error_path(:edit)
+        @financial_provider.update(provider_params)
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_provider.errors, status: :unprocessable_entity }
       end
@@ -171,7 +172,7 @@ class FinancialAlternativeController < AuthenticatedController
   def error_path(action)
     error_path_generate(action) do
       set_account_owners
-      financial_error_breadcrumb_update
+      financial_alternative_error_breadcrumb_update
       prepare_share_params(error: true)
       set_viewable_contacts
     end

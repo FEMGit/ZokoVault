@@ -103,8 +103,9 @@ class FinancialInvestmentController < AuthenticatedController
   def update
     authorize @financial_investment
     @previous_share_with = @investment_provider.share_with_contact_ids
+    params_valid = validate_params
     respond_to do |format|
-      if validate_params && @financial_investment.update(investment_params.merge(user_id: resource_owner.id))
+      if params_valid && @financial_investment.update(investment_params.merge(user_id: resource_owner.id))
         @investment_provider.update(name: investment_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@investment_provider, @financial_investment.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_investment)
@@ -114,6 +115,7 @@ class FinancialInvestmentController < AuthenticatedController
         format.json { render :show, status: :created, location: @financial_investment }
       else
         error_path(:edit)
+        params_valid &&  @financial_investment.update(investment_params.merge(user_id: resource_owner.id))
         @financial_investment.share_with_contact_ids = (@financial_investment.share_with_contact_ids + @previous_share_with).uniq
         format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout] }
         format.json { render json: @financial_investment.errors, status: :unprocessable_entity }
@@ -171,7 +173,7 @@ class FinancialInvestmentController < AuthenticatedController
   def error_path(action)
     error_path_generate(action) do
       set_account_owners
-      financial_error_breadcrumb_update
+      financial_investment_error_breadcrumb_update
       prepare_share_params(error: true)
       set_viewable_contacts
     end

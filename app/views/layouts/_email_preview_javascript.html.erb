@@ -26,7 +26,7 @@
   
   var emailPreviewSectionPrepare = function() {
     $('#email-preview-section').empty()
-    $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "tutorials/email_preview") %>')
+    $('#email-preview-section').prepend('<%= escape_javascript(render :partial => "layouts/email_preview") %>')
   }
   
   var screenShift = function(element) {

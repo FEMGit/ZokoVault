@@ -1,4 +1,4 @@
-<button class="primary-button big-button hidden" data-modal-id="wizard-modal" id="show-modal-button">
+<button class="primary-button big-button hidden create-new-contact-modal" data-modal-id="wizard-modal" id="show-modal-button">
   Wizard Modal
 </button>
 <div id="wizard-modal" class="modal wizard-modal modal-no-js">
@@ -67,7 +67,7 @@ var displayContactFormModal = function() {
   $("body").append("<div class='modal-overlay js-modal-close'></div>");
   $(".modal-overlay").fadeTo(500, 0.8);
   $(".js-modalbox").fadeIn(500);
-  canvasEl = $('button[data-modal-id]');
+  canvasEl = $('button.create-new-contact-modal[data-modal-id]');
   var modalBox = $(canvasEl).attr('data-modal-id');
   $('#' + modalBox).fadeIn($(canvasEl).data());
   wizNav(1);

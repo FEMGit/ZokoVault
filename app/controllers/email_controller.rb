@@ -12,8 +12,10 @@ class EmailController < AuthenticatedController
   end
   
   def email_preview_line
+    render :json => '' and return unless mailer_preview_params[:contact_id].present?
     user = Thread.current[:current_user]
     contact = Contact.for_user(user).find_by(id: mailer_preview_params[:contact_id])
+    render :json => '' and return unless contact.present?
     submit_button_text = mailer_preview_params[:submit_button_text].eql?('Save') ? 'Save' : 'Continue'
     render :json => '' and return unless request_referrer_path
     if ShareInvitationSent.find_by(user_id: user.try(:id), contact_email: contact.try(:emailaddress)).blank? || 

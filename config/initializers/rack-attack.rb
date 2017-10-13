@@ -60,6 +60,11 @@ class Rack::Attack
       req.params['email'].presence
     end
   end
+  
+  safelist('allow from localhost') do |req|
+    # Requests are allowed if the return value is truthy
+    req.path.start_with?('/email/email_preview_line/') && req.get?
+  end
 
   ### Custom Throttle Response ###
 

@@ -15,11 +15,11 @@
     <%= f.text_field :website, { class: ("input-error" if @online_account.errors.messages[:website].first.present?), type: "url", onblur: "checkURL(this)", onsubmit: "checkURL(this)", :maxlength => get_max_length(:web) } %>
     
     <%= f.label :username %>
-    <%= f.text_field :username, :maxlength => get_max_length(:default) %>
+    <%= f.text_field :username, :maxlength => get_max_length(:default), :autocomplete => 'new-user', :readonly => true, onfocus: "this.removeAttribute('readonly');" %>
 
     <div class="password-block">
       <%= f.label :password, class: 'block' %>
-      <%= f.password_field :password, :maxlength => get_max_length(:default), class: 'inline-block max-w-295', :autocomplete => 'new-password', value: @online_account.persisted? ? @password : '' %>
+      <%= f.password_field :password, :maxlength => get_max_length(:default), class: 'inline-block max-w-295', :autocomplete => 'new-password', :readonly => true, onfocus: "this.removeAttribute('readonly');", value: @online_account.persisted? ? @password : '' %>
     
       <%= link_to 'Show', 'javascript:togglePassword()', class: "button small-button blue-button inline-block text-center p-8", id: 'toggle-button' %>
     </div>

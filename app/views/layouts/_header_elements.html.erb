@@ -30,5 +30,5 @@
   <a id="mobile-app-menu" class="mobile-app-menu button fr primary-button big-button">☰ Menu</a>
 
   <%= link_to( image_tag("SVG/search-blue.svg", :alt=>"Search", :class=>"search-icon"), search_url, class: "fr header-search") %>
-  <%= image_tag("SVG/question-blue.svg", :alt=>"Search", :class=>"question-icon fr") %>
+  <%= link_to image_tag("SVG/question-blue.svg", :alt=>"Search", :class=>"question-icon fr"), email_support_path %>
 <% end %>

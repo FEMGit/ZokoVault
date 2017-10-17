@@ -118,7 +118,8 @@
     $.get(url, function(data) {
       if (append === true) {
         var currently_selected = $("#document_contact_ids").val()
-        $("#document_contact_ids").val(data.concat(currently_selected))
+        data = currently_selected === null ? data : data.concat(currently_selected)
+        $("#document_contact_ids").val(data)
       } else {
         $("#document_contact_ids").val(data)
       }

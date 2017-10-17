@@ -26,8 +26,8 @@
         <td>
           <%= render partial: "layouts/avatar_circle", locals: { :with_name => false, :contact => contact } %>
         </td>
-        <td><%= contact.lastname %></td>
-        <td><%= contact.firstname %></td>
+        <td class="overflow-ellipsis-cell-200"><%= contact.lastname %></td>
+        <td class="overflow-ellipsis-cell-200"><%= contact.firstname %></td>
         <td><%= contact.emailaddress %></td>
         <td>
           <span class="fw-600 clr-color-primary-shaded"><%= contact_status(contact) %></span>

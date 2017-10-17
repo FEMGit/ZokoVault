@@ -110,3 +110,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+@mixin overflow-ellipsis-cell($max-cell-width) {
+  max-width: $max-cell-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

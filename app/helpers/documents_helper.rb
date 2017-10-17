@@ -76,13 +76,15 @@ module DocumentsHelper
   end
   
   def document_name_tag(document)
-    if document.vendor_id.present? && document.vendor_id.positive?
-      document.vendor.name
-    elsif document.financial_information_id.present? && document.financial_information_id.positive?
-      FinancialProvider.find(document.financial_information_id).name
-    elsif document.card_document_id.present? && document.card_document_id.positive?
-      document.card_document.name
-    end
+    name = 
+      if document.vendor_id.present? && document.vendor_id.positive?
+        Vendor.find(document.vendor_id).name
+      elsif document.financial_information_id.present? && document.financial_information_id.positive?
+        FinancialProvider.find(document.financial_information_id).name
+      elsif document.card_document_id.present? && document.card_document_id.positive?
+        CardDocument.find(document.card_document_id).name
+      end
+    truncate(name)
   end
 
   def document_group(document)

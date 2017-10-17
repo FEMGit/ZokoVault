@@ -194,6 +194,13 @@
     $('#camera-deets').click(function() {
       $( ".deets" ).toggle();
     });
+    
+    $("#document_name").keypress(function(event) {
+      if(event.keyCode === 13) {
+        event.preventDefault()
+        addDocument()
+      }
+    })
 
   });
   $(window).resize(function() {

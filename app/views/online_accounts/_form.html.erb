@@ -19,9 +19,9 @@
 
     <div class="password-block">
       <%= f.label :password, class: 'block' %>
-      <%= f.password_field :password, :maxlength => get_max_length(:default), class: 'inline-block max-w-295', :autocomplete => 'new-password', :readonly => true, onfocus: "this.removeAttribute('readonly');", value: @online_account.persisted? ? @password : '' %>
+      <%= f.password_field :password, :id => "password_#{@online_account.try(:id) || 'field'}", :maxlength => get_max_length(:online_account_password), class: 'inline-block max-w-295', :autocomplete => 'new-password', :readonly => true, onfocus: "this.removeAttribute('readonly');" %>
     
-      <%= link_to 'Show', 'javascript:togglePassword()', class: "button small-button blue-button inline-block text-center p-8", id: 'toggle-button' %>
+      <%= link_to 'Show', "javascript:togglePasswordView(#{@online_account.try(:id) || "undefined"}, true)", class: "button small-button blue-button inline-block text-center p-8", id: "toggle_#{@online_account.try(:id) || 'button'}" %>
     </div>
 
     <%= f.label :notes, class: 'block' %>
@@ -47,18 +47,11 @@
 <% end %>
 
 <%= javascript_include_tag 'url_validation' %>
+<%= javascript_include_tag 'online_accounts' %>
+
 <script>
-  var togglePassword = function() {
-    var passwordField = $('#online_account_password').get(0)
-    var toggleButton = $('#toggle-button')
-    var passwordType = passwordField.type
-    if (passwordType === "text") {
-      passwordField.type = 'password'
-      toggleButton.text('Show')
-    } else if (passwordType === "password") {
-      passwordField.type = 'text'
-      toggleButton.text('Hide')
-    }
-  }
+  $(document).ready(function() {
+    togglePasswordView(<%= @online_account.try(:id) || "undefined"%>, true, true)
+  })
   $('.chosen-select').chosen({allow_single_deselect: true});
 </script>

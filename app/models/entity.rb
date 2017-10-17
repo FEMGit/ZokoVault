@@ -1,5 +1,5 @@
 class Entity < ActiveRecord::Base
-  include WtlBuildShares
+  include BuildShares
   scope :for_user, ->(user) { where(user: user) }
 
   belongs_to :category

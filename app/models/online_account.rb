@@ -20,7 +20,7 @@ class OnlineAccount < ActiveRecord::Base
                       :message => "Please enter a valid url (starts with 'http://' or 'https://')",
                       :allow_blank => true
   
-  validates_length_of :password, :maximum => 500
+  validates_length_of :password, :maximum => ApplicationController.helpers.get_max_length(:online_account_password)
   
   before_save { self.category = Category.fetch("online accounts") }
   

@@ -46,35 +46,12 @@
 </table>
 
 <%= render :partial => "layouts/shared_category", :locals => { :category => Rails.application.config.x.OnlineAccountCategory.downcase } %>
+<%= javascript_include_tag 'online_accounts' %>
 
 <script>
   $(document).ready(function(){
     DatatableUpdate('#online-accounts-table', [ [10, 25, 50, 100], 'accounts', [[0, 'asc']] ], [2, 1, 2])
   });
-  
-  var isToggleShow = function(password_id) {
-    toggleButtonValue = $("#toggle_" + password_id).text()
-    return toggleButtonValue === "Show"
-  }
-  
-  var togglePasswordView = function(password_id) {
-    if (isToggleShow(password_id)) {
-      shared_user_id = $("#shared_user_id").val();
-      $.ajax({
-        url: "/online_accounts/reveal_password/" + password_id + '/' + shared_user_id,
-        type: 'GET',
-        dataType: 'json'
-      }).success(function(data) {
-        $("#password_" + password_id).text(data)
-        $("#toggle_" + password_id).text("Hide")
-      }).fail(function(data) {
-        showFlashMessageError("Error while receiving a password.", 2000)
-      })
-    } else {
-      $("#password_" + password_id).text("**********")
-      $("#toggle_" + password_id).text("Show")
-    }
-  }
   
   var copyHiddenPassword = function(password_id) {
     shared_user_id = $("#shared_user_id").val();

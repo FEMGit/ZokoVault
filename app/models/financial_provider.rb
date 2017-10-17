@@ -29,7 +29,7 @@ class FinancialProvider < ActiveRecord::Base
            foreign_key: :empty_provider_id,
            dependent: :destroy
   
-  has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify
+  has_many :documents, class_name: "Document", foreign_key: :financial_information_id, dependent: :nullify, inverse_of: :financial_provider
   
   validates :name, presence: { :message => "Required" }
   before_save { self.category = Category.fetch("financial information") }

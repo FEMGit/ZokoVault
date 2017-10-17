@@ -1,8 +1,10 @@
 class Share < ActiveRecord::Base
   before_validation :validate_share, on: :create
-  belongs_to :user
+  belongs_to :user, inverse_of: :shares
+  
   scope :for_user, ->(user) {where(user: user)}
   scope :categories, -> { where(shareable_type: 'Category') }
+  
   scope :for_category_and_contact, ->(category, contact) {
     where(shareable: category, contact: contact)
   }

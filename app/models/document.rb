@@ -9,10 +9,10 @@ class Document < ActiveRecord::Base
                            Rails.application.config.x.FinalWishesCategory,
                            Rails.application.config.x.ContactCategory, "Select..."]
 
-  belongs_to :user
-  belongs_to :folder
-
-  belongs_to :vendor
+  belongs_to :user, inverse_of: :documents
+  belongs_to :vendor, inverse_of: :documents
+  belongs_to :financial_provider, foreign_key: :financial_information_id, inverse_of: :documents
+  belongs_to :card_document, inverse_of: :documents
 
   scope :for_user, ->(user) {where(user: user)}
 

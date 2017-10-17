@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
 
   # == Associations
   has_many :vendors, dependent: :nullify
-  has_many :shares, dependent: :destroy
+  has_many :shares, inverse_of: :user, dependent: :destroy
   has_many :user_activities, dependent: :destroy
   has_many :user_death_traps, dependent: :destroy
   has_many :tax_year_infos, dependent: :destroy
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   has_one :tutorial_selection, dependent: :destroy
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy
-
+  has_many :documents, inverse_of: :user, dependent: :destroy
 
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription

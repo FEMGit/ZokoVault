@@ -66,9 +66,10 @@ class DocumentsController < AuthenticatedController
   @after_new_user_created = ""
 
   def index
-    @documents = policy_scope(Document).each { |d| authorize d }
+    @documents = policy_scope(Document).includes(:card_document, :vendor, shares: :contact).each{ |d| authorize d }
     @category = Category.fetch(Rails.application.config.x.DocumentsCategory.downcase)
-    @contacts_with_access = current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) 
+    @contacts_with_access = current_user.shares.categories.includes(:shareable, :contact
+                            ).select { |share| share.shareable.eql? @category }.map(&:contact) 
     session[:ret_url] = "/documents"
   end
 
@@ -83,9 +84,9 @@ class DocumentsController < AuthenticatedController
   
   def download
     authorize @document
-    document_key = @document.url
-    data = open(download_file(document_key))
-    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
+    name = @document.url.split('_').last
+    file = S3Service.get_object_by_key(@document.url).get
+    send_data file.body.read, type: file.content_type, filename: name
   end
   
   def preview

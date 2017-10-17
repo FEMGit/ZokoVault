@@ -111,9 +111,16 @@ var handleSelectOnChange = function(selectInput) {
     selectedOption.removeAttr('selected');
     $(selectInput).trigger("chosen:updated");
 
-    contact_type_handle($('#contact_contact_type'), true)
+    contact_type_handle($('#contact_contact_type'), true);
+    focusOnFirstInput();
     displayContactFormModal();
   }
+}
+
+var focusOnFirstInput = function() {
+  setTimeout(function() {
+    $("#contact_firstname").focus()
+  }, 500)
 }
 
 var closeContactFormModal = function() {

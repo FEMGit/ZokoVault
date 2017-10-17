@@ -15,10 +15,12 @@ class S3Service
   end
   
   # TODO simplify after https://github.com/aws/aws-sdk-ruby/issues/1598 is resolved
-  def self.stable_presigned_url_for_today(s3obj)
-    url = "https://#{s3obj.bucket_name}.s3.amazonaws.com/#{URI.escape(s3obj.key)}"
-    presigner = Aws::S3::Presigner.new(client: s3obj.client)
-    signer = presigner.send(:build_signer, s3obj.client.config)
+  def self.stable_presigned_url_for_today(s3key)
+    client = Zoku::AWS::S3.client
+    bucket = Zoku::AWS::S3.bucket_name
+    url = "https://#{bucket}.s3.amazonaws.com/#{URI.escape(s3key)}"
+    presigner = Aws::S3::Presigner.new(client: client)
+    signer = presigner.send(:build_signer, client.config)
     signer.presign_url(
       url: url,
       http_method: 'GET',

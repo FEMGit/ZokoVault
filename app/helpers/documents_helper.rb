@@ -14,34 +14,30 @@ module DocumentsHelper
     return [] if owner.nil?
     shares = 
       if document.vendor_id.present? && document.vendor_id.positive?
-        Vendor.find(document.vendor_id).share_with_contacts
-        owner.shares.select { |sh| (sh.shareable.is_a? Vendor) && sh.shareable_id == document.vendor_id }
+        document.vendor.share_with_contacts
+        owner.shares.where(shareable: document.vendor).includes(:contact).to_a
       elsif document.financial_information_id.present? && document.financial_information_id.positive?
-        FinancialProvider.find(document.financial_information_id).share_with_contacts
-        owner.shares.select { |sh| (sh.shareable.is_a? FinancialProvider) && sh.shareable_id == document.financial_information_id }
+        document.financial_provider.share_with_contacts
+        owner.shares.where(shareable: document.financial_provider).includes(:contact).to_a
       elsif document.card_document_id.present? && document.card_document_id.positive?
-        card_document = CardDocument.find(document.card_document_id)
-        card_id = card_document.card_id
-        card_type = card_document.object_type
-        owner.shares.select { |sh| (sh.shareable.is_a? Will) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
-          owner.shares.select { |sh| (sh.shareable.is_a? PowerOfAttorneyContact) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
-          owner.shares.select { |sh| (sh.shareable.is_a? Trust) && sh.shareable_id == card_id && sh.shareable_type == card_type } +
-          owner.shares.select { |sh| (sh.shareable.is_a? Entity) && sh.shareable_id == card_id && sh.shareable_type == card_type }
+        card_id = document.card_document.card_id
+        card_type = document.card_document.object_type
+        owner.shares.where(shareable_type: card_type, shareable_id: card_id).includes(:contact).to_a
       elsif document.group.present?
         model = ModelService.model_by_name(document.group)
         if model == Tax
           tax_year_id = TaxYearInfo.for_user(owner).find_by(:year => document.group).try(:id)
           return [] if tax_year_id.nil?
           tax_ids = Tax.for_user(owner).select { |x| x.tax_year_id == tax_year_id }.map(&:id).flatten
-          owner.shares.select { |sh| (sh.shareable.is_a? Tax) && (tax_ids.include? sh.shareable_id) }
+          owner.shares.where(shareable_type: 'Tax', shareable_id: tax_ids).includes(:contact).to_a
         elsif model == FinalWish
           final_wish_info_id = FinalWishInfo.for_user(owner).find_by(:group => document.group).try(:id)
           return [] if final_wish_info_id.nil?
           final_wish_ids = FinalWish.for_user(owner).select { |x| x.final_wish_info_id == final_wish_info_id }.map(&:id).flatten
-          owner.shares.select { |sh| (sh.shareable.is_a? FinalWish) && (final_wish_ids.include? sh.shareable_id) }
+          owner.shares.where(shareable_type: 'FinalWish', shareable_id: final_wish_ids).includes(:contact).to_a
         else
           return [] unless model.present?
-          owner.shares.select(&:shareable_type).select { |sh| sh.shareable.is_a? model }
+          owner.shares.where(shareable_type: model.name).includes(:contact, :shareable_type).to_a.select(&:shareable_type)
         end
       else
         []
@@ -52,7 +48,8 @@ module DocumentsHelper
     return [] if document.category.nil? || document.category.blank? || (document.category.eql? DocumentService.empty_value)
     category = Category.fetch(document.category.downcase)
     return [] unless category.present?
-    document.user.shares.reject{ |x| x.shareable_type.nil? }.select { |sh| sh.shareable == category }
+    all = document.user.shares.categories.includes(:shareable, :contact).to_a
+    all.select{ |sh| sh.shareable == category }
   end
 
   def add_new_document?(title)
@@ -80,11 +77,11 @@ module DocumentsHelper
   
   def document_name_tag(document)
     if document.vendor_id.present? && document.vendor_id.positive?
-      Vendor.find(document.vendor_id).name
+      document.vendor.name
     elsif document.financial_information_id.present? && document.financial_information_id.positive?
       FinancialProvider.find(document.financial_information_id).name
     elsif document.card_document_id.present? && document.card_document_id.positive?
-      CardDocument.find(document.card_document_id).name
+      document.card_document.name
     end
   end
 
@@ -157,9 +154,7 @@ module DocumentsHelper
   end
   
   def get_avatar_url(key)
-    s3_object = S3Service.get_object_by_key(key) if key.present?
-    return if s3_object.blank? || !s3_object.exists?
-    S3Service.stable_presigned_url_for_today(s3_object)
+    S3Service.stable_presigned_url_for_today(key) if key.present?
   end
 
   def download_file_link(document_url)

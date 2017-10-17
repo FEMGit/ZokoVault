@@ -132,7 +132,7 @@ class OnlineAccountsController < AuthenticatedController
   private
   
   def set_online_account
-    @online_account = OnlineAccount.for_user(resource_owner).find_by(id: params[:id])
+    @online_account = OnlineAccount.for_user(resource_owner).find(params[:id])
   end
   
   def shared_user_params

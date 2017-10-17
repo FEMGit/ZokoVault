@@ -129,7 +129,7 @@ class CorporateAccountsController < CorporateBaseController
   end
   
   def remove_corporate_client
-    contact = Contact.find_by(id: params[:contact_id])
+    contact = Contact.find(params[:contact_id])
     authorize contact
     user_account = User.find_by(email: contact.try(:emailaddress))
     CorporateService.remove_client_from_admin(client: user_account, admin: current_user)

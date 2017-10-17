@@ -21,6 +21,7 @@ class DocumentsController < AuthenticatedController
   layout :resolve_layout, only: [:new, :edit, :index, :preview]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
 
   def page_name
     case action_name
@@ -29,13 +30,13 @@ class DocumentsController < AuthenticatedController
       when 'new'
         return "Add Document"
       when 'edit'
-        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
+        document = Document.for_user(resource_owner).find_by!(uuid: params[:uuid])
         return "#{document.name} - Edit"
       when 'preview'
-        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
+        document = Document.for_user(resource_owner).find_by!(uuid: params[:uuid])
         return "#{document.name} - Preview"
       when 'download'
-        document = Document.for_user(resource_owner).find_by(uuid: params[:uuid])
+        document = Document.for_user(resource_owner).find_by!(uuid: params[:uuid])
         return "#{document.name} - Download"
     end
   end

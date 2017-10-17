@@ -17,6 +17,7 @@ class TrustsController < AuthenticatedController
   include BreadcrumbsCacheModule
   include BreadcrumbsErrorModule
   include UserTrafficModule
+  include PageTitle
   include CancelPathErrorUpdateModule
   
   def set_index_breadcrumbs

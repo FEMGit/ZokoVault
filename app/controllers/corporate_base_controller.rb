@@ -194,7 +194,7 @@ class CorporateBaseController < AuthenticatedController
   end
 
   def set_corporate_contact_by_user_profile
-    user_profile = UserProfile.find_by(id: params[:id])
+    user_profile = UserProfile.find(params[:id])
     return unless user_profile.present?
     return unless user_accounts.include? user_profile.user
     @corporate_contact = Contact.where(user_profile_id: user_profile.id, user_id: corporate_owner.id).first
@@ -213,15 +213,7 @@ class CorporateBaseController < AuthenticatedController
   end
 
   def corporate_contact_by_contact_id(contact_id)
-    return nil unless contact_id.present? &&
-           (corporate_contact = Contact.find_by(id: contact_id)).present?
-    corporate_contact
-  end
-
-  def corporate_contact_by_contact_id(contact_id)
-    return nil unless contact_id.present? &&
-           (corporate_contact = Contact.find_by(id: contact_id)).present?
-    corporate_contact
+    Contact.find(contact_id) if contact_id.present?
   end
 
   def bill_and_persist_client(client:, account_type:)

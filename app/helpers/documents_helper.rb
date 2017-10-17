@@ -162,7 +162,7 @@ module DocumentsHelper
     S3Service.stable_presigned_url_for_today(s3_object)
   end
 
-  def download_file(document_url)
+  def download_file_link(document_url)
     s3_object = S3Service.get_object_by_key(document_url)
     s3_object.presigned_url(:get,
       response_content_disposition: "attachment", expires_in: 2.minutes.to_i)

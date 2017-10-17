@@ -82,9 +82,9 @@ class DocumentsController < AuthenticatedController
   
   def download
     authorize @document
-    document_key = @document.url
-    data = open(download_file(document_key))
-    send_data data.read, type: data.metas["content-type"], filename: document_key.split('_').last
+    name = @document.url.split('_').last
+    file = S3Service.get_object_by_key(@document.url).get
+    send_data file.body.read, type: file.content_type, filename: name
   end
   
   def preview

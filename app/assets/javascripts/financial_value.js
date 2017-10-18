@@ -11,14 +11,34 @@
     $.get(url, function(data) {
       var value = $(valueFieldSelector).val()
       initAutonumeric(valueFieldSelector)
-      if(data === true) {
-        $(valueFieldSelector).autoNumeric('update', {aSign: '-$' })
-        $(valueFieldSelector).css('color', 'red')
-      } else {
-        $(valueFieldSelector).autoNumeric('update', {aSign: '$' })
-        $(valueFieldSelector).css('color', 'black')
+      setPositiveNegativeStyle(valueFieldSelector, data)
+    });
+  }
+  
+  var updateAllValues = function(valueFieldSelectorPrefix, idTypesCollection) {
+    var url = '/financial_information/value_negative/';
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: 'json',
+      data: { data: idTypesCollection },
+      success: function(data) {
+        data.forEach(function(el) {
+          var valueFieldSelector = "#" + valueFieldSelectorPrefix + el[0]
+          setPositiveNegativeStyle(valueFieldSelector, el[1])
+        })
       }
     });
+  }
+  
+  var setPositiveNegativeStyle = function(valueFieldSelector, negative) {
+    if(negative === true) {
+      $(valueFieldSelector).autoNumeric('update', {aSign: '-$' })
+      $(valueFieldSelector).css('color', 'red')
+    } else {
+      $(valueFieldSelector).autoNumeric('update', {aSign: '$' })
+      $(valueFieldSelector).css('color', 'black')
+    }
   }
   
   var setValue = function(valueFieldSelector, value, negative) {

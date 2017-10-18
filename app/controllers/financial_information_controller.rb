@@ -56,8 +56,16 @@ class FinancialInformationController < AuthenticatedController
   def value_negative
     return false unless params[:type].present?
     type = params[:type]
-    render :json => FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans].include?(type) ||
-                    FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
+    render :json => value_negative?(type: type)
+  end
+  
+  def value_negative_collection
+    render :json => params[:data].values.map{ |x| [x[0], value_negative?(type: x[1])] }
+  end
+  
+  def value_negative?(type:)
+    FinancialInformation::FINANCIAL_INFORMATION_TYPES[:loans].include?(type) ||
+      FinancialInformation::FINANCIAL_INFORMATION_TYPES[:credit_cards].include?(type)
   end
   
   def property_provider_id(user, property)

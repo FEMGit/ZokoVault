@@ -23,6 +23,7 @@ class FinancialAlternativeController < AuthenticatedController
   include CancelPathErrorUpdateModule
 
   def page_name
+    return if tutorial_params_present?
     provider = FinancialProvider.for_user(resource_owner).find(params[:id])
     case action_name
       when 'new'

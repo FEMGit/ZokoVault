@@ -26,6 +26,6 @@
     var investments = <%= raw investments.compact.flatten.collect { |x| [x.id, x.investment_type] } %>
     for(var i = 0; i < investments.length; i++ ) {
       setValue($('#investment_value_' + investments[i][0]), $('#investment_value_' + investments[i][0]).val())
-      updateValues(null, $('#investment_value_' + investments[i][0]), investments[i][1]);
     }
+    updateAllValues('investment_value_', investments);
 </script>

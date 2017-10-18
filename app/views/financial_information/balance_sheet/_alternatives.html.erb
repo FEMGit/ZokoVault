@@ -28,6 +28,6 @@
     var alternatives = <%= raw alternative_managers.map(&:alternatives).compact.flatten.collect { |x| [x.id, x.alternative_type] } %>
     for(var i = 0; i < alternatives.length; i++ ) {
       setValue($('#alternative_value_' + alternatives[i][0]), $('#alternative_value_' + alternatives[i][0]).val())
-      updateValues(null, $('#alternative_value_' + alternatives[i][0]), alternatives[i][1]);
     }
+    updateAllValues('alternative_value_', alternatives);
 </script>

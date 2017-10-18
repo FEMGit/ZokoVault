@@ -279,6 +279,7 @@ Rails.application.routes.draw do
   # Financial information
   get 'financial_information' => 'financial_information#index', as: 'financial_information'
   get 'financial_information/value_negative/:type', to: 'financial_information#value_negative'
+  post 'financial_information/value_negative', to: 'financial_information#value_negative_collection'
   get 'financial_information/balance_sheet', to: 'financial_information#balance_sheet', as: :balance_sheet_financial_information
   post 'financial_information/update_balance_sheet', to: 'financial_information#update_balance_sheet', as: :update_balance_sheet_financial_information
 

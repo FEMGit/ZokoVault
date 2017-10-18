@@ -26,6 +26,6 @@
     var properties = <%= raw properties.compact.flatten.collect { |x| [x.id, x.property_type] } %>
     for(var i = 0; i < properties.length; i++ ) {
       setValue($('#property_value_' + properties[i][0]), $('#property_value_' + properties[i][0]).val())
-      updateValues(null, $('#property_value_' + properties[i][0]), properties[i][1]);
     }
+    updateAllValues('property_value_', properties);
 </script>

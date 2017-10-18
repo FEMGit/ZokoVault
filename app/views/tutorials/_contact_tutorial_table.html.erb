@@ -11,9 +11,9 @@
   <tbody>
     <% contacts.each do |contact| %>
       <tr>
-        <td><%= contact.lastname %></td>
-        <td><%= contact.firstname %></td>
-        <td><%= contact.emailaddress %></td>
+        <td class="overflow-ellipsis-cell-200"><%= contact.lastname %></td>
+        <td class="overflow-ellipsis-cell-200"><%= contact.firstname %></td>
+        <td class="overflow-ellipsis-cell-200"><%= contact.emailaddress %></td>
         <td><%= contact.relationship %></td>
       </tr>
     <% end %>

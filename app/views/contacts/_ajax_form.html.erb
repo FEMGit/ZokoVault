@@ -191,12 +191,16 @@ var updateAddContactableTable = function(json) {
     return
   } else {
     var table = $(tableIdToUpdate).DataTable();
-    table.row.add([
+    var rowNode = table.row.add([
       json['lastname'],
       json['firstname'],
       json['emailaddress'],
       json['relationship']
-    ]).draw(false)
+    ]).draw(false).node();
+    ellipsisColumnIndexes = [0, 1, 2]
+    ellipsisColumnIndexes.forEach(function(currentValue) {
+      $(rowNode).find('td').eq(currentValue).addClass("overflow-ellipsis-cell-200")
+    })
     $(tableIdToUpdate).show()
     $(tableIdToUpdate + '-title').show()
     $('.flash.add-contactable').show()

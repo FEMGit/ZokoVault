@@ -15,7 +15,7 @@
       <span class="error-label"> - <%= resource.errors.messages[:password].first %></span>
     <% end %>
     <div class="tooltip-item fixed w-100-percent">
-      <%= f.password_field :password, {autofocus: true, autocomplete: "off", class: ("input-error" if resource.errors.messages[:password].present?) } %>
+      <%= f.password_field :password, {autofocus: true, :autocomplete => 'new-password', :readonly => true, onfocus: "this.removeAttribute('readonly');", class: ("input-error" if resource.errors.messages[:password].present?) } %>
       <%= render partial: 'layouts/password_tooltip' %>
     </div>
     <%= render partial: 'layouts/password_requirements', locals: { password_field_id: 'user_password' } %>

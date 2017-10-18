@@ -104,3 +104,9 @@
 @mixin fixed-cell-size($width) {
   width: $width;
 }
+
+@mixin overflow-ellipsis-cell($max-cell-width) {
+  max-width: $max-cell-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

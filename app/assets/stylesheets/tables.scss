@@ -304,3 +304,8 @@ table#online-accounts-table {
     }
   }
 }
+
+// General Styles
+td.overflow-ellipsis-cell-200 {
+  @include overflow-ellipsis-cell(200px)
+}

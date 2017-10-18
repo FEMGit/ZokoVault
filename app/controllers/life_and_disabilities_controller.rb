@@ -23,6 +23,7 @@ class LifeAndDisabilitiesController < AuthenticatedController
   include CancelPathErrorUpdateModule
 
   def page_name
+    return if tutorial_params_present?
     vendor = Vendor.for_user(resource_owner).find(params[:id])
     case action_name
       when 'show'

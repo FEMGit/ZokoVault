@@ -165,6 +165,10 @@ module TutorialsHelper
   end
 
   # Tutorial selection
+  def tutorial_params_present?
+    params[:tutorial_name] || update_all_params
+  end
+
   def clean_tutorial_progress
     TutorialSelection.where(user_id: current_user.try(:id)).destroy_all
   end

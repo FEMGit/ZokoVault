@@ -23,7 +23,7 @@ class FinancialPropertyController < AuthenticatedController
 
   def page_name
     return if tutorial_params_present?
-    financial_property = FinancialProperty.for_user(resource_owner).find(params[:id])
+    financial_property = FinancialProperty.for_user(resource_owner).find_by(id: params[:id])
     case action_name
       when 'new'
         return "Financial Property - Setup"

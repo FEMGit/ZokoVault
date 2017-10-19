@@ -23,7 +23,7 @@ class HealthsController < AuthenticatedController
 
   def page_name
     return if tutorial_params_present?
-    vendor = Vendor.for_user(resource_owner).find(params[:id])
+    vendor = Vendor.for_user(resource_owner).find_by(id: params[:id])
     case action_name
       when 'show'
         return "Health - #{vendor.name} - Details"

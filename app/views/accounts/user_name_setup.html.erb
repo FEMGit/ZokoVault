@@ -16,13 +16,13 @@
       <% if errors && @user.errors.messages[:"user_profile.first_name"].try(:first) %>
         <span class="error-label"> - <%= @user.errors.messages[:"user_profile.first_name"].first %></span>
       <% end %>
-      <%= user_profile_form.text_field :first_name, { class: "m-0-auto max-w-250 mb-10 " + (@user.errors.messages[:"user_profile.first_name"].present? ? "input-error" : "" ) } %>
+      <%= user_profile_form.text_field :first_name, { class: "m-0-auto max-w-250 mb-10 " + (@user.errors.messages[:"user_profile.first_name"].present? ? "input-error" : "" ), onkeyup: "handleEnterClicked(event)" } %>
 
       <%= user_profile_form.label :last_name, 'Last Name' %>
       <% if errors && @user.errors.messages[:"user_profile.last_name"].try(:first) %>
         <span class="error-label"> - <%= @user.errors.messages[:"user_profile.last_name"].first %></span>
       <% end %>
-      <%= user_profile_form.text_field :last_name, { class: "m-0-auto max-w-250 " + (@user.errors.messages[:"user_profile.last_name"].present? ? "input-error" : "" ) } %>
+      <%= user_profile_form.text_field :last_name, { class: "m-0-auto max-w-250 " + (@user.errors.messages[:"user_profile.last_name"].present? ? "input-error" : "" ), onkeyup: "handleEnterClicked(event)" } %>
 	  <% end %>
     </div>
 
@@ -33,6 +33,12 @@
 <% end %>
 
 <script>
+  var handleEnterClicked = function(event) {
+    if (event.keyCode === 13) {
+      submitAccount()
+    }
+  }
+
   var submitAccount = function(){
     var accountForm = document.getElementById("account-form");
     accountForm.submit();

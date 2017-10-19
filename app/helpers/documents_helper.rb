@@ -88,7 +88,7 @@ module DocumentsHelper
   def document_group(document)
     if document.category == @@contact_category
       contact = Contact.find_by_id(document.group)
-      contact && contact.name
+      contact && truncate_name(contact.name)
     else
       asset_group(document.group)
     end
@@ -170,5 +170,10 @@ module DocumentsHelper
       else
         asset
       end
+    end
+    
+    def truncate_name(name)
+      return nil unless name
+      name.split(' ').map { |x| x.truncate(15) }.join(' ')
     end
 end

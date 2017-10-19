@@ -24,7 +24,7 @@ class FinancialAccountController < AuthenticatedController
   
   def page_name
     return if tutorial_params_present?
-    provider = FinancialProvider.for_user(resource_owner).find(params[:id])
+    provider = FinancialProvider.for_user(resource_owner).find_by(id: params[:id])
     case action_name
       when 'new'
         return "Financial Account - Setup"

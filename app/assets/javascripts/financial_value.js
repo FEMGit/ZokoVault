@@ -15,8 +15,9 @@
     });
   }
   
-  var updateAllValues = function(valueFieldSelectorPrefix, idTypesCollection) {
-    var url = '/financial_information/value_negative/';
+  var updateAllValues = function(valueFieldSelectorPrefix, idTypesCollection, shared_user_id) {
+    shared_user_id = shared_user_id || ""
+    var url = '/financial_information/value_negative/' + shared_user_id;
     $.ajax({
       url: url,
       type: 'POST',

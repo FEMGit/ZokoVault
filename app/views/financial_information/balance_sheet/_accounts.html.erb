@@ -25,9 +25,10 @@
 
 <%= javascript_include_tag 'autonumeric' %>
 <script>
+    var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
     var accounts = <%= raw account_providers.map(&:accounts).compact.flatten.collect { |x| [x.id, x.account_type] } %>
     for(var i = 0; i < accounts.length; i++ ) {
       setValue($('#account_value_' + accounts[i][0]), $('#account_value_' + accounts[i][0]).val())
     }
-    updateAllValues('account_value_', accounts);
+    updateAllValues('account_value_', accounts, shared_user_id);
 </script>

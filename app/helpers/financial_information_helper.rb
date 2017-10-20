@@ -1,10 +1,14 @@
 module FinancialInformationHelper
   def set_financial_information_resources
-    @financial_provider = FinancialProvider.new(:user => current_user)
-    @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
-    @alternative_managers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Alternative"])
-    @investments = FinancialInvestment.for_user(current_user)
-    @properties = FinancialProperty.for_user(current_user)
+    @financial_provider = FinancialProvider.new(:user => resource_owner)
+    @account_providers = FinancialProvider.for_user(resource_owner).type(FinancialProvider::provider_types["Account"])
+    @account_providers.each { |account_pr| authorize account_pr }
+    @alternative_managers = FinancialProvider.for_user(resource_owner).type(FinancialProvider::provider_types["Alternative"])
+    @alternative_managers.each { |alternative_man| authorize alternative_man }
+    @investments = FinancialInvestment.for_user(resource_owner)
+    @investments.each { |investment| authorize investment }
+    @properties = FinancialProperty.for_user(resource_owner)
+    @properties.each { |property| authorize property }
   end
   
   def financial_account_last_update_date(provider)

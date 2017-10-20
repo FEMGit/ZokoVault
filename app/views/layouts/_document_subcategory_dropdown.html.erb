@@ -116,7 +116,7 @@
     var category_selected = $('#document_category.chosen-select :selected').text()
     var url = "/documents/document_subcategory_share_contacts/" + category_selected + "/" + subcategory_selected.replace('...', '') + "/" + shared_user_id
     $.get(url, function(data) {
-      if (append === true) {
+      if (append === true && data !== null) {
         var currently_selected = $("#document_contact_ids").val()
         data = currently_selected === null ? data : data.concat(currently_selected)
         $("#document_contact_ids").val(data)

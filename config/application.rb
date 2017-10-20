@@ -25,7 +25,8 @@ module ZokuVault
     config.x.ProfileCategory = "My Profile"
     config.x.ShareCategories = [config.x.FinancialInformationCategory, config.x.WillsPoaCategory,
                                 config.x.TrustsEntitiesCategory, config.x.InsuranceCategory,
-                                config.x.TaxCategory, config.x.FinalWishesCategory, config.x.OnlineAccountCategory,
+                                config.x.TaxCategory, config.x.FinalWishesCategory, 
+                                #config.x.OnlineAccountCategory,
                                 config.x.DocumentsCategory, config.x.ContactCategory]
     
     config.x.CorporateCategories = {

@@ -29,7 +29,7 @@ class CorporateAccountProfile < ActiveRecord::Base
   validates :contact_type, inclusion: { in: Contact::CONTACT_TYPES.keys.flatten, allow_blank: true }
   
   validates :business_name, :web_address, :street_address, :zip,
-            :state, :phone_number, :city, :presence => true,
+            :state, :phone_number, :city, :presence => { message: "Required" },
             :if => Proc.new { |profile| profile.company_information_required.eql? true }
   
   def company_information_required!

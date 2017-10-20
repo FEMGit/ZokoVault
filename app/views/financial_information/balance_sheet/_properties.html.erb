@@ -23,9 +23,10 @@
 
 <%= javascript_include_tag 'autonumeric' %>
 <script>
+    var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
     var properties = <%= raw properties.compact.flatten.collect { |x| [x.id, x.property_type] } %>
     for(var i = 0; i < properties.length; i++ ) {
       setValue($('#property_value_' + properties[i][0]), $('#property_value_' + properties[i][0]).val())
     }
-    updateAllValues('property_value_', properties);
+    updateAllValues('property_value_', properties, shared_user_id);
 </script>

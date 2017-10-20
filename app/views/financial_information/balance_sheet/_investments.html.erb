@@ -23,9 +23,10 @@
 
 <%= javascript_include_tag 'autonumeric' %>
 <script>
+    var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
     var investments = <%= raw investments.compact.flatten.collect { |x| [x.id, x.investment_type] } %>
     for(var i = 0; i < investments.length; i++ ) {
       setValue($('#investment_value_' + investments[i][0]), $('#investment_value_' + investments[i][0]).val())
     }
-    updateAllValues('investment_value_', investments);
+    updateAllValues('investment_value_', investments, shared_user_id);
 </script>

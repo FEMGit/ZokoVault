@@ -25,9 +25,10 @@
 
 <%= javascript_include_tag 'autonumeric' %>
 <script>
+    var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
     var alternatives = <%= raw alternative_managers.map(&:alternatives).compact.flatten.collect { |x| [x.id, x.alternative_type] } %>
     for(var i = 0; i < alternatives.length; i++ ) {
       setValue($('#alternative_value_' + alternatives[i][0]), $('#alternative_value_' + alternatives[i][0]).val())
     }
-    updateAllValues('alternative_value_', alternatives);
+    updateAllValues('alternative_value_', alternatives, shared_user_id);
 </script>

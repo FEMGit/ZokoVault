@@ -21,8 +21,17 @@
 
 <script>
   $(document).ready(function() {
+    clearVaultCoOwnerDropdown()
     setEmailPreviewSingleDropdown($('#user_profile_primary_shared_with_ids'))
   })
+  
+  var clearVaultCoOwnerDropdown = function() {
+    $("#user_profile_primary_shared_with_ids").find($('option')).attr('selected', false)
+  }
+  
+  var clearEmailPreviewSection = function() {
+    $("#email-preview-list").find("p").remove()
+  }
   
   var submitForm = function() {
     var form = $('#edit_user_profile_' + "<%=@user_profile.id%>")
@@ -30,6 +39,8 @@
   }
 
   var toggleCoOwnerView = function(id) {
+    clearVaultCoOwnerDropdown()
+    clearEmailPreviewSection()
     $("#share-section").toggle()
     $("#yes-no-section").toggle()
 

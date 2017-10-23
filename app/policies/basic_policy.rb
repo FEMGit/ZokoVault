@@ -87,4 +87,14 @@ class BasicPolicy
   def owner_primary_shared_with_user?
     user.primary_shared_with? record.user
   end
+  
+  def policy_share
+    shared_contact = Contact.for_user(shared_user).where("emailaddress ILIKE ?", user.email)
+    return false unless shared_contact.present?
+    shared_user.shares.where(contact: shared_contact)
+  end
+  
+  def shared_user
+    record.user
+  end
 end

@@ -30,7 +30,7 @@ class DocumentPolicy < BasicPolicy
   private
 
   def policy_share
-    shared_contact = Contact.for_user(shared_user).where(emailaddress: user.email)
+    shared_contact = shared_user.contacts.where(emailaddress: user.email)
     return false unless shared_contact.present?
 
     shared_user.shares.where(contact: shared_contact)

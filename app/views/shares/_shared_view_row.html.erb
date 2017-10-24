@@ -1,6 +1,6 @@
 <tr>
   <td>
-    <% contact = Contact.for_user(current_user).detect { |c| c.emailaddress.downcase == user.email.downcase } %>
+    <% contact = current_user.contacts.detect { |c| c.emailaddress.downcase == user.email.downcase } %>
     <% if contact.present? %>
       <%= render partial: "layouts/avatar_circle", locals: { :with_name => true, :contact => contact } %>
     <% else %>

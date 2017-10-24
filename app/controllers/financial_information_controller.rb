@@ -93,7 +93,7 @@ class FinancialInformationController < AuthenticatedController
   # Tutorial workflow integrated
   
   def set_tutorial_resources
-    @financial_advisors = Contact.for_user(resource_owner).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    @financial_advisors = resource_owner.contacts.where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     @contact = Contact.new(user: resource_owner)
   end
 end

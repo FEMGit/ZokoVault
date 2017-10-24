@@ -161,7 +161,7 @@ module TutorialsHelper
   # Will Subtutorials
   def will_subtutorial_show?(tutorial)
     return true unless tutorial.name.eql? "My spouse's will."
-    Contact.for_user(current_user).any? { |c| c.relationship == 'Spouse / Domestic Partner' }
+    current_user.contacts.any? { |c| c.relationship == 'Spouse / Domestic Partner' }
   end
 
   # Tutorial selection

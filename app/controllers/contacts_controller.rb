@@ -19,10 +19,10 @@ class ContactsController < AuthenticatedController
       when 'new'
         return "Add Contact"
       when 'edit'
-        contact = Contact.for_user(resource_owner).find(params[:id])
+        contact = resource_owner.contacts.find(params[:id])
         return "Contacts - #{contact.name} - Edit"
       when 'show'
-        contact = Contact.for_user(resource_owner).find(params[:id])
+        contact = resource_owner.contacts.find(params[:id])
         return "Contacts - #{contact.name} - Details"
     end
   end
@@ -143,7 +143,7 @@ class ContactsController < AuthenticatedController
   # Use callbacks to share common setup or constraints between actions.
   def set_contact
     @category = "Contact"
-    @contact = Contact.for_user(resource_owner).find(params[:id])
+    @contact = resource_owner.contacts.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -186,7 +186,7 @@ class ContactsController < AuthenticatedController
     UpdateDocumentService.new(:user => resource_owner, :contact => @contact.id, :ret_url => session[:ret_url]).update_document
     format.html { redirect_to success_path(contact_path(@contact), contact_path(@contact, @shared_user)), flash: { success: 'Contact was successfully created.' } }
 
-    contact_ids = Contact.for_user(resource_owner).sort_by { |s| s.lastname.downcase }.map(&:id)
+    contact_ids = resource_owner.contacts.sort_by { |s| s.lastname.downcase }.map(&:id)
     contact_position = contact_ids.find_index(@contact.id)
     general_after_id = general_after_id(contact_ids, contact_position)
     after_contact = Contact.find_by(id: general_after_id)

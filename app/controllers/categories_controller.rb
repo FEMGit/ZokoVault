@@ -243,7 +243,7 @@ class CategoriesController < AuthenticatedController
   
   def set_tutorial_resources
     @category_dropdown_options, @card_names, @cards = TutorialService.set_documents_information(@category.name, current_user)
-    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    @contacts = current_user.contacts.reject { |c| c.emailaddress == current_user.email } 
     @contact = Contact.new(user: current_user)
     case @category.name
       when Rails.application.config.x.WillsPoaCategory
@@ -257,15 +257,15 @@ class CategoriesController < AuthenticatedController
   
   def set_will_tutorial_resources
     @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
-    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @estate_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
   end
   
   def set_trust_tutorial_resources
-    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @trust_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
   end
   
   def set_insurance_tutorial_resources
-    @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+    @insurance_brokers = current_user.contacts.where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     @insurance_policies = Document.for_user(current_user).where(category: Rails.application.config.x.InsuranceCategory)
   end
 end

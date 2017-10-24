@@ -40,7 +40,7 @@ class TutorialsController < AuthenticatedController
   def vault_co_owners
     @user_profile = UserProfile.for_user(current_user)
     @contact = Contact.new(user: current_user)
-    @primary_contacts = Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries')
+    @primary_contacts = current_user.contacts.where(contact_type: 'Family & Beneficiaries')
     @tutorial_name = "account_co_owner"
     @page_number = 0
     tutorial_progress_save('vault_co_owners')
@@ -174,7 +174,7 @@ class TutorialsController < AuthenticatedController
         if tutorial_name.eql? 'My will.'
           Will.create!(title: current_user.name + ' Will', user: current_user)
         elsif tutorial_name.eql? "My spouse's will."
-          spouse_contacts = Contact.for_user(current_user).where(relationship: 'Spouse / Domestic Partner')
+          spouse_contacts = current_user.contacts.where(relationship: 'Spouse / Domestic Partner')
           spouse_contacts.map { |sc| Will.create!(title: sc.name + ' Will', user: current_user) }
         end
       rescue
@@ -324,10 +324,10 @@ class TutorialsController < AuthenticatedController
   end
   
   def update_shares_tutorial_path
-    @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
-    @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
-    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
-    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @tax_accountants = current_user.contacts.where(relationship: 'Accountant', contact_type: 'Advisor')
+    @financial_advisors = current_user.contacts.where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    @estate_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
+    @trust_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
     if @tax_accountants.blank? && @financial_advisors.blank? && 
         @estate_planning_attorneys.blank? && @trust_planning_attorneys.blank?
       redirect_to confirmation_tutorials_path and return;
@@ -362,7 +362,7 @@ class TutorialsController < AuthenticatedController
   
   def set_primary_shared_tutorial_contacts
     @user_profile = UserProfile.for_user(current_user)
-    @primary_contacts = Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries')
+    @primary_contacts = current_user.contacts.where(contact_type: 'Family & Beneficiaries')
     
     @primary_shared_contacts = @user_profile.primary_shared_with
     @contacts_with_access = (@primary_contacts.select{ |pc| pc.relationship.eql? 'Spouse / Domestic Partner' } + @primary_shared_contacts).uniq
@@ -422,7 +422,7 @@ class TutorialsController < AuthenticatedController
   end
   
   def set_insurance_tutorial_contacts
-    @insurance_brokers = Contact.for_user(current_user).where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
+    @insurance_brokers = current_user.contacts.where(relationship: 'Insurance Agent / Broker', contact_type: 'Advisor')
     @insurance_policies = Document.for_user(current_user).where(category: Rails.application.config.x.InsuranceCategory)
     set_documents_information(Rails.application.config.x.InsuranceCategory)
   end
@@ -430,7 +430,7 @@ class TutorialsController < AuthenticatedController
   def set_taxes_tutorial_contacts
     @digital_taxes = Document.for_user(current_user).where(category: Rails.application.config.x.TaxCategory)
     
-    @tax_accountants = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor')
+    @tax_accountants = current_user.contacts.where(relationship: 'Accountant', contact_type: 'Advisor')
     set_documents_information(Rails.application.config.x.TaxCategory)
     set_contact_and_category_share(@tax_accountants, Rails.application.config.x.TaxCategory)
     
@@ -443,20 +443,20 @@ class TutorialsController < AuthenticatedController
   end
   
   def set_trusts_tutorial_contacts
-    @trust_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @trust_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
     set_contact_and_category_share(@trust_planning_attorneys, Rails.application.config.x.TrustsEntitiesCategory)
   end
   
   def set_wills_tutorial_contacts
     @digital_wills = Document.for_user(current_user).where(category: Rails.application.config.x.WillsPoaCategory)
     
-    @estate_planning_attorneys = Contact.for_user(current_user).where(relationship: 'Attorney', contact_type: 'Advisor')
+    @estate_planning_attorneys = current_user.contacts.where(relationship: 'Attorney', contact_type: 'Advisor')
     set_documents_information(Rails.application.config.x.WillsPoaCategory)
     set_contact_and_category_share(@estate_planning_attorneys, Rails.application.config.x.WillsPoaCategory)
   end
   
   def set_financial_information_tutorial_contacts
-    @financial_advisors = Contact.for_user(current_user).where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
+    @financial_advisors = current_user.contacts.where(relationship: 'Financial Advisor / Broker', contact_type: 'Advisor')
     set_contact_and_category_share(@financial_advisors, Rails.application.config.x.FinancialInformationCategory)
   end
   
@@ -466,7 +466,7 @@ class TutorialsController < AuthenticatedController
   end
   
   def set_contact_and_category_share(contact_collection, category_name)
-    @contacts = Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email } 
+    @contacts = current_user.contacts.reject { |c| c.emailaddress == current_user.email } 
     @category = Category.fetch(category_name.downcase)
 
     @contacts_with_access = (current_user.shares.categories.select { |share| share.shareable.eql? @category }.map(&:contact) +

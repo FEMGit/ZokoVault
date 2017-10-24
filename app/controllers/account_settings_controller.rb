@@ -241,7 +241,7 @@ class AccountSettingsController < AuthenticatedController
       rescue ActiveRecord::RecordNotSaved
         set_contacts_shareable
         if user_profile_params[:full_primary_shared_with].present?
-          full_primary_shared_with_contact = Contact.for_user(current_user).where(:id => user_profile_params[:full_primary_shared_with])
+          full_primary_shared_with_contact = current_user.contacts.where(:id => user_profile_params[:full_primary_shared_with])
           invalid_contacts = full_primary_shared_with_contact.select { |x| !x.valid? }
           if invalid_contacts.present?
             @user_profile.errors[:contact_validation_error] = invalid_contacts.map(&:name)
@@ -349,7 +349,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def set_corporate_admin_resources
-    @corporate_admin_contact = Contact.for_user(current_user).find_by(id: params[:contact_id])
+    @corporate_admin_contact = current_user.contacts.find_by(id: params[:contact_id])
     @corporate_admin_user = User.where("email ILIKE ?", @corporate_admin_contact.try(:emailaddress)).first
     redirect_to contacts_path unless current_user.corporate_user_by_admin?(@corporate_admin_user)
   end
@@ -389,7 +389,7 @@ class AccountSettingsController < AuthenticatedController
   end
 
   def create_contact_if_not_exists
-    contact = Contact.for_user(current_user).find_or_initialize_by(emailaddress: current_user.email)
+    contact = current_user.contacts.find_or_initialize_by(emailaddress: current_user.email)
     contact.update_attributes(
       firstname: @user_profile.first_name,
       lastname: @user_profile.last_name,
@@ -412,7 +412,7 @@ class AccountSettingsController < AuthenticatedController
   def prepare_user_profile_params
     return if params[:user_profile].blank?
     params[:user_profile][:primary_shared_with_ids] = Array.wrap(params[:user_profile][:primary_shared_with_ids])
-    params[:user_profile][:full_primary_shared_with] = Contact.for_user(current_user).find_by(id: params[:user_profile][:full_primary_shared_with])
+    params[:user_profile][:full_primary_shared_with] = current_user.contacts.find_by(id: params[:user_profile][:full_primary_shared_with])
   end
 
   def tutorial_params

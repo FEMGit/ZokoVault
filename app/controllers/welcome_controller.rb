@@ -68,7 +68,7 @@ class WelcomeController < AuthenticatedController
   end
   
   def contacts_count
-    Contact.for_user(current_user).reject { |c| c.emailaddress == current_user.email }.count
+    current_user.contacts.reject { |c| c.emailaddress == current_user.email }.count
   end
   
   def insurance_vendors_count

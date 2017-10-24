@@ -1,6 +1,6 @@
 <% submit_button_text ||= 'Continue' %>
 
-<% contact = Contact.for_user(current_user).find_by(id: contact_id) %>
+<% contact = current_user.contacts.find_by(id: contact_id) %>
 <% if contact.present? %>
   <p class="max-w-1000" id="share-contact-message-<%=contact.id%>">
     <%= link_to 'Preview invitation email.', 'javascript:displayEmailPreview(' + contact.try(:id).try(:to_s) + ')' %><br>

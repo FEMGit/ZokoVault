@@ -204,7 +204,7 @@ class DocumentsController < AuthenticatedController
   
   def mass_upload_add_shares_if_shared_view(file_params)
     if current_user != resource_owner
-      contact = Contact.for_user(resource_owner).where("emailaddress ILIKE ?", current_user.email).first
+      contact = resource_owner.contacts.where("emailaddress ILIKE ?", current_user.email).first
       document_access_shared = resource_owner.shares.any? { |sh| sh.shareable == Category.fetch(Rails.application.config.x.DocumentsCategory.downcase) && sh.contact == contact }
       if document_access_shared == true
         file_params.each { |f| f[:contact_ids] = Array.wrap(contact.id) }

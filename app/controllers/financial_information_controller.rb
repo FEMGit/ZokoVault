@@ -20,7 +20,7 @@ class FinancialInformationController < AuthenticatedController
     session[:ret_url] = financial_information_path
     @category = Category.fetch(Rails.application.config.x.FinancialInformationCategory.downcase)
     set_tutorial_in_progress(financial_information_empty?)
-    @documents = Document.for_user(current_user).where(category: @category.name)
+    @documents = Document.for_user(current_user).where(category: @category.name).includes(:card_document, :vendor, shares: :contact)
     
     @account_providers = FinancialProvider.for_user(current_user).type(FinancialProvider::provider_types["Account"])
     

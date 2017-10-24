@@ -7,7 +7,7 @@
     </svg>
   </a>
 
-  <% corporate_account_current = 'active' if (current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path)) && !action?('account_settings', 'edit_account_settings', 'update_account_settings', 'billing_information') %>
+  <% corporate_account_current = 'active' if (current_page?(corporate_accounts_url) || controller?('corporate_accounts') || breadcrumb?(corporate_accounts_path) || breadcrumb?(:corporate_accounts_path)) && !action?('account_settings', 'edit_account_settings', 'update_account_settings', 'billing_information', 'clio_sync') %>
   <%= link_to corporate_accounts_path, class: "main-nav #{corporate_account_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-key-1"></use>
@@ -34,6 +34,13 @@
       <svg class="icon nav-icon">
         <use xlink:href="#icon-money-1"></use>
       </svg>Billing Information
+    <% end %>
+    
+    <% clio_sync_current = 'active' if current_page?(clio_sync_corporate_accounts_path) %>
+    <%= link_to clio_sync_corporate_accounts_path, class: "main-nav pl-9 #{clio_sync_current}" do %>
+      <svg class="icon wide nav-icon mr-8">
+        <use xlink:href="#icon-clio-logo"></use>
+      </svg>Clio Sync
     <% end %>
   <% end %>
   

@@ -128,6 +128,10 @@ Rails.application.routes.draw do
     end
   end
   
+  # Clio
+  get 'clio/authorize', to: 'clio#authorization', as: :authorization_clio
+  get 'clio/index', to: 'clio#index', as: :clios
+  
   # Online Accounts
   get 'online_accounts/reveal_password/:account_id(/:shared_user_id)', to: 'online_accounts#reveal_password'
   get 'online_accounts', to: 'online_accounts#index', as: :online_accounts
@@ -403,6 +407,7 @@ Rails.application.routes.draw do
   get '/corporate/account_settings', to: 'corporate_accounts#account_settings', as: :account_settings_corporate_accounts
   get '/corporate/edit_account_settings', to: 'corporate_accounts#edit_account_settings', as: :edit_corporate_settings_corporate_accounts
   get '/corporate/billing_information', to: 'corporate_accounts#billing_information', as: :billing_information_corporate_accounts
+  get '/corporate/clio_sync', to: 'corporate_accounts#clio_sync', as: :clio_sync_corporate_accounts
   post '/corporate/remove_client/:contact_id', to: 'corporate_accounts#remove_corporate_client', as: :remove_corporate_client_corporate_accounts
   post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_account_settings_corporate_accounts
   post '/corporate/send_invitation/:contact_id(/:account_type)', to: 'corporate_accounts#send_invitation', as: :send_invitation_corporate_accounts

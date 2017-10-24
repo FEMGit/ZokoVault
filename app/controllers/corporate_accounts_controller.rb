@@ -1,6 +1,6 @@
 class CorporateAccountsController < CorporateBaseController
   before_action :redirect_if_corporate_employee, only: [:account_settings, :edit_account_settings, :update_account_settings,
-                                                        :billing_information]
+                                                        :billing_information, :clio_sync]
   before_action :set_account_settings_crumbs, only: [:account_settings, :edit_account_settings]
   before_action :set_edit_corporate_details_crumbs, only: [:edit_account_settings]
 
@@ -63,6 +63,12 @@ class CorporateAccountsController < CorporateBaseController
     @card = StripeService.customer_card(customer: stripe_customer)
     @invoices = StripeService.all_invoices(customer: stripe_customer)
     session[:ret_url] = billing_information_corporate_accounts_path
+  end
+  
+  def clio_sync
+    if session[:clio_access_token].present?
+      @clio_service = ClioService.new(access_token: session[:clio_access_token])
+    end
   end
 
   def account_settings

@@ -167,7 +167,7 @@ module ApplicationHelper
         account_settings_corporate_accounts_path
       when CorporateClient,
            CorporateEmployee
-        corporate_user_profile = Contact.for_user(current_user.corporate_account_owner).where("emailaddress ILIKE ?", subcategory.email).first.user_profile
+        corporate_user_profile = current_user.corporate_account_owner.contacts.where("emailaddress ILIKE ?", subcategory.email).first.user_profile
         return corporate_employee_path(corporate_user_profile) if corporate_user_profile.user.corporate_employee?
         corporate_account_path(corporate_user_profile)
       else

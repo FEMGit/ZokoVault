@@ -30,7 +30,7 @@ class MailerPreview < ActionMailer::Preview
   
   def path_contact(user, path)
     if user.corporate_employee?
-      Contact.for_user(user.corporate_admin_by_user).find_by(id: path[:contact_id])
+      user.corporate_admin_by_user.contacts.find_by(id: path[:contact_id])
     else
       user.contacts.find_by(id: path[:contact_id])
     end

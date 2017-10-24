@@ -182,7 +182,7 @@ class UserResourceGatherer < Struct.new(:user)
   def gather_corporate_clients(user)
     return [] unless user.corporate_manager?
     corporate_client_emails = (user.employee_users + user.corporate_users).select(&:corporate_client?).map(&:email)
-    Contact.for_user(user.corporate_account_owner).where(emailaddress: corporate_client_emails)
+    user.corporate_account_owner.contacts.where(emailaddress: corporate_client_emails)
                                                   .map { |contact| CorporateClient.new({ name: contact.user_profile.name,
                                                                                          email: contact.emailaddress,
                                                                                          phone_number: contact.user_profile.phone_number,

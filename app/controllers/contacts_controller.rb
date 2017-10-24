@@ -41,9 +41,10 @@ class ContactsController < AuthenticatedController
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.for_user(resource_owner)
-                       .reject { |c| contact_emails_rejected.include? c.emailaddress.downcase }
-                       .each { |c| authorize c }
+    ignore = contact_emails_rejected
+    @contacts = resource_owner.contacts.reject do |c|
+                  ignore.include?(c.emailaddress.downcase)
+                end.each{ |c| authorize c }
     session[:ret_url] = contacts_path
   end
   

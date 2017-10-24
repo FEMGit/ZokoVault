@@ -1,6 +1,6 @@
 class Contact < ActiveRecord::Base
   ACCOUNT_OWNER_RELATIONSHIP = 'Account Owner'.freeze
-  belongs_to :user
+  belongs_to :user, inverse_of: :contacts
 
   scope :for_user, ->(user) {where(user: user)}
 

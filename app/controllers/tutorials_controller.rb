@@ -4,6 +4,7 @@ class TutorialsController < AuthenticatedController
   include TutorialsHelper
   include FinancialInformationHelper
   include BreadcrumbsCacheModule
+  include PageTitle
   before_action :set_cache_headers
   before_action :save_return_to_path, :save_tutorial_progress, only: [:new, :confirmation, :show]
   before_action :set_tutorial, :set_contacts, :set_balance_sheet, :set_shares_information, only: [:show]

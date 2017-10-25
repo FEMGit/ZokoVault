@@ -8,6 +8,7 @@ class FinancialInformationController < AuthenticatedController
   add_breadcrumb "Financial Information", :financial_information_shared_view_path, only: [:index], if: :shared_view?
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
   
   def page_name
     case action_name

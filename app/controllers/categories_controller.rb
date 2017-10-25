@@ -12,6 +12,7 @@ class CategoriesController < AuthenticatedController
   add_breadcrumb "Insurance", :insurance_path, only: [:insurance]
   include BreadcrumbsCacheModule
   include UserTrafficModule
+  include PageTitle
   include TutorialsHelper
   
   def page_name

@@ -9,7 +9,7 @@ class AuthenticatedController < ApplicationController
   private
 
   def trial_check
-    return unless is_expired_trial_user?
+    return unless is_expired_trial_user?(user: current_user)
     if !trial_whitelist_page? && !permitted_page_trial_expired_user?
       redirect_to trial_membership_ended_accounts_path
     end
@@ -52,15 +52,6 @@ class AuthenticatedController < ApplicationController
 
   def is_free_user?
     current_user && current_user.setup_complete? && current_user.free? && !corporate?
-  end
-
-  def is_trial_user?
-    current_user && current_user.current_user_subscription &&
-                    current_user.current_user_subscription.trial?
-  end
-
-  def is_expired_trial_user?
-    is_trial_user? && current_user.current_user_subscription.expired_trial? && !current_user.corporate_manager?
   end
 
   def trial_whitelist_page?

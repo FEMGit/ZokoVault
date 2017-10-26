@@ -25,7 +25,7 @@ class EmailSupportController < AuthenticatedController
       name: user_name,
       email: params[:email],
       message_content: params[:message],
-      phone_number: params[:phone_number],
+      phone_number: params[:two_factor_phone_number],
       preferred_contact_method:  params["user"]["connect_by"].capitalize)
 
     if @message.valid? && @message.message_content.length > 0

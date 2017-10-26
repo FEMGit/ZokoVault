@@ -1,5 +1,6 @@
 class EmailSupportController < AuthenticatedController
   include BackPathHelper
+  include UsersHelper
   include SanitizeModule
   attr_reader :referrer
   
@@ -57,6 +58,7 @@ class EmailSupportController < AuthenticatedController
   end
   
   def pick_layout
+    return 'blank_layout' if current_user && is_expired_trial_user?(user: current_user)
     missing_mfa? ? 'without_sidebar_layout' : 'application'
   end
   

@@ -1,34 +1,38 @@
-<!DOCTYPE html>
-<html>
-  <%= render partial: 'layouts/application_head_tag' %>
+<% if is_expired_trial_user?(user: current_user) %>
+  <%= render template: 'layouts/blank_layout' %>
+<% else %>
+  <!DOCTYPE html>
+  <html>
+    <%= render partial: 'layouts/application_head_tag' %>
 
-  <% if user_signed_in? %>
-    <body class="logged-in">
-  <% else %>
-    <body class="logged-out">
-  <% end %>
+    <% if user_signed_in? %>
+      <body class="logged-in">
+    <% else %>
+      <body class="logged-out">
+    <% end %>
 
-  <%= render :partial => 'layouts/svgdefs' %>
-  <%= render :partial => 'layouts/alerts' %>
-  <% if user_signed_in? %>
-    <%= render :partial => 'layouts/left_nav' %>
-    <main class="app-nav">
+    <%= render :partial => 'layouts/svgdefs' %>
+    <%= render :partial => 'layouts/alerts' %>
+    <% if user_signed_in? %>
+      <%= render :partial => 'layouts/left_nav' %>
+      <main class="app-nav">
 
-  <% else %>
-    <main class="marketing">
+    <% else %>
+      <main class="marketing">
 
-  <% end %>
+    <% end %>
 
-    <%= render :partial => 'layouts/header' %>
+      <%= render :partial => 'layouts/header' %>
 
-    <div class="content">
-      <%= yield %>
+      <div class="content">
+        <%= yield %>
 
-    </div>
-    <%= render :partial => 'layouts/footer' %>
-  </main>
-    <%= render partial: 'layouts/layout_javascript_include' %>
-  </body>
-</html>
+      </div>
+      <%= render :partial => 'layouts/footer' %>
+    </main>
+      <%= render partial: 'layouts/layout_javascript_include' %>
+    </body>
+  </html>
 
-<%= javascript_include_tag 'date_picker_check' %>
+  <%= javascript_include_tag 'date_picker_check' %>
+<% end %>

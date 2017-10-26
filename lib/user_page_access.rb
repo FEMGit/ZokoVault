@@ -11,6 +11,6 @@ module UserPageAccess
                     shared_view: permitted_shared_view },
     :corporate_employee => { general_view: ['documents', 'email_support', 'account_settings', 'account_traffics', 'user_profiles', 'shared_view', 'corporate_accounts', 'mfas', 'accounts', 'usage_metrics', 'users', 'search'],
                              shared_view: permitted_shared_view },
-    :trial_expired => []
+    :trial_expired => ['email_support']
   }
 end

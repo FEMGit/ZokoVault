@@ -53,6 +53,25 @@ var getMultipleSelectChoices = function(multiselectSelector) {
   return multiselectSelector.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
 }
 
+var getRowInputData = function($btn) {
+  var chosenMultipleSelect = ""
+  var inputTextField = ""
+  if (!$btn.closest('tr.tutorial-fields').length) {
+    chosenMultipleSelect = $btn.prev()
+    inputTextField = $btn.siblings('input.repeated-field')
+  } else {
+    var baseElement = $btn.closest('tr.tutorial-fields')
+    chosenMultipleSelect = baseElement.find('div.chosen-styled-select')
+    inputTextField = baseElement.find('input.repeated-field')
+  }
+  var chosenMultipleChoices = chosenMultipleSelect.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
+  var chosenMultipleValue = chosenMultipleSelect.find('.chosen-select').val()
+  var inputTextValue = inputTextField.val()
+  
+  return [chosenMultipleSelect, chosenMultipleChoices, chosenMultipleValue,
+    inputTextValue, inputTextField]
+}
+
 var FieldsValidate = function(){
   var tutorialFields = $(".tutorial-fields")
   var errorsCount = 0
@@ -144,15 +163,21 @@ DynamicTutorialField.prototype.addRow = function($btn, id) {
 };
 
 DynamicTutorialField.prototype.fieldIsEmpty = function($btn) {
-  return $btn.siblings('input.repeated-field').val() != '';
+  var rowInputData = getRowInputData($btn)
+  var chosenMultipleChoices = rowInputData[1]
+  var chosenMultipleValue = rowInputData[2]
+  var inputTextValue = rowInputData[3]
+  
+  return (chosenMultipleChoices.length > 0 && chosenMultipleValue === null) || !inputTextValue.trim().length
 };
 
 DynamicTutorialField.prototype.showLittleError = function($btn) {
-  var chosenMultipleSelect = $btn.prev()
-  var chosenMultipleChoices = chosenMultipleSelect.find('[id^="tutorial_multiple_types"].chosen-container > ul.chosen-choices')
-  var chosenMultipleValue = chosenMultipleSelect.find('.chosen-select').val()
-  var inputTextField = $btn.siblings('input.repeated-field')
-  var inputTextValue = inputTextField.val()
+  var rowInputData = getRowInputData($btn)
+  var chosenMultipleSelect = rowInputData[0]
+  var chosenMultipleChoices = rowInputData[1]
+  var chosenMultipleValue = rowInputData[2]
+  var inputTextValue = rowInputData[3]
+  var inputTextField = rowInputData[4]
   
   if (chosenMultipleChoices.length > 0 && chosenMultipleValue === null) {
     addErrorOnChange(chosenMultipleSelect, chosenMultipleChoices)
@@ -211,7 +236,7 @@ DynamicTutorialField.prototype.addAnotherBtnListener = function() {
   $(document).on('click', this.addBtn, function() {
     var $btn = $(this);
 
-    if (that.fieldIsEmpty($btn))
+    if (!that.fieldIsEmpty($btn))
       that.submit($btn).success(function(data) {
         // Add hidden field with record id
         if ($('tr.tutorial-fields').length > 0) {

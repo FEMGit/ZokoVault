@@ -48,7 +48,7 @@ class PasswordsController < Devise::PasswordsController
       respond_with resource do |format|
         if errors && errors.messages[:reset_password_token] &&
             errors.messages[:reset_password_token].include?('Incorrect Format')
-          format.html { redirect_to password_link_expired_path(corporate_password_update?) }
+          format.html { redirect_to password_link_expired_path(create_new_invitation?) }
         elsif create_new_invitation? && reset_token_params[:reset_password_token].present?
           format.html { render :action => :create_new_invitation}
         else

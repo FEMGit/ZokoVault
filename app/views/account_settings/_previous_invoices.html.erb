@@ -20,7 +20,7 @@
           <% if corporate %>
             <td><%= user_name_by_subscription_id(invoice.subscription) %></td>
           <% end %>
-          <td><%= date_format(DateTime.strptime(invoice.period_start.to_s, '%s')) %></td>
+          <td><%= invoice_date(invoice) %></td>
           <td><%= "$#{invoice.total / 100.0}" %></td>
           <% if @corporate_invoices.present? && @corporate_invoices.include?(invoice) %>
             <td>Corporate Payment</td>

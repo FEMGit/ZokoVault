@@ -63,7 +63,7 @@ class DocumentService
         end
       end
     card_values
-      .sort_by { |x| x.first[:name] }
+      .sort_by { |x| x.first[:name].try(:downcase) }
       .prepend(get_empty_card_values)
   end
   
@@ -152,7 +152,7 @@ class DocumentService
 
   def collect_card_names(collection, category)
     collection.collect { |x| [id: x.id, name: x.try(:name)] }
-      .sort_by { |x| x.first[:name] }
+      .sort_by { |x| x.first[:name].try(:downcase) }
       .prepend([id: category, name: "Select..."])
   end
 end

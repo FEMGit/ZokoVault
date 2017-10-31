@@ -127,7 +127,8 @@ var getColumnCount = function(table_id) {
 
 var tableEmpty = function (table_id) {
   var table = $(table_id).DataTable()
-  var pagesCount = table.page.info().pages
+  var pageInfo = table.page.info()
+  var pagesCount = pageInfo === undefined ? 0 : pageInfo.pages
   if(!table.data().any() || pagesCount === 0) {
     return true
   } else {

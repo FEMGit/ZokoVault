@@ -1,6 +1,8 @@
 class FinancialProvider < ActiveRecord::Base
   scope :for_user, ->(user) { where(user: user) }
   scope :type, ->(type) { where(provider_type: type) }
+  scope :account_type, -> { where(provider_type: provider_types["Account"]) }
+  scope :alternative_type, -> { where(provider_type: provider_types["Alternative"]) }
   enum provider_type: ["Account", "Investment", "Alternative", "Property"]
   
   belongs_to :user

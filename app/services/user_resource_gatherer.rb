@@ -153,7 +153,8 @@ class UserResourceGatherer < Struct.new(:user)
   def gather_financial_information(user, category)
     FinancialInvestment.for_user(user) |
       FinancialProperty.for_user(user) |
-      FinancialProvider.for_user(user) |
+      FinancialProvider.for_user(user).account_type |
+      FinancialProvider.for_user(user).alternative_type |
       Document.for_user(user).where(category: category.name)
   end
   

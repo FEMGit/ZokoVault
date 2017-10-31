@@ -24,7 +24,11 @@ class PowerOfAttorneyContact < ActiveRecord::Base
   def share_with_contact_ids
     @share_with_contact_ids || shares.map(&:contact_id)
   end
-
+  
+  def search_attributes
+    self.attributes.merge(contact_information: self.contact.search_attributes)
+  end
+  
   attr_writer :share_with_contact_ids
   
   validates :contact, presence: { message: 'Required' }

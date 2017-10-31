@@ -27,7 +27,8 @@ class ResourceSearcher
 
   def search(term)
     resources.select do |resource|
-      resource.to_h.values.map(&:to_s).any? { |x| x.downcase.include? (term.downcase) }
+      resource_search_params = resource.is_a?(PowerOfAttorneyContact) ? resource.search_attributes : resource.to_h
+      resource_search_params.values.map(&:to_s).any? { |x| x.downcase.include? (term.downcase) }
     end
   end
 end

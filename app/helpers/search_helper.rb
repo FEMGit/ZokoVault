@@ -31,6 +31,8 @@ module SearchHelper
         "#{resource.name} - Corporate Client"
       when CorporateEmployee
         "#{resource.name} - Corporate Employee"
+      when PowerOfAttorneyContact
+        "Power of Attorney - #{resource.contact.name}"
       else
         subcategory_name(resource) + shared_user_name_if_exists(resource)
       end
@@ -38,6 +40,7 @@ module SearchHelper
   
   def entity_info(resource)
     if (resource_attributes = resource.try(:attributes))
+      resource_attributes = resource.search_attributes if resource.is_a? PowerOfAttorneyContact
       response_format(resource_attributes)
     elsif (resource_attributes = resource.try(:to_h))
       response_format(resource_attributes)

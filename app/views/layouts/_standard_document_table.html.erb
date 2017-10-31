@@ -12,7 +12,7 @@
   <tbody>
     <% documents && documents.each do |document| %>
       <tr>
-        <td>
+        <td class="overflow-ellipsis-cell-200">
           <%= render :partial => "layouts/document_links", :locals => {:document => document } %>
         </td>
         <td><%= date_format(document.updated_at) %></td>

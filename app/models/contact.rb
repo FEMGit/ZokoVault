@@ -103,6 +103,11 @@ class Contact < ActiveRecord::Base
       [firstname,lastname].compact.join(' ')
     end
   end
+  
+  def search_attributes
+    self.attributes.except("id", "relationship_id",
+      "full_primary_shared_id", "uuid", "corporate_contact")
+  end
 
   validate  :validate_contact_type_and_relationship
   validates :state, inclusion: { in:  States::STATES.map(&:last), allow_blank: true }

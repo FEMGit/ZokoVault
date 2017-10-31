@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   has_many :corporate_client_joins, class_name: 'CorporateAdminAccountUser',
             foreign_key: :corporate_admin_id, inverse_of: :corporate_admin
             
-  has_many :per_user_encryption_keys, inverse_of: :user
+  has_many :per_user_encryption_keys, inverse_of: :user, dependent: :destroy
 
   # == Delegations
   delegate :mfa_frequency, :mfa_disabled, :initials, :first_name, :middle_name,

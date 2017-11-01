@@ -9,8 +9,17 @@ changeIdAndName = function($form, old_id, new_id, new_name){
   unselectItemsByClass(new_id, $form, ".owner-item")
 };
 
+
 unselectItemsByClass = function(new_id, $form, class_selector) {
   $form.find("#" + new_id + class_selector).val("").trigger('chosen:updated');
+}
+
+updateMultipleDropdowns = function($form) {
+  var newMultipleDropdowns = $form.find('.chosen-styled-select').find(".chosen-container-multi")
+  for(var i = 0; i < newMultipleDropdowns.length; i++) {
+    var multipleSelect = $(newMultipleDropdowns[i]).prev()
+    multipleSelect.trigger('chosen:updated')
+  }
 }
 
 changeHiddenMultipleSelect = function($form, old_name, new_name) {

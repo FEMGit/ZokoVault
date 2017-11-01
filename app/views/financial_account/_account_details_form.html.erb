@@ -31,15 +31,6 @@
   <%= ff.text_area :notes, id: "account_notes_#{index}", :maxlength => get_max_length(:notes) %>
 
 <script>
-  changeIdAndName = function($form, old_id, new_id, new_name){
-    $form.find("#" + old_id).attr({
-      id: new_id,
-      name: new_name,
-      value: ""
-    });
-    $form.find("#" + new_id + " option").prop("selected", false);
-    $form.find("#" + new_id).css('color', 'black')
-  };
   clearForm = function($newForm, old_id, new_id) {
     new_element_name = "financial_provider[account_" + new_id + "]";
     id_prefix = "financial_provider_account_"

@@ -106,7 +106,7 @@
       form.find('textarea').val("");
       form.find(':checked').prop('checked', false);
     }
-
+    
     cloneForm = function() {
       var $form = $('div[class^="card cg-3 mb-30"]:last');
       old_id_number = parseInt($form.find("input[type=hidden]").attr("id").split('_').last());
@@ -120,6 +120,7 @@
       $('.chosen-select').chosen({allow_single_deselect: true});
       $('.chosen-container').css({"width": ""});//enforces > 0 width when adding policy in mobile view
       $(document).trigger('refresh_autonumeric')
+      updateMultipleDropdowns($newForm)
     }
 
     var alternativeCount = <%= @financial_provider.alternatives.count %>

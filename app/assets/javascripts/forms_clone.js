@@ -8,6 +8,14 @@ changeIdAndName = function($form, old_id, new_id, new_name){
   $form.find("#" + new_id + ".contact-item").val("").trigger('chosen:updated');
 };
 
+updateMultipleDropdowns = function($form) {
+  var newMultipleDropdowns = $form.find('.chosen-styled-select').find(".chosen-container-multi")
+  for(var i = 0; i < newMultipleDropdowns.length; i++) {
+    var multipleSelect = $(newMultipleDropdowns[i]).prev()
+    multipleSelect.trigger('chosen:updated')
+  }
+}
+
 changeHiddenMultipleSelect = function($form, old_name, new_name) {
   $form.find("[name=\'" + old_name + "\']").attr({
     name: new_name,

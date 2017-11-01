@@ -1,12 +1,24 @@
-  var financialValueSignUpdate = function(typeDropDownSelector, valueFieldSelector) {
-    $(typeDropDownSelector).change(updateValues(typeDropDownSelector, valueFieldSelector));
+  var handleFinancialTypeChange = function(event, valueFieldIdPrefix, typeFieldIdPart) {
+    element = event.target
+    if(element.id.indexOf(typeFieldIdPart) > -1) {
+      id_number = element.id.match(/\d+/)
+      id_number = id_number === null ? "" : id_number
+      financialValueSignUpdate($("#" + element.id),
+        $(valueFieldIdPrefix + id_number), shared_user_id)
+    }
+  }
+  
+  var financialValueSignUpdate = function(typeDropDownSelector, valueFieldSelector, sharedUserId) {
+    sharedUserId = sharedUserId || ""
+    $(typeDropDownSelector).change(updateValues(typeDropDownSelector, valueFieldSelector, sharedUserId));
   }
 
-  var updateValues = function(typeDropDownSelector, valueFieldSelector, type) {
+  var updateValues = function(typeDropDownSelector, valueFieldSelector, sharedUserId, type) {
+    sharedUserId = sharedUserId || ""
     if (type === undefined) {
       var type = $(typeDropDownSelector).val()
     }
-    var url = '/financial_information/value_negative/' + type;
+    var url = '/financial_information/value_negative/' + type + "/" + sharedUserId;
     
     $.get(url, function(data) {
       var value = $(valueFieldSelector).val()

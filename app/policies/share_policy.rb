@@ -63,6 +63,10 @@ class SharePolicy < BasicPolicy
   def relationship_values?
     owned_or_shared?
   end
+  
+  def value_negative?
+    owned_or_shared?
+  end
 
   class Scope
     attr_reader :user, :scope

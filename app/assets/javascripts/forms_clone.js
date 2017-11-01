@@ -4,9 +4,14 @@ changeIdAndName = function($form, old_id, new_id, new_name){
     name: new_name,
     value: ""
   });
-  $form.find("#" + new_id + " option.contact-item").prop("selected", false).trigger('chosen:updated');
-  $form.find("#" + new_id + ".contact-item").val("").trigger('chosen:updated');
+  $form.find("#" + new_id + " option").prop("selected", false).trigger('chosen:updated');
+  unselectItemsByClass(new_id, $form, ".contact-item")
+  unselectItemsByClass(new_id, $form, ".owner-item")
 };
+
+unselectItemsByClass = function(new_id, $form, class_selector) {
+  $form.find("#" + new_id + class_selector).val("").trigger('chosen:updated');
+}
 
 changeHiddenMultipleSelect = function($form, old_name, new_name) {
   $form.find("[name=\'" + old_name + "\']").attr({

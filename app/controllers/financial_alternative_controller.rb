@@ -81,10 +81,10 @@ class FinancialAlternativeController < AuthenticatedController
     @financial_provider = FinancialProvider.new(provider_params.merge(user_id: resource_owner.id))
     authorize @financial_provider
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
+    FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
     respond_to do |format|
       if @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, nil, resource_owner)
-        FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
         @path = success_path(financial_alternative_url(@financial_provider), financial_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         
         if params[:tutorial_name]
@@ -111,10 +111,10 @@ class FinancialAlternativeController < AuthenticatedController
     authorize @financial_provider
     @previous_share_with = @financial_provider.share_with_contact_ids
     FinancialInformationService.fill_alternatives(alternative_params, @financial_provider, resource_owner.id)
+    FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
     respond_to do |format|
       if @financial_provider.update(provider_params)
         FinancialInformationService.update_shares(@financial_provider, @financial_provider.share_with_contact_ids, @previous_share_with, resource_owner)
-        FinancialInformationService.update_account_owners(@financial_provider.alternatives, account_owner_params)
         @path = success_path(financial_alternative_url(@financial_provider), financial_alternative_url(@financial_provider, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Alternative was successfully updated.' } }
         format.json { render :show, status: :ok, location: @financial_provider }

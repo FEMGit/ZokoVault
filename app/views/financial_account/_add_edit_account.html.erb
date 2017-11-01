@@ -114,7 +114,7 @@
     displayEmailPreviewSharedWith(contact_id)
   }
 
-  $(document).ready(function(){
+  $(document).on('ready page:load', function(){
     clearFormFields = function(form){
       form.find(':text').val("");
       form.find('textarea').val("");
@@ -140,9 +140,10 @@
       $(document).trigger('refresh_autonumeric')
     }
 
-    var accountCount = <%= @financial_provider.accounts.count %>
+    var accountCount = <%= @financial_provider.accounts.to_a.count %>
+    var accountValues = <%= @financial_provider.accounts.to_a.map(&:value).compact.map { |x| x.to_f } || 'undefined' %>
     for(var i = 0; i < accountCount; i++ ) {
-      setValue($('#account_value_' + i), $('#account_value_' + i).val())
+      setValue($('#account_value_' + i), accountValues[i])
       updateValues($('#financial_provider_account_' + i + '_account_type'),
         $('#account_value_' + i));
     }

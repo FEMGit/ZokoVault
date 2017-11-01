@@ -44,6 +44,7 @@
   var setValue = function(valueFieldSelector, value, negative) {
     initAutonumeric(valueFieldSelector, negative)
     $(valueFieldSelector).autoNumeric('set', currencyToNumber(value))
+    $(valueFieldSelector).blur()
   };
   
   var initAutonumeric = function(valueFieldSelector, negative) {
@@ -57,7 +58,9 @@
   };
   
   var currencyToNumber = function(value) {
-    if (value == null) {
+    if (!isNaN(parseFloat(value)) && isFinite(value)) {
+      return value
+    } else if (value == null) {
       return 0
     } else {
       var numberCurrency = value.replace(/\$/g, '')

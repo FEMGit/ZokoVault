@@ -75,12 +75,11 @@ class FinancialPropertyController < AuthenticatedController
     @financial_property = FinancialProperty.new(property_params.merge(user_id: resource_owner.id))
     @financial_provider = FinancialProvider.new(user_id: resource_owner.id, name: property_params[:name], provider_type: provider_type)
     @financial_provider.properties << @financial_property
+    FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
     authorize @financial_property
-
     respond_to do |format|
       if validate_params && @financial_provider.save
         FinancialInformationService.update_shares(@financial_provider, @financial_property.share_with_contact_ids, nil, resource_owner, @financial_property)
-        FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(financial_property_url(@financial_property), financial_property_url(@financial_property, shared_user_id: resource_owner.id))
 
         if params[:tutorial_name]
@@ -106,13 +105,13 @@ class FinancialPropertyController < AuthenticatedController
   def update
     authorize @financial_property
     @previous_share_with = @property_provider.share_with_contact_ids
+    FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
     params_valid = validate_params
     respond_to do |format|
       if params_valid && @financial_property.update(property_params.merge(user_id: resource_owner.id))
         @property_provider.update(name: property_params[:name], provider_type: provider_type)
         FinancialInformationService.update_shares(@property_provider, @financial_property.share_with_contact_ids,
                                                   @previous_share_with, resource_owner, @financial_property)
-        FinancialInformationService.update_property_owners(@financial_property, property_owner_params)
         @path = success_path(financial_property_url(@financial_property), financial_property_url(@financial_property, shared_user_id: resource_owner.id))
         format.html { redirect_to @path, flash: { success: 'Property was successfully updated.' } }
         format.json { render :show, status: :created, location: @financial_property }

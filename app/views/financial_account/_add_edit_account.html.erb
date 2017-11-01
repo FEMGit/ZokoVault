@@ -101,13 +101,10 @@
 <%= javascript_include_tag 'url_validation' %>
 
 <script>
+  var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
+
   document.addEventListener('change', function(e) {
-    element = e.target
-    if(element.id.indexOf('_account_type') > -1) {
-      id_number = element.id.match(/\d+/)
-      financialValueSignUpdate($("#" + element.id),
-        $('#account_value_' + id_number))
-    }
+    handleFinancialTypeChange(e, '#account_value_', '_account_type')
   });
   
   var displayEmailPreview = function(contact_id) {
@@ -145,7 +142,7 @@
     for(var i = 0; i < accountCount; i++ ) {
       setValue($('#account_value_' + i), $('#account_value_' + i).val())
       updateValues($('#financial_provider_account_' + i + '_account_type'),
-        $('#account_value_' + i));
+        $('#account_value_' + i), shared_user_id);
     }
   });
 

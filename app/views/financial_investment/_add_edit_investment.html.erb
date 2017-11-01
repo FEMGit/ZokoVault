@@ -18,8 +18,7 @@
 
   <%= f.label :investment_type, 'Type' %>
   <div class="styled-select">
-    <%= f.select :investment_type, FinancialInvestment::investment_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_investment_investment_type'),
-  $('#financial_investment_value'))" %>
+    <%= f.select :investment_type, FinancialInvestment::investment_types.keys %>
   </div>
 
   <%= f.label :owner_ids, 'Owners' %>
@@ -86,10 +85,16 @@
 <%= javascript_include_tag "phone_address_toggle" %>
 <%= javascript_include_tag 'url_validation' %>
 <script>
+  var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
+  
+  document.addEventListener('change', function(e) {
+    handleFinancialTypeChange(e, '#financial_investment_value', '_investment_type')
+  });
+
   $(document).ready(function(){
     setValue($('#financial_investment_value'), $('#financial_investment_value').val())
     updateValues($('#financial_investment_investment_type'),
-      $('#financial_investment_value'));
+      $('#financial_investment_value'), shared_user_id);
     $('.chosen-select').chosen({allow_single_deselect: true});
   });
 </script>

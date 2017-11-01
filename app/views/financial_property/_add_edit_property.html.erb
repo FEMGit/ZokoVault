@@ -18,8 +18,7 @@
 
   <%= f.label :property_type, 'Property Type' %>
   <div class="styled-select">
-    <%= f.select :property_type, FinancialProperty::property_types.keys, {}, onchange: "financialValueSignUpdate($('#financial_property_property_type'),
-    $('#financial_property_value'))" %>
+    <%= f.select :property_type, FinancialProperty::property_types.keys %>
   </div>
 
   <%= f.label :property_owner_ids, 'Owners' %>
@@ -79,10 +78,17 @@
 
 <%= javascript_include_tag "phone_address_toggle" %>
 <script>
+  var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
+  
+  document.addEventListener('change', function(e) {
+    handleFinancialTypeChange(e, '#financial_property_value', '_property_type')
+  });
+  
   $(document).ready(function(){
     setValue($('#financial_property_value'), $('#financial_property_value').val())
+    var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
     updateValues($('#financial_property_property_type'),
-      $('#financial_property_value'))
+      $('#financial_property_value'), shared_user_id)
     $('.chosen-select').chosen({allow_single_deselect: true});
   });
 </script>

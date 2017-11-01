@@ -100,6 +100,12 @@
 <%= javascript_include_tag "phone_address_toggle" %>
 <%= javascript_include_tag 'url_validation' %>
 <script>
+  var shared_user_id = <%= @shared_user.try(:id) || 'undefined' %>
+  
+  document.addEventListener('change', function(e) {
+    handleFinancialTypeChange(e, '#alternative_current_value_', '_alternative_type')
+  });
+
   $(document).ready(function(){
     clearFormFields = function(form){
       form.find(':text').val("");

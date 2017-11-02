@@ -62,7 +62,7 @@
   <% end %>
 
   <% online_accounts_current = 'active' if current_page?(online_accounts_url) || controller?('online_accounts') || breadcrumb?(online_accounts_path) || breadcrumb?(:online_accounts_path) %>
-  <% link_to online_accounts_path, class: "main-nav #{online_accounts_current}" do %>
+  <%= link_to online_accounts_path, class: "main-nav #{online_accounts_current}" do %>
     <svg class="icon nav-icon">
       <use xlink:href="#icon-cloud-1"></use>
     </svg>Online Accounts

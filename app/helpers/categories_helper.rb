@@ -51,11 +51,11 @@ module CategoriesHelper
       Document.for_user(user).where(category: category_name).blank?
   end
 
-  # def online_accounts_empty?(user = current_user)
-  #   return false unless user.present?
-  #   category_name = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase).name
-  #   OnlineAccount.for_user(user).blank?
-  # end
+  def online_accounts_empty?(user = current_user)
+    return false unless user.present?
+    category_name = Category.fetch(Rails.application.config.x.FinalWishesCategory.downcase).name
+    OnlineAccount.for_user(user).blank?
+  end
 
   def vault_inheritance_empty?(user = current_user)
     return false unless user.present? && user.user_profile.present?

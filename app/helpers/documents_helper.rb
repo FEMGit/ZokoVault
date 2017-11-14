@@ -84,7 +84,7 @@ module DocumentsHelper
       elsif document.card_document_id.present? && document.card_document_id.positive?
         CardDocument.find(document.card_document_id).name
       end
-    truncate(name)
+    name.try(:truncate, 30)
   end
 
   def document_group(document)

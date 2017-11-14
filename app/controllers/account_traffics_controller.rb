@@ -22,7 +22,7 @@ class AccountTrafficsController < AuthenticatedController
   
   def user_link(traffic_info)
     return user_profiles_path if traffic_info.user == current_user
-    contact = Contact.for_user(current_user).detect do |c|
+    contact = current_user.contacts.detect do |c|
       c.emailaddress.downcase.eql? traffic_info.user.email.downcase
     end
     ### HARDCODED RESPONSE BECAUSE I CAN'T FIND nil CONTACT ON MY LOCALHOST

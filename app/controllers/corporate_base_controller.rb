@@ -24,7 +24,7 @@ class CorporateBaseController < AuthenticatedController
         CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user && x.account_type == account_type }
       end
     corporate_users_emails = corporate_users.map(&:user_account).map(&:email).map(&:downcase)
-    @corporate_contacts = Contact.for_user(corporate_owner)
+    @corporate_contacts = corporate_owner.contacts
                                  .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
     @corporate_profile =CorporateAccountProfile.find_by(user: corporate_owner)
   end
@@ -55,7 +55,7 @@ class CorporateBaseController < AuthenticatedController
   def update(account_type:, success_return_path:, params_to_update:)
     respond_to do |format|
       if @user_account.update(params_to_update)
-        corporate_profile = Contact.for_user(corporate_owner).find_by(emailaddress: @user_account.email).user_profile
+        corporate_profile = corporate_owner.contacts.find_by(emailaddress: @user_account.email).user_profile
         update_associated_contacts
         format.html { redirect_to success_path(success_return_path), flash: { success: "#{account_type} Account successfully updated." } }
         format.json { render :show, status: :created, location: @user_account }
@@ -209,7 +209,7 @@ class CorporateBaseController < AuthenticatedController
   end
 
   def set_corporate_profile_by_user_account
-    @corporate_profile = Contact.for_user(corporate_owner).find_by(emailaddress: @user_account.email).user_profile
+    @corporate_profile = corporate_owner.contacts.find_by(emailaddress: @user_account.email).user_profile
   end
 
   def corporate_contact_by_contact_id(contact_id)

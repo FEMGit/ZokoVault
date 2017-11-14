@@ -109,7 +109,7 @@ class UserResourceGatherer < Struct.new(:user)
     when Category.fetch('insurance');
       gather_insurance(user, category)
     # when Category.fetch('contact')
-    #   Contact.for_user(user)
+    #   user.contacts
     when Category.fetch('taxes')
       gather_taxes(user, category)
     when Category.fetch('final wishes')
@@ -159,9 +159,9 @@ class UserResourceGatherer < Struct.new(:user)
   
   def gather_contacts(user)
     if user.corporate_manager? || user.free?
-      return Contact.for_user(user).where("emailaddress ILIKE ?", user.email.downcase)
+      return user.contacts.where("emailaddress ILIKE ?", user.email.downcase)
     end
-    Contact.for_user(user) 
+    user.contacts 
   end
   
   def gather_documents(user)
@@ -182,7 +182,7 @@ class UserResourceGatherer < Struct.new(:user)
   def gather_corporate_clients(user)
     return [] unless user.corporate_manager?
     corporate_client_emails = (user.employee_users + user.corporate_users).select(&:corporate_client?).map(&:email)
-    Contact.for_user(user.corporate_account_owner).where(emailaddress: corporate_client_emails)
+    user.corporate_account_owner.contacts.where(emailaddress: corporate_client_emails)
                                                   .map { |contact| CorporateClient.new({ name: contact.user_profile.name,
                                                                                          email: contact.emailaddress,
                                                                                          phone_number: contact.user_profile.phone_number,
@@ -199,7 +199,7 @@ class UserResourceGatherer < Struct.new(:user)
   def gather_corporate_employees(user)
     return [] unless user.corporate_admin?
     corporate_employee_emails = (user.employee_users + user.corporate_users).select(&:corporate_employee?).map(&:email)
-    Contact.for_user(user).where(emailaddress: corporate_employee_emails).map { |contact| CorporateEmployee.new(
+    user.contacts.where(emailaddress: corporate_employee_emails).map { |contact| CorporateEmployee.new(
                                                                                         { name: contact.user_profile.name,
                                                                                           email: contact.emailaddress,
                                                                                           mobile_phone_number: contact.user_profile.two_factor_phone_number,

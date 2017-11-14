@@ -37,11 +37,10 @@ class ContactPolicy < BasicPolicy
   end
 
   def owner_shared_category_with_user?
-    shared_contact = Contact.for_user(record.user).where(emailaddress: user.email)
-    return false unless shared_contact.present?
-    shares = record.user.shares.where(contact: shared_contact)
-
-    return false unless shares
+    shared_contact = record.user.contacts.where(emailaddress: user.email).first
+    return false if shared_contact.blank?
+    shares = record.user.shares.where(contact: shared_contact).to_a
+    return false if shares.blank?
     return true if SharedViewService.shared_categories_full(shares).any?
     false
   end

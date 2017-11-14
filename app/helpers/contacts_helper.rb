@@ -55,7 +55,7 @@ module ContactsHelper
     contact_user = User.where("email ILIKE ?", contact.emailaddress).first
     return nil unless contact_user.present?
     manager_emails = (Array.wrap(contact_user.corporate_admin_by_user) + contact_user.corporate_employees_by_user).compact.uniq.map(&:email).map(&:downcase)
-    Contact.for_user(current_user).select { |x| manager_emails.include? x.emailaddress.downcase }
+    current_user.contacts.select { |x| manager_emails.include? x.emailaddress.downcase }
   end
   
   def contact_status(contact)

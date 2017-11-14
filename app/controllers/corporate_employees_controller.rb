@@ -164,7 +164,7 @@ class CorporateEmployeesController < CorporateBaseController
     return unless current_user.corporate_admin
     corporate_users_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user && x.account_type == CorporateAdminAccountUser.client_type }
                                                       .map(&:user_account).map(&:email).map(&:downcase)
-    @corporate_contacts = Contact.for_user(current_user)
+    @corporate_contacts = current_user.contacts
                                  .select { |c| (corporate_users_emails.include? c.emailaddress.downcase) && c.user_profile.present? }
   end
   

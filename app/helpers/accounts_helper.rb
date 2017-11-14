@@ -5,7 +5,7 @@ module AccountsHelper
   
   def family_members_count
     return 0 unless current_user
-    Contact.for_user(current_user).where(contact_type: 'Family & Beneficiaries').count
+    current_user.contacts.where(contact_type: 'Family & Beneficiaries').count
   end
   
   def financial_properties_count

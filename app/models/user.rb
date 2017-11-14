@@ -44,6 +44,7 @@ class User < ActiveRecord::Base
   has_many :categories, class_name: 'CorporateAdminCategory', dependent: :destroy
   has_one :corporate_account_profile, dependent: :destroy
   has_many :documents, inverse_of: :user, dependent: :destroy
+  has_many :contacts, inverse_of: :user, dependent: :destroy
 
   has_one  :stripe_subscription, -> { order("created_at DESC") }
   accepts_nested_attributes_for :stripe_subscription

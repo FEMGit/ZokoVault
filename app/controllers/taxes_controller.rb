@@ -106,14 +106,14 @@ class TaxesController < AuthenticatedController
   end
   
   def update_tax_preparers
-    tax_accountant_ids = Contact.for_user(current_user).where(relationship: 'Accountant', contact_type: 'Advisor').map(&:id)
+    tax_accountant_ids = current_user.contacts.where(relationship: 'Accountant', contact_type: 'Advisor').map(&:id)
     parameter_contact_ids = tax_accountant_params.try(:keys).try(:map, &:to_i) || []
     (tax_accountant_ids - parameter_contact_ids).each do |contact_id|
       clean_unchecked_taxes([], contact_id)
     end
       
     tax_accountant_params.try(:each) do |contact_id, accountant_years|
-      tax_accountant = Contact.for_user(resource_owner).find_by(id: contact_id)
+      tax_accountant = resource_owner.contacts.find_by(id: contact_id)
       next unless tax_accountant.present?
       years_for_accountant = accountant_years[:years].keys
       user_tax_years = TaxYearInfo.for_user(resource_owner).map(&:year).uniq
@@ -329,7 +329,7 @@ class TaxesController < AuthenticatedController
   # Tutorial workflow integrated
   def set_tutorial_resources
     @digital_taxes = Document.for_user(resource_owner).where(category: Rails.application.config.x.TaxCategory)
-    @tax_accountants = Contact.for_user(resource_owner).where(relationship: 'Accountant', contact_type: 'Advisor')
+    @tax_accountants = resource_owner.contacts.where(relationship: 'Accountant', contact_type: 'Advisor')
     @category_dropdown_options, @card_names, @cards = TutorialService.set_documents_information(@category.name, resource_owner)
     @contact = Contact.new(user: resource_owner)
   end

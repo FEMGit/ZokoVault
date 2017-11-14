@@ -16,7 +16,7 @@ class Share < ActiveRecord::Base
   
   def validate_share
     current_user = self.user || self.shareable.try(:user)
-    contact_ids = Contact.for_user(current_user).map(&:id)
+    contact_ids = current_user.contacts.map(&:id)
     if contact_ids.present? && (contact_ids.exclude? contact_id)
       self.errors.add(:contact_id, 'error saving contact as share - ' + contact_id.to_s)
     end

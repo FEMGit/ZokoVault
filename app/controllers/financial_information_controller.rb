@@ -49,7 +49,8 @@ class FinancialInformationController < AuthenticatedController
       if params[:is_tutorial].present? && params[:is_tutorial].eql?('true')
         tutorial_redirection(format, @financial_provider.as_json)
       else
-        format.html { redirect_to financial_information_path, flash: { success: 'Balance Sheet was successfully updated.' } }
+        return_path = @shared_user ? financial_information_shared_view_path(@shared_user) : financial_information_path
+        format.html { redirect_to return_path, flash: { success: 'Balance Sheet was successfully updated.' } }
       end
     end
   end
@@ -87,7 +88,22 @@ class FinancialInformationController < AuthenticatedController
   def update_value(type, model, value_name)
     balance_sheet_params(type).each do |id, value|
       next unless (account = model.find_by(id: id)).present?
+      next unless (resource = authorizable_resource(account)).present?
+      authorize resource
       account.update_attribute(value_name, value)
+    end
+  end
+  
+  def authorizable_resource(financial_object)
+    case financial_object
+      when FinancialAccountInformation
+        FinancialProvider.find_by(id: financial_object.account_provider_id)
+      when FinancialAlternative
+        FinancialProvider.find_by(id: financial_object.manager_id)
+      when FinancialProperty, FinancialInvestment
+        financial_object
+      else
+        nil
     end
   end
   

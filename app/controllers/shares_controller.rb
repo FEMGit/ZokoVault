@@ -28,15 +28,18 @@ class SharesController < AuthenticatedController
 
     def shared_document_count(shareables, user)
       return Document.for_user(user).count if current_user.primary_shared_with? user
+      user_documents = Document.for_user(user)
+      user_shared_groups = shared_groups(user)
+      user_shared_categories = shared_categories(user)
       direct_document_share = shareables.select { |res| res.is_a? Document }
-      group_docs = Document.for_user(user).select { |x| (shared_groups(user)["Tax"].include? x.group) ||
-                                                        (shared_groups(user)["FinalWish"].include? x.group) ||
-                                                        (shared_groups(user)["FinancialProvider"].include? x.financial_information_id) ||
-                                                        (shared_groups(user)["Vendor"].include? x.vendor_id) ||
-                                                        (shared_groups(user)["Will - POA"].include? x.card_document_id) || 
-                                                        (shared_groups(user)["Trusts & Entities"].include? x.card_document_id)}
+      group_docs = user_documents.select { |x| (user_shared_groups["Tax"].include? x.group) ||
+                                                        (user_shared_groups["FinalWish"].include? x.group) ||
+                                                        (user_shared_groups["FinancialProvider"].include? x.financial_information_id) ||
+                                                        (user_shared_groups["Vendor"].include? x.vendor_id) ||
+                                                        (user_shared_groups["Will - POA"].include? x.card_document_id) || 
+                                                        (user_shared_groups["Trusts & Entities"].include? x.card_document_id)}
 
-      category_docs = Document.for_user(user).select { |x| shared_categories(user).include? x.category }
+      category_docs = user_documents.select { |x| user_shared_categories.include? x.category }
       (group_docs.map(&:id) + direct_document_share.map(&:id) + category_docs.map(&:id)).uniq.count
     end
     

@@ -40,14 +40,22 @@ class CorporateBaseController < AuthenticatedController
         corporate_admin_contact = create_corporate_admin_contact_for_user_account
         CorporateAdminService.add_category_share_for_corporate_admin(corporate_admin: corporate_owner, corporate_admin_contact: corporate_admin_contact, user: @user_account)
         add_account_user_to_employee(@user_account) if current_user.corporate_employee?
-        return_path = bill_result.eql?(:payed_for_client) ? thank_you_for_subscription_account_settings_path(StripeSubscription.yearly_plan[:id], @user_account) :
-                                                            success_path(success_return_path)
-        format.html { redirect_to return_path, flash: { success: "#{account_type} Account successfully created." } }
-        format.json { render :show, status: :created, location: @user_account }
+        if success_return_path.present?
+          return_path = bill_result.eql?(:payed_for_client) ? thank_you_for_subscription_account_settings_path(StripeSubscription.yearly_plan[:id], @user_account) :
+                                                              success_path(success_return_path)
+          format.html { redirect_to return_path, flash: { success: "#{account_type} Account successfully created." } }
+          format.json { render :show, status: :created, location: @user_account }
+        else
+          return true
+        end
       else
         error_path(:new)
-        format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
-        format.json { render json: @user_accounts.errors, status: :unprocessable_entity }
+        if success_return_path.present?
+          format.html { render controller: @path[:controller], action: @path[:action], layout: @path[:layout], locals: @path[:locals] }
+          format.json { render json: @user_account.errors, status: :unprocessable_entity }
+        else
+          return false
+        end
       end
     end
   end

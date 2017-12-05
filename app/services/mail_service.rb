@@ -23,6 +23,7 @@ module MailService
   end
   
   def self.check_domain(email)
+    return false unless email.present?
     email_domain = MailService.email_domain(email)
     if EmailDomains::DOMAINS.any? { |dom| email_domain =~ dom }
       return true

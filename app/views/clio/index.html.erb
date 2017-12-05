@@ -1,2 +1,49 @@
-<h1>Token received</h1>
-<p>Authorized - <%= @clio_service.client.access_token[:token] %></p>
+<h3>Clio Contacts</h3>
+<div class="mb-30 card" id="clio_contacts_imported">
+  <ul>
+    <% @clio_contacts.each do |clio_contact| %>
+      <li id="<%= clio_contact["id"] %>">
+        <%= "#{clio_contact["first_name"]} #{clio_contact["last_name"]}" %> 
+        <% if clio_contact["primary_email_address"].present? %>
+          (<%= mail_to clio_contact["primary_email_address"], clio_contact["primary_email_address"] %>)
+        <% end %>
+        <% contact_exists = clio_contact["already_exists"] %>
+        <span class="status <%= contact_exists ? 'clr-green' : '' %>"><%= "- #{contact_exists ? 'already exists' : 'to be imported' }" %></span>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<%= link_to "Import Contacts From Clio", 'javascript:importContactsFromClio(0)', class: 'button primary-button big-button' %>
+
+<script>
+  var importContactsFromClio = function() {
+    $("#clio_contacts_imported ul").find('.errors').remove()
+    
+    
+    var url = "<%= create_multiple_clio_corporate_accounts_path %>"
+    $.ajax({
+      url: url,
+      type: "POST",
+      data: { clio_accounts: '<%= @clio_contacts.to_s.html_safe %>' },
+      success: function(data) {
+        data.forEach(function(createdAccount) {
+          var accountListItem = $("#clio_contacts_imported ul").find("li[id='" + createdAccount.clio_contact_id + "']")
+          var accountStatus = accountListItem.find('.status')
+          if (createdAccount.errors === null) {
+            accountStatus.text(accountStatus.text().replace('to be imported', 'created'))
+            accountListItem.css('color', 'black')
+            accountStatus.css('color', '#1acb40')
+          } else {
+            accountStatus.text(accountStatus.text().replace('to be imported', 'error'))
+            accountListItem.css('color', '#D0021B')
+            accountListItem.append("<ul class='errors'></ul>")
+            var ulError = accountListItem.find('ul.errors')
+            for(var key in createdAccount.errors) {
+              ulError.append('<li>' + key + ': ' + createdAccount.errors[key][0] + '</li>')
+            }
+          }
+        })
+      }
+    })
+  }
+</script>

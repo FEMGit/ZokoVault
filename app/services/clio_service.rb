@@ -1,4 +1,6 @@
 class ClioService
+  ZOKUVAULT_CUSTOM_FIELD_NAME = "ZokuVault"
+  
   def initialize(access_token: nil)
     @client = client(access_token: access_token)
   end
@@ -13,10 +15,21 @@ class ClioService
       return refresh_token!(refresh_token: @client.access_token[:refresh_token])
     end
     
+    return nil unless code.present?
+    
     token = @client.authorize_with_code(redirect_url, code)
     @client.access_token = token_information(access_token: token["access_token"], refresh_token: token["refresh_token"],
       expires_in: token["expires_in"])
     @client.access_token
+  end
+  
+  def contacts
+    parameters = "fields=id, first_name, last_name, primary_email_address, primary_phone_number,
+      custom_field_values{field_name, id, value}, addresses{street, city, postal_code}"
+    uri = @client.base_uri("/api/v4/contacts")
+    return if (request = get_request(uri: uri, parameters: parameters)).blank?
+    contacts = @client.make_request(request, uri)
+    contacts["data"].select { |x| x["custom_field_values"].any? { |y| y["field_name"] == ZOKUVAULT_CUSTOM_FIELD_NAME && y["value"] == true } }
   end
   
   def refresh_token!(refresh_token:)
@@ -43,6 +56,14 @@ class ClioService
   end
   
   private
+  
+  def get_request(uri:, parameters:)
+    return unless @client.access_token.present?
+    uri += parameters.present? ? "?#{parameters}" : ""
+    req = Net::HTTP::Get.new(uri)
+    req["Authorization"] = "Bearer #{@client.access_token[:token]}"
+    req
+  end
   
   def expires_at(expires_in:)
     Time.now + expires_in.to_i.seconds

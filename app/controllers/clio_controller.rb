@@ -1,4 +1,5 @@
 class ClioController < AuthenticatedController
+  before_action :redirect_unless_corporate
   before_action :set_clio_service
   
   def authorization
@@ -7,12 +8,22 @@ class ClioController < AuthenticatedController
   
   def index
     session[:clio_access_token] = @clio_service.authorize_with_code(redirect_url: redirect_url, code: params[:code])
+    redirect_to clio_sync_corporate_accounts_path and return unless session[:clio_access_token].present?
+    set_clio_contacts
   end
   
   private
   
   def set_clio_service
     @clio_service = ClioService.new(access_token: session[:clio_access_token])
+  end
+  
+  def set_clio_contacts
+    @clio_contacts = @clio_service.contacts
+    already_used_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user &&
+      x.account_type == CorporateAdminAccountUser.client_type }.map(&:user_account).map(&:email).map(&:downcase)
+    return [] if @clio_contacts.blank?
+    @clio_contacts.map { |x| x["already_exists"] = (already_used_emails.include? x["primary_email_address"].try(:downcase)) ? true : false }
   end
   
   def redirect_url
@@ -24,5 +35,17 @@ class ClioController < AuthenticatedController
   
   def redirect_uri
     return clios_url
+  end
+  
+  def redirect_unless_corporate
+    redirect_to root_path unless current_user.present? && (current_user.corporate_admin || current_user.corporate_employee?)
+  end
+  
+  def corporate_owner
+    if current_user.corporate_employee?
+      current_user.corporate_admin_by_user
+    elsif current_user.corporate_admin
+      current_user
+    end
   end
 end

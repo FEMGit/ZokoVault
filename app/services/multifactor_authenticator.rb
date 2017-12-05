@@ -10,7 +10,7 @@ class MultifactorAuthenticator
   def send_code_on_number(phone_number)
     MultifactorPhoneCode.transaction do
       if MultifactorPhoneCode.can_make_more?(user)
-        formatted = format_phone_number(phone_number)
+        formatted = PhoneService.format_phone_number(phone_number: phone_number)
         code = MultifactorPhoneCode.generate_for(
           user: user, phone_number: formatted
         )
@@ -23,7 +23,7 @@ class MultifactorAuthenticator
   end
 
   def verify_code(code:, phone_number:)
-    formatted = format_phone_number(phone_number)
+    formatted = PhoneService.format_phone_number(phone_number: phone_number)
     MultifactorPhoneCode.verify(user: user, code: code, phone_number: formatted)
   end
 
@@ -37,13 +37,5 @@ class MultifactorAuthenticator
 
   def phone_to_send_code_to
     @_user.user_profile.two_factor_phone_number
-  end
-
-  def format_phone_number(phone_number)
-    phone_number.split('-').join('').prepend(country_code)
-  end
-
-  def country_code
-    "+1"
   end
 end

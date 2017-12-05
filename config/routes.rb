@@ -131,6 +131,7 @@ Rails.application.routes.draw do
   # Clio
   get 'clio/authorize', to: 'clio#authorization', as: :authorization_clio
   get 'clio/index', to: 'clio#index', as: :clios
+  get 'clio/import_contacts', to: 'clio#import_contacts', as: :import_contacts_clio
   
   # Online Accounts
   get 'online_accounts/reveal_password/:account_id(/:shared_user_id)', to: 'online_accounts#reveal_password'
@@ -411,6 +412,7 @@ Rails.application.routes.draw do
   post '/corporate/remove_client/:contact_id', to: 'corporate_accounts#remove_corporate_client', as: :remove_corporate_client_corporate_accounts
   post '/corporate/update_account_settings/:id', to: 'corporate_accounts#update_account_settings', as: :update_account_settings_corporate_accounts
   post '/corporate/send_invitation/:contact_id(/:account_type)', to: 'corporate_accounts#send_invitation', as: :send_invitation_corporate_accounts
+  post '/corporate/create_multiple_clio', to: 'corporate_accounts#create_multiple_clio', as: :create_multiple_clio_corporate_accounts
   resources :corporate_accounts, path: 'corporate'
   
   # Corporate Employee Accounts

@@ -1,7 +1,3 @@
 <div class="mt-15">
-  <% if @clio_service.present? %>
-    <p>Already Authorized - <%= @clio_service.client.access_token[:token] %></p>
-  <% else %>
-    <%= link_to "Connect Account", authorization_clio_path, class: 'button primary-button big-button' %>
-  <% end %>
+  <%= link_to "Connect Account", authorization_clio_path, class: 'button primary-button big-button' %>
 </div>

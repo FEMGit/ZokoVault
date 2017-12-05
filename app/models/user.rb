@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   scope :email_match, ->(email) { where("email ILIKE ?", email.downcase) }
 
   # == Validations
+  validates_length_of :email, :maximum => ApplicationController.helpers.get_max_length(:default)
+  
   validates :email, :email_format => { :message => "Email should contain @ and domain like .com" }
   validate :email_is_valid?
   validates_confirmation_of :email, message: "Emails do not match", if: :confirm_email?

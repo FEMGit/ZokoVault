@@ -67,7 +67,7 @@ class CorporateAccountsController < CorporateBaseController
   
   def clio_sync
     if session[:clio_access_token].present?
-      @clio_service = ClioService.new(access_token: session[:clio_access_token])
+      redirect_to clios_path
     end
   end
 
@@ -112,12 +112,29 @@ class CorporateAccountsController < CorporateBaseController
   def edit
     authorize @corporate_contact
   end
+  
+  def create_multiple_clio
+    new_accounts = JSON.parse clio_accounts_params.gsub('=>', ':').gsub('nil', 'null')
+    already_used_emails = CorporateAdminAccountUser.select { |x| x.corporate_admin == current_user &&
+      x.account_type == CorporateAdminAccountUser.client_type }.map(&:user_account).map(&:email).map(&:downcase)
+    user_accounts_params = user_account_params_from_clio_account_params(clio_accounts_params: new_accounts)
+    user_accounts_params.reject! { |x| already_used_emails.include? x[:email] }
+    user_accounts_params.each do |user_account_params|
+      if (create_result = create(user_account_params.except(:clio_contact_id), nil)).present?
+        user_account_params[:errors] = (create_result == true) ? nil : create_result
+        next unless user_account_params[:errors].present?
+        user_account_params[:errors].transform_keys! { |key| key.to_s.split('.').last.humanize }
+      end
+    end
+    render json: user_accounts_params
+  end
 
-  def create
-    @user_account = User.new(user_account_params)
+  def create(params = user_account_params, success_return_path = corporate_accounts_path)
+    @user_account = User.new(params)
     @user_account.skip_password_validation!
     @user_account.skip_confirmation!
-    super(account_type: CorporateAdminAccountUser.client_type, success_return_path: corporate_accounts_path)
+    return @user_account.errors.messages if @user_account.invalid?
+    super(account_type: CorporateAdminAccountUser.client_type, success_return_path: success_return_path)
   end
 
   def update
@@ -174,6 +191,44 @@ class CorporateAccountsController < CorporateBaseController
                                                             :two_factor_phone_number,
                                                             :phone_number, :street_address_1,
                                                             :city, :state, :zip ])
+  end
+  
+  def clio_accounts_params
+    params.require(:clio_accounts)
+  end
+  
+  def user_account_params_from_clio_account_params(clio_accounts_params:)
+    user_accounts_params = []
+    clio_accounts_params.each do |clio_account_params|
+      next if clio_account_params["already_exists"].eql? true
+      user_accounts_params.push({})
+      account_position = user_accounts_params.count - 1
+      
+      user_accounts_params[account_position][:email] = clio_account_params["primary_email_address"]
+      user_accounts_params[account_position][:email_confirmation] = clio_account_params["primary_email_address"]
+
+      user_accounts_params[account_position][:user_profile_attributes] = {}
+      user_accounts_params[account_position][:user_profile_attributes][:first_name] = clio_account_params["first_name"]
+      user_accounts_params[account_position][:user_profile_attributes][:last_name] = clio_account_params["last_name"]
+
+      if clio_account_params["primary_phone_number"]
+        formatted_phone = PhoneService.format_phone_number(phone_number: clio_account_params["primary_phone_number"])
+        if formatted_phone.present?
+          user_accounts_params[account_position][:user_profile_attributes][:two_factor_phone_number] = clio_account_params["primary_phone_number"]
+        end
+      end
+
+      if clio_account_params["addresses"].try(:first).present?
+        user_accounts_params[account_position][:user_profile_attributes][:street_address_1] = clio_account_params["addresses"].first["street"]
+        user_accounts_params[account_position][:user_profile_attributes][:city] = clio_account_params["addresses"].first["city"]
+        zip = clio_account_params["addresses"].first["postal_code"]
+        if zip.present? && zip.length == ApplicationController.helpers.get_max_length(:zipcode)
+          user_accounts_params[account_position][:user_profile_attributes][:zip] = clio_account_params["addresses"].first["postal_code"]
+        end
+      end
+      user_accounts_params[account_position][:clio_contact_id] = clio_account_params["id"]
+    end
+    user_accounts_params
   end
 
   def error_path(action)

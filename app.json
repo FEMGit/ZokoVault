@@ -16,6 +16,15 @@
     "AWS_S3_USER_ACCESS_KEY_SECRET": {
       "required": true
     },
+    "CLIO_BASE_SCOPE_URL": {
+      "required": true
+    },
+    "CLIO_CLIENT_ID": {
+      "required": true
+    },
+    "CLIO_CLIENT_SECRET": {
+      "required": true
+    },
     "DATABASE_URL": {
       "required": true
     },

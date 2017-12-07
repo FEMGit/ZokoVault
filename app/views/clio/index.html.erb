@@ -1,24 +1,59 @@
 <h3>Clio Contacts</h3>
 <div class="mb-30 card" id="clio_contacts_imported">
-  <ul>
-    <% @clio_contacts.each do |clio_contact| %>
-      <li id="<%= clio_contact["id"] %>">
-        <%= "#{clio_contact["first_name"]} #{clio_contact["last_name"]}" %> 
-        <% if clio_contact["primary_email_address"].present? %>
-          (<%= mail_to clio_contact["primary_email_address"], clio_contact["primary_email_address"] %>)
-        <% end %>
-        <% contact_exists = clio_contact["already_exists"] %>
-        <span class="status <%= contact_exists ? 'clr-green' : '' %>"><%= "- #{contact_exists ? 'already exists' : 'to be imported' }" %></span>
-      </li>
-    <% end %>
-  </ul>
+  <% if @clio_contacts.present? %>
+    <ul>
+      <% @clio_contacts.each do |clio_contact| %>
+        <li id="<%= clio_contact["id"] %>">
+          <%= "#{clio_contact["first_name"]} #{clio_contact["last_name"]}" %> 
+          <% if clio_contact["primary_email_address"].present? %>
+            (<%= mail_to clio_contact["primary_email_address"], clio_contact["primary_email_address"] %>)
+          <% end %>
+          <% contact_exists = clio_contact["already_exists"] %>
+          <span class="status <%= contact_exists ? 'clr-green' : '' %>"><%= "- #{contact_exists ? 'already exists' : 'to be imported' }" %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    No Contacts Available
+  <% end %>
 </div>
-<%= link_to "Import Contacts From Clio", 'javascript:importContactsFromClio(0)', class: 'button primary-button big-button' %>
+<%= link_to "Import Contacts From Clio", 'javascript:importContactsFromClio()', class: 'button primary-button big-button' %>
+
+<h3 class="mt-30">Clio Documents</h3>
+<div class="mb-30 card" id="clio_documents">
+  <% if @clio_contact_documents.present? %>
+    <ul>
+      <% @clio_contact_documents.each do |contact, clio_documents| %>
+        <li>
+          <%= contact.blank? ? 'Your ' : "#{contact["name"]} " %>
+          <% if contact && contact["primary_email_address"].present? %>
+          (<%= mail_to contact["primary_email_address"], contact["primary_email_address"] %>)
+          <% end %>
+          Documents:
+        </li>
+        <ul class="documents_to_import">
+          <% clio_documents.each do |clio_document| %>
+            <li id="<%= clio_document["id"] %>">
+              <%= "#{clio_document["name"]} -" %>
+              <%= link_to ' Download ', clio_document["download_url"] %>
+              <span class="status"></span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </ul>
+  <% else %>
+    No Documents Avaialable
+  <% end %>
+</div>
+
+<!-- For test upload one document -->
+<% upload_args = "'#{file_picker_api_key}', #{FilepickerService.fetch_policy(:document)}, importDocumentsFromClio, \"#{@clio_contact_documents.values.flatten.first["url"]}\", {}" %>
+<%= link_to "Import Documents From Clio", "javascript:uploadDocumentByUrl(#{upload_args})", class: 'button primary-button big-button' %>
 
 <script>
   var importContactsFromClio = function() {
     $("#clio_contacts_imported ul").find('.errors').remove()
-    
     
     var url = "<%= create_multiple_clio_corporate_accounts_path %>"
     $.ajax({
@@ -45,5 +80,15 @@
         })
       }
     })
+  }
+  
+  var importDocumentsFromClio = function(uploaded) {
+    /*var documentIds = []
+    var documentsToImport = $("#clio_documents").find("ul.documents_to_import").find("li")
+    documentsToImport.each(function() {
+      documentIds.push($(this).attr('id'))
+    })
+    console.log(documentIds)*/
+    console.log(uploaded)
   }
 </script>

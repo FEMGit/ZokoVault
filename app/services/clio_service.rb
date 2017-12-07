@@ -1,6 +1,6 @@
 class ClioService
   ZOKUVAULT_CUSTOM_FIELD_NAME = "ZokuVault"
-  
+
   def initialize(access_token: nil)
     @client = client(access_token: access_token)
   end
@@ -32,6 +32,25 @@ class ClioService
     contacts["data"].select { |x| x["custom_field_values"].any? { |y| y["field_name"] == ZOKUVAULT_CUSTOM_FIELD_NAME && y["value"] == true } }
   end
   
+  def documents
+    parameters = "fields=id, name, document_category{name}, contact{name, primary_email_address}"
+    uri = @client.base_uri("/api/v4/documents")
+    return if (request = get_request(uri: uri, parameters: parameters)).blank?
+    documents = @client.make_request(request, uri)
+    documents["data"].select { |x| x["document_category"] && x["document_category"]["name"] == ZOKUVAULT_CUSTOM_FIELD_NAME }
+      .each { |x| x["download_url"] = download_document_uri(id: x["id"]); x["url"] = document_url(id: x["id"]) }
+  end
+  
+  def download_document_uri(id:)
+    "#{ENV["CLIO_BASE_SCOPE_URL"]}/api/v4/documents/#{id}/download"
+  end
+  
+  def document_url(id:)
+    uri = @client.base_uri("/api/v4/documents/#{id}/download")
+    return if (request = get_request(uri: uri)).blank?
+    @client.make_request(request, uri)
+  end
+  
   def refresh_token!(refresh_token:)
     params = {:client_id => ENV["CLIO_CLIENT_ID"],
               :client_secret => ENV["CLIO_CLIENT_SECRET"],
@@ -57,7 +76,7 @@ class ClioService
   
   private
   
-  def get_request(uri:, parameters:)
+  def get_request(uri:, parameters: nil)
     return unless @client.access_token.present?
     uri += parameters.present? ? "?#{parameters}" : ""
     req = Net::HTTP::Get.new(uri)

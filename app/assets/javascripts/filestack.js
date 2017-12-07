@@ -51,6 +51,14 @@ var uploadMultipleDocumentsWithFilestack = function(api_key, policy_hash, max_do
     callback(files)
   })
 }
+
+var uploadDocumentByUrl = function(api_key, policy_hash, callback, url, options) {
+  var client = filestack.init(api_key, policy_hash)
+  console.log(client)
+  client.storeURL(url, options).then(function(result) {
+    console.log(result)
+  })
+}
   
 var multipleDocumentUploadParams = function(max_document_count) {
   documentParams = documentUploadParams()

@@ -1,4 +1,5 @@
 class ClioController < AuthenticatedController
+  include DocumentsHelper
   before_action :redirect_unless_corporate
   before_action :set_clio_service
   
@@ -10,12 +11,17 @@ class ClioController < AuthenticatedController
     session[:clio_access_token] = @clio_service.authorize_with_code(redirect_url: redirect_url, code: params[:code])
     redirect_to clio_sync_corporate_accounts_path and return unless session[:clio_access_token].present?
     set_clio_contacts
+    set_clio_contact_documents
   end
   
   private
   
   def set_clio_service
     @clio_service = ClioService.new(access_token: session[:clio_access_token])
+  end
+  
+  def set_clio_contact_documents
+    @clio_contact_documents = @clio_service.documents.group_by { |doc| doc["contact"] }
   end
   
   def set_clio_contacts
